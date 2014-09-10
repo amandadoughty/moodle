@@ -1054,6 +1054,10 @@ class assign {
             }
             $mform->setDefault($plugin->get_subtype() . '_' . $plugin->get_type() . '_enabled', $default);
 
+            if ($plugin->get_type() == 'file') {
+                $mform->disabledIf($plugin->get_subtype() . '_file_enabled', 'submissioncount', 'gt', 0);
+            }
+
             $plugin->get_settings($mform);
 
         }
