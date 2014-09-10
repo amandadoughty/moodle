@@ -98,6 +98,12 @@ class mod_assign_mod_form extends moodleform_mod {
         $mform->setDefault('alwaysshowdescription', 1);
         $mform->disabledIf('alwaysshowdescription', 'allowsubmissionsfromdate[enabled]', 'notchecked');
 
+        // Are there any submissions?
+        $submissioncount = $assignment->count_submissions();
+        // Add hidden form element to hold no of submissions so that plugins can also access this value.
+        $mform->addElement('hidden', 'submissioncount', $submissioncount);
+        $mform->setType('submissioncount', PARAM_INT);
+
         $assignment->add_all_plugin_settings($mform);
 
         $mform->addElement('header', 'submissionsettings', get_string('submissionsettings', 'assign'));
@@ -143,6 +149,7 @@ class mod_assign_mod_form extends moodleform_mod {
         $mform->addElement('selectyesno', 'teamsubmission', $name);
         $mform->addHelpButton('teamsubmission', 'teamsubmission', 'assign');
         $mform->setDefault('teamsubmission', 0);
+        $mform->disabledIf('teamsubmission', 'submissioncount', 'gt', 0);
 
         $name = get_string('requireallteammemberssubmit', 'assign');
         $mform->addElement('selectyesno', 'requireallteammemberssubmit', $name);
@@ -163,6 +170,7 @@ class mod_assign_mod_form extends moodleform_mod {
         $mform->addHelpButton('teamsubmissiongroupingid', 'teamsubmissiongroupingid', 'assign');
         $mform->setDefault('teamsubmissiongroupingid', 0);
         $mform->disabledIf('teamsubmissiongroupingid', 'teamsubmission', 'eq', 0);
+        $mform->disabledIf('teamsubmissiongroupingid', 'submissioncount', 'gt', 0);
 
         $mform->addElement('header', 'notifications', get_string('notifications', 'assign'));
 
