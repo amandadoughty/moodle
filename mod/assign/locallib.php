@@ -466,6 +466,17 @@ class assign {
                     $nextpageparams['rownum'] = optional_param('rownum', 0, PARAM_INT) + 1;
                     $nextpageparams['useridlistid'] = optional_param('useridlistid', time(), PARAM_INT);
                 }
+            } else if (optional_param('saveandshownextgroup', null, PARAM_RAW)) {
+                // Save and show next group.
+                $action = 'grade';
+                if ($this->process_save_grade($mform)) {
+                    $action = 'redirect';
+                    $nextpageparams['action'] = 'grade';
+                    $nextpageparams['navbygroup'] = 1;
+                    $nextpageparams['useridlistid'] = optional_param('useridlistid', time(), PARAM_INT);
+                    $nextpageparams['grouprownum'] = optional_param('grouprownum', 0, PARAM_INT) + 1;;
+                    $nextpageparams['groupidlistid'] = optional_param('groupidlistid', time(), PARAM_INT);
+                }
             } else if (optional_param('nosaveandprevious', null, PARAM_RAW)) {
                 $action = 'redirect';
                 $nextpageparams['action'] = 'grade';
@@ -476,6 +487,20 @@ class assign {
                 $nextpageparams['action'] = 'grade';
                 $nextpageparams['rownum'] = optional_param('rownum', 0, PARAM_INT) + 1;
                 $nextpageparams['useridlistid'] = optional_param('useridlistid', time(), PARAM_INT);
+            } else if (optional_param('nosaveandpreviousgroup', null, PARAM_RAW)) {
+                $action = 'redirect';
+                $nextpageparams['action'] = 'grade';
+                $nextpageparams['navbygroup'] = 1;
+                $nextpageparams['useridlistid'] = optional_param('useridlistid', time(), PARAM_INT);
+                $nextpageparams['grouprownum'] = optional_param('grouprownum', 0, PARAM_INT) - 1;
+                $nextpageparams['groupidlistid'] = optional_param('groupidlistid', time(), PARAM_INT);
+            } else if (optional_param('nosaveandnextgroup', null, PARAM_RAW)) {
+                $action = 'redirect';
+                $nextpageparams['action'] = 'grade';
+                $nextpageparams['navbygroup'] = 1;
+                $nextpageparams['useridlistid'] = optional_param('useridlistid', time(), PARAM_INT);
+                $nextpageparams['grouprownum'] = optional_param('grouprownum', 0, PARAM_INT) + 1;
+                $nextpageparams['groupidlistid'] = optional_param('groupidlistid', time(), PARAM_INT);
             } else if (optional_param('savegrade', null, PARAM_RAW)) {
                 // Save changes button.
                 $action = 'grade';
@@ -508,7 +533,10 @@ class assign {
         }
 
         $returnparams = array('rownum'=>optional_param('rownum', 0, PARAM_INT),
-                              'useridlistid'=>optional_param('useridlistid', 0, PARAM_INT));
+                              'useridlistid' => optional_param('useridlistid', 0, PARAM_INT),
+                              'grouprownum' => optional_param('groupownum', 0, PARAM_INT),
+                              'groupidlistid' => optional_param('groupidlistid', 0, PARAM_INT)
+                              );
         $this->register_return_link($action, $returnparams);
 
         // Now show the right view page.
@@ -1669,6 +1697,33 @@ class assign {
         $useridlist = $table->get_column_data('userid');
 
         return $useridlist;
+    }
+
+
+    /**
+     * Utility function to get the groupid for every group in the activity grouping
+     * so the order can be frozen while we iterate it.
+     *
+     * @return array An array of groupids
+     */
+    protected function get_grading_groupid_list() {
+        $filter = get_user_preferences('assign_filter', '');
+        $table = new assign_grading_table($this, 0, $filter, 0, false);
+        $groupidlist = array_values(array_unique($table->get_column_data('groupid')));
+        // If a user is not a member of a group or is a member of multiple groups within the
+        // grouping/course then the table data will include a null value. We set this to 0 in $groupidlist
+        // to facilitate the search used in the function view_single_grade_page().
+        // In the function view_single_grade_page() we use get_submission_group() to get a groupid to search
+        // for in $groupidlist. If a user is not a member of a group or is a member of multiple groups
+        // get_submission_group() will return false. So we cast the return value to an integer and are able
+        // to find a matching value of 0 in $groupidlist, in order to return the correct $grouprownum.
+        $null = array_search(null, $groupidlist);
+
+        if ($null !== false) {
+            $groupidlist[$null] = 0;
+        }
+
+        return $groupidlist;
     }
 
     /**
@@ -2970,10 +3025,13 @@ class assign {
         $o .= $this->get_renderer()->render($header);
 
         // If userid is passed - we are only grading a single student.
-        $rownum = required_param('rownum', PARAM_INT);
+        $rownum = optional_param('rownum', 0, PARAM_INT);
         $useridlistid = optional_param('useridlistid', time(), PARAM_INT);
+        $grouprownum = optional_param('grouprownum', 0, PARAM_INT);
+        $groupidlistid = optional_param('groupidlistid', time(), PARAM_INT);
         $userid = optional_param('userid', 0, PARAM_INT);
         $attemptnumber = optional_param('attemptnumber', -1, PARAM_INT);
+        $navbygroup = optional_param('navbygroup', 0, PARAM_INT);
 
         $cache = cache::make_from_params(cache_store::MODE_SESSION, 'mod_assign', 'useridlist');
         if (!$userid) {
@@ -2984,6 +3042,59 @@ class assign {
         } else {
             $rownum = 0;
             $useridlist = array($userid);
+        }
+
+        // MDL-47083 If this is a team submission then we have extra navigation buttons to navigate by team.
+
+        // When navigating by team, the redirect logic (in function view()) simply takes the $grouprownum and adds or subtracts 1.
+        // We therefore need to calculate the $rownum of the $userlistid as it will not increment or decrement
+        // by a known amount. We need $rownum to determine the user to display.
+
+        // Similarly, when navigating by user, the redirect logic takes the $rownum and adds or subtracts 1. In
+        // this case we need to calculate the $grouprownum of the $grouplistid. We need $grouprownum
+        // to determine whether or not this is the last group ($lastgroup) and hence whether of not to show the 'Next
+        // Group' and 'Save and show next group' navigation buttons.
+
+        $lastgroup = false;
+
+        if (!$userid && $instance->teamsubmission) {
+            $groupcache = cache::make_from_params(cache_store::MODE_SESSION, 'mod_assign', 'groupidlist');
+
+            if (!$groupidlist = $groupcache->get($this->get_course_module()->id . '_groups_' . $groupidlistid)) {
+                $groupidlist = $this->get_grading_groupid_list();
+            }
+
+            $groupcache->set($this->get_course_module()->id . '_groups_' . $groupidlistid, $groupidlist);
+
+            if ($grouprownum < 0 || $grouprownum > count($groupidlist)) {
+                throw new coding_exception('Row is out of bounds for the current grading table: ' . $grouprownum);
+            }
+            // If we arrived here using the group navigation then we need to determine $rownum.
+            if ($navbygroup) {
+                $memberids = array();
+                $groupid = $groupidlist[$grouprownum];
+                $members = $this->get_submission_group_members($groupid, true);
+                // The function get_submission_group_members() returns an array of objects. We only want
+                // the ids.
+                foreach ($members as $member) {
+                    $memberids[] = $member->id;
+                }
+                // Maintain the user order as displayed in the grading table. It makes more sense to the
+                // user if the navigation matches their chosen sort order.
+                $orderedmembers = array_intersect($useridlist, $memberids);
+                reset($orderedmembers);
+                $rownum = key($orderedmembers);
+                // If we arrived here using the user navigation then we need to determine $grouprownum.
+            } else {
+                $userid = $useridlist[$rownum];
+                $group = $this->get_submission_group($userid);
+                $groupid = $group == false ? 0 : $group->id;
+                $grouprownum = array_search($groupid, $groupidlist);
+            }
+
+            if ($grouprownum == count($groupidlist) - 1) {
+                $lastgroup = true;
+            }
         }
 
         if ($rownum < 0 || $rownum > count($useridlist)) {
@@ -3098,6 +3209,9 @@ class assign {
             $pagination = array('rownum'=>$rownum,
                                 'useridlistid'=>$useridlistid,
                                 'last'=>$last,
+                                'grouprownum' => $grouprownum,
+                                'groupidlistid' => $groupidlistid,
+                                'lastgroup' => $lastgroup,
                                 'userid'=>optional_param('userid', 0, PARAM_INT),
                                 'attemptnumber'=>$attemptnumber);
             $formparams = array($this, $data, $pagination);
@@ -6015,6 +6129,9 @@ class assign {
         $rownum = $params['rownum'];
         $last = $params['last'];
         $useridlistid = $params['useridlistid'];
+        $grouprownum = $params['grouprownum'];
+        $lastgroup = $params['lastgroup'];
+        $groupidlistid = $params['groupidlistid'];
         $userid = $params['userid'];
         $attemptnumber = $params['attemptnumber'];
         if (!$userid) {
@@ -6179,6 +6296,11 @@ class assign {
         $mform->setConstant('rownum', $rownum);
         $mform->addElement('hidden', 'useridlistid', $useridlistid);
         $mform->setType('useridlistid', PARAM_INT);
+        $mform->addElement('hidden', 'grouprownum', $grouprownum);
+        $mform->setType('grouprownum', PARAM_INT);
+        $mform->setConstant('grouprownum', $grouprownum);
+        $mform->addElement('hidden', 'groupidlistid', $groupidlistid);
+        $mform->setType('groupidlistid', PARAM_INT);
         $mform->addElement('hidden', 'attemptnumber', $attemptnumber);
         $mform->setType('attemptnumber', PARAM_INT);
         $mform->addElement('hidden', 'ajax', optional_param('ajax', 0, PARAM_INT));
@@ -6260,6 +6382,29 @@ class assign {
         }
         if (!empty($buttonarray)) {
             $mform->addGroup($buttonarray, 'navar', '', array(' '), false);
+        }
+
+        $buttonarray = array();
+
+        if ($this->get_instance()->teamsubmission) {
+            if ($grouprownum > 0) {
+                $name = get_string('previousgroup', 'assign');
+                $buttonarray[] = $mform->createElement('submit', 'nosaveandpreviousgroup', $name);
+            }
+
+            if (!$lastgroup) {
+                $name = get_string('nosavebutnextgroup', 'assign');
+                $buttonarray[] = $mform->createElement('submit', 'nosaveandnextgroup', $name);
+            }
+
+            if (!$lastgroup) {
+                $name = get_string('savenextgroup', 'assign');
+                $buttonarray[] = $mform->createElement('submit', 'saveandshownextgroup', $name);
+            }
+        }
+
+        if (!empty($buttonarray)) {
+            $mform->addGroup($buttonarray, 'groupnavar', '', array(' '), false);
         }
         // The grading form does not work well with shortforms.
         $mform->setDisableShortforms();
@@ -6866,8 +7011,10 @@ class assign {
 
         $instance = $this->get_instance();
         $rownum = required_param('rownum', PARAM_INT);
+        $grouprownum = required_param('grouprownum', PARAM_INT);
         $attemptnumber = optional_param('attemptnumber', -1, PARAM_INT);
         $useridlistid = optional_param('useridlistid', time(), PARAM_INT);
+        $groupidlistid = optional_param('groupidlistid', time(), PARAM_INT);
         $userid = optional_param('userid', 0, PARAM_INT);
         $cache = cache::make_from_params(cache_store::MODE_SESSION, 'mod_assign', 'useridlist');
         if (!$userid) {
@@ -6891,6 +7038,9 @@ class assign {
         $gradeformparams = array('rownum'=>$rownum,
                                  'useridlistid'=>$useridlistid,
                                  'last'=>false,
+                                 'grouprownum' => $grouprownum,
+                                 'groupidlistid' => $groupidlistid,
+                                 'lastgroup' => false,
                                  'attemptnumber'=>$attemptnumber,
                                  'userid'=>optional_param('userid', 0, PARAM_INT));
         $mform = new mod_assign_grade_form(null,

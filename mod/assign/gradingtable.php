@@ -185,6 +185,59 @@ class assign_grading_table extends table_sql implements renderable {
         $where = 'u.id ' . $userwhere;
         $params = array_merge($params, $userparams);
 
+        // MDL-47083
+        // For team assignments all table sorting should be by team/group name first, so we need to include this
+        // within our SQL result.
+
+        // This solution may appear a little over-engineered. However if we just used addtional joins
+        // and where clauses then we could get a non-unique first column. This could occur if a user is a member of
+        // more than one group within the grouping/course.
+        // In this situation the function get_records_sql() shows a debug message and returns a resultset that uses
+        // the last row results for the duplicated first column value (in this case the user id). The group name
+        // would be the name of the group in the last row for that user. Although the function col_team()
+        // ensures that the group name is correctly displayed as 'default group', the sorting relies on the group name
+        // returned by this query. So we need to use a subquery to set the group name to null in this edge case.
+        if ($this->assignment->get_instance()->teamsubmission) {
+            $groupingjoin = ' ';
+            $fields .= ', q.team';
+            $fields .= ', q.groupid';
+
+            if ($groupingid = $this->assignment->get_course_module()->groupingid) {
+                $groupingjoin .= '  LEFT OUTER JOIN {groupings_groups} gg ON
+                                        gm.groupid = gg.groupid
+                                    WHERE gg.groupingid = :groupingid ';
+                $params['groupingid'] = $groupingid;
+            }
+
+            $subquery = ' LEFT OUTER JOIN (
+                                SELECT u.id, gs.id as groupid, gs.name as team
+                                    FROM {user} u
+                                    LEFT OUTER JOIN {groups_members} gm ON
+                                        gm.userid = u.id
+                                    LEFT OUTER JOIN {groups} gs ON
+                                        gm.groupid = gs.id
+                                    ' . $groupingjoin . '
+                                    WHERE gs.courseid = :courseid1
+                                    AND u.id IN (
+                                        SELECT u.id
+                                            FROM {user} u
+                                            LEFT OUTER JOIN {groups_members} gm ON
+                                                gm.userid = u.id
+                                            LEFT OUTER JOIN {groups} gs ON
+                                                gm.groupid = gs.id
+                                            ' . $groupingjoin . '
+                                            WHERE gs.courseid = :courseid2
+                                            GROUP BY u.id
+                                            HAVING count(gm.groupid) = 1
+                                            )
+                                ) q ON u.id = q.id';
+
+            $params['courseid1'] = $this->assignment->get_course()->id;
+            $params['courseid2'] = $this->assignment->get_course()->id;
+
+            $from .= $subquery;
+        }
+
         // The filters do not make sense when there are no submissions, so do not apply them.
         if ($this->assignment->is_any_submission_plugin_enabled()) {
             if ($filter == ASSIGN_FILTER_SUBMITTED) {
@@ -409,10 +462,6 @@ class assign_grading_table extends table_sql implements renderable {
         $this->no_sorting('userid');
         $this->no_sorting('select');
         $this->no_sorting('outcomes');
-
-        if ($assignment->get_instance()->teamsubmission) {
-            $this->no_sorting('team');
-        }
 
         $plugincolumnindex = 0;
         foreach ($this->assignment->get_submission_plugins() as $plugin) {
@@ -1383,5 +1432,24 @@ class assign_grading_table extends table_sql implements renderable {
             return parent::show_hide_link($column, $index);
         }
         return '';
+    }
+
+    /**
+     * Overrides the sort order, adding team to the start always.
+     */
+    public function setup() {
+        parent::setup();
+
+        $firstcol = 'team';
+
+        if (array_key_exists($firstcol, $this->prefs['sortby'])) {
+            // This key already exists somewhere. Change its sortorder and bring it to the top.
+            $sortorder = $this->prefs['sortby'][$firstcol] == SORT_ASC ? SORT_DESC : SORT_ASC;
+            unset($this->prefs['sortby'][$firstcol]);
+            $this->prefs['sortby'] = array_merge(array($firstcol => $sortorder), $this->prefs['sortby']);
+        } else {
+            // Key doesn't exist, so just add it to the beginning of the array, ascending order.
+            $this->prefs['sortby'] = array_merge(array($firstcol => SORT_ASC), $this->prefs['sortby']);
+        }
     }
 }

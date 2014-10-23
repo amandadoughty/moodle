@@ -122,7 +122,7 @@ class flexible_table {
     /**
      * @var array For storing user-customised table properties in the user_preferences db table.
      */
-    private $prefs = array();
+    protected $prefs = array();
 
     /**
      * Constructor
