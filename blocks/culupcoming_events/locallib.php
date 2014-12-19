@@ -397,8 +397,6 @@ function block_culupcoming_events_ajax_reload($lastid=0) {
     foreach ($output as $key => $event) {
         $output[$key] = block_upcoming_events_add_event_metadata($event, $filtercourse);
     }
-    return $output;
-    
 
-    return false;
+    return $output;
 }
