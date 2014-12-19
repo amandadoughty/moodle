@@ -37,6 +37,7 @@ $string['lookahead_help'] = 'This sets the (maximum) number of days in the futur
 that an event has to start in in order to be displayed as an upcoming event. Events
 that start beyond this will never be displayed as upcoming.';
 $string['nomoreevents'] = 'No more events';
+$string['reload'] = 'Refresh Feed';
 $string['second'] = 'second';
 $string['sooner'] = 'Sooner';
 $string['time'] = 'in about {$a}';

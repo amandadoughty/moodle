@@ -60,7 +60,7 @@ class block_culupcoming_events extends block_base {
         if (empty($this->instance)) {
             return $this->content;
         } else {
-            $limitnum = 5;
+            $limitnum = 7;
             $page = optional_param('block_culupcoming_events_page', 1, PARAM_RAW);
             $limitfrom = $page > 1 ? ($page * $limitnum) - $limitnum : 0;
             $lastdate = 0;

@@ -13,7 +13,7 @@ div.block_culupcoming_events div.content {
 
 .block_culupcoming_events .culupcoming_events {
     width: 100%;
-    max-height: 320px;
+    max-height: 400px;
     margin: 0;
     padding: 0;
     overflow-y: scroll;
