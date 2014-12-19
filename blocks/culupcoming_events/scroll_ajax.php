@@ -49,7 +49,7 @@ if ($events) {
 }
 
 if (!$more) {
-    $list .= '<li>No more events</li>';
+    $list .= html_writer::tag('li', get_string('nomoreevents', 'block_culupcoming_events'));
     $end = true;
 }
 
