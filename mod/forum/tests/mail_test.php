@@ -200,7 +200,7 @@ class mod_forum_mail_testcase extends advanced_testcase {
      *
      * @param stdClass $post The forum post object
      * @param integer $expected The number of times that the post should have been sent
-     * @return array An array of the messages caught by the message sink
+     * @return array An array of the messages caught by the message sink and the events caught by the event sink.
      */
     protected function helper_run_cron_check_count($post, $expected) {
 
@@ -832,5 +832,41 @@ class mod_forum_mail_testcase extends advanced_testcase {
         $message = reset($messages);
         $this->assertEquals($author->id, $message->useridfrom);
         $this->assertEquals($expectedsubject, $message->subject);
+    }
+
+    public function test_cron_message_includes_courseid() {
+        $this->resetAfterTest(true);
+
+        // Create a course, with a forum.
+        $course = $this->getDataGenerator()->create_course();
+
+        $options = array('course' => $course->id, 'forcesubscribe' => FORUM_FORCESUBSCRIBE);
+        $forum = $this->getDataGenerator()->create_module('forum', $options);
+
+        // Create two users enrolled in the course as students.
+        list($author, $recipient) = $this->helper_create_users($course, 2);
+
+        // Post a discussion to the forum.
+        list($discussion, $post) = $this->helper_post_to_forum($forum, $author);
+
+        // Run cron and check that \core\event\message_sent contains the course id.
+        // Close the message sink so that message_send is run.
+        $this->helper->messagesink->close();
+
+        // Catch just the cron events. For each message sent two events are fired:
+        // core\event\message_sent
+        // core\event\message_viewed.
+        $this->helper->eventsink = $this->redirectEvents();
+
+        forum_cron();
+
+        // Get the events and close the sink so that remaining events can be triggered.
+        $events = $this->helper->eventsink->get_events();
+        $this->helper->eventsink->close();
+
+        // Reset the message sink for other tests.
+        $this->helper->messagesink = $this->redirectMessages();
+        $event = reset($events);
+        $this->assertEquals($course->id, $event->other['courseid']);
     }
 }

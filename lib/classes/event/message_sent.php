@@ -48,12 +48,16 @@ class message_sent extends base {
      * @param int $messageid
      * @return message_sent
      */
-    public static function create_from_ids($userfromid, $usertoid, $messageid) {
+    public static function create_from_ids($userfromid, $usertoid, $messageid, $courseid = null) {
         // We may be sending a message from the 'noreply' address, which means we are not actually sending a
         // message from a valid user. In this case, we will set the userid to 0.
         // Check if the userid is valid.
         if (!\core_user::is_real_user($userfromid)) {
             $userfromid = 0;
+        }
+
+        if (is_null($courseid)) {
+            $courseid = SITEID;
         }
 
         $event = self::create(array(
@@ -64,7 +68,8 @@ class message_sent extends base {
                 // In earlier versions it can either be the id in the 'message_read' or 'message' table.
                 // Now it is always the id from 'message' table. Please note that the record is still moved
                 // to the 'message_read' table later when message marked as read.
-                'messageid' => $messageid
+                'messageid' => $messageid,
+                'courseid' => $courseid
             )
         ));
 
@@ -142,6 +147,10 @@ class message_sent extends base {
 
         if (!isset($this->other['messageid'])) {
             throw new \coding_exception('The \'messageid\' value must be set in other.');
+        }
+
+        if (!isset($this->other['courseid'])) {
+            throw new \coding_exception('The \'courseid\' value must be set in other.');
         }
     }
 }

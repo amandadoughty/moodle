@@ -84,10 +84,12 @@ if ($action == 'sendmessage' AND has_capability('moodle/course:bulkmessaging', $
     $link2 = $CFG->wwwroot.'/mod/feedback/index.php?id='.$course->id;
     $link3 = $CFG->wwwroot.'/mod/feedback/view.php?id='.$cm->id;
 
+    $contexturlname = format_string($feedback->name, true);
+
     $htmlmessage .= '<div class="navbar">'.
     '<a target="_blank" href="'.$link1.'">'.$shortname.'</a> &raquo; '.
     '<a target="_blank" href="'.$link2.'">'.$strfeedbacks.'</a> &raquo; '.
-    '<a target="_blank" href="'.$link3.'">'.format_string($feedback->name, true).'</a>'.
+    '<a target="_blank" href="' . $link3 . '">' . $contexturlname . '</a>' .
     '</div>';
 
     $htmlmessage .= $message;
@@ -106,7 +108,10 @@ if ($action == 'sendmessage' AND has_capability('moodle/course:bulkmessaging', $
             $eventdata->fullmessage      = html_to_text($htmlmessage);
             $eventdata->fullmessageformat = FORMAT_PLAIN;
             $eventdata->fullmessagehtml  = $htmlmessage;
-            $eventdata->smallmessage     = '';
+            $eventdata->smallmessage     = $subject;
+            $eventdata->courseid         = $course->id;
+            $eventdata->contexturl       = $link3;
+            $eventdata->contexturlname   = $contexturlname;
             $good = $good && message_send($eventdata);
         }
         if (!empty($good)) {

@@ -3,6 +3,7 @@ information provided here is intended especially for developers.
 
 === 2.9 ===
 
+* Added courseid to the $eventdata object used in message_send() calls.
 * The default home page for users has been changed to the dashboard (formely my home). See MDL-45774.
 * Support for rendering templates from php or javascript has been added. See MDL-49152.
 * Support for loading AMD javascript modules has been added. See MDL-49046.

@@ -31,6 +31,7 @@ defined('MOODLE_INTERNAL') || die();
  * New messaging class.
  *
  * Required parameters of the $eventdata object:
+ *  courseid int course id. Can be SITEID if message does not relate to specific course
  *  component string Component name. must exist in message_providers
  *  name string Message type name. must exist in message_providers
  *  userfrom object|int The user sending the message
@@ -56,6 +57,9 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class message {
+    /** @var int Course id. */
+    private $courseid;
+
     /** @var string Component name. */
     private $component;
 
@@ -105,9 +109,9 @@ class message {
     private $attachname;
 
     /** @var array a list of properties that is allowed for each message. */
-    private $properties = array('component', 'name', 'userfrom', 'userto', 'subject', 'fullmessage', 'fullmessageformat',
-                                'fullmessagehtml', 'smallmessage', 'notification', 'contexturl', 'contexturlname', 'savedmessageid',
-                                'replyto', 'attachment', 'attachname');
+    private $properties = array('courseid', 'component', 'name', 'userfrom', 'userto', 'subject', 'fullmessage',
+        'fullmessageformat', 'fullmessagehtml', 'smallmessage', 'notification', 'contexturl', 'contexturlname',
+        'savedmessageid', 'replyto', 'attachment', 'attachname');
 
     /** @var array property to store any additional message processor specific content */
     private $additionalcontent = array();

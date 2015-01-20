@@ -32,6 +32,7 @@ require_once(dirname(dirname(__FILE__)) . '/message/lib.php');
  * sends the message to the configured processors
  *
  * Required parameters of the $eventdata object:
+ *  courseid int course id. Can be SITEID if message does not relate to specific course
  *  component string component name. must exist in message_providers
  *  name string message type name. must exist in message_providers
  *  userfrom object|int the user sending the message
@@ -71,6 +72,14 @@ function message_send($eventdata) {
     // By default a message is a notification. Only personal/private messages aren't notifications.
     if (!isset($eventdata->notification)) {
         $eventdata->notification = 1;
+    }
+
+    if (is_a($eventdata, 'stdClass') && !isset($eventdata->courseid)) {
+        $eventdata->courseid = SITEID;
+    }
+
+    if (is_a($eventdata, '\core\message\message') && !$eventdata->courseid) {
+        $eventdata->courseid = SITEID;
     }
 
     if (!is_object($eventdata->userto)) {
@@ -119,6 +128,7 @@ function message_send($eventdata) {
 
     // Create the message object
     $savemessage = new stdClass();
+    $savemessage->courseid          = $eventdata->courseid;
     $savemessage->useridfrom        = $eventdata->userfrom->id;
     $savemessage->useridto          = $eventdata->userto->id;
     $savemessage->subject           = $eventdata->subject;

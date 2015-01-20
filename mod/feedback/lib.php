@@ -2974,7 +2974,10 @@ function feedback_send_email($cm, $feedback, $course, $userid) {
                 $eventdata->fullmessage      = $posttext;
                 $eventdata->fullmessageformat = FORMAT_PLAIN;
                 $eventdata->fullmessagehtml  = $posthtml;
-                $eventdata->smallmessage     = '';
+                $eventdata->smallmessage     = $postsubject;
+                $eventdata->courseid         = $course->id;
+                $eventdata->contexturl       = $info->url;
+                $eventdata->contexturlname   = $info->feedback;
                 message_send($eventdata);
             } else {
                 $eventdata = new stdClass();
@@ -2986,7 +2989,10 @@ function feedback_send_email($cm, $feedback, $course, $userid) {
                 $eventdata->fullmessage      = $posttext;
                 $eventdata->fullmessageformat = FORMAT_PLAIN;
                 $eventdata->fullmessagehtml  = $posthtml;
-                $eventdata->smallmessage     = '';
+                $eventdata->smallmessage     = $postsubject;
+                $eventdata->courseid         = $course->id;
+                $eventdata->contexturl       = $info->url;
+                $eventdata->contexturlname   = $info->feedback;
                 message_send($eventdata);
             }
         }
@@ -3043,7 +3049,10 @@ function feedback_send_email_anonym($cm, $feedback, $course) {
             $eventdata->fullmessage      = $posttext;
             $eventdata->fullmessageformat = FORMAT_PLAIN;
             $eventdata->fullmessagehtml  = $posthtml;
-            $eventdata->smallmessage     = '';
+            $eventdata->smallmessage     = $postsubject;
+            $eventdata->courseid         = $course->id;
+            $eventdata->contexturl       = $info->url;
+            $eventdata->contexturlname   = $info->feedback;
             message_send($eventdata);
         }
     }

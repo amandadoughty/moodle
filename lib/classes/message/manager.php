@@ -67,7 +67,16 @@ class manager {
 
         if (empty($processorlist)) {
             // Trigger event for sending a message - we need to do this before marking as read!
-            \core\event\message_sent::create_from_ids($eventdata->userfrom->id, $eventdata->userto->id, $savemessage->id)->trigger();
+            if (!$eventdata->courseid) {
+                $eventdata->courseid = SITEID;
+            }
+
+            \core\event\message_sent::create_from_ids(
+                $eventdata->userfrom->id,
+                $eventdata->userto->id,
+                $savemessage->id,
+                eventdata->courseid
+                )->trigger();
 
             if ($savemessage->notification or empty($CFG->messaging)) {
                 // If they have deselected all processors and its a notification mark it read. The user doesn't want to be bothered.
@@ -109,6 +118,10 @@ class manager {
             $eventdata->userto = clone($eventdata->userto);
             $eventdata->userfrom = clone($eventdata->userfrom);
 
+            if (!$eventdata->courseid) {
+                $eventdata->courseid = SITEID;
+            }
+
             // Conserve some memory the same was as $USER setup does.
             unset($eventdata->userto->description);
             unset($eventdata->userfrom->description);
@@ -132,7 +145,12 @@ class manager {
         }
 
         // Trigger event for sending a message - must be done before marking as read.
-        \core\event\message_sent::create_from_ids($eventdata->userfrom->id, $eventdata->userto->id, $savemessage->id)->trigger();
+        \core\event\message_sent::create_from_ids(
+            $eventdata->userfrom->id,
+            $eventdata->userto->id,
+            $savemessage->id,
+            $eventdata->courseid
+            )->trigger();
 
         if (empty($CFG->messaging)) {
             // If messaging is disabled and they previously had forum notifications handled by the popup processor

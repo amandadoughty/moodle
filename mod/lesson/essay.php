@@ -256,12 +256,21 @@ switch ($mode) {
                 $a->comment  = format_text($a->comment, $essayinfo->responseformat, $formattextdefoptions);
                 $a->lesson = format_string($lesson->name, true);
 
+                $b = new stdClass();
+                $b->essay = format_string($pages[$attempt->pageid]->title, true);
+                $b->lesson = $lesson->properties()->name;
+                $b->course = $course->idnumber ? $course->idnumber : $course->fullname;
+                $smallmessage  = get_string('essayemailmessage3', 'lesson', $b);
+
                 // Fetch message HTML and plain text formats
                 $message  = get_string('essayemailmessage2', 'lesson', $a);
                 $plaintext = format_text_email($message, FORMAT_HTML);
 
                 // Subject
                 $subject = get_string('essayemailsubject', 'lesson');
+
+                // Context url.
+                $contexturl = new moodle_url('/grade/report/user/index.php', array('id' => $course->id));
 
                 $eventdata = new stdClass();
                 $eventdata->modulename       = 'lesson';
@@ -271,7 +280,8 @@ switch ($mode) {
                 $eventdata->fullmessage      = $plaintext;
                 $eventdata->fullmessageformat = FORMAT_PLAIN;
                 $eventdata->fullmessagehtml  = $message;
-                $eventdata->smallmessage     = '';
+                $eventdata->smallmessage     = $smallmessage;
+                $eventdata->contexturl       = $contexturl->out();
 
                 // Required for messaging framework
                 $eventdata->component = 'mod_lesson';

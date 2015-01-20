@@ -811,6 +811,7 @@ function forum_cron() {
                 $contexturl = new moodle_url('/mod/forum/discuss.php', array('d' => $discussion->id), 'p' . $post->id);
                 $eventdata->contexturl = $contexturl->out();
                 $eventdata->contexturlname = $discussion->name;
+                $eventdata->courseid = $course->id;
 
                 $mailresult = message_send($eventdata);
                 if (!$mailresult) {
