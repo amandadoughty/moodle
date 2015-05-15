@@ -71,8 +71,12 @@ if ($hassiteconfig or has_any_capability($capabilities, $systemcontext)) {
     foreach ($courseformats as $courseformat) {
         $formcourseformats[$courseformat] = new lang_string('pluginname', "format_$courseformat");
     }
-    $temp->add(new admin_setting_configselect('moodlecourse/format', new lang_string('format'), new lang_string('coursehelpformat'),
-        'weeks',$formcourseformats));
+    $format = new admin_setting_configselect('moodlecourse/format', new lang_string('format'), new lang_string('coursehelpformat'),
+        'weeks',$formcourseformats);
+    $format->set_locked_flag_options(admin_setting_flag::ENABLED, true);
+    // $temp->add(new admin_setting_configselect('moodlecourse/format', new lang_string('format'), new lang_string('coursehelpformat'),
+    //     'weeks',$formcourseformats));
+    $temp->add($format);
 
     $temp->add(new admin_setting_configtext('moodlecourse/maxsections', new lang_string('maxnumberweeks'),
         new lang_string('maxnumberweeks_desc'), 52));
