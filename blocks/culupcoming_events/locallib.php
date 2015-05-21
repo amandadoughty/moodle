@@ -243,20 +243,13 @@ function block_culupcoming_events_get_course_displayname ($courseid, $filtercour
     if (!$courseid) {
         return '';
     } else if (array_key_exists($courseid, $filtercourse)) {
-        $coursefullname  = $filtercourse[$courseid]->fullname;
         $courseshortname = $filtercourse[$courseid]->shortname;
-        $courseidnumber  = $filtercourse[$courseid]->idnumber;
     } else {
         $course = $DB->get_record('course', array('id' => $courseid));
-        $coursefullname  = $course->fullname;
         $courseshortname = $course->shortname;
-        $courseidnumber  = $course->idnumber;
     }
 
-    $coursedisplayname = preg_match('/\A\s*\z/', trim($courseidnumber)) ?
-        $courseshortname : $courseidnumber;
-
-    return $coursedisplayname;
+    return $courseshortname;
 }
 
 /**
