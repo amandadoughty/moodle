@@ -110,67 +110,97 @@ function block_culschool_html_global_db_replace($search, $replace) {
     $instances->close();
 }
 
-/*
- * Returns array of departments that the user can see/edit
- *
- */
-function block_culschool_html_get_dept() {
-    global $USER;
-    // TODO
-    // If admin
-    if (is_siteadmin()) {
-        return array('cass', 'soisems', 'law', 'sass', 'shs', 'other');
-    }
+// /*
+//  * Returns array of departments that the user can see/edit
+//  *
+//  */
+// function block_culschool_html_get_dept() {
+//     global $USER;
+//     // TODO
+//     // If admin
+//     if (is_siteadmin()) {
+//         return array('cass', 'smcse', 'law', 'sass', 'shs', 'other');
+//     }
 
-    $deptcodes = array (
-        'UU' => 'other',
-        'XX' => 'other',
-        'LL' => 'law',
-        'BB' => 'cass',
-        'AA' => 'sass',
-        'SS' => 'sass',
-        'EE' => 'soisems',
-        'HS' => 'shs',
-        'HA' => 'shs',
-        'HN' => 'shs',
-        'II' => 'soisems'
-    );
+//     $deptcodes = array (
+//         'UU' => 'other',
+//         'XX' => 'other',
+//         'LL' => 'law',
+//         'BB' => 'cass',
+//         'AA' => 'sass',
+//         'SS' => 'sass',
+//         'EE' => 'smcse',
+//         'HS' => 'shs',
+//         'HA' => 'shs',
+//         'HN' => 'shs',
+//         'II' => 'smcse'
+//     );
 
-    // else get school code
-    if (!empty($USER->institution)) {
-        $userschool = (substr(trim($USER->institution),0,2));
+//     // else get school code
+//     if (!empty($USER->institution)) {
+//         $userschool = (substr(trim($USER->institution),0,2));
 
-        if (array_key_exists($userschool, $deptcodes)) {
-            $depts = array($deptcodes[$userschool]);
-        }
+//         if (array_key_exists($userschool, $deptcodes)) {
+//             $depts = array($deptcodes[$userschool]);
+//         }
 
-    } /*elseif (isset($USER->department)) {
-        $userdept = (substr(trim($USER->department),0,2));
+//     } /*elseif (isset($USER->department)) {
+//         $userdept = (substr(trim($USER->department),0,2));
 
-        if (array_key_exists($userdept, $deptcodes)) {
-            $depts = array($deptcodes[$userdept]);
-        }
+//         if (array_key_exists($userdept, $deptcodes)) {
+//             $depts = array($deptcodes[$userdept]);
+//         }
 
-    }*/
+//     }*/
 
-    if (empty($depts)) {
-        $depts = array ('other');
-    }
+//     if (empty($depts)) {
+//         $depts = array ('other');
+//     }
 
-    return $depts;
-}
+//     return $depts;
+// }
 
 /*
  * Returns array of types that the user can see/edit
  *
  */
 function block_culschool_html_get_type() {
-    // TODO
+    global $USER, $COURSE; 
     // if admin
-    $types = array('student', 'staff');
+    //$types = array('student', 'staff');
+     
+        $context = context_course::instance($COURSE->id);
 
-    // TODO when we cab identifiy staff and students
-    $types = array('student');
+        $can_edit = has_capability('moodle/course:update', $context, $USER->id, false);
+
+        if ($can_edit) {
+            $types = array('staff');
+        } else {
+            $types = array('student');
+        }
 
     return $types;
+}
+
+/*
+ * Returns array of categories in the hierarchy of the current course.
+ *
+ */
+function block_culschool_html_get_category() {
+    global $USER, $COURSE, $DB;
+
+    $category = $COURSE->category;
+    //$catnames = array();
+    $cats = array();
+    $select = "path LIKE '%/$category'";
+
+    if ($result = $DB->get_record_select('course_categories', $select, null, 'path', $strictness=MUST_EXIST)) {
+        
+                 $longerpath = format_string($result->path);
+                 $path = substr($longerpath, 1);
+                 $cats = explode("/", $path);
+                 //$paths = array_reverse($backpaths);
+    }
+
+    return $cats;
 }

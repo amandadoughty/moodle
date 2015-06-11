@@ -34,7 +34,7 @@ class block_culschool_html extends block_base {
     }
 
     function applicable_formats() {
-        return array('all' => false, 'site' => true, 'my-index' => true);
+        return array('all' => true);
     }
 
     function specialization() {
@@ -55,8 +55,15 @@ class block_culschool_html extends block_base {
         require_once($CFG->libdir . '/filelib.php');
         require_once($CFG->dirroot . '/blocks/culschool_html/lib.php');
 
-        $depts = block_culschool_html_get_dept();
+        //$depts = block_culschool_html_get_dept();
         $types = block_culschool_html_get_type();
+        $cats = block_culschool_html_get_category();
+
+        if (isset($this->config)){
+            $config = $this->config;
+        } else{
+            $config = get_config('block_culschool_html');
+        }
 
         if ($this->content !== NULL) {
             return $this->content;
@@ -78,31 +85,41 @@ class block_culschool_html extends block_base {
         // editor was properly implemented for the block.
         $format = FORMAT_HTML;
 
+        // foreach ($types as $type) {
+        //     foreach ($depts as $dept) {
+        //         $name = $type . $dept;
+        //         $textname = 'text' . $name;
+        //         $configname = 'config_' . $textname;
+
+        //         if (isset($this->config->{$textname})) {
+        //             // rewrite url
+        //             $this->config->{$textname} = file_rewrite_pluginfile_urls($this->config->{$textname}, 'pluginfile.php', $this->context->id, 'block_culschool_html', 'content', NULL);
+
+        //             // Check to see if the format has been properly set on the config
+        //             if (isset($this->config->format)) {
+        //                 $format = $this->config->format;
+        //             }
+
+        //             //$this->content->text .= format_text($this->config->{$textname}, $format, $filteropt);
+        //             $text .= $this->config->{$textname};
+        //         }
+        //     }
+        // }
         foreach ($types as $type) {
-            foreach ($depts as $dept) {
-                $name = $type . $dept;
-                $textname = 'text' . $name;
-                $configname = 'config_' . $textname;
 
-                if (isset($this->config->{$textname})) {
-                    // rewrite url
-                    $this->config->{$textname} = file_rewrite_pluginfile_urls($this->config->{$textname}, 'pluginfile.php', $this->context->id, 'block_culschool_html', 'content', NULL);
-
-                    // Check to see if the format has been properly set on the config
-                    if (isset($this->config->format)) {
-                        $format = $this->config->format;
+                foreach ($cats as $cat) {
+                    $textcat = $cat . $type; 
+                    if( !empty(get_config('block_culschool_html', $textcat))){
+                        $text .= get_config('block_culschool_html', $textcat);
                     }
-
-                    //$this->content->text .= format_text($this->config->{$textname}, $format, $filteropt);
-                    $text .= $this->config->{$textname};
                 }
-            }
         }
 
-        $this->content->text .= format_text($text, $format, $filteropt);
+            $this->content->text .= format_text($text, $format, $filteropt);
 
-        unset($filteropt); // memory footprint
-        return $this->content;
+            unset($filteropt); // memory footprint
+            return $this->content;
+            
     }
 
 
