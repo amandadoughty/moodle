@@ -51,11 +51,10 @@ class block_culschool_html extends block_base {
     }
 
     function get_content() {
-        global $CFG;
+        global $CFG, $COURSE;
         require_once($CFG->libdir . '/filelib.php');
         require_once($CFG->dirroot . '/blocks/culschool_html/lib.php');
 
-        //$depts = block_culschool_html_get_dept();
         $types = block_culschool_html_get_type();
         $cats = block_culschool_html_get_category();
 
@@ -108,7 +107,7 @@ class block_culschool_html extends block_base {
         foreach ($types as $type) {
 
                 foreach ($cats as $cat) {
-                    $textcat = $cat . $type; 
+                    $textcat = $type . $cat; 
                     if( !empty(get_config('block_culschool_html', $textcat))){
                         $text .= get_config('block_culschool_html', $textcat);
                     }
@@ -130,13 +129,14 @@ class block_culschool_html extends block_base {
         global $DB, $CFG;
         require_once($CFG->dirroot . '/blocks/culschool_html/lib.php');
 
-        $depts = block_culschool_html_get_dept();
+        //$depts = block_culschool_html_get_dept();
+        $categories = $DB->get_records('course_categories', array ('visible' => 1), 'id, name');
         $types = block_culschool_html_get_type();
         $config = clone($data);
 
         foreach ($types as $type) {
-            foreach ($depts as $dept) {
-                $name = $type . $dept;
+            foreach ($categories as $category) {
+                $name = $type . $category;    
                 $textname = 'text' . $name;
                 $formatname = 'format' . $name;
                 // Move embedded files into a proper filearea and adjust HTML links to match
