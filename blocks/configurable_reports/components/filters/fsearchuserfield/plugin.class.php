@@ -24,12 +24,12 @@
 
 require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
 
-class plugin_fuserfield extends plugin_base{
+class plugin_fsearchuserfield extends plugin_base{
 
 	function init(){
 		$this->form = true;
-		$this->unique = false;
-		$this->fullname = get_string('fuserfield','block_configurable_reports');
+		$this->unique = true;
+		$this->fullname = get_string('fsearchuserfield','block_configurable_reports');
 		$this->reporttypes = array('users', 'sql');
 	}
 
@@ -66,7 +66,7 @@ class plugin_fuserfield extends plugin_base{
 		$filter_fuserfield = optional_param('filter_fuserfield_'.$data->field,0,PARAM_RAW);
 		if($filter_fuserfield){
 			// addslashes is done in clean param
-			$filter = clean_param(base64_decode($filter_fuserfield),PARAM_RAW);
+			$filter = clean_param(base64_decode($filter_fuserfield),PARAM_CLEAN);
 
 			if(strpos($data->field,'profile_') === 0){
 				if($fieldid = $remotedb->get_field('user_info_field','id',array('shortname' => str_replace('profile_','', $data->field)))){
@@ -83,11 +83,12 @@ class plugin_fuserfield extends plugin_base{
 						return $finalusersid;
 					}
 				}
-			} else {
+			}
+			else{
 				list($usql, $params) = $remotedb->get_in_or_equal($finalelements);
 				$sql = "$data->field LIKE ? AND id $usql";
-				$params = array_merge(array("%$filter%"), $params);
-				if($elements = $remotedb->get_records_select('user', $sql, $params)){
+				$params = array_merge(array("%$filter%"),$params);
+				if($elements = $remotedb->get_records_select('user',$sql,$params)){
 				$finalelements = array_keys($elements);
 				}
 			}
@@ -157,6 +158,6 @@ class plugin_fuserfield extends plugin_base{
 		}
 
 		$mform->addElement('select', 'filter_fuserfield_'.$data->field, $selectname, $filteroptions);
-		$mform->setType('filter_fuserfield_'.$data->field, PARAM_BASE64);
+		$mform->setType('filter_fuserfield_'.$data->field, PARAM_INT);
 	}
 }
