@@ -56,7 +56,9 @@ class block_culschool_html extends block_base {
         require_once($CFG->libdir . '/filelib.php');
         require_once($CFG->dirroot . '/blocks/culschool_html/lib.php');
 
+        // Determine if user sees student or staff info.
         $types = block_culschool_html_get_type();
+        // Get all the ancestor categories of this course.
         $cats = block_culschool_html_get_category();
 
         if (isset($this->config)) {
@@ -72,6 +74,9 @@ class block_culschool_html extends block_base {
         $filteropt = new stdClass;
         $filteropt->overflowdiv = true;
 
+        // @TODO Remove the if statement and just leave $filteropt->noclean = true;
+        // We always want the content cleaned up. Just in case an admin copies and pastes
+        // something bad by mistake.
         if ($this->content_is_trusted()) {
             // Fancy html allowed only on course, category and system blocks.
             $filteropt->noclean = true;
@@ -85,6 +90,7 @@ class block_culschool_html extends block_base {
         // editor was properly implemented for the block.
         $format = FORMAT_HTML;
 
+        // @TODO Remove commented code
         // foreach ($types as $type) {
         //     foreach ($depts as $dept) {
         //         $name = $type . $dept;
@@ -115,6 +121,13 @@ class block_culschool_html extends block_base {
                 $textcat = $type . $cat;
                 if ( !empty(get_config('block_culschool_html', $textcat))) {
                     $text .= get_config('block_culschool_html', $textcat);
+
+                // @TODO Uncomment these lines. We do need to rewrite the file urls when displaying
+                // files.
+                // // rewrite url
+                // $text = file_rewrite_pluginfile_urls($text,
+                //     'pluginfile.php', $this->context->id, 'block_culschool_html', 'content', NULL);
+
                 }
             }
         }
@@ -133,6 +146,7 @@ class block_culschool_html extends block_base {
         global $DB, $CFG;
         require_once($CFG->dirroot . '/blocks/culschool_html/lib.php');
 
+        // Get all of the categories.
         $categories = $DB->get_records('course_categories', array ('visible' => 1), 'id, name');
         $types = block_culschool_html_get_type();
         $config = clone($data);
@@ -141,10 +155,12 @@ class block_culschool_html extends block_base {
             foreach ($categories as $category) {
                 $name = $type . $category;
                 $textname = 'text' . $name;
+                // @TODO Remove line below. We are always using FORMAT_HTML
                 $formatname = 'format' . $name;
                 // Move embedded files into a proper filearea and adjust HTML links to match.
                 $config->{$textname} = file_save_draft_area_files($data->{$textname}['itemid'], $this->context->id,
                     'block_culschool_html', 'content', 0, array('subdirs' => true), $data->{$textname}['text']);
+                // @TODO Remove line below. We are always using FORMAT_HTML
                 $config->{$formatname} = $data->{$textname}['format'];
             }
         }
@@ -159,6 +175,7 @@ class block_culschool_html extends block_base {
         return true;
     }
 
+    // @TODO Remove this function. We will require that the content is cleaned regardless.
     public function content_is_trusted() {
         global $SCRIPT;
 
@@ -190,6 +207,8 @@ class block_culschool_html extends block_base {
         return (!empty($this->config->title) && parent::instance_can_be_docked());
     }
 
+
+    // @TODO Remove this function. We are not using the config setting
     /*
      * Add custom html attributes to aid with theming and styling
      *
