@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -25,32 +24,34 @@
 
 class block_culschool_html extends block_base {
 
-    function init() {
+    public function init() {
         $this->title = get_string('pluginname', 'block_culschool_html');
     }
 
-    function has_config() {
+    public function has_config() {
         return true;
     }
 
-    function applicable_formats() {
-        return array('all' => true);
+    public function applicable_formats() {
+        return array('all' => false,
+                    'course-view' => true);
     }
 
-    function specialization() {
-        $this->title = isset($this->config->title) ? format_string($this->config->title) : format_string(get_string('newhtmlblock', 'block_culschool_html'));
+    public function specialization() {
+        $this->title = isset($this->config->title) ? format_string($this->config->title) :
+        format_string(get_string('newhtmlblock', 'block_culschool_html'));
     }
 
-    function instance_allow_multiple() {
+    public function instance_allow_multiple() {
         return false;
     }
 
 
-    function instance_can_be_hidden() {
+    public function instance_can_be_hidden() {
         return false;
     }
 
-    function get_content() {
+    public function get_content() {
         global $CFG, $COURSE;
         require_once($CFG->libdir . '/filelib.php');
         require_once($CFG->dirroot . '/blocks/culschool_html/lib.php');
@@ -58,13 +59,13 @@ class block_culschool_html extends block_base {
         $types = block_culschool_html_get_type();
         $cats = block_culschool_html_get_category();
 
-        if (isset($this->config)){
+        if (isset($this->config)) {
             $config = $this->config;
-        } else{
+        } else {
             $config = get_config('block_culschool_html');
         }
 
-        if ($this->content !== NULL) {
+        if ($this->content !== null) {
             return $this->content;
         }
 
@@ -72,7 +73,7 @@ class block_culschool_html extends block_base {
         $filteropt->overflowdiv = true;
 
         if ($this->content_is_trusted()) {
-            // fancy html allowed only on course, category and system blocks.
+            // Fancy html allowed only on course, category and system blocks.
             $filteropt->noclean = true;
         }
 
@@ -92,7 +93,8 @@ class block_culschool_html extends block_base {
 
         //         if (isset($this->config->{$textname})) {
         //             // rewrite url
-        //             $this->config->{$textname} = file_rewrite_pluginfile_urls($this->config->{$textname}, 'pluginfile.php', $this->context->id, 'block_culschool_html', 'content', NULL);
+        //             $this->config->{$textname} = file_rewrite_pluginfile_urls($this->config->{$textname},
+        //                 'pluginfile.php', $this->context->id, 'block_culschool_html', 'content', NULL);
 
         //             // Check to see if the format has been properly set on the config
         //             if (isset($this->config->format)) {
@@ -106,69 +108,71 @@ class block_culschool_html extends block_base {
         // }
         foreach ($types as $type) {
 
-                foreach ($cats as $cat) {
-                    $textcat = $type . $cat; 
-                    if( !empty(get_config('block_culschool_html', $textcat))){
-                        $text .= get_config('block_culschool_html', $textcat);
-                    }
+            $this->title = isset($this->config->title) ? format_string($this->config->title) :
+            format_string(get_string($type . 'blockname', 'block_culschool_html'));
+
+            foreach ($cats as $cat) {
+                $textcat = $type . $cat;
+                if ( !empty(get_config('block_culschool_html', $textcat))) {
+                    $text .= get_config('block_culschool_html', $textcat);
                 }
+            }
         }
 
-            $this->content->text .= format_text($text, $format, $filteropt);
+        $this->content->text .= format_text($text, $format, $filteropt);
 
-            unset($filteropt); // memory footprint
-            return $this->content;
-            
+        unset($filteropt); // Memory footprint.
+        return $this->content;
     }
 
 
     /**
      * Serialize and store config data
      */
-    function instance_config_save($data, $nolongerused = false) {
+    public function instance_config_save($data, $nolongerused = false) {
         global $DB, $CFG;
         require_once($CFG->dirroot . '/blocks/culschool_html/lib.php');
 
-        //$depts = block_culschool_html_get_dept();
         $categories = $DB->get_records('course_categories', array ('visible' => 1), 'id, name');
         $types = block_culschool_html_get_type();
         $config = clone($data);
 
         foreach ($types as $type) {
             foreach ($categories as $category) {
-                $name = $type . $category;    
+                $name = $type . $category;
                 $textname = 'text' . $name;
                 $formatname = 'format' . $name;
-                // Move embedded files into a proper filearea and adjust HTML links to match
-                $config->{$textname} = file_save_draft_area_files($data->{$textname}['itemid'], $this->context->id, 'block_culschool_html', 'content', 0, array('subdirs'=>true), $data->{$textname}['text']);
+                // Move embedded files into a proper filearea and adjust HTML links to match.
+                $config->{$textname} = file_save_draft_area_files($data->{$textname}['itemid'], $this->context->id,
+                    'block_culschool_html', 'content', 0, array('subdirs' => true), $data->{$textname}['text']);
                 $config->{$formatname} = $data->{$textname}['format'];
-           }
+            }
         }
 
         parent::instance_config_save($config, $nolongerused);
     }
 
-    function instance_delete() {
+    public function instance_delete() {
         global $DB;
         $fs = get_file_storage();
         $fs->delete_area_files($this->context->id, 'block_culschool_html');
         return true;
     }
 
-    function content_is_trusted() {
+    public function content_is_trusted() {
         global $SCRIPT;
 
         if (!$context = context::instance_by_id($this->instance->parentcontextid, IGNORE_MISSING)) {
             return false;
         }
-        //find out if this block is on the profile page
+        // Find out if this block is on the profile page.
         if ($context->contextlevel == CONTEXT_USER) {
             if ($SCRIPT === '/my/index.php') {
-                // this is exception - page is completely private, nobody else may see content there
-                // that is why we allow JS here
+                // This is exception - page is completely private, nobody else may see content there
+                // That is why we allow JS here.
                 return true;
             } else {
-                // no JS on public personal pages, it would be a big security issue
+                // No JS on public personal pages, it would be a big security issue.
                 return false;
             }
         }
@@ -191,7 +195,7 @@ class block_culschool_html extends block_base {
      *
      * @return array
      */
-    function html_attributes() {
+    public function html_attributes() {
         global $CFG;
 
         $attributes = parent::html_attributes();

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Version details.
  *
  * @package    block_culschool_html
  * @copyright  1999 onwards Amanda Doughty (amanda.doughty.1@city.ac.uk)
@@ -26,4 +26,4 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2013070300;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2012112900;        // Requires this Moodle version
-$plugin->component = 'block_culschool_html';      // Full name of the plugin (used for diagnostics)
+$plugin->component = 'block_culschool_html';      // Full name of the plugin (used for diagnostics).

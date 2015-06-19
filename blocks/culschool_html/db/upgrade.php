@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -33,11 +32,9 @@ function xmldb_block_culschool_html_upgrade($oldversion) {
 
     // Moodle v2.3.0 release upgrade line
     // Put any upgrade step following this
-
-
+    //
     // Moodle v2.4.0 release upgrade line
-    // Put any upgrade step following this
-
+    // Put any upgrade step following this.
 
     return true;
 }

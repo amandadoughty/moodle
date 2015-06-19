@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -43,9 +42,11 @@ foreach ($categories as $category) {
     $string['staff'.$catid] = $catname . ' Staff Content';
     $string['staffdesc'.$catid] = $catname . ' Staff Content';
 
+    $string['studentblockname'] = 'Student Information';
+    $string['staffblockname'] = 'Staff Information';
+
 }
 
-$string['configtitle'] = 'Block title';
 $string['culschool_html:addinstance'] = 'Add a new CUL School HTML block';
 $string['culschool_html:myaddinstance'] = 'Add a new CUL School HTML block to My home';
 $string['culschool_html:edit'] = 'Edit CUL School HTML block';
