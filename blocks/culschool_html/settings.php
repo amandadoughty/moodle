@@ -27,11 +27,13 @@ global $DB;
 
 if ($ADMIN->fulltree) {
     // TODO Remove this setting - the user can't add content so no need to let them add css
-    $settings->add(new admin_setting_configcheckbox('block_culschool_html_allowcssclasses',
-        get_string('allowadditionalcssclasses', 'block_culschool_html'),
-        get_string('configallowadditionalcssclasses', 'block_culschool_html'), 0));
+    // $settings->add(new admin_setting_configcheckbox('block_culschool_html_allowcssclasses',
+    //     get_string('allowadditionalcssclasses', 'block_culschool_html'),
+    //     get_string('configallowadditionalcssclasses', 'block_culschool_html'), 0));
 
-    $categories = $DB->get_records('course_categories', array ('visible' => 1), 'id, name');
+    // @TODO remove  and array ('visible' => 1)
+    // $categories = $DB->get_records('course_categories', array ('visible' => 1), 'id, name');
+    $categories = $DB->get_records('course_categories', null, 'id, name');
 
     // @TODO no file options in the admin class admin_setting_confightmleditor, so we may need
     // to extend it. First find out the logic for not including file picker.
@@ -45,7 +47,6 @@ if ($ADMIN->fulltree) {
     admin_setting_confightmleditor which initialises the file picker options (and performs any
     necessary handling on the submitted form).
     **/
-    $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean'=>true);
 
     foreach ($categories as $category) {
 
@@ -54,9 +55,7 @@ if ($ADMIN->fulltree) {
 
         $settings->add(new admin_setting_confightmleditor('block_culschool_html/student'.$catid,
             new lang_string('student'.$catid, 'block_culschool_html'),
-            new lang_string('studentdesc'.$catid, 'block_culschool_html'), '', PARAM_RAW),
-            null,
-            $editoroptions);
+            new lang_string('studentdesc'.$catid, 'block_culschool_html'), '', PARAM_RAW));
 
         $settings->add(new admin_setting_confightmleditor('block_culschool_html/staff'.$catid,
             new lang_string('staff'.$catid, 'block_culschool_html'),

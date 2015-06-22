@@ -118,7 +118,11 @@ function block_culschool_html_global_db_replace($search, $replace) {
 function block_culschool_html_get_type() {
     global $USER, $COURSE;
     // If admin.
-    $types = array('student', 'staff');
+    // @TODO return both for site admin
+    if (is_siteadmin()) {
+        return array('student', 'staff');
+    }
+    
     $context = context_course::instance($COURSE->id);
     $canedit = has_capability('moodle/course:update', $context, $USER->id, false);
 
@@ -139,7 +143,9 @@ function block_culschool_html_get_category() {
     global $DB, $COURSE;
 
     $category = $COURSE->category;
-    $select = "id = '$category' and visible = 1";
+    // @TODO remove  and visible = 1
+    // $select = "id = '$category' and visible = 1";
+    $select = "id = '$category'";
     $cats = array();
 
     if ($result = $DB->get_record_select('course_categories', $select, null, 'path', $strictness = MUST_EXIST)) {
