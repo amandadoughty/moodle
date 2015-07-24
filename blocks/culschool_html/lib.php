@@ -143,8 +143,6 @@ function block_culschool_html_get_category() {
     global $DB, $COURSE;
 
     $category = $COURSE->category;
-    // @TODO remove  and visible = 1
-    // $select = "id = '$category' and visible = 1";
     $select = "id = '$category'";
     $cats = array();
 

@@ -30,8 +30,6 @@ $string['configclasses'] = 'Additional CSS classes';
 $string['configclasses_help'] = 'The purpose of this configuration is to aid with theming by helping distinguish HTML blocks from each other. Any CSS classes entered here (space delimited) will be appended to the block\'s default classes.';
 $string['configcontent'] = 'Content';
 
-// @TODO remove  and array ('visible' => 1)
-// $categories = $DB->get_records('course_categories', array ('visible' => 1), 'id, name');
 $categories = $DB->get_records('course_categories', null, 'id, name');
 
 foreach ($categories as $category) {

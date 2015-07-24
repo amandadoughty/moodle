@@ -31,9 +31,7 @@ if ($ADMIN->fulltree) {
     //     get_string('allowadditionalcssclasses', 'block_culschool_html'),
     //     get_string('configallowadditionalcssclasses', 'block_culschool_html'), 0));
 
-    // @TODO remove  and array ('visible' => 1)
-    // $categories = $DB->get_records('course_categories', array ('visible' => 1), 'id, name');
-    $categories = $DB->get_records('course_categories', null, 'id, name');
+    $categories = $DB->get_records('course_categories', null, 'path', 'id, name');
 
     // @TODO no file options in the admin class admin_setting_confightmleditor, so we may need
     // to extend it. First find out the logic for not including file picker.
@@ -48,18 +46,35 @@ if ($ADMIN->fulltree) {
     necessary handling on the submitted form).
     **/
 
-    foreach ($categories as $category) {
+// @TODO if statement to display only one category from parameter. If no parameter then list the categories 
+// with a link to include parameter
 
-        $catid = $category->id;
-        $catname = $category->name;
+$categoryId = optional_param('id', 0, PARAM_INT);
 
-        $settings->add(new admin_setting_confightmleditor('block_culschool_html/student'.$catid,
-            new lang_string('student'.$catid, 'block_culschool_html'),
-            new lang_string('studentdesc'.$catid, 'block_culschool_html'), '', PARAM_RAW));
+    if ($categoryId) {
 
-        $settings->add(new admin_setting_confightmleditor('block_culschool_html/staff'.$catid,
-            new lang_string('staff'.$catid, 'block_culschool_html'),
-            new lang_string('staffdesc'.$catid, 'block_culschool_html'), '', PARAM_RAW));
+            $settings->add(new admin_setting_confightmleditor('block_culschool_html/student'.$categoryId,
+                new lang_string('student'.$categoryId, 'block_culschool_html'),
+                new lang_string('studentdesc'.$categoryId, 'block_culschool_html'), '', PARAM_RAW));
 
+            $settings->add(new admin_setting_confightmleditor('block_culschool_html/staff'.$categoryId,
+                new lang_string('staff'.$categoryId, 'block_culschool_html'),
+                new lang_string('staffdesc'.$categoryId, 'block_culschool_html'), '', PARAM_RAW));
+
+    } else {
+
+        foreach ($categories as $category) {
+
+            $catid = $category->id;
+            $catname = $category->name;
+
+            $url = new moodle_url('/admin/settings.php?section=blocksettingculschool_html');
+            $url->param('id', $catid);
+
+            $link ='<p><a href='.$url.'>Edit '.$catname.'</a></p>'; 
+            
+            $settings->add(new admin_setting_heading('block_culschool_html_addlink'.$catid, '', $link));
+        
+        }          
     }
 }
