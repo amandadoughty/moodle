@@ -18,7 +18,7 @@
  * CUL School HTML block
  *
  * @package    block_culschool_html
- * @copyright  1999 onwards Amanda Doughty (amanda.doughty.1@city.ac.uk)
+ * @copyright  1999 onwards Naomi Wilce (Naomi.Wilce.1@city.ac.uk)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -118,11 +118,9 @@ function block_culschool_html_global_db_replace($search, $replace) {
 function block_culschool_html_get_type() {
     global $USER, $COURSE;
     // If admin.
-    // @TODO return both for site admin
     if (is_siteadmin()) {
         return array('student', 'staff');
     }
-    
     $context = context_course::instance($COURSE->id);
     $canedit = has_capability('moodle/course:update', $context, $USER->id, false);
 
@@ -146,7 +144,7 @@ function block_culschool_html_get_category() {
     $select = "id = '$category'";
     $cats = array();
 
-    if ($result = $DB->get_record_select('course_categories', $select, null, 'path', $strictness = MUST_EXIST)) {
+    if ($result = $DB->get_record_select('course_categories', $select, null, 'path')) {
 
         $longerpath = format_string($result->path);
         $path = substr($longerpath, 1);

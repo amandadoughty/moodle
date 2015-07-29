@@ -18,7 +18,7 @@
  * CUL School HTML block caps
  *
  * @package    block_culschool_html
- * @copyright  1999 onwards Amanda Doughty (amanda.doughty.1@city.ac.uk)
+ * @copyright  1999 onwards Naomi Wilce (naomi.wilce.1@city.ac.uk)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

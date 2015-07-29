@@ -18,12 +18,12 @@
  * Version details.
  *
  * @package    block_culschool_html
- * @copyright  1999 onwards Amanda Doughty (amanda.doughty.1@city.ac.uk)
+ * @copyright  1999 onwards Naomi Wilce (Naomi.Wilce.1@city.ac.uk)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015062201;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->version   = 2015072900;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2012112900;        // Requires this Moodle version
 $plugin->component = 'block_culschool_html';      // Full name of the plugin (used for diagnostics).

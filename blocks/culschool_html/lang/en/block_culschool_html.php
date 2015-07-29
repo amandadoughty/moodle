@@ -18,16 +18,12 @@
  * Strings for component 'block_culschool_html', language 'en', branch 'MOODLE_20_STABLE'
  *
  * @package   block_culschool_html
- * @copyright  1999 onwards Amanda Doughty (amanda.doughty.1@city.ac.uk)
+ * @copyright  1999 onwards Naomi Wilce (Naomi.Wilce.1@city.ac.uk)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 global $DB;
 
-$string['allowadditionalcssclasses'] = 'Allow additional CSS classes';
-$string['configallowadditionalcssclasses'] = 'Adds a configuration option to HTML block instances allowing additional CSS classes to be set.';
-$string['configclasses'] = 'Additional CSS classes';
-$string['configclasses_help'] = 'The purpose of this configuration is to aid with theming by helping distinguish HTML blocks from each other. Any CSS classes entered here (space delimited) will be appended to the block\'s default classes.';
 $string['configcontent'] = 'Content';
 
 $categories = $DB->get_records('course_categories', null, 'id, name');

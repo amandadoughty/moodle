@@ -18,7 +18,7 @@
  * Form for editing HTML block instances.
  *
  * @package   block_culschool_html
- * @copyright  1999 onwards Amanda Doughty (amanda.doughty.1@city.ac.uk)
+ * @copyright  1999 onwards Naomi Wilce (naomi.wilce.1@city.ac.uk)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -74,8 +74,6 @@ class block_culschool_html extends block_base {
         $filteropt = new stdClass;
         $filteropt->overflowdiv = true;
         $filteropt->noclean = true;
-
-
         $this->content = new stdClass;
         $this->content->footer = '';
         $this->content->text = '';
@@ -94,8 +92,9 @@ class block_culschool_html extends block_base {
                 if ( !empty(get_config('block_culschool_html', $textcat))) {
                     $text .= get_config('block_culschool_html', $textcat);
 
-                // rewrite url
-                $text = file_rewrite_pluginfile_urls($text, 'pluginfile.php', $this->context->id, 'block_culschool_html', 'content', NULL);
+                    // Rewrite url.
+                    $text = file_rewrite_pluginfile_urls($text, 'pluginfile.php', $this->context->id, 'block_culschool_html',
+                        'content', null);
 
                 }
             }
