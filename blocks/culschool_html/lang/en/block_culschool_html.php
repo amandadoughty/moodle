@@ -26,21 +26,27 @@ global $DB;
 
 $string['configcontent'] = 'Content';
 
-$categories = $DB->get_records('course_categories', null, 'id, name');
+// @TODO remove  and array ('visible' => 1)
+// $categories = $DB->get_records('course_categories', array ('visible' => 1), 'id, name');
+try {
+	$categories = $DB->get_records('course_categories', null, 'id, name');
 
-foreach ($categories as $category) {
+	foreach ($categories as $category) {
 
-    $catid = $category->id;
-    $catname = $category->name;
+	    $catid = $category->id;
+	    $catname = $category->name;
 
-    $string['student'.$catid] = $catname . ' Student Content';
-    $string['studentdesc'.$catid] = $catname . ' Student Content';
-    $string['staff'.$catid] = $catname . ' Staff Content';
-    $string['staffdesc'.$catid] = $catname . ' Staff Content';
+	    $string['student'.$catid] = $catname . ' Student Content';
+	    $string['studentdesc'.$catid] = $catname . ' Student Content';
+	    $string['staff'.$catid] = $catname . ' Staff Content';
+	    $string['staffdesc'.$catid] = $catname . ' Staff Content';
 
-    $string['studentblockname'] = 'Student Information';
-    $string['staffblockname'] = 'Staff Information';
+	    $string['studentblockname'] = 'Student Information';
+	    $string['staffblockname'] = 'Staff Information';
 
+	}
+} catch (dml_exception $e) {
+	// required for cold installation of moodle code.
 }
 
 $string['culschool_html:addinstance'] = 'Add a new CUL School HTML block';
