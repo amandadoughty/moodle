@@ -27,7 +27,7 @@ namespace local_culcourse_visibility\task;
 class update_course_visibility extends \core\task\scheduled_task {
 
     public function get_name() {
-        // Shown in admin screens
+        // Shown in admin screens.
         return get_string('updatecoursevisibility', 'local_culcourse_visibility');
     }
 
@@ -35,18 +35,20 @@ class update_course_visibility extends \core\task\scheduled_task {
      * Update course visibility if the startdate has become due.
      * @return void
      */
-    function execute() {
+    public function execute() {
         global $CFG, $DB;
 
-        // If startdate is today and visibility = 0 then set visibility = 1.
-
+        $start = time();
         // Get list of courses to update.
         mtrace("\n  Searching for courses to make visible ...");
         // Use the configured timezone.
-        $tz = date_default_timezone_set($CFG->timezone);
-        // Course start dates are always set to midnight.
+        date_default_timezone_set($CFG->timezone);
+        // Course start dates are always set to midnight but we will check the whole day in case the value has been
+        // manually updated.
         $beginofday = strtotime('midnight', time());
-        $select = "visible = 0 AND startdate = {$beginofday}";
+        $endofday   = strtotime('tomorrow', $beginofday) - 1;
+        // If startdate is today and visibility = 0 then set visibility = 1.
+        $select = "visible = 0 AND startdate BETWEEN {$beginofday} AND {$endofday}";
 
         if ($courses = $DB->get_records_select('course', $select)) {
             foreach ($courses as $course) {
@@ -59,5 +61,8 @@ class update_course_visibility extends \core\task\scheduled_task {
         } else {
             mtrace("  Nothing to do, except ponder the boundless wonders of the Universe, perhaps. ;-)\n");
         }
+
+        $end = time();
+        mtrace(($end - $start) / 60 . ' mins');
     }
 }
