@@ -15,15 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for plugin local_culcron
+ * Strings for plugin local_culcourse_visibility
  *
- * @package    local
- * @subpackage culcron
- * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>, Tim Gagen <tim.gagen.1@city.ac.uk>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_culcourse_visibility
+ * @category  task
+ * @copyright 2016 Tim Gagen and Amanda Doughty
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['autoupdate'] = 'Auto-update';
-$string['coursevisibility'] = 'Module Visibility';
-$string['coursevisibility_autoupdate_desc'] = 'If enabled, modules with start dates which have recently become due will be made visible when the cron job runs overnight.';
-$string['pluginname'] = 'CUL Cron';
+$string['pluginname'] = 'CUL Course Visibility Update';
+$string['updatecoursevisibility'] = 'Update course visibility based on start date';

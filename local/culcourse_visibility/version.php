@@ -16,17 +16,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CUL Cron version information
+ * CUL Course Visibility version information
  *
  * @package    local
- * @subpackage culcron
- * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>, Tim Gagen <tim.gagen.1@city.ac.uk>
+ * @subpackage course_visibility
+ * @copyright  2016 Tim Gagen and Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014070100; // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2012112900; // Requires this Moodle version
-$plugin->component = 'local_culcron'; // Full name of the plugin (used for diagnostics)
+$plugin->version   = 2016011404; // The current plugin version (Date: YYYYMMDDXX)
+$plugin->requires  = 2014110400; // Requires this Moodle version
+$plugin->component = 'local_culcourse_visibility'; // Full name of the plugin (used for diagnostics)
+$plugin->maturity = MATURITY_BETA;
+$plugin->release = '2.0.0 (Build: 2016011403)';
