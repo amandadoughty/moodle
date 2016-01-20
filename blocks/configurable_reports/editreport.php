@@ -201,10 +201,6 @@
 			$data->jsordering = 0;
 		}
 
-		if(!isset($data->cron)) {
-			$data->cron = 0;
-		}
-
    		if(!isset($data->remote)) {
 			$data->remote = 0;
 		}
