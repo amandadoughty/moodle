@@ -49,6 +49,7 @@ try {
 	// required for cold installation of moodle code.
 }
 
+$string['categoryid'] = 'Category id';
 $string['culschool_html:addinstance'] = 'Add a new CUL School HTML block';
 $string['culschool_html:myaddinstance'] = 'Add a new CUL School HTML block to My home';
 $string['culschool_html:edit'] = 'Edit CUL School HTML block';

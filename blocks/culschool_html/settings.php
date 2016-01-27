@@ -54,6 +54,12 @@ if ($ADMIN->fulltree) {
                 new lang_string('staff'.$categoryid, 'block_culschool_html'),
                 new lang_string('staffdesc'.$categoryid, 'block_culschool_html'), '', PARAM_RAW));
 
+            $settings->add(new block_culschool_html_admin_setting_hidden('block_culschool_html/categoryid',
+                new lang_string('categoryid', 'block_culschool_html'),
+                new lang_string('categoryid', 'block_culschool_html'), '', $categoryid));
+
+
+
     } else {
 
         foreach ($categories as $category) {
