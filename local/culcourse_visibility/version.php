@@ -17,7 +17,7 @@
 /**
  * CUL Course Visibility version information
  *
- * @package    local_course_visibility
+ * @package    local_culcourse_visibility
  * @copyright  2016 Tim Gagen and Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
