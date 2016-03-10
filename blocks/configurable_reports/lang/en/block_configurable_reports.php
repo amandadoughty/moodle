@@ -246,7 +246,7 @@ $string['badconditionexpr'] = "Incorrect condition expression";
 $string['notallowedwords'] = "Not allowed words";
 $string['nosemicolon'] = "No semicolon";
 $string['noexplicitprefix'] = "No explicit prefix";
-$string['queryfailed'] = "Query failed";
+$string['queryfailed'] = 'Query failed <code><pre>{$a}</pre></code>';
 $string['norowsreturned'] = "No rows returned";
 
 $string['listofsqlreports'] = 'Press F11 when cursor is in the editor to toggle full screen editing. Esc can also be used to exit full screen editing.<br/><br/><a href="http://docs.moodle.org/en/ad-hoc_contributed_reports" target="_blank">List of SQL Contributed reports</a>';
@@ -476,11 +476,10 @@ $string['datatables_loadingrecords'] = 'Loading...';
 $string['datatables_processing'] = 'Processing...';
 $string['datatables_search'] = 'Search:';
 $string['datatables_zerorecords'] = 'No matching records found';
-
 // New features: Graph new column.
+
 $string['others'] = 'Others';
 $string['limitcategories'] = 'Limit categories in a graph';
 $string['decimals'] = 'Number of decimals';
-
 $string['sessionlimittime'] = 'Limit between clicks (in minutes)';
 $string['sessionlimittime_help'] = 'The limit between clicks defines if two clicks are part of the same session or not';
