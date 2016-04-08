@@ -24,6 +24,8 @@
 
 class block_culschool_html extends block_base {
 
+    public $hide = '';
+
     public function init() {
         $this->title = get_string('pluginname', 'block_culschool_html');
     }
@@ -37,9 +39,27 @@ class block_culschool_html extends block_base {
                     'course-view' => true);
     }
 
+    public function html_attributes() {
+        $attributes = parent::html_attributes();
+        $attributes['class'] .= " {$this->hide}";
+        return $attributes;
+    }
+
     public function specialization() {
         $this->title = isset($this->config->title) ? format_string($this->config->title) :
         format_string(get_string('newhtmlblock', 'block_culschool_html'));
+
+        // Get content early to check if block should be hidden in editing mode.
+        // Content is maintained at site level, so the block should not show up
+        // if it is empty.
+        // When get_content() is called by the parent class, $content will already 
+        // be populated so the function short circuits and returns the value set 
+        // here.
+        $this->content = $this->get_content();
+
+        if(!$this->content->text) {
+            $this->hide = 'hide';
+        }
     }
 
     public function instance_allow_multiple() {
