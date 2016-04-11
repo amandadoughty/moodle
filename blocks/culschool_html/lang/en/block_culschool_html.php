@@ -56,3 +56,6 @@ $string['culschool_html:edit'] = 'Edit CUL School HTML block';
 $string['leaveblanktohide'] = 'leave blank to hide the title';
 $string['newhtmlblock'] = 'School Information';
 $string['pluginname'] = 'CUL School HTML';
+$string['please'] = 'Please do not make any changes';
+$string['donotedit'] = 'The School Information block for the students and staff is an important way of making sure that the information they get is consistent. Please make sure this is not altered.';
+$string['thanks'] = 'Thank you';
