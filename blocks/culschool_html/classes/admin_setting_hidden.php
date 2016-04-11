@@ -34,7 +34,7 @@ class block_culschool_html_admin_setting_hidden extends admin_setting {
      * @param string $description
      */
     public function __construct($name, $visiblename, $description, $default, $categoryid) {
-    	$this->categoryid = $categoryid;
+        $this->categoryid = $categoryid;
         parent::__construct($name, $visiblename, $description, $default);
     }
 

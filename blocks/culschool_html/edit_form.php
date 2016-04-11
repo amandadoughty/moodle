@@ -25,11 +25,11 @@
 
 class block_culschool_html_edit_form extends block_edit_form {
     protected function specific_definition($mform) {
-        // $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
 
-        $mform->addElement('header', 'configheader', get_string('please', 'block_culschool_html'));
+        $mform->addElement('header', 'configheader', get_string('settings', 'block_culschool_html'));
 
-        $mform->addElement('static', 'donot_edit', get_string('donotedit', 'block_culschool_html'), get_string('thanks', 'block_culschool_html'));
+        $mform->addElement('static', 'donot_edit', get_string('changes', 'block_culschool_html'),
+            get_string('donot_edit', 'block_culschool_html'));
 
     }
 }

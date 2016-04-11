@@ -52,12 +52,12 @@ class block_culschool_html extends block_base {
         // Get content early to check if block should be hidden in editing mode.
         // Content is maintained at site level, so the block should not show up
         // if it is empty.
-        // When get_content() is called by the parent class, $content will already 
-        // be populated so the function short circuits and returns the value set 
+        // When get_content() is called by the parent class, $content will already
+        // be populated so the function short circuits and returns the value set
         // here.
         $this->content = $this->get_content();
 
-        if(!$this->content->text) {
+        if (!$this->content->text) {
             $this->hide = 'hide';
         }
     }
@@ -76,6 +76,10 @@ class block_culschool_html extends block_base {
         require_once($CFG->libdir . '/filelib.php');
         require_once($CFG->dirroot . '/blocks/culschool_html/lib.php');
 
+        if ($this->content !== null) {
+            return $this->content;
+        }
+
         // Determine if user sees student or staff info.
         $types = block_culschool_html_get_type();
         // Get all the ancestor categories of this course.
@@ -85,10 +89,6 @@ class block_culschool_html extends block_base {
             $config = $this->config;
         } else {
             $config = get_config('block_culschool_html');
-        }
-
-        if ($this->content !== null) {
-            return $this->content;
         }
 
         $filteropt = new stdClass;

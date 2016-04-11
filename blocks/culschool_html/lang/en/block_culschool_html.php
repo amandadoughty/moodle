@@ -26,27 +26,25 @@ global $DB;
 
 $string['configcontent'] = 'Content';
 
-// @TODO remove  and array ('visible' => 1)
-// $categories = $DB->get_records('course_categories', array ('visible' => 1), 'id, name');
 try {
-	$categories = $DB->get_records('course_categories', null, 'id, name');
+    $categories = $DB->get_records('course_categories', null, 'id, name');
 
-	foreach ($categories as $category) {
+    foreach ($categories as $category) {
 
-	    $catid = $category->id;
-	    $catname = $category->name;
+        $catid = $category->id;
+        $catname = $category->name;
 
-	    $string['student'.$catid] = $catname . ' Student Content';
-	    $string['studentdesc'.$catid] = $catname . ' Student Content';
-	    $string['staff'.$catid] = $catname . ' Staff Content';
-	    $string['staffdesc'.$catid] = $catname . ' Staff Content';
+        $string['student'.$catid] = $catname . ' Student Content';
+        $string['studentdesc'.$catid] = $catname . ' Student Content';
+        $string['staff'.$catid] = $catname . ' Staff Content';
+        $string['staffdesc'.$catid] = $catname . ' Staff Content';
 
-	    $string['studentblockname'] = 'Student Information';
-	    $string['staffblockname'] = 'Staff Information';
+        $string['studentblockname'] = 'Student Information';
+        $string['staffblockname'] = 'Staff Information';
 
-	}
+    }
 } catch (dml_exception $e) {
-	// required for cold installation of moodle code.
+    // Required for cold installation of moodle code.
 }
 
 $string['categoryid'] = 'Category id';
@@ -56,6 +54,7 @@ $string['culschool_html:edit'] = 'Edit CUL School HTML block';
 $string['leaveblanktohide'] = 'leave blank to hide the title';
 $string['newhtmlblock'] = 'School Information';
 $string['pluginname'] = 'CUL School HTML';
-$string['please'] = 'Please do not make any changes';
-$string['donotedit'] = 'The School Information block for the students and staff is an important way of making sure that the information they get is consistent. Please make sure this is not altered.';
-$string['thanks'] = 'Thank you';
+$string['settings'] = 'Settings';
+$string['changes'] = 'Changes to text';
+$string['donot_edit'] = 'This is a centrally maintained block and can not be edited by staff members.
+    If this information does need to be changed please ask your course officer to put in a request to ServiceNow';
