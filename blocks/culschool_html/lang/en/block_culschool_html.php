@@ -56,5 +56,6 @@ $string['newhtmlblock'] = 'School Information';
 $string['pluginname'] = 'CUL School HTML';
 $string['settings'] = 'Settings';
 $string['changes'] = 'Changes to text';
-$string['donot_edit'] = 'This is a centrally maintained block and can not be edited by staff members.
-    If this information does need to be changed please ask your course officer to put in a request to ServiceNow';
+$string['donot_edit'] = 'This is a centrally maintained block and cannot be edited by staff members.
+If this information does need to be changed please log a request in ServiceNow and the Educational Technology Team will
+co-ordinate with your School.';
