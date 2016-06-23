@@ -34,7 +34,7 @@ if ($ADMIN->fulltree) {
     ));
 
     $options = array();
-    for ($i = 1; $i <= 365; $i++) {
+    for ($i = 0; $i <= 365; $i++) {
         $options[$i] = $i;
     }
     $settings->add(new admin_setting_configselect(
