@@ -78,7 +78,14 @@ class block_culupcoming_events extends block_base {
             $courseid = $COURSE->id;
             $lookahead = $this->config->lookahead;
 
-            list($more, $events) = block_culupcoming_events_get_events($lookahead, $courseid, $lastid, $lastdate, $limitfrom, $limitnum);
+            list($more, $events) = block_culupcoming_events_get_events(
+                $lookahead,
+                $courseid,
+                $lastid,
+                $lastdate,
+                $limitfrom,
+                $limitnum);
+
             $renderer = $this->page->get_renderer('block_culupcoming_events');
             $this->content->text = $renderer->culupcoming_events_reload();
             $this->content->text .= $renderer->culupcoming_events($events);

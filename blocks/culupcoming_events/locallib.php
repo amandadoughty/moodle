@@ -37,7 +37,14 @@ require_once($CFG->dirroot . '/calendar/lib.php');
  * @param int $limitnum maximum number of events
  * @return array $more bool if there are more events to load, $output array of upcoming events
  */
-function block_culupcoming_events_get_events($lookahead = 365, $courseid = SITEID, $lastid = 0, $lastdate = 0, $limitfrom = 0, $limitnum = 5) {
+function block_culupcoming_events_get_events(
+    $lookahead = 365,
+    $courseid = SITEID,
+    $lastid = 0,
+    $lastdate = 0,
+    $limitfrom = 0,
+    $limitnum = 5) {
+
     global $DB;
 
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
@@ -123,7 +130,7 @@ function block_culupcoming_events_get_events($lookahead = 365, $courseid = SITEI
     return array($more, $output);
 }
 
-/* Gets the raw calendar upcoming events 
+/* Gets the raw calendar upcoming events
  *
  * @param int $lookahead the number of days to look ahead
  * @param stClass $course the course the block is displaying events for
