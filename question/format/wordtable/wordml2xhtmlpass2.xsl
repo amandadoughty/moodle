@@ -27,8 +27,10 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:x="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"
     xmlns:mml="http://www.w3.org/1998/Math/MathML"
-    exclude-result-prefixes="x"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    exclude-result-prefixes="x mc"
     version="1.0">
     <xsl:output method="xml" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
     <xsl:preserve-space elements="x:span x:p"/>
@@ -435,6 +437,9 @@
             <xsl:apply-templates/>
         </th>
     </xsl:template>
+
+    <!-- Strip out VML/drawingML markup from Word 2010 files (cf. http://officeopenxml.com/drwOverview.php)-->
+    <xsl:template match="mc:AlternateContent|m:ctrlPr"/>
 
     <!-- Delete unused image, hyperlink and style info -->
     <xsl:template match="x:imageLinks|x:imagesContainer|x:styleMap|x:hyperLinks"/>
