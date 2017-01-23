@@ -68,7 +68,7 @@ class filter_dates_form extends moodleform {
         $repeatarray[] = $mform->createElement('static', 'dummyspacer', '');
         $repeatedoptions['daterangename']['type'] = PARAM_RAW;
 
-        $repeatno = $DB->count_records('block_culcourse_listing_periods');
+        $repeatno = $DB->count_records('block_culcourse_listing_prds');
         $repeatno += 1;   
 
         $this->repeat_elements(
@@ -139,7 +139,7 @@ class filter_dates_form extends moodleform {
 
         $group = $mform->createElement('group', 'repeatnamedgroup', 'repeatnamedgroup', $repeatarray, null, true);
 
-        $repeatno = $DB->count_records('block_culcourse_listing_periods');
+        $repeatno = $DB->count_records('block_culcourse_listing_prds');
         $repeatno += 1;   
 
         $this->repeat_elements(

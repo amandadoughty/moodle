@@ -44,7 +44,7 @@ $PAGE->navbar->add(get_string('navculcourselisting', 'block_culcourse_listing'),
 $PAGE->navbar->add(get_string('navfilters', 'block_culcourse_listing'), null, navigation_node::TYPE_CUSTOM, 'culcourse_listing');
 
 $filterForm = new filter_dates_form();
-$results = $DB->get_records('block_culcourse_listing_periods');
+$results = $DB->get_records('block_culcourse_listing_prds');
 
 $i = 0;
 $data = new stdClass();
@@ -82,10 +82,10 @@ if ($formData != null) {
             $filter->enddate += DAYSECS - 1; // Set to end of the chosen day.
 
             if ($filter->id) {
-            	$DB->update_record('block_culcourse_listing_periods', $filter);
+            	$DB->update_record('block_culcourse_listing_prds', $filter);
             } else {
 	            // insert or update? Add hidden value for id
-	            $DB->insert_record('block_culcourse_listing_periods', $filter);
+	            $DB->insert_record('block_culcourse_listing_prds', $filter);
 	        }
         }
 

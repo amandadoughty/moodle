@@ -124,7 +124,7 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_heading('block_culcourse_listing_addfilter', '', $link));
 
-    $filters = $DB->get_records('block_culcourse_listing_periods');
+    $filters = $DB->get_records('block_culcourse_listing_prds');
 
     foreach ($filters as $filter) {
 

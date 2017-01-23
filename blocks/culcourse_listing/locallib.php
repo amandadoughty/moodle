@@ -256,7 +256,7 @@ function block_culcourse_listing_get_filter_list_regex($course, $config, &$years
 
 /**
  * Updates the year and period arrays on comparing the course start date with ranges in
- * block_culcourse_listing_periods
+ * block_culcourse_listing_prds
  *
  * @param course_in_list $course
  * @param array $config
@@ -266,7 +266,7 @@ function block_culcourse_listing_get_filter_list_regex($course, $config, &$years
 function block_culcourse_listing_get_filter_list_date($course, $config, &$years, &$periods) {
     global $DB;
 
-    $periods = $DB->get_records('block_culcourse_listing_periods');
+    $periods = $DB->get_records('block_culcourse_listing_prds');
 
     foreach($periods as $period) {
         if (($course->startdate >= $period->startdate) && ($course->startdate < $period->enddate)) {
@@ -452,7 +452,7 @@ function block_culcourse_listing_set_regex_filtered_course($course, $config, $ye
 
 /**
  * This function compares the course startdate to the ranges set for each year and
- * period in block_culcourse_listing_periods, to determine if the course is filtered or
+ * period in block_culcourse_listing_prds, to determine if the course is filtered or
  * not.
  *
  * @param stdClass $course
@@ -599,8 +599,8 @@ function block_culcourse_listing_get_categories($courses, $filteredcourseids) {
 function block_culcourse_listing_edit_period($action, $id) {
     global $DB;
 
-    $DB->delete_records('block_culcourse_listing_periods', array('id' => $id));
-    $periods = $DB->get_records('block_culcourse_listing_periods');
+    $DB->delete_records('block_culcourse_listing_prds', array('id' => $id));
+    $periods = $DB->get_records('block_culcourse_listing_prds');
 
     return $periods;
 }
