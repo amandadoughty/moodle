@@ -1,0 +1,77 @@
+.path-grade-report-culuser #graded_users_selector {
+    float: right;
+    margin-bottom: 5px;
+}
+
+.path-grade-report-culuser .view_users_selector {
+    clear: both;
+    float: right;
+    margin-bottom: 5px;
+}
+
+.path-grade-report-culuser #graded_users_selector .singleselect label,
+.path-grade-report-culuser .view_users_selector .singleselect label {
+    display: inline-block;
+}
+
+.path-grade-report-culuser .user-grade {
+    width: 100%;
+    border: none;
+}
+
+.path-grade-report-culuser .user-grade thead th {
+    vertical-align: bottom;
+}
+
+.path-grade-report-culuser .user-grade th {
+    text-align: left;
+}
+
+.path-grade-report-culuser .user-grade td {
+    min-width: 4.5em;
+    vertical-align: top;
+}
+
+.path-grade-report-culuser .user-grade .b1l {
+    padding: 0;
+    width: 24px;
+    min-width: 24px;
+}
+
+.path-grade-report-culuser .user-grade tbody .column-itemname {
+    padding-left: 0;
+    padding-right: 8px;
+}
+
+.path-grade-report-culuser .user-grade .column-itemname.item,
+.path-grade-report-culuser .user-grade .gradeitemdescription {
+    font-weight: normal;
+    padding-left: 24px;
+}
+
+.path-grade-report-culuser .user-grade .column-itemname.baggt,
+.path-grade-report-culuser .user-grade .column-itemname.baggb {
+    padding-left: 24px;
+}
+
+.path-grade-report-culuser .user-grade .baggt,
+.path-grade-report-culuser .user-grade .baggb {
+    font-weight: bold;
+}
+
+.path-grade-report-culuser .user-grade.generaltable .levelodd {
+  background-color: #f9f9f9;
+}
+.path-grade-report-culuser .user-grade.generaltable .leveleven {
+  background-color: transparent;
+}
+.path-grade-report-culuser .user-grade.generaltable td.column-feedback table td {
+    background-color: transparent;!important;
+    border-top: none;
+}
+.path-grade-report-culuser .user-grade.generaltable td.column-feedback > .feedbackpluginname ~ .feedbackpluginname{
+    margin-top: 1em;    
+}
+.path-grade-report-culuser .user-grade.generaltable td.column-feedback .feedbackpluginname {
+    font-style: italic;
+}
