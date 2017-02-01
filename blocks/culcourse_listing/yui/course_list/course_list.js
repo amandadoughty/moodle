@@ -92,7 +92,15 @@ YUI.add('moodle-block_culcourse_listing-course_list', function(Y) {
 
             // TODO Hide the filtered out courses.
             var filterbydate = function(node){
+                var courseyear = Y.Array(node.getData('year'));
+                var courseperiod = Y.Array(node.getData('period'));
 
+                if (filteryear && filteryear != courseyear) {
+                    node.setStyle('display', 'none');
+                }
+                if (filterperiod && filterperiod != courseperiod) {
+                    node.setStyle('display', 'none');
+                }
             };
 
             if (config.filtertype == 'regex') {

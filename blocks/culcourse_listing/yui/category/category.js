@@ -32,7 +32,7 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
     },
     TYPE_CATEGORY = 0,
     TYPE_COURSE = 1,
-    URL = M.cfg.wwwroot + '/blocks/culcourse_listing/category.ajax.php'
+    URL = M.cfg.wwwroot + '/blocks/culcourse_listing/category_ajax.php'
 
     Y.extend(CAT, Y.Base, {
 
@@ -136,6 +136,7 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
             childnode: categorynode.one(SELECTORS.CONTENTNODE),
             spinnerhandle: SELECTORS.CATEGORYSPINNERLOCATION,
             data: {
+                sesskey : M.cfg.sesskey,
                 categoryid: categoryid,
                 depth: depth,
                 showcourses: categorynode.getData('showcourses'),

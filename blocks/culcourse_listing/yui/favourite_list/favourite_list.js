@@ -102,6 +102,9 @@ YUI.add('moodle-block_culcourse_listing-favourite_list', function(Y) {
 
         clear: function(e) {
             e.preventDefault();
+            var params = {
+                sesskey : M.cfg.sesskey
+            };
             var args = {};
             args.message = M.util.get_string('clearfavouritescheck', 'block_culcourse_listing');
             args.scope = this;
@@ -109,6 +112,7 @@ YUI.add('moodle-block_culcourse_listing-favourite_list', function(Y) {
             args.callback = function(e){
                 Y.io(URLCLEAR, {
                     context: this,
+                    data: build_querystring(params),
                     on: {
                         success: function(id) {
                             // Remove all courses from the favourite area.

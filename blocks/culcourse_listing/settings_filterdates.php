@@ -77,8 +77,8 @@ if ($formData != null) {
             $filter->id = $formData->daterangeid[$i];
             $filter->name = $formData->daterangename[$i];
             $filter->type = $formData->daterangetype[$i];
-            $filter->startdate = $formData->{"startdate[$i]"};
-            $filter->enddate = $formData->{"enddate[$i]" };
+            $filter->startdate = $formData->startdate[$i];
+            $filter->enddate = $formData->enddate[$i];
             $filter->enddate += DAYSECS - 1; // Set to end of the chosen day.
 
             if ($filter->id) {
@@ -90,7 +90,9 @@ if ($formData != null) {
         }
 
         $i--;
-    }    
+    } 
+
+    // @TODO redirect   
 }
 
 $output = $PAGE->get_renderer('block_culcourse_listing');

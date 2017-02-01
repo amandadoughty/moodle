@@ -28,7 +28,9 @@ global $PAGE;
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
+require_sesskey();
 require_login();
+$PAGE->set_context(context_system::instance());
 
 $config = get_config('block_culcourse_listing');
 $preferences = block_culcourse_listing_get_preferences();

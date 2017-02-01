@@ -27,11 +27,15 @@
 
 define('AJAX_SCRIPT', true);
 
+global $PAGE;
+
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once($CFG->dirroot.'/blocks/culcourse_listing/renderer.php');
 require_once($CFG->dirroot.'/blocks/culcourse_listing/locallib.php');
 
-require_login();
+require_sesskey(); // Gotta have the sesskey.
+require_login(); // Gotta be logged in (of course).
+$PAGE->set_context(context_system::instance());
 
 $config = get_config('block_culcourse_listing');
 $preferences = block_culcourse_listing_get_preferences();

@@ -96,7 +96,9 @@ function block_culcourse_listing_get_favourite_courses($preferences) {
     // Array of favourite course ids in sort order.
     $usersortorder = unserialize($usersortorder);
 
-    $usersortorder = array();
+    if(!$usersortorder) {
+        $usersortorder = array();
+    }
 
     try {
         $courses = $DB->get_records_list('course', 'id', $usersortorder);
@@ -234,8 +236,9 @@ function block_culcourse_listing_reorder_favourites($favourites) {
  * @param array $config
  * @param array $years passed by reference
  * @param array $periods passed by reference
+ * @param array $daterangeperiods not used
  */
-function block_culcourse_listing_get_filter_list_regex($course, $config, &$years, &$periods) {
+function block_culcourse_listing_get_filter_list_regex($course, $config, &$years, &$periods, $daterangeperiods) {
     $filterfield = $config->filterfield;
     $glue = $config->filterglue;
 
@@ -262,18 +265,16 @@ function block_culcourse_listing_get_filter_list_regex($course, $config, &$years
  * @param array $config
  * @param array $years
  * @param array $periods
+ * @param array $daterangeperiods block_culcourse_listing_prds records.
  */
-function block_culcourse_listing_get_filter_list_date($course, $config, &$years, &$periods) {
-    global $DB;
+function block_culcourse_listing_get_filter_list_date($course, $config, &$years, &$periods, $daterangeperiods) {
 
-    $periods = $DB->get_records('block_culcourse_listing_prds');
-
-    foreach($periods as $period) {
-        if (($course->startdate >= $period->startdate) && ($course->startdate < $period->enddate)) {
-            if($period->type == 0) {
-                $years[$period->name] = $period->name;
+    foreach($daterangeperiods as $daterangeperiod) {
+        if (($course->startdate >= $daterangeperiod->startdate) && ($course->startdate < $daterangeperiod->enddate)) {
+            if($daterangeperiod->type == 0) {
+                $years[$daterangeperiod->name] = $daterangeperiod->name;
             } else {
-                $periods[$period->name] = $period->name;
+                $periods[$daterangeperiod->name] = $daterangeperiod->name;
             }
         }
     }
@@ -377,23 +378,24 @@ function block_culcourse_listing_filter_form($config, $years, $periods, $selecte
  * @param array $courses array of stdClass courses that the user is enrolled on
  * @param array $config block admin settings
  * @param array $preferences user preferences
+ * @param array $daterangeperiods block_culcourse_listing_prds records.
  * @return array $filteredcourseids with course id as key and value on/off (0/1)
  */
-function block_culcourse_listing_get_filtered_course_ids($courses, $config, $preferences) {
+function block_culcourse_listing_get_filtered_course_ids($courses, $config, $preferences, $daterangeperiods) {
     $year = block_culcourse_listing_get_filtered_year($config, $preferences);
     $period = block_culcourse_listing_get_filtered_period($config, $preferences);
     $filteredcourseids = array();
     $filterfunction = 'block_culcourse_listing_set_' . $config->filtertype . '_filtered_course';
 
     foreach ($courses as $course) {
-        $filteredcourseids[$course->id] = $filterfunction($course, $config, $year, $period);
+        $filteredcourseids[$course->id] = $filterfunction($course, $config, $year, $period, $daterangeperiods);
     }
 
     return $filteredcourseids;
 }
 
 /**
- * Returns the filter setting for year based on the dateuser filter
+ * Returns the filter setting for year based on the user filter
  * preference 'culcourse_listing_filter_year'
  *
  * @param array $config block admin settings
@@ -434,8 +436,9 @@ function block_culcourse_listing_get_filtered_period($config, $preferences) {
  * @param array $config block admin settings
  * @param string $year the year to filter by
  * @param string $period the period to filter by
+ * @param array $daterangeperiods not used
  */
-function block_culcourse_listing_set_regex_filtered_course($course, $config, $year, $period) {
+function block_culcourse_listing_set_regex_filtered_course($course, $config, $year, $period, $daterangeperiods) {
     $elements = explode($config->filterglue, $course->{$config->filterfield});
     $filtered = 1;
 
@@ -459,9 +462,27 @@ function block_culcourse_listing_set_regex_filtered_course($course, $config, $ye
  * @param array $config block admin settings
  * @param string $year the year to filter by
  * @param string $period the period to filter by
+ * @param array $daterangeperiods block_culcourse_listing_prds records.
  */
-function block_culcourse_listing_set_date_filtered_course($course, $config, $year, $period) {
+function block_culcourse_listing_set_date_filtered_course($course, $config, $year, $period, $daterangeperiods) {
+    $elements = [];
+    $filtered = 1;
 
+    foreach($daterangeperiods as $daterangeperiod) {
+        if (($course->startdate >= $daterangeperiod->startdate) && ($course->startdate < $daterangeperiod->enddate)) {
+            $elements[] = $daterangeperiod->name;
+        }
+    }
+
+    if ($year && !in_array($year, $elements)) {
+        $filtered = 0;
+    }
+
+    if ($period && !in_array($period, $elements)) {
+        $filtered = 0;
+    }
+
+    return $filtered;
 }
 
 /**
@@ -469,9 +490,10 @@ function block_culcourse_listing_set_date_filtered_course($course, $config, $yea
  *
  * @param course_in_list $course
  * @param array $config
- * @return array of year and period values for $course
+ * @param array $daterangeperiods not used
+ * @return array of year and period values for $course 
  */
-function block_culcourse_listing_get_filter_meta_regex($course, $config) {
+function block_culcourse_listing_get_filter_meta_regex($course, $config, $daterangeperiods) {
     $courseyear = '';
     $courseperiod = '';
     $filterfield = $config->filterfield;
@@ -497,10 +519,27 @@ function block_culcourse_listing_get_filter_meta_regex($course, $config) {
  *
  * @param course_in_list $course
  * @param array $config
+ * @param array $daterangeperiods block_culcourse_listing_prds records.
  * @return array of year and period values for $course
  */
-function block_culcourse_listing_get_filter_meta_date($course, $config) {
+function block_culcourse_listing_get_filter_meta_date($course, $config, $daterangeperiods) {
+    $courseyear = '';
+    $courseperiod = '';
 
+    foreach($daterangeperiods as $period) {
+        if (($course->startdate >= $period->startdate) && ($course->startdate < $period->enddate)) {
+            if($period->type == 0) {
+                $courseyear = $period->name;
+            } else {
+                $courseperiod = $period->name;
+            }
+        }
+    }
+
+    return array (
+        'year' => $courseyear,
+        'period' => $courseperiod
+        );
 }
 
 /*** CATEGORY FUNCTIONS ***/

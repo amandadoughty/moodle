@@ -61,6 +61,16 @@ class block_culcourse_listing extends block_base {
         // Get all of the user preferences for this block. NB returns default values if no
         // preferences are set.
         $preferences = block_culcourse_listing_get_preferences();
+
+        $chelper = new block_culcourse_listing_helper();
+
+        if($config->filtertype == 'date') {
+            global $DB;
+
+            $daterangeperiods = $DB->get_records('block_culcourse_listing_prds');
+            $chelper->set_daterange_periods($daterangeperiods);
+        }
+
         // Get the courses that the user is  enrolled on.
         $enrolledcourses = enrol_get_my_courses('id, shortname, fullname, idnumber,
             category, summary', 'fullname ASC, visible DESC');
@@ -68,18 +78,17 @@ class block_culcourse_listing extends block_base {
         // the filtered courses in order to identify the filtered categories.
         // Anyone who has a category role assignment will still see the categories even if they
         // are empty.
-        $filteredcourseids = block_culcourse_listing_get_filtered_course_ids($enrolledcourses, $config, $preferences);
+        $filteredcourseids = block_culcourse_listing_get_filtered_course_ids($enrolledcourses, $config, $preferences, $chelper->get_daterange_periods());
         $favourites = block_culcourse_listing_get_favourite_courses($preferences);
         // Get categories with enrolled courses.
         list($mycategories, $filteredcategoryids) = block_culcourse_listing_get_categories($enrolledcourses, $filteredcourseids);
         $attributes = block_culcourse_listing_get_filter_state($config, $preferences);
 
-        $chelper = new block_culcourse_listing_helper();
         $chelper->set_my_courses($enrolledcourses);
         $chelper->set_my_categories($mycategories);
         $chelper->set_favourites($favourites);
         $chelper->set_filtered_category_ids($filteredcategoryids);
-        $chelper->set_attributes($attributes);
+        $chelper->set_attributes($attributes);        
 
         $renderer = $this->page->get_renderer('block_culcourse_listing');
         $renderer->set_config($config);
