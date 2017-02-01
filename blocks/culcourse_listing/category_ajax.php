@@ -39,18 +39,8 @@ $PAGE->set_context(context_system::instance());
 
 $config = get_config('block_culcourse_listing');
 $preferences = block_culcourse_listing_get_preferences();
-$chelper = new block_culcourse_listing_helper();
-
-if($config->filtertype == 'date') {
-    global $DB;
-
-    $daterangeperiods = $DB->get_records('block_culcourse_listing_prds');
-    $chelper->set_daterange_periods($daterangeperiods);
-}
-
 $renderer = $PAGE->get_renderer('block_culcourse_listing');
 $renderer->set_config($config);
 $renderer->set_preferences($preferences);
 
-
-echo json_encode($renderer->coursecat_ajax($chelper));
+echo json_encode($renderer->coursecat_ajax());
