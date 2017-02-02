@@ -59,16 +59,16 @@ class review_options_form extends moodleform {
         $cellgroups = $this->get_group_options($this->_customdata['defaultgroups']);
         $cellvisible = $this->get_visibility_options($this->_customdata['defaultvisible']);
         $celldelete = html_writer::link('#', 'Remove', array('class' => 'DeleteRow'));
-        $defaultroles = explode(',', $this->_customdata['defaultroles']);        
-        $rolesallowed = explode(',', $CFG->allowedroles);
+        $defaultroles = explode(',', $this->_customdata['defaultroles']);
         $allroles = $DB->get_records('role');
         $displayrolenames = '';
         $jsrolesvalue = '[]';
         $jsrolessource = '[]';
 
         // Get the selected role names to display.
-        // Get the js value and source strings to pass to createEditableFields()
-        if(!empty($rolesallowed)) {
+        // Get the js value and source strings to pass to createEditableFields().
+        if($CFG->allowedroles != '') {
+            $rolesallowed = explode(',', $CFG->allowedroles);
             $jsrolessourcearray = array();
 
             foreach($rolesallowed as $roleid) {
@@ -100,9 +100,6 @@ class review_options_form extends moodleform {
 
             $srcname = $this->get_course_name($this->_customdata['source'][$count]);
             $destname = $this->get_course_name($this->_customdata['dest'][$count]);
-
-            
-
             $roles = isset($this->_customdata['roles'][$count])? $this->_customdata['roles'][$count] : $this->_customdata['defaultroles'];
             $visible = isset($this->_customdata['visible'][$count])? $this->_customdata['visible'][$count] : $this->_customdata['defaultvisible'];
             $visibleondate = isset($this->_customdata['visibleondate'][$count])? $this->_customdata['visibleondate'][$count] : $this->_customdata['defaultvisibleondate'];          
@@ -290,11 +287,12 @@ class review_options_form extends moodleform {
         // $PAGE->requires->js_call_amd('local_culrollover/x-editable', 'initialise', $params);
         // // Add the JS to show/hide options when a selection changes.
         $PAGE->requires->js_call_amd('local_culrollover/reviewsettings', 'initialise');
-
-        $roles = explode(',', $CFG->allowedroles);
+        
         $allroles = $DB->get_records('role');
 
-        if(!empty($roles)) {
+        if($CFG->allowedroles != '') {
+            $roles = explode(',', $CFG->allowedroles);
+
             foreach($roles as $role) {
                 $rolearray[$role] = $allroles[$role]->shortname;
             }

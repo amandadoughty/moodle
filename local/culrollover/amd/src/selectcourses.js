@@ -11,6 +11,8 @@
     define(['jquery', 'select2'], function($) {
         return {
             initialise: function (delay) {
+                // $.fn.select2.defaults.set("theme", "bootstrap");
+                
                 $('.source_select').select2({
                     placeholder: "Select a source module", // @TODO lang string
                     allowClear: true,

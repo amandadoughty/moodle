@@ -618,7 +618,7 @@ class rollover {
 
         if ($srcoptions){
             if ($dstoptionsrec = $DB->get_record('course_format_options', $dstoptions)) {
-                $dstoptions->value = $srcoptions->value;
+                $dstoptionsrec->value = $srcoptions->value;
                 $DB->update_record('course_format_options', $dstoptionsrec);
             } else {
                 $dstoptions['value'] = $srcoptions->value;
