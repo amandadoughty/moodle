@@ -28,6 +28,7 @@ require_once(dirname(__FILE__) . '/locallib.php');
 
 require_sesskey();
 require_login();
+$PAGE->set_context(context_system::instance());
 // Reorder confirmation hash.
 $reorder = optional_param('reorder', '', PARAM_ALPHANUM);
 
@@ -38,7 +39,6 @@ if (!$reorder) {
             'block_culcourse_listing');
     $site = get_site();
     $PAGE->set_url('/blocks/culcourse_listing/reorderfavourites_post.php');
-    $PAGE->set_context(context_system::instance());
     $PAGE->navbar->add(get_string('mycourses'), new moodle_url('/my/index.php'));
     $PAGE->navbar->add($strreordercheck);
     $PAGE->set_title("$site->shortname: $strreordercheck");
