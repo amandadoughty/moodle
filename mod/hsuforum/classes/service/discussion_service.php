@@ -110,7 +110,7 @@ class discussion_service {
             'eventaction'      => 'discussioncreated',
             'discussionid'     => (int) $discussion->id,
             'livelog'          => $message,
-            'notificationhtml' => $OUTPUT->notification($message, 'notifysuccess'),
+            'notificationhtml' => $OUTPUT->notification($message, 'success'),
             'html'             => $renderer->render_discussionsview($forum),
         ));
     }
@@ -137,6 +137,7 @@ class discussion_service {
             'messagetrust'  => trusttext_trusted($context),
             'mailnow'       => 0,
             'reveal'        => 0,
+            'pinned'        => 0,
         );
         foreach ($options as $name => $value) {
             if (property_exists($discussion, $name)) {
@@ -212,9 +213,7 @@ class discussion_service {
         $discussion->id = hsuforum_add_discussion($discussion, null, $message);
 
         $file = $uploader->process_file_upload($discussion->firstpost);
-        if (!is_null($file)) {
-            $this->db->set_field('hsuforum_posts', 'attachment', 1, array('id' => $discussion->firstpost));
-        }
+        $this->db->set_field('hsuforum_posts', 'attachment', empty($file) ? 0 : 1, array('id' => $discussion->firstpost));
     }
 
     /**

@@ -360,7 +360,10 @@ var ROUTER = Y.Base.create('hsuforumRouter', Y.Router, [], {
         var ta = el.get('href').split('#');
         // Without this timeout it doesn't always focus on the desired element.
         setTimeout(function(){
-            Y.one('#'+ta[1]).ancestor('li').focus();
+            try {
+                Y.one('#' + ta[1]).ancestor('li').focus();
+            } catch (err) {
+            }
         },300);
     },
 
@@ -691,9 +694,9 @@ Y.extend(FORM, Y.Base,
 
         handleTimeToggle: function(e) {
             if (e.currentTarget.get('checked')) {
-                e.currentTarget.ancestor('.fdate_selector').all('select').set('disabled', '');
+                e.currentTarget.ancestor('.felement.fdate_time_selector').all('select').removeAttribute('disabled');
             } else {
-                e.currentTarget.ancestor('.fdate_selector').all('select').set('disabled', 'disabled');
+                e.currentTarget.ancestor('.felement.fdate_time_selector').all('select').setAttribute('disabled', 'disabled');
             }
         },
 
@@ -920,15 +923,25 @@ Y.extend(FORM, Y.Base,
          */
         setDateField: function(field, enabled, timeuts) {
             var dt = new Date(timeuts * 1000),
+                min = dt.getMinutes(),
+                hh = dt.getHours(),
                 dd = dt.getDate(),
                 mm = dt.getMonth()+1,
                 yyyy = dt.getFullYear();
 
             if (enabled) {
-                Y.one('#id_time' + field + '_enabled').set('checked', 'checked');
+                Y.one('#id_time' + field + '_enabled').set('checked', true);
             } else {
-                Y.one('#id_time' + field + '_enabled').removeAttribute('checked');
+                Y.one('#id_time' + field + '_enabled').set('checked', false);
             }
+            if (min > 0) {
+                min = Math.round(min / 5.0) * 5;
+                if (min == 60) {
+                    min = 55;
+                }
+            }
+            Y.one('#id_time'+field+'_minute').set('value', min);
+            Y.one('#id_time'+field+'_hour').set('value', hh);
             Y.one('#id_time'+field+'_day').set('value', dd);
             Y.one('#id_time'+field+'_month').set('value', mm);
             Y.one('#id_time'+field+'_year').set('value', yyyy);
@@ -972,9 +985,9 @@ Y.extend(FORM, Y.Base,
             // Set initial toggle state for date fields.
             datefs.all('.fdate_selector').each(function(el){
                 if (el.one('input').get('checked')) {
-                    el.all('select').set('disabled', '');
+                    el.all('select').removeAttribute('disabled');
                 } else {
-                    el.all('select').set('disabled', 'disabled');
+                    el.all('select').setAttribute('disabled', 'disabled');
                 }
             });
         },
@@ -997,7 +1010,7 @@ Y.extend(FORM, Y.Base,
 
             Y.one('.dateformtarget').append(datefs);
             // Stop calendar button from routing.
-            Y.all('.dateformtarget .fitem_fdate_selector a').addClass('disable-router');
+            Y.all('.dateformtarget .fitem_fdate_time_selector a').addClass('disable-router');
 
             this.setDateFieldsClassState();
         },
@@ -1033,6 +1046,17 @@ Y.extend(FORM, Y.Base,
         },
 
         /**
+         * Put the default setting for date fields
+         *
+         */
+        setDefaultDateSettings: function () {
+            var checkstart = Y.one('#id_timestart_enabled').ancestor('.felement.fdate_time_selector');
+            var checkend = Y.one('#id_timeend_enabled').ancestor('.felement.fdate_time_selector');
+            checkstart.all('select').setAttribute('disabled', 'disabled');
+            checkend.all('select').setAttribute('disabled', 'disabled');
+        },
+
+        /**
          * Show the add discussion form
          *
          * @method showAddDiscussionForm
@@ -1047,6 +1071,12 @@ Y.extend(FORM, Y.Base,
             this.resetDateFields();
             this.applyDateFields();
             this.attachFormWarnings();
+            try {
+                this.setDefaultDateSettings();
+            }
+            catch(err) {
+                Y.log('Timed post disabled');
+            }
         },
 
         /**
@@ -1233,8 +1263,8 @@ Y.extend(ARTICLE, Y.Base,
             Y.delegate('click', form.handlePostToGroupsToggle, document, posttoallgroups, form);
 
             // Implement toggling for the start and time elements for discussions.
-            var discussiontimesselector = '.hsuforum-discussion .fdate_selector input';
-            Y.delegate('click', form.handleTimeToggle, document, discussiontimesselector, form);
+            Y.delegate('click', form.handleTimeToggle, document, '#id_timestart_enabled', form);
+            Y.delegate('click', form.handleTimeToggle, document, '#id_timeend_enabled', form);
 
             // We bind to document otherwise screen readers read everything as clickable.
             Y.delegate('click', form.handleCancelForm, document, SELECTORS.LINK_CANCEL, form);

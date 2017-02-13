@@ -56,6 +56,13 @@ class upload_file {
     protected $element;
 
     /**
+     * Use is_uploaded_file or file_exist
+     *
+     * @var boolean
+     */
+    protected $usestub;
+
+    /**
      * PHP upload errors to Moodle strings
      *
      * @var array
@@ -74,11 +81,13 @@ class upload_file {
      * @param attachments $attachments
      * @param array $options File upload options
      * @param string $element File upload element name
+     * @param boolean $stub Indicates if we need a stub or not
      */
-    public function __construct(attachments $attachments, array $options, $element = 'attachment') {
+    public function __construct(attachments $attachments, array $options, $stub = false, $element = 'attachment') {
         $this->options     = $options;
         $this->element     = $element;
         $this->attachments = $attachments;
+        $this->usestub     = $stub;
     }
 
     /**
@@ -184,7 +193,7 @@ class upload_file {
             }
             throw new moodle_exception('nofile');
         }
-        if (!is_uploaded_file($file['tmp_name'])) {
+        if (!$this->is_uploaded_function($file['tmp_name'])) {
             throw new moodle_exception('notuploadedfile', 'hsuforum');
         }
         if (!$this->validate_file_contents($file['tmp_name'])) {
@@ -192,10 +201,13 @@ class upload_file {
         }
         $maxbytes = $this->options['maxbytes'];
         if (($maxbytes !== -1) && (filesize($file['tmp_name']) > $maxbytes)) {
-            throw new \file_exception('maxbytes');
+            $message = new \stdClass();
+            $message->file = '\'' . $file['name'] . '\'';
+            $message->size = $this->format_bytes($maxbytes);
+            throw new \file_exception('maxbytesfile', $message);
         }
 
-        \repository::antivir_scan_file($file['tmp_name'], $file['name'], true);
+        \core\antivirus\manager::scan_file($file['tmp_name'], $file['name'], true);
     }
 
     /**
@@ -236,4 +248,30 @@ class upload_file {
             $this->attachments->add_attachment($file['name'], $file['tmp_name'], $postid, $license);
         }
     }
+
+    /**
+     * Function to convert an integer that represents the max size of a file in bytes
+     * to a more human readable format.
+     * @param int $maxsize max size in bytes that a file can take.
+     * @return string size of the file on B, KB, MB, GB or TB.
+     */
+    protected function format_bytes($maxsize){
+        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+        $exp = floor(log($maxsize, 1024));
+        return round($maxsize / pow(1024, $exp), 2) . $units[$exp];
+    }
+
+    /**
+     * Tells whether the file was uploaded via HTTP POST or use
+     * a different approach if it nos possible to do the POST validation
+     * @param string $filename the filename being checked
+     * @return bool true on success or false on failure.
+     */
+    protected function is_uploaded_function($filename){
+        if (!$this->usestub){
+            return is_uploaded_file($filename);
+        }
+        return file_exists($filename);
+    }
+
 }

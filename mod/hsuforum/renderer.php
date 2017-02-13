@@ -87,7 +87,7 @@ class mod_hsuforum_renderer extends plugin_renderer_base {
 
         switch ($forum->type) {
             case 'blog':
-                hsuforum_print_latest_discussions($course, $forum, -1, 'p.created DESC', -1, -1, $page, $config->manydiscussions, $cm);
+                hsuforum_print_latest_discussions($course, $forum, -1, 'd.pinned DESC, p.created DESC', -1, -1, $page, $config->manydiscussions, $cm);
                 break;
             case 'eachuser':
                 if (hsuforum_user_can_post_discussion($forum, null, -1, $cm)) {
@@ -200,7 +200,9 @@ class mod_hsuforum_renderer extends plugin_renderer_base {
         if (isloggedin() && !isguestuser()) {
             $url = new \moodle_url('/mod/hsuforum/index.php', ['id' => $course->id]);
             $manageforumsubscriptions = get_string('manageforumsubscriptions', 'mod_hsuforum');
-            $output .= \html_writer::link($url, $manageforumsubscriptions);
+            $output .= '<div class="text-right"><hr>';
+            $output .= \html_writer::link($url, $manageforumsubscriptions, array('class' => 'btn btn-link'));
+            $output .= '</div>';
         }
 
         $output = ob_get_contents().$output;
@@ -312,6 +314,7 @@ class mod_hsuforum_renderer extends plugin_renderer_base {
         $data->message  = $this->post_message($post, $cm);
         $data->created  = userdate($post->created, $format);
         $data->modified = userdate($discussion->timemodified, $format);
+        $data->pinned   = $discussion->pinned;
         $data->replies  = $discussion->replies;
         $data->replyavatars = array();
         if ($data->replies > 0) {
@@ -537,8 +540,12 @@ class mod_hsuforum_renderer extends plugin_renderer_base {
         $datecreated = hsuforum_relative_time($d->rawcreated, array('class' => 'hsuforum-thread-pubdate'));
 
         $threadtitle = $d->subject;
+        if ($d->pinned) {
+            $pinnedstr = get_string('discussionpinned', 'hsuforum');
+            $threadtitle = $this->pix_icon('i/pinned', $pinnedstr, 'mod_hsuforum') . ' ' . $threadtitle;
+        }
         if (!$d->fullthread) {
-            $threadtitle = "<a class='disable-router' href='$d->viewurl'>$d->subject</a>";
+            $threadtitle = "<a class='disable-router' href='$d->viewurl'>$threadtitle</a>";
         }
         $options = get_string('options', 'hsuforum');
         $threadmeta  =
@@ -1446,8 +1453,8 @@ HTML;
                                     && has_capability('mod/hsuforum:canposttomygroups', $context);
 
             if ($canposttoowngroups) {
-                $extrahtml .= html_writer::tag('label', html_writer::checkbox('posttomygroups', 1, false).
-                    get_string('posttomygroups', 'hsuforum'));
+                $extrahtml .= html_writer::tag('label', get_string('posttomygroups', 'hsuforum') . ' ' .
+                    html_writer::checkbox('posttomygroups', 1, false));
             }
 
             if (hsuforum_user_can_post_discussion($forum, -1, null, $cm, $context)) {
@@ -1475,8 +1482,8 @@ HTML;
             }
         }
         if ($forum->anonymous) {
-            $extrahtml .= html_writer::tag('label', html_writer::checkbox('reveal', 1, !empty($data['reveal'])).
-                get_string('reveal', 'hsuforum'));
+            $extrahtml .= html_writer::tag('label', get_string('reveal', 'hsuforum') . ' ' .
+                    html_writer::checkbox('reveal', 1, !empty($data['reveal'])));
         }
 
         $config = get_config('hsuforum');
@@ -1561,13 +1568,13 @@ HTML;
         if (has_capability('mod/hsuforum:allowprivate', $context, $postuser)
             && $forum->allowprivatereplies !== '0'
         ) {
-            $extrahtml .= html_writer::tag('label', html_writer::checkbox('privatereply', 1, !empty($data['privatereply'])).
-                get_string('privatereply', 'hsuforum'));
+            $extrahtml .= html_writer::tag('label', get_string('privatereply', 'hsuforum') . ' ' .
+                    html_writer::checkbox('privatereply', 1, !empty($data['privatereply'])));
         }
         if ($forum->anonymous && !$isedit
             || $forum->anonymous && $isedit && $ownpost) {
-            $extrahtml .= html_writer::tag('label', html_writer::checkbox('reveal', 1, !empty($data['reveal'])).
-                get_string('reveal', 'hsuforum'));
+            $extrahtml .= html_writer::tag('label', get_string('reveal', 'hsuforum') . ' ' .
+                    html_writer::checkbox('reveal', 1, !empty($data['reveal'])));
         }
         $data += array(
             'postid'          => ($isedit) ? $postid : 0,
@@ -1654,6 +1661,13 @@ HTML;
 HTML;
         }
 
+        $mailnowcb = '';
+        $coursecontext = $t->context->get_course_context(false);
+        if (empty($t->postid) && has_capability('moodle/course:manageactivities', $coursecontext)) {
+            $mailnowcb = '<label>' . get_string('mailnow', 'hsuforum') . ' ' .
+                    '<input name="mailnow" type="checkbox" value="1" id="id_mailnow"></label>';
+        }
+
         return <<<HTML
 <div class="hsuforum-reply-wrapper$t->thresholdblocked">
     <form method="post" role="region" aria-label="$t->legend" class="hsuforum-form $t->class" action="$actionurl" autocomplete="off">
@@ -1674,11 +1688,16 @@ HTML;
 
                 $files
 
-                $t->extrahtml
+                <div class="advancedoptions">
+                    $mailnowcb
+                    $t->extrahtml
+                </div>
                 $hidden
-                <button type="submit">$t->submitlabel</button>
-                <a href="#" class="hsuforum-cancel disable-router">$t->cancellabel</a>
-                <a href="$advancedurl" aria-pressed="false" class="hsuforum-use-advanced disable-router">$t->advancedlabel</a>
+
+                    <button type="submit">$t->submitlabel</button>
+                    <a href="#" class="hsuforum-cancel disable-router btn btn-link">$t->cancellabel</a>
+                    <a href="$advancedurl" aria-pressed="false" class="hsuforum-use-advanced disable-router btn btn-link">$t->advancedlabel</a>
+
             </div>
         </fieldset>
     </form>
@@ -1731,7 +1750,7 @@ HTML;
      * @author Mark Nielsen
      */
     public function post_get_commands($post, $discussion, $cm, $canreply) {
-        global $CFG, $USER;
+        global $CFG, $USER, $OUTPUT;
 
         $discussionlink = new moodle_url('/mod/hsuforum/discuss.php', array('d' => $post->discussion));
         $ownpost        = (isloggedin() and $post->userid == $USER->id);
@@ -1806,6 +1825,22 @@ HTML;
         $rating = $this->post_rating($post);
         if (!empty($rating)) {
             $commands['rating'] = $rating;
+        }
+
+        if (!$post->parent && has_capability('mod/hsuforum:pindiscussions', context_module::instance($cm->id))) {
+            if ($discussion->pinned == HSUFORUM_DISCUSSION_PINNED) {
+                $pinlink = HSUFORUM_DISCUSSION_UNPINNED;
+                $pintext = get_string('discussionunpin', 'hsuforum');
+            } else {
+                $pinlink = HSUFORUM_DISCUSSION_PINNED;
+                $pintext = get_string('discussionpin', 'hsuforum');
+            }
+            $pinurl = new moodle_url('/mod/hsuforum/discuss.php', [
+                'pin' => $pinlink,
+                'd' => $discussion->id,
+                'sesskey' => sesskey(),
+            ]);
+            $commands['pin'] = html_writer::link($pinurl, $pintext, ['class' => 'disable-router']);
         }
 
         return $commands;
