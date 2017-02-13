@@ -22,6 +22,7 @@
  * @copyright  2016 Dan Marsden http://danmarsden.com
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * stores constants/data used by sessions page params.
@@ -30,12 +31,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_attendance_sessions_page_params {
-    const ACTION_ADD              = 1;
-    const ACTION_UPDATE           = 2;
-    const ACTION_DELETE           = 3;
-    const ACTION_DELETE_SELECTED  = 4;
-    const ACTION_CHANGE_DURATION  = 5;
-    const ACTION_DELETE_HIDDEN    = 6;
+    const ACTION_ADD               = 1;
+    const ACTION_UPDATE            = 2;
+    const ACTION_DELETE            = 3;
+    const ACTION_DELETE_SELECTED   = 4;
+    const ACTION_CHANGE_DURATION   = 5;
+    const ACTION_DELETE_HIDDEN     = 6;
 
     /** @var int view mode of taking attendance page*/
     public $action;

@@ -21,6 +21,7 @@
  * @copyright  2016 Dan Marsden http://danmarsden.com
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * contains specific data/functions for report_page.
@@ -43,14 +44,14 @@ class mod_attendance_report_page_params extends mod_attendance_page_with_filter_
             $this->group = $this->get_current_sesstype() > 0 ? $this->get_current_sesstype() : 0;
         }
         if (!isset($this->sort)) {
-            $this->sort = ATT_SORT_LASTNAME;
+            $this->sort = ATT_SORT_DEFAULT;
         }
     }
 
     public function get_significant_params() {
         $params = array();
 
-        if ($this->sort != ATT_SORT_LASTNAME) {
+        if ($this->sort != ATT_SORT_DEFAULT) {
             $params['sort'] = $this->sort;
         }
 

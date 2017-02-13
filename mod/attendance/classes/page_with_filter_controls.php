@@ -21,6 +21,7 @@
  * @copyright  2016 Dan Marsden http://danmarsden.com
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * base filter controls class - overridden by different views where needed.
@@ -123,6 +124,10 @@ class mod_attendance_page_with_filter_controls {
             case ATT_VIEW_ALL:
                 $this->startdate = 0;
                 $this->enddate = 0;
+                break;
+            case ATT_VIEW_SUMMARY:
+                $this->startdate = 1;
+                $this->enddate = 1;
                 break;
         }
     }
