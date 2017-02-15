@@ -13,7 +13,7 @@
             initialise: function (delay) {
                 // $.fn.select2.defaults.set("theme", "bootstrap");
                 
-                $('.source_select').select2({
+                $('select.source_select').select2({
                     placeholder: "Select a source module", // @TODO lang string
                     allowClear: true,
                     ajax: {
@@ -45,7 +45,7 @@
                     }
                 });
 
-                $('.dest_select').select2({
+                $('select.dest_select').select2({
                     placeholder: "Select a destination module", // @TODO lang string
                     allowClear: true,
                     ajax: {
