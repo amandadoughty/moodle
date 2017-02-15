@@ -20,9 +20,9 @@ YUI.add('moodle-block_culcourse_listing-favourite_list', function(Y) {
             FAVOURITECOURSEBOX: '.favourite_list .culcoursebox',
             FAVOURITEICON: '.favouritelink i',
             FAVOURITECLEARBUTTON: '.block_culcourse_listing #clearfavourites',
-            FAVOURITECLEARINPUT: '.block_culcourse_listing #clearfavourites input[type=submit]',
+            FAVOURITECLEARINPUT: '.block_culcourse_listing #clearfavourites [type=submit]',
             FAVOURITEREORDERBUTTON: '.block_culcourse_listing #reorderfavourites',
-            FAVOURITEREORDERINPUT: '.block_culcourse_listing #reorderfavourites input[type=submit]',
+            FAVOURITEREORDERINPUT: '.block_culcourse_listing #reorderfavourites [type=submit]',
         },
         URLREORDER = M.cfg.wwwroot + '/blocks/culcourse_listing/reorderfavourites_ajax.php',
         URLCLEAR = M.cfg.wwwroot + '/blocks/culcourse_listing/clearfavourites_ajax.php'

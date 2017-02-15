@@ -384,6 +384,11 @@
   opacity: 0.3;
 }
 
+.block_culcourse_listing [class^="fa-star"],
+.block_culcourse_listing [class*=" fa-star"] {
+    margin: 0;
+}
+
 /*.block_culcourse_listing .icon-white {
   background-image: url("glyphfas-white.png");
 }*/
