@@ -123,11 +123,11 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 $selectedperiod = $this->preferences[$userpref];
 
                 if ($selectedperiod != $all) {
-                    $filters[] = $selectedperiod;
+                    $filters[] = get_string($selectedperiod, 'block_culcourse_listing');
                     // Adds the selected period to the existing array (NB the year and period arrays have been
                     // filled by calling coursecat_subcategory_children() but the user may have set a preference
                     // that no longer exists so we need to add that).
-                    $periods = array($selectedperiod => $selectedperiod);
+                    $periods = array($selectedperiod => get_string($selectedperiod, 'block_culcourse_listing'));
                 }
 
                 $filterperiods = $chelper->get_filter_periods();
@@ -152,6 +152,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             $and = get_string('and', 'block_culcourse_listing');
             $filterstring = join($and, $filters);
             $divalert = get_string('divalert', 'block_culcourse_listing', $filterstring);
+            // $divalert .= '<i class="fa fa-hand-o-right"></i>';
             $content .= html_writer::tag('h2', $header, array('class' => 'allcourses'));
             $content .= html_writer::tag('h2', $divalert, array('class' => 'divalert'));
             $hasexpandedcats = $chelper->get_has_expanded_categories();
@@ -165,7 +166,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                     $filterperiods,
                     $selectedyear,
                     $selectedperiod
-                    );
+                    );                
                 $content .= html_writer::tag('div', $form, array('class' => 'filter'));
             }
 
@@ -1013,6 +1014,8 @@ class block_culcourse_listing_helper {
     protected $filteryears = array();
     /** @var array  */
     protected $filterperiods = array();
+    /** @var array  */
+    protected $terms = array();
     /** @var array  */
     protected $daterangeperiods = array();
     /** @var bool if the category has expanded categories  */

@@ -34,6 +34,10 @@
     text-transform: none !important;
 }
 
+.block_culcourse_listing .favourites {
+    margin-bottom: 2em;
+}
+
 .block_culcourse_listing .favourites  h2,
 .block_culcourse_listing .course_category_tree h2 {
     display: inline-block;
@@ -51,11 +55,31 @@
 }
 
 .block_culcourse_listing .filter-on {
-    background-color: #fbeed5;
+    /*background-color: #fbeed5;*/
+    border: 5px solid #8f182e;
+}
+
+.block_culcourse_listing .filter-on  .fa-hand-o-right {
+    color: #8f182e;
+    font-size: 4em;
+    opacity: 1;
+}
+
+.block_culcourse_listing .filter-on #allcoursesheader {
+
+}
+
+.block_culcourse_listing .filter-on #allcoursesheader h2 {
+    color: #8f182e;
+    text-shadow: #EEEE00 0 0 10px;
 }
 
 .block_culcourse_listing .filter-off .allcourses {
     display: inline-block;
+}
+
+.block_culcourse_listing .filter-on select {
+    border: 2px solid #8f182e;
 }
 
 .block_culcourse_listing .filter-on .allcourses {

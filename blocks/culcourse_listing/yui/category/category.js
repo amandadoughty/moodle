@@ -170,7 +170,7 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
             config.data.years = Y.JSON.stringify(years);
         }
 
-        if (periodselect) {Y
+        if (periodselect) {
             periodselect.get('options').each(function() {
                 periods[this.get('text')] = this.get('text');
             });

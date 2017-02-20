@@ -251,7 +251,7 @@ function block_culcourse_listing_get_filter_list_regex($course, $config, &$years
             }
 
             if (preg_match($config->filterperiodregex, $element, $matches)) {
-                $periods[$matches[0]] = $matches[0];
+                $periods[$matches[0]] = get_string($matches[0], 'block_culcourse_listing');
             }
         }
     }
