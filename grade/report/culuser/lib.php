@@ -25,14 +25,6 @@
 require_once($CFG->dirroot . '/grade/report/user/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
 
-//showhiddenitems values
-// define("GRADE_REPORT_USER_HIDE_HIDDEN", 0);
-// define("GRADE_REPORT_USER_HIDE_UNTIL", 1);
-// define("GRADE_REPORT_USER_SHOW_HIDDEN", 2);
-
-// define("GRADE_REPORT_USER_VIEW_SELF", 1);
-// define("GRADE_REPORT_USER_VIEW_USER", 2);
-
 /**
  * Class providing an API for the user report building and displaying.
  * @uses grade_report
@@ -40,344 +32,8 @@ require_once($CFG->libdir.'/tablelib.php');
  */
 class grade_report_culuser extends grade_report_user {
 
-    /**
-     * The user.
-     * @var object $user
-     */
-    public $user;
-
-    /**
-     * A flexitable to hold the data.
-     * @var object $table
-     */
-    public $table;
-
-    /**
-     * An array of table headers
-     * @var array
-     */
-    public $tableheaders = array();
-
-    /**
-     * An array of table columns
-     * @var array
-     */
-    public $tablecolumns = array();
-
-    /**
-     * An array containing rows of data for the table.
-     * @var type
-     */
-    public $tabledata = array();
-
-    /**
-     * An array containing the grade items data for external usage (web services, ajax, etc...)
-     * @var array
-     */
-    public $gradeitemsdata = array();
-
-    /**
-     * The grade tree structure
-     * @var grade_tree
-     */
-    public $gtree;
-
-    /**
-     * Flat structure similar to grade tree
-     */
-    public $gseq;
-
-    /**
-     * show student ranks
-     */
-    public $showrank;
-
-    /**
-     * show grade percentages
-     */
-    public $showpercentage;
-
-    /**
-     * Show range
-     */
-    public $showrange = true;
-
-    /**
-     * Show grades in the report, default true
-     * @var bool
-     */
-    public $showgrade = true;
-
-    /**
-     * Decimal points to use for values in the report, default 2
-     * @var int
-     */
-    public $decimals = 2;
-
-    /**
-     * The number of decimal places to round range to, default 0
-     * @var int
-     */
-    public $rangedecimals = 0;
-
-    /**
-     * Show grade feedback in the report, default true
-     * @var bool
-     */
-    public $showfeedback = true;
-
-    /**
-     * Show grade weighting in the report, default true.
-     * @var bool
-     */
-    public $showweight = true;
-
-    /**
-     * Show letter grades in the report, default false
-     * @var bool
-     */
-    public $showlettergrade = false;
-
-    /**
-     * Show the calculated contribution to the course total column.
-     * @var bool
-     */
-    public $showcontributiontocoursetotal = true;
-
-    /**
-     * Show average grades in the report, default false.
-     * @var false
-     */
-    public $showaverage = false;
-
-    public $maxdepth;
-    public $evenodd;
-
-    public $canviewhidden;
-
-    public $switch;
-
-    /**
-     * Show hidden items even when user does not have required cap
-     */
-    public $showhiddenitems;
-    public $showtotalsifcontainhidden;
-
-    public $baseurl;
-    public $pbarurl;
-
-    /**
-     * The modinfo object to be used.
-     *
-     * @var course_modinfo
-     */
-    protected $modinfo = null;
-
-    /**
-     * View as user.
-     *
-     * When this is set to true, the visibility checks, and capability checks will be
-     * applied to the user whose grades are being displayed. This is very useful when
-     * a mentor/parent is viewing the report of their mentee because they need to have
-     * access to the same information, but not more, not less.
-     *
-     * @var boolean
-     */
-    protected $viewasuser = false;
-
-    /**
-     * An array that collects the aggregationhints for every
-     * grade_item. The hints contain grade, grademin, grademax
-     * status, weight and parent.
-     *
-     * @var array
-     */
-    protected $aggregationhints = array();
-
-    /**
-     * Constructor. Sets local copies of user preferences and initialises grade_tree.
-     * @param int $courseid
-     * @param object $gpr grade plugin return tracking object
-     * @param string $context
-     * @param int $userid The id of the user
-     * @param bool $viewasuser Set this to true when the current user is a mentor/parent of the targetted user.
-     */
-    public function __construct($courseid, $gpr, $context, $userid, $viewasuser = null) {
-        global $DB, $CFG;
-        grade_report::__construct($courseid, $gpr, $context);
-
-        $this->showrank        = grade_get_setting($this->courseid, 'report_culuser_showrank', $CFG->grade_report_culuser_showrank);
-        $this->showpercentage  = grade_get_setting($this->courseid, 'report_culuser_showpercentage', $CFG->grade_report_culuser_showpercentage);
-        $this->showhiddenitems = grade_get_setting($this->courseid, 'report_culuser_showhiddenitems', $CFG->grade_report_culuser_showhiddenitems);
-        $this->showtotalsifcontainhidden = array($this->courseid => grade_get_setting($this->courseid, 'report_culuser_showtotalsifcontainhidden', $CFG->grade_report_culuser_showtotalsifcontainhidden));
-
-        $this->showgrade       = grade_get_setting($this->courseid, 'report_culuser_showgrade',       !empty($CFG->grade_report_culuser_showgrade));
-        $this->showrange       = grade_get_setting($this->courseid, 'report_culuser_showrange',       !empty($CFG->grade_report_culuser_showrange));
-        $this->showfeedback    = grade_get_setting($this->courseid, 'report_culuser_showfeedback',    !empty($CFG->grade_report_culuser_showfeedback));
-
-        $this->showweight = grade_get_setting($this->courseid, 'report_culuser_showweight',
-            !empty($CFG->grade_report_culuser_showweight));
-
-        $this->showcontributiontocoursetotal = grade_get_setting($this->courseid, 'report_culuser_showcontributiontocoursetotal',
-            !empty($CFG->grade_report_culuser_showcontributiontocoursetotal));
-
-        $this->showlettergrade = grade_get_setting($this->courseid, 'report_culuser_showlettergrade', !empty($CFG->grade_report_culuser_showlettergrade));
-        $this->showaverage     = grade_get_setting($this->courseid, 'report_culuser_showaverage',     !empty($CFG->grade_report_culuser_showaverage));
-
-        $this->viewasuser = $viewasuser;
-
-        // The default grade decimals is 2
-        $defaultdecimals = 2;
-        if (property_exists($CFG, 'grade_decimalpoints')) {
-            $defaultdecimals = $CFG->grade_decimalpoints;
-        }
-        $this->decimals = grade_get_setting($this->courseid, 'decimalpoints', $defaultdecimals);
-
-        // The default range decimals is 0
-        $defaultrangedecimals = 0;
-        if (property_exists($CFG, 'grade_report_culuser_rangedecimals')) {
-            $defaultrangedecimals = $CFG->grade_report_culuser_rangedecimals;
-        }
-        $this->rangedecimals = grade_get_setting($this->courseid, 'report_culuser_rangedecimals', $defaultrangedecimals);
-
-        $this->switch = grade_get_setting($this->courseid, 'aggregationposition', $CFG->grade_aggregationposition);
-
-        // Grab the grade_tree for this course
-        $this->gtree = new grade_tree($this->courseid, false, $this->switch, null, !$CFG->enableoutcomes);
-
-        // Get the user (for full name).
-        $this->user = $DB->get_record('user', array('id' => $userid));
-
-        // What user are we viewing this as?
-        $coursecontext = context_course::instance($this->courseid);
-        if ($viewasuser) {
-            $this->modinfo = new course_modinfo($this->course, $this->user->id);
-            $this->canviewhidden = has_capability('moodle/grade:viewhidden', $coursecontext, $this->user->id);
-        } else {
-            $this->modinfo = $this->gtree->modinfo;
-            $this->canviewhidden = has_capability('moodle/grade:viewhidden', $coursecontext);
-        }
-
-        // Determine the number of rows and indentation.
-        $this->maxdepth = 1;
-        $this->inject_rowspans($this->gtree->top_element);
-        $this->maxdepth++; // Need to account for the lead column that spans all children.
-        for ($i = 1; $i <= $this->maxdepth; $i++) {
-            $this->evenodd[$i] = 0;
-        }
-
-        $this->tabledata = array();
-
-        // base url for sorting by first/last name
-        $this->baseurl = $CFG->wwwroot.'/grade/report?id='.$courseid.'&amp;userid='.$userid;
-        $this->pbarurl = $this->baseurl;
-
-        // no groups on this report - rank is from all course users
-        $this->setup_table();
-
-        //optionally calculate grade item averages
-        $this->calculate_averages();
-    }
-
-    // /**
-    //  * Recurses through a tree of elements setting the rowspan property on each element
-    //  *
-    //  * @param array $element Either the top element or, during recursion, the current element
-    //  * @return int The number of elements processed
-    //  */
-    // function inject_rowspans(&$element) {
-
-    //     if ($element['depth'] > $this->maxdepth) {
-    //         $this->maxdepth = $element['depth'];
-    //     }
-    //     if (empty($element['children'])) {
-    //         return 1;
-    //     }
-    //     $count = 1;
-
-    //     foreach ($element['children'] as $key=>$child) {
-    //         // If category is hidden then do not include it in the rowspan.
-    //         if ($child['type'] == 'category' && $child['object']->is_hidden() && !$this->canviewhidden
-    //                 && ($this->showhiddenitems == GRADE_REPORT_USER_HIDE_HIDDEN
-    //                 || ($this->showhiddenitems == GRADE_REPORT_USER_HIDE_UNTIL && !$child['object']->is_hiddenuntil()))) {
-    //             // Just calculate the rowspans for children of this category, don't add them to the count.
-    //             $this->inject_rowspans($element['children'][$key]);
-    //         } else {
-    //             $count += $this->inject_rowspans($element['children'][$key]);
-    //         }
-    //     }
-
-    //     $element['rowspan'] = $count;
-    //     return $count;
-    // }
-
-
-    // /**
-    //  * Prepares the headers and attributes of the flexitable.
-    //  */
-    // public function setup_table() {
-    //     /*
-    //      * Table has 1-8 columns
-    //      *| All columns except for itemname/description are optional
-    //      */
-
-    //     // setting up table headers
-
-    //     $this->tablecolumns = array('itemname');
-    //     $this->tableheaders = array($this->get_lang_string('gradeitem', 'grades'));
-
-    //     if ($this->showweight) {
-    //         $this->tablecolumns[] = 'weight';
-    //         $this->tableheaders[] = $this->get_lang_string('weightuc', 'grades');
-    //     }
-
-    //     if ($this->showgrade) {
-    //         $this->tablecolumns[] = 'grade';
-    //         $this->tableheaders[] = $this->get_lang_string('grade', 'grades');
-    //     }
-
-    //     if ($this->showrange) {
-    //         $this->tablecolumns[] = 'range';
-    //         $this->tableheaders[] = $this->get_lang_string('range', 'grades');
-    //     }
-
-    //     if ($this->showpercentage) {
-    //         $this->tablecolumns[] = 'percentage';
-    //         $this->tableheaders[] = $this->get_lang_string('percentage', 'grades');
-    //     }
-
-    //     if ($this->showlettergrade) {
-    //         $this->tablecolumns[] = 'lettergrade';
-    //         $this->tableheaders[] = $this->get_lang_string('lettergrade', 'grades');
-    //     }
-
-    //     if ($this->showrank) {
-    //         $this->tablecolumns[] = 'rank';
-    //         $this->tableheaders[] = $this->get_lang_string('rank', 'grades');
-    //     }
-
-    //     if ($this->showaverage) {
-    //         $this->tablecolumns[] = 'average';
-    //         $this->tableheaders[] = $this->get_lang_string('average', 'grades');
-    //     }
-
-    //     if ($this->showfeedback) {
-    //         $this->tablecolumns[] = 'feedback';
-    //         $this->tableheaders[] = $this->get_lang_string('feedback', 'grades');
-    //     }
-
-    //     if ($this->showcontributiontocoursetotal) {
-    //         $this->tablecolumns[] = 'contributiontocoursetotal';
-    //         $this->tableheaders[] = $this->get_lang_string('contributiontocoursetotal', 'grades');
-    //     }
-    // }
-
-    function fill_table() {
-        //print "<pre>";
-        //print_r($this->gtree->top_element);
+    public function fill_table() {
         $this->fill_table_recursive($this->gtree->top_element);
-        //print_r($this->tabledata);
-        //print "</pre>";
         return true;
     }
 
@@ -679,12 +335,6 @@ class grade_report_culuser extends grade_report_user {
                     $data['average']['headers'] = "$header_cat $header_row average";
                 }
 
-
-
-
-
-
-
                 // Feedback
                 require_once($CFG->dirroot . '/mod/assign/locallib.php');
 
@@ -710,53 +360,17 @@ class grade_report_culuser extends grade_report_user {
                         }
 
                         // At this point $data['feedback']['content'] will contain the feedback or an empty string.
-                        // Now we check if the grade is for an assigment module.
-                        if ($grade_object->itemmodule == 'assign'){
-                            // It is so we first retrieve all the assignment modules in the course.
-                            $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
-                            // Now we use the iteminstance to retrieve the assignment module for this grade.
-                            if (!empty($instances[$grade_object->iteminstance])) {
-                                $cm = $instances[$grade_object->iteminstance];                              
-                                $context = context_module::instance($cm->id);
-                                $course = get_course($this->courseid);
-                                $assign = new assign($context, $cm, $course);
-                                $feedbackplugins = $assign->get_feedback_plugins();
-                                $renderer = $assign->get_renderer();
-                                $config = get_config('assign');
-                                // Get the feedback plugin that is set to push comments to the gradebook. This is what populates
-                                // $grade_grade->feedback unless it is overridden.
-                                $gradebookfeedback = str_replace('assignfeedback_', '', $config->feedback_plugin_for_gradebook);
-                                // We need a stdClass with an id property from assign_grades that is for this $grade_object. 
-                                // It is needed to test $feedbackplugin->is_empty() for the remaining assignfeedback plugins.
-                                $params = array('assignment'=>$assign->get_instance()->id,  'userid' => $this->user->id);
-                                $grade = $DB->get_record('assign_grades', $params, '*');
-                                $grade = $DB->get_record('assign_grades', $params, '*');
-           
-                                foreach($feedbackplugins as $feedbackplugin) {
-                                    if ($feedbackplugin->is_enabled() &&
-                                        $feedbackplugin->is_visible() &&
-                                        $feedbackplugin->has_user_summary()                                            
-                                    ){
-                                        $feedbacksubtitle = '<p class="feedbackpluginname">' . $feedbackplugin->get_name() . '</p>';
+                        // Now we check if there is a feedback function for this module.
+                        $feedbackfunction = 'get' . ucfirst($grade_object->itemmodule) . 'Feedback';
 
-                                        // Add the title of the default feedback type if the feedback is not empty.
-                                        if ($feedbackplugin->get_type() == $gradebookfeedback) {
-                                            if ($data['feedback']['content']) {
-                                                $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
-                                            }
-                                        // Use the plugin function to output the feedback.
-                                        } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
-                                            $data['feedback']['content'] .= $feedbacksubtitle;
-                                            $data['feedback']['content'] .= $feedbackplugin->view($grade);
-                                        }
-                                    }
-                                }
-                            }
+                        if (method_exists($this, $feedbackfunction)){
+                            $this->{$feedbackfunction}($data, $grade_object);
                         }
                     }
 
                     $data['feedback']['headers'] = "$header_cat $header_row feedback";
                 }
+
                 // Contribution to the course total column.
                 if ($this->showcontributiontocoursetotal) {
                     $data['contributiontocoursetotal']['class'] = $class;
@@ -764,14 +378,9 @@ class grade_report_culuser extends grade_report_user {
                     $data['contributiontocoursetotal']['headers'] = "$header_cat $header_row contributiontocoursetotal";
 
                 }
+
                 $this->gradeitemsdata[] = $gradeitemdata;
             }
-
-
-
-
-
-
 
             // We collect the aggregation hints whether they are hidden or not.
             if ($this->showcontributiontocoursetotal) {
@@ -824,6 +433,408 @@ class grade_report_culuser extends grade_report_user {
             $this->fill_contributions_column($element);
         }
     }
+
+
+    protected function getAssignFeedback(&$data, $grade_object) {
+        global $DB;
+
+        // It is so we first retrieve all the assignment modules in the course.
+        $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
+        // Now we use the iteminstance to retrieve the assignment module for this grade.
+        if (!empty($instances[$grade_object->iteminstance])) {
+            $cm = $instances[$grade_object->iteminstance];                              
+            $context = context_module::instance($cm->id);
+            $course = get_course($this->courseid);
+            $assign = new assign($context, $cm, $course);
+            $feedbackplugins = $assign->get_feedback_plugins();
+            $renderer = $assign->get_renderer();
+            $config = get_config('assign');
+            // Get the feedback plugin that is set to push comments to the gradebook. This is what populates
+            // $grade_grade->feedback unless it is overridden.
+            $gradebookfeedback = str_replace('assignfeedback_', '', $config->feedback_plugin_for_gradebook);
+            // We need a stdClass with an id property from assign_grades that is for this $grade_object. 
+            // It is needed to test $feedbackplugin->is_empty() for the remaining assignfeedback plugins.
+            $params = array(
+                'assignment' => $assign->get_instance()->id,  
+                'userid' => $this->user->id
+                );
+
+            $grade = $DB->get_record('assign_grades', $params, '*');
+            $grade = $DB->get_record('assign_grades', $params, '*');
+
+            foreach($feedbackplugins as $feedbackplugin) {
+                if ($feedbackplugin->is_enabled() &&
+                    $feedbackplugin->is_visible() &&
+                    $feedbackplugin->has_user_summary()                                            
+                ){
+                    $feedbacksubtitle = '<p class="feedbackpluginname">' . $feedbackplugin->get_name() . '</p>';
+
+                    // Add the title of the default feedback type if the feedback is not empty.
+                    if ($feedbackplugin->get_type() == $gradebookfeedback) {
+                        if ($data['feedback']['content']) {
+                            $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
+                        }
+                    // Use the plugin function to output the feedback.
+                    } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
+                        $data['feedback']['content'] .= $feedbacksubtitle;
+                        $data['feedback']['content'] .= $feedbackplugin->view($grade);
+                    }
+                }
+            }
+
+            // Get any rubric feedback.
+            $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('rubric', 'gradereport_culuser') . '</p>';
+            $rubrictext = $this->rubric_text($this->user->id, $this->courseid, $assign->get_instance()->id, 'assign');
+
+            if ($rubrictext) {
+                $data['feedback']['content'] .= $feedbacksubtitle .= $rubrictext;
+            }
+
+            // Get any marking guide feedback.
+            $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('markingguide', 'gradereport_culuser') . '</p>';
+            $rubrictext = $this->marking_guide_text($this->user->id, $this->courseid, $assign->get_instance()->id, 'assign');
+
+            if ($rubrictext) {
+                $data['feedback']['content'] .= $feedbacksubtitle .= $rubrictext;
+            }
+        }
+    }
+
+    protected function getWorkshopFeedback(&$data, $grade_object) {
+        global $DB;
+
+        // It is so we first retrieve all the workshop modules in the course.
+        $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
+        // Now we use the iteminstance to retrieve the workshop module for this grade.
+        if (!empty($instances[$grade_object->iteminstance])) {
+            $cm = $instances[$grade_object->iteminstance];                              
+            $context = context_module::instance($cm->id);
+            $course = get_course($this->courseid);
+            // $workshop = new workshop($context, $cm, $course);
+            $params = array(
+                'workshopid' => $grade_object->iteminstance,  
+                'authorid' => $this->user->id
+                );
+
+            $submission = $DB->get_record('workshop_submissions', $params, '*');
+            $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
+
+            if ($data['feedback']['content']) {
+                $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
+            }
+
+            if($submission) {
+                // Get any workshop feedback.
+                $workshoptext = $this->has_workshop_feedback($this->user->id, $submission->id, $grade_object->iteminstance, $this->courseid, $grade_object->itemnumber);
+
+                $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('workshop', 'gradereport_culuser') . '</p>';
+
+                if ($workshoptext) {
+                    $data['feedback']['content'] .= $feedbacksubtitle .= $workshoptext;
+                }
+            }
+        }
+
+    }
+
+
+    /**
+     * Get the Rubric feedback
+     * 
+     * @param int $userid The id of the user who's feedback being viewed
+     * @param int $courseid The course the Rubric is being checked for
+     * @param int $iteminstance The instance of the module item 
+     * @param int $itemmodule The module currently being queried
+     * @return str the text for the Rubric
+     */
+    public function rubric_text($userid, $courseid, $iteminstance, $itemmodule) {
+        global $DB;
+
+        $sql = "SELECT DISTINCT rc.id, rc.description, rl.definition 
+            FROM {gradingform_rubric_criteria} rc
+            JOIN {gradingform_rubric_levels} rl
+            ON rc.id = rl.criterionid
+            JOIN {gradingform_rubric_fillings} rf
+            ON rl.id = rf.levelid AND rc.id = rf.criterionid
+            JOIN {grading_instances} gin
+            ON rf.instanceid = gin.id
+            JOIN {assign_grades} ag
+            ON gin.itemid = ag.id
+            JOIN {grade_items} gi
+            ON ag.assignment = gi.iteminstance AND ag.userid = ?
+            JOIN {grade_grades} gg
+            ON gi.id = gg.itemid AND gi.itemmodule = ? 
+            AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ? AND status = ?";
+        $params = array($userid, $itemmodule, $courseid, $userid, $iteminstance, 1);
+        $rubrics = $DB->get_recordset_sql($sql, $params);
+        $out = '';
+        if ($rubrics) {
+            foreach ($rubrics as $rubric) {
+                if ($rubric->description || $rubric->definition) {
+                    $out .= "<strong>" . $rubric->description . ": </strong>" . $rubric->definition . "<br/>";
+                }
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Get the Marking guide feedback
+     * 
+     * @param int $userid The id of the user who's feedback being viewed
+     * @param int $courseid The course the Marking guide is being checked for
+     * @param int $iteminstance The instance of the module item 
+     * @param int $itemmodule The module currently being queried
+     * @return str the text for the Marking guide
+     */
+    public function marking_guide_text($userid, $courseid, $iteminstance, $itemmodule) {
+        global $DB;
+
+        $sql = "SELECT DISTINCT gc.shortname,gf.remark 
+            FROM {gradingform_guide_criteria} gc
+            JOIN {gradingform_guide_fillings} gf
+            ON gc.id = gf.criterionid
+            JOIN {grading_instances} gin
+            ON gf.instanceid = gin.id
+            JOIN {assign_grades} ag
+            ON gin.itemid = ag.id
+            JOIN {grade_items} gi
+            ON ag.assignment = gi.iteminstance AND ag.userid = ?
+            JOIN {grade_grades} gg
+            ON gi.id = gg.itemid AND gi.itemmodule = ? 
+            AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ?";
+        $params = array($userid, $itemmodule, $courseid, $userid, $iteminstance);
+        $guides = $DB->get_recordset_sql($sql, $params);
+        $out = '';
+        if ($guides) {
+            foreach ($guides as $guide) {
+                if ($guide->shortname || $guide->remark) {
+                    $out .= "<strong>" . $guide->shortname . ": </strong>" . $guide->remark . "<br/>";
+                }
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Checks whether or not there is any workshop feedback file either from peers or tutor
+     * 
+     * @param int $userid The user id
+     * @param int $subid The workshop submission id
+     * @return boolean true if there is a feedback file and false if there ain't
+     */
+    public function has_workshop_feedback_file($userid, $subid) {
+        global $DB;
+        // Is there any feedback file?
+        $sql = "SELECT DISTINCT max(wa.id) as id, wa.feedbackauthorattachment
+                FROM {workshop_assessments} wa 
+                JOIN {workshop_submissions} ws ON wa.submissionid=ws.id 
+                AND ws.authorid=? AND ws.id=? and ws.example = 0";
+        $params = array($userid, $subid);
+        $feedbackfile = $DB->get_record_sql($sql, $params);
+        if ($feedbackfile) {
+            if ($feedbackfile->feedbackauthorattachment != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets and returns any workshop feedback
+     * 
+     * @global stdClass $DB The database object
+     * @global stdClass $CFG The global config
+     * @param int $userid The user id
+     * @param int $subid The workshop submission id
+     * @param int $assignid The workshop id
+     * @param int $cid The course id
+     * @param int $itemnumber The grade_item itemnumber
+     * @return string All the feedback information
+     */
+    public function has_workshop_feedback($userid, $subid, $assignid, $cid, $itemnumber) {
+        global $DB, $CFG;
+        $feedback = '';
+
+        //Get the other feedback that comes when graded so will have a grade id otherwise it is not unique
+        $peer = "SELECT DISTINCT wg.id, wg.peercomment, wa.reviewerid, wa.feedbackreviewer, w.conclusion
+        FROM {workshop} w
+        JOIN {workshop_submissions} ws ON ws.workshopid=w.id AND w.course=? AND w.useexamples=0      
+        JOIN {workshop_assessments} wa ON wa.submissionid=ws.id AND ws.authorid=?
+        AND ws.workshopid=? AND ws.example=0 AND wa.submissionid=?
+        LEFT JOIN {workshop_grades} wg ON wg.assessmentid=wa.id AND wa.submissionid=?";
+        $arr = array($cid, $userid, $assignid, $subid, $subid);
+
+        if ($assess = $DB->get_recordset_sql($peer, $arr)) {
+            if ($itemnumber == 1) {
+                foreach ($assess as $a) {
+                    if ($a->feedbackreviewer && strlen($a->feedbackreviewer) > 0) {
+                        $feedback = (strip_tags($a->feedbackreviewer) ? "<b>" . get_string('tutorfeedback', 'report_myfeedback') . "</b><br/>" . strip_tags($a->feedbackreviewer) : '');
+                    }
+                }
+                return $feedback;
+            }
+        }
+
+        if ($itemnumber != 1) {
+            //get the feedback from author as this does not necessarily mean they are graded
+            $auth = "SELECT DISTINCT wa.id, wa.feedbackauthor, wa.reviewerid
+            FROM {workshop} w
+            JOIN {workshop_submissions} ws ON ws.workshopid=w.id AND w.course=? AND w.useexamples=0      
+            JOIN {workshop_assessments} wa ON wa.submissionid=ws.id AND ws.authorid=?
+            AND ws.workshopid=? AND ws.example=0 AND wa.submissionid=?";
+            $par = array($cid, $userid, $assignid, $subid);
+            $self = $pfeed = false;
+            if ($asse = $DB->get_records_sql($auth, $par)) {
+                foreach ($asse as $cub) {
+                    if ($cub->feedbackauthor && $cub->reviewerid != $userid) {
+                        $pfeed = true;
+                    }
+                }
+                if ($pfeed) {
+                    $feedback .= strip_tags($feedback) ? '<br/>' : '';
+                    $feedback .= '<b>' . get_string('peerfeedback', 'report_myfeedback') . '</b>';
+                }
+                foreach ($asse as $as) {
+                    if ($as->feedbackauthor && $as->reviewerid != $userid) {
+                        $feedback .= (strip_tags($as->feedbackauthor) ? '<br/>' . strip_tags($as->feedbackauthor) : '');
+                    }
+                }
+                foreach ($asse as $cub1) {
+                    if ($cub1->feedbackauthor && $cub1->reviewerid == $userid) {
+                        $self = true;
+                    }
+                }
+                if ($self) {
+                    $feedback .= strip_tags($feedback) ? '<br/>' : '';
+                    $feedback .= '<b>' . get_string('selfassessment', 'report_myfeedback') . '</b>';
+                }
+                foreach ($asse as $as1) {
+                    if ($as1->feedbackauthor && $as1->reviewerid == $userid) {
+                        $feedback .= (strip_tags($as1->feedbackauthor) ? '<br/>' . strip_tags($as1->feedbackauthor) : '');
+                    }
+                }
+            }
+        }
+
+        //get comments strategy type
+        $sql_c = "SELECT wg.id as gradeid, wa.reviewerid, a.description, peercomment
+          FROM {workshopform_accumulative} a
+          JOIN {workshop_grades} wg ON wg.dimensionid=a.id AND wg.strategy = 'comments'
+          JOIN {workshop_assessments} wa ON wg.assessmentid = wa.id AND wa.submissionid = ?
+          JOIN {workshop_submissions} ws ON wa.submissionid = ws.id
+          AND ws.workshopid = ? AND ws.example = 0 AND ws.authorid = ?
+          ORDER BY wa.reviewerid";
+        $params_c = array($subid, $assignid, $userid);
+        $c = 0;
+        if ($commentscheck = $DB->get_records_sql($sql_c, $params_c)) {
+            foreach ($commentscheck as $com) {
+                if (strip_tags($com->description)) {
+                    $c = 1;
+                }
+            }
+            if ($c) {
+                $feedback .= strip_tags($feedback) ? '<br/>' : '';
+                $feedback .= "<br/><b>" . get_string('comments', 'report_myfeedback') . "</b>";
+            }
+            foreach ($commentscheck as $ts) {
+                $feedback .= strip_tags($ts->description) ? "<br/><b>" . $ts->description : '';
+                $feedback .= strip_tags($ts->description) ? "<br/><b>" . get_string('comment', 'report_myfeedback') . "</b>: " . strip_tags($ts->peercomment) . "<br/>" : '';
+            }
+        }
+
+        //get accumulative strategy type
+        $sql_a = "SELECT wg.id as gradeid, wa.reviewerid, a.description, wg.grade as score, a.grade, peercomment
+          FROM {workshopform_accumulative} a
+          JOIN {workshop_grades} wg ON wg.dimensionid=a.id AND wg.strategy='accumulative'
+          JOIN {workshop_assessments} wa ON wg.assessmentid=wa.id AND wa.submissionid=?
+          JOIN {workshop_submissions} ws ON wa.submissionid=ws.id
+          AND ws.workshopid=? AND ws.example=0 AND ws.authorid = ?
+          ORDER BY wa.reviewerid";
+        $params_a = array($subid, $assignid, $userid);
+        $a = 0;
+        if ($accumulativecheck = $DB->get_records_sql($sql_a, $params_a)) {
+            foreach ($accumulativecheck as $acc) {
+                if (strip_tags($acc->description && $acc->score)) {
+                    $a = 1;
+                }
+            }
+            if ($a) {
+                $feedback .= strip_tags($feedback) ? '<br/>' : '';
+                $feedback .= "<br/><b>" . get_string('accumulativetitle', 'report_myfeedback') . "</b>";
+            }
+            foreach ($accumulativecheck as $tiv) {
+                $feedback .= strip_tags($acc->description && $acc->score) ? "<br/><b>" . strip_tags($tiv->description) . "</b>: " . get_string('grade', 'report_myfeedback') . round($tiv->score) . "/" . round($tiv->grade) : '';
+                $feedback .= strip_tags($acc->description && $acc->score) ? "<br/><b>" . get_string('comment', 'report_myfeedback') . "</b>: " . strip_tags($tiv->peercomment) . "<br/>" : '';
+            }
+        }
+
+        //get the rubrics strategy type
+        $sql = "SELECT wg.id as gradeid, wa.reviewerid, r.description, l.definition, peercomment
+          FROM {workshopform_rubric} r
+          LEFT JOIN {workshopform_rubric_levels} l ON (l.dimensionid = r.id) AND r.workshopid=?
+          JOIN {workshop_grades} wg ON wg.dimensionid=r.id AND l.grade=wg.grade and wg.strategy='rubric'
+          JOIN {workshop_assessments} wa ON wg.assessmentid=wa.id AND wa.submissionid=?
+          JOIN {workshop_submissions} ws ON wa.submissionid=ws.id
+          AND ws.workshopid=? AND ws.example=0 AND ws.authorid = ?
+          ORDER BY wa.reviewerid";
+        $params = array($assignid, $subid, $assignid, $userid);
+        $r = 0;
+        if ($rubriccheck = $DB->get_records_sql($sql, $params)) {
+            foreach ($rubriccheck as $rub) {
+                if (strip_tags($rub->description && $rub->definition)) {
+                    $r = 1;
+                }
+            }
+            if ($r) {
+                $feedback .= strip_tags($feedback) ? '<br/>' : '';
+                $feedback .= "<br/><span style=\"font-weight:bold;\"><img src=\"" .
+                        $CFG->wwwroot . "/report/myfeedback/pix/rubric.png\">" . get_string('rubrictext', 'report_myfeedback') . "</span>";
+            }
+            foreach ($rubriccheck as $rec) {
+                $feedback .= strip_tags($rec->description && $rec->definition) ? "<br/><b>" . strip_tags($rec->description) . "</b>: " . strip_tags($rec->definition) : '';
+                $feedback .= strip_tags($rec->peercomment) ? "<br/><b>" . get_string('comment', 'report_myfeedback') . "</b>: " . strip_tags($rec->peercomment) . "<br/>" : '';
+            }
+        }
+
+        //get the numerrors strategy type
+        $sql_n = "SELECT wg.id as gradeid, wa.reviewerid, n.description, wg.grade, n.grade0, n.grade1, peercomment
+          FROM {workshopform_numerrors} n
+          JOIN {workshop_grades} wg ON wg.dimensionid=n.id AND wg.strategy='numerrors'
+          JOIN {workshop_assessments} wa ON wg.assessmentid=wa.id AND wa.submissionid=?
+          JOIN {workshop_submissions} ws ON wa.submissionid=ws.id
+          AND ws.workshopid=? AND ws.example=0 AND ws.authorid = ?
+          ORDER BY wa.reviewerid";
+        $params_n = array($subid, $assignid, $userid);
+        $n = 0;
+        if ($numerrorcheck = $DB->get_records_sql($sql_n, $params_n)) {
+            foreach ($numerrorcheck as $num) {
+                if ($num->gradeid) {
+                    $n = 1;
+                }
+            }
+            if ($n) {
+                $feedback .= strip_tags($feedback) ? '<br/>' : '';
+                $feedback .= "<br/><b>" . get_string('numerrortitle', 'report_myfeedback') . "</b>";
+            }
+            foreach ($numerrorcheck as $err) {
+                $feedback .= $err->gradeid ? "<br/><b>" . strip_tags($err->description) . "</b>: " . ($err->grade < 1.0 ? strip_tags($err->grade0) : strip_tags($err->grade1)) : '';
+                $feedback .= $err->gradeid ? "<br/><b>" . get_string('comment', 'report_myfeedback') . "</b>: " . strip_tags($err->peercomment) . "<br/>" : '';
+            }
+        }
+
+        return $feedback;
+    }
+
+
+
+
+
+
+
+
+
+
 
     // /**
     //  * This function is called after the table has been built and the aggregationhints
