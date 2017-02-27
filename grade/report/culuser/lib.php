@@ -336,8 +336,6 @@ class grade_report_culuser extends grade_report_user {
                 }
 
                 // Feedback
-                require_once($CFG->dirroot . '/mod/assign/locallib.php');
-
                 if ($this->showfeedback) {
                     $gradeitemdata['feedback'] = '';
                     $gradeitemdata['feedbackformat'] = $grade_grade->feedbackformat;
@@ -436,7 +434,9 @@ class grade_report_culuser extends grade_report_user {
 
 
     protected function getAssignFeedback(&$data, $grade_object) {
-        global $DB;
+        global $DB, $CFG;
+
+        require_once($CFG->dirroot . '/mod/assign/locallib.php');
 
         // It is so we first retrieve all the assignment modules in the course.
         $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
@@ -500,8 +500,14 @@ class grade_report_culuser extends grade_report_user {
         }
     }
 
+    protected function getTurnitintooltwoFeedback(&$data, $grade_object) {
+
+    }
+
     protected function getWorkshopFeedback(&$data, $grade_object) {
-        global $DB;
+        global $DB, $CFG, $PAGE;
+
+        require_once($CFG->dirroot . '/mod/workshop/locallib.php');
 
         // It is so we first retrieve all the workshop modules in the course.
         $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
@@ -510,29 +516,61 @@ class grade_report_culuser extends grade_report_user {
             $cm = $instances[$grade_object->iteminstance];                              
             $context = context_module::instance($cm->id);
             $course = get_course($this->courseid);
-            // $workshop = new workshop($context, $cm, $course);
+
             $params = array(
-                'workshopid' => $grade_object->iteminstance,  
-                'authorid' => $this->user->id
+                'id' => $grade_object->iteminstance
                 );
 
-            $submission = $DB->get_record('workshop_submissions', $params, '*');
+            $workshoprecord = $DB->get_record('workshop', $params, '*');
+            $workshop = new workshop($workshoprecord, $cm, $course, $context);
+
             $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
 
             if ($data['feedback']['content']) {
                 $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
             }
 
-            if($submission) {
-                // Get any workshop feedback.
-                $workshoptext = $this->has_workshop_feedback($this->user->id, $submission->id, $grade_object->iteminstance, $this->courseid, $grade_object->itemnumber);
+            $params = array(
+                'workshopid' => $grade_object->iteminstance,  
+                'authorid' => $this->user->id
+                );
 
-                $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('workshop', 'gradereport_culuser') . '</p>';
+            if($submission = $DB->get_record('workshop_submissions', $params, '*')) {
+                $assessments = $workshop->get_assessments_of_submission($submission->id);
+                // $renderer = $PAGE->get_renderer('mod_workshop');               
 
-                if ($workshoptext) {
-                    $data['feedback']['content'] .= $feedbacksubtitle .= $workshoptext;
+                foreach($assessments as $assessment) {
+                    $assessment = $workshop->prepare_assessment($assessment, null);
+                    $data['feedback']['content'] .= $this->overall_feedback($assessment);
                 }
             }
+
+            // $workshopassessmentrecord = 
+            // $workshopassessment = new workshop_assessment($workshop, $workshopassessmentrecord);
+
+
+            // $renderer = $workshop->get_renderer();
+
+
+            
+            
+
+            // if($submission) {
+            //     // Get any workshop feedback.
+            //     $workshoptext = $this->has_workshop_feedback(
+            //         $this->user->id, 
+            //         $submission->id, 
+            //         $grade_object->iteminstance, 
+            //         $this->courseid, 
+            //         $grade_object->itemnumber
+            //         );
+
+            //     $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('workshop', 'gradereport_culuser') . '</p>';
+
+            //     if ($workshoptext) {
+            //         $data['feedback']['content'] .= $feedbacksubtitle .= $workshoptext;
+            //     }
+            // }
         }
 
     }
@@ -829,338 +867,71 @@ class grade_report_culuser extends grade_report_user {
 
 
 
-
-
-
-
-
-
-
-    // /**
-    //  * This function is called after the table has been built and the aggregationhints
-    //  * have been collected. We need this info to walk up the list of parents of each
-    //  * grade_item.
-    //  *
-    //  * @param $element - An array containing the table data for the current row.
-    //  */
-    // public function fill_contributions_column($element) {
-
-    //     // Recursively iterate through all child elements.
-    //     if (isset($element['children'])) {
-    //         foreach ($element['children'] as $key=>$child) {
-    //             $this->fill_contributions_column($element['children'][$key]);
-    //         }
-    //     } else if ($element['type'] == 'item') {
-    //         // This is a grade item (We don't do this for categories or we would double count).
-    //         $grade_object = $element['object'];
-    //         $itemid = $grade_object->id;
-
-    //         // Ignore anything with no hint - e.g. a hidden row.
-    //         if (isset($this->aggregationhints[$itemid])) {
-
-    //             // Normalise the gradeval.
-    //             $gradecat = $grade_object->load_parent_category();
-    //             if ($gradecat->aggregation == GRADE_AGGREGATE_SUM) {
-    //                 // Natural aggregation/Sum of grades does not consider the mingrade, cannot traditionnally normalise it.
-    //                 $graderange = $this->aggregationhints[$itemid]['grademax'];
-
-    //                 if ($graderange != 0) {
-    //                     $gradeval = $this->aggregationhints[$itemid]['grade'] / $graderange;
-    //                 } else {
-    //                     $gradeval = 0;
-    //                 }
-    //             } else {
-    //                 $gradeval = grade_grade::standardise_score($this->aggregationhints[$itemid]['grade'],
-    //                     $this->aggregationhints[$itemid]['grademin'], $this->aggregationhints[$itemid]['grademax'], 0, 1);
-    //             }
-
-    //             // Multiply the normalised value by the weight
-    //             // of all the categories higher in the tree.
-    //             $parent = null;
-    //             do {
-    //                 if (!is_null($this->aggregationhints[$itemid]['weight'])) {
-    //                     $gradeval *= $this->aggregationhints[$itemid]['weight'];
-    //                 } else if (empty($parent)) {
-    //                     // If we are in the first loop, and the weight is null, then we cannot calculate the contribution.
-    //                     $gradeval = null;
-    //                     break;
-    //                 }
-
-    //                 // The second part of this if is to prevent infinite loops
-    //                 // in case of crazy data.
-    //                 if (isset($this->aggregationhints[$itemid]['parent']) &&
-    //                         $this->aggregationhints[$itemid]['parent'] != $itemid) {
-    //                     $parent = $this->aggregationhints[$itemid]['parent'];
-    //                     $itemid = $parent;
-    //                 } else {
-    //                     // We are at the top of the tree.
-    //                     $parent = false;
-    //                 }
-    //             } while ($parent);
-
-    //             // Finally multiply by the course grademax.
-    //             if (!is_null($gradeval)) {
-    //                 // Convert to percent.
-    //                 $gradeval *= 100;
-    //             }
-
-    //             // Now we need to loop through the "built" table data and update the
-    //             // contributions column for the current row.
-    //             $header_row = "row_{$grade_object->id}_{$this->user->id}";
-    //             foreach ($this->tabledata as $key => $row) {
-    //                 if (isset($row['itemname']) && ($row['itemname']['id'] == $header_row)) {
-    //                     // Found it - update the column.
-    //                     $content = '-';
-    //                     if (!is_null($gradeval)) {
-    //                         $decimals = $grade_object->get_decimals();
-    //                         $content = format_float($gradeval, $decimals, true) . ' %';
-    //                     }
-    //                     $this->tabledata[$key]['contributiontocoursetotal']['content'] = $content;
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    // /**
-    //  * Prints or returns the HTML from the flexitable.
-    //  * @param bool $return Whether or not to return the data instead of printing it directly.
-    //  * @return string
-    //  */
-    // public function print_table($return=false) {
-    //      $maxspan = $this->maxdepth;
-
-    //     /// Build table structure
-    //     $html = "
-    //         <table cellspacing='0'
-    //                cellpadding='0'
-    //                summary='" . s($this->get_lang_string('tablesummary', 'gradereport_culuser')) . "'
-    //                class='boxaligncenter generaltable user-grade'>
-    //         <thead>
-    //             <tr>
-    //                 <th id='".$this->tablecolumns[0]."' class=\"header column-{$this->tablecolumns[0]}\" colspan='$maxspan'>".$this->tableheaders[0]."</th>\n";
-
-    //     for ($i = 1; $i < count($this->tableheaders); $i++) {
-    //         $html .= "<th id='".$this->tablecolumns[$i]."' class=\"header column-{$this->tablecolumns[$i]}\">".$this->tableheaders[$i]."</th>\n";
-    //     }
-
-    //     $html .= "
-    //             </tr>
-    //         </thead>
-    //         <tbody>\n";
-
-    //     /// Print out the table data
-    //     for ($i = 0; $i < count($this->tabledata); $i++) {
-    //         $html .= "<tr>\n";
-    //         if (isset($this->tabledata[$i]['leader'])) {
-    //             $rowspan = $this->tabledata[$i]['leader']['rowspan'];
-    //             $class = $this->tabledata[$i]['leader']['class'];
-    //             $html .= "<td class='$class' rowspan='$rowspan'></td>\n";
-    //         }
-    //         for ($j = 0; $j < count($this->tablecolumns); $j++) {
-    //             $name = $this->tablecolumns[$j];
-    //             $class = (isset($this->tabledata[$i][$name]['class'])) ? $this->tabledata[$i][$name]['class'] : '';
-    //             $colspan = (isset($this->tabledata[$i][$name]['colspan'])) ? "colspan='".$this->tabledata[$i][$name]['colspan']."'" : '';
-    //             $content = (isset($this->tabledata[$i][$name]['content'])) ? $this->tabledata[$i][$name]['content'] : null;
-    //             $celltype = (isset($this->tabledata[$i][$name]['celltype'])) ? $this->tabledata[$i][$name]['celltype'] : 'td';
-    //             $id = (isset($this->tabledata[$i][$name]['id'])) ? "id='{$this->tabledata[$i][$name]['id']}'" : '';
-    //             $headers = (isset($this->tabledata[$i][$name]['headers'])) ? "headers='{$this->tabledata[$i][$name]['headers']}'" : '';
-    //             if (isset($content)) {
-    //                 $html .= "<$celltype $id $headers class='$class' $colspan>$content</$celltype>\n";
-    //             }
-    //         }
-    //         $html .= "</tr>\n";
-    //     }
-
-    //     $html .= "</tbody></table>";
-
-    //     if ($return) {
-    //         return $html;
-    //     } else {
-    //         echo $html;
-    //     }
-    // }
-
-    // *
-    //  * Processes the data sent by the form (grades and feedbacks).
-    //  * @var array $data
-    //  * @return bool Success or Failure (array of errors).
-     
-    // function process_data($data) {
-    // }
-    // function process_action($target, $action) {
-    // }
-
     /**
-     * Builds the grade item averages.
+     * Renders the overall feedback for the author of the submission
+     *
+     * @param workshop_assessment $assessment
+     * @return string HTML
      */
-    // function calculate_averages() {
-    //     global $USER, $DB, $CFG;
+    public function overall_feedback(workshop_assessment $assessment) {
+        global $OUTPUT;
 
-    //     if ($this->showaverage) {
-    //         // This settings are actually grader report settings (not user report)
-    //         // however we're using them as having two separate but identical settings the
-    //         // user would have to keep in sync would be annoying.
-    //         $averagesdisplaytype   = $this->get_pref('averagesdisplaytype');
-    //         $averagesdecimalpoints = $this->get_pref('averagesdecimalpoints');
-    //         $meanselection         = $this->get_pref('meanselection');
-    //         $shownumberofgrades    = $this->get_pref('shownumberofgrades');
+        $content = $assessment->get_overall_feedback_content();
 
-    //         $avghtml = '';
-    //         $groupsql = $this->groupsql;
-    //         $groupwheresql = $this->groupwheresql;
-    //         $totalcount = $this->get_numusers(false);
+        if ($content === false) {
+            return '';
+        }
 
-    //         // We want to query both the current context and parent contexts.
-    //         list($relatedctxsql, $relatedctxparams) = $DB->get_in_or_equal($this->context->get_parent_context_ids(true), SQL_PARAMS_NAMED, 'relatedctx');
+        $o = '';
 
-    //         // Limit to users with a gradeable role ie students.
-    //         list($gradebookrolessql, $gradebookrolesparams) = $DB->get_in_or_equal(explode(',', $this->gradebookroles), SQL_PARAMS_NAMED, 'grbr0');
+        if (!is_null($content)) {
+            // $o .= $OUTPUT->container($content, 'content');
 
-    //         // Limit to users with an active enrolment.
-    //         $coursecontext = $this->context->get_course_context(true);
-    //         $defaultgradeshowactiveenrol = !empty($CFG->grade_report_showonlyactiveenrol);
-    //         $showonlyactiveenrol = get_user_preferences('grade_report_showonlyactiveenrol', $defaultgradeshowactiveenrol);
-    //         $showonlyactiveenrol = $showonlyactiveenrol || !has_capability('moodle/course:viewsuspendedusers', $coursecontext);
-    //         list($enrolledsql, $enrolledparams) = get_enrolled_sql($this->context, '', 0, $showonlyactiveenrol);
+            $o .= $content;
+        }
 
-    //         $params = array_merge($this->groupwheresql_params, $gradebookrolesparams, $enrolledparams, $relatedctxparams);
-    //         $params['courseid'] = $this->courseid;
+        $attachments = $assessment->get_overall_feedback_attachments();
 
-    //         // find sums of all grade items in course
-    //         $sql = "SELECT gg.itemid, SUM(gg.finalgrade) AS sum
-    //                   FROM {grade_items} gi
-    //                   JOIN {grade_grades} gg ON gg.itemid = gi.id
-    //                   JOIN {user} u ON u.id = gg.userid
-    //                   JOIN ($enrolledsql) je ON je.id = gg.userid
-    //                   JOIN (
-    //                                SELECT DISTINCT ra.userid
-    //                                  FROM {role_assignments} ra
-    //                                 WHERE ra.roleid $gradebookrolessql
-    //                                   AND ra.contextid $relatedctxsql
-    //                        ) rainner ON rainner.userid = u.id
-    //                   $groupsql
-    //                  WHERE gi.courseid = :courseid
-    //                    AND u.deleted = 0
-    //                    AND gg.finalgrade IS NOT NULL
-    //                    AND gg.hidden = 0
-    //                    $groupwheresql
-    //               GROUP BY gg.itemid";
+        if (!empty($attachments)) {
+            $o .= $OUTPUT->container_start('attachments');
+            $images = '';
+            $files = '';
+            foreach ($attachments as $attachment) {
+                $icon = $OUTPUT->pix_icon(file_file_icon($attachment), get_mimetype_description($attachment),
+                    'moodle', array('class' => 'icon'));
+                $link = html_writer::link($attachment->fileurl, $icon.' '.substr($attachment->filepath.$attachment->filename, 1));
+                if (file_mimetype_in_typegroup($attachment->mimetype, 'web_image')) {
+                    $preview = html_writer::empty_tag('img', array('src' => $attachment->previewurl, 'alt' => '', 'class' => 'preview'));
+                    $preview = html_writer::tag('a', $preview, array('href' => $attachment->fileurl));
+                    $images .= $OUTPUT->container($preview);
+                } else {
+                    $files .= html_writer::tag('li', $link, array('class' => $attachment->mimetype));
+                }
+            }
+            if ($images) {
+                $images = $OUTPUT->container($images, 'images');
+            }
 
-    //         $sum_array = array();
-    //         $sums = $DB->get_recordset_sql($sql, $params);
-    //         foreach ($sums as $itemid => $csum) {
-    //             $sum_array[$itemid] = $csum->sum;
-    //         }
-    //         $sums->close();
+            if ($files) {
+                $files = html_writer::tag('ul', $files, array('class' => 'files'));
+            }
 
-    //         $columncount=0;
+            $o .= $images.$files;
+            $o .= $OUTPUT->container_end();
+        }
 
-    //         // Empty grades must be evaluated as grademin, NOT always 0
-    //         // This query returns a count of ungraded grades (NULL finalgrade OR no matching record in grade_grades table)
-    //         // No join condition when joining grade_items and user to get a grade item row for every user
-    //         // Then left join with grade_grades and look for rows with null final grade (which includes grade items with no grade_grade)
-    //         $sql = "SELECT gi.id, COUNT(u.id) AS count
-    //                   FROM {grade_items} gi
-    //                   JOIN {user} u ON u.deleted = 0
-    //                   JOIN ($enrolledsql) je ON je.id = u.id
-    //                   JOIN (
-    //                            SELECT DISTINCT ra.userid
-    //                              FROM {role_assignments} ra
-    //                             WHERE ra.roleid $gradebookrolessql
-    //                               AND ra.contextid $relatedctxsql
-    //                        ) rainner ON rainner.userid = u.id
-    //                   LEFT JOIN {grade_grades} gg
-    //                          ON (gg.itemid = gi.id AND gg.userid = u.id AND gg.finalgrade IS NOT NULL AND gg.hidden = 0)
-    //                   $groupsql
-    //                  WHERE gi.courseid = :courseid
-    //                        AND gg.finalgrade IS NULL
-    //                        $groupwheresql
-    //               GROUP BY gi.id";
+        if ($o === '') {
+            return '';
+        }
 
-    //         $ungraded_counts = $DB->get_records_sql($sql, $params);
+        // $o = $OUTPUT->box($o, 'overallfeedback');
+        // $o = print_collapsible_region($o, 'overall-feedback-wrapper', uniqid('workshop-overall-feedback'),
+            // get_string('overallfeedback', 'workshop'), '', false, true);
 
-    //         foreach ($this->gtree->items as $itemid=>$unused) {
-    //             if (!empty($this->gtree->items[$itemid]->avg)) {
-    //                 continue;
-    //             }
-    //             $item = $this->gtree->items[$itemid];
+        return $o;
+    }
 
-    //             if ($item->needsupdate) {
-    //                 $avghtml .= '<td class="cell c' . $columncount++.'"><span class="gradingerror">'.get_string('error').'</span></td>';
-    //                 continue;
-    //             }
 
-    //             if (empty($sum_array[$item->id])) {
-    //                 $sum_array[$item->id] = 0;
-    //             }
-
-    //             if (empty($ungraded_counts[$itemid])) {
-    //                 $ungraded_count = 0;
-    //             } else {
-    //                 $ungraded_count = $ungraded_counts[$itemid]->count;
-    //             }
-
-    //             //do they want the averages to include all grade items
-    //             if ($meanselection == GRADE_REPORT_MEAN_GRADED) {
-    //                 $mean_count = $totalcount - $ungraded_count;
-    //             } else { // Bump up the sum by the number of ungraded items * grademin
-    //                 $sum_array[$item->id] += ($ungraded_count * $item->grademin);
-    //                 $mean_count = $totalcount;
-    //             }
-
-    //             // Determine which display type to use for this average
-    //             if (!empty($USER->gradeediting) && $USER->gradeediting[$this->courseid]) {
-    //                 $displaytype = GRADE_DISPLAY_TYPE_REAL;
-
-    //             } else if ($averagesdisplaytype == GRADE_REPORT_PREFERENCE_INHERIT) { // no ==0 here, please resave the report and user preferences
-    //                 $displaytype = $item->get_displaytype();
-
-    //             } else {
-    //                 $displaytype = $averagesdisplaytype;
-    //             }
-
-    //             // Override grade_item setting if a display preference (not inherit) was set for the averages
-    //             if ($averagesdecimalpoints == GRADE_REPORT_PREFERENCE_INHERIT) {
-    //                 $decimalpoints = $item->get_decimals();
-    //             } else {
-    //                 $decimalpoints = $averagesdecimalpoints;
-    //             }
-
-    //             if (empty($sum_array[$item->id]) || $mean_count == 0) {
-    //                 $this->gtree->items[$itemid]->avg = '-';
-    //             } else {
-    //                 $sum = $sum_array[$item->id];
-    //                 $avgradeval = $sum/$mean_count;
-    //                 $gradehtml = grade_format_gradevalue($avgradeval, $item, true, $displaytype, $decimalpoints);
-
-    //                 $numberofgrades = '';
-    //                 if ($shownumberofgrades) {
-    //                     $numberofgrades = " ($mean_count)";
-    //                 }
-
-    //                 $this->gtree->items[$itemid]->avg = $gradehtml.$numberofgrades;
-    //             }
-    //         }
-    //     }
-    // }
-
-    // /**
-    //  * Trigger the grade_report_viewed event
-    //  *
-    //  * @since Moodle 2.9
-    //  */
-    // public function viewed() {
-    //     $event = \gradereport_culuser\event\grade_report_viewed::create(
-    //         array(
-    //             'context' => $this->context,
-    //             'courseid' => $this->courseid,
-    //             'relateduserid' => $this->user->id,
-    //         )
-    //     );
-    //     $event->trigger();
-    // }
 }
 
 function grade_report_culuser_settings_definition(&$mform) {
