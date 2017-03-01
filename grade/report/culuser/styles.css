@@ -75,3 +75,16 @@
 .path-grade-report-culuser .user-grade.generaltable td.column-feedback .feedbackpluginname {
     font-style: italic;
 }
+
+.path-grade-report-culuser .user-grade.generaltable td.column-feedback ul.ygtvlnfiles {
+    list-style: none;
+    margin: 0;
+}
+
+.path-grade-report-culuser .user-grade.generaltable td.column-feedback ul.ygtvlnfiles li {    
+    line-height: 20px;
+    padding: 8px;
+    padding-left: 80px;
+    background: url(/lib/yuilib/2in3/2.9.0/build/yui2-skin-sam-treeview/assets/skins/sam/treeview-sprite.gif) 0 -1600px no-repeat;
+    cursor: pointer;
+}

@@ -26,6 +26,7 @@ $string['pluginname'] = 'CUL user report';
 
 $string['comments'] = 'Feedback comments';
 $string['eventgradereportviewed'] = 'Grade user report viewed';
+$string['files'] = 'Feedback files';
 $string['markingguide'] = 'Marking guide';
 $string['myself'] = 'Myself';
 $string['otheruser'] = 'User';
