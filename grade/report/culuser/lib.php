@@ -501,7 +501,35 @@ class grade_report_culuser extends grade_report_user {
         }
     }
 
+    protected function getKalvidassignFeedback(&$data, $grade_object) {
+        $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
+
+        if ($data['feedback']['content']) {
+            $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
+        }        
+    }
+
     protected function getPeerassessmentFeedback(&$data, $grade_object) {
+        // NB Overriding grades and feedback in the gradebbok shows changes in gradebook but not in
+        // assignment.
+
+
+
+        $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
+
+        if ($data['feedback']['content']) {
+            $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
+        }
+
+        // Feedback files.
+        // $mygroup = peerassessment_get_mygroup($course);
+        // $group = $DB->get_record('groups', array('id' => $mygroup), '*', MUST_EXIST);
+
+        // peerassessment_feedback_files($context, $group);
+
+        // Peer grades.
+        // Looks like they can't see these. They just see the grades and feedback they gave others.
+
 
     }
 
