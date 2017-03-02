@@ -525,8 +525,9 @@ class grade_report_culuser extends grade_report_user {
             $workshoprecord = $DB->get_record('workshop', $params, '*');
             $workshop = new workshop($workshoprecord, $cm, $course, $context);
             $strategy = $workshop->grading_strategy_instance();
-            // $form = $strategy->get_assessment_form();
-            
+            $strategyclass = get_class($strategy);
+            $strategynamearray = explode('_', $strategyclass);
+            $stategyname = $strategynamearray[1];
 
             $params = array(
                 'workshopid' => $grade_object->iteminstance,  
@@ -535,7 +536,7 @@ class grade_report_culuser extends grade_report_user {
 
             if($submission = $DB->get_record('workshop_submissions', $params, '*')) {
                 $assessments = $workshop->get_assessments_of_submission($submission->id);
-                // $renderer = $PAGE->get_renderer('mod_workshop');               
+           
 
                 if($grade_object->itemnumber == 0) {
                     // need to get feedback for each stategy type.
@@ -547,44 +548,22 @@ class grade_report_culuser extends grade_report_user {
 
                     // This gets overall feedback.
                     foreach($assessments as $assessment) {
-                        // $assessment = $workshop->prepare_assessment($assessment, $form, ['showform' => true]);
-                        // $mform = $strategy->get_assessment_form($PAGE->url, 'assessment', $assessment, false);
-                        // $options = array(
-                        //     'showreviewer'  => true,
-                        //     'showauthor'    => true, // $showauthor
-                        //     'showform'      => !is_null($assessment->grade),
-                        //     'showweight'    => true,
-                        // );
-
                         
                         $diminfo = $strategy->get_dimensions_info();
                         $nodimensions   = count($diminfo);
-                        // $fields         = $strategy->prepare_form_fields($diminfo);
 
-
-
-
-
-// $formdata = new stdclass();
-//         $key = 0;
-//         foreach ($raw as $dimension) {
-//             $formdata->{'dimensionid__idx_' . $key}             = $dimension->id;
-//             $formdata->{'description__idx_' . $key}             = $dimension->description;
-//             $formdata->{'description__idx_' . $key.'format'}    = $dimension->descriptionformat;
-//             $formdata->{'grade__idx_' . $key}                   = $dimension->grade;
-//             $formdata->{'weight__idx_' . $key}                  = $dimension->weight;
-//             $key++;
-//         }
-//         return $formdata;
 
 
                         // @TODO Do we need to test if they should be visible?
+                        // Test for rubric
 
-                        $grades = $this->get_current_assessment_data($assessment, $diminfo);
+                        $grades = $this->get_current_assessment_data($assessment, $diminfo, $stategyname);
 
                         foreach ($diminfo as $dimension) {
                             $dimid = $dimension->id;
                             if (isset($grades[$dimid])) {
+var_dump($diminfo);
+                                // @TODO list with title
                                 $data['feedback']['content'] .=  $grades[$dimid]->peercomment;
                             }
                         }
@@ -597,16 +576,6 @@ class grade_report_culuser extends grade_report_user {
 
                         $filefeedback = $this->overall_feedback_files($assessment);
 
-
-                        
-
-                        // if (!is_null($assessment->form)) {
-
-                        //     $data['feedback']['content'] .= serialize($assessment->form->get_data());
-                        //     print_r($assessment->form->_customdata);
-                        // } else {
-                        //     $data['feedback']['content'] .= 'no form';
-                        // }
                         
 
                         
@@ -757,192 +726,6 @@ class grade_report_culuser extends grade_report_user {
     }
 
 
-    /**
-     * Gets and returns any workshop feedback
-     * 
-     * @global stdClass $DB The database object
-     * @global stdClass $CFG The global config
-     * @param int $userid The user id
-     * @param int $subid The workshop submission id
-     * @param int $assignid The workshop id
-     * @param int $cid The course id
-     * @param int $itemnumber The grade_item itemnumber
-     * @return string All the feedback information
-     */
-    public function has_workshop_feedback($userid, $subid, $assignid, $cid, $itemnumber) {
-        global $DB, $CFG;
-        $feedback = '';
-
-        // //Get the other feedback that comes when graded so will have a grade id otherwise it is not unique
-        // $peer = "SELECT DISTINCT wg.id, wg.peercomment, wa.reviewerid, wa.feedbackreviewer, w.conclusion
-        // FROM {workshop} w
-        // JOIN {workshop_submissions} ws ON ws.workshopid=w.id AND w.course=? AND w.useexamples=0      
-        // JOIN {workshop_assessments} wa ON wa.submissionid=ws.id AND ws.authorid=?
-        // AND ws.workshopid=? AND ws.example=0 AND wa.submissionid=?
-        // LEFT JOIN {workshop_grades} wg ON wg.assessmentid=wa.id AND wa.submissionid=?";
-        // $arr = array($cid, $userid, $assignid, $subid, $subid);
-
-        // if ($assess = $DB->get_recordset_sql($peer, $arr)) {
-        //     if ($itemnumber == 1) {
-        //         foreach ($assess as $a) {
-        //             if ($a->feedbackreviewer && strlen($a->feedbackreviewer) > 0) {
-        //                 $feedback = (strip_tags($a->feedbackreviewer) ? "<b>" . get_string('tutorfeedback', 'report_myfeedback') . "</b><br/>" . strip_tags($a->feedbackreviewer) : '');
-        //             }
-        //         }
-        //         return $feedback;
-        //     }
-        // }
-
-        // if ($itemnumber != 1) {
-        //     //get the feedback from author as this does not necessarily mean they are graded
-        //     $auth = "SELECT DISTINCT wa.id, wa.feedbackauthor, wa.reviewerid
-        //     FROM {workshop} w
-        //     JOIN {workshop_submissions} ws ON ws.workshopid=w.id AND w.course=? AND w.useexamples=0      
-        //     JOIN {workshop_assessments} wa ON wa.submissionid=ws.id AND ws.authorid=?
-        //     AND ws.workshopid=? AND ws.example=0 AND wa.submissionid=?";
-        //     $par = array($cid, $userid, $assignid, $subid);
-        //     $self = $pfeed = false;
-        //     if ($asse = $DB->get_records_sql($auth, $par)) {
-        //         foreach ($asse as $cub) {
-        //             if ($cub->feedbackauthor && $cub->reviewerid != $userid) {
-        //                 $pfeed = true;
-        //             }
-        //         }
-        //         if ($pfeed) {
-        //             $feedback .= strip_tags($feedback) ? '<br/>' : '';
-        //             $feedback .= '<b>' . get_string('peerfeedback', 'report_myfeedback') . '</b>';
-        //         }
-        //         foreach ($asse as $as) {
-        //             if ($as->feedbackauthor && $as->reviewerid != $userid) {
-        //                 $feedback .= (strip_tags($as->feedbackauthor) ? '<br/>' . strip_tags($as->feedbackauthor) : '');
-        //             }
-        //         }
-        //         foreach ($asse as $cub1) {
-        //             if ($cub1->feedbackauthor && $cub1->reviewerid == $userid) {
-        //                 $self = true;
-        //             }
-        //         }
-        //         if ($self) {
-        //             $feedback .= strip_tags($feedback) ? '<br/>' : '';
-        //             $feedback .= '<b>' . get_string('selfassessment', 'report_myfeedback') . '</b>';
-        //         }
-        //         foreach ($asse as $as1) {
-        //             if ($as1->feedbackauthor && $as1->reviewerid == $userid) {
-        //                 $feedback .= (strip_tags($as1->feedbackauthor) ? '<br/>' . strip_tags($as1->feedbackauthor) : '');
-        //             }
-        //         }
-        //     }
-        // }
-
-        //get comments strategy type
-        $sql_c = "SELECT wg.id as gradeid, wa.reviewerid, a.description, peercomment
-          FROM {workshopform_accumulative} a
-          JOIN {workshop_grades} wg ON wg.dimensionid=a.id AND wg.strategy = 'comments'
-          JOIN {workshop_assessments} wa ON wg.assessmentid = wa.id AND wa.submissionid = ?
-          JOIN {workshop_submissions} ws ON wa.submissionid = ws.id
-          AND ws.workshopid = ? AND ws.example = 0 AND ws.authorid = ?
-          ORDER BY wa.reviewerid";
-        $params_c = array($subid, $assignid, $userid);
-        $c = 0;
-        if ($commentscheck = $DB->get_records_sql($sql_c, $params_c)) {
-            foreach ($commentscheck as $com) {
-                if (strip_tags($com->description)) {
-                    $c = 1;
-                }
-            }
-            if ($c) {
-                $feedback .= strip_tags($feedback) ? '<br/>' : '';
-                $feedback .= "<br/><b>" . get_string('comments', 'report_myfeedback') . "</b>";
-            }
-            foreach ($commentscheck as $ts) {
-                $feedback .= strip_tags($ts->description) ? "<br/><b>" . $ts->description : '';
-                $feedback .= strip_tags($ts->description) ? "<br/><b>" . get_string('comment', 'report_myfeedback') . "</b>: " . strip_tags($ts->peercomment) . "<br/>" : '';
-            }
-        }
-
-        //get accumulative strategy type
-        $sql_a = "SELECT wg.id as gradeid, wa.reviewerid, a.description, wg.grade as score, a.grade, peercomment
-          FROM {workshopform_accumulative} a
-          JOIN {workshop_grades} wg ON wg.dimensionid=a.id AND wg.strategy='accumulative'
-          JOIN {workshop_assessments} wa ON wg.assessmentid=wa.id AND wa.submissionid=?
-          JOIN {workshop_submissions} ws ON wa.submissionid=ws.id
-          AND ws.workshopid=? AND ws.example=0 AND ws.authorid = ?
-          ORDER BY wa.reviewerid";
-        $params_a = array($subid, $assignid, $userid);
-        $a = 0;
-        if ($accumulativecheck = $DB->get_records_sql($sql_a, $params_a)) {
-            foreach ($accumulativecheck as $acc) {
-                if (strip_tags($acc->description && $acc->score)) {
-                    $a = 1;
-                }
-            }
-            if ($a) {
-                $feedback .= strip_tags($feedback) ? '<br/>' : '';
-                $feedback .= "<br/><b>" . get_string('accumulativetitle', 'report_myfeedback') . "</b>";
-            }
-            foreach ($accumulativecheck as $tiv) {
-                $feedback .= strip_tags($acc->description && $acc->score) ? "<br/><b>" . strip_tags($tiv->description) . "</b>: " . get_string('grade', 'report_myfeedback') . round($tiv->score) . "/" . round($tiv->grade) : '';
-                $feedback .= strip_tags($acc->description && $acc->score) ? "<br/><b>" . get_string('comment', 'report_myfeedback') . "</b>: " . strip_tags($tiv->peercomment) . "<br/>" : '';
-            }
-        }
-
-        //get the rubrics strategy type
-        $sql = "SELECT wg.id as gradeid, wa.reviewerid, r.description, l.definition, peercomment
-          FROM {workshopform_rubric} r
-          LEFT JOIN {workshopform_rubric_levels} l ON (l.dimensionid = r.id) AND r.workshopid=?
-          JOIN {workshop_grades} wg ON wg.dimensionid=r.id AND l.grade=wg.grade and wg.strategy='rubric'
-          JOIN {workshop_assessments} wa ON wg.assessmentid=wa.id AND wa.submissionid=?
-          JOIN {workshop_submissions} ws ON wa.submissionid=ws.id
-          AND ws.workshopid=? AND ws.example=0 AND ws.authorid = ?
-          ORDER BY wa.reviewerid";
-        $params = array($assignid, $subid, $assignid, $userid);
-        $r = 0;
-        if ($rubriccheck = $DB->get_records_sql($sql, $params)) {
-            foreach ($rubriccheck as $rub) {
-                if (strip_tags($rub->description && $rub->definition)) {
-                    $r = 1;
-                }
-            }
-            if ($r) {
-                $feedback .= strip_tags($feedback) ? '<br/>' : '';
-                $feedback .= "<br/><span style=\"font-weight:bold;\"><img src=\"" .
-                        $CFG->wwwroot . "/report/myfeedback/pix/rubric.png\">" . get_string('rubrictext', 'report_myfeedback') . "</span>";
-            }
-            foreach ($rubriccheck as $rec) {
-                $feedback .= strip_tags($rec->description && $rec->definition) ? "<br/><b>" . strip_tags($rec->description) . "</b>: " . strip_tags($rec->definition) : '';
-                $feedback .= strip_tags($rec->peercomment) ? "<br/><b>" . get_string('comment', 'report_myfeedback') . "</b>: " . strip_tags($rec->peercomment) . "<br/>" : '';
-            }
-        }
-
-        //get the numerrors strategy type
-        $sql_n = "SELECT wg.id as gradeid, wa.reviewerid, n.description, wg.grade, n.grade0, n.grade1, peercomment
-          FROM {workshopform_numerrors} n
-          JOIN {workshop_grades} wg ON wg.dimensionid=n.id AND wg.strategy='numerrors'
-          JOIN {workshop_assessments} wa ON wg.assessmentid=wa.id AND wa.submissionid=?
-          JOIN {workshop_submissions} ws ON wa.submissionid=ws.id
-          AND ws.workshopid=? AND ws.example=0 AND ws.authorid = ?
-          ORDER BY wa.reviewerid";
-        $params_n = array($subid, $assignid, $userid);
-        $n = 0;
-        if ($numerrorcheck = $DB->get_records_sql($sql_n, $params_n)) {
-            foreach ($numerrorcheck as $num) {
-                if ($num->gradeid) {
-                    $n = 1;
-                }
-            }
-            if ($n) {
-                $feedback .= strip_tags($feedback) ? '<br/>' : '';
-                $feedback .= "<br/><b>" . get_string('numerrortitle', 'report_myfeedback') . "</b>";
-            }
-            foreach ($numerrorcheck as $err) {
-                $feedback .= $err->gradeid ? "<br/><b>" . strip_tags($err->description) . "</b>: " . ($err->grade < 1.0 ? strip_tags($err->grade0) : strip_tags($err->grade1)) : '';
-                $feedback .= $err->gradeid ? "<br/><b>" . get_string('comment', 'report_myfeedback') . "</b>: " . strip_tags($err->peercomment) . "<br/>" : '';
-            }
-        }
-
-        return $feedback;
-    }
-
 
     /**
      * Returns the list of current grades filled by the reviewer indexed by dimensionid
@@ -950,7 +733,7 @@ class grade_report_culuser extends grade_report_user {
      * @param stdClass $assessment Assessment record
      * @return array [int dimensionid] => stdclass workshop_grades record
      */
-    public function get_current_assessment_data(stdclass $assessment, $diminfo) {
+    public function get_current_assessment_data(stdclass $assessment, $diminfo, $stategyname) {
         global $DB;
 
         if (empty($diminfo)) {
@@ -961,11 +744,89 @@ class grade_report_culuser extends grade_report_user {
         $sql = "SELECT dimensionid, wg.*
                   FROM {workshop_grades} wg
                  WHERE assessmentid = :assessmentid AND strategy= :strategy AND dimensionid $dimsql";
-        $params = array('assessmentid' => $assessment->id, 'strategy' => 'accumulative');
+        $params = array('assessmentid' => $assessment->id, 'strategy' => $stategyname); // @TODO variable or function for each?
         $params = array_merge($params, $dimparams);
 
         return $DB->get_records_sql($sql, $params);
     }
+
+    //     /**
+    //  * Returns the list of current grades filled by the reviewer indexed by dimensionid
+    //  *
+    //  * @param stdClass $assessment Assessment record
+    //  * @return array [int dimensionid] => stdclass workshop_grades record
+    //  */
+    // protected function get_current_assessment_data(stdclass $assessment) {
+    //     global $DB;
+
+    //     if (empty($this->dimensions)) {
+    //         return array();
+    //     }
+    //     list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($this->dimensions), SQL_PARAMS_NAMED);
+    //     // beware! the caller may rely on the returned array is indexed by dimensionid
+    //     $sql = "SELECT dimensionid, wg.*
+    //               FROM {workshop_grades} wg
+    //              WHERE assessmentid = :assessmentid AND strategy= :strategy AND dimensionid $dimsql";
+    //     $params = array('assessmentid' => $assessment->id, 'strategy' => 'comments');
+    //     $params = array_merge($params, $dimparams);
+
+    //     return $DB->get_records_sql($sql, $params);
+    // }
+
+
+
+    // /**
+    //  * Returns the list of current grades filled by the reviewer
+    //  *
+    //  * @param stdClass $assessment Assessment record
+    //  * @return array of filtered records from the table workshop_grades
+    //  */
+    // protected function get_current_assessment_data(stdclass $assessment) {
+    //     global $DB;
+
+    //     if (empty($this->dimensions)) {
+    //         return array();
+    //     }
+    //     list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($this->dimensions), SQL_PARAMS_NAMED);
+    //     // beware! the caller may rely on the returned array is indexed by dimensionid
+    //     $sql = "SELECT dimensionid, wg.*
+    //               FROM {workshop_grades} wg
+    //              WHERE assessmentid = :assessmentid AND strategy= :strategy AND dimensionid $dimsql";
+    //     $params = array('assessmentid' => $assessment->id, 'strategy' => 'numerrors');
+    //     $params = array_merge($params, $dimparams);
+
+    //     return $DB->get_records_sql($sql, $params);
+    // }
+
+    //     /**
+    //  * Returns the list of current grades filled by the reviewer indexed by dimensionid
+    //  *
+    //  * @param stdClass $assessment Assessment record
+    //  * @return array [int dimensionid] => stdclass workshop_grades record
+    //  */
+    // protected function get_current_assessment_data(stdclass $assessment) {
+    //     global $DB;
+
+    //     if (empty($this->dimensions)) {
+    //         return array();
+    //     }
+    //     list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($this->dimensions), SQL_PARAMS_NAMED);
+    //     // beware! the caller may rely on the returned array is indexed by dimensionid
+    //     $sql = "SELECT dimensionid, wg.*
+    //               FROM {workshop_grades} wg
+    //              WHERE assessmentid = :assessmentid AND strategy= :strategy AND dimensionid $dimsql";
+    //     $params = array('assessmentid' => $assessment->id, 'strategy' => 'rubric');
+    //     $params = array_merge($params, $dimparams);
+
+    //     return $DB->get_records_sql($sql, $params);
+    // }    
+
+
+
+
+
+
+
 
     /**
      * Renders the overall feedback for the author of the submission
