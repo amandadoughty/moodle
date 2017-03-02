@@ -24,13 +24,20 @@
 
 $string['pluginname'] = 'CUL user report';
 
+$string['accumulativetitle'] = 'Accumulative:';
+$string['comment'] = 'Comment: ';
 $string['comments'] = 'Feedback comments';
+$string['commenttitle'] = 'Comments:';
 $string['eventgradereportviewed'] = 'Grade user report viewed';
 $string['files'] = 'Feedback files';
+$string['grade'] = 'Grade - ';
 $string['markingguide'] = 'Marking guide';
 $string['myself'] = 'Myself';
+$string['numerrortitle'] = 'Number error:';
 $string['otheruser'] = 'User';
+$string['peerfeedback'] = 'Peer feedback:';
 $string['rubric'] = 'Rubric';
+$string['rubrictitle'] = 'Rubric:';
 $string['tablesummary'] = 'The table is arranged as a list of graded items including categories of graded items. When items are in a category they will be indicated as such.';
 $string['user:view'] = 'View your own grade report';
 $string['viewas'] = 'View report as';
