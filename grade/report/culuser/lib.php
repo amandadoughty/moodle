@@ -601,7 +601,7 @@ class grade_report_culuser extends grade_report_user {
                     // Put it all together.
                     $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('peerfeedback', 'gradereport_culuser') . '</p>';
                     $data['feedback']['content'] .= $feedbacksubtitle . $overallfeedback;
-                    $feedbacksubtitle = '<b>' . get_string($strategyname . 'title', 'gradereport_culuser') . '</b>';
+                    $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string($strategyname . 'title', 'gradereport_culuser') . '</p>';
                     $data['feedback']['content'] .= $feedbacksubtitle . $strategyfeedback ;
 
                     $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';                    
@@ -731,11 +731,11 @@ class grade_report_culuser extends grade_report_user {
         list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
         // beware! the caller may rely on the returned array is indexed by dimensionid
 
-        $sql = "SELECT dimensionid, ws.description, ws.grade, wg.grade as score, wg.peercomment
+        $sql = "SELECT wg.dimensionid, ws.description, ws.grade, wg.grade as score, wg.peercomment
                 FROM {workshop_grades} wg
                 LEFT JOIN {workshopform_accumulative} ws
                 ON wg.dimensionid = ws.id
-                WHERE assessmentid = :assessmentid AND strategy = :strategy AND dimensionid $dimsql";
+                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
         $params = array('assessmentid' => $assessment->id, 'strategy' => 'accumulative'); // @TODO variable or function for each?
         $params = array_merge($params, $dimparams);
 
@@ -744,8 +744,8 @@ class grade_report_culuser extends grade_report_user {
             
             foreach($records as $record) {
                 if($record->description && $record->score) {
-                    $feedback .= '<br/><b>' . strip_tags($record->description) . '</b>: ' . get_string('grade', 'gradereport_culuser') . round($record->score) . '/' . round($record->grade);
-                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '<br/>';
+                    $feedback .= '<p><b>' . strip_tags($record->description) . '</b>: ' . get_string('grade', 'gradereport_culuser') . round($record->score) . '/' . round($record->grade);
+                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '</p>';
                 }
             }
         }
@@ -770,25 +770,24 @@ class grade_report_culuser extends grade_report_user {
         list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
         // beware! the caller may rely on the returned array is indexed by dimensionid
 
-        $sql = "SELECT dimensionid, ws.description, wg.peercomment
+        $sql = "SELECT wg.dimensionid, ws.description, wg.peercomment
                 FROM {workshop_grades} wg
                 LEFT JOIN {workshopform_comments} ws
-                ON wg.dimensionid = ws.id
-                WHERE assessmentid = :assessmentid AND strategy = :strategy AND dimensionid $dimsql";
+                ON wg.dimensionid = ws.id 
+                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
         $params = array('assessmentid' => $assessment->id, 'strategy' => 'comments'); // @TODO variable or function for each?
         $params = array_merge($params, $dimparams);
 
         if($records = $DB->get_records_sql($sql, $params)) {
-            $feedback .= "<b>" . get_string('commentstitle', 'gradereport_culuser') . "</b>";
+            // $feedback .= "<b>" . get_string('commentstitle', 'gradereport_culuser') . "</b>";
             
             foreach($records as $record) {
-                if($record->description && $record->score) {
-                    $feedback .= '<br/><b>' . strip_tags($record->description);
-                    $feedback .= '<br/><b>' . get_string('comment', 'report_myfeedback') . '</b>: ' . strip_tags($record->peercomment) . '<br/>';
+                if($record->description) {
+                    $feedback .= '<p><b>' . strip_tags($record->description)  . '</b>';
+                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '</p>';
                 }
             }
         }
-
         return $feedback;
     }
 
@@ -809,21 +808,21 @@ class grade_report_culuser extends grade_report_user {
         list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
         // beware! the caller may rely on the returned array is indexed by dimensionid
 
-        $sql = "SELECT dimensionid, ws.description, ws.grade0, ws.grade1, wg.grade, wg.peercomment
+        $sql = "SELECT wg.dimensionid, ws.description, ws.grade0, ws.grade1, wg.grade, wg.peercomment
                 FROM {workshop_grades} wg
                 LEFT JOIN {workshopform_numerrors} ws
                 ON wg.dimensionid = ws.id
-                WHERE assessmentid = :assessmentid AND strategy = :strategy AND dimensionid $dimsql";
+                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
         $params = array('assessmentid' => $assessment->id, 'strategy' => 'numerrors'); // @TODO variable or function for each?
         $params = array_merge($params, $dimparams);
 
         if($records = $DB->get_records_sql($sql, $params)) {
-            $feedback .= "<b>" . get_string('accumulativetitle', 'gradereport_culuser') . "</b>";
+            // $feedback .= "<b>" . get_string('numerrorstitle', 'gradereport_culuser') . "</b>";
             
             foreach($records as $record) {
-                if($record->description && $record->score) {
-                    $feedback .= '<br/><b>' . strip_tags($record->description) . '</b>: ' . ($record->grade < 1.0 ? strip_tags($record->grade0) : strip_tags($record->grade1));
-                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '<br/>';
+                if($record->grade) {
+                    $feedback .= '<p><b>' . strip_tags($record->description) . '</b>: ' . ($record->grade < 1.0 ? strip_tags($record->grade0) : strip_tags($record->grade1));
+                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '</p>';
                 }
             }
         }
@@ -848,24 +847,24 @@ class grade_report_culuser extends grade_report_user {
         list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
         // beware! the caller may rely on the returned array is indexed by dimensionid
 
-        $sql = "SELECT dimensionid, ws.description, rl.definition, wg.peercomment
+        $sql = "SELECT wg.dimensionid, ws.description, rl.definition, wg.peercomment
                 FROM {workshop_grades} wg
                 LEFT JOIN {workshopform_rubric} ws
                 ON wg.dimensionid = ws.id
                 LEFT JOIN {workshopform_rubric_levels} rl 
                 ON rl.dimensionid = ws.id
                 AND rl.grade = wg.grade                                
-                WHERE assessmentid = :assessmentid AND strategy = :strategy AND dimensionid $dimsql";
+                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
         $params = array('assessmentid' => $assessment->id, 'strategy' => 'rubric'); // @TODO variable or function for each?
         $params = array_merge($params, $dimparams);
 
         if($records = $DB->get_records_sql($sql, $params)) {
-            $feedback .= "<b>" . get_string('accumulativetitle', 'gradereport_culuser') . "</b>";
+            // $feedback .= "<b>" . get_string('rubrictitle', 'gradereport_culuser') . "</b>";
             
             foreach($records as $record) {
-                if($record->description && $record->score) {
-                    $feedback .= '<br/><b>' . strip_tags($record->description) . '</b>: ' . strip_tags($record->definition) ;
-                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '<br/>';
+                if($record->description && $record->definition) {
+                    $feedback .= '<p><b>' . strip_tags($record->description) . '</b>: ' . strip_tags($record->definition) ;
+                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '<p/';
                 }
             }
         }
