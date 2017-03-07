@@ -362,6 +362,8 @@ class grade_report_culuser extends grade_report_user {
 
                         if (method_exists($this, $feedbackfunction)){
                             $this->{$feedbackfunction}($data, $grade_object);
+                        } else {
+                            $this->getModfeedback($data, $grade_object);
                         }
                     }
 
@@ -431,12 +433,18 @@ class grade_report_culuser extends grade_report_user {
         }
     }
 
-
+    /**
+     * Entry function to collect all the types of feedback for Assignment
+     * 
+     * @param array $data
+     * @param stdClass $grade_object
+     */
     protected function getAssignFeedback(&$data, $grade_object) {
         global $DB, $CFG;
 
         require_once($CFG->dirroot . '/mod/assign/locallib.php');
 
+        // We retrieve all the assign modules in the course.
         $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
         // Now we use the iteminstance to retrieve the assignment module for this grade.
         if (!empty($instances[$grade_object->iteminstance])) {
@@ -475,7 +483,8 @@ class grade_report_culuser extends grade_report_user {
                     // Use the plugin function to output the feedback.
                     } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
                         if($feedbackplugin->get_name() == 'Feedback files') {
-                            // Feedback files.
+                            // Feedback files. We use our own funtion to format these as the 
+                            // plugin produces verbose html.
                             if($files = $this->assign_get_feedback_files($grade, $context)) {
                                 $filefeedback = $this->get_formatted_feedback_files($files);
                                 $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';
@@ -483,7 +492,6 @@ class grade_report_culuser extends grade_report_user {
                             }
                         } else {
                             $data['feedback']['content'] .= $feedbacksubtitle;
-                            // @TODO Should really just get files and do simplified rendering without tables
                             $data['feedback']['content'] .= $feedbackplugin->view($grade);
                         }
                     }
@@ -508,7 +516,14 @@ class grade_report_culuser extends grade_report_user {
         }
     }
 
-    protected function getKalvidassignFeedback(&$data, $grade_object) {
+    /**
+     * Function to format the comment feedback for mods that have no other types of
+     * collectable feedback.
+     * 
+     * @param array $data
+     * @param stdClass $grade_object
+     */
+    protected function getModFeedback(&$data, $grade_object) {
         $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
 
         if ($data['feedback']['content']) {
@@ -516,9 +531,15 @@ class grade_report_culuser extends grade_report_user {
         }        
     }
 
+    /**
+     * Entry function to collect all the types of feedback for Peerassessment
+     * 
+     * @param array $data
+     * @param stdClass $grade_object
+     */
     protected function getPeerassessmentFeedback(&$data, $grade_object) {
         // NB Overriding grades and feedback in the gradebbok shows changes in gradebook but not in
-        // assignment.
+        // Peerassessment.
         $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
 
         if ($data['feedback']['content']) {
@@ -534,20 +555,30 @@ class grade_report_culuser extends grade_report_user {
 
         // Peer grades.
         // Looks like they can't see these. They just see the grades and feedback they gave others.
-
-
     }
 
+    /**
+     * Entry function to collect all the types of feedback for Workshop
+     * 
+     * @param array $data
+     * @param stdClass $grade_object
+     */
     protected function getTurnitintooltwoFeedback(&$data, $grade_object) {
 
     }
 
+    /**
+     * Entry function to collect all the types of feedback for Asssignment
+     * 
+     * @param array $data
+     * @param stdClass $grade_object
+     */
     protected function getWorkshopFeedback(&$data, $grade_object) {
         global $DB, $CFG, $PAGE;
 
         require_once($CFG->dirroot . '/mod/workshop/locallib.php');
 
-        // It is so we first retrieve all the workshop modules in the course.
+        // We retrieve all the workshop modules in the course.
         $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
         // Now we use the iteminstance to retrieve the workshop module for this grade.
         if (!empty($instances[$grade_object->iteminstance])) {
@@ -572,7 +603,7 @@ class grade_report_culuser extends grade_report_user {
                 );
 
             if($submission = $DB->get_record('workshop_submissions', $params, '*')) {
-                $assessments = $workshop->get_assessments_of_submission($submission->id);           
+                $assessments = $workshop->get_assessments_of_submission($submission->id);         
 
                 if($grade_object->itemnumber == 0) {
                                
@@ -585,9 +616,8 @@ class grade_report_culuser extends grade_report_user {
                     $strategyfeedback = '';
                     $filefeedback = '';
 
-                    // This gets overall feedback.
                     foreach($assessments as $assessment) {
-                        $assessment = $workshop->prepare_assessment($assessment, null);                        
+                        $assessment = $workshop->prepare_assessment($assessment, null);
                         // Overall peer feedback.
                         $overallfeedback .= $this->workshop_get_overall_feedback($assessment);
                         // Strategy feedback.
@@ -634,6 +664,7 @@ class grade_report_culuser extends grade_report_user {
         }
     }
 
+    // Assignment functions
 
     /**
      * Get the Assign Rubric feedback
@@ -719,196 +750,13 @@ class grade_report_culuser extends grade_report_user {
         return $out;
     }
 
-
     /**
-     * Returns the list of current grades filled by the reviewer indexed by dimensionid
+     * Gets the assign feedback files.
      *
-     * @param workshop_assessment $assessment Assessment record
-     * @return array [int dimensionid] => stdclass workshop_grades record
-     */
-    public function workshop_get_accumulative_feedback($assessment, $diminfo) {
-        global $DB;
-
-        if (empty($diminfo)) {
-            return array();
-        }
-
-        $feedback = '';
-        $feedbacktitle  = '';
-        list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
-        // beware! the caller may rely on the returned array is indexed by dimensionid
-
-        $sql = "SELECT wg.dimensionid, ws.description, ws.grade, wg.grade as score, wg.peercomment
-                FROM {workshop_grades} wg
-                LEFT JOIN {workshopform_accumulative} ws
-                ON wg.dimensionid = ws.id
-                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
-        $params = array('assessmentid' => $assessment->id, 'strategy' => 'accumulative'); // @TODO variable or function for each?
-        $params = array_merge($params, $dimparams);
-
-        if($records = $DB->get_records_sql($sql, $params)) {
-            // $feedbacktitle .= '<br/><b>' . get_string('accumulativetitle', 'gradereport_culuser') . '</b>';
-            
-            foreach($records as $record) {
-                if($record->description && $record->score) {
-                    $feedback .= '<p><b>' . strip_tags($record->description) . '</b>: ' . get_string('grade', 'gradereport_culuser') . round($record->score) . '/' . round($record->grade);
-                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '</p>';
-                }
-            }
-        }
-
-        return $feedback;
-    }
-
-    /**
-     * Returns the list of current grades filled by the reviewer indexed by dimensionid
-     *
-     * @param workshop_assessment $assessment Assessment record
-     * @return array [int dimensionid] => stdclass workshop_grades record
-     */
-    public function workshop_get_comments_feedback($assessment, $diminfo) {
-        global $DB;
-
-        if (empty($diminfo)) {
-            return array();
-        }
-
-        $feedback = '';
-        list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
-        // beware! the caller may rely on the returned array is indexed by dimensionid
-
-        $sql = "SELECT wg.dimensionid, ws.description, wg.peercomment
-                FROM {workshop_grades} wg
-                LEFT JOIN {workshopform_comments} ws
-                ON wg.dimensionid = ws.id 
-                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
-        $params = array('assessmentid' => $assessment->id, 'strategy' => 'comments'); // @TODO variable or function for each?
-        $params = array_merge($params, $dimparams);
-
-        if($records = $DB->get_records_sql($sql, $params)) {
-            // $feedback .= "<b>" . get_string('commentstitle', 'gradereport_culuser') . "</b>";
-            
-            foreach($records as $record) {
-                if($record->description) {
-                    $feedback .= '<p><b>' . strip_tags($record->description)  . '</b>';
-                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '</p>';
-                }
-            }
-        }
-        return $feedback;
-    }
-
-    /**
-     * Returns the list of current grades filled by the reviewer indexed by dimensionid
-     *
-     * @param workshop_assessment $assessment Assessment record
-     * @return array [int dimensionid] => stdclass workshop_grades record
-     */
-    public function workshop_get_numerrors_feedback($assessment, $diminfo) {
-        global $DB;
-
-        if (empty($diminfo)) {
-            return array();
-        }
-
-        $feedback = '';
-        list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
-        // beware! the caller may rely on the returned array is indexed by dimensionid
-
-        $sql = "SELECT wg.dimensionid, ws.description, ws.grade0, ws.grade1, wg.grade, wg.peercomment
-                FROM {workshop_grades} wg
-                LEFT JOIN {workshopform_numerrors} ws
-                ON wg.dimensionid = ws.id
-                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
-        $params = array('assessmentid' => $assessment->id, 'strategy' => 'numerrors'); // @TODO variable or function for each?
-        $params = array_merge($params, $dimparams);
-
-        if($records = $DB->get_records_sql($sql, $params)) {
-            // $feedback .= "<b>" . get_string('numerrorstitle', 'gradereport_culuser') . "</b>";
-            
-            foreach($records as $record) {
-                if($record->grade) {
-                    $feedback .= '<p><b>' . strip_tags($record->description) . '</b>: ' . ($record->grade < 1.0 ? strip_tags($record->grade0) : strip_tags($record->grade1));
-                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '</p>';
-                }
-            }
-        }
-
-        return $feedback;
-    }
-
-    /**
-     * Returns the list of current grades filled by the reviewer indexed by dimensionid
-     *
-     * @param workshop_assessment $assessment Assessment record
-     * @return array [int dimensionid] => stdclass workshop_grades record
-     */
-    public function workshop_get_rubric_feedback($assessment, $diminfo) {
-        global $DB;
-
-        if (empty($diminfo)) {
-            return array();
-        }
-
-        $feedback = '';
-        list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
-        // beware! the caller may rely on the returned array is indexed by dimensionid
-
-        $sql = "SELECT wg.dimensionid, ws.description, rl.definition, wg.peercomment
-                FROM {workshop_grades} wg
-                LEFT JOIN {workshopform_rubric} ws
-                ON wg.dimensionid = ws.id
-                LEFT JOIN {workshopform_rubric_levels} rl 
-                ON rl.dimensionid = ws.id
-                AND rl.grade = wg.grade                                
-                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
-        $params = array('assessmentid' => $assessment->id, 'strategy' => 'rubric'); // @TODO variable or function for each?
-        $params = array_merge($params, $dimparams);
-
-        if($records = $DB->get_records_sql($sql, $params)) {
-            // $feedback .= "<b>" . get_string('rubrictitle', 'gradereport_culuser') . "</b>";
-            
-            foreach($records as $record) {
-                if($record->description && $record->definition) {
-                    $feedback .= '<p><b>' . strip_tags($record->description) . '</b>: ' . strip_tags($record->definition) ;
-                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '<p/';
-                }
-            }
-        }
-
-        return $feedback;
-    }
-
-    /**
-     * Renders the overall feedback for the author of the submission
-     *
-     * @param workshop_assessment $assessment
-     * @return string HTML
-     */
-    public function workshop_get_overall_feedback(workshop_assessment $assessment) {
-        global $OUTPUT;
-
-        $content = $assessment->get_overall_feedback_content();
-
-        if ($content === false) {
-            return '';
-        }
-
-        $o = '';
-
-        if (!is_null($content)) {
-            $o .= $content;
-        }
-
-        return $o;
-    }
-
-  
-    /**
-     * Renders the overall feedback for the author of the submission
-     *
-     * @param workshop_assessment $assessment
-     * @return string HTML
+     * @param stdClass $grade
+     * @param context $context
+     * 
+     * @return array
      */
     public function assign_get_feedback_files($grade, $context) { // @TODO get all fileslike this.
         $fs = get_file_storage();
@@ -918,16 +766,16 @@ class grade_report_culuser extends grade_report_user {
     }     
 
 
-
-
+    // Peerassessment functions
 
     /**
-     * Renders the overall feedback for the author of the submission
+     * Gets the peerassessment feedback files.
      *
-     * @param workshop_assessment $assessment
-     * @return string HTML
+     * @param stdClass $grade_object
+     * 
+     * @return array
      */
-    public function peerassesment_get_feedback_files($grade_object) { // @TODO get all fileslike this.
+    public function peerassesment_get_feedback_files($grade_object) {
         global $CFG, $DB;
 
         require_once($CFG->dirroot . '/lib/grouplib.php');
@@ -953,26 +801,220 @@ class grade_report_culuser extends grade_report_user {
         return $files;
     } 
 
+    // Turnitin functions
+
+    // Workshop functions
+
+    /**
+     * Returns accumulative feedback
+     *
+     * @param workshop_assessment $assessment
+     * @param array $diminfo
+     * 
+     * @return string $feedback
+     */
+    public function workshop_get_accumulative_feedback($assessment, $diminfo) {
+        global $DB;
+
+        if (empty($diminfo)) {
+            return array();
+        }
+
+        $feedback = '';
+        $feedbacktitle  = '';
+        list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
+        // beware! the caller may rely on the returned array is indexed by dimensionid
+
+        $sql = "SELECT wg.dimensionid, ws.description, ws.grade, wg.grade as score, wg.peercomment
+                FROM {workshop_grades} wg
+                LEFT JOIN {workshopform_accumulative} ws
+                ON wg.dimensionid = ws.id
+                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
+        $params = array('assessmentid' => $assessment->id, 'strategy' => 'accumulative'); // 
+        $params = array_merge($params, $dimparams);
+
+        if($records = $DB->get_records_sql($sql, $params)) {
+            foreach($records as $record) {
+                if($record->description && $record->score) {
+                    $feedback .= '<p><b>' . strip_tags($record->description) . '</b>: ' . get_string('grade', 'gradereport_culuser') . round($record->score) . '/' . round($record->grade);
+                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '</p>';
+                }
+            }
+        }
+
+        return $feedback;
+    } 
+    
+    /**
+     * Returns comments feedback
+     *
+     * @param workshop_assessment $assessment
+     * @param array $diminfo
+     * 
+     * @return string $feedback
+     */
+    public function workshop_get_comments_feedback($assessment, $diminfo) {
+        global $DB;
+
+        if (empty($diminfo)) {
+            return array();
+        }
+
+        $feedback = '';
+        list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
+        // beware! the caller may rely on the returned array is indexed by dimensionid
+
+        $sql = "SELECT wg.dimensionid, ws.description, wg.peercomment
+                FROM {workshop_grades} wg
+                LEFT JOIN {workshopform_comments} ws
+                ON wg.dimensionid = ws.id 
+                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
+        $params = array('assessmentid' => $assessment->id, 'strategy' => 'comments');
+        $params = array_merge($params, $dimparams);
+
+        if($records = $DB->get_records_sql($sql, $params)) {
+            foreach($records as $record) {
+                if($record->description) {
+                    $feedback .= '<p><b>' . strip_tags($record->description)  . '</b>';
+                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '</p>';
+                }
+            }
+        }
+        return $feedback;
+    }
+
+    /**
+     * Returns numerrors feedback
+     *
+     * @param workshop_assessment $assessment
+     * @param array $diminfo
+     * 
+     * @return string $feedback
+     */
+    public function workshop_get_numerrors_feedback($assessment, $diminfo) {
+        global $DB;
+
+        if (empty($diminfo)) {
+            return array();
+        }
+
+        $feedback = '';
+        list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
+        // beware! the caller may rely on the returned array is indexed by dimensionid
+
+        $sql = "SELECT wg.dimensionid, ws.description, ws.grade0, ws.grade1, wg.grade, wg.peercomment
+                FROM {workshop_grades} wg
+                LEFT JOIN {workshopform_numerrors} ws
+                ON wg.dimensionid = ws.id
+                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
+        $params = array('assessmentid' => $assessment->id, 'strategy' => 'numerrors');
+        $params = array_merge($params, $dimparams);
+
+        if($records = $DB->get_records_sql($sql, $params)) {
+            foreach($records as $record) {
+                if($record->grade) {
+                    $feedback .= '<p><b>' . strip_tags($record->description) . '</b>: ' . ($record->grade < 1.0 ? strip_tags($record->grade0) : strip_tags($record->grade1));
+                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '</p>';
+                }
+            }
+        }
+
+        return $feedback;
+    }
+
+    /**
+     * Returns rubric feedback
+     *
+     * @param workshop_assessment $assessment
+     * @param array $diminfo
+     * 
+     * @return string $feedback
+     */
+    public function workshop_get_rubric_feedback($assessment, $diminfo) {
+        global $DB;
+
+        if (empty($diminfo)) {
+            return array();
+        }
+
+        $feedback = '';
+        list($dimsql, $dimparams) = $DB->get_in_or_equal(array_keys($diminfo), SQL_PARAMS_NAMED);
+        // beware! the caller may rely on the returned array is indexed by dimensionid
+
+        $sql = "SELECT wg.dimensionid, ws.description, rl.definition, wg.peercomment
+                FROM {workshop_grades} wg
+                LEFT JOIN {workshopform_rubric} ws
+                ON wg.dimensionid = ws.id
+                LEFT JOIN {workshopform_rubric_levels} rl 
+                ON rl.dimensionid = ws.id
+                AND rl.grade = wg.grade                                
+                WHERE wg.assessmentid = :assessmentid AND wg.strategy = :strategy AND wg.dimensionid $dimsql";
+        $params = array('assessmentid' => $assessment->id, 'strategy' => 'rubric');
+        $params = array_merge($params, $dimparams);
+
+        if($records = $DB->get_records_sql($sql, $params)) {
+            foreach($records as $record) {
+                if($record->description && $record->definition) {
+                    $feedback .= '<p><b>' . strip_tags($record->description) . '</b>: ' . strip_tags($record->definition) ;
+                    $feedback .= '<br/><b>' . get_string('comment', 'gradereport_culuser') . '</b>: ' . strip_tags($record->peercomment) . '<p/';
+                }
+            }
+        }
+
+        return $feedback;
+    }
+
     /**
      * Renders the overall feedback for the author of the submission
      *
      * @param workshop_assessment $assessment
-     * @return string HTML
+     * 
+     * @return string $o
      */
-    public function workshop_get_feedback_files($assessment, $context) { // @TODO get all fileslike th
+    public function workshop_get_overall_feedback(workshop_assessment $assessment) {
+        global $OUTPUT;
+
+        $content = $assessment->get_overall_feedback_content();
+
+        if ($content === false) {
+            return '';
+        }
+
+        $o = '';
+
+        if (!is_null($content)) {
+            $o .= $content;
+        }
+
+        return $o;
+    }
+
+    /**
+     * Gets the workshop feedback files.
+     *
+     * @param workshop_assessment $assessment
+     * @param context $context
+     * 
+     * @return array
+     */
+    public function workshop_get_feedback_files($assessment, $context) {
         $fs = get_file_storage();
         $files = $fs->get_area_files($context->id, 'mod_workshop', 'overallfeedback_attachment', $assessment->id);
 
         return $files;
-    } 
+    }     
+
+
+    // Generic functions
 
    /**
-     * Renders the overall feedback for the author of the submission
+     * Renders the html to display file feedback.
      *
-     * @param workshop_assessment $assessment
+     * @param array $files
+     * 
      * @return string HTML
      */
-    public function get_formatted_feedback_files($files) { // @TODO get all fileslike this.
+    public function get_formatted_feedback_files($files) {
         global $OUTPUT;
 
         $o ='';        
