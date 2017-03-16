@@ -55,7 +55,7 @@
 }
 
 .block_culcourse_listing .filter-on {
-    /*background-color: #fbeed5;*/
+    background-color: #8f182e;
     border: 5px solid #8f182e;
 }
 
@@ -69,9 +69,11 @@
 
 }
 
-.block_culcourse_listing .filter-on #allcoursesheader h2 {
-    color: #8f182e;
-    text-shadow: #EEEE00 0 0 10px;
+.block_culcourse_listing .filter-on #allcoursesheader h2,
+.block_culcourse_listing .filter-on #allcoursesheader label,
+.block_culcourse_listing .filter-on #allcoursesheader .collapsible-actions a {
+    color: #fff;
+    /*text-shadow: #EEEE00 0 0 10px;*/
 }
 
 .block_culcourse_listing .filter-off .allcourses {
@@ -143,6 +145,7 @@
     position: relative;
     margin: 0;
     padding: 0.36em;
+    background: #fff;
     border: 1px solid #eee;
 }
 
