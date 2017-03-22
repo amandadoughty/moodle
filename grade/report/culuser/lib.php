@@ -457,7 +457,7 @@ class grade_report_culuser extends grade_report_user {
             $config = get_config('assign');
             // Get the feedback plugin that is set to push comments to the gradebook. This is what populates
             // $grade_grade->feedback unless it is overridden.
-            $gradebookfeedback = str_replace('assignfeedback_', '', $config->feedback_plugin_for_gradebook);
+            $gradebookfeedbacktype = str_replace('assignfeedback_', '', $config->feedback_plugin_for_gradebook);
             // We need a stdClass with an id property from assign_grades that is for this $grade_object. 
             // It is needed to test $feedbackplugin->is_empty() for the remaining assignfeedback plugins.
             $params = array(
@@ -465,35 +465,34 @@ class grade_report_culuser extends grade_report_user {
                 'userid' => $this->user->id
                 );
 
-            $grades = $DB->get_records('assign_grades', $params);
+            $grades = $DB->get_records('assign_grades', $params, 'attemptnumber DESC');
+            $grade = array_pop($grades);
+            
+            foreach($feedbackplugins as $feedbackplugin) {
+                if ($feedbackplugin->is_enabled() &&
+                    $feedbackplugin->is_visible() &&
+                    $feedbackplugin->has_user_summary()                                            
+                ){
+                    $feedbacksubtitle = '<p class="feedbackpluginname">' . $feedbackplugin->get_name() . '</p>';
 
-            foreach($grades as $grade) {
-                foreach($feedbackplugins as $feedbackplugin) {
-                    if ($feedbackplugin->is_enabled() &&
-                        $feedbackplugin->is_visible() &&
-                        $feedbackplugin->has_user_summary()                                            
-                    ){
-                        $feedbacksubtitle = '<p class="feedbackpluginname">' . $feedbackplugin->get_name() . '</p>';
-
-                        // Add the title of the default feedback type if the feedback is not empty.
-                        if ($feedbackplugin->get_type() == $gradebookfeedback) {
-                            if ($data['feedback']['content']) {
-                                $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
+                    // Add the title of the default feedback type if the feedback is not empty.
+                    if ($feedbackplugin->get_type() == $gradebookfeedbacktype) {
+                        if ($data['feedback']['content']) {
+                            $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
+                        }
+                    // Use the plugin function to output the feedback.
+                    } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
+                        if($feedbackplugin->get_name() == 'Feedback files') {
+                            // Feedback files. We use our own funtion to format these as the 
+                            // plugin produces verbose html.
+                            if($files = $this->assign_get_feedback_files($grade, $context)) {
+                                $filefeedback = $this->get_formatted_feedback_files($files);
+                                $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';
+                                $data['feedback']['content'] .= $feedbacksubtitle .= $filefeedback;
                             }
-                        // Use the plugin function to output the feedback.
-                        } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
-                            if($feedbackplugin->get_name() == 'Feedback files') {
-                                // Feedback files. We use our own funtion to format these as the 
-                                // plugin produces verbose html.
-                                if($files = $this->assign_get_feedback_files($grade, $context)) {
-                                    $filefeedback = $this->get_formatted_feedback_files($files);
-                                    $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';
-                                    $data['feedback']['content'] .= $feedbacksubtitle .= $filefeedback;
-                                }
-                            } else {
-                                $data['feedback']['content'] .= $feedbacksubtitle;
-                                $data['feedback']['content'] .= $feedbackplugin->view($grade);
-                            }
+                        } else {
+                            $data['feedback']['content'] .= $feedbacksubtitle;
+                            $data['feedback']['content'] .= $feedbackplugin->view($grade);
                         }
                     }
                 }
@@ -845,9 +844,13 @@ class grade_report_culuser extends grade_report_user {
             $context = context_module::instance($cm->id);
             $course = get_course($this->courseid);
 
+            // @TODO needs to change when groups are fixed.
             try {
                 $groups = groups_get_user_groups($course->id, $this->user->id);
-                $group = $DB->get_record('groups', array('id' => $groups[0][0]), '*', MUST_EXIST);
+
+                if($groups[0]) {
+                    $group = $DB->get_record('groups', array('id' => $groups[0][0]), '*', MUST_EXIST);
+                }
             } catch(Exception $e) {
                 // Do nothing.
             }
