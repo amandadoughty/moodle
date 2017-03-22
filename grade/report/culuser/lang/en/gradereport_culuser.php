@@ -31,6 +31,7 @@ $string['commentstitle'] = 'Comments feedback';
 $string['eventgradereportviewed'] = 'Grade user report viewed';
 $string['files'] = 'Feedback files';
 $string['grade'] = 'Grade - ';
+$string['grademark'] = 'Feedback in Grademark';
 $string['markingguide'] = 'Marking guide';
 $string['myself'] = 'Myself';
 $string['numerrorstitle'] = 'Numerrors feedback';

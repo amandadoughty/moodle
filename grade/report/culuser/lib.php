@@ -465,34 +465,35 @@ class grade_report_culuser extends grade_report_user {
                 'userid' => $this->user->id
                 );
 
-            $grade = $DB->get_record('assign_grades', $params, '*');
-            $grade = $DB->get_record('assign_grades', $params, '*');
+            $grades = $DB->get_records('assign_grades', $params);
 
-            foreach($feedbackplugins as $feedbackplugin) {
-                if ($feedbackplugin->is_enabled() &&
-                    $feedbackplugin->is_visible() &&
-                    $feedbackplugin->has_user_summary()                                            
-                ){
-                    $feedbacksubtitle = '<p class="feedbackpluginname">' . $feedbackplugin->get_name() . '</p>';
+            foreach($grades as $grade) {
+                foreach($feedbackplugins as $feedbackplugin) {
+                    if ($feedbackplugin->is_enabled() &&
+                        $feedbackplugin->is_visible() &&
+                        $feedbackplugin->has_user_summary()                                            
+                    ){
+                        $feedbacksubtitle = '<p class="feedbackpluginname">' . $feedbackplugin->get_name() . '</p>';
 
-                    // Add the title of the default feedback type if the feedback is not empty.
-                    if ($feedbackplugin->get_type() == $gradebookfeedback) {
-                        if ($data['feedback']['content']) {
-                            $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
-                        }
-                    // Use the plugin function to output the feedback.
-                    } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
-                        if($feedbackplugin->get_name() == 'Feedback files') {
-                            // Feedback files. We use our own funtion to format these as the 
-                            // plugin produces verbose html.
-                            if($files = $this->assign_get_feedback_files($grade, $context)) {
-                                $filefeedback = $this->get_formatted_feedback_files($files);
-                                $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';
-                                $data['feedback']['content'] .= $feedbacksubtitle .= $filefeedback;
+                        // Add the title of the default feedback type if the feedback is not empty.
+                        if ($feedbackplugin->get_type() == $gradebookfeedback) {
+                            if ($data['feedback']['content']) {
+                                $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
                             }
-                        } else {
-                            $data['feedback']['content'] .= $feedbacksubtitle;
-                            $data['feedback']['content'] .= $feedbackplugin->view($grade);
+                        // Use the plugin function to output the feedback.
+                        } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
+                            if($feedbackplugin->get_name() == 'Feedback files') {
+                                // Feedback files. We use our own funtion to format these as the 
+                                // plugin produces verbose html.
+                                if($files = $this->assign_get_feedback_files($grade, $context)) {
+                                    $filefeedback = $this->get_formatted_feedback_files($files);
+                                    $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';
+                                    $data['feedback']['content'] .= $feedbacksubtitle .= $filefeedback;
+                                }
+                            } else {
+                                $data['feedback']['content'] .= $feedbacksubtitle;
+                                $data['feedback']['content'] .= $feedbackplugin->view($grade);
+                            }
                         }
                     }
                 }
@@ -564,6 +565,63 @@ class grade_report_culuser extends grade_report_user {
      * @param stdClass $grade_object
      */
     protected function getTurnitintooltwoFeedback(&$data, $grade_object) {
+        global $DB, $CFG, $PAGE;
+
+        $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
+
+        if ($data['feedback']['content']) {
+            $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
+        }
+
+        // We retrieve all the tii modules in the course.
+        $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
+        // Now we use the iteminstance to retrieve the tii module for this grade.
+        if (!empty($instances[$grade_object->iteminstance])) {
+            $cm = $instances[$grade_object->iteminstance];                              
+            $context = context_module::instance($cm->id);
+            $course = get_course($this->courseid);
+
+            $params = array(
+                'id' => $grade_object->iteminstance
+                );
+
+            $tiirecord = $DB->get_record('turnitintooltwo', $params, '*');
+
+            $params = array(
+                'turnitintooltwoid' => $grade_object->iteminstance,  
+                'userid' => $this->user->id
+                );
+
+            $submissions = $DB->get_records('turnitintooltwo_submissions', $params);
+            $grademarkfeedback = '';
+
+         
+
+            // Link the submission to the plagiarism comparison report.
+            // If grademark marking is enabled.
+            if ($tiirecord->usegrademark == 1 && $submissions) {
+                foreach($submissions as $submission) {
+                    // Link the submission to the gradebook.
+                    $grademarkfeedback .= "<a href=\"" . 
+                        $CFG->wwwroot . 
+                        "/mod/turnitintooltwo/view.php?id=" .
+                        $cm->id . 
+                        "&viewcontext=box&do=grademark&submissionid=" . 
+                        $submission->submission_objectid .
+                        "\" target=\"_blank\">" . 
+                        $submission->submission_title .
+                        "</a>";                    
+                }
+            }
+
+            if($grademarkfeedback){
+                $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('grademark', 'gradereport_culuser') . '</p>';
+
+                $data['feedback']['content'] = $feedbacksubtitle .= $grademarkfeedback;
+            }
+        }
+
+
 
     }
 
