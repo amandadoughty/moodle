@@ -27,7 +27,7 @@ function xmldb_block_culcourse_listing_upgrade($oldversion, $block) {
 
     $dbman = $DB->get_manager(); // Get database manager
 
-    if($oldversion < 201702012) {
+    if($oldversion < 2017020104) {
 		// Create new table to hold terms and ears defined in settings by date range.
         $table = new xmldb_table('block_culcourse_listing_prds');
 
