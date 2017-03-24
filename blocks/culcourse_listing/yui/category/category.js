@@ -165,14 +165,14 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
 
         if (yearselect) {
             yearselect.get('options').each(function() {
-                years[this.get('text')] = this.get('text');
+                years[this.get('value')] = this.get('text');
             });
             config.data.years = Y.JSON.stringify(years);
         }
 
         if (periodselect) {
             periodselect.get('options').each(function() {
-                periods[this.get('text')] = this.get('text');
+                periods[this.get('value')] = this.get('text');
             });
             config.data.periods = Y.JSON.stringify(periods);
         }

@@ -110,6 +110,9 @@ class block_culcourse_listing extends block_base {
             $this->page->requires->string_for_js('favouriteremove', 'block_culcourse_listing');
             $this->page->requires->string_for_js('nofavourites', 'block_culcourse_listing');
             $this->page->requires->string_for_js('divalert', 'block_culcourse_listing');
+            $this->page->requires->string_for_js('PRD1', 'block_culcourse_listing');
+            $this->page->requires->string_for_js('PRD2', 'block_culcourse_listing');
+            $this->page->requires->string_for_js('PRD3', 'block_culcourse_listing');
             $this->page->requires->string_for_js('and', 'block_culcourse_listing');
             $this->page->requires->string_for_js('all', 'block_culcourse_listing');
 

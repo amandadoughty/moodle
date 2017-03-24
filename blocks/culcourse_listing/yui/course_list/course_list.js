@@ -62,7 +62,7 @@ YUI.add('moodle-block_culcourse_listing-course_list', function(Y) {
                     filterstring = filterstring + M.util.get_string('and', 'block_culcourse_listing');
                 }
                 if (filterperiod != false) {
-                    filterstring = filterstring + filterperiod;
+                    filterstring = filterstring + M.util.get_string(filterperiod, 'block_culcourse_listing');
                 }
 
                 filterstring = M.util.get_string('divalert', 'block_culcourse_listing', filterstring);
