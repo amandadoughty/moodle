@@ -25,8 +25,9 @@ YUI.add('moodle-block_culcourse_listing-course_list', function(Y) {
 
        initializer: function(params) {
             this.setupcourses();
-            var doc = Y.one(Y.config.doc);
-            doc.delegate('change', this.filtercourses, SELECTORS.FILTERLIST, this, params.config);
+            // var doc = Y.one(Y.config.doc);
+            // doc.delegate('change', this.filtercourses, SELECTORS.FILTERLIST, this, params.config);
+            Y.one(SELECTORS.FILTERLIST).on('change', this.filtercourses, this, params.config);
         },
 
         setupcourses: function() {
