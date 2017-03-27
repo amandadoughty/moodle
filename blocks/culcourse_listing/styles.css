@@ -467,6 +467,10 @@
     display: none;
 }
 
+.block.block_culcourse_listing .couorseimage img {
+    width: 100%;
+    max-width: 250px;
+}
 .block.block_culcourse_listing .courseimage img {
     width: 100%;
     max-width: 250px;
