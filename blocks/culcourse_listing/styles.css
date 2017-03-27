@@ -458,3 +458,8 @@
 .block.block_culcourse_listing .collapseexpand.collapse-all.hide {
     display: none;
 }
+
+.block.block_culcourse_listing .couorseimage img {
+    width: 100%;
+    max-width: 250px;
+}
