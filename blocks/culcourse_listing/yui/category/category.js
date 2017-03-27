@@ -91,6 +91,7 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
             childnode: courseboxnode.one(SELECTORS.CONTENTNODE),
             spinnerhandle: SELECTORS.COURSEBOXSPINNERLOCATION,
             data: {
+                sesskey : M.cfg.sesskey,
                 courseid: courseboxnode.getData('courseid'),
                 type: TYPE_COURSE
             }
