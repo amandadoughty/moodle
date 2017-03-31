@@ -592,9 +592,7 @@ class grade_report_culuser extends grade_report_user {
                 );
 
             $submissions = $DB->get_records('turnitintooltwo_submissions', $params);
-            $grademarkfeedback = '';
-
-         
+            $grademarkfeedback = '';         
 
             // Link the submission to the plagiarism comparison report.
             // If grademark marking is enabled.
@@ -616,12 +614,9 @@ class grade_report_culuser extends grade_report_user {
             if($grademarkfeedback){
                 $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('grademark', 'gradereport_culuser') . '</p>';
 
-                $data['feedback']['content'] = $feedbacksubtitle .= $grademarkfeedback;
+                $data['feedback']['content'] .= $feedbacksubtitle .= $grademarkfeedback;
             }
         }
-
-
-
     }
 
     /**
