@@ -157,6 +157,7 @@ class rollover {
         // Remove Turnitin assignments and core assignments with turnitin plagerism on.
         $this->debug("   attempting to remove Turnitin assignments in the course now \n");
         $this->delete_turnitin_activities($modinfobeforerollover);
+        $this->delete_forum_activities($modinfobeforerollover);
         
         // Update the rollover record.
         $this->debug("   setting rollover status as complete \n");        
@@ -476,27 +477,7 @@ class rollover {
 
         $courseid = $this->dstcourse->id;
         $modinfo = get_fast_modinfo($courseid);
-        $plugins = core_component::get_plugin_list('plagiarism');
-
-        // Delete any turnitintool assignments.
-        if(array_key_exists('turnitintool', $plugins)) {
-            $turnitintoolmods = $modinfo->get_instances_of('turnitintool');
-
-            foreach($turnitintoolmods as $turnitintoolmod) {
-                $this->debug("   deleting turinitintool $turnitintoolmod->name \n");
-                course_delete_module($turnitintoolmod->id);
-            }
-        }
-
-        // Delete turnitintooltwo assignments.
-        if(array_key_exists('turnitintooltwo', $plugins)) {
-            $turnitintooltwomods = $modinfo->get_instances_of('turnitintooltwo');               
-
-            foreach($turnitintooltwomods as $turnitintooltwomod) {
-                $this->debug("   deleting turinitintooltwo $turnitintooltwomod->name \n");
-                course_delete_module($turnitintooltwomod->id);
-            }
-        }
+        $plugins = \core_component::get_plugin_list('plagiarism');
 
         // Delete assignments with turnitin plagerism plugin
         if(array_key_exists('turnitin', $plugins)) {
@@ -541,7 +522,7 @@ class rollover {
 
         $courseid = $this->dstcourse->id;
         $modinfo = get_fast_modinfo($courseid);
-        $plugins = core_component::get_plugin_list('plagiarism');
+        $plugins = \core_component::get_plugin_list('plagiarism');
 
         if(array_key_exists('turnitin', $plugins)) {
 
