@@ -476,30 +476,30 @@ class rollover {
 
         $courseid = $this->dstcourse->id;
         $modinfo = get_fast_modinfo($courseid);
-        // $modinfobeforerollover = $
+        $plugins = core_component::get_plugin_list('plagiarism');
 
         // Delete any turnitintool assignments.
-        // if($module = $DB->get_record('modules', array('name' => 'turnitintool'))) {
+        if(array_key_exists('turnitintool', $plugins)) {
+            $turnitintoolmods = $modinfo->get_instances_of('turnitintool');
 
-        //     $turnitintoolmods = $modinfo->get_instances_of('turnitintool');
-
-        //     foreach($turnitintoolmods as $turnitintoolmod) {
-        //         $this->debug("   deleting turinitintool $turnitintoolmod->name \n");
-        //         course_delete_module($turnitintoolmod->id);
-        //     }
-        // }
+            foreach($turnitintoolmods as $turnitintoolmod) {
+                $this->debug("   deleting turinitintool $turnitintoolmod->name \n");
+                course_delete_module($turnitintoolmod->id);
+            }
+        }
 
         // Delete turnitintooltwo assignments.
-        if($module = $DB->get_record('modules', array('name' => 'turnitintooltwo'))) {
+        if(array_key_exists('turnitintooltwo', $plugins)) {
+            $turnitintooltwomods = $modinfo->get_instances_of('turnitintooltwo');               
 
-            $turnitintooltwomods = $modinfo->get_instances_of('turnitintooltwo');                    
+            foreach($turnitintooltwomods as $turnitintooltwomod) {
+                $this->debug("   deleting turinitintooltwo $turnitintooltwomod->name \n");
+                course_delete_module($turnitintooltwomod->id);
+            }
+        }
 
-            // foreach($turnitintooltwomods as $turnitintooltwomod) {
-            //     $this->debug("   deleting turinitintooltwo $turnitintooltwomod->name \n");
-            //     course_delete_module($turnitintooltwomod->id);
-            // }
-
-            // Delete assignments with turnitin plagerism plugin
+        // Delete assignments with turnitin plagerism plugin
+        if(array_key_exists('turnitin', $plugins)) {
             if($modinfobeforerollover) {
                 $assignmodsbeforerollover = $modinfobeforerollover->get_instances_of('assign');
             } else {
@@ -531,6 +531,51 @@ class rollover {
             }
         }
         // TODO can be forum and other mods too
+    }
+
+    /**
+     * Remove turnitin enabled forum activities from a course.
+     */
+    private function delete_forum_activities($modinfobeforerollover) {
+        global $DB, $CFG ;
+
+        $courseid = $this->dstcourse->id;
+        $modinfo = get_fast_modinfo($courseid);
+        $plugins = core_component::get_plugin_list('plagiarism');
+
+        if(array_key_exists('turnitin', $plugins)) {
+
+            // Delete forums with turnitin plagerism plugin
+            if($modinfobeforerollover) {
+                $forummodsbeforerollover = $modinfobeforerollover->get_instances_of('forum');
+            } else {
+                $forummodsbeforerollover = array();
+            }
+
+            $forummods = $modinfo->get_instances_of('forum');
+            $forummods = array_diff_key($forummods, $forummodsbeforerollover);
+            $forumnames = array();
+            $cmids = array();
+
+            foreach($forummods as $forum) {
+                $cmids[] = $forum->id;
+                $forumnames[$forum->id] = $forum->name;
+            }
+
+            $plagiarismsettings = $DB->get_records_list('plagiarism_turnitin_config', 'cm', $cmids);
+            $forumswithtii = array();
+
+            foreach($plagiarismsettings as $plagiarismsetting) {
+                if(($plagiarismsetting->name == 'use_turnitin') &&  ($plagiarismsetting->value == 1)) {
+                    $forumswithtii[$plagiarismsetting->cm] = $forumnames[$plagiarismsetting->cm];
+                }
+            }
+
+            foreach($forumswithtii as $cm => $forummod) {
+                $this->debug("   deleting forum $forummod \n");
+                course_delete_module($cm);
+            }
+        }
     }
 
     /**
