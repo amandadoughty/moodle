@@ -487,7 +487,7 @@ class grade_report_culuser extends grade_report_user {
                             // plugin produces verbose html.
                             if($files = $this->assign_get_feedback_files($grade, $context)) {
                                 $filefeedback = $this->get_formatted_feedback_files($files);
-                                $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';
+                                // $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';
                                 $data['feedback']['content'] .= $feedbacksubtitle .= $filefeedback;
                             }
                         } else {
