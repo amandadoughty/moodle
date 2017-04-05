@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'CUL user report';
+$string['pluginname'] = 'Grades & feedback report';
 
 $string['accumulativetitle'] = 'Accumulative feedback';
 $string['comment'] = 'Comment';
