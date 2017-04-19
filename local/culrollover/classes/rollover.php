@@ -154,8 +154,8 @@ class rollover {
         // Update the destination course record with all the changes.
         $this->update_course_settings();
 
-        // Remove Turnitin assignments and core assignments with turnitin plagerism on.
-        $this->debug("   attempting to remove Turnitin assignments in the course now \n");
+        // Remove assignments and forums with turnitin plagerism on.
+        $this->debug("   attempting to remove assignments and forums with turnitin plagarism on now \n");
         $this->delete_turnitin_activities($modinfobeforerollover);
         $this->delete_forum_activities($modinfobeforerollover);
         
