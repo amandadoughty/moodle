@@ -250,7 +250,11 @@ function kalvidassign_email_teachers($cm, $name, $submission, $context) {
  */
 function kalvidassign_get_graders($cm, $user, $context) {
     // Potential graders.
-    $potgraders = get_users_by_capability($context, 'mod/kalvidassign:gradesubmission', '', '', '', '', '', '', false, false);
+    // $potgraders = get_users_by_capability($context, 'mod/kalvidassign:gradesubmission', '', '', '', '', '', '', false, false);
+
+    // CMDLTWO-813
+    $potgraders = get_enrolled_users($context, "mod/kalvidassign:gradesubmission", null, 'u.*', null, null, null, true);
+    // End CMDLTWO-813
 
     $graders = array();
     // Separate groups are being used.
