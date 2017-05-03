@@ -61,6 +61,12 @@ class mod_attendance_structure {
 
     public $subnet;
 
+    /** Define if session details should be shown in reports */
+    public $showsessiondetails;
+
+    /** Position for the session detail columns related to summary columns.*/
+    public $sessiondetailspos;
+
     private $groupmode;
 
     private $statuses;
@@ -81,6 +87,8 @@ class mod_attendance_structure {
      * @param stdClass $context  The context of the workshop instance
      */
     public function __construct(stdclass $dbrecord, stdclass $cm, stdclass $course, stdclass $context=null, $pageparams=null) {
+        global $DB;
+
         foreach ($dbrecord as $field => $value) {
             if (property_exists('mod_attendance_structure', $field)) {
                 $this->{$field} = $value;
@@ -97,6 +105,13 @@ class mod_attendance_structure {
         }
 
         $this->pageparams = $pageparams;
+
+        if (isset($pageparams->showsessiondetails) && $pageparams->showsessiondetails != $this->showsessiondetails) {
+            $DB->set_field('attendance', 'showsessiondetails', $pageparams->showsessiondetails, array('id' => $this->id));
+        }
+        if (isset($pageparams->sessiondetailspos) && $pageparams->sessiondetailspos != $this->sessiondetailspos) {
+            $DB->set_field('attendance', 'sessiondetailspos', $pageparams->sessiondetailspos, array('id' => $this->id));
+        }
     }
 
     public function get_group_mode() {
@@ -477,24 +492,25 @@ class mod_attendance_structure {
     public function take_from_form_data($formdata) {
         global $DB, $USER;
         // TODO: WARNING - $formdata is unclean - comes from direct $_POST - ideally needs a rewrite but we do some cleaning below.
+        // This whole function could do with a nice clean up.
         $statuses = implode(',', array_keys( (array)$this->get_statuses() ));
         $now = time();
         $sesslog = array();
         $formdata = (array)$formdata;
         foreach ($formdata as $key => $value) {
-            if (substr($key, 0, 4) == 'user') {
-                $sid = substr($key, 4);
-                if (!(is_numeric($sid) && is_numeric($value))) { // Sanity check on $sid and $value.
+            // Look at Remarks field because the user options may not be passed if empty.
+            if (substr($key, 0, 7) == 'remarks') {
+                $sid = substr($key, 7);
+                if (!(is_numeric($sid))) { // Sanity check on $sid.
                     print_error('nonnumericid', 'attendance');
                 }
                 $sesslog[$sid] = new stdClass();
                 $sesslog[$sid]->studentid = $sid; // We check is_numeric on this above.
-                $sesslog[$sid]->statusid = $value; // We check is_numeric on this above.
-                $sesslog[$sid]->statusset = $statuses;
-                $sesslog[$sid]->remarks = '';
-                if (array_key_exists('remarks'.$sid, $formdata)) {
-                    $sesslog[$sid]->remarks = clean_param($formdata['remarks' . $sid], PARAM_TEXT);
+                if (array_key_exists('user'.$sid, $formdata) && is_numeric($formdata['user' . $sid])) {
+                    $sesslog[$sid]->statusid = $formdata['user' . $sid];
                 }
+                $sesslog[$sid]->statusset = $statuses;
+                $sesslog[$sid]->remarks = $value;
                 $sesslog[$sid]->sessionid = $this->pageparams->sessionid;
                 $sesslog[$sid]->timetaken = $now;
                 $sesslog[$sid]->takenby = $USER->id;
@@ -503,7 +519,8 @@ class mod_attendance_structure {
 
         $dbsesslog = $this->get_session_log($this->pageparams->sessionid);
         foreach ($sesslog as $log) {
-            if ($log->statusid) {
+            // Don't save a record if no statusid or remark.
+            if (!empty($log->statusid) || !empty($log->remarks)) {
                 if (array_key_exists($log->studentid, $dbsesslog)) {
                     $log->id = $dbsesslog[$log->studentid]->id;
                     $DB->update_record('attendance_log', $log);
