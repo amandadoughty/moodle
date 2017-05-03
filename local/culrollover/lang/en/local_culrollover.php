@@ -35,52 +35,22 @@ $string['delete'] = "Delete first";
 $string['groups'] = "Yes";
 $string['nogroups'] = "No";
 $string['rolestocopy'] = "Copy role assignments";
-$string['norolestocopy'] = "No selectable roles! Has the admin allowed roles to be copied across?";
+$string['norolestocopy'] = "No selectable roles!";
 $string['visible'] = " Make Visible";
 $string['notvisible'] = "Hide";
 $string['visiblefrom'] = "Make visible on a given date";
-$string['visibledate'] = "Set start date (module visibility) Day";
+$string['visibledate'] = "Set start date (module visibility)";
 $string['migratedate'] = "Rollover date";
 $string['selectcourses_header'] = "2. Select Modules";
 $string['reviewoptions_header'] = "3. Review and Amend Settings";
-$string['rolestoinform'] = "Which users group should be emailed with the rollover status";
+$string['rolestoinform'] = "Select roles to be notified of rollover success";
 $string['addmore'] = "Add another";
 $string['automatedbackupschedule'] = "Automated Backup Schedule";
-$string['successemail'] = 'Your course {$a->coursename} was successfully rolled over. <br> <a href="' .
-$CFG->wwwroot . 
-'/course/view.php?id={$a->courseid}">Click here to access the course</a>
-<br/>
-<br/>
-* You will need to update Moodle assignment descriptions and due dates prior to the start of the module.
-<br/>
-* Turnitin and Moodle assignments with the Turnitin plugin enabled will not be rolled over and will have to be added to Moodle prior to the start of the module.
-<br/>
-* If you have selected to rollover groups you will need to add your students into groups before your activities go live.
-<br/>
-<br/>
-To help you prepare your modules for the start of year/term refer to the Module Page Checklist: 
-<a href="https://sleguidance.atlassian.net/wiki/display/Moodle/Module+Page+Checklist">
-https://sleguidance.atlassian.net/wiki/display/Moodle/Module+Page+Checklist
-</a>
+$string['successemail'] = 'This is to let you know that the Moodle module called {$a->coursename} has been rolled over and the requestor has asked for you to be notified.<br><a href="http://moodle.city.ac.uk/course/view.php?id={$a->courseid}">Click this link to access the module</a>
 ';
-$string['successemail_subject'] = 'Moodle Rollover complete for {$a->coursename}';
-$string['successemail_subject_requestor'] = 'Moodle Rollover complete for {$a->coursename}';
-$string['successemail_requestor'] = 'Your course {$a->coursename} was successfully rolled over. <br> <a href="' .
-$CFG->wwwroot . 
-'/course/view.php?id={$a->courseid}">Click here to access the course</a>
-<br/>
-<br/>
-* You will need to update Moodle assignment descriptions and due dates prior to the start of the module.
-<br/>
-* Turnitin and Moodle assignments with the Turnitin plugin enabled will not be rolled over and will have to be added to Moodle prior to the start of the module.
-<br/>
-* If you have selected to rollover groups you will need to add your students into groups before your activities go live.
-<br/>
-<br/>
-To help you prepare your modules for the start of year/term refer to the Module Page Checklist: 
-<a href="https://sleguidance.atlassian.net/wiki/display/Moodle/Module+Page+Checklist">
-https://sleguidance.atlassian.net/wiki/display/Moodle/Module+Page+Checklist
-</a>
+$string['successemail_subject'] = 'Moodle module rollover notification ({$a->coursename})';
+$string['successemail_subject_requestor'] = 'Moodle module rollover notification ({$a->coursename})';
+$string['successemail_requestor'] = 'Your requested rollover for the Moodle module called {$a->coursename} was successful and is now ready for editing. If requested module roles (except students) have also been notifed.<br><a href="http://moodle.city.ac.uk/course/view.php?id={$a->courseid}">Click this link to access the module</a>
 ';
 $string['visiblity'] = 'Course Visibility';
 $string['whentorollover'] = 'When should rollover be carried out?';
@@ -88,14 +58,14 @@ $string['howtorollover'] = 'Merge or delete first existing content in destinatio
 $string['whattoroolover'] = 'Rollover type';
 $string['shouldgroupsbecopied'] = 'Copy groups and groupings';
 $string['shouldcoursebevisible'] = 'Module visibility';
-$string['source_courses'] = "Select Source Courses";
-$string['destination_courses'] = "Select Destination Courses";
+$string['source_courses'] = "select module";
+$string['destination_courses'] = "select module";
 $string['reviewmessage'] = 'Destination modules that already have content (and therefore may have been rolled over already) are highlighted. Click the link to view a module in a new window. You can remove the rollover from the list using the Remove from queue link.';
 $string['selectcoursesmessage'] = 'Modules are filtered according to current year and rollover period. You can only see modules that you are enroled on. Destination modules that already have a rollover pending will be shown in the destination list but you can not select them until the rollover has processed.';
 
 // Course visibility Strings.
-$string['hidecourse'] = 'Keep New Course Hidden';
-$string['visiblecourse'] = 'Make New Course Visible Immediately';
+$string['hidecourse'] = 'Make hidden';
+$string['visiblecourse'] = 'Make visible';
 $string['coursevisibleon'] ='Make Course Visible on:  ';
 
 // Table Headers.
@@ -123,13 +93,13 @@ $string['addformigration'] = "Add to Rollover Queue";
 $string['breadcrumb'] = 'Rollover Tool';
 $string['date'] = "Date";
 $string['existingrecords'] = 'Module Rollover Tool';
-$string['norequests'] = "No Current Rollover Requests";
+$string['norequests'] = "No rollover requests in queue";
 $string['status'] = "Status";
 $string['title'] = 'Moodle: CUL Rollover Tool';
 $string['user'] = "User";
 
 // Tooltip Strings.
-$string['tooltipwarning'] = 'There is existing content in this course! It might get overwritten!!';
+$string['tooltipwarning'] = 'click to edit (red background indicates destination has content already!)';
 
 // Settings.
 $string['src_regex_identifier'] = "Specify Source Course RegEx Filter";
@@ -153,9 +123,11 @@ $string['alwaysbackupdestination'] = "Backup Destination Course?";
 $string['backupdestination_desc'] = "Always backup destination course before a rollover takes place. this might increase processing times and significantly reduce performance!";
 
 // Error Strings.
-$string['nocoursestomigrate'] = "There are no selectable courses to rollover. Please check the admin settings and ensure that the course filters are correct";
-$string['invalidcourseshortname'] = "The course shortname supplied is invalid! Please review the CSV upload file and retry";
-$string['invalidcourseformigration'] = "The specified course is not a valid source course or a valid destination course. Please contact your administrator for further details";
+$string['nocoursestomigrate'] = "You do not have sufficient access rights to use  module rollover. 
+
+Clicking Continue will take you back to Moodle home.";
+$string['invalidcourseshortname'] = "A module shortname supplied is invalid! Please review the CSV upload file and retry.";
+$string['invalidcourseformigration'] = "The specified module is not a valid source module or a valid destination module. Please contact your school administrator or Service Desk for assistance.";
 $string['invalidextparam'] = 'The backup option {$a} is invalid';
 $string['invaliddstcourseid'] = 'The source course id {$a} is invalid';
 $string['invalidsrccourseid'] = 'The destination course id {$a} is invalid';
@@ -165,27 +137,24 @@ $string['backupprecheckerrors'] = 'There were errors in the backup precheck: {$a
 
 
 // Help Icons Text.
-$string['defaultoptions_helptext_help'] = "This sections allows you to set the default / bulk options for the courses you wish to rollover. These options can be modified later on";
+$string['defaultoptions_helptext_help'] = "Set default/bulk options here. These can be overridden for individual rollovers later on. Please see <a href=\"https://sleguidance.atlassian.net/wiki/display/Moodle/Rollover+tool\" target=\"_blank\">guidance notes</a> for more help.";
 $string['defaultoptions_helptext'] = "Default Options";
-$string['whengroup_helptext_help'] = "You can choose to set the rollover to happen on a particular date, or on the next available date. Depending on the queue this might be the tomorrow.";
+$string['whengroup_helptext_help'] = "Determines which date the rollover is performed. If Next available is chosen then rollovers will be added to the queue and run during the next available window (usually overnight). To specify a date use the calendar selector to select a date.";
 $string['whengroup_helptext'] = "Rollover Date";
-$string['whatgroup_helptext_help'] = "Rollover has changed. There is no need to select a type. 
-Rollover will copy all content (activities and resources, except Turnitin and Moodle assignments with the Turnitin Plugin enabled) 
-from the Source to the Destination module. Blocks cannot be copied. 
-Blocks are setup using the new CUL Collapsed Topics format which will be applied automatically when the module is created.";
-$string['whatgroup_helptext'] = "Content Options";
-$string['mergegroup_helptext_help'] = "Would you like to merge the content in the destination course or replace it with the course to be rolled over?";
+$string['whatgroup_helptext_help'] = "Rollover has changed. There is no need to select a type. Rollover will copy all content (activities and resources, except Turnitin) from the Source to the Destination module. Blocks are no longer copied. These are setup using the new CUL Collapsed Topics format which will be applied automatically when the module is created.";
+$string['whatgroup_helptext'] = "Rollover Type";
+$string['mergegroup_helptext_help'] = "What to do if destination module contains any content. Merge will just add content from source module to it, delete first will remove any content from destination module before rollover.";
 $string['mergegroup_helptext'] = "Merge Options";
 $string['groupsgroup_helptext_help'] = "Selecting Yes for this option will copy any groups or groupings from the source module 
 to the destination. Note this does not include group members, just group names and groupings. 
 You will need to add your students into groups before your activities go live.";
-$string['groupsgroup_helptext'] = "Group Copy Options";
-$string['roles_helptext_help'] = "Choose the roles that you would like copied across from the course being rolled over. You can select multiple courses at the same time.";
-$string['roles_helptext'] = "Roles Copy Options";
-$string['noroles_helptext_help'] = "Roles currently cannot be copied across. Please contact the admin team for further details.";
+$string['groupsgroup_helptext'] = "Group Copy";
+$string['roles_helptext_help'] = "Choose the roles assignments that you would like to copy from source to destination. You can select multiple roles. Currently rollover prevents the copying of student enrolments.";
+$string['roles_helptext'] = "Copy Roles";
+$string['noroles_helptext_help'] = "Roles currently cannot be copied across.";
 $string['noroles_helptext'] = "No roles!";
-$string['visiblegroup_helptext_help'] = "You can select to make the course visible to students now, or hide it, or make it available on a certain date";
-$string['visiblegroup_helptext'] = "Course Availability Options";
+$string['visiblegroup_helptext_help'] = "Use these options to control the visibility of the module. If a visibility date is set then the module will remain unavailable to students until that date.";
+$string['visiblegroup_helptext'] = "Module Visibility";
 $string['rolestoinform_help'] = 'Select roles to inform when rollover complete';
 $string['rolestoinform_help_help'] = 'Select roles to inform when rollover complete';
 
