@@ -642,9 +642,22 @@ class rollover {
             )
         );
 
-        if ($srcoptions){
-            if ($dstoptionsrec = $DB->get_record('course_format_options', $dstoptions)) {
-                $dstoptionsrec->value = $srcoptions->value;
+        if($srcoptions) {
+            // If there is a record for the number of sections for this 
+            // course and format then update it. Otherwise insert one.
+            if($dstoptionsrec = $DB->get_record('course_format_options', $dstoptions)) {
+                // If this is a merge then we want to keep whichever number
+                // of sections is greater.
+                if ($this->record->merge == 0) {
+                    $this->debug($dstoptionsrec->value);
+                    $this->debug($srcoptions->value);
+                    if($dstoptionsrec->value < $srcoptions->value) {
+                        $dstoptionsrec->value = $srcoptions->value;
+                    }
+                } else {
+                    $dstoptionsrec->value = $srcoptions->value;
+                }
+
                 $DB->update_record('course_format_options', $dstoptionsrec);
             } else {
                 $dstoptions['value'] = $srcoptions->value;
