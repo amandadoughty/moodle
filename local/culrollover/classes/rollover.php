@@ -649,8 +649,6 @@ class rollover {
                 // If this is a merge then we want to keep whichever number
                 // of sections is greater.
                 if ($this->record->merge == 0) {
-                    $this->debug($dstoptionsrec->value);
-                    $this->debug($srcoptions->value);
                     if($dstoptionsrec->value < $srcoptions->value) {
                         $dstoptionsrec->value = $srcoptions->value;
                     }
