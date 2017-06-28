@@ -25,6 +25,10 @@
 
 namespace local_culactivity_stream\task;
 
+// To run on command line:
+// php admin/tool/task/cli/schedule_task.php --execute=\\local_culactivity_stream\\task\\messaging_cleanup_task
+// .
+
 /**
  * Simple task to delete old messaging records.
  */
