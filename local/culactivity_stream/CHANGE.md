@@ -10,4 +10,10 @@
 
 - Changed eventdata from \stdClass to core\message\message.
 
+### Date: 		2017-June-28
+### Version:	v2017062800
+### Release:    3.2.0
+
+- Added clean up task for message_culactivity_stream and message_culactivity_stream_q.
+
 ---
