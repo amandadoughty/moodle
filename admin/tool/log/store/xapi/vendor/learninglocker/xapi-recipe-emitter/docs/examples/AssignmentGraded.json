@@ -1,0 +1,137 @@
+{
+    "version": "1.0.0",
+    "actor": {
+        "objectType": "Agent",
+        "name": "learner",
+        "account": {
+            "name": "3",
+            "homePage": "http://localhost/moodle"
+        }
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/scored",
+        "display": {
+            "en": "recieved grade for"
+        }
+    },
+    "result": {
+        "score": {
+            "scaled": 0.67,
+            "raw": 67,
+            "max": 100
+        },
+        "success": true,
+        "completion": true,
+        "response": "Some feedback from the instructor."
+    },
+    "context": {
+        "contextActivities": {
+            "parent": [
+                {
+                    "objectType": "Activity",
+                    "id": "http://localhost/moodle/course.php?id=2",
+                    "definition": {
+                        "type": "http://lrs.learninglocker.net/define/type/moodle/course",
+                        "name": {
+                            "en": "My Test Course 1"
+                        },
+                        "description": {
+                            "en": "<p>A test course.</p>"
+                        }
+                    }
+                }
+            ],
+            "grouping": [
+                {
+                    "objectType": "Activity",
+                    "id": "http://localhost/moodle",
+                    "definition": {
+                        "type": "http://id.tincanapi.com/activitytype/site",
+                        "name": {
+                            "en": "My Test Site"
+                        },
+                        "description": {
+                            "en": "A test site."
+                        }
+                    }
+                }
+            ],
+            "category": [
+                {
+                    "id": "http://moodle.org",
+                    "definition": {
+                        "name": {
+                            "en": "Moodle"
+                        },
+                        "description": {
+                            "en": "Moodle is a open source learning platform designed to provide educators, 
+                            administrators and learners with a single robust, secure and integrated system to 
+                            create personalised learning environments."
+                        },
+                        "type": "http://id.tincanapi.com/activitytype/source"
+                    },
+                    "objectType": "Activity"
+                }
+            ]
+        },
+        "platform": "Moodle",
+        "instructor": {
+            "objectType": "Agent",
+            "name": "instructor",
+            "account": {
+                "name": "2",
+                "homePage": "http://localhost/moodle"
+            }
+        },
+        "extensions": {
+            "http://lrs.learninglocker.net/define/extensions/moodle_logstore_standard_log": {
+                "eventname": "\\mod_assign\\event\\submission_graded",
+                "component": "mod_assign",
+                "action": "graded",
+                "objecttable": "assign_grades",
+                "objectid": 6,
+                "crud": "u",
+                "edulevel": 1,
+                "contextid": 51,
+                "contextlevel": 70,
+                "contextinstanceid": "11",
+                "userid": "2",
+                "courseid": "2",
+                "relateduserid": "2",
+                "other": "N;",
+                "timecreated": 1434621423,
+                "origin": "web",
+                "ip": "127.0.0.1",
+                "object": "submission"
+            },
+            "http://lrs.learninglocker.net/define/extensions/info": {
+                "https://moodle.org/": "1.0.0",
+                "https://github.com/LearningLocker/Moodle-Log-Expander": "1.0.0",
+                "https://github.com/LearningLocker/Moodle-xAPI-Translator": "1.0.0",
+                "https://github.com/LearningLocker/xAPI-Recipe-Emitter": "1.0.0"
+            }
+        }
+    },
+    "timestamp": "2015-06-18T10:57:03+01:00",
+    "object": {
+            "objectType": "Activity",
+            "id": "http://localhost/moodle/mod/assign/view.php?id=11",
+            "definition": {
+                "type": "http://lrs.learninglocker.net/define/type/moodle/assign",
+                "name": {
+                    "en": "My Test Assignment 3"
+                },
+                "description": {
+                    "en": "A module"
+                }
+            }
+        }
+    },
+    "authority": {
+        "objectType": "Agent",
+        "name": "New Client",
+        "mbox": "mailto:hello@learninglocker.net"
+    },
+    "stored": "2015-06-18T09:57:04.388200+00:00",
+    "id": "a8248852-68b4-4206-9006-4848a295cd3e"
+}

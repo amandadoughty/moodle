@@ -1,0 +1,115 @@
+{
+    "version": "1.0.0",
+    "actor": {
+        "objectType": "Agent",
+        "name": "ryansmith",
+        "account": {
+            "name": "2",
+            "homePage": "http://localhost/moodle"
+        }
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/completed",
+        "display": {
+            "en": "completed"
+        }
+    },
+    "context": {
+        "contextActivities": {
+            "grouping": [
+                {
+                    "objectType": "Activity",
+                    "id": "http://localhost/moodle",
+                    "definition": {
+                        "type": "http://id.tincanapi.com/activitytype/site",
+                        "name": {
+                            "en": "My Test Site"
+                        },
+                        "description": {
+                            "en": "A test site."
+                        }
+                    }
+                },
+                {
+                    "objectType": "Activity",
+                    "id": "http://localhost/moodle/course.php?id=2",
+                    "definition": {
+                        "type": "http://lrs.learninglocker.net/define/type/moodle/course",
+                        "name": {
+                            "en": "My Test Course 1"
+                        },
+                        "description": {
+                            "en": "<p>A test course.</p>"
+                        }
+                    }
+                }
+            ],
+            "category": [
+                {
+                    "id": "http://moodle.org",
+                    "definition": {
+                        "name": {
+                            "en": "Moodle"
+                        },
+                        "description": {
+                            "en": "Moodle is a open source learning platform designed to provide educators, 
+                            administrators and learners with a single robust, secure and integrated system to 
+                            create personalised learning environments."
+                        },
+                        "type": "http://id.tincanapi.com/activitytype/source"
+                    },
+                    "objectType": "Activity"
+                }
+            ]
+        },
+        "platform": "Moodle",
+        "extensions": {
+            "http://lrs.learninglocker.net/define/extensions/moodle_logstore_standard_log": {
+                "eventname": "\\mod_assign\\event\\assessable_submitted",
+                "component": "mod_assign",
+                "action": "submitted",
+                "objecttable": "assign_submission",
+                "objectid": "5",
+                "crud": "u",
+                "edulevel": 2,
+                "contextid": 50,
+                "contextlevel": 70,
+                "contextinstanceid": "10",
+                "userid": "2",
+                "courseid": "2",
+                "other": "a:1:{s:19:\"submission_editable\";b:1;}",
+                "timecreated": 1434617044,
+                "origin": "web",
+                "ip": "127.0.0.1",
+                "object": "assessable"
+            },
+            "http://lrs.learninglocker.net/define/extensions/info": {
+                "https://moodle.org/": "1.0.0",
+                "https://github.com/LearningLocker/Moodle-Log-Expander": "1.0.0",
+                "https://github.com/LearningLocker/Moodle-xAPI-Translator": "1.0.0",
+                "https://github.com/LearningLocker/xAPI-Recipe-Emitter": "1.0.0"
+            }
+        }
+    },
+    "timestamp": "2015-06-18T09:44:04+01:00",
+    "object": {
+        "objectType": "Activity",
+        "id": "http://localhost/moodle/mod/assign/view.php?id=10",
+        "definition": {
+            "type": "http://lrs.learninglocker.net/define/type/moodle/assign",
+            "name": {
+                "en": "My Test Assignment 3"
+            },
+            "description": {
+                "en": "A module"
+            }
+        }
+    },
+    "authority": {
+        "objectType": "Agent",
+        "name": "New Client",
+        "mbox": "mailto:hello@learninglocker.net"
+    },
+    "stored": "2015-06-18T08:44:05.743700+00:00",
+    "id": "b6b74605-cba8-4b09-a67b-a0ec8b370386"
+}

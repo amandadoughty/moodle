@@ -1,0 +1,99 @@
+{
+    "version": "1.0.0",
+    "actor": {
+        "objectType": "Agent",
+        "name": "ryansmith",
+        "account": {
+            "name": "3",
+            "homePage": "http://localhost/moodle"
+        }
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/registered",
+        "display": {
+            "en": "registered to"
+        }
+    },
+    "context": {
+        "platform": "Moodle",
+        "extensions": {
+            "http://lrs.learninglocker.net/define/extensions/moodle_logstore_standard_log": {
+                "eventname": "\\core\\event\\user_registered",
+                "component": "core",
+                "action": "created",
+                "objecttable": "user",
+                "objectid": "3",
+                "crud": "r",
+                "contextid": 1,
+                "contextlevel": 10,
+                "userid": "3",
+                "other": "a:1:{s:8:\"username\";s:9:\"ryansmith\";}",
+                "timecreated": 1434553404,
+                "origin": "web",
+                "ip": "127.0.0.1",
+                "object": "user"
+            },
+            "http://lrs.learninglocker.net/define/extensions/info": {
+                "https://moodle.org/": "1.0.0",
+                "https://github.com/LearningLocker/Moodle-Log-Expander": "1.0.0",
+                "https://github.com/LearningLocker/Moodle-xAPI-Translator": "1.0.0",
+                "https://github.com/LearningLocker/xAPI-Recipe-Emitter": "1.0.0"
+            }
+        },
+        "contextActivities": {
+            "grouping": [
+                {
+                    "objectType": "Activity",
+                    "id": "http://localhost/moodle",
+                    "definition": {
+                        "type": "http://id.tincanapi.com/activitytype/site",
+                        "name": {
+                            "en": "My Test Site"
+                        },
+                        "description": {
+                            "en": "A test site."
+                        }
+                    }
+                }
+            ],
+            "category": [
+                {
+                    "id": "http://moodle.org",
+                    "definition": {
+                        "name": {
+                            "en": "Moodle"
+                        },
+                        "description": {
+                            "en": "Moodle is a open source learning platform designed to provide educators, 
+                            administrators and learners with a single robust, secure and integrated system to 
+                            create personalised learning environments."
+                        },
+                        "type": "http://id.tincanapi.com/activitytype/source"
+                    },
+                    "objectType": "Activity"
+                }
+            ]
+        }
+    },
+    "timestamp": "2015-06-17T16:03:24+01:00",
+    "object": {
+        "objectType": "Activity",
+        "id": "http://localhost/moodle/course.php?id=1",
+        "definition": {
+            "type": "http://lrs.learninglocker.net/define/type/moodle/course",
+            "name": {
+                "en": "My Test Site"
+            },
+            "description": {
+                "en": "<p>A test site.</p>"
+            }
+        }
+    },
+    "authority": {
+        "objectType": "Agent",
+        "name": "New Client",
+        "mbox": "mailto:hello@learninglocker.net"
+    },
+    "stored": "2015-06-17T15:03:24.484500+00:00",
+    "id": "1d5e50a4-4aae-4fb2-9383-5271bccbc8c0"
+}
