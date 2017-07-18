@@ -1273,7 +1273,7 @@ function grade_report_culuser_profilereport($course, $user, $viewasuser = false)
         /// return tracking object
         $gpr = new grade_plugin_return(array('type'=>'report', 'plugin'=>'culuser', 'courseid'=>$course->id, 'userid'=>$user->id));
         // Create a report instance
-        $report = new grade_report_usercul($course->id, $gpr, $context, $user->id, $viewasuser);
+        $report = new grade_report_culuser($course->id, $gpr, $context, $user->id, $viewasuser);
 
         // print the page
         echo '<div class="grade-report-user">'; // css fix to share styles with real report page
