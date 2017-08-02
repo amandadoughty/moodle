@@ -59,22 +59,49 @@ class update_course_visibility extends \core\task\scheduled_task {
         // manually updated.
         $beginofday = strtotime('midnight', time());
         $endofday   = strtotime('tomorrow', $beginofday) - 1;
-        // If startdate is today and visibility = 0 then set visibility = 1.
-        $select = "visible = 0 AND startdate BETWEEN {$beginofday} AND {$endofday}";
+        $showcourses = array();
+        $hidecourses = array();
 
-        if ($courses = $DB->get_records_select('course', $select)) {
-            foreach ($courses as $course) {
-                if (!$DB->set_field('course', 'visible', 1 , array('id' => $course->id))) {
-                    mtrace("    {$course->id}: {$course->shortname} could not be updated for some reason.");
-                } else {
-                    mtrace("    {$course->id}: {$course->shortname} is now visible");
-                }
-            }
+        if () {
+            // If startdate is today and visibility = 0 then set visibility = 1.
+            $select = "visible = 0 AND startdate BETWEEN {$beginofday} AND {$endofday}";
+            $showcourses = $DB->get_records_select('course', $select)
+        }
+
+        if () {
+            // If enddate is today and visibility = 1 then set visibility = 0.
+            $select = "visible = 1 AND enddate BETWEEN {$beginofday} AND {$endofday}";
+            $hidecourses = $DB->get_records_select('course', $select)
+        }
+
+        if ($showcourses || $hidecourses) {
+            $this->show_courses($showcourses);
+            $this->hide_courses($hidecourses);
         } else {
             mtrace("  Nothing to do, except ponder the boundless wonders of the Universe, perhaps. ;-)\n");
         }
 
         $end = time();
         mtrace(($end - $start) / 60 . ' mins');
+    }
+
+    private function show_courses($courses) {
+        foreach ($courses as $course) {
+            if (!$DB->set_field('course', 'visible', 1 , array('id' => $course->id))) {
+                mtrace("    {$course->id}: {$course->shortname} could not be updated for some reason.");
+            } else {
+                mtrace("    {$course->id}: {$course->shortname} is now visible");
+            }
+        }
+    }
+
+    private function hide_courses($courses) {
+        foreach ($courses as $course) {
+            if (!$DB->set_field('course', 'visible', 0 , array('id' => $course->id))) {
+                mtrace("    {$course->id}: {$course->shortname} could not be updated for some reason.");
+            } else {
+                mtrace("    {$course->id}: {$course->shortname} is now hidden");
+            }
+        }
     }
 }
