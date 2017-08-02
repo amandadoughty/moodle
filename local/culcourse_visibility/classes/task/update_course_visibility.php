@@ -50,9 +50,7 @@ class update_course_visibility extends \core\task\scheduled_task {
     public function execute() {
         global $CFG, $DB;
 
-        $start = time();
-        // Get list of courses to update.
-        mtrace("\n  Searching for courses to make visible ...");
+        $start = time();        
         // Use the configured timezone.
         date_default_timezone_set($CFG->timezone);
         // Course start dates are always set to midnight but we will check the whole day in case the value has been
@@ -61,23 +59,29 @@ class update_course_visibility extends \core\task\scheduled_task {
         $endofday   = strtotime('tomorrow', $beginofday) - 1;
         $showcourses = array();
         $hidecourses = array();
+        $config = get_config('local_culcourse_visibility');
 
-        if () {
+        if ($config->showcourses) {
+            // Get list of courses to update.     
+            mtrace("\n  Searching for courses to make visible ...");       
             // If startdate is today and visibility = 0 then set visibility = 1.
             $select = "visible = 0 AND startdate BETWEEN {$beginofday} AND {$endofday}";
-            $showcourses = $DB->get_records_select('course', $select)
+            if ($showcourses = $DB->get_records_select('course', $select)) {
+                $this->show_courses($showcourses);
+            }
         }
 
-        if () {
+        if ($config->hidecourses) {
+            // Get list of courses to update.
+            mtrace("\n  Searching for courses to hide ...");
             // If enddate is today and visibility = 1 then set visibility = 0.
             $select = "visible = 1 AND enddate BETWEEN {$beginofday} AND {$endofday}";
-            $hidecourses = $DB->get_records_select('course', $select)
+            if ($hidecourses = $DB->get_records_select('course', $select)) {
+                $this->hide_courses($hidecourses);
+            }
         }
 
-        if ($showcourses || $hidecourses) {
-            $this->show_courses($showcourses);
-            $this->hide_courses($hidecourses);
-        } else {
+        if (!$showcourses && !$hidecourses) {
             mtrace("  Nothing to do, except ponder the boundless wonders of the Universe, perhaps. ;-)\n");
         }
 
@@ -86,8 +90,11 @@ class update_course_visibility extends \core\task\scheduled_task {
     }
 
     private function show_courses($courses) {
+        global $DB;
+
+        mtrace("\n  There are courses to make visible ...");
         foreach ($courses as $course) {
-            if (!$DB->set_field('course', 'visible', 1 , array('id' => $course->id))) {
+            if (!$DB->set_field('course', 'visible', 1, array('id' => $course->id))) {
                 mtrace("    {$course->id}: {$course->shortname} could not be updated for some reason.");
             } else {
                 mtrace("    {$course->id}: {$course->shortname} is now visible");
@@ -96,8 +103,11 @@ class update_course_visibility extends \core\task\scheduled_task {
     }
 
     private function hide_courses($courses) {
+        global $DB;
+
+        mtrace("\n  There are courses to hide ...");
         foreach ($courses as $course) {
-            if (!$DB->set_field('course', 'visible', 0 , array('id' => $course->id))) {
+            if (!$DB->set_field('course', 'visible', 0, array('id' => $course->id))) {
                 mtrace("    {$course->id}: {$course->shortname} could not be updated for some reason.");
             } else {
                 mtrace("    {$course->id}: {$course->shortname} is now hidden");
