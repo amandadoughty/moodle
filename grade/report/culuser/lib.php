@@ -833,26 +833,26 @@ class grade_report_culuser extends grade_report_user {
         require_once($CFG->dirroot . '/lib/grouplib.php');
 
         $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
+        $files = [];
 
         if (!empty($instances[$grade_object->iteminstance])) {
             $cm = $instances[$grade_object->iteminstance];                              
             $context = context_module::instance($cm->id);
-            $course = get_course($this->courseid);
+            $peerassessment = $DB->get_record('peerassessment', array('id' => $grade_object->iteminstance));
+            $groupingid = $peerassessment->submissiongroupingid;
 
-            // @TODO needs to change when groups are fixed.
             try {
-                $groups = groups_get_user_groups($course->id, $this->user->id);
+                $groups = groups_get_all_groups($this->courseid, $this->user->id, $groupingid);
 
-                if($groups[0]) {
-                    $group = $DB->get_record('groups', array('id' => $groups[0][0]), '*', MUST_EXIST);
+                if($groups) {
+                    $group = array_shift($groups);
+                    $fs = get_file_storage();
+                    $files = $fs->get_area_files($context->id, 'mod_peerassessment', 'feedback_files', $group->id, 'sortorder', false);
                 }
             } catch(Exception $e) {
                 // Do nothing.
             }
-        }
-
-        $fs = get_file_storage();
-        $files = $fs->get_area_files($context->id, 'mod_peerassessment', 'feedback_files', $group->id, 'sortorder', false);
+        }        
 
         return $files;
     } 
