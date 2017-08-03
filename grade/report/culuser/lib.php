@@ -844,7 +844,7 @@ class grade_report_culuser extends grade_report_user {
             try {
                 $groups = groups_get_all_groups($this->courseid, $this->user->id, $groupingid);
 
-                if($groups) {
+                if(count($groups) == 1) {
                     $group = array_shift($groups);
                     $fs = get_file_storage();
                     $files = $fs->get_area_files($context->id, 'mod_peerassessment', 'feedback_files', $group->id, 'sortorder', false);
