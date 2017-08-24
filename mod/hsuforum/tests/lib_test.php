@@ -1047,7 +1047,7 @@ class mod_hsuforum_lib_testcase extends advanced_testcase {
         $this->assertEmpty($neighbours['next']);
 
         // Querying the neighbours of a discussion passing the wrong CM.
-        $this->setExpectedException('coding_exception');
+        $this->expectException('coding_exception');
         hsuforum_get_discussion_neighbours($cm2, $disc11, $forum2);
     }
 
@@ -1247,7 +1247,7 @@ class mod_hsuforum_lib_testcase extends advanced_testcase {
         $this->assertEmpty($neighbours['next']);
 
         // Querying the neighbours of a discussion passing the wrong CM.
-        $this->setExpectedException('coding_exception');
+        $this->expectException('coding_exception');
         hsuforum_get_discussion_neighbours($cm2, $disc11, $forum2);
     }
 
@@ -1679,9 +1679,9 @@ class mod_hsuforum_lib_testcase extends advanced_testcase {
         $cm = get_coursemodule_from_instance('hsuforum', $forum->id);
 
         // Create groups.
-        $group1 = self::getDataGenerator()->create_group(array('courseid' => $course->id));
-        $group2 = self::getDataGenerator()->create_group(array('courseid' => $course->id));
-        $group3 = self::getDataGenerator()->create_group(array('courseid' => $course->id));
+        $group1 = self::getDataGenerator()->create_group(array('courseid' => $course->id, 'name' => 'group1'));
+        $group2 = self::getDataGenerator()->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+        $group3 = self::getDataGenerator()->create_group(array('courseid' => $course->id, 'name' => 'group3'));
 
         // Add the user1 to g1 and g2 groups.
         groups_add_member($group1->id, $user1->id);
@@ -1730,7 +1730,7 @@ class mod_hsuforum_lib_testcase extends advanced_testcase {
         }
 
         // Get all my g2 discussions.
-        $discussions = hsuforum_get_discussions($cm, '', true, -1, -1, false, -1, 0, $group2->id, false);
+        $discussions = hsuforum_get_discussions($cm, '', true, -1, -1, false, -1, 0, $group2->id, 0, false);
         self::assertCount(1, $discussions);
         $discussion = array_shift($discussions);
         self::assertEquals($group2->id, $discussion->groupid);
@@ -2749,7 +2749,7 @@ class mod_hsuforum_lib_testcase extends advanced_testcase {
             new \mod_hsuforum\attachments($forum, $modcontext), \mod_hsuforum_post_form::attachment_options($forum),
             true
         );
-        
+
         // Define the expected exception with its error message
         $params = array(
             'file' => '\'' . $filerecord['filename'] . '\'',
@@ -2800,6 +2800,41 @@ class mod_hsuforum_lib_testcase extends advanced_testcase {
         // Attachment field on the database must be empty.
         $result = $DB->get_record('hsuforum_posts', array('discussion' => $discussion->id));
         $this->assertEquals(0, $result->attachment);
+    }
+
+    /**
+     * Test for hsuforum_is_author_hidden.
+     */
+    public function test_forum_is_author_hidden() {
+        // First post, different forum type.
+        $post = (object) ['parent' => 0];
+        $forum = (object) ['type' => 'standard'];
+        $this->assertFalse(hsuforum_is_author_hidden($post, $forum));
+
+        // Child post, different forum type.
+        $post->parent = 1;
+        $this->assertFalse(hsuforum_is_author_hidden($post, $forum));
+
+        // First post, single simple discussion forum type.
+        $post->parent = 0;
+        $forum->type = 'single';
+        $this->assertTrue(hsuforum_is_author_hidden($post, $forum));
+
+        // Child post, single simple discussion forum type.
+        $post->parent = 1;
+        $this->assertFalse(hsuforum_is_author_hidden($post, $forum));
+
+        // Incorrect parameters: $post.
+        $this->expectException('coding_exception');
+        $this->expectExceptionMessage('$post->parent must be set.');
+        unset($post->parent);
+        hsuforum_is_author_hidden($post, $forum);
+
+        // Incorrect parameters: $forum.
+        $this->expectException('coding_exception');
+        $this->expectExceptionMessage('$forum->type must be set.');
+        unset($forum->type);
+        hsuforum_is_author_hidden($post, $forum);
     }
 
     public function hsuforum_get_unmailed_posts_provider() {
@@ -2957,5 +2992,117 @@ class mod_hsuforum_lib_testcase extends advanced_testcase {
                 'replycount'        => 0,
             ],
         ];
+    }
+
+    /**
+     * Test the hsuforum_discussion_is_locked function.
+     *
+     * @dataProvider hsuforum_discussion_is_locked_provider
+     * @param   stdClass    $forum
+     * @param   stdClass    $discussion
+     * @param   bool        $expect
+     */
+    public function test_forum_discussion_is_locked($forum, $discussion, $expect) {
+        $this->assertEquals($expect, hsuforum_discussion_is_locked($forum, $discussion));
+    }
+
+    /**
+     * Dataprovider for hsuforum_discussion_is_locked tests.
+     *
+     * @return  array
+     */
+    public function hsuforum_discussion_is_locked_provider() {
+        return [
+            'Unlocked: lockdiscussionafter is unset' => [
+                (object) [],
+                (object) [],
+                false
+            ],
+            'Unlocked: lockdiscussionafter is false' => [
+                (object) ['lockdiscussionafter' => false],
+                (object) [],
+                false
+            ],
+            'Unlocked: lockdiscussionafter is null' => [
+                (object) ['lockdiscussionafter' => null],
+                (object) [],
+                false
+            ],
+            'Unlocked: lockdiscussionafter is set; forum is of type single; post is recent' => [
+                (object) ['lockdiscussionafter' => DAYSECS, 'type' => 'single'],
+                (object) ['timemodified' => time()],
+                false
+            ],
+            'Unlocked: lockdiscussionafter is set; forum is of type single; post is old' => [
+                (object) ['lockdiscussionafter' => MINSECS, 'type' => 'single'],
+                (object) ['timemodified' => time() - DAYSECS],
+                false
+            ],
+            'Unlocked: lockdiscussionafter is set; forum is of type eachuser; post is recent' => [
+                (object) ['lockdiscussionafter' => DAYSECS, 'type' => 'eachuser'],
+                (object) ['timemodified' => time()],
+                false
+            ],
+            'Locked: lockdiscussionafter is set; forum is of type eachuser; post is old' => [
+                (object) ['lockdiscussionafter' => MINSECS, 'type' => 'eachuser'],
+                (object) ['timemodified' => time() - DAYSECS],
+                true
+            ],
+        ];
+    }
+
+    /**
+     * Test that {@link hsuforum_update_post()} keeps correct hsuforum_discussions usermodified.
+     */
+    public function test_forum_update_post_keeps_discussions_usermodified() {
+        global $DB;
+
+        $this->resetAfterTest();
+
+        // Let there be light.
+        $teacher = self::getDataGenerator()->create_user();
+        $student = self::getDataGenerator()->create_user();
+        $course = self::getDataGenerator()->create_course();
+
+        $forum = self::getDataGenerator()->create_module('hsuforum', (object)[
+            'course' => $course->id,
+        ]);
+
+        $generator = self::getDataGenerator()->get_plugin_generator('mod_hsuforum');
+
+        // Let the teacher start a discussion.
+        $discussion = $generator->create_discussion((object)[
+            'course' => $course->id,
+            'userid' => $teacher->id,
+            'forum' => $forum->id,
+        ]);
+
+        // On this freshly created discussion, the teacher is the author of the last post.
+        $this->assertEquals($teacher->id, $DB->get_field('hsuforum_discussions', 'usermodified', ['id' => $discussion->id]));
+
+        // Let the student reply to the teacher's post.
+        $reply = $generator->create_post((object)[
+            'course' => $course->id,
+            'userid' => $student->id,
+            'forum' => $forum->id,
+            'discussion' => $discussion->id,
+            'parent' => $discussion->firstpost,
+        ]);
+
+        // The student should now be the last post's author.
+        $this->assertEquals($student->id, $DB->get_field('hsuforum_discussions', 'usermodified', ['id' => $discussion->id]));
+
+        // Let the teacher edit the student's reply.
+        $this->setUser($teacher->id);
+        $newpost = (object)[
+            'id' => $reply->id,
+            'itemid' => 0,
+            'subject' => 'Amended subject',
+        ];
+        $message = '';
+        hsuforum_update_post($newpost, null, $message);
+
+        // The student should be still the last post's author.
+        $this->assertEquals($student->id, $DB->get_field('hsuforum_discussions', 'usermodified', ['id' => $discussion->id]));
     }
 }

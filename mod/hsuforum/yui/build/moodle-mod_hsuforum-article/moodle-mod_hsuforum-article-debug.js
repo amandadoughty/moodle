@@ -694,9 +694,9 @@ Y.extend(FORM, Y.Base,
 
         handleTimeToggle: function(e) {
             if (e.currentTarget.get('checked')) {
-                e.currentTarget.ancestor('.felement.fdate_time_selector').all('select').removeAttribute('disabled');
+                e.currentTarget.ancestor('.fdate_time_selector').all('select').removeAttribute('disabled');
             } else {
-                e.currentTarget.ancestor('.felement.fdate_time_selector').all('select').setAttribute('disabled', 'disabled');
+                e.currentTarget.ancestor('.fdate_time_selector').all('select').setAttribute('disabled', 'disabled');
             }
         },
 
@@ -997,20 +997,50 @@ Y.extend(FORM, Y.Base,
          */
         applyDateFields: function() {
 
-            var datefs = Y.one('#discussion_dateform fieldset');
-            if (!datefs) {
-                return;
-            }
-            datefs.addClass('dateform_fieldset');
-            datefs.removeClass('hidden');
-            // Remove legend if present
-            if (datefs.one('legend')) {
-                datefs.one('legend').remove();
-            }
+            if (Y.one('.dateformtarget')) {
+                var datefs = Y.one('#discussion_dateform fieldset');
+                if (!datefs) {
+                    datefs = Y.Node.create('<fieldset/>');
+                    datefs.addClass('form-inline');
+                    var fitems = Y.all('#discussion_dateform div.row.fitem');
+                    if( !(fitems._nodes.length > 0)) {
+                        var items = Y.all('#discussion_dateform .form-inline.felement');
+                        var titles = Y.all('.col-form-label.d-inline');
+                        var title_nodes = [];
+                        titles.each(function (title) {
+                            title_nodes.push(title.ancestor());
+                        });
+                        items.each(function (item, iter) {
+                            if (iter > 0) {
+                                var cont = Y.Node.create('<div/>');
+                                cont.addClass('form-group');
+                                datefs.appendChild(cont);
+                                cont.appendChild(title_nodes[iter - 1]).addClass('row');
+                                cont.appendChild(item).addClass('row');
+                            }
+                        });
+                    }
+                    fitems.each(function (fitem, index) {
+                        if (index > 0) {
+                            datefs.appendChild(fitem);
+                        }
+                    });
+                }
+                if (!datefs) {
+                    return;
+                }
+                datefs.addClass('dateform_fieldset');
+                datefs.removeClass('hidden');
+                // Remove legend if present
+                if (datefs.one('legend')) {
+                    datefs.one('legend').remove();
+                }
 
-            Y.one('.dateformtarget').append(datefs);
-            // Stop calendar button from routing.
-            Y.all('.dateformtarget .fitem_fdate_time_selector a').addClass('disable-router');
+                // Stop calendar button from routing.
+                datefs.all('a.visibleifjs').addClass('disable-router');
+
+                Y.one('.dateformtarget').append(datefs);
+            }
 
             this.setDateFieldsClassState();
         },
@@ -1050,8 +1080,8 @@ Y.extend(FORM, Y.Base,
          *
          */
         setDefaultDateSettings: function () {
-            var checkstart = Y.one('#id_timestart_enabled').ancestor('.felement.fdate_time_selector');
-            var checkend = Y.one('#id_timeend_enabled').ancestor('.felement.fdate_time_selector');
+            var checkstart = Y.one('#id_timestart_enabled').ancestor('.felement');
+            var checkend = Y.one('#id_timeend_enabled').ancestor('.felement');
             checkstart.all('select').setAttribute('disabled', 'disabled');
             checkend.all('select').setAttribute('disabled', 'disabled');
         },
@@ -1110,9 +1140,16 @@ Y.extend(FORM, Y.Base,
 
                 if (data.isdiscussion) {
                     self.applyDateFields();
-                    self.setDateFields(data.timestart, data.timeend);
+                    var server_offset = data.offset;
+                    if (data.timestart != 0 || data.timeend != 0) {
+                        var offset = new Date().getTimezoneOffset() * 60;
+                        var dstart = parseInt(data.timestart) + parseInt(offset) + parseInt(server_offset);
+                        var dend = parseInt(data.timeend) + parseInt(offset) + parseInt(server_offset);
+                        self.setDateFields(dstart, dend);
+                    } else {
+                        self.setDateFields(data.timestart, data.timeend);
+                    }
                 }
-
                 this.attachFormWarnings();
             }, this);
         }
@@ -1270,41 +1307,6 @@ Y.extend(ARTICLE, Y.Base,
             Y.delegate('click', form.handleCancelForm, document, SELECTORS.LINK_CANCEL, form);
             Y.delegate('click', router.handleRoute, document, SELECTORS.CONTAINER_LINKS, router);
             Y.delegate('click', dom.handleViewRating, document, SELECTORS.RATE_POPUP, dom);
-
-            // Advanced editor.
-            Y.delegate('click', function(e){
-                var editCont = Y.one('#hiddenadvancededitorcont'),
-                    editor,
-                    editArea,
-                    advancedEditLink = this,
-                    checkEditArea;
-
-                if (!editCont){
-                    return;
-                }
-
-                // Note, preventDefault is intentionally here as if an editor container is not present we want the
-                // link to work.
-                e.preventDefault();
-
-                editArea = Y.one('#hiddenadvancededitoreditable');
-                editor = editArea.ancestor('.editor_atto');
-
-                if (editor){
-                    M.mod_hsuforum.toggleAdvancedEditor(advancedEditLink);
-                } else {
-                    // The advanced editor isn't available yet, lets try again periodically.
-                    advancedEditLink.setContent(M.util.get_string('loadingeditor', 'hsuforum'));
-                    checkEditArea = setInterval(function(){
-                        editor = editArea.ancestor('.editor_atto');
-                        if (editor) {
-                            clearInterval(checkEditArea);
-                            M.mod_hsuforum.toggleAdvancedEditor(advancedEditLink);
-                        }
-                    }, 500);
-                }
-
-            }, document, '.hsuforum-use-advanced');
 
             // We bind to document for these buttons as they get re-added on each discussion addition.
             Y.delegate('submit', form.handleFormSubmit, document, SELECTORS.FORM, form);
@@ -1486,144 +1488,9 @@ M.mod_hsuforum.restoreEditor = function() {
                 contentEditable.setContent(editArea.getContent());
             }
         }
-
-
-
-        // Switch all editor links to hide mode.
-        M.mod_hsuforum.toggleAdvancedEditor(false, true);
-
-        // Put editor back in its correct place.
-        Y.one('#hiddenadvancededitorcont').show();
-        Y.one('#hiddenadvancededitorcont')._node.style.display='block';
-        editCont.appendChild(editor);
-        editCont.appendChild(Y.one('#hiddenadvancededitor'));
     }
 };
 
-/**
- * Toggle advanced editor in place of plain text editor.
- */
-M.mod_hsuforum.toggleAdvancedEditor = function(advancedEditLink, forcehide, keepLink) {
-
-    var showEditor = false;
-    if (!forcehide) {
-        showEditor = advancedEditLink && advancedEditLink.getAttribute('aria-pressed') === 'false';
-    }
-
-    if (advancedEditLink) {
-        M.mod_hsuforum.Article.currentEditLink = advancedEditLink;
-        if (showEditor) {
-            advancedEditLink.removeClass('hideadvancededitor');
-        } else {
-            advancedEditLink.addClass('hideadvancededitor');
-        }
-    }
-
-    // @TODO - consider a better explantion of forcehide
-    // Force hide is required for doing things like hiding all editors except for the link that was just clicked.
-    // So if you click reply against a topic and then open the editor and then click reply against another topic and
-    // then open the editor you need the previous editor link to be reset.
-    if (forcehide) {
-        // If advancedEditLink is not set and we are forcing a hide then we need to hide every instance and change all labels.
-        if (!advancedEditLink){
-            var links = Y.all('.hsuforum-use-advanced');
-            for (var l = 0; l<links.size(); l++) {
-                var link = links.item(l);
-                if (keepLink && keepLink === link){
-                    continue; // Do not process this link.
-                }
-                // To hide this link and restore the editor, call myself.
-                M.mod_hsuforum.toggleAdvancedEditor(link, true);
-            }
-
-            return;
-        }
-    } else {
-        // OK we need to make sure the editor isn't available anywhere else, so call myself.
-        M.mod_hsuforum.toggleAdvancedEditor(false, true, advancedEditLink);
-    }
-
-    var editCont = Y.one('#hiddenadvancededitorcont'),
-        editArea,
-        contentEditable = advancedEditLink.previous('.hsuforum-textarea'),
-        editor;
-
-    if (editCont){
-        editArea = Y.one('#hiddenadvancededitoreditable');
-        editor = editArea.ancestor('.editor_atto');
-        if (contentEditable){
-            editArea.setStyle('height', contentEditable.getDOMNode().offsetHeight+'px');
-        }
-    } else {
-        //@TODO - throw error
-        throw "Failed to get editor";
-    }
-
-    var editorHidden = false;
-    if (!editor || editor.getComputedStyle('display') === 'none'){
-        editorHidden = true;
-    }
-
-    if (showEditor) {
-        advancedEditLink.setAttribute('aria-pressed', 'true');
-        advancedEditLink.setContent(M.util.get_string('hideadvancededitor', 'hsuforum'));
-        contentEditable.hide();
-        // Are we in source mode?
-        if (editor.one('.atto_html_button.highlight')) {
-            Y.one('#hiddenadvancededitor').show();
-        }
-        editor.show();
-        contentEditable.insert(editor, 'before');
-        contentEditable.insert(Y.one('#hiddenadvancededitor'), 'before');
-        var draftid = Y.one('#hiddenadvancededitordraftid');
-        if (draftid) {
-            var clonedraftid = draftid.cloneNode();
-            clonedraftid.id = 'hiddenadvancededitordraftidclone';
-            contentEditable.insert(clonedraftid, 'before');
-        }
-        editArea.setContent(contentEditable.getContent());
-
-        // Focus on editarea.
-        editArea.focus();
-
-        /**
-         * Callback for when editArea content changes.
-         */
-        var editAreaChanged = function(){
-            contentEditable.setContent(editArea.getContent());
-        };
-
-        // Whenever the html editor changes its content, update the text area.
-        if (window.MutationObserver){
-            M.mod_hsuforum.Article.editorMutateObserver = new MutationObserver(editAreaChanged);
-            M.mod_hsuforum.Article.editorMutateObserver.observe(editArea.getDOMNode(), {childList: true, characterData: true, subtree: true});
-        } else {
-            // Don't use yui delegate as I don't think it supports this event type
-            editArea.getDOMNode().addEventListener ('DOMCharacterDataModified', editAreachanged, false);
-        }
-    } else {
-        advancedEditLink.setAttribute('aria-pressed', 'false');
-        if (M.mod_hsuforum.Article.editorMutateObserver){
-            M.mod_hsuforum.Article.editorMutateObserver.disconnect();
-        }
-        advancedEditLink.setContent(M.util.get_string('useadvancededitor', 'hsuforum'));
-        contentEditable.show();
-
-        // If editor is not hidden then we need to update content editable div with editor content.
-        if (!editorHidden) {
-            // Are we in source mode?
-            if (editor.one('.atto_html_button.highlight')) {
-                // Trigger click on atto source button - we need to update the editor content.
-                M.mod_hsuforum.dispatchClick(editor.one('.atto_html_button.highlight')._node);
-            }
-            // Update content of content editable div.
-
-            contentEditable.setContent(editArea.getContent());
-        }
-        Y.one('#hiddenadvancededitor').hide();
-        editor.hide();
-    }
-};
 
 
 }, '@VERSION@', {

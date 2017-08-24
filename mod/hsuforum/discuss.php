@@ -86,6 +86,8 @@
         $event->add_record_snapshot('course', $course);
         $event->add_record_snapshot('hsuforum', $forum);
         $event->trigger();
+
+        $PAGE->force_settings_menu(true);
     }
 
     if (!empty($CFG->enablerssfeeds) && !empty($config->enablerssfeeds) && $forum->rsstype && $forum->rssarticles) {
@@ -218,6 +220,7 @@
 
     $renderer = $PAGE->get_renderer('mod_hsuforum');
     $PAGE->requires->js_init_call('M.mod_hsuforum.init', null, false, $renderer->get_js_module());
+    $PAGE->requires->js_call_amd('mod_hsuforum/advanced_editor', 'initialize', ['.box.mod-hsuforum-posts-container.article', $cm->id]);
 
     $PAGE->set_title("$course->shortname: $discussion->name");
     $PAGE->set_heading($course->fullname);
@@ -257,6 +260,10 @@
         );
     }
 
+    if (hsuforum_discussion_is_locked($forum, $discussion)) {
+        echo html_writer::div(get_string('discussionlocked', 'hsuforum'), 'discussionlocked');
+    }
+
     if (!empty($forum->blockafter) && !empty($forum->blockperiod)) {
         $a = new stdClass();
         $a->blockafter  = $forum->blockafter;
@@ -276,7 +283,7 @@
     $canrate = \mod_hsuforum\local::cached_has_capability('mod/hsuforum:rate', $modcontext);
     hsuforum_print_discussion($course, $cm, $forum, $discussion, $post, $canreply, $canrate);
 
-    echo '<div class="discussioncontrols clearfix"><div class="controlscontainer">';
+    echo '<div class="discussioncontrols clearfix"><div class="controlscontainer m-b-1">';
 
     if (!empty($CFG->enableportfolios) && local::cached_has_capability('mod/hsuforum:exportdiscussion', $modcontext) && empty($forum->anonymous)) {
         require_once($CFG->libdir.'/portfoliolib.php');
@@ -353,7 +360,7 @@
     $neighbours = hsuforum_get_discussion_neighbours($cm, $discussion, $forum);
     echo $renderer->discussion_navigation($neighbours['prev'], $neighbours['next']);
     echo "</div></div>";
-
-echo $renderer->render(new advanced_editor($modcontext));
-
-echo $OUTPUT->footer();
+    $editor = new advanced_editor($modcontext);
+    echo '<div id="preload-container" style="display: none;"><div id="preload-container-editor">';
+    echo $renderer->render_advanced_editor($editor, 'preload-container-editor', 0).'</div></div>';
+    echo $OUTPUT->footer();

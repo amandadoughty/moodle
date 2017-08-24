@@ -187,9 +187,9 @@ Y.extend(FORM, Y.Base,
 
         handleTimeToggle: function(e) {
             if (e.currentTarget.get('checked')) {
-                e.currentTarget.ancestor('.felement.fdate_time_selector').all('select').removeAttribute('disabled');
+                e.currentTarget.ancestor('.fdate_time_selector').all('select').removeAttribute('disabled');
             } else {
-                e.currentTarget.ancestor('.felement.fdate_time_selector').all('select').setAttribute('disabled', 'disabled');
+                e.currentTarget.ancestor('.fdate_time_selector').all('select').setAttribute('disabled', 'disabled');
             }
         },
 
@@ -490,20 +490,50 @@ Y.extend(FORM, Y.Base,
          */
         applyDateFields: function() {
 
-            var datefs = Y.one('#discussion_dateform fieldset');
-            if (!datefs) {
-                return;
-            }
-            datefs.addClass('dateform_fieldset');
-            datefs.removeClass('hidden');
-            // Remove legend if present
-            if (datefs.one('legend')) {
-                datefs.one('legend').remove();
-            }
+            if (Y.one('.dateformtarget')) {
+                var datefs = Y.one('#discussion_dateform fieldset');
+                if (!datefs) {
+                    datefs = Y.Node.create('<fieldset/>');
+                    datefs.addClass('form-inline');
+                    var fitems = Y.all('#discussion_dateform div.row.fitem');
+                    if( !(fitems._nodes.length > 0)) {
+                        var items = Y.all('#discussion_dateform .form-inline.felement');
+                        var titles = Y.all('.col-form-label.d-inline');
+                        var title_nodes = [];
+                        titles.each(function (title) {
+                            title_nodes.push(title.ancestor());
+                        });
+                        items.each(function (item, iter) {
+                            if (iter > 0) {
+                                var cont = Y.Node.create('<div/>');
+                                cont.addClass('form-group');
+                                datefs.appendChild(cont);
+                                cont.appendChild(title_nodes[iter - 1]).addClass('row');
+                                cont.appendChild(item).addClass('row');
+                            }
+                        });
+                    }
+                    fitems.each(function (fitem, index) {
+                        if (index > 0) {
+                            datefs.appendChild(fitem);
+                        }
+                    });
+                }
+                if (!datefs) {
+                    return;
+                }
+                datefs.addClass('dateform_fieldset');
+                datefs.removeClass('hidden');
+                // Remove legend if present
+                if (datefs.one('legend')) {
+                    datefs.one('legend').remove();
+                }
 
-            Y.one('.dateformtarget').append(datefs);
-            // Stop calendar button from routing.
-            Y.all('.dateformtarget .fitem_fdate_time_selector a').addClass('disable-router');
+                // Stop calendar button from routing.
+                datefs.all('a.visibleifjs').addClass('disable-router');
+
+                Y.one('.dateformtarget').append(datefs);
+            }
 
             this.setDateFieldsClassState();
         },
@@ -543,8 +573,8 @@ Y.extend(FORM, Y.Base,
          *
          */
         setDefaultDateSettings: function () {
-            var checkstart = Y.one('#id_timestart_enabled').ancestor('.felement.fdate_time_selector');
-            var checkend = Y.one('#id_timeend_enabled').ancestor('.felement.fdate_time_selector');
+            var checkstart = Y.one('#id_timestart_enabled').ancestor('.felement');
+            var checkend = Y.one('#id_timeend_enabled').ancestor('.felement');
             checkstart.all('select').setAttribute('disabled', 'disabled');
             checkend.all('select').setAttribute('disabled', 'disabled');
         },
@@ -603,9 +633,16 @@ Y.extend(FORM, Y.Base,
 
                 if (data.isdiscussion) {
                     self.applyDateFields();
-                    self.setDateFields(data.timestart, data.timeend);
+                    var server_offset = data.offset;
+                    if (data.timestart != 0 || data.timeend != 0) {
+                        var offset = new Date().getTimezoneOffset() * 60;
+                        var dstart = parseInt(data.timestart) + parseInt(offset) + parseInt(server_offset);
+                        var dend = parseInt(data.timeend) + parseInt(offset) + parseInt(server_offset);
+                        self.setDateFields(dstart, dend);
+                    } else {
+                        self.setDateFields(data.timestart, data.timeend);
+                    }
                 }
-
                 this.attachFormWarnings();
             }, this);
         }

@@ -961,7 +961,8 @@ HTML;
                 array('toggle:substantive', 'hsuforum'),
                 array('toggled:bookmark', 'hsuforum'),
                 array('toggled:subscribe', 'hsuforum'),
-                array('toggled:substantive', 'hsuforum')
+                array('toggled:substantive', 'hsuforum'),
+                array('addareply', 'hsuforum')
 
             )
         );
@@ -1654,7 +1655,7 @@ HTML;
         }
         if ($canattach) {
             $files .= <<<HTML
-                <label>
+                <label class="editor-attachments">
                     <span class="accesshide">$t->attachmentlabel</span>
                     <input type="file" name="attachment[]" multiple="multiple" />
                 </label>
@@ -1667,7 +1668,12 @@ HTML;
             $mailnowcb = '<label>' . get_string('mailnow', 'hsuforum') . ' ' .
                     '<input name="mailnow" type="checkbox" value="1" id="id_mailnow"></label>';
         }
-
+        $timestamp = time();
+        if ($t->postid === 0) {
+            $postype = 'new';
+        } else {
+            $postype = 'edit';
+        }
         return <<<HTML
 <div class="hsuforum-reply-wrapper$t->thresholdblocked">
     <form method="post" role="region" aria-label="$t->legend" class="hsuforum-form $t->class" action="$actionurl" autocomplete="off">
@@ -1679,12 +1685,14 @@ HTML;
                 $t->userpicture
             </div>
             <div class="hsuforum-post-body">
+            <input type="hidden" id="hsuforum-post-type" value="$postype">
                 <label>
                     <span class="accesshide">$t->subjectlabel</span>
                     <input type="text" placeholder="$t->subjectplaceholder" name="subject" class="form-control" $subjectrequired spellcheck="true" value="$subject" maxlength="255" />
                 </label>
+                <div id="editor-info"></div>
                 <textarea name="message" class="hidden"></textarea>
-                <div data-placeholder="$t->messageplaceholder" aria-label="$messagelabel" contenteditable="true" required="required" spellcheck="true" role="textbox" aria-multiline="true" class="hsuforum-textarea">$t->message</div>
+                <div id="editor-target-container-$timestamp" data-placeholder="$t->messageplaceholder" aria-label="$messagelabel" contenteditable="true" required="required" spellcheck="true" role="textbox" aria-multiline="true" class="hsuforum-textarea">$t->message</div>
 
                 $files
 
@@ -1694,7 +1702,7 @@ HTML;
                 </div>
                 $hidden
 
-                    <button type="submit">$t->submitlabel</button>
+                    <button type="submit" class="btn btn-primary">$t->submitlabel</button>
                     <a href="#" class="hsuforum-cancel disable-router btn btn-link">$t->cancellabel</a>
                     <a href="$advancedurl" aria-pressed="false" class="hsuforum-use-advanced disable-router btn btn-link">$t->advancedlabel</a>
 
@@ -1851,11 +1859,28 @@ HTML;
      * @param discussion_dateform $dateform
      * @return string
      */
-    public function render_advanced_editor(advanced_editor $advancededitor) {
-        $data = $advancededitor->get_data();
-        if (get_class($data->editor) == 'atto_texteditor'){
-            $data->editor->use_editor('hiddenadvancededitor', $data->options, $data->fpoptions);
-            $draftitemidfld = '<input type="hidden" id="hiddenadvancededitordraftid" name="hiddenadvancededitor[itemid]" value="'.$data->draftitemid.'" />';
+    public function render_advanced_editor(advanced_editor $advancededitor, $target, $targetid) {
+        $data = $advancededitor->get_data($targetid);
+        $editor = get_class($data->editor);
+        if ($editor == 'atto_texteditor' || $editor == 'tinymce_texteditor'){
+            if ($editor == 'tinymce_texteditor') {
+                $data->options['enable_filemanagement'] = 1;
+                $data->options['subdirs'] = 0;
+                $data->options['maxfiles'] = -1;
+                $data->options['changeformat'] = 0;
+                $data->options['areamaxbytes'] = -1;
+                $data->options['noclean'] = 0;
+                $data->options['trusttext'] = 1;
+                $data->options['return_types'] = 3;
+                $data->options['enable_filemanagement'] = 1;
+            }
+            $data->editor->use_editor($target, $data->options, $data->fpoptions);
+            if ($targetid != 0) {
+                $draftitemid = $targetid;
+            } else{
+                $draftitemid = $data->draftitemid;
+            }
+            $draftitemidfld = '<input type="hidden" id="hiddenadvancededitordraftid" name="hiddenadvancededitor[itemid]" value="'.$draftitemid.'" />';
             return '<div id="hiddenadvancededitorcont">'.$draftitemidfld.'<textarea style="display:none" id="hiddenadvancededitor"></textarea></div>';
         }
         return '';
@@ -1920,5 +1945,48 @@ HTML;
            <polygon  points="3.5,9.8 96.7,9.8 50.2,44.5 	"/>
         </g>
         </svg>';
+    }
+
+    /**
+     * Create the inplace_editable used to select forum digest options.
+     *
+     * @param   stdClass    $forum  The forum to create the editable for.
+     * @param   int         $value  The current value for this user
+     * @return  inplace_editable
+     */
+    public function render_digest_options($forum, $value) {
+        $options = hsuforum_get_user_digest_options();
+        $editable = new \core\output\inplace_editable(
+            'mod_hsuforum',
+            'digestoptions',
+            $forum->id,
+            true,
+            $options[$value],
+            $value
+        );
+
+        $editable->set_type_select($options);
+
+        return $editable;
+    }
+
+    /**
+     * Render quick search form.
+     *
+     * @param \mod_hsuforum\output\quick_search_form $form The renderable.
+     * @return string
+     */
+    public function render_quick_search_form(\mod_hsuforum\output\quick_search_form $form) {
+        return $this->render_from_template('mod_hsuforum/quick_search_form', $form->export_for_template($this));
+    }
+
+    /**
+     * Render big search form.
+     *
+     * @param \mod_hsuforum\output\big_search_form $form The renderable.
+     * @return string
+     */
+    public function render_big_search_form(\mod_hsuforum\output\big_search_form $form) {
+        return $this->render_from_template('mod_hsuforum/big_search_form', $form->export_for_template($this));
     }
 }

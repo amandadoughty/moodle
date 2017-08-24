@@ -13,11 +13,10 @@ Feature: Teachers and students can create time released discussions
       | student1 | C1 | student |
       | teacher1 | C1 | teacher |
     And I log in as "admin"
-    And I am on homepage
-    And I follow "Courses"
+    And I am on site homepage
     And I follow "Course 1"
     And I turn editing mode on
-    And I add a "Advanced Forum" to section "1" and I fill the form with:
+    And I add a "Moodlerooms Forum" to section "1" and I fill the form with:
       | Forum name | Test forum name |
       | Forum type | Standard forum for general use |
       | Description | Test forum description |

@@ -43,7 +43,7 @@ class behat_mod_hsuforum extends behat_base {
     /**
      * Adds a topic to the forum specified by it's name. Useful for the Announcements and blog-style forums.
      *
-     * @Given /^I add a new topic to "(?P<hsuforum_name_string>(?:[^"]|\\")*)" advanced forum with:$/
+     * @Given /^I add a new topic to "(?P<hsuforum_name_string>(?:[^"]|\\")*)" Moodlerooms forum with:$/
      * @param string $forumname
      * @param TableNode $table
      */
@@ -54,7 +54,7 @@ class behat_mod_hsuforum extends behat_base {
     /**
      * Adds a discussion to the forum specified by it's name with the provided table data (usually Subject and Message). The step begins from the forum's course page.
      *
-     * @Given /^I add a new discussion to "(?P<hsuforum_name_string>(?:[^"]|\\")*)" advanced forum with:$/
+     * @Given /^I add a new discussion to "(?P<hsuforum_name_string>(?:[^"]|\\")*)" Moodlerooms forum with:$/
      * @param string $forumname
      * @param TableNode $table
      */
@@ -65,7 +65,7 @@ class behat_mod_hsuforum extends behat_base {
     /**
      * Adds a reply to the specified post of the specified forum. The step begins from the forum's page or from the forum's course page.
      *
-     * @Given /^I reply "(?P<post_subject_string>(?:[^"]|\\")*)" post from "(?P<hsuforum_name_string>(?:[^"]|\\")*)" advanced forum with:$/
+     * @Given /^I reply "(?P<post_subject_string>(?:[^"]|\\")*)" post from "(?P<hsuforum_name_string>(?:[^"]|\\")*)" Moodlerooms forum with:$/
      * @param string $postname The subject of the post
      * @param string $forumname The forum name
      * @param TableNode $table
@@ -242,7 +242,7 @@ class behat_mod_hsuforum extends behat_base {
      * @param string $fixturefilename this is a filename relative to the snap fixtures folder.
      * @param string $input
      *
-     * @Given /^Advanced Forums I upload file "(?P<fixturefilename_string>(?:[^"]|\\")*)" using input "(?P<input_string>(?:[^"]|\\")*)"$/
+     * @Given /^Moodlerooms Forums I upload file "(?P<fixturefilename_string>(?:[^"]|\\")*)" using input "(?P<input_string>(?:[^"]|\\")*)"$/
      */
     public function i_upload_file_using_input($fixturefilename, $input) {
         global $CFG;
@@ -256,7 +256,7 @@ class behat_mod_hsuforum extends behat_base {
      * Upload image via inline advanced editor.
      * @param string $fixturefilename
      *
-     * @Given /^Advanced Forums I upload image "(?P<link>(?:[^"]|\\")*)" using inline advanced editor$/
+     * @Given /^Moodlerooms Forums I upload image "(?P<link>(?:[^"]|\\")*)" using inline advanced editor$/
      */
     public function i_upload_image_using_inline_advanced_editor($fixturefilename) {
         $this->execute('behat_general::click_link', 'Use advanced editor');
@@ -270,6 +270,26 @@ class behat_mod_hsuforum extends behat_base {
     }
 
     /**
+     * Upload image via inline advanced editor (TinyMCE).
+     * @param string $fixturefilename
+     *
+     * @Given /^Moodlerooms Forums I upload image "(?P<link>(?:[^"]|\\")*)" using inline advanced editor tinymce$/
+     */
+    public function i_upload_image_using_inline_advanced_editor_tinymce($fixturefilename) {
+        $this->execute('behat_forms::press_button', 'Insert/edit image');
+        $this->execute('behat_mod_hsuforum::i_find_and_switch_to_iframe', array('iframe[id^="mce_inlinepop"]', 'css'));
+        $this->execute('behat_general::i_click_on', array('#srcbrowser_link', "css_element"));
+        $this->execute('behat_general::switch_to_the_main_frame');
+        $this->execute('behat_general::click_link', 'Upload a file');
+        $this->i_upload_file_using_input($fixturefilename, 'input[name="repo_upload_file"]');
+        $this->execute('behat_forms::press_button', 'Upload this file');
+        $this->execute('behat_mod_hsuforum::i_find_and_switch_to_iframe', array('iframe[id^="mce_inlinepop"]', 'css'));
+        $this->execute('behat_forms::i_set_the_field_to', ['Image description', 'Test fixture']);
+        $this->execute('behat_forms::press_button', 'insert');
+        $this->execute('behat_general::switch_to_the_main_frame');
+    }
+
+    /**
      * Image exists on page.
      * @param string $fixturefilename
      *
@@ -278,5 +298,30 @@ class behat_mod_hsuforum extends behat_base {
     public function image_exists($filename) {
         $images = $this->find_all('css', 'img[src*="'.$filename.'"]');
         return !empty($images);
+    }
+
+    /**
+     * Find and switches to the specified iframe, so this function acepts selectors like div[id^="value"].
+     *
+     * @Given /^I change focus to "(?P<iframe_name_string>(?:[^"]|\\")*)" iframe "(?P<selector_string>[^"]*)"$/
+     * @param string $iframename
+     */
+    public function i_find_and_switch_to_iframe($iframename, $selectortype) {
+
+        // We spin to give time to the iframe to be loaded.
+        // Using extended timeout as we don't know about which
+        // kind of iframe will be loaded.
+        $node = $this->find($selectortype, $iframename);
+        $iframename = $node->getAttribute('id');
+        $this->spin(
+            function($context, $iframename) {
+                $context->getSession()->switchToIFrame($iframename);
+
+                // If no exception we are done.
+                return true;
+            },
+            $iframename,
+            self::EXTENDED_TIMEOUT
+        );
     }
 }
