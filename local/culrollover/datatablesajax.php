@@ -55,10 +55,25 @@ $columns = array(
         'al' => 'cr.datesubmitted', 
         'dt' => 1
         ),
+    array(
+        'db' => 'firstname',
+        'al' => 'u.firstname',  
+        'dt' => 2
+    ),
+    array(
+        'db' => 'lastname',
+        'al' => 'u.lastname',  
+        'dt' => 3
+    ),
+    array(
+        'db' => 'alternatename',
+        'al' => 'u.alternatename',  
+        'dt' => 4
+    ),
     array( 
         'db' => 'datesubmitted',
         'al' => 'cr.datesubmitted',    
-        'dt' => 2,
+        'dt' => 5,
         'formatter' => function($d, $row) {
             return date('d/M/Y', $d);
         }
@@ -66,7 +81,7 @@ $columns = array(
     array(
         'db' => 'srcshortname',
         'al' => 'sc.shortname', 
-        'dt' => 3,
+        'dt' => 6,
         'formatter' => function($d, $row) {
             return local_culrollover_renderer::format_srccoursename($d, $row);
         }
@@ -74,7 +89,7 @@ $columns = array(
     array(
         'db' => 'dstshortname',
         'al' => 'dc.shortname',
-        'dt' => 4,
+        'dt' => 7,
         'formatter' => function($d, $row) {
             return local_culrollover_renderer::format_dstcoursename($d, $row);
         }
@@ -82,7 +97,7 @@ $columns = array(
     array(
         'db' => 'type',
         'al' => 'cr.type', 
-        'dt' => 5,
+        'dt' => 8,
         'formatter' => function($d, $row) {
             return local_culrollover_renderer::format_type($d, $row);
         }
@@ -90,7 +105,7 @@ $columns = array(
     array(
         'db' => 'status',
         'al' => 'cr.status',  
-        'dt' => 6,
+        'dt' => 9,
         'formatter' => function($d, $row) {
             return local_culrollover_renderer::format_status($d, $row);
         }
@@ -98,7 +113,7 @@ $columns = array(
     array(
         'db' => 'userid',
         'al' => 'cr.userid',  
-        'dt' => 7,
+        'dt' => 10,
         'formatter' => function($d, $row) {
             return local_culrollover_renderer::format_user($d);
         }
@@ -106,7 +121,7 @@ $columns = array(
     array(
         'db' => 'id',
         'al' => 'cr.id',  
-        'dt' => 8,
+        'dt' => 11,
         'formatter' => function($d, $row) {
             return local_culrollover_renderer::format_delete($d, $row);
         }
@@ -114,50 +129,50 @@ $columns = array(
     array(
         'db' => 'id',
         'al' => 'cr.id',  
-        'dt' => 9,
+        'dt' => 12,
         'formatter' => function($d, $row) {
             return local_culrollover_renderer::format_repeat($d, $row);
         }
-    ),    
+    ),      
     array(
         'db' => 'schedule',
         'al' => 'cr.schedule',  
-        'dt' => 10
+        'dt' => 13
         ),    
     array(
         'db' => 'merge',
         'al' => 'cr.merge',  
-        'dt' => 11
+        'dt' => 14
         ),
     array(
         'db' => 'groups',
         'al' => 'cr.groups',  
-        'dt' => 12
+        'dt' => 15
         ),
     array(
         'db' => 'enrolments',
         'al' => 'cr.enrolments', 
-        'dt' => 13
+        'dt' => 16
         ),
     array(
         'db' => 'visible',
         'al' => 'cr.visible',  
-        'dt' => 14
+        'dt' => 17
         ),
     array(
         'db' => 'visibledate',
         'al' => 'cr.visibledate',  
-        'dt' => 15
+        'dt' => 18
         ),
     array(
         'db' => 'completiondate',
         'al' => 'cr.completiondate',  
-        'dt' => 16
+        'dt' => 19
         ),
     array(
         'db' => 'notify',
         'al' => 'cr.notify',  
-        'dt' => 17
+        'dt' => 20
         ),
     // array(
     //     'db' => 'srcshortname',
@@ -167,17 +182,17 @@ $columns = array(
     array(
         'db' => 'sourceid',
         'al' => 'cr.sourceid',  
-        'dt' => 18
+        'dt' => 21
         ),
     array(
         'db' => 'destid',
         'al' => 'cr.destid',  
-        'dt' => 19
+        'dt' => 22
         ),
     array(
         'db' => 'srcfullname',
         'al' => 'srcfullname',  
-        'dt' => 20
+        'dt' => 23
         ),
     // array(
     //     'db' => 'dstshortname',
@@ -187,8 +202,8 @@ $columns = array(
     array(
         'db' => 'dstfullname',
         'al' => 'dstfullname',  
-        'dt' => 21
-        ),
+        'dt' => 24
+        )
 );
  
 require_once($CFG->dirroot . '/local/culrollover/classes/cul_ssp.php');

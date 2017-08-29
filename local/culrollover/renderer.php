@@ -51,10 +51,14 @@ class local_culrollover_renderer extends plugin_renderer_base {
                                                 c1.shortname as srcshortname, 
                                                 c1.fullname as srcfullname, 
                                                 c1.shortname as dstshortname, 
-                                                c1.fullname as dstfullname
+                                                c1.fullname as dstfullname,
+                                                u.firstname,
+                                                u.lastname,
+                                                u.alternatename
                                             FROM {cul_rollover} r 
                                             JOIN {course} c1 ON c1.id = r.sourceid
                                             JOIN {course} c2 ON c2.id = r.destid
+                                            JOIN {user} u ON u.id = r.userid
                                             WHERE $where");
 
         if (!empty($requests)) {
@@ -63,6 +67,9 @@ class local_culrollover_renderer extends plugin_renderer_base {
             $headers = array(
                     'id',
                     't',
+                    'firstname',
+                    'lastname',
+                    'alternatename',
                     get_string('date', 'local_culrollover'),
                     get_string('source_header', 'local_culrollover'),
                     get_string('dest_header', 'local_culrollover'),
@@ -86,6 +93,9 @@ class local_culrollover_renderer extends plugin_renderer_base {
                 $cells = array();
                 $cells[] = $request->id;
                 $cells[] = $request->schedule;
+                $cells[] = $request->firstname;
+                $cells[] = $request->lastname;
+                $cells[] = $request->alternatename;
                 $cells[] = date('d/M/Y', $request->schedule);
                 $cells[] = self::format_srccoursename($request->srcshortname, $request);
                 $cells[] = self::format_dstcoursename($request->dstshortname, $request);
@@ -93,7 +103,7 @@ class local_culrollover_renderer extends plugin_renderer_base {
                 $cells[] = self::format_status($request->status, $request);
                 $cells[] = self::format_user($request->userid, $users);
                 $cells[] = self::format_delete($request->id, $request);
-                $cells[] = self::format_repeat($request->id, $request);
+                $cells[] = self::format_repeat($request->id, $request);                
                 $rows[] = $cells;
             } 
 

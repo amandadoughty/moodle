@@ -261,12 +261,17 @@ class cul_ssp {
 			 sc.shortname as srcshortname,
 			 sc.fullname as srcfullname,
 			 dc.shortname as dstshortname,
-			 dc.fullname as dstfullname
+			 dc.fullname as dstfullname,
+			 u.firstname,
+			 u.lastname,
+			 u.alternatename
 			 FROM {cul_rollover} cr
 			 INNER JOIN {course} sc
 			 ON cr.sourceid = sc.id
 			 INNER JOIN {course} dc
 			 ON cr.destid = dc.id
+			 INNER JOIN {user} u
+			 ON cr.userid = u.id
 			 $where
 			 $order
 			 $limit";
@@ -279,6 +284,8 @@ class cul_ssp {
 			 ON cr.sourceid = sc.id
 			 INNER JOIN {course} dc
 			 ON cr.destid = dc.id
+			 INNER JOIN {user} u
+			 ON cr.userid = u.id
 			 $where";
 
 		$recordsFiltered = $DB->count_records_sql($sql, $bindings);
@@ -289,6 +296,8 @@ class cul_ssp {
 			 ON cr.sourceid = sc.id
 			 INNER JOIN {course} dc
 			 ON cr.destid = dc.id
+			 INNER JOIN {user} u
+			 ON cr.userid = u.id
 			 $whereAllSql";
 
 

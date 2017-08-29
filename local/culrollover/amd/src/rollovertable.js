@@ -19,7 +19,12 @@
                             "searchable": false
                         },
                         {
-                            "targets": [8, 9],
+                            "targets": [2, 3, 4],
+                            "visible": false,
+                            "searchable": true
+                        },
+                        {
+                            "targets": [11, 12],
                             "sortable": false
                         }
                     ],
