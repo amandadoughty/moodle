@@ -13,6 +13,10 @@
             initialise: function (sEmptyTable) {
                 $('#previous').dataTable({
                     "columnDefs": [
+                        { 
+                            'orderData':[10], 
+                            'targets': [3] 
+                        },
                         {
                             "targets": [0, 1],
                             "visible": false,
