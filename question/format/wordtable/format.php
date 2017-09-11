@@ -34,6 +34,8 @@
  */
 
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once("$CFG->libdir/xmlize.php");
 require_once($CFG->dirroot.'/lib/uploadlib.php');
 
@@ -112,8 +114,9 @@ class qformat_wordtable extends qformat_xml {
         // @codingStandardsIgnoreLine debugging(__FUNCTION__ . ":" . __LINE__ . ": Word file = $realfilename; path = '$filename'", DEBUG_WORDTABLE);
         $basefilename = basename($filename);
         $baserealfilename = basename($realfilename);
-        // Give XSLT as much memory as possible, to enable larger Word files to be imported.
-        raise_memory_limit(MEMORY_HUGE);
+
+        // Uncomment next line to give XSLT as much memory as possible, to enable larger Word files to be imported.
+        // raise_memory_limit(MEMORY_HUGE);
 
         // Check that the file is in Word 2010 format, not HTML, XML, or Word 2003.
         if ((substr($realfilename, -3, 3) == 'doc')) {
@@ -155,7 +158,7 @@ class qformat_wordtable extends qformat_xml {
             'moodle_url' => $CFG->wwwroot . "/",
             'moodle_username' => $USER->username,
             'pluginname' => 'qformat_wordtable',
-            'heading1stylelevel' => '1', // Default HTML heading element level for 'Heading 1' Word style
+            'heading1stylelevel' => '1', // Default HTML heading element level for 'Heading 1' Word style.
             'debug_flag' => DEBUG_WORDTABLE
             );
 
