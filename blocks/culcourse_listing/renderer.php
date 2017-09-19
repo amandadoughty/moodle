@@ -823,7 +823,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * @return string
      * @throws coding_exception
      */
-    public function coursecat_ajax() {
+    public function coursecat_ajax($chelper) {
         global $DB, $CFG;
         require_once($CFG->libdir. '/coursecatlib.php');
 
@@ -842,8 +842,6 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             $showcourses = required_param('showcourses', PARAM_INT);
             $depth = required_param('depth', PARAM_INT);
             $category = coursecat::get($categoryid);
-
-            $chelper = new block_culcourse_listing_helper();
             $chelper->set_show_courses($showcourses);
             $chelper->set_favourites($favourites);
 
