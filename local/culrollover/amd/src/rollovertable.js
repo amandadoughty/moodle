@@ -14,8 +14,8 @@
                 $('#previous').dataTable({
                     "columnDefs": [
                         { 
-                            'orderData':[10], 
-                            'targets': [3] 
+                            'orderData':[3, 2], 
+                            'targets': 10
                         },
                         {
                             "targets": [0, 1],
