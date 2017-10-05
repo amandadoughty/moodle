@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'logstore_jisc_xapi';
-$plugin->version = 2017081401;
-$plugin->release = '1.0.0';
+$plugin->version = 2017081402;
+$plugin->release = '1.0.2';
 $plugin->requires = 2014111000;
 $plugin->maturity = MATURITY_STABLE;

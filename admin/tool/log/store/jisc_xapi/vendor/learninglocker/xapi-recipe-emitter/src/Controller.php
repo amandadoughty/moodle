@@ -1,8 +1,6 @@
 <?php namespace XREmitter;
 use \stdClass as PhpObj;
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 class Controller extends PhpObj {
     protected $repo;
