@@ -1,3 +1,5 @@
+/* global YUI */
+// eslint-disable-next-line new-cap
 YUI().use('yui2-container', 'yui2-calendar', function(Y) {
     var YAHOO = Y.YUI2;
 
@@ -62,6 +64,7 @@ YUI().use('yui2-container', 'yui2-calendar', function(Y) {
 
                 calendar = new YAHOO.widget.Calendar("cal", {
                     iframe: false,          // Turn iframe off, since container has iframe support.
+                    // eslint-disable-next-line camelcase
                     hide_blank_weeks: true  // Enable, to demonstrate how we handle changing height, using changeContent.
                 });
 

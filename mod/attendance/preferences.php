@@ -62,14 +62,30 @@ if (!empty($att->pageparams->action)) {
     require_sesskey();
 }
 
+// TODO: combine this with the stuff in defaultstatus.php to avoid code duplication.
 switch ($att->pageparams->action) {
     case mod_attendance_preferences_page_params::ACTION_ADD:
         $newacronym         = optional_param('newacronym', null, PARAM_TEXT);
         $newdescription     = optional_param('newdescription', null, PARAM_TEXT);
         $newgrade           = optional_param('newgrade', 0, PARAM_RAW);
+        $newstudentavailability = optional_param('newstudentavailability', null, PARAM_INT);
         $newgrade = unformat_float($newgrade);
 
-        $att->add_status($newacronym, $newdescription, $newgrade);
+        $newstatus = new stdClass();
+        $newstatus->attendanceid = $att->id;
+        $newstatus->acronym = $newacronym;
+        $newstatus->description = $newdescription;
+        $newstatus->grade = $newgrade;
+        $newstatus->studentavailability = $newstudentavailability;
+        $newstatus->setnumber = $att->pageparams->statusset;
+        $newstatus->cm = $att->cm;
+        $newstatus->context = $att->context;
+
+        $status = attendance_add_status($newstatus);
+        if (!$status) {
+            print_error('cantaddstatus', 'attendance', $this->url_preferences());
+        }
+
         if ($pageparams->statusset > $maxstatusset) {
             $maxstatusset = $pageparams->statusset; // Make sure the new maximum is shown without a page refresh.
         }
@@ -84,7 +100,7 @@ switch ($att->pageparams->action) {
         $status = $statuses[$att->pageparams->statusid];
 
         if (isset($confirm)) {
-            $att->remove_status($status);
+            attendance_remove_status($status);
             redirect($att->url_preferences(), get_string('statusdeleted', 'attendance'));
         }
 
@@ -101,17 +117,20 @@ switch ($att->pageparams->action) {
     case mod_attendance_preferences_page_params::ACTION_HIDE:
         $statuses = $att->get_statuses(false);
         $status = $statuses[$att->pageparams->statusid];
-        $att->update_status($status, null, null, null, 0);
+        attendance_update_status($status, null, null, null, 0, $att->context, $att->cm);
         break;
     case mod_attendance_preferences_page_params::ACTION_SHOW:
         $statuses = $att->get_statuses(false);
         $status = $statuses[$att->pageparams->statusid];
-        $att->update_status($status, null, null, null, 1);
+        attendance_update_status($status, null, null, null, 1, $att->context, $att->cm);
         break;
     case mod_attendance_preferences_page_params::ACTION_SAVE:
         $acronym        = required_param_array('acronym', PARAM_TEXT);
         $description    = required_param_array('description', PARAM_TEXT);
         $grade          = required_param_array('grade', PARAM_RAW);
+        $studentavailability = optional_param_array('studentavailability', null, PARAM_RAW);
+        $unmarkedstatus = optional_param('setunmarked', null, PARAM_INT);
+
         foreach ($grade as &$val) {
             $val = unformat_float($val);
         }
@@ -119,7 +138,12 @@ switch ($att->pageparams->action) {
 
         foreach ($acronym as $id => $v) {
             $status = $statuses[$id];
-            $errors[$id] = $att->update_status($status, $acronym[$id], $description[$id], $grade[$id], null);
+            $setunmarked = false;
+            if ($unmarkedstatus == $id) {
+                $setunmarked = true;
+            }
+            $errors[$id] = attendance_update_status($status, $acronym[$id], $description[$id], $grade[$id],
+                                                    null, $att->context, $att->cm, $studentavailability[$id], $setunmarked);
         }
         attendance_update_users_grade($att);
         break;
@@ -135,6 +159,7 @@ $setselector = new attendance_set_selector($att, $maxstatusset);
 echo $output->header();
 echo $output->heading(get_string('attendanceforthecourse', 'attendance').' :: '. format_string($course->fullname));
 echo $output->render($tabs);
+echo $OUTPUT->box(get_string('preferences_desc', 'attendance'), 'generalbox attendancedesc', 'notice');
 echo $output->render($setselector);
 echo $output->render($prefdata);
 
