@@ -1,0 +1,453 @@
+/**
+ * Collapsed Topics Information
+ *
+ * A topic based format that solves the issue of the 'Scroll of Death' when a course has many topics. All topics
+ * except zero have a toggle that displays that topic. One or more topics can be displayed at any given time.
+ * Toggles are persistent on a per browser session per course basis but can be made to persist longer by a small
+ * code change. Full installation instructions, code adaptions and credits are included in the 'Readme.txt' file.
+ *
+ * @package    course/format
+ * @subpackage culcollapsed
+ * @version    See the value of '$plugin->version' in version.php.
+ * @copyright  &copy; 2009-onwards G J Barnard in respect to modifications of standard topics format.
+ * @author     G J Barnard - gjbarnard at gmail dot com and {@link http://moodle.org/user/profile.php?id=442195}
+ * @link       http://docs.moodle.org/en/Collapsed_Topics_course_format
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// Cleaned through use of http://jshint.com/.
+/**
+ * @namespace
+ */
+M.format_culcollapsed = M.format_culcollapsed || {};
+
+// Namespace variables:
+// A constant of 26 0's to be used to pad the storage state of the toggles when converting between base 2 and 36,
+// this is to be compact.
+M.format_culcollapsed.thesparezeros = "00000000000000000000000000";
+M.format_culcollapsed.togglestate = false;
+M.format_culcollapsed.courseid = 0;
+M.format_culcollapsed.togglePersistence = 1; // Toggle persistence - 1 = on, 0 = off.
+M.format_culcollapsed.ourYUI = false;
+M.format_culcollapsed.numSections = 0;
+M.format_culcollapsed.oneTopic = false;
+M.format_culcollapsed.currentTopic = null; // For oneTopic when true represents the current open topic or null if none.
+M.format_culcollapsed.currentTopicNum = false; // For oneTopic when true represents the current open topic number or 0 if none.
+M.format_culcollapsed.userIsEditing = false;
+
+// Namespace constants:....
+M.format_culcollapsed.TOGGLE_6 = 1;
+M.format_culcollapsed.TOGGLE_5 = 2;
+M.format_culcollapsed.TOGGLE_4 = 4;
+M.format_culcollapsed.TOGGLE_3 = 8;
+M.format_culcollapsed.TOGGLE_2 = 16;
+M.format_culcollapsed.TOGGLE_1 = 32;
+
+/**
+ * Initialise with the information supplied from the course format 'format.php' so we can operate.
+ * @param {Object} Y YUI instance
+ * @param {String} theCourseId the id of the current course to allow for settings for each course.
+ * @param {String} theToggleState the current state of the toggles.
+ * @param {Integer} theNumSections the number of sections in the course.
+ * @param {Integer} theTogglePersistence Persistence on (1) or off (0).
+ * @param {Integer} theDefaultTogglePersistence Persistence all open (1) or all closed (0) when theToggleState is null.
+ * @param {Boolean} theOneTopic One toggle open at a time (true) or not (false).
+ * @param {Integer} theOneTopicToggle Number of the toggle that is open for one toggle open functionality.
+ * @param {Boolean} theUserIsEditing User is editing (true) or or not (false).
+ */
+M.format_culcollapsed.init = function(Y, theCourseId, theToggleState, theNumSections, theTogglePersistence,
+    theDefaultTogglePersistence, theOneTopic, theOneTopicToggle, theUserIsEditing) {
+    "use strict";
+    // Init.
+    this.ourYUI = Y;
+    this.courseid = theCourseId;
+    this.togglestate = theToggleState;
+    this.numSections = parseInt(theNumSections);
+    this.togglePersistence = theTogglePersistence;
+    this.oneTopic = theOneTopic;
+    this.userIsEditing = theUserIsEditing;
+
+    if ((this.togglestate !== null) && (this.togglePersistence == 1)) { // Toggle persistence - 1 = on, 0 = off.
+        if (this.is_old_preference(this.togglestate) === true) {
+            // Old preference, so convert to new.
+            this.convert_to_new_preference();
+        }
+        // Check we have enough digits for the number of toggles in case this has increased.
+        var numdigits = this.get_required_digits(this.numSections);
+        if (numdigits > this.togglestate.length) {
+            var dchar;
+            if (theDefaultTogglePersistence === 0) {
+                dchar = this.get_min_digit();
+            } else {
+                dchar = this.get_max_digit();
+            }
+            for (var i = this.togglestate.length; i < numdigits; i++) {
+                this.togglestate += dchar;
+            }
+        } else if (numdigits < this.togglestate.length) {
+            // Shorten to save space.
+            this.togglestate = this.togglestate.substring(0, numdigits);
+        }
+    } else {
+        // Reset to default.
+        if (theDefaultTogglePersistence === 0) {
+            this.resetState(this.get_min_digit());
+        } else {
+            this.resetState(this.get_max_digit());
+        }
+    }
+
+    // For some reason Y.delegate does not work on iPhones / iPad's on M3.1 with 'spans' instead of 'a' tags.
+    for (var togi = 1; togi <= this.numSections; togi++) {
+        // Cope with hidden / not shown toggles.
+        var toggle = Y.one("ul.ctopics #toggle-" + togi);
+        if (toggle) {
+            toggle.on('click', this.toggleClick, this);
+        }
+    }
+
+ Y.delegate('click', this.toggle_showhide, Y.config.doc, 'ul.ctopics .editing_showhide', this);
+
+    if (this.oneTopic === false) {
+
+    // Event handlers for all opened / closed.
+    var allopen = Y.one("#toggles-all-opened");
+    if (allopen) {
+        allopen.on('click', this.allOpenClick);
+    }
+    var allclosed = Y.one("#toggles-all-closed");
+    if (allclosed) {
+        allclosed.on('click', this.allCloseClick);
+    }
+    } else {
+        if (theOneTopicToggle !== false) {
+            this.currentTopic = Y.one("ul.ctopics #toggle-" + theOneTopicToggle);
+            this.currentTopicNum = theOneTopicToggle;
+        }
+    }
+};
+
+M.format_culcollapsed.toggleClick = function(e) {
+    if (this.userIsEditing) {
+        var parentClasses = e.target.get('parentNode').getAttribute('class');
+        if ((parentClasses.indexOf('quickediticon') > -1) || (parentClasses.indexOf('inplaceeditable') > -1)) {
+            return;
+        }
+    }
+    var toggleIndex = parseInt(e.currentTarget.get('id').replace("toggle-", ""));
+    e.preventDefault();
+    this.toggle_topic(e.currentTarget, toggleIndex);
+};
+
+M.format_culcollapsed.allOpenClick = function(e) {
+    e.preventDefault();
+    M.format_culcollapsed.ourYUI.all(".toggledsection").addClass('sectionopen');
+    M.format_culcollapsed.ourYUI.all(".toggle span.the_toggle").addClass('toggle_open').removeClass('toggle_closed')
+        .setAttribute('aria-pressed', 'true');
+    M.format_culcollapsed.resetState(M.format_culcollapsed.get_max_digit());
+    M.format_culcollapsed.save_toggles();
+};
+
+M.format_culcollapsed.allCloseClick = function(e) {
+    e.preventDefault();
+    M.format_culcollapsed.ourYUI.all(".toggledsection").removeClass('sectionopen');
+    M.format_culcollapsed.ourYUI.all(".toggle span.the_toggle").addClass('toggle_closed').removeClass('toggle_open')
+        .setAttribute('aria-pressed', 'false');
+    M.format_culcollapsed.ourYUI.all(".summary").addClass('summary_closed').removeClass('summary_open');
+    M.format_culcollapsed.resetState(M.format_culcollapsed.get_min_digit());
+    M.format_culcollapsed.save_toggles();
+};
+
+M.format_culcollapsed.resetState = function(dchar) {
+    M.format_culcollapsed.togglestate = "";
+    var numdigits = M.format_culcollapsed.get_required_digits(M.format_culcollapsed.numSections);
+    for (var i = 0; i < numdigits; i++) {
+        M.format_culcollapsed.togglestate += dchar;
+    }
+};
+
+// Toggle functions
+// Args - targetNode that initiated the call, toggleNum the number of the toggle.
+M.format_culcollapsed.toggle_topic = function(targetNode, toggleNum) {
+    "use strict";
+    if (this.oneTopic === true) {
+        if ((this.currentTopicNum !== false) && (this.currentTopicNum != toggleNum)) {
+            var currentTarget = this.currentTopic.one('span.the_toggle');
+            currentTarget.addClass('toggle_closed').removeClass('toggle_open').setAttribute('aria-pressed', 'false');
+            this.currentTopic.next('.toggledsection').removeClass('sectionopen');
+            this.set_toggle_state(this.currentTopicNum, false);
+            this.currentTopic = null;
+            this.currentTopicNum = false;
+        }
+    }
+    var target = targetNode.one('span.the_toggle');
+    var state;
+    var targetsummary = targetNode.next('.toggledsection').one('.summary');
+    var targetsummaryalwaysshown = targetNode.one('.summaryalwaysshown');
+
+    if (!target.hasClass('toggle_open')) {
+        target.addClass('toggle_open').removeClass('toggle_closed').setAttribute('aria-pressed', 'true');
+        if (targetsummary) {
+            targetsummary.removeClass('summary_closed');
+            targetsummary.addClass('summary_open');
+        }
+        if (targetsummaryalwaysshown) {
+            targetsummaryalwaysshown.removeClass('summary_closed');
+            targetsummaryalwaysshown.addClass('summary_open');
+        }
+        targetNode.next('.toggledsection').addClass('sectionopen');
+        state = true;
+        if (this.oneTopic === true) {
+            this.currentTopic = targetNode;
+            this.currentTopicNum = toggleNum;
+        }
+    } else {
+        target.addClass('toggle_closed').removeClass('toggle_open').setAttribute('aria-pressed', 'false');
+        if (targetsummary) {
+            targetsummary.removeClass('summary_open');
+            targetsummary.addClass('summary_closed');
+        }
+        if (targetsummaryalwaysshown) {
+            targetsummaryalwaysshown.removeClass('summary_open');
+            targetsummaryalwaysshown.addClass('summary_closed');
+        }
+        targetNode.next('.toggledsection').removeClass('sectionopen');
+        state = false;
+        if (this.oneTopic === true) {
+            this.currentTopic = null;
+            this.currentTopicNum = false;
+        }
+    }
+
+    this.set_toggle_state(toggleNum, state);
+    this.save_toggles();
+};
+
+/* Old maximum number of sections was 52, but as the conversion utilises integers which are 32 bit signed,
+   this must be broken into two string segments for the process to work.  Therefore each 6 character base 36
+   string will represent 26 characters for part 1 and 27 for part 2 in base 2.
+   This is all required to save cookie space, so instead of using 53 bytes (characters) per course, only 12 are used.
+   Convert from a base 36 string to a base 2 string - effectively a private function.
+  Args - thirtysix - a 12 character string representing a base 36 number. */
+M.format_culcollapsed.to2baseString = function(thirtysix) {
+    "use strict";
+    // Break apart the string because integers are signed 32 bit and therefore can only store 31 bits, therefore a
+    // 53 bit number will cause overflow / carry with loss of resolution.
+    var firstpart = parseInt(thirtysix.substring(0,6),36);
+    var secondpart = parseInt(thirtysix.substring(6,12),36);
+    var fps = firstpart.toString(2);
+    var sps = secondpart.toString(2);
+
+    // Add in preceding 0's if base 2 sub strings are not long enough.
+    if (fps.length < 26) {
+        // Need to PAD.
+        fps = this.thesparezeros.substring(0,(26 - fps.length)) + fps;
+    }
+    if (sps.length < 27) {
+        // Need to PAD.
+        sps = this.thesparezeros.substring(0,(27 - sps.length)) + sps;
+    }
+
+    return fps + sps;
+};
+
+/* Save the toggles - called from togglebinary and allToggle.
+   AJAX call to server to save the state of the toggles for this course for the current user if on. */
+M.format_culcollapsed.save_toggles = function() {
+    "use strict";
+    if (this.togglePersistence == 1) { // Toggle persistence - 1 = on, 0 = off.
+        M.format_culcollapsed.set_user_preference('culcollapsed_toggle_' + this.courseid, this.togglestate);
+    }
+};
+
+// New base 64 code:....
+M.format_culcollapsed.is_old_preference = function(pref) {
+    "use strict";
+    var retr = false;
+    var firstchar = pref[0];
+
+    if ((firstchar == '0') || (firstchar == '1')) {
+        retr = true;
+    }
+
+    return retr;
+};
+
+M.format_culcollapsed.convert_to_new_preference = function() {
+    "use strict";
+    var toggleBinary = this.to2baseString(this.togglestate);
+    var bin, value;
+    this.togglestate = "";
+    var logbintext = "";
+
+    for (var i = 1; i <= 43; i = i + 6) {
+        bin = toggleBinary.substring(i, i + 6);
+        value = parseInt(bin, 2);
+        this.togglestate += this.encode_value_to_character(value);
+        logbintext += bin + ' ';
+    }
+
+    bin = toggleBinary.substring(49, 53);
+    logbintext += bin + ' ';
+    value = parseInt(bin, 2);
+    // @codingStandardsIgnoreStart
+    value = value << 2; // jshint ignore:line
+    // @codingStandardsIgnoreEnd
+    this.togglestate += this.encode_value_to_character(value);
+};
+
+/**
+ * Sets the state of the requested Toggle number.
+ * int togglenum - The toggle number.
+ * boolean state - true or false.
+ */
+M.format_culcollapsed.set_toggle_state = function(togglenum, state) {
+    "use strict";
+    var togglecharpos = this.get_toggle_pos(togglenum);
+    var toggleflag = this.get_toggle_flag(togglenum, togglecharpos);
+    var value = this.decode_character_to_value(this.togglestate.charAt(togglecharpos - 1));
+    if (state === true) {
+        // @codingStandardsIgnoreStart
+        value |= toggleflag; // jshint ignore:line
+        // @codingStandardsIgnoreEnd
+    } else {
+        // @codingStandardsIgnoreStart
+        value &= ~toggleflag; // jshint ignore:line
+        // @codingStandardsIgnoreEnd
+    }
+    var newchar = this.encode_value_to_character(value);
+    var start = this.togglestate.substring(0,togglecharpos - 1);
+    var end = this.togglestate.substring(togglecharpos);
+    this.togglestate = start + newchar + end;
+};
+
+M.format_culcollapsed.get_required_digits = function(numtoggles) {
+    "use strict";
+    return this.get_toggle_pos(numtoggles);
+};
+
+M.format_culcollapsed.get_toggle_pos = function(togglenum) {
+    "use strict";
+    return Math.ceil(togglenum / 6);
+};
+
+M.format_culcollapsed.get_min_digit = function() {
+    "use strict";
+    return ':'; // Digit ':' is 58.
+};
+
+M.format_culcollapsed.get_max_digit = function() {
+    "use strict";
+    return 'y'; // Digit 'y' is 121.
+};
+
+M.format_culcollapsed.get_toggle_flag = function(togglenum, togglecharpos) {
+    "use strict";
+    var toggleflagpos = togglenum - ((togglecharpos - 1) * 6);
+    var flag;
+    switch (toggleflagpos) {
+        case 1:
+            flag = this.TOGGLE_1;
+            break;
+        case 2:
+            flag = this.TOGGLE_2;
+            break;
+        case 3:
+            flag = this.TOGGLE_3;
+            break;
+        case 4:
+            flag = this.TOGGLE_4;
+            break;
+        case 5:
+            flag = this.TOGGLE_5;
+            break;
+        case 6:
+            flag = this.TOGGLE_6;
+            break;
+    }
+    return flag;
+};
+
+M.format_culcollapsed.decode_character_to_value = function(character) {
+    "use strict";
+    return character.charCodeAt(0) - 58;
+};
+
+M.format_culcollapsed.encode_value_to_character = function(val) {
+    "use strict";
+    return String.fromCharCode(val + 58);
+};
+
+/**
+ * Makes a best effort to connect back to Moodle to update a user preference,
+ * however, there is no mechanism for finding out if the update succeeded.
+ *
+ * Before you can use this function in your JavsScript, you must have called
+ * user_preference_allow_ajax_update from moodlelib.php to tell Moodle that
+ * the update is allowed, and how to safely clean and submitted values.
+ *
+ * @param String name the name of the setting to update.
+ * @param String the value to set it to.
+ */
+M.format_culcollapsed.set_user_preference = function(name, value) {
+    YUI().use('io', function(Y) {
+        var url = M.cfg.wwwroot + '/course/format/culcollapsed/setculcollapsedpref.php?sesskey=' + M.cfg.sesskey + '&pref=' + encodeURI(name) + '&value=' + encodeURI(value); // jshint ignore:line
+
+        // If we are a developer, ensure that failures are reported.
+        var cfg = {
+            method: 'get',
+            on: {}
+        };
+        if (M.cfg.developerdebug) {
+            cfg.on.failure = function() {
+                console.log("Error updating culcollapsed preference '" + name + "' using AJAX.  Almost certainly your session has timed out.  Clicking this link will repeat the AJAX call that failed so you can see the error: "); // jshint ignore:line
+            };
+        }
+
+        // Make the request.
+        Y.io(url, cfg);
+    });
+};
+
+/**
+ * Toggle hiding the current section.
+ *
+ * @method toggle_showhide
+ * @param {EventFacade} e
+ */
+M.format_culcollapsed.toggle_showhide = function(e) {
+
+    var button = e.target.ancestor('a', true);
+    var buttonicon = button.one('i');
+
+    // Determine whether the section is currently hidden.
+    var hidden = buttonicon.hasClass('fa-eye-slash');
+
+    var hide_string = M.util.get_string('hidefromothers', 'format_culcollapsed');
+    var show_string = M.util.get_string('showfromothers', 'format_culcollapsed');
+
+    if (!hidden) {
+        buttonicon
+            .set('title', show_string)
+            .removeClass('fa-eye')
+            .addClass('fa-eye-slash');
+    } else {
+        buttonicon
+            .set('title', hide_string)
+            .removeClass('fa-eye-slash')
+            .addClass('fa-eye');
+    }
+};

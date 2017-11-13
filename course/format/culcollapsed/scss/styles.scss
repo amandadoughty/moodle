@@ -1,0 +1,233 @@
+// sass --watch styles.scss:../styles.css 
+
+@import "ctopics.scss";
+@import "colours.scss";
+@import "mixins.scss";
+@import "dashboard.scss";
+
+body.format-culcollapsed {
+    .course-content ul.ctopics {
+        li.main,
+        li#toggle-all {
+            margin: 4px 1px 1px 1px;
+            border-bottom: none;
+            .content {
+                // Default for non tablets / mobiles.  If the language file has 'culcollapsedsidewidth' for the current language, then will be set in format.php. 
+                margin: 0 !important;
+                padding: 0 !important;
+                .toggle {
+                    min-height: 7em;
+                    span {
+                        text-align: left;
+                    }
+                }
+                /* Icon sets.  Note: Background images for the settings - does not work in Chrome or Safari - known issue. */
+                /* Arrow icon set. */
+                .toggle-arrow {
+                    span.toggle_closed, 
+                    span.toggle_open {
+                        background-image: url([[pix:t/expanded]]); /* JavaScript disabled */
+                    }
+                    h4 span {
+                        cursor: pointer;
+                        font-size: 1.4rem;
+                        &.off {
+                            background-image: url([[pix:t/expanded]]);
+                            :hover {
+                                background-image: url([[pix:t/collapsed]]);
+                            }
+                        }
+                        &.on{
+                            background-image: url([[pix:t/collapsed]]);
+                            :hover {
+                                background-image: url([[pix:t/expanded]]);
+                            }
+                        }
+                    }           
+                }
+                .sectionhead {
+                    position: relative;
+                    width: auto;
+                    margin: 2px;               
+                    padding-bottom: 1.5em;
+                    .summary_open {
+                        .truncate {
+                            display: none;
+                        }
+                        .no-overflow {
+                            display: inline-block;
+                        }
+                    }
+                    .summary_closed {
+                        .truncate {
+                            display: inline-block;
+                            overflow: hidden;
+                            height: 3.4em;
+                            width: 100%;
+                            line-height: 16px;
+                            &::before {
+
+                            }
+                            &::after {
+                                content: "\02026";
+                                float: right;
+                                position: relative;
+                                top: -16px;
+                                left: 100%;
+                                width: 50%;
+                                margin-left: -50%;
+                                padding-right: 5px;
+                                text-align: right;
+                                @include gradient-horizontal(rgba($white, 0), $grey, 0, 50%);
+                            }
+                            > *:first-child {
+                                float: right;
+                                width: 100%;
+                                margin-left: -5px;
+                            }
+                        }
+                        .no-overflow {
+                            display: none;
+                        }
+                    }
+                    h3.sectionname {
+                        margin: 0 !important;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        font-size: 1.25rem;
+                        span.quickediticon img {
+                            background: transparent;
+                            border: none;
+                        }
+                    }
+                    .section-summary-activities {
+                        position: absolute;
+                        right: 4px;
+                        bottom: 0;
+                        margin-right: 4px;
+                        .activity-count {
+                            color: $nearlyblack;
+                        }
+                    }
+                    .section-summary-progress {
+                        position: absolute;
+                        left: 31px;
+                        bottom: 0;
+                        margin-right: 4px;
+                        .activity-count {
+                            color: $nearlyblack;
+                        }
+                    }
+                    &:hover {
+                        .summary_closed {
+                            .truncate {
+                                &::after {
+                                    @include gradient-horizontal(rgba($white, 0), $darkgrey, 0, 50%);
+                                }
+                            }
+                        }
+                    }
+                }
+                .sectionbody {
+                    margin: 2px;
+                    background-color: $white;
+                    .summary_open {
+                        margin-left: 0.2em;
+                        padding-left: 0;
+                        padding-top: 1em;
+                        .truncate {
+                            display: none;
+                        }
+                        .no-overflow {
+                            display: inline-block;
+                        }
+                    }
+                    .summary_closed {
+                        .truncate {
+                            display: none;
+                        }
+                        .no-overflow {
+                            display: none;
+                        }
+                    }
+                    .section-modchooser {
+                        margin-right: 4px;
+                    }
+                    .activity {
+                        margin: 0.5em 0;
+                    }
+                }
+                .summary {
+                    margin-left: .2em;
+                    margin-right: .2em;
+                    padding-left: 28px;
+                    background-color: transparent!important;
+                    border: none;
+                }
+            }
+            .side {
+                padding: 10px 0 0 0;
+            }        
+        }
+    }
+    .insertsection {
+        text-align: center;
+        .sectionbutton {
+            display: inline-block;
+            margin: 1rem;
+        }
+    }
+}
+
+body.format-culcollapsed.jsenabled {
+    .course-content ul.ctopics li.section .content {
+        .toggle-arrow {
+            span.toggle_closed {
+                background-image: url([[pix:t/collapsed]]);
+            }
+            span.toggle_open {
+                background-image: url([[pix:t/expanded]]);
+            }
+        }
+    }
+}
+
+body.format-culcollapsed.editing .course-content ul.ctopics {
+    li.main {
+        .content {
+            /* Default for non tablets / mobiles.  If the language file has 'culcollapsedsidewidth' for the current language, then will be set in format.php. */
+            margin: 0 40px !important;
+            padding: 0 !important;
+            .inplaceeditable.inplaceeditingon .editinstructions {
+                margin-top: -30px;
+            }
+
+        }
+        .side {
+            padding: 10px 0 0 0;
+            .fa,
+            .section-handle {
+                font-size: 1.2em;
+                padding: 2px 0;
+            }
+            img {
+                display: none;
+            }
+        }
+        &.current {
+            border-radius: 0;
+            .side {
+                .fa,
+                .section-handle {
+                    color: $white;
+                }
+            }
+        }
+    }
+}
+
+body.format-culcollapsed#page-admin-setting-formatsettingculcollapsed select#id_s_format_culcollapsed_defaulttoggleiconset option[value="arrow"], 
+body#page-course-edit select#id_toggleiconset option[value="arrow"] {
+    background-image: url([[pix:t/collapsed]]);
+}
+

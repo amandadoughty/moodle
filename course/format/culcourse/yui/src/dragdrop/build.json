@@ -1,0 +1,10 @@
+{
+    "name": "moodle-format_culcourse-dragdrop-interceptor",
+    "builds": {
+        "moodle-format_culcourse-dragdrop-interceptor": {
+            "jsfiles": [
+                "resource.js"
+            ]
+        }
+    }
+}
