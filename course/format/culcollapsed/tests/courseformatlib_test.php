@@ -82,30 +82,30 @@ class format_culcollapsed_courseformatlib_testcase extends advanced_testcase {
         $this->assertEquals('0.4', $thesettings['togglebackgroundhoveropacity']);
     }
 
-    public function test_reset_opacity() {
-        $teacher = $this->getDataGenerator()->create_user();
-        $this->setUser($teacher);
+    // public function test_reset_opacity() {
+    //     $teacher = $this->getDataGenerator()->create_user();
+    //     $this->setUser($teacher);
 
-        global $DB;
-        $roleids = $DB->get_records_menu('role', null, '', 'shortname, id');
-        $this->getDataGenerator()->enrol_user($teacher->id, $this->course->id, $roleids['editingteacher']);
+    //     global $DB;
+    //     $roleids = $DB->get_records_menu('role', null, '', 'shortname, id');
+    //     $this->getDataGenerator()->enrol_user($teacher->id, $this->course->id, $roleids['editingteacher']);
 
-        set_config('defaulttgfgopacity', '0.5', 'format_culcollapsed');
-        set_config('defaulttgfghvropacity', '0.6', 'format_culcollapsed');
-        set_config('defaulttgbgopacity', '0.7', 'format_culcollapsed');
-        set_config('defaulttgbghvropacity', '0.8', 'format_culcollapsed');
+    //     set_config('defaulttgfgopacity', '0.5', 'format_culcollapsed');
+    //     set_config('defaulttgfghvropacity', '0.6', 'format_culcollapsed');
+    //     set_config('defaulttgbgopacity', '0.7', 'format_culcollapsed');
+    //     set_config('defaulttgbghvropacity', '0.8', 'format_culcollapsed');
 
-        $testdata = new stdClass;
-        $testdata->resetcolour = true;
-        $this->courseformat->update_course_format_options($testdata);
+    //     $testdata = new stdClass;
+    //     $testdata->resetcolour = true;
+    //     $this->courseformat->update_course_format_options($testdata);
 
-        $thesettings = $this->courseformat->get_settings();
+    //     $thesettings = $this->courseformat->get_settings();
 
-        $this->assertEquals('0.5', $thesettings['toggleforegroundopacity']);
-        $this->assertEquals('0.6', $thesettings['toggleforegroundhoveropacity']);
-        $this->assertEquals('0.7', $thesettings['togglebackgroundopacity']);
-        $this->assertEquals('0.8', $thesettings['togglebackgroundhoveropacity']);
-    }
+    //     $this->assertEquals('0.5', $thesettings['toggleforegroundopacity']);
+    //     $this->assertEquals('0.6', $thesettings['toggleforegroundhoveropacity']);
+    //     $this->assertEquals('0.7', $thesettings['togglebackgroundopacity']);
+    //     $this->assertEquals('0.8', $thesettings['togglebackgroundhoveropacity']);
+    // }
 
     public function test_reset_all_opacity() {
         $this->setAdminUser();
