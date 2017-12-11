@@ -42,7 +42,7 @@ class assessable_uploaded extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "{$this->other['pathnamehashes']}";
+        return "{$this->other['contenthashes']}";
     }
 
     /**

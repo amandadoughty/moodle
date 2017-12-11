@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2015071600;
-$plugin->release   = '2.0';
+$plugin->version   = 2017121104;
+$plugin->release   = '3.0';
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->requires  = 2013111800; // Moodle 2.6 release and upwards
 $plugin->component = 'local_culobserver';

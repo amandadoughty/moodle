@@ -37,15 +37,23 @@ class local_culobserver_observer {
     public static function assessable_uploaded(\assignsubmission_file\event\assessable_uploaded $event) {
         global $CFG;
 
+        $fs = new file_storage();
+        $contenthashes = [];
+
+        foreach ($event->other['pathnamehashes'] as $pathnamehash) {
+            $file = $fs->get_file_by_hash($pathnamehash);
+            $contenthashes[] = $file->get_contenthash();
+        }
+
         $info = get_string('uploaded', 'local_culobserver', count($event->other['pathnamehashes']));
         $info .= "\n\n";
-        $info .= join("; \n\n", $event->other['pathnamehashes']);
+        $info .= join("; \n\n", $contenthashes);
         $info = nl2br($info);
 
         $params = array(
             'context' => $event->get_context(),
             'objectid' => $event->objectid,
-            'other' => array('pathnamehashes' => $info)
+            'other' => array('contenthashes' => $info)
         );
 
         $event = local_culobserver\event\assessable_uploaded::create($params);
