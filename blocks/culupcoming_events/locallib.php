@@ -52,30 +52,32 @@ function block_culupcoming_events_get_events(
     $processed = 0;
     list($filtercourse, $events) = block_culupcoming_events_get_all_events($lookahead, $course, $lastdate);
 
+    $events = $events->events;
+
     if ($events !== false) {
         // Gets the cached stuff for the current course, others are checked below.
-        $modinfo = get_fast_modinfo($courseid);
+        // $modinfo = get_fast_modinfo($courseid);
 
         foreach ($events as $key => $event) {
             unset($events[$key]);
 
-            if (!empty($event->modulename)) {
-                if ($event->courseid == $courseid) {
-                    if (isset($modinfo->instances[$event->modulename][$event->instance])) {
-                        $cm = $modinfo->instances[$event->modulename][$event->instance];
-                        if (!$cm->uservisible) {
-                            continue;
-                        }
-                    }
-                } else {
-                    if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
-                        continue;
-                    }
-                    if (!\core_availability\info_module::is_user_visible($cm)) {
-                        continue;
-                    }
-                }
-            }
+            // if (!empty($event->modulename)) {
+            //     if ($event->course->id == $courseid) {
+            //         if (isset($modinfo->instances[$event->modulename][$event->instance])) {
+            //             $cm = $modinfo->instances[$event->modulename][$event->instance];
+            //             if (!$cm->uservisible) {
+            //                 continue;
+            //             }
+            //         }
+            //     } else {
+            //         if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
+            //             continue;
+            //         }
+            //         if (!\core_availability\info_module::is_user_visible($cm)) {
+            //             continue;
+            //         }
+            //     }
+            // }
 
             ++$processed;
 
@@ -138,7 +140,7 @@ function block_culupcoming_events_get_events(
  * @return array $filterclass, $events
  */
 function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate = 0) {
-    global $USER;
+    global $USER, $PAGE;
 
     $filtercourse = array();
     $courseshown = $course->id;
@@ -172,7 +174,12 @@ function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate
     // Get the events matching our criteria.
     $events = calendar_get_events($tstart, $tend, $user, $groups, $courses);
 
-    return array($filtercourse, $events);
+    $courseid = $PAGE->course->id;
+        $categoryid = ($PAGE->context->contextlevel === CONTEXT_COURSECAT) ? $PAGE->category->id : null;
+        $calendar = \calendar_information::create(time(), $courseid, $categoryid);
+        list($data, $template) = calendar_get_view($calendar, 'upcoming_mini');
+// die(var_dump($data));
+    return array($filtercourse, $data);
 }
 
 
@@ -185,9 +192,9 @@ function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate
  */
 function block_upcoming_events_add_event_metadata($event, $filtercourse) {
 
-    calendar_add_event_metadata($event);
+    // calendar_add_event_metadata($event);
     $event->timeuntil = block_culupcoming_events_human_timing($event->timestart);
-    $courseid  = is_numeric($event->courseid) ? $event->courseid : 0;
+    $courseid  = is_numeric($event->course->id) ? $event->course->id : 0;
 
     $a = new stdClass();
     $a->name = $event->name;
@@ -210,7 +217,7 @@ function block_upcoming_events_add_event_metadata($event, $filtercourse) {
             $event->img = block_culupcoming_events_get_site_img();
             break;
         default:
-            $event->img = block_culupcoming_events_get_course_img($event->courseid, $filtercourse);
+            $event->img = block_culupcoming_events_get_course_img($event->course->id, $filtercourse);
     }
 
     return $event;
@@ -383,7 +390,7 @@ function block_culupcoming_events_ajax_reload($lookahead, $courseid, $lastid) {
             unset($events[$key]);
 
             if (!empty($event->modulename)) {
-                if ($event->courseid == $course->id) {
+                if ($event->course->id == $course->id) {
                     if (isset($modinfo->instances[$event->modulename][$event->instance])) {
                         $cm = $modinfo->instances[$event->modulename][$event->instance];
                         if (!$cm->uservisible) {

@@ -70,6 +70,7 @@ class block_culupcoming_events extends block_base {
         if (empty($this->instance)) {
             return $this->content;
         } else {
+            // Extra params for reloading and scrolling.
             $limitnum = 7;
             $page = optional_param('block_culupcoming_events_page', 1, PARAM_RAW);
             $limitfrom = $page > 1 ? ($page * $limitnum) - $limitnum : 0;

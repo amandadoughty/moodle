@@ -98,7 +98,7 @@ class block_culupcoming_events_renderer extends plugin_renderer_base {
 
             // Activity icon.
             $output .= html_writer::start_tag('div', array('class' => 'activityicon'));
-            $output .= $item->icon;
+            // $output .= $item->icon;
 
             $output .= html_writer::end_tag('div'); // Closing div: .activityicon.
             $output .= html_writer::end_tag('div'); // Closing div: .notifictionitem.
