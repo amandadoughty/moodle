@@ -159,7 +159,7 @@ class block_culupcoming_events_renderer extends plugin_renderer_base {
      * @param int $next the next page number
      * @return string $output html
      */
-    public function culupcoming_events_pagination($prev=false, $next=false) {
+    public function culupcoming_events_pagination($prev = false, $next = false) {
         $output = '';
 
         if ($prev || $next) {

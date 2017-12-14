@@ -27,6 +27,119 @@
 require_once($CFG->dirroot . '/calendar/lib.php');
 
 /**
+ * Get the calendar view output. Function based on calendar_get_view.
+ *
+ * @param   \calendar_information $calendar The calendar being represented
+ * @param   string  $view The type of calendar to have displayed
+ * @param   bool    $includenavigation Whether to include navigation
+ * @return  array[array, string]
+ */
+function block_culupcoming_get_view(\calendar_information $calendar, $tstart = 0, $tstartaftereventid = 0, $eventlimit = 5) {
+    global $PAGE, $CFG;
+
+    $renderer = $PAGE->get_renderer('core_calendar');
+    $type = \core_calendar\type_factory::get_calendar_instance();
+
+    // Calculate the bounds of the month.
+    $calendardate = $type->timestamp_to_date_array($calendar->time);
+
+    $date = new \DateTime('now', core_date::get_user_timezone_object(99));
+
+
+        // Number of days in the future that will be used to fetch events.
+        if (isset($CFG->calendar_lookahead)) {
+            $defaultlookahead = intval($CFG->calendar_lookahead);
+        } else {
+            $defaultlookahead = CALENDAR_DEFAULT_UPCOMING_LOOKAHEAD;
+        }
+        $lookahead = get_user_preferences('calendar_lookahead', $defaultlookahead);
+
+        // Maximum number of events to be displayed on upcoming view.
+        $defaultmaxevents = CALENDAR_DEFAULT_UPCOMING_MAXEVENTS;
+        if (isset($CFG->calendar_maxevents)) {
+            $defaultmaxevents = intval($CFG->calendar_maxevents);
+        }
+
+
+        $tstart = $type->convert_to_timestamp($calendardate['year'], $calendardate['mon'], $calendardate['mday'],
+                $calendardate['hours']);
+        $date->setTimestamp($tstart);
+        $date->modify('+' . $lookahead . ' days');
+
+
+    // We need to extract 1 second to ensure that we don't get into the next day.
+    $date->modify('-1 second');
+    $tend = $date->getTimestamp();
+
+    list($userparam, $groupparam, $courseparam, $categoryparam) = array_map(function($param) {
+        // If parameter is true, return null.
+        if ($param === true) {
+            return null;
+        }
+
+        // If parameter is false, return an empty array.
+        if ($param === false) {
+            return [];
+        }
+
+        // If the parameter is a scalar value, enclose it in an array.
+        if (!is_array($param)) {
+            return [$param];
+        }
+
+        // No normalisation required.
+        return $param;
+    }, [$calendar->users, $calendar->groups, $calendar->courses, $calendar->categories]);
+
+    $events = \core_calendar\local\api::get_events(
+        $tstart,
+        $tend,
+        null,
+        null,
+        $tstartaftereventid,
+        null,
+        $eventlimit,
+        null,
+        $userparam,
+        $groupparam,
+        $courseparam,
+        $categoryparam,
+        true,
+        true,
+        function ($event) {
+            if ($proxy = $event->get_course_module()) {
+                $cminfo = $proxy->get_proxied_instance();
+                return $cminfo->uservisible;
+            }
+
+            if ($proxy = $event->get_category()) {
+                $category = $proxy->get_proxied_instance();
+
+                return $category->is_uservisible();
+            }
+
+            return true;
+        }
+    );
+
+    $related = [
+        'events' => $events,
+        'cache' => new \core_calendar\external\events_related_objects_cache($events),
+        'type' => $type,
+    ];
+
+    $data = [];
+ 
+        $upcoming = new \core_calendar\external\calendar_upcoming_exporter($calendar, $related);
+        $data = $upcoming->export($renderer);
+
+
+
+
+    return [$data, ''];
+}
+
+/**
  * Retrieves and filters the calendar upcoming events and adds meta data
  *
  * @param int $lookahead the number of days to look ahead
@@ -50,48 +163,48 @@ function block_culupcoming_events_get_events(
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
     $output = array();
     $processed = 0;
-    list($filtercourse, $events) = block_culupcoming_events_get_all_events($lookahead, $course, $lastdate);
+    list($filtercourse, $events) = block_culupcoming_events_get_all_events($lookahead, $course, $lastdate, $lastid, $limitnum);
 
     $events = $events->events;
 
     if ($events !== false) {
         // Gets the cached stuff for the current course, others are checked below.
         // $modinfo = get_fast_modinfo($courseid);
-
+echo "Lastid $lastid";
         foreach ($events as $key => $event) {
-            unset($events[$key]);
+//             unset($events[$key]);
 
-            // if (!empty($event->modulename)) {
-            //     if ($event->course->id == $courseid) {
-            //         if (isset($modinfo->instances[$event->modulename][$event->instance])) {
-            //             $cm = $modinfo->instances[$event->modulename][$event->instance];
-            //             if (!$cm->uservisible) {
-            //                 continue;
-            //             }
-            //         }
-            //     } else {
-            //         if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
-            //             continue;
-            //         }
-            //         if (!\core_availability\info_module::is_user_visible($cm)) {
-            //             continue;
-            //         }
-            //     }
-            // }
+//             // if (!empty($event->modulename)) {
+//             //     if ($event->course->id == $courseid) {
+//             //         if (isset($modinfo->instances[$event->modulename][$event->instance])) {
+//             //             $cm = $modinfo->instances[$event->modulename][$event->instance];
+//             //             if (!$cm->uservisible) {
+//             //                 continue;
+//             //             }
+//             //         }
+//             //     } else {
+//             //         if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
+//             //             continue;
+//             //         }
+//             //         if (!\core_availability\info_module::is_user_visible($cm)) {
+//             //             continue;
+//             //         }
+//             //     }
+//             // }
+// echo "<br/>$event->id";
+//             ++$processed;
 
-            ++$processed;
+//             if ($event->id == $lastid) {
+//                 continue;
+//             }
 
-            if ($event->id == $lastid) {
-                continue;
-            }
+//             if ($processed <= $limitfrom) {
+//                 continue;
+//             }
 
-            if ($processed <= $limitfrom) {
-                continue;
-            }
-
-            if ($processed > ($limitnum + $limitfrom)) {
-                break;
-            }
+//             if ($processed > ($limitnum + $limitfrom)) {
+//                 break;
+//             }
 
             $event = block_upcoming_events_add_event_metadata($event, $filtercourse);
             $output[] = $event;
@@ -99,35 +212,37 @@ function block_culupcoming_events_get_events(
     }
 
     // Find out if there are more to display.
-    $more = false;
-    if ($events !== false) {
+    // $more = false;
+    // if ($events !== false) {
 
-        foreach ($events as $event) {
-            if (!empty($event->modulename)) {
-                if ($event->courseid == $courseid) {
-                    if (isset($modinfo->instances[$event->modulename][$event->instance])) {
-                        $cm = $modinfo->instances[$event->modulename][$event->instance];
-                        if (!$cm->uservisible) {
-                            continue;
-                        }
-                    }
-                } else {
-                    if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
-                        continue;
-                    }
-                    if (!\core_availability\info_module::is_user_visible($cm)) {
-                        continue;
-                    }
-                }
-            }
+    //     foreach ($events as $event) {
+    //         if (!empty($event->modulename)) {
+    //             if ($event->courseid == $courseid) {
+    //                 if (isset($modinfo->instances[$event->modulename][$event->instance])) {
+    //                     $cm = $modinfo->instances[$event->modulename][$event->instance];
+    //                     if (!$cm->uservisible) {
+    //                         continue;
+    //                     }
+    //                 }
+    //             } else {
+    //                 if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
+    //                     continue;
+    //                 }
+    //                 if (!\core_availability\info_module::is_user_visible($cm)) {
+    //                     continue;
+    //                 }
+    //             }
+    //         }
 
-            $more = true;
+    //         $more = true;
 
-            if ($more) {
-                break;
-            }
-        }
-    }
+    //         if ($more) {
+    //             break;
+    //         }
+    //     }
+    // }
+
+    $more = true;
 
     return array($more, $output);
 }
@@ -139,7 +254,7 @@ function block_culupcoming_events_get_events(
  * @param array|int $lastdate the date of the last event loaded
  * @return array $filterclass, $events
  */
-function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate = 0) {
+function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate = 0, $lastid = 0, $limitnum = 5) {
     global $USER, $PAGE;
 
     $filtercourse = array();
@@ -177,7 +292,7 @@ function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate
     $courseid = $PAGE->course->id;
         $categoryid = ($PAGE->context->contextlevel === CONTEXT_COURSECAT) ? $PAGE->category->id : null;
         $calendar = \calendar_information::create(time(), $courseid, $categoryid);
-        list($data, $template) = calendar_get_view($calendar, 'upcoming_mini');
+        list($data, $template) = block_culupcoming_get_view($calendar, $lastdate = 0, $lastid = 0, $limitnum = 5);
 // die(var_dump($data));
     return array($filtercourse, $data);
 }
