@@ -76,6 +76,8 @@ class block_culupcoming_events extends block_base {
             $limitfrom = $page > 1 ? ($page * $limitnum) - $limitnum : 0;
             $lastdate = 0;
             $lastid = 0;
+            // $currentlastid = optional_param('block_culupcoming_events_cid', 0, PARAM_RAW);
+            // $prevlastid = optional_param('block_culupcoming_events_pid', 0, PARAM_RAW);
             $courseid = $COURSE->id;
 
             if(isset($this->config->lookahead)) {
@@ -110,6 +112,8 @@ class block_culupcoming_events extends block_base {
             }
 
             $this->content->text .= $renderer->culupcoming_events_pagination($prev, $next);
+
+            // $this->content->text .= $renderer->culupcoming_events_pagination($prevlastid, $nextlastid, $currentlastid);
 
             if (empty($this->content->text)) {
                 $this->content->text = html_writer::tag('div',

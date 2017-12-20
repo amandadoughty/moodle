@@ -167,6 +167,7 @@ class block_culupcoming_events_renderer extends plugin_renderer_base {
 
             if ($prev) {
                 $prevurl = new moodle_url($this->page->url, array('block_culupcoming_events_page' => $prev));
+                // $prevurl = new moodle_url($this->page->url, array('block_culupcoming_events_lastid' => $prev));
                 $prevtext = get_string('sooner', 'block_culupcoming_events');
                 $output .= html_writer::link($prevurl, $prevtext);
             }
@@ -177,6 +178,7 @@ class block_culupcoming_events_renderer extends plugin_renderer_base {
 
             if ($next) {
                 $nexturl = new moodle_url($this->page->url, array('block_culupcoming_events_page' => $next));
+                // $nexturl = new moodle_url($this->page->url, array('block_culupcoming_events_lastid' => $next));
                 $nexttext = get_string('later', 'block_culupcoming_events');
                 $output .= html_writer::link($nexturl, $nexttext);
             }
@@ -186,4 +188,48 @@ class block_culupcoming_events_renderer extends plugin_renderer_base {
 
         return $output;
     }
+
+    /**
+     * Function to create the pagination. This will only show up for non-js
+     * enabled browsers.
+     *
+     * @param int $prev the previous page number
+     * @param int $next the next page number
+     * @return string $output html
+     */
+    // public function culupcoming_events_pagination($prev = false, $next = false) {
+    //     $output = '';
+
+    //     if ($prev || $next) {
+    //         $output .= html_writer::start_tag('div', array('class' => 'pages'));
+
+    //         if ($prev) {
+    //             $prevurl = new moodle_url(
+    //                 $this->page->url, 
+    //                 array('block_culupcoming_events_cid' => $prev)
+    //             );
+    //             // $prevurl = new moodle_url($this->page->url, array('block_culupcoming_events_lastid' => $prev));
+    //             $prevtext = get_string('sooner', 'block_culupcoming_events');
+    //             $output .= html_writer::link($prevurl, $prevtext);
+    //         }
+
+    //         if ($prev && $next) {
+    //             $output .= '&nbsp;|&nbsp;';
+    //         }
+
+    //         if ($next) {
+    //             $nexturl = new moodle_url(
+    //                 $this->page->url, 
+    //                 array('block_culupcoming_events_cid' => $next)
+    //             );
+    //             // $nexturl = new moodle_url($this->page->url, array('block_culupcoming_events_lastid' => $next));
+    //             $nexttext = get_string('later', 'block_culupcoming_events');
+    //             $output .= html_writer::link($nexturl, $nexttext);
+    //         }
+
+    //         $output .= html_writer::end_tag('div'); // Closing div: .pages.
+    //     }
+
+    //     return $output;
+    // }
 }

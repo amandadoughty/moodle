@@ -163,14 +163,26 @@ function block_culupcoming_events_get_events(
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
     $output = array();
     $processed = 0;
-    list($filtercourse, $events) = block_culupcoming_events_get_all_events($lookahead, $course, $lastdate, $lastid, $limitnum);
+    $more = false;
+
+    // We need a subset of the events and we cannot use timestartafterevent because we want to be able to page forward
+    // and backwards. So we retrieve all the events for previous and current page plus one to check if there are more to
+    // page through.
+    $eventnum = $limitfrom + $limitnum + 1;
+    list($events) = block_culupcoming_events_get_all_events($lookahead, $course, $lastdate, $lastid, $eventnum);
 
     $events = $events->events;
 
+    
+
     if ($events !== false) {
+        if (count($events) > ($limitfrom + $limitnum)) {
+            $more = true;
+            $events = array_slice($events, $limitfrom, $limitnum);
+        }
         // Gets the cached stuff for the current course, others are checked below.
         // $modinfo = get_fast_modinfo($courseid);
-echo "Lastid $lastid";
+// echo "Lastid $lastid";
         foreach ($events as $key => $event) {
 //             unset($events[$key]);
 
@@ -192,21 +204,21 @@ echo "Lastid $lastid";
 //             //     }
 //             // }
 // echo "<br/>$event->id";
-//             ++$processed;
+            // ++$processed;
 
-//             if ($event->id == $lastid) {
-//                 continue;
-//             }
+            // if ($event->id == $lastid) {
+            //     continue;
+            // }
 
-//             if ($processed <= $limitfrom) {
-//                 continue;
-//             }
+            // if ($processed <= $limitfrom) {
+            //     continue;
+            // }
 
-//             if ($processed > ($limitnum + $limitfrom)) {
-//                 break;
-//             }
+            // if ($processed > ($limitnum + $limitfrom)) {
+            //     break;
+            // }
 
-            $event = block_upcoming_events_add_event_metadata($event, $filtercourse);
+            $event = block_upcoming_events_add_event_metadata($event);
             $output[] = $event;
         }
     }
@@ -242,7 +254,7 @@ echo "Lastid $lastid";
     //     }
     // }
 
-    $more = true;
+    // $more = true;/
 
     return array($more, $output);
 }
@@ -257,44 +269,44 @@ echo "Lastid $lastid";
 function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate = 0, $lastid = 0, $limitnum = 5) {
     global $USER, $PAGE;
 
-    $filtercourse = array();
-    $courseshown = $course->id;
-    // Filter events to include only those from the course we are in.
-    if ($courseshown == SITEID) {
-        $filtercourse = calendar_get_default_courses();
-        list($courses, $groups, $user) = calendar_set_filters($filtercourse, true);
-    } else {
-        $filtercourse = array($courseshown => $course);
-        list($courses, $groups, $user) = calendar_set_filters($filtercourse, true);
-        $courses = array($courseshown);
-        $user = false;
-    }
+    // $filtercourse = array();
+    // $courseshown = $course->id;
+    // // Filter events to include only those from the course we are in.
+    // if ($courseshown == SITEID) {
+    //     $filtercourse = calendar_get_default_courses();
+    //     // list($courses, $groups, $user) = calendar_set_filters($filtercourse, true);
+    // } else {
+    //     $filtercourse = array($courseshown => $course);
+    //     // list($courses, $groups, $user) = calendar_set_filters($filtercourse, true);
+    //     // $courses = array($courseshown);
+    //     // $user = false;
+    // }
 
-    $processed = 0;
-    $now = time(); // We 'll need this later.
-    $usermidnighttoday = usergetmidnight($now);
+    // $processed = 0;
+    // $now = time(); // We 'll need this later.
+    // $usermidnighttoday = usergetmidnight($now);
 
-    if ($lastdate) {
-        $tstart = $lastdate;
-    } else {
-        $tstart = $usermidnighttoday;
-    }
+    // if ($lastdate) {
+    //     $tstart = $lastdate;
+    // } else {
+    //     $tstart = $usermidnighttoday;
+    // }
 
-    // This function adds the lookahead (in seconds) plus one day (in seconds)
-    // to the current timestamp.
-    // It then deducts one second to get the resulting end date at 23:59.
-    // The extra day is added to account for resetting the result to midnight.
-    // Otherwise a lookahead setting of 1 day would give an end date of today at 23:59.
-    $tend = usergetmidnight($now + DAYSECS * $lookahead + DAYSECS) - 1;
-    // Get the events matching our criteria.
-    $events = calendar_get_events($tstart, $tend, $user, $groups, $courses);
+    // // This function adds the lookahead (in seconds) plus one day (in seconds)
+    // // to the current timestamp.
+    // // It then deducts one second to get the resulting end date at 23:59.
+    // // The extra day is added to account for resetting the result to midnight.
+    // // Otherwise a lookahead setting of 1 day would give an end date of today at 23:59.
+    // $tend = usergetmidnight($now + DAYSECS * $lookahead + DAYSECS) - 1;
+    // // Get the events matching our criteria.
+    // $events = calendar_get_events($tstart, $tend, $user, $groups, $courses);
 
     $courseid = $PAGE->course->id;
-        $categoryid = ($PAGE->context->contextlevel === CONTEXT_COURSECAT) ? $PAGE->category->id : null;
-        $calendar = \calendar_information::create(time(), $courseid, $categoryid);
-        list($data, $template) = block_culupcoming_get_view($calendar, $lastdate = 0, $lastid = 0, $limitnum = 5);
+    $categoryid = ($PAGE->context->contextlevel === CONTEXT_COURSECAT) ? $PAGE->category->id : null;
+    $calendar = \calendar_information::create(time(), $courseid, $categoryid);
+    list($data, $template) = block_culupcoming_get_view($calendar, $lastdate, $lastid, $limitnum);
 // die(var_dump($data));
-    return array($filtercourse, $data);
+    return array($data);
 }
 
 
@@ -305,7 +317,7 @@ function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate
  * @param stdClass $event
  * @return stdClass $event with additional attributes
  */
-function block_upcoming_events_add_event_metadata($event, $filtercourse) {
+function block_upcoming_events_add_event_metadata($event) {
 
     // calendar_add_event_metadata($event);
     $event->timeuntil = block_culupcoming_events_human_timing($event->timestart);
@@ -315,7 +327,7 @@ function block_upcoming_events_add_event_metadata($event, $filtercourse) {
     $a->name = $event->name;
 
     if ($courseid && $courseid != SITEID) {
-        $a->course = block_culupcoming_events_get_course_displayname ($courseid, $filtercourse);
+        $a->course = block_culupcoming_events_get_course_displayname ($courseid);
         $event->description = get_string('courseevent', 'block_culupcoming_events', $a);
     } else {
         $event->description = get_string('event', 'block_culupcoming_events', $a);
@@ -326,13 +338,13 @@ function block_upcoming_events_add_event_metadata($event, $filtercourse) {
             $event->img = block_culupcoming_events_get_user_img($event->userid);
             break;
         case 'course':
-            $event->img = block_culupcoming_events_get_course_img($event->courseid, $filtercourse);
+            $event->img = block_culupcoming_events_get_course_img($event->courseid);
             break;
         case 'site':
             $event->img = block_culupcoming_events_get_site_img();
             break;
         default:
-            $event->img = block_culupcoming_events_get_course_img($event->course->id, $filtercourse);
+            $event->img = block_culupcoming_events_get_course_img($event->course->id);
     }
 
     return $event;
@@ -381,13 +393,11 @@ function block_culupcoming_events_human_timing ($time) {
  * @param  int $courseid
  * @return string
  */
-function block_culupcoming_events_get_course_displayname ($courseid, $filtercourse) {
+function block_culupcoming_events_get_course_displayname ($courseid) {
     global $DB;
 
     if (!$courseid) {
         return '';
-    } else if (array_key_exists($courseid, $filtercourse)) {
-        $courseshortname = $filtercourse[$courseid]->shortname;
     } else {
         $course = $DB->get_record('course', array('id' => $courseid));
         $courseshortname = $course->shortname;
@@ -406,7 +416,7 @@ function block_culupcoming_events_get_course_img ($courseid) {
     global $CFG, $DB, $PAGE, $OUTPUT;
 
     $courseid  = is_numeric($courseid) ? $courseid : null;
-    $coursedisplayname = block_culupcoming_events_get_course_displayname ($courseid, array());
+    $coursedisplayname = block_culupcoming_events_get_course_displayname ($courseid);
 
     if ($course = $DB->get_record('course', array('id' => $courseid))) {
         $courseimgrenderer = $PAGE->get_renderer('block_culupcoming_events', 'renderers_course_picture');
@@ -495,7 +505,7 @@ function block_culupcoming_events_ajax_reload($lookahead, $courseid, $lastid) {
 
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
     $output = array();
-    list($filtercourse, $events) = block_culupcoming_events_get_all_events($lookahead, $course);
+    list($events) = block_culupcoming_events_get_all_events($lookahead, $course);
 
     if ($events !== false) {
         // Gets the cached stuff for the current course, others are checked below.
@@ -531,7 +541,7 @@ function block_culupcoming_events_ajax_reload($lookahead, $courseid, $lastid) {
     }
 
     foreach ($output as $key => $event) {
-        $output[$key] = block_upcoming_events_add_event_metadata($event, $filtercourse);
+        $output[$key] = block_upcoming_events_add_event_metadata($event);
     }
 
     // Find out if there are more to display.
