@@ -136,7 +136,7 @@ function block_culupcoming_get_view(\calendar_information $calendar, $tstart = 0
 
 
 
-    return [$data, ''];
+    return $data;
 }
 
 /**
@@ -158,22 +158,21 @@ function block_culupcoming_events_get_events(
     $limitfrom = 0,
     $limitnum = 5) {
 
-    global $DB;
+    // global $DB;
 
-    $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+    // $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
     $output = array();
-    $processed = 0;
+    // $processed = 0;
     $more = false;
 
     // We need a subset of the events and we cannot use timestartafterevent because we want to be able to page forward
     // and backwards. So we retrieve all the events for previous and current page plus one to check if there are more to
     // page through.
     $eventnum = $limitfrom + $limitnum + 1;
-    list($events) = block_culupcoming_events_get_all_events($lookahead, $course, $lastdate, $lastid, $eventnum);
+    $events = block_culupcoming_events_get_all_events($lookahead, $courseid, $lastdate, $lastid, $eventnum);
 
-    $events = $events->events;
+    // $events = $events->events;
 
-    
 
     if ($events !== false) {
         if (count($events) > ($limitfrom + $limitnum)) {
@@ -266,7 +265,7 @@ function block_culupcoming_events_get_events(
  * @param array|int $lastdate the date of the last event loaded
  * @return array $filterclass, $events
  */
-function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate = 0, $lastid = 0, $limitnum = 5) {
+function block_culupcoming_events_get_all_events ($lookahead, $courseid, $lastdate = 0, $lastid = 0, $limitnum = 5) {
     global $USER, $PAGE;
 
     // $filtercourse = array();
@@ -301,12 +300,12 @@ function block_culupcoming_events_get_all_events ($lookahead, $course, $lastdate
     // // Get the events matching our criteria.
     // $events = calendar_get_events($tstart, $tend, $user, $groups, $courses);
 
-    $courseid = $PAGE->course->id;
+    // $courseid = $PAGE->course->id;
     $categoryid = ($PAGE->context->contextlevel === CONTEXT_COURSECAT) ? $PAGE->category->id : null;
     $calendar = \calendar_information::create(time(), $courseid, $categoryid);
-    list($data, $template) = block_culupcoming_get_view($calendar, $lastdate, $lastid, $limitnum);
+    $events = block_culupcoming_get_view($calendar, $lastdate, $lastid, $limitnum);
 // die(var_dump($data));
-    return array($data);
+    return $events->events;
 }
 
 
@@ -503,75 +502,100 @@ function block_culupcoming_events_get_site_img () {
 function block_culupcoming_events_ajax_reload($lookahead, $courseid, $lastid) {
     global $DB;
 
-    $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+    // $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+    // $output = array();
+    // list($events) = block_culupcoming_events_get_all_events($lookahead, $course);
+
+    // if ($events !== false) {
+        // Gets the cached stuff for the current course, others are checked below.
+        // $modinfo = get_fast_modinfo($course);
+
+        // foreach ($events as $key => $event) {
+        //     unset($events[$key]);
+
+        //     if (!empty($event->modulename)) {
+        //         if ($event->course->id == $course->id) {
+        //             if (isset($modinfo->instances[$event->modulename][$event->instance])) {
+        //                 $cm = $modinfo->instances[$event->modulename][$event->instance];
+        //                 if (!$cm->uservisible) {
+        //                     continue;
+        //                 }
+        //             }
+        //         } else {
+        //             if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
+        //                 continue;
+        //             }
+        //             if (!\core_availability\info_module::is_user_visible($cm)) {
+        //                 continue;
+        //             }
+        //         }
+        //     }
+        //     $output[] = $event;
+        //     // We only want the events up to the last one currently displayed
+        //     // when we are reloading.
+        //     if ($event->id == $lastid) {
+        //         break;
+        //     }
+        // }
+    // }
+
+    // foreach ($output as $key => $event) {
+    //     $output[$key] = block_upcoming_events_add_event_metadata($event);
+    // }
+
+    // // Find out if there are more to display.
+    // $more = false;
+    // if ($events !== false) {
+
+    //     foreach ($events as $event) {
+    //         if (!empty($event->modulename)) {
+    //             if ($event->courseid == $course->id) {
+    //                 if (isset($modinfo->instances[$event->modulename][$event->instance])) {
+    //                     $cm = $modinfo->instances[$event->modulename][$event->instance];
+    //                     if (!$cm->uservisible) {
+    //                         continue;
+    //                     }
+    //                 }
+    //             } else {
+    //                 if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
+    //                     continue;
+    //                 }
+    //                 if (!\core_availability\info_module::is_user_visible($cm)) {
+    //                     continue;
+    //                 }
+    //             }
+    //         }
+
+    //         $more = true;
+
+    //         if ($more) {
+    //             break;
+    //         }
+    //     }
+    // }
+
+   
     $output = array();
-    list($events) = block_culupcoming_events_get_all_events($lookahead, $course);
+    $more = false;
+
+    // We need a subset of the events and we cannot use timestartafterevent because we want to be able to page forward
+    // and backwards. So we retrieve all the events for previous and current page plus one to check if there are more to
+    // page through.
+    $eventnum = $limitnum + 1;
+    $events = block_culupcoming_events_get_all_events($lookahead, $courseid, 0, $lastid, $eventnum);
+    // $events = $events->events;
+
 
     if ($events !== false) {
-        // Gets the cached stuff for the current course, others are checked below.
-        $modinfo = get_fast_modinfo($course);
+        if (count($events) > ($limitnum)) {
+            $more = true;
+            // Get rid of the extra one used to test for more.
+            array_pop($events);
+        }
 
         foreach ($events as $key => $event) {
-            unset($events[$key]);
-
-            if (!empty($event->modulename)) {
-                if ($event->course->id == $course->id) {
-                    if (isset($modinfo->instances[$event->modulename][$event->instance])) {
-                        $cm = $modinfo->instances[$event->modulename][$event->instance];
-                        if (!$cm->uservisible) {
-                            continue;
-                        }
-                    }
-                } else {
-                    if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
-                        continue;
-                    }
-                    if (!\core_availability\info_module::is_user_visible($cm)) {
-                        continue;
-                    }
-                }
-            }
+            $event = block_upcoming_events_add_event_metadata($event);
             $output[] = $event;
-            // We only want the events up to the last one currently displayed
-            // when we are reloading.
-            if ($event->id == $lastid) {
-                break;
-            }
-        }
-    }
-
-    foreach ($output as $key => $event) {
-        $output[$key] = block_upcoming_events_add_event_metadata($event);
-    }
-
-    // Find out if there are more to display.
-    $more = false;
-    if ($events !== false) {
-
-        foreach ($events as $event) {
-            if (!empty($event->modulename)) {
-                if ($event->courseid == $course->id) {
-                    if (isset($modinfo->instances[$event->modulename][$event->instance])) {
-                        $cm = $modinfo->instances[$event->modulename][$event->instance];
-                        if (!$cm->uservisible) {
-                            continue;
-                        }
-                    }
-                } else {
-                    if (!$cm = get_coursemodule_from_instance($event->modulename, $event->instance)) {
-                        continue;
-                    }
-                    if (!\core_availability\info_module::is_user_visible($cm)) {
-                        continue;
-                    }
-                }
-            }
-
-            $more = true;
-
-            if ($more) {
-                break;
-            }
         }
     }
 
