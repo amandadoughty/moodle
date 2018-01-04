@@ -230,3 +230,37 @@ body#page-course-edit select#id_toggleiconset option[value="arrow"] {
     background-image: url([[pix:t/collapsed]]);
 }
 
+
+
+
+.course-content ul.ctopics li.section .content .toggle,
+.course-content ul.ctopics li.section .content.sectionhidden {
+background-color: rgba(226, 226, 242, 1.0);
+}
+
+.course-content ul.ctopics li.section .content .toggle span, 
+.course-content ul.ctopics li.section .content.sectionhidden {
+color: rgba(143, 24, 46, 1.0);
+}
+
+.course-content ul.ctopics li.section .content .toggle span:hover,
+.course-content ul.ctopics li.section .content.sectionhidden .toggle span:hover {
+color: rgba(103, 0, 3, 1.0);
+}
+
+.course-content ul.ctopics li.section .content div.toggle:hover {
+background-color: rgba(238, 238, 255, 1.0);
+}
+
+.course-content ul.ctopics li.section .content .toggle span, 
+#toggle-all .content .sectionname {
+color: rgba(143, 24, 46, 1.0);
+}
+
+.course-content .linkscontainer .links a.dash-icon {
+background: rgba(143, 24, 46, 1.0);
+}
+
+.course-content ul.ctopics li.section.current {
+background-color: rgba(143, 24, 46, 1.0);
+}

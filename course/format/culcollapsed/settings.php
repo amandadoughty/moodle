@@ -39,15 +39,15 @@ if ($ADMIN->fulltree) {
             format_text(get_string('defaultheadingsubdesc', 'format_culcollapsed'), FORMAT_MARKDOWN)));
 
     /* Toggle instructions - 1 = no, 2 = yes. */
-    $name = 'format_culcollapsed/defaultdisplayinstructions';
-    $title = get_string('defaultdisplayinstructions', 'format_culcollapsed');
-    $description = get_string('defaultdisplayinstructions_desc', 'format_culcollapsed');
-    $default = 2;
-    $choices = array(
-        1 => new lang_string('no'), // No.
-        2 => new lang_string('yes')   // Yes.
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/defaultdisplayinstructions';
+    // $title = get_string('defaultdisplayinstructions', 'format_culcollapsed');
+    // $description = get_string('defaultdisplayinstructions_desc', 'format_culcollapsed');
+    // $default = 2;
+    // $choices = array(
+    //     1 => new lang_string('no'), // No.
+    //     2 => new lang_string('yes')   // Yes.
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     /* Layout configuration.
       Here you can see what numbers in the array represent what layout for setting the default value below.
@@ -61,21 +61,21 @@ if ($ADMIN->fulltree) {
       8 => Toggle section x.
       Default layout to use - used when a new Collapsed Topics course is created or an old one is accessed for the first time
       after installing this functionality introduced in CONTRIB-3378. */
-    $name = 'format_culcollapsed/defaultlayoutelement';
-    $title = get_string('defaultlayoutelement', 'format_culcollapsed');
-    $description = get_string('defaultlayoutelement_descpositive', 'format_culcollapsed');
-    $default = 6;
-    $choices = array(// In insertion order and not numeric for sorting purposes.
-        1 => new lang_string('setlayout_all', 'format_culcollapsed'), // Toggle word, toggle section x and section number - default.
-        3 => new lang_string('setlayout_toggle_word_section_x', 'format_culcollapsed'), // Toggle word and toggle section x.
-        2 => new lang_string('setlayout_toggle_word_section_number', 'format_culcollapsed'), // Toggle word and section number.
-        5 => new lang_string('setlayout_toggle_section_x_section_number', 'format_culcollapsed'), // Toggle section x and section number.
-        4 => new lang_string('setlayout_toggle_word', 'format_culcollapsed'), // Toggle word.
-        8 => new lang_string('setlayout_toggle_section_x', 'format_culcollapsed'), // Toggle section x.
-        6 => new lang_string('setlayout_section_number', 'format_culcollapsed'), // Section number.
-        7 => new lang_string('setlayout_no_additions', 'format_culcollapsed')                     // No additions.
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/defaultlayoutelement';
+    // $title = get_string('defaultlayoutelement', 'format_culcollapsed');
+    // $description = get_string('defaultlayoutelement_descpositive', 'format_culcollapsed');
+    // $default = 6;
+    // $choices = array(// In insertion order and not numeric for sorting purposes.
+    //     1 => new lang_string('setlayout_all', 'format_culcollapsed'), // Toggle word, toggle section x and section number - default.
+    //     3 => new lang_string('setlayout_toggle_word_section_x', 'format_culcollapsed'), // Toggle word and toggle section x.
+    //     2 => new lang_string('setlayout_toggle_word_section_number', 'format_culcollapsed'), // Toggle word and section number.
+    //     5 => new lang_string('setlayout_toggle_section_x_section_number', 'format_culcollapsed'), // Toggle section x and section number.
+    //     4 => new lang_string('setlayout_toggle_word', 'format_culcollapsed'), // Toggle word.
+    //     8 => new lang_string('setlayout_toggle_section_x', 'format_culcollapsed'), // Toggle section x.
+    //     6 => new lang_string('setlayout_section_number', 'format_culcollapsed'), // Section number.
+    //     7 => new lang_string('setlayout_no_additions', 'format_culcollapsed')                     // No additions.
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     /* Structure configuration.
       Here so you can see what numbers in the array represent what structure for setting the default value below.
@@ -100,53 +100,53 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     // Default number of columns between 1 and 4.
-    $name = 'format_culcollapsed/defaultlayoutcolumns';
-    $title = get_string('defaultlayoutcolumns', 'format_culcollapsed');
-    $description = get_string('defaultlayoutcolumns_desc', 'format_culcollapsed');
-    $default = 1;
-    $choices = array(
-        1 => new lang_string('one', 'format_culcollapsed'), // Default.
-        2 => new lang_string('two', 'format_culcollapsed'), // Two.
-        3 => new lang_string('three', 'format_culcollapsed'), // Three.
-        4 => new lang_string('four', 'format_culcollapsed')   // Four.
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/defaultlayoutcolumns';
+    // $title = get_string('defaultlayoutcolumns', 'format_culcollapsed');
+    // $description = get_string('defaultlayoutcolumns_desc', 'format_culcollapsed');
+    // $default = 1;
+    // $choices = array(
+    //     1 => new lang_string('one', 'format_culcollapsed'), // Default.
+    //     2 => new lang_string('two', 'format_culcollapsed'), // Two.
+    //     3 => new lang_string('three', 'format_culcollapsed'), // Three.
+    //     4 => new lang_string('four', 'format_culcollapsed')   // Four.
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     // Default column orientation - 1 = vertical and 2 = horizontal.
-    $name = 'format_culcollapsed/defaultlayoutcolumnorientation';
-    $title = get_string('defaultlayoutcolumnorientation', 'format_culcollapsed');
-    $description = get_string('defaultlayoutcolumnorientation_desc', 'format_culcollapsed');
-    $default = 2;
-    $choices = array(
-        1 => new lang_string('columnvertical', 'format_culcollapsed'),
-        2 => new lang_string('columnhorizontal', 'format_culcollapsed') // Default.
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/defaultlayoutcolumnorientation';
+    // $title = get_string('defaultlayoutcolumnorientation', 'format_culcollapsed');
+    // $description = get_string('defaultlayoutcolumnorientation_desc', 'format_culcollapsed');
+    // $default = 2;
+    // $choices = array(
+    //     1 => new lang_string('columnvertical', 'format_culcollapsed'),
+    //     2 => new lang_string('columnhorizontal', 'format_culcollapsed') // Default.
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     // Toggle text alignment.
     // 1 = left, 2 = center and 3 = right - done this way to avoid typos.
-    $name = 'format_culcollapsed/defaulttogglealignment';
-    $title = get_string('defaulttogglealignment', 'format_culcollapsed');
-    $description = get_string('defaulttogglealignment_desc', 'format_culcollapsed');
-    $default = 2;
-    $choices = array(
-        1 => new lang_string('left', 'format_culcollapsed'), // Left.
-        2 => new lang_string('center', 'format_culcollapsed'), // Centre.
-        3 => new lang_string('right', 'format_culcollapsed')   // Right.
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/defaulttogglealignment';
+    // $title = get_string('defaulttogglealignment', 'format_culcollapsed');
+    // $description = get_string('defaulttogglealignment_desc', 'format_culcollapsed');
+    // $default = 2;
+    // $choices = array(
+    //     1 => new lang_string('left', 'format_culcollapsed'), // Left.
+    //     2 => new lang_string('center', 'format_culcollapsed'), // Centre.
+    //     3 => new lang_string('right', 'format_culcollapsed')   // Right.
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     // Toggle icon position.
     // 1 = left and 2 = right - done this way to avoid typos.
-    $name = 'format_culcollapsed/defaulttoggleiconposition';
-    $title = get_string('defaulttoggleiconposition', 'format_culcollapsed');
-    $description = get_string('defaulttoggleiconposition_desc', 'format_culcollapsed');
-    $default = 1;
-    $choices = array(
-        1 => new lang_string('left', 'format_culcollapsed'), // Left.
-        2 => new lang_string('right', 'format_culcollapsed')   // Right.
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/defaulttoggleiconposition';
+    // $title = get_string('defaulttoggleiconposition', 'format_culcollapsed');
+    // $description = get_string('defaulttoggleiconposition_desc', 'format_culcollapsed');
+    // $default = 1;
+    // $choices = array(
+    //     1 => new lang_string('left', 'format_culcollapsed'), // Left.
+    //     2 => new lang_string('right', 'format_culcollapsed')   // Right.
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     // Toggle icon set.
     // arrow        => Arrow icon set.
@@ -163,125 +163,125 @@ if ($ADMIN->fulltree) {
     // square       => Square icon set.
     // sunmoon      => Sun / Moon icon set.
     // switch       => Switch icon set.
-    $name = 'format_culcollapsed/defaulttoggleiconset';
-    $title = get_string('defaulttoggleiconset', 'format_culcollapsed');
-    $description = get_string('defaulttoggleiconset_desc', 'format_culcollapsed');
-    $default = 'arrow';
-    $choices = array(
-        'arrow' => new lang_string('arrow', 'format_culcollapsed'), // Arrow icon set.
-        'bulb' => new lang_string('bulb', 'format_culcollapsed'), // Bulb icon set.
-        'cloud' => new lang_string('cloud', 'format_culcollapsed'), // Cloud icon set.
-        'eye' => new lang_string('eye', 'format_culcollapsed'), // Eye icon set.
-        'folder' => new lang_string('folder', 'format_culcollapsed'), // Folder icon set.
-        'groundsignal' => new lang_string('groundsignal', 'format_culcollapsed'), // Ground signal set.
-        'led' => new lang_string('led', 'format_culcollapsed'), // LED icon set.
-        'point' => new lang_string('point', 'format_culcollapsed'), // Point icon set.
-        'power' => new lang_string('power', 'format_culcollapsed'), // Power icon set.
-        'radio' => new lang_string('radio', 'format_culcollapsed'), // Radio icon set.
-        'smiley' => new lang_string('smiley', 'format_culcollapsed'), // Smiley icon set.
-        'square' => new lang_string('square', 'format_culcollapsed'), // Square icon set.
-        'sunmoon' => new lang_string('sunmoon', 'format_culcollapsed'), // Sun / Moon icon set.
-        'switch' => new lang_string('switch', 'format_culcollapsed') // Switch icon set.
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/defaulttoggleiconset';
+    // $title = get_string('defaulttoggleiconset', 'format_culcollapsed');
+    // $description = get_string('defaulttoggleiconset_desc', 'format_culcollapsed');
+    // $default = 'arrow';
+    // $choices = array(
+    //     'arrow' => new lang_string('arrow', 'format_culcollapsed'), // Arrow icon set.
+    //     'bulb' => new lang_string('bulb', 'format_culcollapsed'), // Bulb icon set.
+    //     'cloud' => new lang_string('cloud', 'format_culcollapsed'), // Cloud icon set.
+    //     'eye' => new lang_string('eye', 'format_culcollapsed'), // Eye icon set.
+    //     'folder' => new lang_string('folder', 'format_culcollapsed'), // Folder icon set.
+    //     'groundsignal' => new lang_string('groundsignal', 'format_culcollapsed'), // Ground signal set.
+    //     'led' => new lang_string('led', 'format_culcollapsed'), // LED icon set.
+    //     'point' => new lang_string('point', 'format_culcollapsed'), // Point icon set.
+    //     'power' => new lang_string('power', 'format_culcollapsed'), // Power icon set.
+    //     'radio' => new lang_string('radio', 'format_culcollapsed'), // Radio icon set.
+    //     'smiley' => new lang_string('smiley', 'format_culcollapsed'), // Smiley icon set.
+    //     'square' => new lang_string('square', 'format_culcollapsed'), // Square icon set.
+    //     'sunmoon' => new lang_string('sunmoon', 'format_culcollapsed'), // Sun / Moon icon set.
+    //     'switch' => new lang_string('switch', 'format_culcollapsed') // Switch icon set.
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     /* One section - 1 = no, 2 = yes. */
-    $name = 'format_culcollapsed/defaultonesection';
-    $title = get_string('defaultonesection', 'format_culcollapsed');
-    $description = get_string('defaultonesection_desc', 'format_culcollapsed');
-    $default = 1;
-    $choices = array(
-        1 => new lang_string('no'), // No.
-        2 => new lang_string('yes')   // Yes.
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/defaultonesection';
+    // $title = get_string('defaultonesection', 'format_culcollapsed');
+    // $description = get_string('defaultonesection_desc', 'format_culcollapsed');
+    // $default = 1;
+    // $choices = array(
+    //     1 => new lang_string('no'), // No.
+    //     2 => new lang_string('yes')   // Yes.
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     // Toggle all icon hovers.
     // 1 => No.
     // 2 => Yes.
-    $name = 'format_culcollapsed/defaulttoggleallhover';
-    $title = get_string('defaulttoggleallhover', 'format_culcollapsed');
-    $description = get_string('defaulttoggleallhover_desc', 'format_culcollapsed');
-    $default = 2;
-    $choices = array(
-        1 => new lang_string('no'),
-        2 => new lang_string('yes')
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/defaulttoggleallhover';
+    // $title = get_string('defaulttoggleallhover', 'format_culcollapsed');
+    // $description = get_string('defaulttoggleallhover_desc', 'format_culcollapsed');
+    // $default = 2;
+    // $choices = array(
+    //     1 => new lang_string('no'),
+    //     2 => new lang_string('yes')
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     // Default toggle foreground colour in hexadecimal RGB with preceding '#'.
-    $name = 'format_culcollapsed/defaulttgfgcolour';
-    $title = get_string('defaulttgfgcolour', 'format_culcollapsed');
-    $description = get_string('defaulttgfgcolour_desc', 'format_culcollapsed');
-    $default = '#8f182e';
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
-    $settings->add($setting);
+    // $name = 'format_culcollapsed/defaulttgfgcolour';
+    // $title = get_string('defaulttgfgcolour', 'format_culcollapsed');
+    // $description = get_string('defaulttgfgcolour_desc', 'format_culcollapsed');
+    // $default = '#8f182e';
+    // $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    // $settings->add($setting);
 
-    $opacityvalues = array(
-        '0.0' => '0.0',
-        '0.1' => '0.1',
-        '0.2' => '0.2',
-        '0.3' => '0.3',
-        '0.4' => '0.4',
-        '0.5' => '0.5',
-        '0.6' => '0.6',
-        '0.7' => '0.7',
-        '0.8' => '0.8',
-        '0.9' => '0.9',
-        '1.0' => '1.0'
-    );
+    // $opacityvalues = array(
+    //     '0.0' => '0.0',
+    //     '0.1' => '0.1',
+    //     '0.2' => '0.2',
+    //     '0.3' => '0.3',
+    //     '0.4' => '0.4',
+    //     '0.5' => '0.5',
+    //     '0.6' => '0.6',
+    //     '0.7' => '0.7',
+    //     '0.8' => '0.8',
+    //     '0.9' => '0.9',
+    //     '1.0' => '1.0'
+    // );
 
-    // Default toggle foreground opacity between 0 and 1 in 0.1 increments.
-    $name = 'format_culcollapsed/defaulttgfgopacity';
-    $title = get_string('defaulttgfgopacity', 'format_culcollapsed');
-    $description = get_string('defaulttgfgopacity_desc', 'format_culcollapsed');
-    $default = '1.0';
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $opacityvalues));
+    // // Default toggle foreground opacity between 0 and 1 in 0.1 increments.
+    // $name = 'format_culcollapsed/defaulttgfgopacity';
+    // $title = get_string('defaulttgfgopacity', 'format_culcollapsed');
+    // $description = get_string('defaulttgfgopacity_desc', 'format_culcollapsed');
+    // $default = '1.0';
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $opacityvalues));
 
-    // Default toggle foreground hover colour in hexadecimal RGB with preceding '#'.
-    $name = 'format_culcollapsed/defaulttgfghvrcolour';
-    $title = get_string('defaulttgfghvrcolour', 'format_culcollapsed');
-    $description = get_string('defaulttgfghvrcolour_desc', 'format_culcollapsed');
-    $default = '#670003';
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
-    $settings->add($setting);
+    // // Default toggle foreground hover colour in hexadecimal RGB with preceding '#'.
+    // $name = 'format_culcollapsed/defaulttgfghvrcolour';
+    // $title = get_string('defaulttgfghvrcolour', 'format_culcollapsed');
+    // $description = get_string('defaulttgfghvrcolour_desc', 'format_culcollapsed');
+    // $default = '#670003';
+    // $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    // $settings->add($setting);
 
-    // Default toggle foreground hover opacity between 0 and 1 in 0.1 increments.
-    $name = 'format_culcollapsed/defaulttgfghvropacity';
-    $title = get_string('defaulttgfghvropacity', 'format_culcollapsed');
-    $description = get_string('defaulttgfghvropacity_desc', 'format_culcollapsed');
-    $default = '1.0';
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $opacityvalues));
+    // // Default toggle foreground hover opacity between 0 and 1 in 0.1 increments.
+    // $name = 'format_culcollapsed/defaulttgfghvropacity';
+    // $title = get_string('defaulttgfghvropacity', 'format_culcollapsed');
+    // $description = get_string('defaulttgfghvropacity_desc', 'format_culcollapsed');
+    // $default = '1.0';
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $opacityvalues));
 
-    // Default toggle background colour in hexadecimal RGB with preceding '#'.
-    $name = 'format_culcollapsed/defaulttgbgcolour';
-    $title = get_string('defaulttgbgcolour', 'format_culcollapsed');
-    $description = get_string('defaulttgbgcolour_desc', 'format_culcollapsed');
-    $default = '#e2e2f2';
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
-    $settings->add($setting);
+    // // Default toggle background colour in hexadecimal RGB with preceding '#'.
+    // $name = 'format_culcollapsed/defaulttgbgcolour';
+    // $title = get_string('defaulttgbgcolour', 'format_culcollapsed');
+    // $description = get_string('defaulttgbgcolour_desc', 'format_culcollapsed');
+    // $default = '#e2e2f2';
+    // $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    // $settings->add($setting);
 
-    // Default toggle background opacity between 0 and 1 in 0.1 increments.
-    $name = 'format_culcollapsed/defaulttgbgopacity';
-    $title = get_string('defaulttgbgopacity', 'format_culcollapsed');
-    $description = get_string('defaulttgbgopacity_desc', 'format_culcollapsed');
-    $default = '1.0';
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $opacityvalues));
+    // // Default toggle background opacity between 0 and 1 in 0.1 increments.
+    // $name = 'format_culcollapsed/defaulttgbgopacity';
+    // $title = get_string('defaulttgbgopacity', 'format_culcollapsed');
+    // $description = get_string('defaulttgbgopacity_desc', 'format_culcollapsed');
+    // $default = '1.0';
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $opacityvalues));
 
-    // Default toggle background hover colour in hexadecimal RGB with preceding '#'.
-    $name = 'format_culcollapsed/defaulttgbghvrcolour';
-    $title = get_string('defaulttgbghvrcolour', 'format_culcollapsed');
-    $description = get_string('defaulttgbghvrcolour_desc', 'format_culcollapsed');
-    $default = '#eeeeff';
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
-    $settings->add($setting);
+    // // Default toggle background hover colour in hexadecimal RGB with preceding '#'.
+    // $name = 'format_culcollapsed/defaulttgbghvrcolour';
+    // $title = get_string('defaulttgbghvrcolour', 'format_culcollapsed');
+    // $description = get_string('defaulttgbghvrcolour_desc', 'format_culcollapsed');
+    // $default = '#eeeeff';
+    // $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    // $settings->add($setting);
 
-    // Default toggle background hover opacity between 0 and 1 in 0.1 increments.
-    $name = 'format_culcollapsed/defaulttgbghvropacity';
-    $title = get_string('defaulttgbghvropacity', 'format_culcollapsed');
-    $description = get_string('defaulttgbghvropacity_desc', 'format_culcollapsed');
-    $default = '1.0';
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $opacityvalues));
+    // // Default toggle background hover opacity between 0 and 1 in 0.1 increments.
+    // $name = 'format_culcollapsed/defaulttgbghvropacity';
+    // $title = get_string('defaulttgbghvropacity', 'format_culcollapsed');
+    // $description = get_string('defaulttgbghvropacity_desc', 'format_culcollapsed');
+    // $default = '1.0';
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $opacityvalues));
     // Show the section summary when collapsed.
     // 1 => No.
     // 2 => Yes.
@@ -326,97 +326,97 @@ if ($ADMIN->fulltree) {
     );
     $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
-    // Toggle icon size.
-    $name = 'format_culcollapsed/defaulttoggleiconsize';
-    $title = get_string('defaulttoggleiconsize', 'format_culcollapsed');
-    $description = get_string('defaulttoggleiconsize_desc', 'format_culcollapsed');
-    $default = 'tc-medium';
-    $choices = array(
-        'tc-small' => new lang_string('small', 'format_culcollapsed'),
-        'tc-medium' => new lang_string('medium', 'format_culcollapsed'),
-        'tc-large' => new lang_string('large', 'format_culcollapsed')
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // // Toggle icon size.
+    // $name = 'format_culcollapsed/defaulttoggleiconsize';
+    // $title = get_string('defaulttoggleiconsize', 'format_culcollapsed');
+    // $description = get_string('defaulttoggleiconsize_desc', 'format_culcollapsed');
+    // $default = 'tc-medium';
+    // $choices = array(
+    //     'tc-small' => new lang_string('small', 'format_culcollapsed'),
+    //     'tc-medium' => new lang_string('medium', 'format_culcollapsed'),
+    //     'tc-large' => new lang_string('large', 'format_culcollapsed')
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
-    // Toggle border radius top left.
-    $name = 'format_culcollapsed/defaulttoggleborderradiustl';
-    $title = get_string('defaulttoggleborderradiustl', 'format_culcollapsed');
-    $description = get_string('defaulttoggleborderradiustl_desc', 'format_culcollapsed');
-    $default = '0.0';
-    $choices = array(
-        '0.0' => new lang_string('em0_0', 'format_culcollapsed'),
-        '0.3' => new lang_string('em0_1', 'format_culcollapsed'),
-        '0.2' => new lang_string('em0_2', 'format_culcollapsed'),
-        '0.3' => new lang_string('em0_3', 'format_culcollapsed'),
-        '0.4' => new lang_string('em0_4', 'format_culcollapsed'),
-        '0.5' => new lang_string('em0_5', 'format_culcollapsed'),
-        '0.6' => new lang_string('em0_6', 'format_culcollapsed'),
-        '0.7' => new lang_string('em0_7', 'format_culcollapsed'),
-        '0.8' => new lang_string('em0_8', 'format_culcollapsed'),
-        '0.9' => new lang_string('em0_9', 'format_culcollapsed'),
-        '1.0' => new lang_string('em1_0', 'format_culcollapsed'),
-        '1.1' => new lang_string('em1_1', 'format_culcollapsed'),
-        '1.2' => new lang_string('em1_2', 'format_culcollapsed'),
-        '1.3' => new lang_string('em1_3', 'format_culcollapsed'),
-        '1.4' => new lang_string('em1_4', 'format_culcollapsed'),
-        '1.5' => new lang_string('em1_5', 'format_culcollapsed'),
-        '1.6' => new lang_string('em1_6', 'format_culcollapsed'),
-        '1.7' => new lang_string('em1_7', 'format_culcollapsed'),
-        '1.8' => new lang_string('em1_8', 'format_culcollapsed'),
-        '1.9' => new lang_string('em1_9', 'format_culcollapsed'),
-        '2.0' => new lang_string('em2_0', 'format_culcollapsed'),
-        '2.1' => new lang_string('em2_1', 'format_culcollapsed'),
-        '2.2' => new lang_string('em2_2', 'format_culcollapsed'),
-        '2.3' => new lang_string('em2_3', 'format_culcollapsed'),
-        '2.4' => new lang_string('em2_4', 'format_culcollapsed'),
-        '2.5' => new lang_string('em2_5', 'format_culcollapsed'),
-        '2.6' => new lang_string('em2_6', 'format_culcollapsed'),
-        '2.7' => new lang_string('em2_7', 'format_culcollapsed'),
-        '2.8' => new lang_string('em2_8', 'format_culcollapsed'),
-        '2.9' => new lang_string('em2_9', 'format_culcollapsed'),
-        '3.0' => new lang_string('em3_0', 'format_culcollapsed'),
-        '3.1' => new lang_string('em3_1', 'format_culcollapsed'),
-        '3.2' => new lang_string('em3_2', 'format_culcollapsed'),
-        '3.3' => new lang_string('em3_3', 'format_culcollapsed'),
-        '3.4' => new lang_string('em3_4', 'format_culcollapsed'),
-        '3.5' => new lang_string('em3_5', 'format_culcollapsed'),
-        '3.6' => new lang_string('em3_6', 'format_culcollapsed'),
-        '3.7' => new lang_string('em3_7', 'format_culcollapsed'),
-        '3.8' => new lang_string('em3_8', 'format_culcollapsed'),
-        '3.9' => new lang_string('em3_9', 'format_culcollapsed'),
-        '4.0' => new lang_string('em4_0', 'format_culcollapsed')
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // // Toggle border radius top left.
+    // $name = 'format_culcollapsed/defaulttoggleborderradiustl';
+    // $title = get_string('defaulttoggleborderradiustl', 'format_culcollapsed');
+    // $description = get_string('defaulttoggleborderradiustl_desc', 'format_culcollapsed');
+    // $default = '0.0';
+    // $choices = array(
+    //     '0.0' => new lang_string('em0_0', 'format_culcollapsed'),
+    //     '0.3' => new lang_string('em0_1', 'format_culcollapsed'),
+    //     '0.2' => new lang_string('em0_2', 'format_culcollapsed'),
+    //     '0.3' => new lang_string('em0_3', 'format_culcollapsed'),
+    //     '0.4' => new lang_string('em0_4', 'format_culcollapsed'),
+    //     '0.5' => new lang_string('em0_5', 'format_culcollapsed'),
+    //     '0.6' => new lang_string('em0_6', 'format_culcollapsed'),
+    //     '0.7' => new lang_string('em0_7', 'format_culcollapsed'),
+    //     '0.8' => new lang_string('em0_8', 'format_culcollapsed'),
+    //     '0.9' => new lang_string('em0_9', 'format_culcollapsed'),
+    //     '1.0' => new lang_string('em1_0', 'format_culcollapsed'),
+    //     '1.1' => new lang_string('em1_1', 'format_culcollapsed'),
+    //     '1.2' => new lang_string('em1_2', 'format_culcollapsed'),
+    //     '1.3' => new lang_string('em1_3', 'format_culcollapsed'),
+    //     '1.4' => new lang_string('em1_4', 'format_culcollapsed'),
+    //     '1.5' => new lang_string('em1_5', 'format_culcollapsed'),
+    //     '1.6' => new lang_string('em1_6', 'format_culcollapsed'),
+    //     '1.7' => new lang_string('em1_7', 'format_culcollapsed'),
+    //     '1.8' => new lang_string('em1_8', 'format_culcollapsed'),
+    //     '1.9' => new lang_string('em1_9', 'format_culcollapsed'),
+    //     '2.0' => new lang_string('em2_0', 'format_culcollapsed'),
+    //     '2.1' => new lang_string('em2_1', 'format_culcollapsed'),
+    //     '2.2' => new lang_string('em2_2', 'format_culcollapsed'),
+    //     '2.3' => new lang_string('em2_3', 'format_culcollapsed'),
+    //     '2.4' => new lang_string('em2_4', 'format_culcollapsed'),
+    //     '2.5' => new lang_string('em2_5', 'format_culcollapsed'),
+    //     '2.6' => new lang_string('em2_6', 'format_culcollapsed'),
+    //     '2.7' => new lang_string('em2_7', 'format_culcollapsed'),
+    //     '2.8' => new lang_string('em2_8', 'format_culcollapsed'),
+    //     '2.9' => new lang_string('em2_9', 'format_culcollapsed'),
+    //     '3.0' => new lang_string('em3_0', 'format_culcollapsed'),
+    //     '3.1' => new lang_string('em3_1', 'format_culcollapsed'),
+    //     '3.2' => new lang_string('em3_2', 'format_culcollapsed'),
+    //     '3.3' => new lang_string('em3_3', 'format_culcollapsed'),
+    //     '3.4' => new lang_string('em3_4', 'format_culcollapsed'),
+    //     '3.5' => new lang_string('em3_5', 'format_culcollapsed'),
+    //     '3.6' => new lang_string('em3_6', 'format_culcollapsed'),
+    //     '3.7' => new lang_string('em3_7', 'format_culcollapsed'),
+    //     '3.8' => new lang_string('em3_8', 'format_culcollapsed'),
+    //     '3.9' => new lang_string('em3_9', 'format_culcollapsed'),
+    //     '4.0' => new lang_string('em4_0', 'format_culcollapsed')
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
-    // Toggle border radius top right.
-    $name = 'format_culcollapsed/defaulttoggleborderradiustr';
-    $title = get_string('defaulttoggleborderradiustr', 'format_culcollapsed');
-    $description = get_string('defaulttoggleborderradiustr_desc', 'format_culcollapsed');
-    $default = '0.0';
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // // Toggle border radius top right.
+    // $name = 'format_culcollapsed/defaulttoggleborderradiustr';
+    // $title = get_string('defaulttoggleborderradiustr', 'format_culcollapsed');
+    // $description = get_string('defaulttoggleborderradiustr_desc', 'format_culcollapsed');
+    // $default = '0.0';
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
-    // Toggle border radius bottom right.
-    $name = 'format_culcollapsed/defaulttoggleborderradiusbr';
-    $title = get_string('defaulttoggleborderradiusbr', 'format_culcollapsed');
-    $description = get_string('defaulttoggleborderradiusbr_desc', 'format_culcollapsed');
-    $default = '0.0';
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // // Toggle border radius bottom right.
+    // $name = 'format_culcollapsed/defaulttoggleborderradiusbr';
+    // $title = get_string('defaulttoggleborderradiusbr', 'format_culcollapsed');
+    // $description = get_string('defaulttoggleborderradiusbr_desc', 'format_culcollapsed');
+    // $default = '0.0';
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
-    // Toggle border radius bottom left.
-    $name = 'format_culcollapsed/defaulttoggleborderradiusbl';
-    $title = get_string('defaulttoggleborderradiusbl', 'format_culcollapsed');
-    $description = get_string('defaulttoggleborderradiusbl_desc', 'format_culcollapsed');
-    $default = '0.0';
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // // Toggle border radius bottom left.
+    // $name = 'format_culcollapsed/defaulttoggleborderradiusbl';
+    // $title = get_string('defaulttoggleborderradiusbl', 'format_culcollapsed');
+    // $description = get_string('defaulttoggleborderradiusbl_desc', 'format_culcollapsed');
+    // $default = '0.0';
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
     /* Format responsive.  Turn on to support a non responsive theme theme. */
-    $name = 'format_culcollapsed/formatresponsive';
-    $title = get_string('formatresponsive', 'format_culcollapsed');
-    $description = get_string('formatresponsive_desc', 'format_culcollapsed');
-    $default = 0;
-    $choices = array(
-        0 => new lang_string('off', 'format_culcollapsed'), // Off.
-        1 => new lang_string('on', 'format_culcollapsed')   // On.
-    );
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // $name = 'format_culcollapsed/formatresponsive';
+    // $title = get_string('formatresponsive', 'format_culcollapsed');
+    // $description = get_string('formatresponsive_desc', 'format_culcollapsed');
+    // $default = 0;
+    // $choices = array(
+    //     0 => new lang_string('off', 'format_culcollapsed'), // Off.
+    //     1 => new lang_string('on', 'format_culcollapsed')   // On.
+    // );
+    // $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 }

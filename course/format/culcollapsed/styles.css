@@ -1014,4 +1014,29 @@ body.format-culcollapsed#page-admin-setting-formatsettingculcollapsed select#id_
 body#page-course-edit select#id_toggleiconset option[value="arrow"] {
   background-image: url([[pix:t/collapsed]]); }
 
+.course-content ul.ctopics li.section .content .toggle,
+.course-content ul.ctopics li.section .content.sectionhidden {
+  background-color: #e2e2f2; }
+
+.course-content ul.ctopics li.section .content .toggle span,
+.course-content ul.ctopics li.section .content.sectionhidden {
+  color: #8f182e; }
+
+.course-content ul.ctopics li.section .content .toggle span:hover,
+.course-content ul.ctopics li.section .content.sectionhidden .toggle span:hover {
+  color: #670003; }
+
+.course-content ul.ctopics li.section .content div.toggle:hover {
+  background-color: #eeeeff; }
+
+.course-content ul.ctopics li.section .content .toggle span,
+#toggle-all .content .sectionname {
+  color: #8f182e; }
+
+.course-content .linkscontainer .links a.dash-icon {
+  background: #8f182e; }
+
+.course-content ul.ctopics li.section.current {
+  background-color: #8f182e; }
+
 /*# sourceMappingURL=styles.css.map */
