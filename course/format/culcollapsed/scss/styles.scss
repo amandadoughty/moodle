@@ -166,7 +166,10 @@ body.format-culcollapsed {
                 }
             }
             .side {
-                padding: 10px 0 0 0;
+                padding: 0;
+                a:first-of-type > .icon {
+                    margin-left: 0;
+                }
             }        
         }
     }
@@ -207,11 +210,7 @@ body.format-culcollapsed.editing .course-content ul.ctopics {
             padding: 10px 0 0 0;
             .fa,
             .section-handle {
-                font-size: 1.2em;
                 padding: 2px 0;
-            }
-            img {
-                display: none;
             }
         }
         &.current {
@@ -219,7 +218,7 @@ body.format-culcollapsed.editing .course-content ul.ctopics {
             .side {
                 .fa,
                 .section-handle {
-                    color: $white;
+                    /*color: $white;*/
                 }
             }
         }

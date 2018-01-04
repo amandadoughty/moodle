@@ -101,13 +101,13 @@ class format_culcollapsed_courseformatrenderer_testcase extends advanced_testcas
         self::set_property($this->outputus, 'tcsettings', $tcsettings);
     }
 
-    // public function test_start_section_list() {
-    //     $theclass = self::call_method($this->outputus, 'start_section_list',
-    //         array());
-    //     $thevalue = '<ul class="ctopics">';
+    public function test_start_section_list() {
+        $theclass = self::call_method($this->outputus, 'start_section_list',
+            array());
+        $thevalue = '<ul class="ctopics">';
 
-    //     $this->assertEquals($thevalue, $theclass);
-    // }
+        $this->assertEquals($thevalue, $theclass);
+    }
 
     public function test_start_toggle_section_list() {
         // With defaults unchanged.
@@ -247,30 +247,30 @@ class format_culcollapsed_courseformatrenderer_testcase extends advanced_testcas
     //     $this->expectOutputString($theoutput);
     // }
 
-    // public function test_toggle_all() {
-    //     global $CFG;
-    //     $theclass = self::call_method($this->outputus, 'toggle_all', array());
-    //     $thevalue = '<li class="tcsection main clearfix" id="toggle-all"><div class="left side"><img ';
-    //     $thevalue .= 'width="1" height="1" class="spacer" alt="" src="'.$CFG->wwwroot.'/theme/image.php/_s/clean/core/1/spacer"/>';
-    //     $thevalue .= '</div><div class="right side"><img width="1" height="1" class="spacer" alt="" ';
-    //     $thevalue .= 'src="'.$CFG->wwwroot.'/theme/image.php/_s/clean/core/1/spacer"/></div><div class="content">';
-    //     $thevalue .= '<div class="sectionbody toggle-arrow-hover toggle-arrow"><h4><span class="on tc-medium" ';
-    //     $thevalue .= 'id="toggles-all-opened" role="button">Open all</span><span class="off tc-medium" ';
-    //     $thevalue .= 'id="toggles-all-closed" role="button">Close all</span></h4></div></div></li>';
-    //     $this->assertEquals($thevalue, $theclass);
-    // }
+    public function test_toggle_all() {
+        global $CFG;
+        $theclass = self::call_method($this->outputus, 'toggle_all', array());
+        $thevalue = '<li class="tcsection main clearfix" id="toggle-all"><div class="left side"><img ';
+        $thevalue .= 'width="1" height="1" class="spacer" alt="" src="'.$CFG->wwwroot.'/theme/image.php/_s/clean/core/1/spacer"/>';
+        $thevalue .= '</div><div class="right side"><img width="1" height="1" class="spacer" alt="" ';
+        $thevalue .= 'src="'.$CFG->wwwroot.'/theme/image.php/_s/clean/core/1/spacer"/></div><div class="content">';
+        $thevalue .= '<div class="sectionbody toggle-arrow-hover toggle-arrow"><h4><span class="on tc-medium" ';
+        $thevalue .= 'id="toggles-all-opened" role="button">Open all</span><span class="off tc-medium" ';
+        $thevalue .= 'id="toggles-all-closed" role="button">Close all</span></h4></div></div></li>';
+        $this->assertEquals($thevalue, $theclass);
+    }
 
-    // public function test_display_instructions() {
-    //     global $CFG;
-    //     $theclass = self::call_method($this->outputus, 'display_instructions', array());
-    //     $thevalue = '<li class="tcsection main clearfix" id="culcollapsed-display-instructions"><div class="left side">';
-    //     $thevalue .= '<img width="1" height="1" class="spacer" alt="" ';
-    //     $thevalue .= 'src="'.$CFG->wwwroot.'/theme/image.php/_s/clean/core/1/spacer"/></div><div class="right side">';
-    //     $thevalue .= '<img width="1" height="1" class="spacer" alt="" ';
-    //     $thevalue .= 'src="'.$CFG->wwwroot.'/theme/image.php/_s/clean/core/1/spacer"/></div><div class="content">';
-    //     $thevalue .= '<div class="sectionbody"><p class="culcollapsed-display-instructions">Instructions: Clicking on the section ';
-    //     $thevalue .= 'name will show / hide the section.</p></div></div></li>';
+    public function test_display_instructions() {
+        global $CFG;
+        $theclass = self::call_method($this->outputus, 'display_instructions', array());
+        $thevalue = '<li class="tcsection main clearfix" id="culcollapsed-display-instructions"><div class="left side">';
+        $thevalue .= '<img width="1" height="1" class="spacer" alt="" ';
+        $thevalue .= 'src="'.$CFG->wwwroot.'/theme/image.php/_s/clean/core/1/spacer"/></div><div class="right side">';
+        $thevalue .= '<img width="1" height="1" class="spacer" alt="" ';
+        $thevalue .= 'src="'.$CFG->wwwroot.'/theme/image.php/_s/clean/core/1/spacer"/></div><div class="content">';
+        $thevalue .= '<div class="sectionbody"><p class="culcollapsed-display-instructions">Instructions: Clicking on the section ';
+        $thevalue .= 'name will show / hide the section.</p></div></div></li>';
 
-    //     $this->assertEquals($thevalue, $theclass);
-    // }
+        $this->assertEquals($thevalue, $theclass);
+    }
 }

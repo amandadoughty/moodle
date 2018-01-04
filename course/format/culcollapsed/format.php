@@ -215,17 +215,17 @@ if (!empty($displaysection)) {
     echo ';';
     echo '}';
 
-    echo '.course-content .linkscontainer .links a.dash-icon {';
-    echo 'background: ';
-    echo \format_culcollapsed\toolbox::hex2rgba($tcsettings['toggleforegroundcolour'], $tcsettings['toggleforegroundopacity']);
-    echo ';';
-    echo '}';
+    // echo '.course-content .linkscontainer .links a.dash-icon {';
+    // echo 'background: ';
+    // echo \format_culcollapsed\toolbox::hex2rgba($tcsettings['toggleforegroundcolour'], $tcsettings['toggleforegroundopacity']);
+    // echo ';';
+    // echo '}';
 
-    echo '.course-content ul.ctopics li.section.current {';
-    echo 'background-color: ';
-    echo \format_culcollapsed\toolbox::hex2rgba($tcsettings['toggleforegroundcolour'], $tcsettings['toggleforegroundopacity']);
-    echo ';';
-    echo '}';
+    // echo '.course-content ul.ctopics li.section.current {';
+    // echo 'background-color: ';
+    // echo \format_culcollapsed\toolbox::hex2rgba($tcsettings['toggleforegroundcolour'], $tcsettings['toggleforegroundopacity']);
+    // echo ';';
+    // echo '}';
     // AD
 
     echo '/* ]]> */';

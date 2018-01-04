@@ -174,7 +174,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $controls = $this->section_edit_control_items($course, $section, $onsectionpage);
 
         if (!empty($controls)) {
-            $o = implode('', $controls);
+            $o .= implode('', $controls);
         }
 
         return $o;
@@ -264,17 +264,17 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
 
         $controls = array();
         $culcontrols = array();
-        $icons = array(
-            'i/settings' => 'fa fa-gear',
-            'i/marked' => 'fa fa-lightbulb-o',
-            'i/marker' => 'fa fa-lightbulb-o',
-            'i/hide' => 'fa fa-eye',
-            'i/show' => 'fa fa-eye-slash',
-            'i/delete' => 'fa fa-remove',
-            'i/up' => 'fa fa-arrow-up',
-            'i/down' => 'fa fa-arrow-down',
-            'i/reinstate' => 'fa fa-recycle'
-            );
+        // $icons = array(
+        //     'i/settings' => 'fa fa-gear',
+        //     'i/marked' => 'fa fa-lightbulb-o',
+        //     'i/marker' => 'fa fa-lightbulb-o',
+        //     'i/hide' => 'fa fa-eye',
+        //     'i/show' => 'fa fa-eye-slash',
+        //     'i/delete' => 'fa fa-remove',
+        //     'i/up' => 'fa fa-arrow-up',
+        //     'i/down' => 'fa fa-arrow-down',
+        //     'i/reinstate' => 'fa fa-recycle'
+        //     );
 
         $coursecontext = context_course::instance($course->id);
 
@@ -303,7 +303,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
                 $controls['highlight'] = array('url' => $url, "icon" => 'i/marked',
                                                'name' => $highlightoff,
                                            'pixattr' => array('class' => '', 'alt' => $markedthissection),
-                                           'attr' => array('class' => 'editing_highlight', 'title' => $markedthissection));
+                                           'attr' => array('class' => 'icon editing_highlight', 'title' => $markedthissection));
             } else {
                 $url->param('marker', $section->section);
                 $markthissection = get_string('markthissection', 'format_culcollapsed');
@@ -311,7 +311,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
                 $controls['highlight'] = array('url' => $url, "icon" => 'i/marker',
                                                'name' => $highlight,
                                            'pixattr' => array('class' => '', 'alt' => $markthissection),
-                                           'attr' => array('class' => 'editing_highlight', 'title' => $markthissection));
+                                           'attr' => array('class' => 'icon editing_highlight', 'title' => $markthissection));
             }
         }
 
@@ -329,7 +329,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             $controls['reinstate'] = array('url' => $url, "icon" => 'i/reinstate',
                                                'name' => $reinstate,
                                                'pixattr' => array('class' => '', 'alt' => $reinstatethissection),
-                                               'attr' => array('class' => 'editing_reinstate', 'title' => $reinstatethissection));
+                                               'attr' => array('class' => 'icon editing_reinstate', 'title' => $reinstatethissection));
         }
 
         $parentcontrols = parent::section_edit_control_items($course, $section, $onsectionpage);
@@ -360,16 +360,19 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             $alt = empty($item['pixattr']['alt']) ? '' : $item['pixattr']['alt'];
 
             $url = new moodle_url($url);
-            $image = html_writer::empty_tag(
-                    'img',
-                    array(
-                        'src' => $this->output->pix_url($icon),
-                        'class' => "icon editing_showhide" . $class,
-                        'alt' => $alt
-                    )
-                );
+            // $image = html_writer::empty_tag(
+            //         'img',
+            //         array(
+            //             'src' => $this->output->pix_url($icon),
+            //             'class' => "icon editing_showhide" . $class,
+            //             'alt' => $alt
+            //         )
+            //     );
 
-            $icon = html_writer::tag('i', $image, array('class' => $icons[$icon]));
+            // $icon = html_writer::tag('i', $image, array('class' => $icons[$icon]));
+
+// var_dump($item);
+            $icon = $this->output->pix_icon($icon, $alt, 'moodle', $item['attr']);
 
             $culcontrols[] = html_writer::link(
                     $url,
@@ -490,15 +493,15 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
             $rightcontent = '';
 
-            if (($section->section != 0) && $this->userisediting && has_capability('moodle/course:update', $context)) {
-                $url = new moodle_url('/course/editsection.php', array('id' => $section->id, 'sr' => $sectionreturn));
+            // if (($section->section != 0) && $this->userisediting && has_capability('moodle/course:update', $context)) {
+            //     $url = new moodle_url('/course/editsection.php', array('id' => $section->id, 'sr' => $sectionreturn));
 
-                $rightcontent .= html_writer::link($url,
-                    html_writer::empty_tag('img',
-                        array('src' => $this->output->pix_url('t/edit'),
-                        'class' => 'icon edit tceditsection', 'alt' => get_string('edit'))),
-                        array('title' => get_string('editsection', 'format_culcollapsed'), 'class' => 'tceditsection'));
-            }
+            //     $rightcontent .= html_writer::link($url,
+            //         html_writer::empty_tag('img',
+            //             array('src' => $this->output->pix_url('t/edit'),
+            //             'class' => 'icon edit tceditsection', 'alt' => get_string('edit'))),
+            //             array('title' => get_string('editsection', 'format_culcollapsed'), 'class' => 'tceditsection'));
+            // }
 
             $rightcontent .= $this->section_right_content($section, $course, $onsectionpage);
 
@@ -564,15 +567,15 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
                 'id' => 'toggledsection-' . $section->section)
             );
 
-            if ($this->userisediting && has_capability('moodle/course:update', $context)) {
-                $url = new moodle_url('/course/editsection.php', array('id' => $section->id, 'sr' => $sectionreturn));
-                $o .= html_writer::link($url,
-                    html_writer::empty_tag('img',
-                        array('src' => $this->output->pix_url('t/edit'),
-                        'class' => 'iconsmall edit', 'alt' => get_string('edit'))),
-                        array('title' => get_string('editsection', 'format_culcollapsed'))
-                );
-            }
+            // if ($this->userisediting && has_capability('moodle/course:update', $context)) {
+            //     $url = new moodle_url('/course/editsection.php', array('id' => $section->id, 'sr' => $sectionreturn));
+            //     $o .= html_writer::link($url,
+            //         html_writer::empty_tag('img',
+            //             array('src' => $this->output->pix_url('t/edit'),
+            //             'class' => 'iconsmall edit', 'alt' => get_string('edit'))),
+            //             array('title' => get_string('editsection', 'format_culcollapsed'))
+            //     );
+            // }
 
             if ($this->tcsettings['showsectionsummary'] == 1) {
                 $o .= $this->section_summary_container($section, $summaryclass);
@@ -590,15 +593,16 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             $o .= html_writer::start_tag('div', array('class' => 'summary'));
             $o .= $this->format_summary_text($section); 
 
-            if ($this->userisediting && has_capability('moodle/course:update', $context)) {
-                $url = new moodle_url('/course/editsection.php', array('id' => $section->id, 'sr' => $sectionreturn));
-                $o .= html_writer::link($url,
-                    html_writer::empty_tag('img',
-                        array('src' => $this->output->pix_url('t/edit'),
-                        'class' => 'iconsmall edit', 'alt' => get_string('edit'))),
-                        array('title' => get_string('editsection', 'format_culcollapsed'))
-                );
-            }
+            // if ($this->userisediting && has_capability('moodle/course:update', $context)) {
+            //     $url = new moodle_url('/course/editsection.php', array('id' => $section->id, 'sr' => $sectionreturn));
+            //     $o .= html_writer::link($url,
+            //         html_writer::empty_tag('img',
+            //             array('src' => $this->output->pix_icon('t/edit', ''),
+            //             'class' => 'iconsmall edit', 'alt' => get_string('edit'))),
+            //             array('title' => get_string('editsection', 'format_culcollapsed'))
+            //     );
+            // }
+
             $o .= html_writer::end_tag('div');
             $o .= $this->section_availability_message($section,
                 has_capability('moodle/course:viewhiddensections', $context));

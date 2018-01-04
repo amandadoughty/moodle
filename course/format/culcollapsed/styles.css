@@ -693,7 +693,7 @@ body.format-culcollapsed .course-content .dash-panel {
           body.format-culcollapsed .course-content .dash-panel .linkscontainer ul.links li span.dash-link a i {
             width: 100%;
             margin: 0 auto;
-            color: #ffffff;
+            /*color: $white;*/
             text-align: center; }
           body.format-culcollapsed .course-content .dash-panel .linkscontainer ul.links li span.dash-link a .fa-stack {
             width: 100%;
@@ -978,7 +978,10 @@ body.format-culcollapsed .course-content ul.ctopics li#toggle-all {
       border: none; }
   body.format-culcollapsed .course-content ul.ctopics li.main .side,
   body.format-culcollapsed .course-content ul.ctopics li#toggle-all .side {
-    padding: 10px 0 0 0; }
+    padding: 0; }
+    body.format-culcollapsed .course-content ul.ctopics li.main .side a:first-of-type > .icon,
+    body.format-culcollapsed .course-content ul.ctopics li#toggle-all .side a:first-of-type > .icon {
+      margin-left: 0; }
 body.format-culcollapsed .insertsection {
   text-align: center; }
   body.format-culcollapsed .insertsection .sectionbutton {
@@ -1000,15 +1003,12 @@ body.format-culcollapsed.editing .course-content ul.ctopics li.main .side {
   padding: 10px 0 0 0; }
   body.format-culcollapsed.editing .course-content ul.ctopics li.main .side .fa,
   body.format-culcollapsed.editing .course-content ul.ctopics li.main .side .section-handle {
-    font-size: 1.2em;
     padding: 2px 0; }
-  body.format-culcollapsed.editing .course-content ul.ctopics li.main .side img {
-    display: none; }
 body.format-culcollapsed.editing .course-content ul.ctopics li.main.current {
   border-radius: 0; }
   body.format-culcollapsed.editing .course-content ul.ctopics li.main.current .side .fa,
   body.format-culcollapsed.editing .course-content ul.ctopics li.main.current .side .section-handle {
-    color: #ffffff; }
+    /*color: $white;*/ }
 
 body.format-culcollapsed#page-admin-setting-formatsettingculcollapsed select#id_s_format_culcollapsed_defaulttoggleiconset option[value="arrow"],
 body#page-course-edit select#id_toggleiconset option[value="arrow"] {
