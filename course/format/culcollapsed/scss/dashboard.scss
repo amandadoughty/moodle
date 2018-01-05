@@ -30,11 +30,11 @@ body.format-culcollapsed {
                         a {
                             display: inline-block;
                             line-height: 2.5rem;
-                            border-bottom: medium none !important;
+                            border-bottom: medium none !important;                            
                             i {
                                 width: 100%;
                                 margin: 0 auto;
-                                /*color: $white;*/
+                                color: $white;
                                 text-align: center;                                                            
                             }
                             .fa-stack {
@@ -80,6 +80,7 @@ body.format-culcollapsed {
                                 width: 2.5rem;
                                 vertical-align: top;
                                 border-right: none; // border-right: 1px solid $midgrey;
+                                background: $black;
                             }
                             &.dash-text {
                                 display: none;

@@ -80,19 +80,10 @@ class restore_format_culcollapsed_plugin extends restore_format_plugin {
         } // From /course/view.php.
         $courseformat = course_get_format($course);
 
-        if (empty($data->layoutcolumns)) {
-            // Cope with backups from Moodle 2.0, 2.1 and 2.2 versions.
-            $data->layoutcolumns = get_config('format_culcollapsed', 'defaultlayoutcolumns');
-        }
-
         $courseformat->restore_culcollapsed_setting(
             $data->courseid,
             $data->layoutelement,
-            $data->layoutstructure,
-            $data->layoutcolumns,
-            $data->tgfgcolour,
-            $data->tgbgcolour,
-            $data->tgbghvrcolour);
+            $data->layoutstructure);
 
         // No need to annotate anything here.
     }

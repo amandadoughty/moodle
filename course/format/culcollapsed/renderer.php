@@ -42,10 +42,10 @@ use format_culcollapsed\output\dashboard;
 
 class format_culcollapsed_renderer extends format_section_renderer_base {
 
-    private $tccolumnwidth = 100; // Default width in percent of the column(s).
-    private $tccolumnpadding = 0; // Default padding in pixels of the column(s).
-    private $mobiletheme = false; // As not using a mobile theme we can react to the number of columns setting.
-    private $tablettheme = false; // As not using a tablet theme we can react to the number of columns setting.
+    // private $tccolumnwidth = 100; // Default width in percent of the column(s).
+    // private $tccolumnpadding = 0; // Default padding in pixels of the column(s).
+    // private $mobiletheme = false; // As not using a mobile theme we can react to the number of columns setting.
+    // private $tablettheme = false; // As not using a tablet theme we can react to the number of columns setting.
     private $courseformat = null; // Our course format object as defined in lib.php;
     private $tcsettings; // Settings for the format - array.
     private $defaulttogglepersistence; // Default toggle persistence.
@@ -54,8 +54,8 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
     private $currentsection = false; // If not false then will be the current section number.
     private $isoldtogglepreference = false;
     private $userisediting = false;
-    private $tctoggleiconsize;
-    private $formatresponsive;
+    // private $tctoggleiconsize;
+    // private $formatresponsive;
     private $rtl = false;
     private $bsnewgrid = false;
 
@@ -76,8 +76,8 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $page->set_other_editing_capability('moodle/course:setcurrentsection');
 
         $this->userisediting = $page->user_is_editing();
-        $this->tctoggleiconsize = clean_param(get_config('format_culcollapsed', 'defaulttoggleiconsize'), PARAM_TEXT);
-        $this->formatresponsive = get_config('format_culcollapsed', 'formatresponsive');
+        // $this->tctoggleiconsize = clean_param(get_config('format_culcollapsed', 'defaulttoggleiconsize'), PARAM_TEXT);
+        // $this->formatresponsive = get_config('format_culcollapsed', 'formatresponsive');
 
         $this->rtl = right_to_left();
 
@@ -117,28 +117,28 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             $classes .= ' bsnewgrid';
         }
         $attributes = array();
-        if (($this->mobiletheme === true) || ($this->tablettheme === true)) {
-            $classes .= ' ctportable';
-        }
-        if ($this->formatresponsive) {
-            $style = '';
-            if ($this->tcsettings['layoutcolumnorientation'] == 1) { // Vertical columns.
-                $style .= 'width:' . $this->tccolumnwidth . '%;';
-            } else {
-                $style .= 'width: 100%;';  // Horizontal columns.
-            }
-            if ($this->mobiletheme === false) {
-                $classes .= ' ctlayout';
-            }
-            $style .= ' padding-left: ' . $this->tccolumnpadding . 'px; padding-right: ' . $this->tccolumnpadding . 'px;';
-            $attributes['style'] = $style;
-        } else {
-            if ($this->tcsettings['layoutcolumnorientation'] == 1) { // Vertical columns.
-                $classes .= ' ' . $this->get_column_class($this->tcsettings['layoutcolumns']);
-            } else {
+        // if (($this->mobiletheme === true) || ($this->tablettheme === true)) {
+        //     $classes .= ' ctportable';
+        // }
+        // if ($this->formatresponsive) {
+        //     $style = '';
+        //     if ($this->tcsettings['layoutcolumnorientation'] == 1) { // Vertical columns.
+        //         $style .= 'width:' . $this->tccolumnwidth . '%;';
+        //     } else {
+        //         $style .= 'width: 100%;';  // Horizontal columns.
+        //     }
+        //     if ($this->mobiletheme === false) {
+        //         $classes .= ' ctlayout';
+        //     }
+        //     $style .= ' padding-left: ' . $this->tccolumnpadding . 'px; padding-right: ' . $this->tccolumnpadding . 'px;';
+        //     $attributes['style'] = $style;
+        // } else {
+            // if ($this->tcsettings['layoutcolumnorientation'] == 1) { // Vertical columns.
+            //     $classes .= ' ' . $this->get_column_class($this->tcsettings['layoutcolumns']);
+            // } else {
                 $classes .= ' ' . $this->get_row_class();
-            }
-        }
+        //     }
+        // }
         $attributes['class'] = $classes;
 
         return html_writer::start_tag('ul', $attributes);
@@ -471,9 +471,13 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             }
         }
 
-        if ((!$this->formatresponsive) && ($section->section != 0) &&
-            ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
-            $sectionstyle .= ' ' . $this->get_column_class($this->tcsettings['layoutcolumns']);
+        // if ((!$this->formatresponsive) && ($section->section != 0) &&
+        //     ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
+        //     $sectionstyle .= ' ' . $this->get_column_class($this->tcsettings['layoutcolumns']);
+        // }
+
+        if ($section->section != 0) { // Horizontal column layout.
+            $sectionstyle .= ' ' . $this->get_column_class(1);
         }
 
         $liattributes = array(
@@ -483,13 +487,15 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             'aria-label' => $this->courseformat->get_culcollapsed_section_name($course, $section, false)
         );
 
-        if (($this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
-            $liattributes['style'] = 'width: ' . $this->tccolumnwidth . '%;';
-        }
+        // if (($this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
+            // $liattributes['style'] = 'width: ' . $this->tccolumnwidth . '%;';
+        // }
 
         $o .= html_writer::start_tag('li', $liattributes);
 
-        if ((($this->mobiletheme === false) && ($this->tablettheme === false)) || ($this->userisediting)) {
+        // if ((($this->mobiletheme === false) && ($this->tablettheme === false)) || ($this->userisediting)) {
+
+        if ($this->userisediting) {
             $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
             $rightcontent = '';
 
@@ -516,9 +522,9 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         }
         $o .= html_writer::start_tag('div', array('class' => 'content'));
 
-        if (($onsectionpage == false) && ($section->section != 0)) {
+        if ($section->section != 0) {
             $o .= html_writer::start_tag('div',
-                array('class' => 'sectionhead toggle toggle-'.$this->tcsettings['toggleiconset'],
+                array('class' => 'sectionhead toggle toggle-arrow',
                 'id' => 'toggle-'.$section->section)
             );
 
@@ -534,7 +540,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
                 $summaryclass = ' summary_closed';
             }
 
-            $toggleclass .= ' the_toggle ' . $this->tctoggleiconsize;
+            $toggleclass .= ' the_toggle tc-medium';
             $o .= html_writer::start_tag('span',
                 array('class' => $toggleclass, 'role' => 'button', 'aria-pressed' => $ariapressed)
             );
@@ -548,7 +554,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             } else {
                 $title = $this->courseformat->get_culcollapsed_section_name($course, $section, true);
             }
-            if ((($this->mobiletheme === false) && ($this->tablettheme === false)) || ($this->userisediting)) {
+            if ($this->userisediting) {
                 $o .= $this->output->heading($title, 3, 'sectionname');
             } else {
                 $o .= html_writer::tag('h3', $title); // Moodle H3's look bad on mobile / tablet with CT so use plain.
@@ -583,30 +589,31 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
 
             $o .= $this->section_availability_message($section,
                 has_capability('moodle/course:viewhiddensections', $context));
-        } else {
-            // When on a section page, we only display the general section title, if title is not the default one.
-            $hasnamesecpg = ($section->section == 0 && (string) $section->name !== '');
+        } 
+            // else {
+        //     // When on a section page, we only display the general section title, if title is not the default one.
+        //     $hasnamesecpg = ($section->section == 0 && (string) $section->name !== '');
 
-            if ($hasnamesecpg) {
-                $o .= $this->output->heading($this->section_title($section, $course), 3, 'section-title');
-            }
-            $o .= html_writer::start_tag('div', array('class' => 'summary'));
-            $o .= $this->format_summary_text($section); 
+        //     if ($hasnamesecpg) {
+        //         $o .= $this->output->heading($this->section_title($section, $course), 3, 'section-title');
+        //     }
+        //     $o .= html_writer::start_tag('div', array('class' => 'summary'));
+        //     $o .= $this->format_summary_text($section); 
 
-            // if ($this->userisediting && has_capability('moodle/course:update', $context)) {
-            //     $url = new moodle_url('/course/editsection.php', array('id' => $section->id, 'sr' => $sectionreturn));
-            //     $o .= html_writer::link($url,
-            //         html_writer::empty_tag('img',
-            //             array('src' => $this->output->pix_icon('t/edit', ''),
-            //             'class' => 'iconsmall edit', 'alt' => get_string('edit'))),
-            //             array('title' => get_string('editsection', 'format_culcollapsed'))
-            //     );
-            // }
+        //     // if ($this->userisediting && has_capability('moodle/course:update', $context)) {
+        //     //     $url = new moodle_url('/course/editsection.php', array('id' => $section->id, 'sr' => $sectionreturn));
+        //     //     $o .= html_writer::link($url,
+        //     //         html_writer::empty_tag('img',
+        //     //             array('src' => $this->output->pix_icon('t/edit', ''),
+        //     //             'class' => 'iconsmall edit', 'alt' => get_string('edit'))),
+        //     //             array('title' => get_string('editsection', 'format_culcollapsed'))
+        //     //     );
+        //     // }
 
-            $o .= html_writer::end_tag('div');
-            $o .= $this->section_availability_message($section,
-                has_capability('moodle/course:viewhiddensections', $context));
-        }
+        //     $o .= html_writer::end_tag('div');
+        //     $o .= $this->section_availability_message($section,
+        //         has_capability('moodle/course:viewhiddensections', $context));
+        // }
 
         return $o;
     }
@@ -653,9 +660,9 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $o = '';
         $sectionstyle = '';
         $course = $this->courseformat->get_course();
-        // Horizontal column layout.
-        if ((!$this->formatresponsive) && ($sectionno != 0) && ($this->tcsettings['layoutcolumnorientation'] == 2)) {
-            $sectionstyle .= ' ' . $this->get_column_class($this->tcsettings['layoutcolumns']);
+
+        if ($sectionno != 0) {
+            $sectionstyle .= ' ' . $this->get_column_class(1);
         }
 
         $liattributes = array(
@@ -665,9 +672,9 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             'aria-label' => $this->courseformat->get_culcollapsed_section_name($course, $sectionno, false)
         );
 
-        if (($this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
-            $liattributes['style'] = 'width: ' . $this->tccolumnwidth . '%;';
-        }
+
+        // $liattributes['style'] = 'width: 100%;';
+
         $o .= html_writer::start_tag('li', $liattributes);
         $o .= html_writer::tag('div', '', array('class' => 'left side'));
         $section = $this->courseformat->get_section($sectionno);
@@ -692,9 +699,9 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $course = $this->courseformat->get_course();
         $sectionstyle = 'section main clearfix hidden';
 
-        if ((!$this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
-            $sectionstyle .= ' ' . $this->get_column_class($this->tcsettings['layoutcolumns']);
-        }
+
+        $sectionstyle .= ' ' . $this->get_column_class(1);
+
 
         $liattributes = array(
             'id' => 'section-' . $section->section,
@@ -703,13 +710,13 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             'aria-label' => $this->courseformat->get_culcollapsed_section_name($course, $section, false)
         );
 
-        if (($this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
-            $liattributes['style'] = 'width: ' . $this->tccolumnwidth . '%;';
-        }
+        // if (($this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
+        //     $liattributes['style'] = 'width: ' . $this->tccolumnwidth . '%;';
+        // }
 
         $o .= html_writer::start_tag('li', $liattributes);
 
-        if ((($this->mobiletheme === false) && ($this->tablettheme === false)) || ($this->userisediting)) {
+        if ($this->userisediting) {
             $leftcontent = $this->section_left_content($section, $course, false);
             $rightcontent = $this->section_right_content($section, $course, false);
 
@@ -728,7 +735,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
 
         $title = get_string('notavailable');
 
-        if ((($this->mobiletheme === false) && ($this->tablettheme === false)) || ($this->userisediting)) {
+        if ($this->userisediting) {
             $o .= $this->output->heading($title, 3, 'section-title');
         } else {
             $o .= html_writer::tag('h3', $title); // Moodle H3's look bad on mobile / tablet with CT so use plain.
@@ -766,9 +773,9 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         echo $this->course_activity_clipboard($course, 0);
 
         // Now the list of sections..
-        if ($this->formatresponsive) {
-            $this->tccolumnwidth = 100; // Reset to default.
-        }
+        // if ($this->formatresponsive) {
+        //     $this->tccolumnwidth = 100; // Reset to default.
+        // }
         echo $this->start_section_list();
 
         $sections = $modinfo->get_section_info_all();
@@ -787,7 +794,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
 
         if ($course->numsections > 0) {
             if ($course->numsections > 1) {
-                if (($this->userisediting) || ($this->tcsettings['onesection'] == 1)) {
+                if ($this->userisediting) {
                     // Collapsed Topics all toggles.
                     echo $this->toggle_all();
                 }
@@ -835,38 +842,38 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
                 $weekdate -= 7200;                 // Subtract two hours to avoid possible DST problems.
             }
 
-            if ($numsections < $this->tcsettings['layoutcolumns']) {
-                $this->tcsettings['layoutcolumns'] = $numsections;  // Help to ensure a reasonable display.
-            }
+            // if ($numsections < $this->tcsettings['layoutcolumns']) {
+            //     $this->tcsettings['layoutcolumns'] = $numsections;  // Help to ensure a reasonable display.
+            // }
 
-            if (($this->tcsettings['layoutcolumns'] > 1) && ($this->mobiletheme === false)) {
-                if ($this->tcsettings['layoutcolumns'] > 4) {
-                    // Default in config.php (and reset in database) or database has been changed incorrectly.
-                    $this->tcsettings['layoutcolumns'] = 4;
+            // if (($this->tcsettings['layoutcolumns'] > 1) && ($this->mobiletheme === false)) {
+            //     if ($this->tcsettings['layoutcolumns'] > 4) {
+            //         // Default in config.php (and reset in database) or database has been changed incorrectly.
+            //         $this->tcsettings['layoutcolumns'] = 4;
 
-                    // Update....
-                    $this->courseformat->update_culcollapsed_columns_setting($this->tcsettings['layoutcolumns']);
-                }
-                if (($this->tablettheme === true) && ($this->tcsettings['layoutcolumns'] > 2)) {
-                    // Use a maximum of 2 for tablets.
-                    $this->tcsettings['layoutcolumns'] = 2;
-                }
-                if ($this->formatresponsive) {
-                    $this->tccolumnwidth = 100 / $this->tcsettings['layoutcolumns'];
-                    if ($this->tcsettings['layoutcolumnorientation'] == 2) { // Horizontal column layout.
-                        $this->tccolumnwidth -= 0.5;
-                        $this->tccolumnpadding = 0; // In 'px'.
-                    } else {
-                        $this->tccolumnwidth -= 0.2;
-                        $this->tccolumnpadding = 0; // In 'px'.
-                    }
-                }
-            } else if ($this->tcsettings['layoutcolumns'] < 1) {
-                // Distributed default in plugin settings (and reset in database) or database has been changed incorrectly.
-                $this->tcsettings['layoutcolumns'] = 1;
-                // Update....
-                $this->courseformat->update_culcollapsed_columns_setting($this->tcsettings['layoutcolumns']);
-            }
+            //         // Update....
+            //         $this->courseformat->update_culcollapsed_columns_setting($this->tcsettings['layoutcolumns']);
+            //     }
+            //     if (($this->tablettheme === true) && ($this->tcsettings['layoutcolumns'] > 2)) {
+            //         // Use a maximum of 2 for tablets.
+            //         $this->tcsettings['layoutcolumns'] = 2;
+            //     }
+            //     if ($this->formatresponsive) {
+            //         $this->tccolumnwidth = 100 / $this->tcsettings['layoutcolumns'];
+            //         if ($this->tcsettings['layoutcolumnorientation'] == 2) { // Horizontal column layout.
+            //             $this->tccolumnwidth -= 0.5;
+            //             $this->tccolumnpadding = 0; // In 'px'.
+            //         } else {
+            //             $this->tccolumnwidth -= 0.2;
+            //             $this->tccolumnpadding = 0; // In 'px'.
+            //         }
+            //     }
+            // } else if ($this->tcsettings['layoutcolumns'] < 1) {
+            //     // Distributed default in plugin settings (and reset in database) or database has been changed incorrectly.
+            //     $this->tcsettings['layoutcolumns'] = 1;
+            //     // Update....
+            //     $this->courseformat->update_culcollapsed_columns_setting($this->tcsettings['layoutcolumns']);
+            // }
 
             echo $this->end_section_list();
         }
@@ -875,9 +882,9 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             echo $this->section_insertsection($course, $thissection->section);
         }
 
-        if ((!$this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 1)) { // Vertical columns.
-            echo html_writer::start_tag('div', array('class' => $this->get_row_class()));
-        }
+        // if ((!$this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 1)) { // Vertical columns.
+        //     echo html_writer::start_tag('div', array('class' => $this->get_row_class()));
+        // }
 
         echo $this->start_toggle_section_list();
 
@@ -971,14 +978,14 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             }
         }
 
-        $canbreak = ($this->tcsettings['layoutcolumns'] > 1);
-        $columncount = 1;
-        $breakpoint = 0;
+        // $canbreak = ($this->tcsettings['layoutcolumns'] > 1);
+        // $columncount = 1;
+        // $breakpoint = 0;
         $shownsectioncount = 0;
 
-        if ((!$this->userisediting) && ($this->tcsettings['onesection'] == 2) && (!empty($this->currentsection))) {
-            $shownonetoggle = $this->currentsection; // One toggle open only, so as we have a current section it will be it.
-        }
+        // if ((!$this->userisediting) && ($this->tcsettings['onesection'] == 2) && (!empty($this->currentsection))) {
+        //     $shownonetoggle = $this->currentsection; // One toggle open only, so as we have a current section it will be it.
+        // }
 
         foreach ($sectiondisplayarray as $thissection) {
             $shownsectioncount++;
@@ -988,21 +995,21 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             } else if (!empty($thissection->issummary)) {
                 echo $this->section_summary($thissection, $course, null);
             } else if (!empty($thissection->isshown)) {
-                if ((!$this->userisediting) && ($this->tcsettings['onesection'] == 2)) {
-                    if ($thissection->toggle) {
-                        if (!empty($shownonetoggle)) {
-                            // Make sure the current section is not closed if set above.
-                            if ($shownonetoggle != $thissection->section) {
-                                // There is already a toggle open so others need to be closed.
-                                $thissection->toggle = false;
-                                $this->togglelib->set_toggle_state($thissection->section, false);
-                            }
-                        } else {
-                            // No open toggle, so as this is the first, it can be the one.
-                            $shownonetoggle = $thissection->section;
-                        }
-                    }
-                }
+                // if ((!$this->userisediting) && ($this->tcsettings['onesection'] == 2)) {
+                //     if ($thissection->toggle) {
+                //         if (!empty($shownonetoggle)) {
+                //             // Make sure the current section is not closed if set above.
+                //             if ($shownonetoggle != $thissection->section) {
+                //                 // There is already a toggle open so others need to be closed.
+                //                 $thissection->toggle = false;
+                //                 $this->togglelib->set_toggle_state($thissection->section, false);
+                //             }
+                //         } else {
+                //             // No open toggle, so as this is the first, it can be the one.
+                //             $shownonetoggle = $thissection->section;
+                //         }
+                //     }
+                // }
 
                 echo $this->section_header($thissection, $course, false, 0);
 
@@ -1020,41 +1027,41 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             }
 
             // Only check for breaking up the structure with rows if more than one column and when we output all of the sections.
-            if ($canbreak === true) {
-                // Only break in non-mobile themes or using a responsive theme.
-                if ((!$this->formatresponsive) || ($this->mobiletheme === false)) {
-                    if ($this->tcsettings['layoutcolumnorientation'] == 1) {  // Vertical mode.
-                        // This is not perfect yet as does not tally the shown sections and divide by columns.
-                        if (($breaking == false) && ($showsection == true)) {
-                            $breaking = true;
-                            // Divide the number of sections by the number of columns.
-                            $breakpoint = $numsections / $this->tcsettings['layoutcolumns'];
-                        }
+            // if ($canbreak === true) {
+            //     // Only break in non-mobile themes or using a responsive theme.
+            //     if ((!$this->formatresponsive) || ($this->mobiletheme === false)) {
+            //         if ($this->tcsettings['layoutcolumnorientation'] == 1) {  // Vertical mode.
+            //             // This is not perfect yet as does not tally the shown sections and divide by columns.
+            //             if (($breaking == false) && ($showsection == true)) {
+            //                 $breaking = true;
+            //                 // Divide the number of sections by the number of columns.
+            //                 $breakpoint = $numsections / $this->tcsettings['layoutcolumns'];
+            //             }
 
-                        if (($breaking == true) && ($shownsectioncount >= $breakpoint) &&
-                            ($columncount < $this->tcsettings['layoutcolumns'])) {
-                            echo $this->end_section_list();
-                            echo $this->start_toggle_section_list();
-                            $columncount++;
-                            // Next breakpoint is...
-                            $breakpoint += $numsections / $this->tcsettings['layoutcolumns'];
-                        }
-                    } else {  // Horizontal mode.
-                        if (($breaking == false) && ($showsection == true)) {
-                            $breaking = true;
-                            // The lowest value here for layoutcolumns is 2 and the maximum for shownsectioncount is 2, so :).
-                            $breakpoint = $this->tcsettings['layoutcolumns'];
-                        }
+            //             if (($breaking == true) && ($shownsectioncount >= $breakpoint) &&
+            //                 ($columncount < $this->tcsettings['layoutcolumns'])) {
+            //                 echo $this->end_section_list();
+            //                 echo $this->start_toggle_section_list();
+            //                 $columncount++;
+            //                 // Next breakpoint is...
+            //                 $breakpoint += $numsections / $this->tcsettings['layoutcolumns'];
+            //             }
+            //         } else {  // Horizontal mode.
+            //             if (($breaking == false) && ($showsection == true)) {
+            //                 $breaking = true;
+            //                 // The lowest value here for layoutcolumns is 2 and the maximum for shownsectioncount is 2, so :).
+            //                 $breakpoint = $this->tcsettings['layoutcolumns'];
+            //             }
 
-                        if (($breaking == true) && ($shownsectioncount >= $breakpoint)) {
-                            echo $this->end_section_list();
-                            echo $this->start_toggle_section_list();
-                            // Next breakpoint is...
-                            $breakpoint += $this->tcsettings['layoutcolumns'];
-                        }
-                    }
-                }
-            }
+            //             if (($breaking == true) && ($shownsectioncount >= $breakpoint)) {
+            //                 echo $this->end_section_list();
+            //                 echo $this->start_toggle_section_list();
+            //                 // Next breakpoint is...
+            //                 $breakpoint += $this->tcsettings['layoutcolumns'];
+            //             }
+            //         }
+            //     }
+            // }
 
             unset($sections[$thissection->section]);
         }
@@ -1073,16 +1080,16 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
 
             echo $this->end_section_list();
 
-            if ((!$this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 1)) { // Vertical columns.
-                echo html_writer::end_tag('div');
-            }
+            // if ((!$this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 1)) { // Vertical columns.
+            //     echo html_writer::end_tag('div');
+            // }
 
         } else {
             echo $this->end_section_list();
 
-            if ((!$this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 1)) { // Vertical columns.
-                echo html_writer::end_tag('div');
-            }
+            // if ((!$this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 1)) { // Vertical columns.
+            //     echo html_writer::end_tag('div');
+            // }
         }
         // Now initialise the JavaScript.
         $toggles = $this->togglelib->get_toggles();
@@ -1107,13 +1114,13 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
     protected function toggle_all() {
         $o = html_writer::start_tag('li', array('class' => 'tcsection main clearfix', 'id' => 'toggle-all'));
 
-        if ((($this->mobiletheme === false) && ($this->tablettheme === false)) || ($this->userisediting)) {
+        if ($this->userisediting) {
             $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'left side'));
             $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'right side'));
         }
 
         $o .= html_writer::start_tag('div', array('class' => 'content'));
-        $iconsetclass = ' toggle-' . $this->tcsettings['toggleiconset'];
+        $iconsetclass = ' toggle-arrow';
 
         if ($this->tcsettings['toggleallhover'] == 2) {
             $iconsetclass .= '-hover' . $iconsetclass;
@@ -1122,11 +1129,11 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $o .= html_writer::start_tag('div', array('class' => 'sectionbody' . $iconsetclass));
         $o .= html_writer::start_tag('h4', null);
         $o .= html_writer::tag('span', get_string('culcollapsedopened', 'format_culcollapsed'),
-            array('class' => 'on ' . $this->tctoggleiconsize, 'id' => 'toggles-all-opened',
+            array('class' => 'on tc-medium', 'id' => 'toggles-all-opened',
             'role' => 'button')
         );
         $o .= html_writer::tag('span', get_string('culcollapsedclosed', 'format_culcollapsed'),
-            array('class' => 'off ' . $this->tctoggleiconsize, 'id' => 'toggles-all-closed',
+            array('class' => 'off tc-medium', 'id' => 'toggles-all-closed',
             'role' => 'button')
         );
         $o .= html_writer::end_tag('h4');
@@ -1145,7 +1152,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $o = html_writer::start_tag('li',
             array('class' => 'tcsection main clearfix', 'id' => 'culcollapsed-display-instructions'));
 
-        if ((($this->mobiletheme === false) && ($this->tablettheme === false)) || ($this->userisediting)) {
+        if ($this->userisediting) {
             $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'left side'));
             $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'right side'));
         }
@@ -1162,20 +1169,20 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         return $o;
     }
 
-    public function set_portable($portable) {
-        switch ($portable) {
-            case 1:
-                $this->mobiletheme = true;
-                break;
-            case 2:
-                $this->tablettheme = true;
-                break;
-            default:
-                $this->mobiletheme = false;
-                $this->tablettheme = false;
-                break;
-        }
-    }
+    // public function set_portable($portable) {
+    //     switch ($portable) {
+    //         case 1:
+    //             $this->mobiletheme = true;
+    //             break;
+    //         case 2:
+    //             $this->tablettheme = true;
+    //             break;
+    //         default:
+    //             $this->mobiletheme = false;
+    //             $this->tablettheme = false;
+    //             break;
+    //     }
+    // }
 
     public function set_user_preference($userpreference, $defaultuserpreference, $defaulttogglepersistence, $coursenumsections) {
         $this->defaultuserpreference = $defaultuserpreference;
@@ -1264,9 +1271,9 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         return $colclasses[$columns];
     }
 
-    public function get_format_responsive() {
-        return $this->formatresponsive;
-    }
+    // public function get_format_responsive() {
+    //     return $this->formatresponsive;
+    // }
 
    /**
      * Generate a summary of the activites in a section

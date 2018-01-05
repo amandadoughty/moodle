@@ -693,7 +693,7 @@ body.format-culcollapsed .course-content .dash-panel {
           body.format-culcollapsed .course-content .dash-panel .linkscontainer ul.links li span.dash-link a i {
             width: 100%;
             margin: 0 auto;
-            /*color: $white;*/
+            color: #ffffff;
             text-align: center; }
           body.format-culcollapsed .course-content .dash-panel .linkscontainer ul.links li span.dash-link a .fa-stack {
             width: 100%;
@@ -721,7 +721,8 @@ body.format-culcollapsed .course-content .dash-panel {
             height: 100%;
             width: 2.5rem;
             vertical-align: top;
-            border-right: none; }
+            border-right: none;
+            background: #000000; }
           body.format-culcollapsed .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-text {
             display: none; }
           body.format-culcollapsed .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
@@ -838,7 +839,11 @@ body.format-culcollapsed .course-content ul.ctopics li#toggle-all {
     /* Arrow icon set. */ }
     body.format-culcollapsed .course-content ul.ctopics li.main .content .toggle,
     body.format-culcollapsed .course-content ul.ctopics li#toggle-all .content .toggle {
+      background-color: #eceeef;
       min-height: 7em; }
+      body.format-culcollapsed .course-content ul.ctopics li.main .content .toggle:hover,
+      body.format-culcollapsed .course-content ul.ctopics li#toggle-all .content .toggle:hover {
+        background-color: #f4f4f4; }
       body.format-culcollapsed .course-content ul.ctopics li.main .content .toggle span,
       body.format-culcollapsed .course-content ul.ctopics li#toggle-all .content .toggle span {
         text-align: left; }
@@ -852,18 +857,6 @@ body.format-culcollapsed .course-content ul.ctopics li#toggle-all {
     body.format-culcollapsed .course-content ul.ctopics li#toggle-all .content .toggle-arrow h4 span {
       cursor: pointer;
       font-size: 1.4rem; }
-      body.format-culcollapsed .course-content ul.ctopics li.main .content .toggle-arrow h4 span.off,
-      body.format-culcollapsed .course-content ul.ctopics li#toggle-all .content .toggle-arrow h4 span.off {
-        background-image: url([[pix:t/expanded]]); }
-        body.format-culcollapsed .course-content ul.ctopics li.main .content .toggle-arrow h4 span.off :hover,
-        body.format-culcollapsed .course-content ul.ctopics li#toggle-all .content .toggle-arrow h4 span.off :hover {
-          background-image: url([[pix:t/collapsed]]); }
-      body.format-culcollapsed .course-content ul.ctopics li.main .content .toggle-arrow h4 span.on,
-      body.format-culcollapsed .course-content ul.ctopics li#toggle-all .content .toggle-arrow h4 span.on {
-        background-image: url([[pix:t/collapsed]]); }
-        body.format-culcollapsed .course-content ul.ctopics li.main .content .toggle-arrow h4 span.on :hover,
-        body.format-culcollapsed .course-content ul.ctopics li#toggle-all .content .toggle-arrow h4 span.on :hover {
-          background-image: url([[pix:t/expanded]]); }
     body.format-culcollapsed .course-content ul.ctopics li.main .content .sectionhead,
     body.format-culcollapsed .course-content ul.ctopics li#toggle-all .content .sectionhead {
       position: relative;
@@ -976,6 +969,9 @@ body.format-culcollapsed .course-content ul.ctopics li#toggle-all {
       padding-left: 28px;
       background-color: transparent !important;
       border: none; }
+  body.format-culcollapsed .course-content ul.ctopics li.main.sectionhidden,
+  body.format-culcollapsed .course-content ul.ctopics li#toggle-all.sectionhidden {
+    background-color: #eceeef; }
   body.format-culcollapsed .course-content ul.ctopics li.main .side,
   body.format-culcollapsed .course-content ul.ctopics li#toggle-all .side {
     padding: 0; }
@@ -1013,30 +1009,5 @@ body.format-culcollapsed.editing .course-content ul.ctopics li.main.current {
 body.format-culcollapsed#page-admin-setting-formatsettingculcollapsed select#id_s_format_culcollapsed_defaulttoggleiconset option[value="arrow"],
 body#page-course-edit select#id_toggleiconset option[value="arrow"] {
   background-image: url([[pix:t/collapsed]]); }
-
-.course-content ul.ctopics li.section .content .toggle,
-.course-content ul.ctopics li.section .content.sectionhidden {
-  background-color: #e2e2f2; }
-
-.course-content ul.ctopics li.section .content .toggle span,
-.course-content ul.ctopics li.section .content.sectionhidden {
-  color: #8f182e; }
-
-.course-content ul.ctopics li.section .content .toggle span:hover,
-.course-content ul.ctopics li.section .content.sectionhidden .toggle span:hover {
-  color: #670003; }
-
-.course-content ul.ctopics li.section .content div.toggle:hover {
-  background-color: #eeeeff; }
-
-.course-content ul.ctopics li.section .content .toggle span,
-#toggle-all .content .sectionname {
-  color: #8f182e; }
-
-.course-content .linkscontainer .links a.dash-icon {
-  background: #8f182e; }
-
-.course-content ul.ctopics li.section.current {
-  background-color: #8f182e; }
 
 /*# sourceMappingURL=styles.css.map */
