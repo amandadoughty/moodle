@@ -93,21 +93,21 @@ class culcollapsed_togglelib {
         $this->toggles[$togglecharpos - 1] = self::encode_value_to_character($value);
     }
 
-    /**
-     * Tells us if the toggle state from the DB is an old one.
-     * string $pref - Toggle state.
-     * returns boolean old preference = true and not old preference = false.
-     */
-    public function is_old_preference($pref) {
-        $retr = false;
-        $firstchar = $pref[0];
+    // /**
+    //  * Tells us if the toggle state from the DB is an old one.
+    //  * string $pref - Toggle state.
+    //  * returns boolean old preference = true and not old preference = false.
+    //  */
+    // public function is_old_preference($pref) {
+    //     $retr = false;
+    //     $firstchar = $pref[0];
 
-        if (($firstchar == '0') || ($firstchar == '1')) {
-            $retr = true;
-        }
+    //     if (($firstchar == '0') || ($firstchar == '1')) {
+    //         $retr = true;
+    //     }
 
-        return $retr;
-    }
+    //     return $retr;
+    // }
 
     /**
      * Tells us the number of digits we need to store the state for the number of toggles we have.

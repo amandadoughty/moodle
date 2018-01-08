@@ -39,20 +39,20 @@
     vertical-align: top;
 }
 
-.course-content ul.ctopics li.section.main .left,
-.course-content ul.ctopics li.section.main .right {
+.course-content ul.ctopics li.section .left,
+.course-content ul.ctopics li.section .right {
     /* Fix for Bootstrap V3 based themes in less/moodle/course.less . */
     display: block;
 }
 
-.course-content ul.ctopics li.section.main,
+.course-content ul.ctopics li.section,
 .course-content ul.ctopics li.tcsection {
     list-style: none;
     margin: 4px 1px 1px 1px;
     padding: 0;
 }
 
-.course-content ul.ctopics.bsnewgrid li.section.main,
+.course-content ul.ctopics.bsnewgrid li.section,
 .course-content ul.ctopics.bsnewgrid li.tcsection {
     margin: 0;
 }
@@ -69,14 +69,14 @@
     list-style: decimal outside none;
 }
 
-.course-content ul.ctopics li.section.main .content,
+.course-content ul.ctopics li.section .content,
 .course-content ul.ctopics li.tcsection .content {
     /* Default for non tablets / mobiles.  If the language file has 'topcollsidewidth' for the current language, then will be set in format.php. */
     margin: 0 40px;
     padding: 0;
 }
 
-.course-content ul.ctopics.ctportable li.section.main .content,
+.course-content ul.ctopics.ctportable li.section .content,
 .course-content ul.ctopics.ctportable li.tcsection .content {
     margin: 0 0; /* Override default for tablets / mobiles.  When have sides, set in format.php. */
 }
@@ -154,27 +154,7 @@
 
 /* Icon sets.  Note: Background images for the settings - does not work in Chrome or Safari - known issue. */
 /* Arrow icon set. */
-.course-content ul.ctopics li.section .content .toggle-arrow span.toggle_closed,
-.course-content ul.ctopics li.section .content .toggle-arrow span.toggle_open, /* JavaScript disabled */
-body.jsenabled .course-content ul.ctopics li.section .content .toggle-arrow span.toggle_open, /* JavaScript enabled */
-#toggle-all .content .toggle-arrow h4 span.off {
-    background-image: url([[pix:format_topcoll|arrow_down]]);
-}
 
-body.jsenabled .course-content ul.ctopics li.section .content .toggle-arrow span.toggle_closed, /* JavaScript enabled */
-#toggle-all .content .toggle-arrow h4 span.on,
-body#page-admin-setting-formatsettingtopcoll select#id_s_format_topcoll_defaulttoggleiconset option[value="arrow"],
-body#page-course-edit select#id_toggleiconset option[value="arrow"] {
-    background-image: url([[pix:format_topcoll|arrow_right]]);
-}
-
-#toggle-all .content .toggle-arrow-hover h4 span.off:hover {
-    background-image: url([[pix:format_topcoll|arrow_right_glow]]);
-}
-
-#toggle-all .content .toggle-arrow-hover h4 span.on:hover {
-    background-image: url([[pix:format_topcoll|arrow_down_glow]]);
-}
 
 /* Bulb icon set. */
 .course-content ul.ctopics li.section .content .toggle-bulb span.toggle_closed,
@@ -492,8 +472,8 @@ body#page-course-edit.lang-en_ar select#id_toggleiconset option {
     padding: 10px;
 }
 
-.course-content ul.ctopics li.section.main .side, .course-content ul.ctopics li.tcsection .side,
-.editing .course-content ul.ctopics li.section.main .side, .editing .course-content ul.ctopics li.tcsection .side {
+.course-content ul.ctopics li.section .side, .course-content ul.ctopics li.tcsection .side,
+.editing .course-content ul.ctopics li.section .side, .editing .course-content ul.ctopics li.tcsection .side {
     padding: 0;
     text-align: center;
     width: 40px; /* Default used in editing mode or when not defined in the language file. */
@@ -503,7 +483,7 @@ body#page-course-edit.lang-en_ar select#id_toggleiconset option {
     float:left;
 }
 
-.course-content ul.ctopics li.section.main .left {
+.course-content ul.ctopics li.section .left {
     padding: 10px 0 0 0;
 }
 
@@ -769,10 +749,10 @@ body.jsenabled #toggle-all {
     body.jsenabled #toggle-all, body.jsenabled #topcoll-display-instructions, .cttoggle {
         display: none;
     }
-    .course-content ul.ctopics li.section.main {
+    .course-content ul.ctopics li.section {
         float: left;
     }
-    body.format-topcoll .course-content ul.ctopics li.section.main {
+    body.format-topcoll .course-content ul.ctopics li.section {
         padding-bottom: 0;
     }
     ul.ctopics {

@@ -28,7 +28,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Javascript functions for Topics course format
+
 M.course = M.course || {};
+
 M.course.format = M.course.format || {};
 
 /**
@@ -50,26 +53,26 @@ M.course.format.get_config = function() {
         section_node : 'li',
         section_class : 'section'
     };
-};
+}
 
 /**
  * Swap section
  *
- * @param {YUI} Y YUI3 instance.
- * @param {string} node1 node to swap to.
- * @param {string} node2 node to swap with.
- * @return {NodeList} section list.
+ * @param {YUI} Y YUI3 instance
+ * @param {string} node1 node to swap to
+ * @param {string} node2 node to swap with
+ * @return {NodeList} section list
  */
 M.course.format.swap_sections = function(Y, node1, node2) {
     var CSS = {
-        COURSECONTENT : '.course-content',
-        SECTIONADDMENUS : '.section_add_menus'
+        COURSECONTENT : 'course-content',
+        SECTIONADDMENUS : 'section_add_menus'
     };
 
-    var sectionlist = Y.Node.all(CSS.COURSECONTENT + ' ' + M.course.format.get_section_selector(Y));
+    var sectionlist = Y.Node.all('.'+CSS.COURSECONTENT+' '+M.course.format.get_section_selector(Y));
     // Swap menus.
-    sectionlist.item(node1).one(CSS.SECTIONADDMENUS).swap(sectionlist.item(node2).one(CSS.SECTIONADDMENUS));
-};
+    sectionlist.item(node1).one('.'+CSS.SECTIONADDMENUS).swap(sectionlist.item(node2).one('.'+CSS.SECTIONADDMENUS));
+}
 
 /**
  * Process sections after ajax response
@@ -82,51 +85,34 @@ M.course.format.swap_sections = function(Y, node1, node2) {
  */
 M.course.format.process_sections = function(Y, sectionlist, response, sectionfrom, sectionto) {
     var CSS = {
-        SECTIONNAME     : 'the_toggle h3'
+        SECTIONNAME : 'sectionname'
     },
     SELECTORS = {
-        LEFTCONTENT     : '.left .cps_centre',
-        SECTIONLEFTSIDE : '.left .section-handle img'
+        SECTIONLEFTSIDE : '.left .section-handle .icon'
     };
 
     if (response.action == 'move') {
-        if (sectionfrom > sectionto) { // MDL-34798.
+        // If moving up swap around 'sectionfrom' and 'sectionto' so the that loop operates.
+        if (sectionfrom > sectionto) {
             var temp = sectionto;
             sectionto = sectionfrom;
             sectionfrom = temp;
         }
 
         // Update titles and move icons in all affected sections.
-        var leftcontent, ele, str, stridx, newstr;
+        var ele, str, stridx, newstr;
 
         for (var i = sectionfrom; i <= sectionto; i++) {
             // Update section title.
             var content = Y.Node.create('<span>' + response.sectiontitles[i] + '</span>');
-            sectionlist.item(i).all('.' + CSS.SECTIONNAME).setHTML(content);
-            // If the left content section number exists, then set it.
-            leftcontent = sectionlist.item(i).one(SELECTORS.LEFTCONTENT);
-            if (leftcontent) { // Only set if the section number is shown otherwise JS crashes and stops working.
-                leftcontent.setContent(i);
-            }
-            // Update move icon.  MDL-37901.
+            sectionlist.item(i).all('.'+CSS.SECTIONNAME).setHTML(content);
+            // Update move icon.
             ele = sectionlist.item(i).one(SELECTORS.SECTIONLEFTSIDE);
             str = ele.getAttribute('alt');
             stridx = str.lastIndexOf(' ');
-            newstr = str.substr(0, stridx + 1) + i;
+            newstr = str.substr(0, stridx +1) + i;
             ele.setAttribute('alt', newstr);
             ele.setAttribute('title', newstr); // For FireFox as 'alt' is not refreshed.
-
-            if (response.current !== -1) {
-                if (sectionlist.item(i).hasClass('current')) {
-                    // Remove the current class as section has been moved.  MDL-33546.
-                    sectionlist.item(i).removeClass('current');
-                }
-            }
-        }
-        // If there is a current section, apply corresponding class in order to highlight it.  MDL-33546.
-        if (response.current !== -1) {
-            // Add current class to the required section.
-            sectionlist.item(response.current).addClass('current');
         }
     }
-};
+}

@@ -52,12 +52,12 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
     private $defaultuserpreference; // Default user preference when none set - bool - true all open, false all closed.
     private $togglelib;
     private $currentsection = false; // If not false then will be the current section number.
-    private $isoldtogglepreference = false;
+    // private $isoldtogglepreference = false;
     private $userisediting = false;
     // private $tctoggleiconsize;
     // private $formatresponsive;
     private $rtl = false;
-    private $bsnewgrid = false;
+    // private $bsnewgrid = false;
 
     /**
      * Constructor method, calls the parent constructor - MDL-21097.
@@ -81,9 +81,6 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
 
         $this->rtl = right_to_left();
 
-        if (strcmp($page->theme->name, 'boost') === 0) {
-            $this->bsnewgrid = true;
-        }
     }
 
     /**
@@ -98,11 +95,11 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $templatecontext = $dashboard->export_for_template($this);
         $o .= $this->render_from_template('format_culcollapsed/dashboard', $templatecontext);
 
-        if ($this->bsnewgrid) {
-            $o .=  html_writer::start_tag('ul', array('class' => 'ctopics bsnewgrid'));
-        } else {
+        // if ($this->bsnewgrid) {
+        //     $o .=  html_writer::start_tag('ul', array('class' => 'ctopics'));
+        // } else {
             $o .=  html_writer::start_tag('ul', array('class' => 'ctopics'));
-        }
+        // }
 
         return $o;
     }
@@ -112,11 +109,11 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function start_toggle_section_list() {
-        $classes = 'ctopics topics';
-        if ($this->bsnewgrid) {
-            $classes .= ' bsnewgrid';
-        }
-        $attributes = array();
+        $classes = 'ctopics';
+        // if ($this->bsnewgrid) {
+        //     $classes .= ' bsnewgrid';
+        // }
+        $attributes = [];
         // if (($this->mobiletheme === true) || ($this->tablettheme === true)) {
         //     $classes .= ' ctportable';
         // }
@@ -136,7 +133,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             // if ($this->tcsettings['layoutcolumnorientation'] == 1) { // Vertical columns.
             //     $classes .= ' ' . $this->get_column_class($this->tcsettings['layoutcolumns']);
             // } else {
-                $classes .= ' ' . $this->get_row_class();
+                // $classes .= ' ' . $this->get_row_class();
         //     }
         // }
         $attributes['class'] = $classes;
@@ -413,14 +410,14 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
             'aria-label' => $title
         );
 
-        if (($this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
-            $liattributes['style'] = 'width: ' . $this->tccolumnwidth . '%;';
-        }
+        // if (($this->formatresponsive) && ($this->tcsettings['layoutcolumnorientation'] == 2)) { // Horizontal column layout.
+        //     $liattributes['style'] = 'width: ' . $this->tccolumnwidth . '%;';
+        // }
         $o .= html_writer::start_tag('li', $liattributes);
-
-        $o .= html_writer::tag('div', '', array('class' => 'left side'));
-        $o .= html_writer::tag('div', '', array('class' => 'right side'));
-        $o .= html_writer::start_tag('div', array('class' => 'content'));
+        $o .= html_writer::tag('span', ['class' => 'hidden sectionname']);
+        $o .= html_writer::tag('div', '', ['class' => 'left side']);
+        $o .= html_writer::tag('div', '', ['class' => 'right side']);
+        $o .= html_writer::start_tag('div', ['class' => 'content']);
 
         if ($section->uservisible) {
             $title = html_writer::tag('a', $title,
@@ -476,9 +473,9 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         //     $sectionstyle .= ' ' . $this->get_column_class($this->tcsettings['layoutcolumns']);
         // }
 
-        if ($section->section != 0) { // Horizontal column layout.
-            $sectionstyle .= ' ' . $this->get_column_class(1);
-        }
+        // if ($section->section != 0) { // Horizontal column layout.
+        //     $sectionstyle .= ' ' . $this->get_column_class(1);
+        // }
 
         $liattributes = array(
             'id' => 'section-' . $section->section,
@@ -661,9 +658,9 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $sectionstyle = '';
         $course = $this->courseformat->get_course();
 
-        if ($sectionno != 0) {
-            $sectionstyle .= ' ' . $this->get_column_class(1);
-        }
+        // if ($sectionno != 0) {
+        //     $sectionstyle .= ' ' . $this->get_column_class(1);
+        // }
 
         $liattributes = array(
             'id' => 'section-' . $sectionno,
@@ -700,7 +697,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $sectionstyle = 'section main clearfix hidden';
 
 
-        $sectionstyle .= ' ' . $this->get_column_class(1);
+        // $sectionstyle .= ' ' . $this->get_column_class(1);
 
 
         $liattributes = array(
@@ -937,16 +934,16 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
                     }
                     }
                 } else {
-                    if ($this->isoldtogglepreference == true) {
-                    $togglestate = substr($this->togglelib->get_toggles(), $section, 1);
-                        if ($togglestate == '1') {
-                            $thissection->toggle = true;
-                        } else {
-                            $thissection->toggle = false;
-                        }
-                    } else {
+                    // if ($this->isoldtogglepreference == true) {
+                    // $togglestate = substr($this->togglelib->get_toggles(), $section, 1);
+                    //     if ($togglestate == '1') {
+                    //         $thissection->toggle = true;
+                    //     } else {
+                    //         $thissection->toggle = false;
+                    //     }
+                    // } else {
                         $thissection->toggle = $this->togglelib->get_toggle_state($thissection->section);
-                    }
+                    // }
                 if ($this->courseformat->is_section_current($thissection)) {
                     $this->currentsection = $thissection->section;
                     $thissection->toggle = true; // Open current section regardless of toggle state.
@@ -1189,26 +1186,26 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         $this->defaulttogglepersistence = $defaulttogglepersistence;
 
         if ($userpreference != null) {
-            $this->isoldtogglepreference = $this->togglelib->is_old_preference($userpreference);
+    //         $this->isoldtogglepreference = $this->togglelib->is_old_preference($userpreference);
 
-            if ($this->isoldtogglepreference == true) {
-                $ts1 = base_convert(substr($userpreference, 0, 6), 36, 2);
-                $ts2 = base_convert(substr($userpreference, 6, 12), 36, 2);
-                $thesparezeros = "00000000000000000000000000";
+    //         if ($this->isoldtogglepreference == true) {
+    //             $ts1 = base_convert(substr($userpreference, 0, 6), 36, 2);
+    //             $ts2 = base_convert(substr($userpreference, 6, 12), 36, 2);
+    //             $thesparezeros = "00000000000000000000000000";
 
-                if (strlen($ts1) < 26) {
-                    // Need to PAD.
-                    $ts1 = substr($thesparezeros, 0, (26 - strlen($ts1))) . $ts1;
-    }
+    //             if (strlen($ts1) < 26) {
+    //                 // Need to PAD.
+    //                 $ts1 = substr($thesparezeros, 0, (26 - strlen($ts1))) . $ts1;
+    // }
 
-                if (strlen($ts2) < 27) {
-                    // Need to PAD.
-                    $ts2 = substr($thesparezeros, 0, (27 - strlen($ts2))) . $ts2;
-                }
+    //             if (strlen($ts2) < 27) {
+    //                 // Need to PAD.
+    //                 $ts2 = substr($thesparezeros, 0, (27 - strlen($ts2))) . $ts2;
+    //             }
 
-                $tb = $ts1 . $ts2;
-                $this->togglelib->set_toggles($tb);
-            } else {
+    //             $tb = $ts1 . $ts2;
+    //             $this->togglelib->set_toggles($tb);
+    //         } else {
                 // Check we have enough digits for the number of toggles in case this has increased.
                 $numdigits = $this->togglelib->get_required_digits($coursenumsections);
                 $totdigits = strlen($userpreference);
@@ -1229,7 +1226,7 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
                     $userpreference = substr($userpreference, 0, $numdigits);
                 }
                 $this->togglelib->set_toggles($userpreference);
-            }
+            // }
         } else {
             $numdigits = $this->togglelib->get_required_digits($coursenumsections);
 
@@ -1249,27 +1246,27 @@ class format_culcollapsed_renderer extends format_section_renderer_base {
         }
     }
 
-    protected function get_row_class() {
-        if ($this->bsnewgrid) {
-            return 'row';
-        } else {
-            return 'row-fluid';
-        }
-    }
+    // protected function get_row_class() {
+    //     if ($this->bsnewgrid) {
+    //         return 'row';
+    //     } else {
+    //         return 'row-fluid';
+    //     }
+    // }
 
-    protected function get_column_class($columns) {
-        if ($this->bsnewgrid) {
-            $colclasses = array(
-                1 => 'col-sm-12 col-md-12 col-lg-12',
-                2 => 'col-sm-6 col-md-6 col-lg-6',
-                3 => 'col-md-4 col-lg-4',
-                4 => 'col-lg-3');
-        } else {
-            $colclasses = array(1 => 'span12', 2 => 'span6', 3 => 'span4', 4 => 'span3');
-        }
+    // protected function get_column_class($columns) {
+    //     if ($this->bsnewgrid) {
+    //         $colclasses = array(
+    //             1 => 'col-sm-12 col-md-12 col-lg-12',
+    //             2 => 'col-sm-6 col-md-6 col-lg-6',
+    //             3 => 'col-md-4 col-lg-4',
+    //             4 => 'col-lg-3');
+    //     } else {
+    //         $colclasses = array(1 => 'span12', 2 => 'span6', 3 => 'span4', 4 => 'span3');
+    //     }
 
-        return $colclasses[$columns];
-    }
+    //     return $colclasses[$columns];
+    // }
 
     // public function get_format_responsive() {
     //     return $this->formatresponsive;
