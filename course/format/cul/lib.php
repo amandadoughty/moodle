@@ -46,9 +46,9 @@ $record = $DB->get_record('course_format_options',
 if ($record) {
     $baseclass = $record->value;
 } else {
-    $config = get_settings('format_cul');
-    $baseclass = $config->baseclass;
-    // $baseclass = 'format_topics';
+    // $config = get_config('format_cul');
+    // $baseclass = $config->baseclass;
+    $baseclass = FORMATTOPICS;
 }
 
 

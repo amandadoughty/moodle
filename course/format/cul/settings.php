@@ -24,21 +24,21 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-    /* Structure configuration.
-      Here so you can see what numbers in the array represent what structure for setting the default value below.
-      1 => Topic.
-      2 => Week.
-      3 => Latest Week First.
-      4 => Current Topic First.
-      5 => Day.
-      Default structure to use - used when a new Collapsed Topics course is created or an old one is accessed for the first time
-      after installing this functionality introduced in CONTRIB-3378. */
-    $name = 'format_cul/defaultlayoutstructure';
-    $title = get_string('defaultlayoutstructure', 'format_culcollapsed');
-    $description = get_string('defaultlayoutstructure_desc', 'format_culcollapsed');
-    $default = 1;
-    $choices = [
-    	1 => new lang_string('pluginname', 'format_topics'),
+/* Structure configuration.
+    Here so you can see what numbers in the array represent what structure for setting the default value below.
+    1 => Topic.
+    2 => Week.
+    3 => Latest Week First.
+    4 => Current Topic First.
+    5 => Day.
+    Default structure to use - used when a new Collapsed Topics course is created or an old one is accessed for the first time
+    after installing this functionality introduced in CONTRIB-3378. */
+$name = 'format_cul/defaultlayoutstructure';
+$title = get_string('defaultlayoutstructure', 'format_culcollapsed');
+$description = get_string('defaultlayoutstructure_desc', 'format_culcollapsed');
+$default = 1;
+$choices = [
+    1 => new lang_string('pluginname', 'format_topics'),
         2 => new lang_string('pluginname', 'format_weeks')
         
         // 1 => new lang_string('setlayoutstructuretopic', 'format_culcollapsed'), // Topic.
@@ -46,6 +46,6 @@ defined('MOODLE_INTERNAL') || die;
         // 3 => new lang_string('setlayoutstructurelatweekfirst', 'format_culcollapsed'), // Latest Week First.
         // 4 => new lang_string('setlayoutstructurecurrenttopicfirst', 'format_culcollapsed'), // Current Topic First.
         // 5 => new lang_string('setlayoutstructureday', 'format_culcollapsed')                // Day.
-    ];
-    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));    
-}
+];
+$settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));    
+
