@@ -34,18 +34,18 @@ defined('MOODLE_INTERNAL') || die;
     Default structure to use - used when a new Collapsed Topics course is created or an old one is accessed for the first time
     after installing this functionality introduced in CONTRIB-3378. */
 $name = 'format_cul/baseclass';
-$title = get_string('baseclass', 'format_culcollapsed');
-$description = get_string('baseclass_desc', 'format_culcollapsed');
+$title = get_string('baseclass', 'format_cul');
+$description = get_string('baseclass_desc', 'format_cul');
 $default = 1;
 $choices = [
     1 => new lang_string('pluginname', 'format_topics'),
         2 => new lang_string('pluginname', 'format_weeks')
         
-        // 1 => new lang_string('setlayoutstructuretopic', 'format_culcollapsed'), // Topic.
-        // 2 => new lang_string('setlayoutstructureweek', 'format_culcollapsed'), // Week.
-        // 3 => new lang_string('setlayoutstructurelatweekfirst', 'format_culcollapsed'), // Latest Week First.
-        // 4 => new lang_string('setlayoutstructurecurrenttopicfirst', 'format_culcollapsed'), // Current Topic First.
-        // 5 => new lang_string('setlayoutstructureday', 'format_culcollapsed')                // Day.
+        // 1 => new lang_string('setlayoutstructuretopic', 'format_cul'), // Topic.
+        // 2 => new lang_string('setlayoutstructureweek', 'format_cul'), // Week.
+        // 3 => new lang_string('setlayoutstructurelatweekfirst', 'format_cul'), // Latest Week First.
+        // 4 => new lang_string('setlayoutstructurecurrenttopicfirst', 'format_cul'), // Current Topic First.
+        // 5 => new lang_string('setlayoutstructureday', 'format_cul')                // Day.
 ];
 $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));    
 

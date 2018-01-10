@@ -38,4 +38,5 @@ $string['hidefromothers'] = 'Hide section';
 $string['showfromothers'] = 'Show section';
 
 $string['baseclass'] = 'The format to use';
+$string['baseclass_desc'] = 'This setting specifies whether to use topics or weeks format.';
 $string['baseclass_help'] = 'This setting specifies whether to use topics or weeks format.';
