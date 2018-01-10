@@ -31,7 +31,7 @@ require_once($CFG->dirroot. '/course/format/lib.php');
 require_once($CFG->dirroot. '/course/format/topics/lib.php');
 require_once($CFG->dirroot. '/course/format/weeks/lib.php');
 
-
+die($courseid);
 
 define('FORMATTOPICS', 1);
 define('FORMATWEEKS', 2);
@@ -46,9 +46,8 @@ $record = $DB->get_record('course_format_options',
 if ($record) {
     $baseclass = $record->value;
 } else {
-    // $config = get_config('format_cul');
-    // $baseclass = $config->baseclass;
-    $baseclass = FORMATTOPICS;
+    $config = get_config('format_cul');
+    $baseclass = $config->baseclass;
 }
 
 
@@ -109,7 +108,7 @@ class format_cul extends dynamic_parent {
         }
 
         $pcourseformatoptions = parent::course_format_options($foreditform);
-        $courseformatoptions = array_merge_recursive($pcourseformatoptions, $courseformatoptions);
+        $courseformatoptions = $pcourseformatoptions + $courseformatoptions;
 
         return $courseformatoptions;
     }

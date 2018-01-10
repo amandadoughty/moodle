@@ -33,9 +33,9 @@ defined('MOODLE_INTERNAL') || die;
     5 => Day.
     Default structure to use - used when a new Collapsed Topics course is created or an old one is accessed for the first time
     after installing this functionality introduced in CONTRIB-3378. */
-$name = 'format_cul/defaultlayoutstructure';
-$title = get_string('defaultlayoutstructure', 'format_culcollapsed');
-$description = get_string('defaultlayoutstructure_desc', 'format_culcollapsed');
+$name = 'format_cul/baseclass';
+$title = get_string('baseclass', 'format_culcollapsed');
+$description = get_string('baseclass_desc', 'format_culcollapsed');
 $default = 1;
 $choices = [
     1 => new lang_string('pluginname', 'format_topics'),
