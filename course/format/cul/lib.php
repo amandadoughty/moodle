@@ -30,33 +30,11 @@ global $DB, $COURSE;
 require_once($CFG->dirroot. '/course/format/lib.php');
 require_once($CFG->dirroot. '/course/format/topics/lib.php');
 require_once($CFG->dirroot. '/course/format/weeks/lib.php');
-// require_once($CFG->dirroot. '/course/format/cul/lib_trait.php');
+require_once($CFG->dirroot. '/course/format/cul/topics_trait.php');
+require_once($CFG->dirroot. '/course/format/cul/weeks_trait.php');
 
 define('FORMATTOPICS', 1);
 define('FORMATWEEKS', 2);
-
-// // Get record from db or default
-// $record = $DB->get_record('course_format_options',
-//                         array('courseid' => $COURSE->id,
-//                               'format' => 'cul',
-//                               'name' => 'baseclass'
-//                             ), 'value');
-
-// if ($record) {
-//     $baseclass = $record->value;
-// } else {
-//     $config = get_config('format_cul');
-//     $baseclass = $config->baseclass;
-// }
-
-
-
-
-// if ($baseclass == FORMATTOPICS) {
-//     class dynamic_parent extends format_topics {}
-// } else {
-//     class dynamic_parent extends format_weeks {}
-// }
 
 /**
  * Main class for the Topics course format
@@ -67,6 +45,8 @@ define('FORMATWEEKS', 2);
  */
 class format_cul extends format_base {
 
+    use format_topics_trait;
+    use format_weeks_trait;
 
 
     /** @var string baseformat used for this course. Please note that it can be different from
@@ -83,17 +63,16 @@ class format_cul extends format_base {
      * @return format_base
      */
     protected function __construct($format, $courseid) {        
-        // define('FORMATTOPICS', 1);
-        // define('FORMATWEEKS', 2);
-
         global $DB;
 
-        // $baseclasses = [
-        //     1 => 'format_cultopics',
-        //     2 => 'format_culweeks'
-        // ];
+        // use topics;
 
-        // Get record from db or default
+        $baseclasses = [
+            1 => 'format_topics_',
+            2 => 'format_weeks_'
+        ];
+
+        // Get record from db or default.
         $record = $DB->get_record('course_format_options',
                                 array('courseid' => $courseid,
                                       'format' => 'cul',
@@ -101,31 +80,16 @@ class format_cul extends format_base {
                                     ), 'value');
 
         if ($record) {
-            $this->baseclass = $record->value;
+            $baseclass = $record->value;
         } else {
             $config = get_config('format_cul');
-            $this->baseclass = $config->baseclass;
+            $baseclass = $config->baseclass;
         }
 
-        // $this->baseclass = get_format_or_default($baseclasses[$baseclass]);
+        parent::__construct($format, $courseid);
 
-        // parent::__construct($format, $courseid);
-
-        // $extendedclassname = $baseclasses[$baseclassid];
-
-        // return new $extendedclassname($format, $courseid);
+        $this->baseclass = $baseclasses[$baseclass];
     }
-
-// }
-
-// class format_culweeks extends format_weeks { 
-//     use culformat;
-// }
-
-// class format_cultopics extends format_topics { 
-//     use culformat;    
-
-
 
     /**
      * Returns the display name of the given section that the course prefers.
@@ -134,20 +98,9 @@ class format_cul extends format_base {
      * @return Display name that the course format prefers, e.g. "Topic 2"
      */
     public function get_section_name($section) {
-        if (is_object($section)) {
-            $sectionnum = $section->section;
-        } else {
-            $sectionnum = $section;
-        }
+        $args = func_get_args();
 
-        //@TODO
-
-        if (get_string_manager()->string_exists('sectionname', 'format_' . $this->format)) {
-            return get_string('sectionname', 'format_' . $this->format) . ' ' . $sectionnum;
-        }
-
-        // Return an empty string if there's no available section name string for the given format.
-        return '';
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
@@ -157,9 +110,9 @@ class format_cul extends format_base {
      * @return string The default value for the section name based on the given course format.
      */
     public function get_default_section_name($section) {
+        $args = func_get_args();
 
-        // @TODO
-        return self::get_section_name($section);
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
@@ -173,7 +126,7 @@ class format_cul extends format_base {
     public function supports_ajax() {
         // no support by default
         $ajaxsupport = new stdClass();
-        $ajaxsupport->capable = false;
+        $ajaxsupport->capable = true;
         return $ajaxsupport;
     }
 
@@ -185,88 +138,39 @@ class format_cul extends format_base {
      * @return array This will be passed in ajax respose
      */
     public function ajax_section_move() {
+        $args = func_get_args();
 
-
-        // @TODO
-        return null;
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
      * The URL to use for the specified course (with section)
      *
-     * Please note that course view page /course/view.php?id=COURSEID is hardcoded in many
-     * places in core and contributed modules. If course format wants to change the location
-     * of the view script, it is not enough to change just this function. Do not forget
-     * to add proper redirection.
-     *
      * @param int|stdClass $section Section object from database or just field course_sections.section
-     *     if null the course view page is returned
+     *     if omitted the course view page is returned
      * @param array $options options for view URL. At the moment core uses:
      *     'navigation' (bool) if true and section has no separate page, the function returns null
      *     'sr' (int) used by multipage formats to specify to which section to return
      * @return null|moodle_url
      */
     public function get_view_url($section, $options = array()) {
-        global $CFG;
+        $args = func_get_args();
 
-        // @TODO
-        $course = $this->get_course();
-        $url = new moodle_url('/course/view.php', array('id' => $course->id));
-
-        if (array_key_exists('sr', $options)) {
-            $sectionno = $options['sr'];
-        } else if (is_object($section)) {
-            $sectionno = $section->section;
-        } else {
-            $sectionno = $section;
-        }
-        if (empty($CFG->linkcoursesections) && !empty($options['navigation']) && $sectionno !== null) {
-            // by default assume that sections are never displayed on separate pages
-            return null;
-        }
-        if ($this->uses_sections() && $sectionno !== null) {
-            $url->set_anchor('section-'.$sectionno);
-        }
-        return $url;
+        return $this->call_base_function(__FUNCTION__, $args);
     }
-
+ 
     /**
      * Loads all of the course sections into the navigation
-     *
-     * This method is called from {@link global_navigation::load_course_sections()}
-     *
-     * By default the method {@link global_navigation::load_generic_course_sections()} is called
-     *
-     * When overwriting please note that navigationlib relies on using the correct values for
-     * arguments $type and $key in {@link navigation_node::add()}
-     *
-     * Example of code creating a section node:
-     * $sectionnode = $node->add($sectionname, $url, navigation_node::TYPE_SECTION, null, $section->id);
-     * $sectionnode->nodetype = navigation_node::NODETYPE_BRANCH;
-     *
-     * Example of code creating an activity node:
-     * $activitynode = $sectionnode->add($activityname, $action, navigation_node::TYPE_ACTIVITY, null, $activity->id, $icon);
-     * if (global_navigation::module_extends_navigation($activity->modname)) {
-     *     $activitynode->nodetype = navigation_node::NODETYPE_BRANCH;
-     * } else {
-     *     $activitynode->nodetype = navigation_node::NODETYPE_LEAF;
-     * }
-     *
-     * Also note that if $navigation->includesectionnum is not null, the section with this relative
-     * number needs is expected to be loaded
      *
      * @param global_navigation $navigation
      * @param navigation_node $node The course node within the navigation
      */
     public function extend_course_navigation($navigation, navigation_node $node) {
+        $args = func_get_args();
 
-        // @TODO
-        if ($course = $this->get_course()) {
-            $navigation->load_generic_course_sections($course, $node);
-        }
-        return array();
+        return $this->call_base_function(__FUNCTION__, $args);
     }
-
+  
     /**
      * Returns the list of blocks to be automatically added for the newly created course
      *
@@ -328,12 +232,12 @@ class format_cul extends format_base {
             $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
         }
 
-        $pcourseformatoptions = parent::course_format_options($foreditform);
+        $args = func_get_args();
+        $pcourseformatoptions = $this->call_base_function(__FUNCTION__, $args);
         $courseformatoptions = $pcourseformatoptions + $courseformatoptions;
 
         return $courseformatoptions;
     }
-
 
     /**
      * Adds format options elements to the course/section edit form
@@ -348,7 +252,9 @@ class format_cul extends format_base {
      */
     public function create_edit_form_elements(&$mform, $forsection = false) {
         global $PAGE;
-        $elements = parent::create_edit_form_elements($mform, $forsection);
+
+        $args = func_get_args();
+        $elements = $this->call_base_function(__FUNCTION__, [&$mform, $forsection]);
 
         // Weekly format unsets a key which leads to an error as the 
         // combined parent and child array have a gap in the key sequence.
@@ -357,7 +263,39 @@ class format_cul extends format_base {
         $elements = array_values($elements);
 
         return $elements;
-    }    
+    }
+
+           /**
+     * Updates format options for a course
+     *
+     * In case if course format was changed to 'weeks', we try to copy options
+     * 'coursedisplay', 'numsections' and 'hiddensections' from the previous format.
+     * If previous course format did not have 'numsections' option, we populate it with the
+     * current number of sections
+     *
+     * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
+     * @param stdClass $oldcourse if this function is called from {@link update_course()}
+     *     this object contains information about the course before update
+     * @return bool whether there were any changes to the options values
+     */
+    public function update_course_format_options($data, $oldcourse = null) {
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
+    }
+
+    /**
+     * Return the start and end date of the passed section
+     *
+     * @param int|stdClass|section_info $section section to get the dates for
+     * @param int $startdate Force course start date, useful when the course is not yet created
+     * @return stdClass property start for startdate, property end for enddate
+     */
+    public function get_section_dates($section, $startdate = false) {
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
+    }
 
     /**
      * Returns true if the specified section is current
@@ -368,14 +306,9 @@ class format_cul extends format_base {
      * @return bool
      */
     public function is_section_current($section) {
-        if (is_object($section)) {
-            $sectionnum = $section->section;
-        } else {
-            $sectionnum = $section;
-        }
+        $args = func_get_args();
 
-        // @TODO
-        return ($sectionnum && ($course = $this->get_course()) && $course->marker == $sectionnum);
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
@@ -390,10 +323,12 @@ class format_cul extends format_base {
      * @return bool
      */
     public function can_delete_section($section) {
-        return true;
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
-    /**
+   /**
      * Prepares the templateable object to display section name
      *
      * @param \section_info|\stdClass $section
@@ -405,39 +340,9 @@ class format_cul extends format_base {
      */
     public function inplace_editable_render_section_name($section, $linkifneeded = true,
                                                          $editable = null, $edithint = null, $editlabel = null) {
+        $args = func_get_args();
 
-        // @TODO
-        global $USER, $CFG;
-        require_once($CFG->dirroot.'/course/lib.php');
-
-        if ($editable === null) {
-            $editable = !empty($USER->editing) && has_capability('moodle/course:update',
-                    context_course::instance($section->course));
-        }
-
-        $displayvalue = $title = get_section_name($section->course, $section);
-        if ($linkifneeded) {
-            // Display link under the section name if the course format setting is to display one section per page.
-            $url = course_get_url($section->course, $section->section, array('navigation' => true));
-            if ($url) {
-                $displayvalue = html_writer::link($url, $title);
-            }
-            $itemtype = 'sectionname';
-        } else {
-            // If $linkifneeded==false, we never display the link (this is used when rendering the section header).
-            // Itemtype 'sectionnamenl' (nl=no link) will tell the callback that link should not be rendered -
-            // there is no other way callback can know where we display the section name.
-            $itemtype = 'sectionnamenl';
-        }
-        if (empty($edithint)) {
-            $edithint = new lang_string('editsectionname');
-        }
-        if (empty($editlabel)) {
-            $editlabel = new lang_string('newsectionname', '', $title);
-        }
-
-        return new \core\output\inplace_editable('format_' . $this->format, $itemtype, $section->id, $editable,
-            $displayvalue, $section->name, $edithint, $editlabel);
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
@@ -452,21 +357,9 @@ class format_cul extends format_base {
      * @return int
      */
     public function get_default_course_enddate($mform, $fieldnames = array()) {
+        $args = func_get_args();
 
-
-        // @TODO
-        if (empty($fieldnames)) {
-            $fieldnames = array('startdate' => 'startdate');
-        }
-
-        $startdate = $this->get_form_start_date($mform, $fieldnames);
-        $courseduration = intval(get_config('moodlecourse', 'courseduration'));
-        if (!$courseduration) {
-            // Default, it should be already set during upgrade though.
-            $courseduration = YEARSECS;
-        }
-
-        return $startdate + $courseduration;
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
@@ -478,7 +371,9 @@ class format_cul extends format_base {
      * @return bool
      */
     public function supports_news() {
-        return true;
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
@@ -508,49 +403,40 @@ class format_cul extends format_base {
      * @return null|array|stdClass any data for the Javascript post-processor (must be json-encodeable)
      */
     public function section_action($section, $action, $sr) {
+        $args = func_get_args();
 
-        // @TODO
-        global $PAGE;
-        if (!$this->uses_sections() || !$section->section) {
-            // No section actions are allowed if course format does not support sections.
-            // No actions are allowed on the 0-section by default (overwrite in course format if needed).
-            throw new moodle_exception('sectionactionnotsupported', 'core', null, s($action));
-        }
-
-        $course = $this->get_course();
-        $coursecontext = context_course::instance($course->id);
-        switch($action) {
-            case 'hide':
-            case 'show':
-                require_capability('moodle/course:sectionvisibility', $coursecontext);
-                $visible = ($action === 'hide') ? 0 : 1;
-                course_update_section($course, $section, array('visible' => $visible));
-                break;
-            default:
-                throw new moodle_exception('sectionactionnotsupported', 'core', null, s($action));
-        }
-
-        $modules = [];
-
-        $modinfo = get_fast_modinfo($course);
-        $coursesections = $modinfo->sections;
-        if (array_key_exists($section->section, $coursesections)) {
-            $courserenderer = $PAGE->get_renderer('core', 'course');
-            $completioninfo = new completion_info($course);
-            foreach ($coursesections[$section->section] as $cmid) {
-                $cm = $modinfo->get_cm($cmid);
-                $modules[] = $courserenderer->course_section_cm_list_item($course, $completioninfo, $cm, $sr);
-            }
-        }
-
-        return ['modules' => $modules];
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
+    /**
+     * There is no way to dyanamically inherit from a choice of course formats. So to ease
+     * upgrades, the methods of each course format we may want to inherit from have been
+     * copied into traits. Each function has been prepended with the format name eg
+     * format_weeks_section_action(). This function can then use the format_cul.baseclass 
+     * ($this->baseclass) to determine which of the functions to call.
+     *
+     * The functions in the traits will be easier to compare to the format_<name>/lib.php they mock 
+     * when these are upgraded. It is not a perfect solution but the course id is not always
+     * available when lib.php is called. Therefore format_cul.baseclass is only available after
+     * instantiation. This prevents the use of dynamic inheritance, dynamic traits,
+     * decorator pattern, returning a class instantiated in format_cul.__construct (the classname 
+     * format_cul is used under the hood) and anything else I thought of!
+     *
+     *
+     * @param string $method
+     * @param array $args
+     * @return mixed result of the function called.
+     */
+    protected function call_base_function ($method, $args) {
+        $function = $this->baseclass . $method;
 
-
-
-
-
+        if (is_callable([$this, $function])) {
+            return call_user_func_array([$this, $function], $args);
+        } else {
+            $method = 'parent::' . $method;
+            return call_user_func_array([$this, $method], $args);
+        }        
+    }
 }
 
 /**
