@@ -1,0 +1,301 @@
+// sass --watch styles.scss:../styles.css 
+
+/*// @import "../../../../theme/boost/scss/bootstrap/_variables.scss";*/
+/*@import "ctopics.scss";*/
+@import "colours.scss";
+@import "mixins.scss";
+@import "dashboard.scss";
+
+body.format-cul {
+    .course-content ul.ctopics {
+        li.section,
+        li#toggle-all {
+            margin: 4px 1px 1px 1px;
+            border-bottom: none;
+            list-style: none;
+            .content {
+                // Default for non tablets / mobiles.  If the language file has 'culsidewidth' for the current language, then will be set in format.php. 
+                margin: 0 !important;
+                padding: 0 !important;
+                .toggle {
+                    background-color: #eceeef; // @TODO
+                    min-height: 7em;
+                    &:hover {
+                        background-color: #f4f4f4; // @TODO
+                    }
+                    span {
+                        text-align: left;
+                    }
+                }
+                /* Icon sets.  Note: Background images for the settings - does not work in Chrome or Safari - known issue. */
+                /* Arrow icon set. */
+                .toggle-arrow {
+                    span.toggle_closed, 
+                    span.toggle_open {
+                        background-image: url([[pix:t/expanded]]); /* JavaScript disabled */
+                    }
+                    h4 span {
+                        cursor: pointer;
+                        font-size: 1.4rem;
+                        &.off {
+                            background-image: url([[pix:t/expanded]]);
+                        //     &:hover {
+                        //         background-image: url([[pix:t/collapsed]]);
+                        //     }
+                        }
+                        &.on{
+                            background-image: url([[pix:t/collapsed]]);
+                        //     &:hover {
+                        //         background-image: url([[pix:t/expanded]]);
+                        //     }
+                        }
+                    }           
+                }
+                .sectionhead {
+                    position: relative;
+                    width: auto;
+                    margin: 2px;               
+                    padding-bottom: 1.5em;
+                    .summary_open {
+                        .truncate {
+                            display: none;
+                        }
+                        .no-overflow {
+                            display: inline-block;
+                        }
+                    }
+                    .summary_closed {
+                        .truncate {
+                            display: inline-block;
+                            overflow: hidden;
+                            height: 3.4em;
+                            width: 100%;
+                            line-height: 16px;
+                            &::before {
+
+                            }
+                            &::after {
+                                content: "\02026";
+                                float: right;
+                                position: relative;
+                                top: -16px;
+                                left: 100%;
+                                width: 50%;
+                                margin-left: -50%;
+                                padding-right: 5px;
+                                text-align: right;
+                                @include gradient-horizontal(rgba($white, 0), $grey, 0, 50%);
+                            }
+                            > *:first-child {
+                                float: right;
+                                width: 100%;
+                                margin-left: -5px;
+                            }
+                        }
+                        .no-overflow {
+                            display: none;
+                        }
+                    }
+                    h3.sectionname {
+                        margin: 0 !important;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        font-size: 1.25rem;
+                        span.quickediticon img {
+                            background: transparent;
+                            border: none;
+                        }
+                    }
+                    .section-summary-activities {
+                        position: absolute;
+                        right: 4px;
+                        bottom: 0;
+                        margin-right: 4px;
+                        .activity-count {
+                            color: $nearlyblack;
+                        }
+                    }
+                    .section-summary-progress {
+                        position: absolute;
+                        left: 31px;
+                        bottom: 0;
+                        margin-right: 4px;
+                        .activity-count {
+                            color: $nearlyblack;
+                        }
+                    }
+                    &:hover {
+                        .summary_closed {
+                            .truncate {
+                                &::after {
+                                    @include gradient-horizontal(rgba($white, 0), $darkgrey, 0, 50%);
+                                }
+                            }
+                        }
+                    }
+                }
+                .sectionbody {
+                    margin: 2px;
+                    background-color: $white;
+                    .summary_open {
+                        margin-left: 0.2em;
+                        padding-left: 0;
+                        padding-top: 1em;
+                        .truncate {
+                            display: none;
+                        }
+                        .no-overflow {
+                            display: inline-block;
+                        }
+                    }
+                    .summary_closed {
+                        .truncate {
+                            display: none;
+                        }
+                        .no-overflow {
+                            display: none;
+                        }
+                    }
+                    .section-modchooser {
+                        margin-right: 4px;
+                    }
+                    .activity {
+                        margin: 0.5em 0;
+                    }
+                }
+                .summary {
+                    margin-left: .2em;
+                    margin-right: .2em;
+                    padding-left: 28px;
+                    background-color: transparent!important;
+                    border: none;
+                }
+            }
+            &.sectionhidden {
+                background-color: #eceeef; // @TODO
+            }
+            .side {
+                padding: 0;
+                a:first-of-type > .icon {
+                    margin-left: 0;
+                }
+            }        
+        }
+    }
+    .insertsection {
+        text-align: center;
+        .sectionbutton {
+            display: inline-block;
+            margin: 1rem;
+        }
+    }
+}
+
+body.format-cul.jsenabled {
+    .course-content ul.ctopics li.section .content {
+        .toggle-arrow {
+            span.toggle_closed {
+                background-image: url([[pix:t/collapsed]]);
+            }
+            span.toggle_open {
+                background-image: url([[pix:t/expanded]]);
+            }
+        }
+    }
+}
+
+body.format-cul.editing .course-content ul.ctopics {
+    li.section {
+        .content {
+            /* Default for non tablets / mobiles.  If the language file has 'culsidewidth' for the current language, then will be set in format.php. */
+            margin: 0 40px !important;
+            padding: 0 !important;
+            .inplaceeditable.inplaceeditingon .editinstructions {
+                margin-top: -30px;
+            }
+
+        }
+        .side {
+            padding: 10px 0 0 0;
+            .fa,
+            .section-handle {
+                padding: 2px 0;
+            }
+        }
+        &.current {
+            border-radius: 0;
+            .side {
+                .fa,
+                .section-handle {
+                    /*color: $white;*/
+                }
+            }
+        }
+    }
+}
+
+body.format-cul#page-admin-setting-formatsettingcul select#id_s_format_cul_defaulttoggleiconset option[value="arrow"], 
+body#page-course-edit select#id_toggleiconset option[value="arrow"] {
+    background-image: url([[pix:t/collapsed]]);
+}
+
+
+.course-content ul.ctopics li.section .content .toggle span.the_toggle, #toggle-all .content h4 span {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    margin: 0 4px;
+}
+#toggle-all .content .sectionbody h4 span.tc-medium,
+.course-content ul.ctopics li.section .content .toggle span.tc-medium {
+    background-size: 24px 24px;
+}
+/* -- Set the clickable element of the Toggle -- */
+.course-content ul.ctopics li.section .content .toggle span.the_toggle {
+    display: block;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    width: auto;
+}
+.course-content ul.ctopics li.section .content .toggle span.the_toggle.tc-medium {
+    padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
+    padding-right: 24px;
+}
+.course-content ul.ctopics li.section .content .toggle span.the_toggle h3,
+.course-content ul.ctopics li.section .content.sectionhidden h3 {
+    margin: 0;
+    word-wrap: break-word;
+}
+.course-content ul.ctopics li.section .content .toggle span.the_toggle h3.sectionname,
+.course-content ul.ctopics li.section .content.sectionhidden h3.sectionname {
+    color: inherit;
+    margin: 4px;
+}
+#toggle-all .content .sectionbody h4 span.tc-medium {
+    padding-left: 26px; /* The 26px allows the arrow to be with the text next to it. */
+    padding-right: 26px;
+}
+.course-content ul.ctopics li.section .right a {
+    display: block;  /* So that section_right_content() does not implode with 'br's and get too many when the up arrow is removed by JS. */
+}
+
+
+.course-content ul.ctopics li.current.main .right {
+    padding: 0 0 0 0; /* Cancel out effect of above when having to use 'left' side selector for getting the correct text colour on the right for the current section.  This is because the selector '.course-content .current .left' defines the colour in the theme and therefore any CT specific 'right' implementation would not work for all themes. */
+}
+
+.course-content ul.ctopics li.section .right,
+.course-content ul.ctopics li.tcsection .right {
+    float:right;
+}
+
+.course-content ul.ctopics li.section .right {
+    line-height: 1.3;
+}
+
+.course-content ul.ctopics li.section .right a {
+    display: block;  /* So that section_right_content() does not implode with 'br's and get too many when the up arrow is removed by JS. */
+}
+
+.course-content ul.ctopics li.section .right a img.hide{
+    display: inline;  /* CONTRIB-5817 - Align the eye icon. */
+}

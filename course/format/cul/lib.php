@@ -32,6 +32,7 @@ require_once($CFG->dirroot. '/course/format/topics/lib.php');
 require_once($CFG->dirroot. '/course/format/weeks/lib.php');
 require_once($CFG->dirroot. '/course/format/cul/topics_trait.php');
 require_once($CFG->dirroot. '/course/format/cul/weeks_trait.php');
+require_once($CFG->dirroot . '/course/format/cul/dashboard/lib.php');
 
 define('FORMATTOPICS', 1);
 define('FORMATWEEKS', 2);
@@ -90,6 +91,17 @@ class format_cul extends format_base {
 
         $this->baseclass = $baseclasses[$baseclass];
     }
+
+    /**
+     * Returns true if this course format uses sections
+     *
+     * @return bool
+     */
+    public function uses_sections() {
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
+    }    
 
     /**
      * Returns the display name of the given section that the course prefers.
@@ -204,6 +216,7 @@ class format_cul extends format_base {
      */
     public function course_format_options($foreditform = false) { 
         static $courseformatoptions = false;
+
         if ($courseformatoptions === false) {
 
             $courseformatoptions = [
@@ -213,6 +226,10 @@ class format_cul extends format_base {
                 ]
             ];
         }
+
+        // Splice in the dashboard options.
+        $dashboard = new format_cul_dashboard();
+        $dashboard->set_dashboard_options($courseformatoptions);
 
         if ($foreditform && !isset($courseformatoptions['baseclass']['label'])) {
             $baseclasses = [
@@ -229,8 +246,13 @@ class format_cul extends format_base {
                     'element_attributes' => [$baseclasses]
                 ]
             ];
+
+            // Splice in the dashboard edit options.
+            $dashboard->set_dashboard_edit_options($courseformatoptionsedit);
             $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
         }
+
+        
 
         $args = func_get_args();
         $pcourseformatoptions = $this->call_base_function(__FUNCTION__, $args);
@@ -255,12 +277,33 @@ class format_cul extends format_base {
 
         $args = func_get_args();
         $elements = $this->call_base_function(__FUNCTION__, [&$mform, $forsection]);
-
         // Weekly format unsets a key which leads to an error as the 
         // combined parent and child array have a gap in the key sequence.
         // /course/edit_form.php #373.
         // So we reindex the array.
         $elements = array_values($elements);
+
+        if ($forsection == false) {
+            global $USER;
+  
+            // Convert saved course_format_options value back to an array to set the value.
+            if ($selectmoduleleaders = $mform->getElementValue('selectmoduleleaders')) {
+                if (!is_array($selectmoduleleaders)) {
+                    $mform->setDefault('selectmoduleleaders', explode(',', $selectmoduleleaders ));
+                } else {
+                    $mform->setDefault('selectmoduleleaders', $selectmoduleleaders);
+                }
+            }
+
+            // Put module leader setting in own dropdown.
+            $selectmoduleleaderhdr = $mform->addElement('header', 'selectmoduleleadershdr', get_string('setselectmoduleleadershdr', 'format_cul'));
+            $mform->addHelpButton('selectmoduleleadershdr', 'setselectmoduleleadershdr', 'format_cul', '', true);
+            array_splice($elements, -1, 0, [$selectmoduleleaderhdr]);
+
+            // Put dashboard settings in own dropdown.
+            $dashboardhdr = $mform->addElement('header', 'dashboardhdr', get_string('setdashboardhdr', 'format_cul'));
+            array_splice($elements, 3, 0, [$dashboardhdr]);
+        }        
 
         return $elements;
     }
@@ -409,7 +452,7 @@ class format_cul extends format_base {
     }
 
     /**
-     * There is no way to dyanamically inherit from a choice of course formats. So to ease
+     * There is no way to dynamically inherit from a choice of course formats. So to ease
      * upgrades, the methods of each course format we may want to inherit from have been
      * copied into traits. Each function has been prepended with the format name eg
      * format_weeks_section_action(). This function can then use the format_cul.baseclass 

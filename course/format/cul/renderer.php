@@ -25,7 +25,10 @@
 
 
 defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot.'/course/format/renderer.php');
+
+use format_cul\output\dashboard;
 
 /**
  * Basic renderer for topics format.
@@ -55,8 +58,18 @@ class format_cul_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function start_section_list() {
-        // @TODO
-        return html_writer::start_tag('ul', array('class' => 'topics'));
+        global $COURSE;
+
+        $culconfig = course_get_format($COURSE)->get_format_options();
+        // $this->settings = $this->get_format_options();
+
+        $o = '';
+        $dashboard = new dashboard($COURSE, $culconfig);
+        $templatecontext = $dashboard->export_for_template($this);
+        $o .= $this->render_from_template('format_cul/dashboard', $templatecontext);
+        $o .=  html_writer::start_tag('ul', array('class' => 'topics'));
+
+        return $o;
     }
 
     /**
@@ -309,7 +322,7 @@ class format_cul_renderer extends format_section_renderer_base {
 
             $icon = $this->output->pix_icon('t/add', $straddsections);
             echo html_writer::link($url, $icon . $straddsections,
-                array('class' => 'add-sections', 'data-add-sections' => $straddsections));
+                array('class' => 'add_section', 'data-add-section' => $straddsections));
             echo html_writer::end_tag('div');
         }
     }    

@@ -36,12 +36,15 @@ M.course.format.get_config = function() {
 M.course.format.swap_sections = function(Y, node1, node2) {
     var CSS = {
         COURSECONTENT : 'course-content',
-        SECTIONADDMENUS : 'section_add_menus'
+        SECTIONADDMENUS : 'section_add_menus',
+        ADDSECTION : 'add_section'
     };
 
     var sectionlist = Y.Node.all('.'+CSS.COURSECONTENT+' '+M.course.format.get_section_selector(Y));
     // Swap menus.
     sectionlist.item(node1).one('.'+CSS.SECTIONADDMENUS).swap(sectionlist.item(node2).one('.'+CSS.SECTIONADDMENUS));
+    // Swap add section link.
+    sectionlist.item(node1).one('.'+CSS.ADDSECTION).swap(sectionlist.item(node2).one('.'+CSS.ADDSECTION));
 }
 
 /**

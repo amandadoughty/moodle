@@ -1,0 +1,21 @@
+<li>
+    <span class="dash-link {{class}}">
+        {{^attrs.class}}
+        <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
+            <i class="fa {{icon}}"></i>
+        </a>
+        {{/attrs.class}}
+        {{#attrs.class}}
+        <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
+            <span class="fa-stack">                
+                <i class="fa {{icon}} fa-stack-1x"></i>
+                <i class="fa fa-ban fa-stack-2x"></i>
+            </span>
+        </a>
+        {{/attrs.class}}
+        <a title="{{attrs.title}}" class="dash-text {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
+            {{text}}
+        </a>
+        {{> format_cul/editlink}}
+    </span>
+</li>
