@@ -237,23 +237,27 @@ class format_cul_dashboard {
 
         $records = $DB->get_recordset_sql($sql, $params);
         $ltitypes = array();
-
+// die(print_r($records));
         foreach($records as $record) {
-            $type = lti_get_type($record->typeid);
+            if (!$record->typeid) {
+                $ltitypes[$record->typeid] = $plurals[$record->name];
+            } else {
+                $type = lti_get_type($record->typeid);
 
-            if ($type) {
-                if (array_key_exists($record->typeid, $ltitypes)) {
-                    continue;
-                }
+                if ($type) {
+                    if (array_key_exists($record->typeid, $ltitypes)) {
+                        continue;
+                    }
 
-                if (!$record->typeid) {
-                    $ltitypes[$record->typeid] = $plurals[$record->name];
-                } else {
-                    $ltitypes[$type->id] = $type->name;
+                    // if (!$record->typeid) {
+                    //     $ltitypes[$record->typeid] = $plurals[$record->name];
+                    // } else {
+                        $ltitypes[$type->id] = $type->name;
+                    // }
                 }
-            }          
+            }      
         }       
-
+// die(print_r($ltitypes));
         return $ltitypes;
     }
 

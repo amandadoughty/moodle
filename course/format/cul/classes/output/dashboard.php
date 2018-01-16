@@ -578,7 +578,7 @@ class dashboard implements templatable, renderable {
 
         foreach ($modfullnames as $modname => $modfullname) {
             if($modname == 'lti') {
-                $activities[] = $this->exttools_modules_display($course, $modinfo);
+                $activities = $this->exttools_modules_display($course, $modinfo);
                 continue;
             }
 
@@ -729,7 +729,7 @@ class dashboard implements templatable, renderable {
                     $icon = \html_writer::empty_tag('img', array('src' => $modnames['type']->icon, 'alt' => $modnames['type']->name, 'class' => 'iconsmall'));
                 }
 
-                $activities = [
+                $activities[] = [
                     'url' => $url,
                     'icon' => $icon,
                     'text' => $modnames['modfullname'],
