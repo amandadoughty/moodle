@@ -1,13 +1,13 @@
 // sass --watch styles.scss:../styles.css 
 
 /*// @import "../../../../theme/boost/scss/bootstrap/_variables.scss";*/
-/*@import "ctopics.scss";*/
+/*@import "cul.scss";*/
 @import "colours.scss";
 @import "mixins.scss";
 @import "dashboard.scss";
 
 body.format-cul {
-    .course-content ul.ctopics {
+    .course-content ul.cul {
         li.section,
         li#toggle-all {
             margin: 4px 1px 1px 1px;
@@ -192,7 +192,7 @@ body.format-cul {
 }
 
 body.format-cul.jsenabled {
-    .course-content ul.ctopics li.section .content {
+    .course-content ul.cul li.section .content {
         .toggle-arrow {
             span.toggle_closed {
                 background-image: url([[pix:t/collapsed]]);
@@ -204,7 +204,7 @@ body.format-cul.jsenabled {
     }
 }
 
-body.format-cul.editing .course-content ul.ctopics {
+body.format-cul.editing .course-content ul.cul {
     li.section {
         .content {
             /* Default for non tablets / mobiles.  If the language file has 'culsidewidth' for the current language, then will be set in format.php. */
@@ -240,33 +240,33 @@ body#page-course-edit select#id_toggleiconset option[value="arrow"] {
 }
 
 
-.course-content ul.ctopics li.section .content .toggle span.the_toggle, #toggle-all .content h4 span {
+.course-content ul.cul li.section .content .toggle span.the_toggle, #toggle-all .content h4 span {
     background-color: transparent;
     background-repeat: no-repeat;
     margin: 0 4px;
 }
 #toggle-all .content .sectionbody h4 span.tc-medium,
-.course-content ul.ctopics li.section .content .toggle span.tc-medium {
+.course-content ul.cul li.section .content .toggle span.tc-medium {
     background-size: 24px 24px;
 }
 /* -- Set the clickable element of the Toggle -- */
-.course-content ul.ctopics li.section .content .toggle span.the_toggle {
+.course-content ul.cul li.section .content .toggle span.the_toggle {
     display: block;
     padding-bottom: 6px;
     padding-top: 6px;
     width: auto;
 }
-.course-content ul.ctopics li.section .content .toggle span.the_toggle.tc-medium {
+.course-content ul.cul li.section .content .toggle span.the_toggle.tc-medium {
     padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
     padding-right: 24px;
 }
-.course-content ul.ctopics li.section .content .toggle span.the_toggle h3,
-.course-content ul.ctopics li.section .content.sectionhidden h3 {
+.course-content ul.cul li.section .content .toggle span.the_toggle h3,
+.course-content ul.cul li.section .content.sectionhidden h3 {
     margin: 0;
     word-wrap: break-word;
 }
-.course-content ul.ctopics li.section .content .toggle span.the_toggle h3.sectionname,
-.course-content ul.ctopics li.section .content.sectionhidden h3.sectionname {
+.course-content ul.cul li.section .content .toggle span.the_toggle h3.sectionname,
+.course-content ul.cul li.section .content.sectionhidden h3.sectionname {
     color: inherit;
     margin: 4px;
 }
@@ -274,28 +274,67 @@ body#page-course-edit select#id_toggleiconset option[value="arrow"] {
     padding-left: 26px; /* The 26px allows the arrow to be with the text next to it. */
     padding-right: 26px;
 }
-.course-content ul.ctopics li.section .right a {
+.course-content ul.cul li.section .right a {
     display: block;  /* So that section_right_content() does not implode with 'br's and get too many when the up arrow is removed by JS. */
 }
 
 
-.course-content ul.ctopics li.current.main .right {
+.course-content ul.cul li.current.main .right {
     padding: 0 0 0 0; /* Cancel out effect of above when having to use 'left' side selector for getting the correct text colour on the right for the current section.  This is because the selector '.course-content .current .left' defines the colour in the theme and therefore any CT specific 'right' implementation would not work for all themes. */
 }
 
-.course-content ul.ctopics li.section .right,
-.course-content ul.ctopics li.tcsection .right {
+.course-content ul.cul li.section .right,
+.course-content ul.cul li.tcsection .right {
     float:right;
 }
 
-.course-content ul.ctopics li.section .right {
+.course-content ul.cul li.section .right {
     line-height: 1.3;
 }
 
-.course-content ul.ctopics li.section .right a {
+.course-content ul.cul li.section .right a {
     display: block;  /* So that section_right_content() does not implode with 'br's and get too many when the up arrow is removed by JS. */
 }
 
-.course-content ul.ctopics li.section .right a img.hide{
+.course-content ul.cul li.section .right a img.hide{
     display: inline;  /* CONTRIB-5817 - Align the eye icon. */
+}
+
+
+
+
+/* cul styles */
+.course-content ul.cul {
+    margin: 0;
+    list-style: none;
+}
+
+.course-content ul.cul li.section .content {
+    margin: 0 40px;
+}
+
+.course-content ul.cul li.section .left,
+.course-content ul.cul li.section .right {
+    width: 40px;
+    padding: 0 6px;
+}
+
+.course-content ul.cul li.section .left {
+    padding-top: 22px;
+    text-align: right;
+}
+
+.jsenabled .course-content ul.cul li.section .left,
+.jsenabled .course-content ul.cul li.section .right {
+    width: auto;
+}
+
+.course-content ul.cul li.section .left .section-handle img.icon {
+    padding: 0;
+    vertical-align: baseline;
+}
+
+.course-content ul.cul li.section .section_action_menu .textmenu,
+.course-content ul.cul li.section .section_action_menu .menu-action-text {
+    white-space: nowrap;
 }

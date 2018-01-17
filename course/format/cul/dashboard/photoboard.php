@@ -22,11 +22,11 @@
  * @package core_user
  */
 
-require_once('../../../config.php');
-require_once($CFG->libdir.'/tablelib.php');
-require_once($CFG->libdir.'/filelib.php');
-require_once($CFG->dirroot . '/course/format/culcourse/locallib.php');
-require_once($CFG->dirroot . '/course/format/culcourse/lib.php');
+require_once('../../../../config.php');
+require_once($CFG->libdir . '/tablelib.php');
+require_once($CFG->libdir . '/filelib.php');
+require_once($CFG->dirroot . '/course/format/cul/dashboard/locallib.php');
+require_once($CFG->dirroot . '/course/format/cul/lib.php');
 // require_once($CFG->dirroot . '/course/renderer.php');
 
 define('USER_SMALL_CLASS', 20);   // Below this is considered small.
@@ -45,7 +45,7 @@ $roleid       = optional_param('roleid', 0, PARAM_INT); // Optional roleid, 0 me
 $contextid    = optional_param('contextid', 0, PARAM_INT); // One of this or.
 $courseid     = optional_param('id', 0, PARAM_INT); // This are required.
 
-$PAGE->set_url('/course/format/culcourse/photoboard.php', array(
+$PAGE->set_url('/course/format/cul/dashboard/photoboard.php', array(
         'page' => $page,
         'perpage' => $perpage,
         'mode' => $mode,
@@ -55,7 +55,7 @@ $PAGE->set_url('/course/format/culcourse/photoboard.php', array(
         'contextid' => $contextid,
         'id' => $courseid));
 
-$PAGE->add_body_class('path-format-culcourse-photos');
+$PAGE->add_body_class('path-format-cul-photos');
 
 if ($contextid) {
     $context = context::instance_by_id($contextid, MUST_EXIST);
@@ -76,7 +76,7 @@ require_login($course);
 $systemcontext = context_system::instance();
 $isfrontpage = ($course->id == SITEID);
 
-$courseformat = course_get_format($course)->get_settings();
+$courseformat = course_get_format($course)->get_format_options();
 
 if($courseformat['selectmoduleleaders']) {
     $moduleleaders = explode(',', $courseformat['selectmoduleleaders']);
@@ -91,9 +91,9 @@ if ($isfrontpage) {
     require_capability('moodle/course:viewparticipants', $context);
 }
 
-$rolenamesurl = new moodle_url('/course/format/culcourse/photoboard.php', array('contextid' => $context->id, 'mode' => $mode));
+$rolenamesurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array('contextid' => $context->id, 'mode' => $mode));
 
-if (has_capability('format/culcourse:viewallphotoboard', $context)) {
+if (has_capability('format/cul:viewallphotoboard', $context)) {
     $rolenames = role_fix_names(get_profile_roles($context), $context, ROLENAME_ALIAS, true);
     $rolenames[0] = get_string('allparticipants');
 } else {
@@ -110,7 +110,7 @@ if (has_capability('format/culcourse:viewallphotoboard', $context)) {
 
 // Make sure other roles may not be selected by any means.
 if (empty($rolenames[$roleid])) {
-    if (has_capability('format/culcourse:viewallphotoboard', $context) && !empty($rolenames[0])) {
+    if (has_capability('format/cul:viewallphotoboard', $context) && !empty($rolenames[0])) {
         redirect ($rolenamesurl);
     } else {
         print_error('noparticipants');
@@ -190,7 +190,7 @@ if ($isseparategroups and (!$currentgroup) ) {
 
 // Should use this variable so that we don't break stuff every time a variable is added or changed.
 $baseurl = new moodle_url(
-    '/course/format/culcourse/photoboard.php',
+    '/course/format/cul/dashboard/photoboard.php',
     array(
         'contextid' => $context->id,
         'roleid' => $roleid,
@@ -256,11 +256,11 @@ $controlstable->attributes['class'] = 'controls';
 $controlstable->cellspacing = 0;
 $controlstable->data[] = new html_table_row();
 
-if (has_capability('format/culcourse:viewallphotoboard', $context)) {
+if (has_capability('format/cul:viewallphotoboard', $context)) {
     // Print my course menus.
     if ($mycourses = enrol_get_my_courses()) {
         $courselist = array();
-        $popupurl = new moodle_url('/course/format/culcourse/photoboard.php?roleid='.$roleid.'&sifirst=&silast=');
+        $popupurl = new moodle_url('/course/format/cul/dashboard/photoboard.php?roleid='.$roleid.'&sifirst=&silast=');
         foreach ($mycourses as $mycourse) {
             $coursecontext = context_course::instance($mycourse->id);
             $courselist[$mycourse->id] = format_string($mycourse->shortname, true, array('context' => $coursecontext));
@@ -487,7 +487,7 @@ $userlist = $DB->get_recordset_sql("$select $from $rolewhere $sort", $roleparams
 // If there are multiple Roles in the course, then show a drop down menu for switching.
 if (count($rolenames) > 1) {
     echo '<div class="rolesform">';
-    echo '<label for="rolesform_jump">'.get_string('roles', 'format_cul').'&nbsp;</label>';
+    echo '<label for="rolesform_jump">'.get_string('roles').'&nbsp;</label>';
     echo $OUTPUT->single_select($rolenamesurl, 'roleid', $roleoptions, $roleid, null, 'rolesform');
     echo '</div>';
 
@@ -673,8 +673,8 @@ if ($mode === MODE_USERDETAILS) {    // Print detailed listing.
                     }
 
                     $row->cells[1]->text .= get_string('phone') . get_string('labelsep', 'langconfig') . $stafftelephone . '<br/>';
-                    $row->cells[1]->text .= get_string('officehours', 'block_culcourse_dashboard') . get_string('labelsep', 'langconfig') . $staffofficehrs . '<br/>';
-                    $row->cells[1]->text .= get_string('buildinglocation', 'block_culcourse_dashboard') . get_string('labelsep', 'langconfig') . $stafflocation . '<br/>';
+                    $row->cells[1]->text .= get_string('officehours', 'block_cul_dashboard') . get_string('labelsep', 'langconfig') . $staffofficehrs . '<br/>';
+                    $row->cells[1]->text .= get_string('buildinglocation', 'block_cul_dashboard') . get_string('labelsep', 'langconfig') . $stafflocation . '<br/>';
                 }
 
                 $showgroups = !isset($hiddenfields['allusergroups']) || (isset($hiddenfields['allusergroups']) && has_capability('moodle/course:viewhiddenuserfields', $context, $user));

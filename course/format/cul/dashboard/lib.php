@@ -49,7 +49,7 @@ class format_cul_dashboard {
             'lecturers',
             'courseofficers',
             'media'
-            ];
+        ];
 
         $this->modfullnames = self::format_cul_get_modfullnames($COURSE);
         $this->ltitypes = self::format_cul_get_ltitypes($COURSE);
@@ -61,37 +61,32 @@ class format_cul_dashboard {
         $dashboardoptions = [];
 
         foreach ($this->elements as $element) {
-            $dashboardoptions['show' . $element] = array(
+            $dashboardoptions['show' . $element] = [
                 'default' => get_config('format_cul', 'defaultshow' . $element),
                 'type' => PARAM_INT,
-            );
+            ];
         }
 
         foreach ($this->modfullnames as $mod => $modplural) {
-            $dashboardoptions['show' . $mod] = array(
+            $dashboardoptions['show' . $mod] = [
                 'default' => 2,
                 'type' => PARAM_INT,
-            );
+            ];
         }
 
         foreach ($this->ltitypes as $typeid => $name) {
-            $dashboardoptions['showltitype' . $typeid] = array(
+            $dashboardoptions['showltitype' . $typeid] = [
                 'default' => 2,
                 'type' => PARAM_INT,
-            );
+            ];
         }
 
-        $dashboardoptions['selectmoduleleaders'] = array(
+        $dashboardoptions['selectmoduleleaders'] = [
             'default' => null,
             'type' => PARAM_RAW,
-        );
+        ];
 
-        # Insert at offset 4.
-        $offset = 4;
-        $courseformatoptions = array_slice($courseformatoptions, 0, $offset, true) +
-            $dashboardoptions +
-            array_slice($courseformatoptions, $offset, NULL, true);
-
+        $courseformatoptions = $courseformatoptions + $dashboardoptions;
     }
 
     public function set_dashboard_edit_options(&$courseformatoptionsedit) {
@@ -101,54 +96,60 @@ class format_cul_dashboard {
         $coursecontext = context_course::instance($COURSE->id);
         
         foreach ($this->elements as $element) {
-            $courseformatoptionsedit['show' . $element] = array(
+            $courseformatoptionsedit['show' . $element] = [
                 'label' => new lang_string('setshow' . $element, 'format_cul'),
                 'help' => 'setshow' . $element,
                 'help_component' => 'format_cul',
                 'element_type' => 'select',
-                'element_attributes' => array(
-                    array(1 => new lang_string('no'),
-                          2 => new lang_string('yes'))
-                )
-            );
+                'element_attributes' => [
+                    [
+                        1 => new lang_string('no'),
+                        2 => new lang_string('yes')
+                    ]
+                ]
+            ];
         }
 
         foreach ($this->modfullnames as $mod => $modplural) {
-            $courseformatoptionsedit['show' . $mod] = array(
+            $courseformatoptionsedit['show' . $mod] = [
                 'label' => new lang_string('setshowmodname', 'format_cul', $modplural),
                 'help' => 'setshowmod',
                 'help_component' => 'format_cul',
                 'element_type' => 'select',
-                'element_attributes' => array(
-                    array(1 => new lang_string('no'),
-                          2 => new lang_string('yes'))
-                )
-            );
+                'element_attributes' => [
+                    [
+                        1 => new lang_string('no'),
+                        2 => new lang_string('yes')
+                    ]
+                ]
+            ];
         }
 
         foreach ($this->ltitypes as $typeid => $name) {
-            $courseformatoptionsedit['showltitype' . $typeid] = array(
+            $courseformatoptionsedit['showltitype' . $typeid] = [
                 'label' => new lang_string('setshowmodname', 'format_cul', $name),
                 'help' => 'setshowmod',
                 'help_component' => 'format_cul',
                 'element_type' => 'select',
-                'element_attributes' => array(
-                    array(1 => new lang_string('no'),
-                          2 => new lang_string('yes'))
-                )
-            );
+                'element_attributes' => [
+                    [
+                        1 => new lang_string('no'),
+                        2 => new lang_string('yes')
+                    ]
+                ]
+            ];
         }
 
         // Get all the lecturers.
-        $lecturers = array();
-        $lecturerrole = $DB->get_record('role', ['shortname'=>'lecturer']);
+        $lecturers = [];
+        $lecturerrole = $DB->get_record('role', ['shortname' => 'lecturer']);
 
         if ($lecturerrole) {
             $lecturers = get_role_users($lecturerrole->id, $coursecontext);
         }
 
         // Create a multi select box?
-        $selectbox = array();
+        $selectbox = [];
 
         if (count($lecturers)) {
             foreach ($lecturers as $lecturer) {
@@ -169,15 +170,33 @@ class format_cul_dashboard {
             ]
         ];
 
-        // array_splice($courseformatoptionsedit, 4, 0, $dashboardoptionsedit);
-
-        # Insert at offset 4.
-        $offset = 4;
-        $courseformatoptionsedit = array_slice($courseformatoptionsedit, 0, $offset, true) +
-            $dashboardoptionsedit +
-            array_slice($courseformatoptionsedit, $offset, NULL, true);
-
+        $courseformatoptionsedit = $courseformatoptionsedit + $dashboardoptionsedit;
     }
+
+
+   /**
+     * Updates format options for a course
+     *
+     * In case if course format was changed to 'weeks', we try to copy options
+     * 'coursedisplay', 'numsections' and 'hiddensections' from the previous format.
+     * If previous course format did not have 'numsections' option, we populate it with the
+     * current number of sections
+     *
+     * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
+     * @param stdClass $oldcourse if this function is called from {@link update_course()}
+     *     this object contains information about the course before update
+     * @return bool whether there were any changes to the options values
+     */
+    public function update_dashboard_options($data, $oldcourse = null) {
+        // Convert the form array to a string to enable saving to course_format_options table.
+        // Without this, an error is thrown:
+        // Warning: mysqli::real_escape_string() expects parameter 1 to be string, array given
+        if (isset($data->selectmoduleleaders) && is_array($data->selectmoduleleaders)) {
+            $data->selectmoduleleaders = join(',', $data->selectmoduleleaders);
+        }
+
+        return $data;
+    }    
 
     /**
      * TODO
@@ -186,8 +205,8 @@ class format_cul_dashboard {
         $modinfo = get_array_of_activities($course->id);
         $plurals = get_module_types_names(true);
 
-        $modfullnames = array();
-        $archetypes   = array();
+        $modfullnames = [];
+        $archetypes   = [];
 
         foreach($modinfo as $cm) {
             if ($cm->mod == 'lti') {
@@ -236,8 +255,8 @@ class format_cul_dashboard {
         $params = ['courseid' => $course->id];
 
         $records = $DB->get_recordset_sql($sql, $params);
-        $ltitypes = array();
-// die(print_r($records));
+        $ltitypes = [];
+
         foreach($records as $record) {
             if (!$record->typeid) {
                 $ltitypes[$record->typeid] = $plurals[$record->name];
@@ -249,16 +268,11 @@ class format_cul_dashboard {
                         continue;
                     }
 
-                    // if (!$record->typeid) {
-                    //     $ltitypes[$record->typeid] = $plurals[$record->name];
-                    // } else {
-                        $ltitypes[$type->id] = $type->name;
-                    // }
+                    $ltitypes[$type->id] = $type->name;
                 }
             }      
         }       
-// die(print_r($ltitypes));
+
         return $ltitypes;
     }
-
 }

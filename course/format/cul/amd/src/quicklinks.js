@@ -17,7 +17,7 @@
  * Helper functions for CUL Course Format
  *
  * @package    course/format
- * @subpackage culcourse
+ * @subpackage cul
  * @copyright  2016 Amanda Doughty <amanda.doughty.1@city.ac.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *

@@ -67,7 +67,7 @@ class format_cul_renderer extends format_section_renderer_base {
         $dashboard = new dashboard($COURSE, $culconfig);
         $templatecontext = $dashboard->export_for_template($this);
         $o .= $this->render_from_template('format_cul/dashboard', $templatecontext);
-        $o .=  html_writer::start_tag('ul', array('class' => 'topics'));
+        $o .=  html_writer::start_tag('ul', array('class' => 'cul'));
 
         return $o;
     }

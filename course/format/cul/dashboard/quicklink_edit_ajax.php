@@ -18,7 +18,7 @@
  * Quicklinks settings for CUL Course Format
  *
  * @package    course/format
- * @subpackage culcourse
+ * @subpackage cul
  * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>, Tim Gagen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *

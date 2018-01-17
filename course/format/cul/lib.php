@@ -49,7 +49,6 @@ class format_cul extends format_base {
     use format_topics_trait;
     use format_weeks_trait;
 
-
     /** @var string baseformat used for this course. Please note that it can be different from
      * course.format field if course referes to non-existing or disabled format */
     protected $baseclass;
@@ -66,8 +65,6 @@ class format_cul extends format_base {
     protected function __construct($format, $courseid) {        
         global $DB;
 
-        // use topics;
-
         $baseclasses = [
             1 => 'format_topics_',
             2 => 'format_weeks_'
@@ -79,6 +76,8 @@ class format_cul extends format_base {
                                       'format' => 'cul',
                                       'name' => 'baseclass'
                                     ), 'value');
+
+        // course_get_format($course) @TODO
 
         if ($record) {
             $baseclass = $record->value;
@@ -136,9 +135,9 @@ class format_cul extends format_base {
      * @return stdClass
      */
     public function supports_ajax() {
-        // no support by default
         $ajaxsupport = new stdClass();
         $ajaxsupport->capable = true;
+
         return $ajaxsupport;
     }
 
@@ -192,17 +191,23 @@ class format_cul extends format_base {
      *     each of values is an array of block names (for left and right side columns)
      */
     public function get_default_blocks() {
+        global $DB;
 
-        // @TODO
-        global $CFG;
-        if (isset($CFG->defaultblocks)) {
-            return blocks_parse_default_blocks_list($CFG->defaultblocks);
+        $blocks = $DB->get_records('block', null, '', 'name');
+        $defaultblocks = get_config('format_cul', 'defaultblocks_cul');
+        $defaultblocks = preg_replace('/\s+/', '', $defaultblocks);
+        $defaultblocks = explode(',', $defaultblocks);
+
+        foreach ($defaultblocks as $key => $defaultblock) {
+            if (!array_key_exists($defaultblock, $blocks)) {
+                unset($defaultblocks[$key]);
+            }
         }
-        $blocknames = array(
-            BLOCK_POS_LEFT => array(),
-            BLOCK_POS_RIGHT => array()
-        );
-        return $blocknames;
+
+        return [
+            BLOCK_POS_LEFT => [],
+            BLOCK_POS_RIGHT => $defaultblocks
+        ];
     }
 
     /**
@@ -221,7 +226,7 @@ class format_cul extends format_base {
 
             $courseformatoptions = [
                 'baseclass' => [
-                    'default' => 1,
+                    'default' => get_config('format_cul', 'baseclass'),
                     'type' => PARAM_INT,
                 ]
             ];
@@ -302,13 +307,13 @@ class format_cul extends format_base {
 
             // Put dashboard settings in own dropdown.
             $dashboardhdr = $mform->addElement('header', 'dashboardhdr', get_string('setdashboardhdr', 'format_cul'));
-            array_splice($elements, 3, 0, [$dashboardhdr]);
+            array_splice($elements, 4, 0, [$dashboardhdr]);
         }        
 
         return $elements;
     }
 
-           /**
+   /**
      * Updates format options for a course
      *
      * In case if course format was changed to 'weeks', we try to copy options
@@ -322,9 +327,10 @@ class format_cul extends format_base {
      * @return bool whether there were any changes to the options values
      */
     public function update_course_format_options($data, $oldcourse = null) {
-        $args = func_get_args();
+        $dashboard = new format_cul_dashboard();
+        $data = $dashboard->update_dashboard_options($data, $oldcourse);
 
-        return $this->call_base_function(__FUNCTION__, $args);
+        return $this->call_base_function(__FUNCTION__, [$data, $oldcourse]);
     }
 
     /**

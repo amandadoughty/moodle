@@ -18,7 +18,7 @@
  * Helper functions for CUL Course Format
  *
  * @package    course/format
- * @subpackage culcourse
+ * @subpackage cul
  * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>, Tim Gagen <tim.gagen.1@city.ac.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -68,8 +68,8 @@ function format_cul_get_reading_list_url_data($course) {
     $url  = "{$path}/lists/{$codedata['year_description']}.json";
 
     // Get the config timeout values.
-    $connectiontimeout = trim(get_config('culcourse', 'connection_timeout'));
-    $transfertimeout   = trim(get_config('culcourse', 'transfer_timeout'));
+    $connectiontimeout = trim(get_config('cul', 'connection_timeout'));
+    $transfertimeout   = trim(get_config('cul', 'transfer_timeout'));
 
     $data = format_cul_get_reading_list_data($path, $url, $connectiontimeout, $transfertimeout);
 
@@ -260,7 +260,7 @@ function format_cul_get_photoboard_url($course, $roleid) {
     $cname = explode(" ",$COURSE->fullname);
     $cid = $cname[0];
     $coursecontext = context_course::instance($COURSE->id);
-    $url = new moodle_url('/course/format/culcourse/photoboard.php', array('contextid' => $coursecontext->id, 'roleid' => $roleid));
+    $url = new moodle_url('/course/format/cul/dashboard/photoboard.php', array('contextid' => $coursecontext->id, 'roleid' => $roleid));
 
     return $url;
 }
@@ -387,7 +387,7 @@ function format_cul_quicklink_visibility($courseid, $name, $value) {
         $option->courseid = $courseid;
         $option->name = $name;
         $option->value = $value;
-        $option->format = 'culcourse';
+        $option->format = 'cul';
         $DB->insert_record('course_format_options', $option);
     }
 }

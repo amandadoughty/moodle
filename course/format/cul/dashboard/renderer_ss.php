@@ -22,7 +22,7 @@
  * Toggles are persistent on a per browser session per course basis but can be made to persist longer.
  *
  * @package    course/format
- * @subpackage culcourse
+ * @subpackage cul
  * @version    See the value of '$plugin->version' in below.
  * @author     Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
@@ -33,9 +33,9 @@ namespace format_cul\output\dashboard;
 
 defined('MOODLE_INTERNAL') || die();
 // require_once($CFG->dirroot . '/course/format/renderer.php');
-// require_once($CFG->dirroot . '/course/format/culcourse/lib.php');
-// require_once($CFG->dirroot . '/course/format/culcourse/togglelib.php');
-require_once($CFG->dirroot . '/course/format/culcourse/dashboard/locallib.php');
+// require_once($CFG->dirroot . '/course/format/cul/lib.php');
+// require_once($CFG->dirroot . '/course/format/cul/togglelib.php');
+require_once($CFG->dirroot . '/course/format/cul/dashboard/locallib.php');
 
 class renderer extends \plugin_renderer_base {
 
@@ -59,7 +59,7 @@ class renderer extends \plugin_renderer_base {
 
         parent::__construct($page, $target);
         $this->config = get_config('format_cul');
-        // $this->togglelib = new culcourse_togglelib;
+        // $this->togglelib = new cul_togglelib;
         // $this->courseformat = course_get_format($page->course); // Needed for collapsed topics settings retrieval.
 
         /* Since format_cul_renderer::section_edit_controls() only displays the 'Set current section' control when editing
@@ -69,7 +69,7 @@ class renderer extends \plugin_renderer_base {
         $this->userisediting = $page->user_is_editing();
 
         if ($this->userisediting) {
-            $adminurl = new moodle_url('/course/format/culcourse/quicklink_edit_ajax.php');
+            $adminurl = new moodle_url('/course/format/cul/quicklink_edit_ajax.php');
             $arguments = array('adminurl' => $adminurl->out());
             $page->requires->js_call_amd('format_cul/quicklinks', 'initialize', array($arguments));
         }
@@ -718,7 +718,7 @@ class renderer extends \plugin_renderer_base {
                         $class = 'linkhidden';                
                 }
 
-                $url = new moodle_url('/course/format/culcourse/ltiindex.php', array('id' => $course->id, 'typeid' => $modnames['type']->id));
+                $url = new moodle_url('/course/format/cul/ltiindex.php', array('id' => $course->id, 'typeid' => $modnames['type']->id));
 
                 if (!$modnames['type']->icon) {
                     $icon = $this->output->pix_icon('icon', '', 'mod_lti', array('class' => 'icon'));

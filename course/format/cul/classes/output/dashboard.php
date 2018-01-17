@@ -22,7 +22,7 @@
  * Toggles are persistent on a per browser session per course basis but can be made to persist longer.
  *
  * @package    course/format
- * @subpackage culcourse
+ * @subpackage cul
  * @version    See the value of '$plugin->version' in below.
  * @author     Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
@@ -680,7 +680,7 @@ class dashboard implements templatable, renderable {
             if($type->id) {
                 $modfullnames[$nametype] = [
                     'modname' => $type->name,
-                    'modfullname' => $type->name . ' ' . $cm->modplural,
+                    'modfullname' => $type->name,
                     'type' => $type,
                     'icon' => $type->$iconfield
                 ];
@@ -721,7 +721,7 @@ class dashboard implements templatable, renderable {
                         $class = 'linkhidden';                
                 }
 
-                $url = new \moodle_url('/course/format/culcourse/ltiindex.php', array('id' => $course->id, 'typeid' => $modnames['type']->id));
+                $url = new \moodle_url('/course/format/cul/ltiindex.php', array('id' => $course->id, 'typeid' => $modnames['type']->id));
 
                 if (!$modnames['type']->icon) {
                     $icon = $OUTPUT->pix_icon('icon', '', 'mod_lti', array('class' => 'iconsmall'));

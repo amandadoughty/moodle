@@ -1,34 +1,446 @@
-.course-content ul.topics {
+/*// @import "../../../../theme/boost/scss/bootstrap/_variables.scss";*/
+/*@import "cul.scss";*/
+/*** Colours ***/
+/*** Dashboard ***/
+body.format-cul .course-content .dash-panel {
+  margin-bottom: 1rem; }
+  body.format-cul .course-content .dash-panel .linkscontainer ul.links {
     margin: 0;
-    list-style: none;
-}
+    padding: 2px;
+    list-style: none; }
+    body.format-cul .course-content .dash-panel .linkscontainer ul.links li {
+      display: block;
+      float: left;
+      text-align: left;
+      padding: 0;
+      margin: 0;
+      width: auto;
+      border: none; }
+      body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link {
+        position: relative;
+        display: block;
+        height: 2.5rem;
+        margin: 3px;
+        border: 1px solid #888888;
+        overflow: hidden; }
+        body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {
+          display: inline-block;
+          line-height: 2.5rem;
+          border-bottom: medium none !important;
+          /** 'disabled'/unavailable links **/ }
+          body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a i {
+            width: 100%;
+            margin: 0 auto;
+            color: #ffffff;
+            text-align: center; }
+          body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a .fa-stack {
+            width: 100%;
+            font-size: 0.7rem; }
+            body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a .fa-stack .fa.fa-stack-2x {
+              color: #888888; }
+          body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a img.iconsmall {
+            width: 1rem;
+            height: 1rem;
+            padding: 0 0.75rem;
+            margin: 0 auto; }
+          body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.nolink, body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a:hover.nolink, body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a:visited.nolink {
+            text-decoration: none !important;
+            color: #888888 !important;
+            cursor: default; }
+          body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.quicklinkedit {
+            position: absolute;
+            right: 0; }
+            body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.quicklinkedit i {
+              margin-top: 7px;
+              color: inherit; }
+              body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.quicklinkedit i:hover {
+                color: inherit; }
+          body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-icon {
+            height: 100%;
+            width: 2.5rem;
+            vertical-align: top;
+            border-right: none;
+            background: #000000; }
+          body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-text {
+            display: none; }
+          body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
+            display: none;
+            width: 2.5rem; }
+        body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link.linkhidden {
+          border: 1px dashed #333333;
+          opacity: 0.7; }
 
-.course-content ul.topics li.section .content {
-    margin: 0 40px;
-}
+body.format-cul.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {
+  /** 'disabled'/unavailable links **/ }
+  body.format-cul.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
+    display: inline-block; }
 
-.course-content ul.topics li.section .left,
-.course-content ul.topics li.section .right {
-    width: 40px;
-    padding: 0 6px;
-}
+body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arrow a.toggle_open {
+  /* JavaScript enabled */
+  background-image: url(@expanded); }
+body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arrow a.toggle_closed {
+  /* JavaScript enabled */
+  background-image: url(@collapsed); }
+body.format-cul.jsenabled .course-content ul.cul li.section .content .toggledsection {
+  display: none;
+  /* If JavaScript is enabled then this css will apply and the section will be hidden. */ }
+body.format-cul.jsenabled .course-content ul.cul li.section .content .toggledsection.sectionopen {
+  display: block; }
+body.format-cul.jsenabled .course-content ul.cul li#toggle-all {
+  /* .tcsection ? */
+  background: none repeat scroll 0 0 transparent;
+  display: block; }
+  body.format-cul.jsenabled .course-content ul.cul li#toggle-all .content h4 {
+    font-size: 1.4em; }
+    body.format-cul.jsenabled .course-content ul.cul li#toggle-all .content h4 a {
+      background-position: left; }
 
-.course-content ul.topics li.section .left {
-    padding-top: 22px;
-    text-align: right;
-}
+/* css for photoboard */
+.path-format-cul-photos table.controls td {
+  padding: 0; }
+.path-format-cul-photos .rolesform {
+  margin-bottom: 1em; }
+.path-format-cul-photos .searchform {
+  clear: both; }
+.path-format-cul-photos table.userinfobox {
+  margin-bottom: 1em; }
+  .path-format-cul-photos table.userinfobox th,
+  .path-format-cul-photos table.userinfobox td {
+    padding: 0px;
+    text-align: left; }
+    .path-format-cul-photos table.userinfobox th .username,
+    .path-format-cul-photos table.userinfobox td .username {
+      padding-bottom: 5px; }
+  .path-format-cul-photos table.userinfobox td.links {
+    width: 150px;
+    vertical-align: top;
+    font-size: 0.9em; }
+.path-format-cul-photos .gallerycontainer {
+  float: left; }
+.path-format-cul-photos .galleryItem {
+  float: left;
+  width: 130px;
+  height: 150px;
+  overflow: hidden;
+  margin: 0px 10px 10px 0px; }
+  .path-format-cul-photos .galleryItem strong {
+    font-size: 95%; }
+  .path-format-cul-photos .galleryItem img {
+    height: 100px;
+    width: 100px; }
 
-.jsenabled .course-content ul.topics li.section .left,
-.jsenabled .course-content ul.topics li.section .right {
-    width: auto;
-}
-
-.course-content ul.topics li.section .left .section-handle img.icon {
-    padding: 0;
-    vertical-align: baseline;
-}
-
-.course-content ul.topics li.section .section_action_menu .textmenu,
-.course-content ul.topics li.section .section_action_menu .menu-action-text {
+@media (min-width: 480px) {
+  body.format-cul .course-content .dash-panel .linkscontainer ul.links li {
+    width: 50%;
+    max-width: none; }
+    body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-icon {
+      border-right: 1px solid #888888; }
+    body.format-cul .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-text {
+      display: inline-block;
+      width: calc(100% - 3rem);
+      text-overflow: ellipsis;
+      /* Required for text-overflow to do anything */
+      white-space: nowrap;
+      overflow: hidden; }
+  body.format-cul.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
+    display: inline-block; }
+  body.format-cul.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-text {
+    display: inline-block;
+    width: calc(100% - 6rem);
+    text-overflow: ellipsis;
+    /* Required for text-overflow to do anything */
     white-space: nowrap;
-}
+    overflow: hidden; } }
+@media (min-width: 980px) {
+  body.format-cul .course-content .dash-panel .linkscontainer ul.links li {
+    width: 33.33%;
+    max-width: none; }
+  body.format-cul.used-region-side-pre.used-region-side-post .course-content .dash-panel .linkscontainer ul.links li {
+    width: 50%;
+    max-width: none; } }
+@media (min-width: 1200px) {
+  body.format-cul .course-content .dash-panel .linkscontainer ul.links li {
+    width: 25%;
+    max-width: none; }
+  body.format-cul.used-region-side-pre.used-region-side-post .course-content .dash-panel .linkscontainer ul.links li {
+    width: 33.33%;
+    max-width: none; } }
+body.format-cul .course-content ul.cul li.section,
+body.format-cul .course-content ul.cul li#toggle-all {
+  margin: 4px 1px 1px 1px;
+  border-bottom: none;
+  list-style: none; }
+  body.format-cul .course-content ul.cul li.section .content,
+  body.format-cul .course-content ul.cul li#toggle-all .content {
+    margin: 0 !important;
+    padding: 0 !important;
+    /* Icon sets.  Note: Background images for the settings - does not work in Chrome or Safari - known issue. */
+    /* Arrow icon set. */ }
+    body.format-cul .course-content ul.cul li.section .content .toggle,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle {
+      background-color: #eceeef;
+      min-height: 7em; }
+      body.format-cul .course-content ul.cul li.section .content .toggle:hover,
+      body.format-cul .course-content ul.cul li#toggle-all .content .toggle:hover {
+        background-color: #f4f4f4; }
+      body.format-cul .course-content ul.cul li.section .content .toggle span,
+      body.format-cul .course-content ul.cul li#toggle-all .content .toggle span {
+        text-align: left; }
+    body.format-cul .course-content ul.cul li.section .content .toggle-arrow span.toggle_closed,
+    body.format-cul .course-content ul.cul li.section .content .toggle-arrow span.toggle_open,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow span.toggle_closed,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow span.toggle_open {
+      background-image: url([[pix:t/expanded]]);
+      /* JavaScript disabled */ }
+    body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 span,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 span {
+      cursor: pointer;
+      font-size: 1.4rem; }
+      body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 span.off,
+      body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 span.off {
+        background-image: url([[pix:t/expanded]]); }
+      body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 span.on,
+      body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 span.on {
+        background-image: url([[pix:t/collapsed]]); }
+    body.format-cul .course-content ul.cul li.section .content .sectionhead,
+    body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead {
+      position: relative;
+      width: auto;
+      margin: 2px;
+      padding-bottom: 1.5em; }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead .summary_open .truncate,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .summary_open .truncate {
+        display: none; }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead .summary_open .no-overflow,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .summary_open .no-overflow {
+        display: inline-block; }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead .summary_closed .truncate,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .summary_closed .truncate {
+        display: inline-block;
+        overflow: hidden;
+        height: 3.4em;
+        width: 100%;
+        line-height: 16px; }
+        body.format-cul .course-content ul.cul li.section .content .sectionhead .summary_closed .truncate::after,
+        body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .summary_closed .truncate::after {
+          content: "\02026";
+          float: right;
+          position: relative;
+          top: -16px;
+          left: 100%;
+          width: 50%;
+          margin-left: -50%;
+          padding-right: 5px;
+          text-align: right;
+          background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f5f5f5 50%);
+          background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f5f5f5 50%);
+          background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #f5f5f5 50%);
+          background-repeat: repeat-x;
+          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFF5F5F5', GradientType=1); }
+        body.format-cul .course-content ul.cul li.section .content .sectionhead .summary_closed .truncate > *:first-child,
+        body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .summary_closed .truncate > *:first-child {
+          float: right;
+          width: 100%;
+          margin-left: -5px; }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead .summary_closed .no-overflow,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .summary_closed .no-overflow {
+        display: none; }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead h3.sectionname,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead h3.sectionname {
+        margin: 0 !important;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-size: 1.25rem; }
+        body.format-cul .course-content ul.cul li.section .content .sectionhead h3.sectionname span.quickediticon img,
+        body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead h3.sectionname span.quickediticon img {
+          background: transparent;
+          border: none; }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead .section-summary-activities,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .section-summary-activities {
+        position: absolute;
+        right: 4px;
+        bottom: 0;
+        margin-right: 4px; }
+        body.format-cul .course-content ul.cul li.section .content .sectionhead .section-summary-activities .activity-count,
+        body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .section-summary-activities .activity-count {
+          color: #333333; }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead .section-summary-progress,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .section-summary-progress {
+        position: absolute;
+        left: 31px;
+        bottom: 0;
+        margin-right: 4px; }
+        body.format-cul .course-content ul.cul li.section .content .sectionhead .section-summary-progress .activity-count,
+        body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .section-summary-progress .activity-count {
+          color: #333333; }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead:hover .summary_closed .truncate::after,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead:hover .summary_closed .truncate::after {
+        background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #e3e3e3 50%);
+        background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #e3e3e3 50%);
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #e3e3e3 50%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFE3E3E3', GradientType=1); }
+    body.format-cul .course-content ul.cul li.section .content .sectionbody,
+    body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody {
+      margin: 2px;
+      background-color: #ffffff; }
+      body.format-cul .course-content ul.cul li.section .content .sectionbody .summary_open,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody .summary_open {
+        margin-left: 0.2em;
+        padding-left: 0;
+        padding-top: 1em; }
+        body.format-cul .course-content ul.cul li.section .content .sectionbody .summary_open .truncate,
+        body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody .summary_open .truncate {
+          display: none; }
+        body.format-cul .course-content ul.cul li.section .content .sectionbody .summary_open .no-overflow,
+        body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody .summary_open .no-overflow {
+          display: inline-block; }
+      body.format-cul .course-content ul.cul li.section .content .sectionbody .summary_closed .truncate,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody .summary_closed .truncate {
+        display: none; }
+      body.format-cul .course-content ul.cul li.section .content .sectionbody .summary_closed .no-overflow,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody .summary_closed .no-overflow {
+        display: none; }
+      body.format-cul .course-content ul.cul li.section .content .sectionbody .section-modchooser,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody .section-modchooser {
+        margin-right: 4px; }
+      body.format-cul .course-content ul.cul li.section .content .sectionbody .activity,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody .activity {
+        margin: 0.5em 0; }
+    body.format-cul .course-content ul.cul li.section .content .summary,
+    body.format-cul .course-content ul.cul li#toggle-all .content .summary {
+      margin-left: .2em;
+      margin-right: .2em;
+      padding-left: 28px;
+      background-color: transparent !important;
+      border: none; }
+  body.format-cul .course-content ul.cul li.section.sectionhidden,
+  body.format-cul .course-content ul.cul li#toggle-all.sectionhidden {
+    background-color: #eceeef; }
+  body.format-cul .course-content ul.cul li.section .side,
+  body.format-cul .course-content ul.cul li#toggle-all .side {
+    padding: 0; }
+    body.format-cul .course-content ul.cul li.section .side a:first-of-type > .icon,
+    body.format-cul .course-content ul.cul li#toggle-all .side a:first-of-type > .icon {
+      margin-left: 0; }
+body.format-cul .insertsection {
+  text-align: center; }
+  body.format-cul .insertsection .sectionbutton {
+    display: inline-block;
+    margin: 1rem; }
+
+body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arrow span.toggle_closed {
+  background-image: url([[pix:t/collapsed]]); }
+body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arrow span.toggle_open {
+  background-image: url([[pix:t/expanded]]); }
+
+body.format-cul.editing .course-content ul.cul li.section .content {
+  /* Default for non tablets / mobiles.  If the language file has 'culsidewidth' for the current language, then will be set in format.php. */
+  margin: 0 40px !important;
+  padding: 0 !important; }
+  body.format-cul.editing .course-content ul.cul li.section .content .inplaceeditable.inplaceeditingon .editinstructions {
+    margin-top: -30px; }
+body.format-cul.editing .course-content ul.cul li.section .side {
+  padding: 10px 0 0 0; }
+  body.format-cul.editing .course-content ul.cul li.section .side .fa,
+  body.format-cul.editing .course-content ul.cul li.section .side .section-handle {
+    padding: 2px 0; }
+body.format-cul.editing .course-content ul.cul li.section.current {
+  border-radius: 0; }
+  body.format-cul.editing .course-content ul.cul li.section.current .side .fa,
+  body.format-cul.editing .course-content ul.cul li.section.current .side .section-handle {
+    /*color: $white;*/ }
+
+body.format-cul#page-admin-setting-formatsettingcul select#id_s_format_cul_defaulttoggleiconset option[value="arrow"],
+body#page-course-edit select#id_toggleiconset option[value="arrow"] {
+  background-image: url([[pix:t/collapsed]]); }
+
+.course-content ul.cul li.section .content .toggle span.the_toggle, #toggle-all .content h4 span {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  margin: 0 4px; }
+
+#toggle-all .content .sectionbody h4 span.tc-medium,
+.course-content ul.cul li.section .content .toggle span.tc-medium {
+  background-size: 24px 24px; }
+
+/* -- Set the clickable element of the Toggle -- */
+.course-content ul.cul li.section .content .toggle span.the_toggle {
+  display: block;
+  padding-bottom: 6px;
+  padding-top: 6px;
+  width: auto; }
+
+.course-content ul.cul li.section .content .toggle span.the_toggle.tc-medium {
+  padding-left: 24px;
+  /* The 24px allows the arrow to be with the text next to it. */
+  padding-right: 24px; }
+
+.course-content ul.cul li.section .content .toggle span.the_toggle h3,
+.course-content ul.cul li.section .content.sectionhidden h3 {
+  margin: 0;
+  word-wrap: break-word; }
+
+.course-content ul.cul li.section .content .toggle span.the_toggle h3.sectionname,
+.course-content ul.cul li.section .content.sectionhidden h3.sectionname {
+  color: inherit;
+  margin: 4px; }
+
+#toggle-all .content .sectionbody h4 span.tc-medium {
+  padding-left: 26px;
+  /* The 26px allows the arrow to be with the text next to it. */
+  padding-right: 26px; }
+
+.course-content ul.cul li.section .right a {
+  display: block;
+  /* So that section_right_content() does not implode with 'br's and get too many when the up arrow is removed by JS. */ }
+
+.course-content ul.cul li.current.main .right {
+  padding: 0 0 0 0;
+  /* Cancel out effect of above when having to use 'left' side selector for getting the correct text colour on the right for the current section.  This is because the selector '.course-content .current .left' defines the colour in the theme and therefore any CT specific 'right' implementation would not work for all themes. */ }
+
+.course-content ul.cul li.section .right,
+.course-content ul.cul li.tcsection .right {
+  float: right; }
+
+.course-content ul.cul li.section .right {
+  line-height: 1.3; }
+
+.course-content ul.cul li.section .right a {
+  display: block;
+  /* So that section_right_content() does not implode with 'br's and get too many when the up arrow is removed by JS. */ }
+
+.course-content ul.cul li.section .right a img.hide {
+  display: inline;
+  /* CONTRIB-5817 - Align the eye icon. */ }
+
+/* cul styles */
+.course-content ul.cul {
+  margin: 0;
+  list-style: none; }
+
+.course-content ul.cul li.section .content {
+  margin: 0 40px; }
+
+.course-content ul.cul li.section .left,
+.course-content ul.cul li.section .right {
+  width: 40px;
+  padding: 0 6px; }
+
+.course-content ul.cul li.section .left {
+  padding-top: 22px;
+  text-align: right; }
+
+.jsenabled .course-content ul.cul li.section .left,
+.jsenabled .course-content ul.cul li.section .right {
+  width: auto; }
+
+.course-content ul.cul li.section .left .section-handle img.icon {
+  padding: 0;
+  vertical-align: baseline; }
+
+.course-content ul.cul li.section .section_action_menu .textmenu,
+.course-content ul.cul li.section .section_action_menu .menu-action-text {
+  white-space: nowrap; }
+
+/*# sourceMappingURL=styles.css.map */

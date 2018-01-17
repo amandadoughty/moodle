@@ -24,22 +24,15 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-/* Structure configuration.
-    Here so you can see what numbers in the array represent what structure for setting the default value below.
-    1 => Topic.
-    2 => Week.
-    3 => Latest Week First.
-    4 => Current Topic First.
-    5 => Day.
-    Default structure to use - used when a new Collapsed Topics course is created or an old one is accessed for the first time
-    after installing this functionality introduced in CONTRIB-3378. */
+/* Base course format.
+*/
 $name = 'format_cul/baseclass';
 $title = get_string('baseclass', 'format_cul');
 $description = get_string('baseclass_desc', 'format_cul');
 $default = 1;
 $choices = [
     1 => new lang_string('pluginname', 'format_topics'),
-        2 => new lang_string('pluginname', 'format_weeks')
+    2 => new lang_string('pluginname', 'format_weeks')
         
         // 1 => new lang_string('setlayoutstructuretopic', 'format_cul'), // Topic.
         // 2 => new lang_string('setlayoutstructureweek', 'format_cul'), // Week.
@@ -49,3 +42,35 @@ $choices = [
 ];
 $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));    
 
+/* Default blocks.
+*/
+$name = 'format_cul/defaultblocks_cul';
+$title = get_string('defaultblocks', 'format_cul');
+$description = get_string('defaultblocks_desc', 'format_cul');
+$default = 'settings,culactivity_stream,culupcoming_events,school_html,quickmail';
+$settings->add(new admin_setting_configtextarea($name, $title, $description, $default));
+
+/* Quicklinks.
+*/
+$elements = [
+    'readinglists', 
+    'timetable', 
+    'graderreport', 
+    'calendar', 
+    'students',
+    'lecturers',
+    'courseofficers',
+    'media'
+];
+
+foreach ($elements as $element) {
+    $name = 'format_cul/defaultshow' . $element;
+    $title = get_string('defaultshow' . $element, 'format_cul');
+    $description = get_string('defaultshow' . $element . '_desc', 'format_cul');
+    $default = 2;
+    $choices = [
+        1 => new lang_string('no'),
+        2 => new lang_string('yes')
+    ];
+    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+}

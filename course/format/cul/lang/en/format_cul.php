@@ -42,6 +42,9 @@ $string['baseclass_desc'] = 'This setting specifies whether to use topics or wee
 $string['baseclass_help'] = 'This setting specifies whether to use topics or weeks format.';
 
 
+$string['defaultblocks'] = 'Default blocks';
+$string['defaultblocks_desc'] = 'Default blocks to include in new course. String should be in the format \'block1,block2\'';
+
 // Show course summary.
 $string['setshowcoursesummary'] = 'Show the course summary';
 $string['setshowcoursesummary_help'] = 'States if the course summary will be shown.';
@@ -73,9 +76,6 @@ click each of the other lecturers you want to select as Module Leaders.
 ';
 $string['nolecturers'] = 'No Lecturers';
 
-// Advanced heading
-$string['setadvancedhdr'] = 'Advanced course format settings for admins';
-
 // Dashboard heading
 $string['setdashboardhdr'] = 'Dashboard settings';
 
@@ -88,7 +88,6 @@ $string['defaultshowactivitieslinks_desc'] = 'States if the activities links wil
 $string['setshowmodname'] = 'Show {$a} link';
 $string['setshowmod'] = 'Show this activity link';
 $string['setshowmod_help'] = 'States if this activity link will be shown.';
-
 
 /*** Quick links ***/
 // Show participants.
