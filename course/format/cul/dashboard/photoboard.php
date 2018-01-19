@@ -29,8 +29,6 @@ require_once($CFG->dirroot . '/course/format/cul/dashboard/locallib.php');
 require_once($CFG->dirroot . '/course/format/cul/lib.php');
 // require_once($CFG->dirroot . '/course/renderer.php');
 
-define('USER_SMALL_CLASS', 20);   // Below this is considered small.
-define('USER_LARGE_CLASS', 200);  // Above this is considered large.
 define('DEFAULT_PAGE_SIZE', 20);
 define('SHOW_ALL_PAGE_SIZE', 5000);
 define('MODE_BRIEF', 0);
