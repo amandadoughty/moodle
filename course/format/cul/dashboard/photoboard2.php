@@ -219,14 +219,34 @@ $baseurl = new moodle_url('/user/photoboard2.php', array(
 
 
 
-$participants = user_get_participants($course->id, $groupid, 0,
+$users = user_get_participants($course->id, $groupid, 0,
             $roleid, 0, -1, '', '', [], '', $page,
             $perpage);
 
+// user_get_total_participants
 
+foreach ($users as $user) {
+    // print_r($user);
 
-foreach ($participants as $participant) {
-    print_r($participant);
+    if (MODE_USERDETAILS) {
+        $stafftelephone = '';
+        $staffofficehrs = '';
+        $stafflocation = '';
+
+        if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
+            $sql = 'SELECT shortname, data
+                    FROM {user_info_data} uid
+                    JOIN {user_info_field} uif
+                    ON uid.fieldid = uif.id
+                    WHERE uid.userid = :userid';
+
+            if ($result = $DB->get_records_sql($sql, array('userid' => $user->id))){
+                $stafftelephone = $result['stafftelephone']->data;
+            }
+        }
+
+        echo 'output ' .  $stafftelephone;
+    }
 }
 
 
