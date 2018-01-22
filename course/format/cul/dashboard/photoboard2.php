@@ -22,6 +22,8 @@
  * @package core_user
  */
 
+use format_cul\output\photoboard;
+
 require_once('../../../../config.php');
 require_once($CFG->dirroot.'/user/lib.php');
 require_once($CFG->dirroot.'/course/lib.php');
@@ -200,10 +202,10 @@ echo $renderer->unified_filter($course, $context, $filtersapplied);
 echo '<div class="userlist">';
 
 // Should use this variable so that we don't break stuff every time a variable is added or changed.
-$baseurl = new moodle_url('/user/photoboard2.php', array(
-        'contextid' => $context->id,
-        'id' => $course->id,
-        'perpage' => $perpage));
+// $baseurl = new moodle_url('/user/photoboard2.php', array(
+//         'contextid' => $context->id,
+//         'id' => $course->id,
+//         'perpage' => $perpage));
 
 // $participanttable = new \core_user\participants_table($course->id, $groupid, $lastaccess, $roleid, $enrolid, $status,
 //     $searchkeywords, false, $selectall);
@@ -225,29 +227,46 @@ $users = user_get_participants($course->id, $groupid, 0,
 
 // user_get_total_participants
 
-foreach ($users as $user) {
-    // print_r($user);
+// foreach ($users as $user) {
+    
 
-    if (MODE_USERDETAILS) {
-        $stafftelephone = '';
-        $staffofficehrs = '';
-        $stafflocation = '';
+//     if (MODE_USERDETAILS) {
+//         // $stafftelephone = '';
+//         // $staffofficehrs = '';
+//         // $stafflocation = '';
 
-        if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
-            $sql = 'SELECT shortname, data
-                    FROM {user_info_data} uid
-                    JOIN {user_info_field} uif
-                    ON uid.fieldid = uif.id
-                    WHERE uid.userid = :userid';
+//         if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
+//             $sql = 'SELECT shortname, data
+//                     FROM {user_info_data} uid
+//                     JOIN {user_info_field} uif
+//                     ON uid.fieldid = uif.id
+//                     WHERE uid.userid = :userid';
 
-            if ($result = $DB->get_records_sql($sql, array('userid' => $user->id))){
-                $stafftelephone = $result['stafftelephone']->data;
-            }
-        }
+//             if ($result = $DB->get_records_sql($sql, array('userid' => $user->id))){
+//                 $user->stafftelephone = $result['stafftelephone']->data;
+//                 $user->staffofficehrs = $result['staffofficehrs']->data;
+//                 $user->stafflocation = $result['stafflocation']->data;
+//             } else {
+//                 $user->stafftelephone = '';
+//                 $user->staffofficehrs = '';
+//                 $user->stafflocation = '';
+//                 $user->course = $COURSE->id;
+//             }
+//         }
 
-        echo 'output ' .  $stafftelephone;
-    }
-}
+//         // $userarray[] = $user;
+
+//         // echo 'output ' .  $stafftelephone;
+//         // print_r($user);
+//     }
+// }
+
+$o = '';
+$photoboard = new photoboard($COURSE, $users);
+$templatecontext = $photoboard->export_for_template($OUTPUT);
+$o .= $OUTPUT->render_from_template('format_cul/photoboard', $templatecontext);
+
+echo $o;
 
 
 $PAGE->requires->js_call_amd('core_user/name_page_filter', 'init');
