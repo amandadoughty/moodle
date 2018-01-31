@@ -84,7 +84,7 @@ class photoboard implements templatable, renderable {
 
 
     public function get_users() {
-        global $USER, $OUTPUT, $DB;
+        global $CFG, $USER, $OUTPUT, $DB;
 
         $course = $this->course;
         $xusers = [];
@@ -107,6 +107,19 @@ class photoboard implements templatable, renderable {
             $currentgroup  = null;
         }
 
+        $context = \context_course::instance($course->id);
+        // Get the hidden field list.
+        if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
+            $hiddenfields = [];
+        } else {
+            $hiddenfields = array_flip(explode(',', $CFG->hiddenuserfields));
+            $hiddenfields['mobile'] = 0;
+            $hiddenfields['webapps'] = 0;
+            $hiddenfields['forumposts'] = 0;
+            $hiddenfields['sendmessage'] = 0;
+            $hiddenfields['allusergroups'] = 0;
+        }
+
 
             foreach ($this->users as $user) {
                 if (in_array($user->id, $usersprinted)) { // Prevent duplicates by r.hidden - MDL-13935.
@@ -118,21 +131,11 @@ class photoboard implements templatable, renderable {
 
                 \context_helper::preload_from_record($user);
 
-                $context = \context_course::instance($course->id);
+                
                 $usercontext = \context_user::instance($user->id);
                 $xuser->viewdetails = ($USER->id == $user->id) || has_capability('moodle/user:viewdetails', $context) || has_capability('moodle/user:viewdetails', $usercontext);
 
-                // Get the hidden field list.
-                if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
-                    $hiddenfields = [];
-                } else {
-                    $hiddenfields = array_flip(explode(',', $CFG->hiddenuserfields));
-                    $hiddenfields['mobile'] = 0;
-                    $hiddenfields['webapps'] = 0;
-                    $hiddenfields['forumposts'] = 0;
-                    $hiddenfields['sendmessage'] = 0;
-                    $hiddenfields['allusergroups'] = 0;
-                }
+                
 
 
                 $xuser->imghtml = $this->get_user_picture($user, $course);
@@ -182,51 +185,9 @@ class photoboard implements templatable, renderable {
                     $user->phone2 = '';
                 }
 
-                // $stafftelephone = '';
-                // $staffofficehrs = '';
-                // $stafflocation = '';
-
-                // if (has_capability('moodle/course:viewhiddenuserfields', $context, $user)) {
-                //     $sql = 'SELECT uid.data as stafftelephone
-                //             FROM {user_info_data} uid
-                //             JOIN {user_info_field} uif
-                //             ON uid.fieldid = uif.id
-                //             AND uif.shortname = \'stafftelephone\'
-                //             WHERE uid.userid = :userid';
-
-                //     if ($result = $DB->get_record_sql($sql, array('userid' => $user->id))){
-                //         $stafftelephone = $result->stafftelephone;
-                //     }
-
-                //     $sql = 'SELECT uid.data as staffofficehrs
-                //             FROM {user_info_data} uid
-                //             JOIN {user_info_field} uif
-                //             ON uid.fieldid = uif.id
-                //             AND uif.shortname = \'staffofficehrs\'
-                //             WHERE uid.userid = :userid';
-
-                //     if ($result = $DB->get_record_sql($sql, array('userid' => $user->id))) {
-                //         $staffofficehrs = $result->staffofficehrs;
-                //     }
-
-                //     $sql = 'SELECT uid.data as stafflocation
-                //             FROM {user_info_data} uid
-                //             JOIN {user_info_field} uif
-                //             ON uid.fieldid = uif.id
-                //             AND uif.shortname = \'stafflocation\'
-                //             WHERE uid.userid = :userid';
-
-                //     if ($result = $DB->get_record_sql($sql, array('userid' => $user->id))) {
-                //         $stafflocation = $result->stafflocation;
-                //     }
-
-                //     $row->cells[1]->text .= get_string('phone') . get_string('labelsep', 'langconfig') . $stafftelephone . '<br/>';
-                //     $row->cells[1]->text .= get_string('officehours', 'block_cul_dashboard') . get_string('labelsep', 'langconfig') . $staffofficehrs . '<br/>';
-                //     $row->cells[1]->text .= get_string('buildinglocation', 'block_cul_dashboard') . get_string('labelsep', 'langconfig') . $stafflocation . '<br/>';
-                // }
 
 
-                if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
+                if (has_capability('moodle/course:viewhiddenuserfields', $context, $user)) {
                     $sql = 'SELECT shortname, data
                             FROM {user_info_data} uid
                             JOIN {user_info_field} uif
