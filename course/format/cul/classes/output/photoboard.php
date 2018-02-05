@@ -230,8 +230,9 @@ class photoboard implements templatable, renderable {
 
                 if (!isset($hiddenfields['lastaccess'])) {
                     if ($user->lastaccess) {
+                        $timesince = format_time(time() - $user->lastaccess);
                         $xuser->lastaccess = userdate($user->lastaccess);
-                        $xuser->lastaccess .= '&nbsp; ('. format_time(time() - $user->lastaccess, $datestring) .')';
+                        $xuser->lastaccess .= " ($timesince)";
                     } else {
                         $xuser->lastaccess = get_string('never');
                     }
