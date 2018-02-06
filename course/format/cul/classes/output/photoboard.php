@@ -75,7 +75,7 @@ class photoboard implements templatable, renderable {
     public function export_for_template(renderer_base $output) {
         $export = new stdClass();
         $export->course = $this->course;
-        $export->users = $this->get_users($this->course);
+        $export->users = $this->get_users();
 
         
 
@@ -114,7 +114,6 @@ class photoboard implements templatable, renderable {
         } else {
             $hiddenfields = array_flip(explode(',', $CFG->hiddenuserfields));
             $hiddenfields['mobile'] = 0;
-            $hiddenfields['webapps'] = 0;
             $hiddenfields['forumposts'] = 0;
             $hiddenfields['sendmessage'] = 0;
             $hiddenfields['allusergroups'] = 0;
@@ -242,39 +241,36 @@ class photoboard implements templatable, renderable {
 
 
                 $links = [];
-
-
-                if (!isset($hiddenfields['webapps'])) {
-                    // link to webapps, hacky check to see if user a student or not
-                    // 99.9% student accounts start 'a%' and don't have id numbers starting 88
-                    if ((substr($user->username, 0, 1) == 'a') && (substr($user->idnumber, 0, 2) <> '88')) {
-                        $links[] = \html_writer::link(
-                            new \moodle_url('https://webapps.city.ac.uk/sst/student/' . $user->idnumber),
-                            get_string('linktowebapps', 'format_cul')
-                            );
-                    }
-                }
+                $link = [];
 
                 if (!isset($hiddenfields['forumposts'])) {
-                    $links[] = \html_writer::link(
+                    $link['link'] = \html_writer::link(
                                 new \moodle_url('/mod/forum/user.php', array('id' => $user->id, 'course' => $course->id)),
-                                get_string('forum-posts', 'format_cul')
+                                get_string('forumposts', 'mod_forum')
                                 );
+
+                    $links[] = $link;
                 }
 
                 if ($USER->id != $user->id && !\core\session\manager::is_loggedinas() && has_capability('moodle/user:loginas', $context) && !is_siteadmin($user->id)) {
-                    $links[] = \html_writer::link(
+                    $link['link'] = \html_writer::link(
                         new \moodle_url('/course/loginas.php', array('id' => $course->id, 'user' => $user->id, 'sesskey' => sesskey())),
                         get_string('loginas')
                         );
+
+                    $links[] = $link;
                 }
 
                 if (!isset($hiddenfields['sendmessage'])) {
-                    $links[] = \html_writer::link(
+                    $link['link'] = \html_writer::link(
                         new \moodle_url('/message/index.php', array('id' => $user->id, 'viewing' => 'course_' . $course->id)),
                         get_string('sendmessage', 'format_cul')
                         );
+
+                    $links[] = $link;
                 }
+
+                $xuser->links = $links;
 
                 $xusers[] = $xuser;
             }

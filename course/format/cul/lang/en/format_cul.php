@@ -174,7 +174,6 @@ $string['config_transfer_timeout_desc'] = 'Enter the maximum time in seconds to 
 $string['config_transfer_timeout_ex'] = '8';
 $string['culcollapsed:viewphotoboard'] = 'View Photoboard';
 $string['culcollapsed:viewallphotoboard'] = 'View all Photoboards';
-$string['forum-posts'] = 'Forum posts';
 $string['headerconfig'] = 'Config section header';
 $string['hide_activitieslinks'] = "Hide 'Activities' links";
 $string['hide_activitieslinks_help'] = 'Hide the panel containing links to activities and resources used within the module.';
@@ -225,7 +224,9 @@ $string['view-mod'] = 'View list of {$a}';
 $string['linktowebapps'] = 'Student info (intranet)';
 
 /* Photoboard fields */
-$string['buildinglocation'] = 'Building/location';
-$string['mobile'] = 'Mobile phone';
-$string['officehours'] = 'Office hours';
-$string['telephone'] = 'Telephone';
+$string['buildinglocation'] = 'Building/location: ';
+$string['email'] = 'Email: ';
+$string['lastaccess'] = 'Last access: ';
+$string['mobile'] = 'Mobile phone: ';
+$string['officehours'] = 'Office hours: ';
+$string['telephone'] = 'Telephone: ';

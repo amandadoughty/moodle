@@ -45,7 +45,7 @@ $selectall    = optional_param('selectall', false, PARAM_BOOL); // When renderin
 $roleid       = optional_param('roleid', 0, PARAM_INT);
 $groupparam   = optional_param('group', 0, PARAM_INT);
 
-$PAGE->set_url('/user/photoboard2.php', array(
+$PAGE->set_url('/course/format/cul/dashboard/photoboard2.php', array(
         'page' => $page,
         'perpage' => $perpage,
         'contextid' => $contextid,
@@ -91,6 +91,30 @@ $PAGE->add_body_class('path-format-cul-photos');                     // So we ca
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('participants'));
 
+// if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
+//     $rolenames = role_fix_names(get_profile_roles($context), $context, ROLENAME_ALIAS, true);
+//     $rolenames[0] = get_string('allparticipants');
+// } else {
+//     $profileroles = get_profile_roles($context);
+//     $photoboardroles = explode(',', $CFG->profileroles);
+//     $ccroles = array();
+
+//     if (in_array($roleid, $photoboardroles)) {
+//         $ccroles[$roleid] = $profileroles[$roleid];
+//     }
+
+//     $rolenames = role_fix_names($ccroles, $context, ROLENAME_ALIAS, true);
+// }
+
+// // Make sure other roles may not be selected by any means.
+// if (empty($rolenames[$roleid])) {
+//     if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context) && !empty($rolenames[0])) {
+//         redirect ($rolenamesurl);
+//     } else {
+//         print_error('noparticipants');
+//     }
+// }
+
 // Get the currently applied filters.
 $filtersapplied = optional_param_array('unified-filters', [], PARAM_NOTAGS);
 $filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
@@ -132,6 +156,7 @@ $lastaccess = 0;
 $searchkeywords = [];
 $enrolid = 0;
 $status = -1;
+
 foreach ($filtersapplied as $filter) {
     $filtervalue = explode(':', $filter, 2);
     $value = null;
@@ -199,13 +224,13 @@ if ($groupid && ($course->groupmode != SEPARATEGROUPS || $canaccessallgroups)) {
 $renderer = $PAGE->get_renderer('core_user');
 echo $renderer->unified_filter($course, $context, $filtersapplied);
 
-echo '<div class="userlist">';
+// echo '<div class="userlist">';
 
 // Should use this variable so that we don't break stuff every time a variable is added or changed.
-// $baseurl = new moodle_url('/user/photoboard2.php', array(
-//         'contextid' => $context->id,
-//         'id' => $course->id,
-//         'perpage' => $perpage));
+$baseurl = new moodle_url('/course/format/cul/dashboard/photoboard2.php', array(
+        'contextid' => $context->id,
+        'id' => $course->id,
+        'perpage' => $perpage));
 
 // $participanttable = new \core_user\participants_table($course->id, $groupid, $lastaccess, $roleid, $enrolid, $status,
 //     $searchkeywords, false, $selectall);
@@ -225,41 +250,13 @@ $users = user_get_participants($course->id, $groupid, 0,
             $roleid, 0, -1, '', '', [], '', $page,
             $perpage);
 
-// user_get_total_participants
+$totalcount = user_get_total_participants($course->id, $groupid, 0, $roleid);
 
-// foreach ($users as $user) {
-    
-
-//     if (MODE_USERDETAILS) {
-//         // $stafftelephone = '';
-//         // $staffofficehrs = '';
-//         // $stafflocation = '';
-
-//         if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
-//             $sql = 'SELECT shortname, data
-//                     FROM {user_info_data} uid
-//                     JOIN {user_info_field} uif
-//                     ON uid.fieldid = uif.id
-//                     WHERE uid.userid = :userid';
-
-//             if ($result = $DB->get_records_sql($sql, array('userid' => $user->id))){
-//                 $user->stafftelephone = $result['stafftelephone']->data;
-//                 $user->staffofficehrs = $result['staffofficehrs']->data;
-//                 $user->stafflocation = $result['stafflocation']->data;
-//             } else {
-//                 $user->stafftelephone = '';
-//                 $user->staffofficehrs = '';
-//                 $user->stafflocation = '';
-//                 $user->course = $COURSE->id;
-//             }
-//         }
-
-//         // $userarray[] = $user;
-
-//         // echo 'output ' .  $stafftelephone;
-//         // print_r($user);
-//     }
-// }
+if ($totalcount > $perpage) {     
+    $pagingbar = new paging_bar($totalcount, $page, $perpage, $baseurl);
+    $pagingbar->pagevar = 'page';
+    echo $OUTPUT->render($pagingbar);
+}
 
 $o = '';
 $photoboard = new photoboard($COURSE, $users);
@@ -274,18 +271,28 @@ $PAGE->requires->js_call_amd('core_user/name_page_filter', 'init');
 
 // @TODO Need to add this back
 
-// $perpageurl = clone($baseurl);
-// $perpageurl->remove_params('perpage');
-// if ($perpage == SHOW_ALL_PAGE_SIZE && $participanttable->totalrows > DEFAULT_PAGE_SIZE) {
-//     $perpageurl->param('perpage', DEFAULT_PAGE_SIZE);
-//     echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showperpage', '', DEFAULT_PAGE_SIZE)), array(), 'showall');
+$perpageurl = clone($baseurl);
+$perpageurl->remove_params('perpage');
+if ($perpage == SHOW_ALL_PAGE_SIZE && $totalcount > DEFAULT_PAGE_SIZE) {
+    $perpageurl->param('perpage', DEFAULT_PAGE_SIZE);
+    echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showperpage', '', DEFAULT_PAGE_SIZE)), array(), 'showall');
 
-// } else if ($participanttable->get_page_size() < $participanttable->totalrows) {
-//     $perpageurl->param('perpage', SHOW_ALL_PAGE_SIZE);
-//     echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showall', '', $participanttable->totalrows)),
-//         array(), 'showall');
+} else if ($perpage < $totalcount) {
+    $perpageurl->param('perpage', SHOW_ALL_PAGE_SIZE);
+    echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showall', '', $totalcount)),
+        array(), 'showall');
+}
+
+
+// Show a search box if all participants don't fit on a single screen.
+// if ($totalcount > $perpage) {
+//     echo '<form action="photoboard.php" class="searchform"><div><input type="hidden" name="id" value="'.$course->id.'" />';
+//     echo '<input type="hidden" name="roleid" value="' . $roleid . '" />';
+//     echo '<input type="hidden" name="mode" value="' . $mode . '" />';
+//     echo '<label for="search">' . get_string('search', 'search') . ' </label>';
+//     echo '<input type="text" id="search" name="search" value="'.s($search) . '" />&nbsp;<input type="submit" value="'.get_string('search').'" /></div></form>'."\n";
 // }
 
-echo '</div>';  // Userlist.
+
 
 echo $OUTPUT->footer();

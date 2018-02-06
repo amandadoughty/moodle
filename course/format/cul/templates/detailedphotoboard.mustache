@@ -1,36 +1,27 @@
-<table class="userinfobox">
-	<tbody>
-		<tr class="lastrow">
-			<td class="left side cell c0" style="">
-			<div class="galleryItem">
-				{{{imghtml}}}
-			</div>
-			</td>
-			<td class="content cell c1" style="">
-				<div class="username">
-					{{{fullname}}}
-				</div>
-				<div class="info">
-
-					{{# str }} email{{/ str }}{{# str }} labelsep, langconfig {{/ str }} <a href="mailto{{# str }} labelsep, langconfig {{/ str }}{{email}}">{{email}}</a><br />
-
-					{{# str }} mobile, format_cul {{/ str }}{{# str }} labelsep, langconfig {{/ str }} {{phone2}}<br />
-
-					{{# str }} telephone, format_cul {{/ str }}{{# str }} labelsep, langconfig {{/ str }} {{stafftelephone}}<br />
-
-					{{# str }} officehours, format_cul {{/ str }}{{# str }} labelsep, langconfig {{/ str }} {{staffofficehrs}}<br />
-
-					{{# str }} buildinglocation, format_cul {{/ str }}{{# str }} labelsep, langconfig {{/ str }} {{stafflocation}}<br />
-
-					{{# str }} lastaccess{{/ str }}{{# str }} labelsep, langconfig {{/ str }} {{lastaccess}}
-
-				</div>
-			</td>
-			<td class="links cell c2 lastcol" style="">
-				<a href="http{{# str }} labelsep, langconfig {{/ str }}//moodle2xgit.localhost/mod/forum/php?id={{id}}&amp;course={{id}}">Forum posts</a>
-				<a href="http{{# str }} labelsep, langconfig {{/ str }}//moodle2xgit.localhost/course/loginas.php?id={{id}}&amp;user={{id}}&amp;sesskey=cIhpcmZl0u">Log in as</a>
-				<a href="http{{# str }} labelsep, langconfig {{/ str }}//moodle2xgit.localhost/message/index.php?id={{id}}&amp;viewing=course_{{id}}">Send a message</a>
-			</td>
-		</tr>
-	</tbody>
-</table>
+    <li>    
+        <div class="cul-photo">
+            {{{imghtml}}}
+        </div>
+        <div class="username">
+            {{{fullname}}}
+        </div>
+        <div class="cul-info">
+            {{# str }} email, format_cul {{/ str }}<a href="mailto:{{email}}">{{email}}</a>
+            <br />
+            {{# str }} mobile, format_cul {{/ str }} {{phone2}}
+            <br />
+            {{# str }} telephone, format_cul {{/ str }} {{stafftelephone}}
+            <br />
+            {{# str }} officehours, format_cul {{/ str }} {{staffofficehrs}}
+            <br />
+            {{# str }} buildinglocation, format_cul {{/ str }} {{stafflocation}}
+            <br />
+            {{# str }} lastaccess, format_cul {{/ str }} {{lastaccess}}
+        </div>
+        <div class="cul-links">
+            {{# links}}
+                {{{link}}}
+                <br />
+            {{/ links}}
+        </div>
+    </li>
