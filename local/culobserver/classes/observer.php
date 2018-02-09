@@ -37,7 +37,7 @@ class local_culobserver_observer {
     public static function assessable_uploaded(\assignsubmission_file\event\assessable_uploaded $event) {
         global $CFG;
 
-        $fs = new file_storage();
+        $fs = get_file_storage();
         $contenthashes = [];
 
         foreach ($event->other['pathnamehashes'] as $pathnamehash) {
