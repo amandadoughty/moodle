@@ -23,13 +23,15 @@
  */
 
 use format_cul\output\photoboard;
+// use format_cul\output\format_cul_search_form; // Built into filter
 
 require_once('../../../../config.php');
-require_once($CFG->dirroot.'/user/lib.php');
-require_once($CFG->dirroot.'/course/lib.php');
-require_once($CFG->dirroot.'/notes/lib.php');
-require_once($CFG->libdir.'/tablelib.php');
-require_once($CFG->libdir.'/filelib.php');
+require_once($CFG->dirroot . '/user/lib.php');
+require_once($CFG->dirroot . '/course/lib.php');
+// require_once($CFG->dirroot.'/notes/lib.php');
+// require_once($CFG->libdir.'/tablelib.php');
+require_once($CFG->libdir . '/filelib.php');
+// require_once($CFG->dirroot . '../classes/forms/format_cul_search_form.php');
 // require_once($CFG->dirroot.'/enrol/locallib.php');
 
 define('DEFAULT_PAGE_SIZE', 20);
@@ -39,11 +41,24 @@ define('MODE_USERDETAILS', 1);
 
 $page         = optional_param('page', 0, PARAM_INT); // Which page to show.
 $perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
+$mode         = optional_param('mode', 1, PARAM_INT); // Use the MODE_ constants.
+// $search       = optional_param('search', '', PARAM_RAW); // Make sure it is processed with p() or s() when sending to output!
 $contextid    = optional_param('contextid', 0, PARAM_INT); // One of this or.
 $courseid     = optional_param('id', 0, PARAM_INT); // This are required.
 $selectall    = optional_param('selectall', false, PARAM_BOOL); // When rendering checkboxes against users mark them all checked.
 $roleid       = optional_param('roleid', 0, PARAM_INT);
 $groupparam   = optional_param('group', 0, PARAM_INT);
+
+$formatculsifirst  = optional_param('sifirst', null, PARAM_NOTAGS);
+$formatculsilast   = optional_param('silast', null, PARAM_NOTAGS);
+
+// The report object is recreated each time, save search information to SESSION object for future use.
+if (isset($formatculsifirst)) {
+    $SESSION->format_cul['filterfirstname'] = $formatculsifirst;
+}
+if (isset($formatculsilast)) {
+    $SESSION->format_cul['filtersurname'] = $formatculsilast;
+}
 
 $PAGE->set_url('/course/format/cul/dashboard/photoboard2.php', array(
         'page' => $page,
@@ -78,7 +93,7 @@ user_list_view($course, $context);
 $PAGE->set_title("$course->shortname: ".get_string('participants'));
 $PAGE->set_heading($course->fullname);
 $PAGE->set_pagetype('course-view-' . $course->format);
-$PAGE->add_body_class('path-format-cul-photos');                     // So we can style it independently.
+$PAGE->add_body_class('path-format-cul-photos'); // So we can style it independently.
 // $PAGE->set_other_editing_capability('moodle/course:manageactivities');
 
 // Expand the users node in the settings navigation when it exists because those pages
@@ -242,18 +257,43 @@ $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard2.php', array(
 // $participanttablehtml = ob_get_contents();
 // ob_end_clean();
 
+// User search
+$firstinitial = isset($SESSION->format_cul['filterfirstname']) ? $SESSION->format_cul['filterfirstname'] : '';
+$lastinitial  = isset($SESSION->format_cul['filtersurname']) ? $SESSION->format_cul['filtersurname'] : '';
+// Generate where clause
+$where = array();
+$where_params = array();
+
+if ($firstinitial !== 'all') {
+    $where[] = $DB->sql_like('u.firstname', ':sifirst', false);
+    $where_params['sifirst'] = $firstinitial . '%';
+}
+
+if ($lastinitial !== 'all') {
+    $where[] = $DB->sql_like('u.lastname', ':silast', false);
+    $where_params['silast'] = $lastinitial . '%';
+}
+
+$where = join(' AND ', $where);
+
 // echo $participanttablehtml;
+$users = user_get_participants($course->id, $groupid, 0, $roleid, 0, -1, '', $where, $where_params, '', $page, $perpage);
+
+$totalcount = user_get_total_participants($course->id);
+$subsetcount = user_get_total_participants($course->id, $groupid, 0, $roleid, 0, -1, '', $where, $where_params);
 
 
 
-$users = user_get_participants($course->id, $groupid, 0,
-            $roleid, 0, -1, '', '', [], '', $page,
-            $perpage);
 
-$totalcount = user_get_total_participants($course->id, $groupid, 0, $roleid);
 
-if ($totalcount > $perpage) {     
-    $pagingbar = new paging_bar($totalcount, $page, $perpage, $baseurl);
+$renderer = $PAGE->get_renderer('core_user');
+echo $renderer->user_search($baseurl, $firstinitial, $lastinitial, $subsetcount, $totalcount, $groupid);
+
+
+
+
+if ($subsetcount > $perpage) {     
+    $pagingbar = new paging_bar($subsetcount, $page, $perpage, $baseurl);
     $pagingbar->pagevar = 'page';
     echo $OUTPUT->render($pagingbar);
 }
@@ -273,24 +313,22 @@ $PAGE->requires->js_call_amd('core_user/name_page_filter', 'init');
 
 $perpageurl = clone($baseurl);
 $perpageurl->remove_params('perpage');
-if ($perpage == SHOW_ALL_PAGE_SIZE && $totalcount > DEFAULT_PAGE_SIZE) {
+if ($perpage == SHOW_ALL_PAGE_SIZE && $subsetcount > DEFAULT_PAGE_SIZE) {
     $perpageurl->param('perpage', DEFAULT_PAGE_SIZE);
     echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showperpage', '', DEFAULT_PAGE_SIZE)), array(), 'showall');
 
-} else if ($perpage < $totalcount) {
+} else if ($perpage < $subsetcount) {
     $perpageurl->param('perpage', SHOW_ALL_PAGE_SIZE);
-    echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showall', '', $totalcount)),
+    echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showall', '', $subsetcount)),
         array(), 'showall');
 }
 
-
 // Show a search box if all participants don't fit on a single screen.
+$data = ['courseid' => $course->id, 'roleid' => $roleid, 'mode' => $mode];
+
 // if ($totalcount > $perpage) {
-//     echo '<form action="photoboard.php" class="searchform"><div><input type="hidden" name="id" value="'.$course->id.'" />';
-//     echo '<input type="hidden" name="roleid" value="' . $roleid . '" />';
-//     echo '<input type="hidden" name="mode" value="' . $mode . '" />';
-//     echo '<label for="search">' . get_string('search', 'search') . ' </label>';
-//     echo '<input type="text" id="search" name="search" value="'.s($search) . '" />&nbsp;<input type="submit" value="'.get_string('search').'" /></div></form>'."\n";
+//     $searchform = new format_cul_search_form(null, $data, 'post', '', array('id' => 'format_cul_search_form'));
+//     echo $searchform->render();
 // }
 
 

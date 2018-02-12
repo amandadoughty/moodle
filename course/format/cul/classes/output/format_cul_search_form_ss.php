@@ -22,9 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace format_cul\output;
+
 defined('MOODLE_INTERNAL') || die();
 
-require_once $CFG->libdir.'/formslib.php';
+require_once $CFG->libdir . '/formslib.php';
 
 /**
  * Admin settings search form
@@ -36,13 +38,16 @@ require_once $CFG->libdir.'/formslib.php';
 class format_cul_search_form extends moodleform {
     function definition () {
         $mform = $this->_form;
-
-        //$mform->addElement('header', 'settingsheader', get_string('search', 'admin'));
         $elements = [];
-        $elements[] = $mform->createElement('text', 'query', get_string('query', 'admin'));
-        $elements[] = $mform->createElement('submit', 'search', get_string('search'));
+        $elements[] = $mform->createElement('hidden', 'id', $this->_customdata['courseid']);
+        $elements[] = $mform->createElement('hidden', 'roleid', $this->_customdata['roleid']);
+        $elements[] = $mform->createElement('hidden', 'mode', $this->_customdata['mode']);
+        $elements[] = $mform->createElement('text', 'search', get_string('search', 'admin'));
+        $elements[] = $mform->createElement('submit', 'submit', get_string('search'));
         $mform->addGroup($elements);
-        $mform->setType('query', PARAM_RAW);
-        $mform->setDefault('query', optional_param('query', '', PARAM_RAW));
+        $mform->setType('search', PARAM_RAW);
+        $mform->setDefault('search', optional_param('search', '', PARAM_RAW));
     }
 }
+
+
