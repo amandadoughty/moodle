@@ -49,16 +49,16 @@ $selectall    = optional_param('selectall', false, PARAM_BOOL); // When renderin
 $roleid       = optional_param('roleid', 0, PARAM_INT);
 $groupparam   = optional_param('group', 0, PARAM_INT);
 
-$formatculsifirst  = optional_param('sifirst', null, PARAM_NOTAGS);
-$formatculsilast   = optional_param('silast', null, PARAM_NOTAGS);
+$sifirst = optional_param('sifirst', 'all', PARAM_NOTAGS);
+$silast  = optional_param('silast', 'all', PARAM_NOTAGS);
 
 // The report object is recreated each time, save search information to SESSION object for future use.
-if (isset($formatculsifirst)) {
-    $SESSION->format_cul['filterfirstname'] = $formatculsifirst;
-}
-if (isset($formatculsilast)) {
-    $SESSION->format_cul['filtersurname'] = $formatculsilast;
-}
+// if (isset($formatculsifirst)) {
+//     $SESSION->format_cul['filterfirstname'] = $formatculsifirst;
+// }
+// if (isset($formatculsilast)) {
+//     $SESSION->format_cul['filtersurname'] = $formatculsilast;
+// }
 
 $PAGE->set_url('/course/format/cul/dashboard/photoboard2.php', array(
         'page' => $page,
@@ -258,42 +258,74 @@ $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard2.php', array(
 // ob_end_clean();
 
 // User search
-$firstinitial = isset($SESSION->format_cul['filterfirstname']) ? $SESSION->format_cul['filterfirstname'] : '';
-$lastinitial  = isset($SESSION->format_cul['filtersurname']) ? $SESSION->format_cul['filtersurname'] : '';
+if ($sifirst !== 'all') {
+    set_user_preference('ifirst', $sifirst);
+}
+if ($silast !== 'all') {
+    set_user_preference('ilast', $silast);
+}
+
+if (!empty($USER->preference['ifirst'])) {
+    $sifirst = $USER->preference['ifirst'];
+} else {
+    $sifirst = 'all';
+}
+
+if (!empty($USER->preference['ilast'])) {
+    $silast = $USER->preference['ilast'];
+} else {
+    $silast = 'all';
+}
+
 // Generate where clause
 $where = array();
 $where_params = array();
 
-if ($firstinitial !== 'all') {
+if ($sifirst !== 'all') {
     $where[] = $DB->sql_like('u.firstname', ':sifirst', false);
-    $where_params['sifirst'] = $firstinitial . '%';
+    $where_params['sifirst'] = $sifirst.'%';
 }
 
-if ($lastinitial !== 'all') {
+if ($silast !== 'all') {
     $where[] = $DB->sql_like('u.lastname', ':silast', false);
-    $where_params['silast'] = $lastinitial . '%';
+    $where_params['silast'] = $silast.'%';
 }
+
 
 $where = join(' AND ', $where);
 
 // echo $participanttablehtml;
 $users = user_get_participants($course->id, $groupid, 0, $roleid, 0, -1, '', $where, $where_params, '', $page, $perpage);
 
-$totalcount = user_get_total_participants($course->id);
-$subsetcount = user_get_total_participants($course->id, $groupid, 0, $roleid, 0, -1, '', $where, $where_params);
+$grandtotal = user_get_total_participants($course->id);
+$total = user_get_total_participants($course->id, $groupid, 0, $roleid, 0, -1, '', $where, $where_params);
+
+
+
+// Search utility heading.
+// $content .= $OUTPUT->heading($heading.get_string('labelsep', 'langconfig') . $usercount . '/' . $grandtotal, 3);
+
+
+
+// Initials bar.
+$prefixfirst = 'sifirst';
+$prefixlast = 'silast';
+$initialbar = $OUTPUT->initials_bar($sifirst, 'firstinitial', get_string('firstname'), $prefixfirst, $baseurl);
+$initialbar .= $OUTPUT->initials_bar($silast, 'lastinitial', get_string('lastname'), $prefixlast, $baseurl);
+
+
+echo $initialbar;
+
+
+
+// $renderer = $PAGE->get_renderer('core_user');
+// echo $renderer->user_search($baseurl, $firstinitial, $lastinitial, $total, $grandtotal, $groupid);
 
 
 
 
-
-$renderer = $PAGE->get_renderer('core_user');
-echo $renderer->user_search($baseurl, $firstinitial, $lastinitial, $subsetcount, $totalcount, $groupid);
-
-
-
-
-if ($subsetcount > $perpage) {     
-    $pagingbar = new paging_bar($subsetcount, $page, $perpage, $baseurl);
+if ($total > $perpage) {     
+    $pagingbar = new paging_bar($total, $page, $perpage, $baseurl);
     $pagingbar->pagevar = 'page';
     echo $OUTPUT->render($pagingbar);
 }
@@ -313,20 +345,20 @@ $PAGE->requires->js_call_amd('core_user/name_page_filter', 'init');
 
 $perpageurl = clone($baseurl);
 $perpageurl->remove_params('perpage');
-if ($perpage == SHOW_ALL_PAGE_SIZE && $subsetcount > DEFAULT_PAGE_SIZE) {
+if ($perpage == SHOW_ALL_PAGE_SIZE && $total > DEFAULT_PAGE_SIZE) {
     $perpageurl->param('perpage', DEFAULT_PAGE_SIZE);
     echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showperpage', '', DEFAULT_PAGE_SIZE)), array(), 'showall');
 
-} else if ($perpage < $subsetcount) {
+} else if ($perpage < $total) {
     $perpageurl->param('perpage', SHOW_ALL_PAGE_SIZE);
-    echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showall', '', $subsetcount)),
+    echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showall', '', $total)),
         array(), 'showall');
 }
 
 // Show a search box if all participants don't fit on a single screen.
 $data = ['courseid' => $course->id, 'roleid' => $roleid, 'mode' => $mode];
 
-// if ($totalcount > $perpage) {
+// if ($grandtotal > $perpage) {
 //     $searchform = new format_cul_search_form(null, $data, 'post', '', array('id' => 'format_cul_search_form'));
 //     echo $searchform->render();
 // }
