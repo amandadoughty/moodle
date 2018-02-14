@@ -23,16 +23,11 @@
  */
 
 use format_cul\output\photoboard;
-// use format_cul\output\format_cul_search_form; // Built into filter
 
 require_once('../../../../config.php');
 require_once($CFG->dirroot . '/user/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
-// require_once($CFG->dirroot.'/notes/lib.php');
-// require_once($CFG->libdir.'/tablelib.php');
 require_once($CFG->libdir . '/filelib.php');
-// require_once($CFG->dirroot . '../classes/forms/format_cul_search_form.php');
-// require_once($CFG->dirroot.'/enrol/locallib.php');
 
 define('DEFAULT_PAGE_SIZE', 20);
 define('SHOW_ALL_PAGE_SIZE', 5000);
@@ -42,23 +37,12 @@ define('MODE_USERDETAILS', 1);
 $page         = optional_param('page', 0, PARAM_INT); // Which page to show.
 $perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
 $mode         = optional_param('mode', 1, PARAM_INT); // Use the MODE_ constants.
-// $search       = optional_param('search', '', PARAM_RAW); // Make sure it is processed with p() or s() when sending to output!
 $contextid    = optional_param('contextid', 0, PARAM_INT); // One of this or.
 $courseid     = optional_param('id', 0, PARAM_INT); // This are required.
-$selectall    = optional_param('selectall', false, PARAM_BOOL); // When rendering checkboxes against users mark them all checked.
 $roleid       = optional_param('roleid', 0, PARAM_INT);
 $groupparam   = optional_param('group', 0, PARAM_INT);
-
 $sifirst = optional_param('sifirst', 'all', PARAM_NOTAGS);
 $silast  = optional_param('silast', 'all', PARAM_NOTAGS);
-
-// The report object is recreated each time, save search information to SESSION object for future use.
-// if (isset($formatculsifirst)) {
-//     $SESSION->format_cul['filterfirstname'] = $formatculsifirst;
-// }
-// if (isset($formatculsilast)) {
-//     $SESSION->format_cul['filtersurname'] = $formatculsilast;
-// }
 
 $PAGE->set_url('/course/format/cul/dashboard/photoboard2.php', array(
         'page' => $page,
@@ -76,16 +60,15 @@ if ($contextid) {
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
     $context = context_course::instance($course->id, MUST_EXIST);
 }
+
 // Not needed anymore.
 unset($contextid);
 unset($courseid);
 
 require_login($course);
 
-
 $PAGE->set_pagelayout('base');
 course_require_view_participants($context);
-
 
 // Trigger events.
 user_list_view($course, $context);
@@ -96,39 +79,11 @@ $PAGE->set_pagetype('course-view-' . $course->format);
 $PAGE->add_body_class('path-format-cul-photos'); // So we can style it independently.
 // $PAGE->set_other_editing_capability('moodle/course:manageactivities');
 
-// Expand the users node in the settings navigation when it exists because those pages
-// are related to this one.
-// $node = $PAGE->settingsnav->find('users', navigation_node::TYPE_CONTAINER);
-// if ($node) {
-//     $node->force_open();
-// }
-
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('participants'));
 
-// if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
-//     $rolenames = role_fix_names(get_profile_roles($context), $context, ROLENAME_ALIAS, true);
-//     $rolenames[0] = get_string('allparticipants');
-// } else {
-//     $profileroles = get_profile_roles($context);
-//     $photoboardroles = explode(',', $CFG->profileroles);
-//     $ccroles = array();
+if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
 
-//     if (in_array($roleid, $photoboardroles)) {
-//         $ccroles[$roleid] = $profileroles[$roleid];
-//     }
-
-//     $rolenames = role_fix_names($ccroles, $context, ROLENAME_ALIAS, true);
-// }
-
-// // Make sure other roles may not be selected by any means.
-// if (empty($rolenames[$roleid])) {
-//     if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context) && !empty($rolenames[0])) {
-//         redirect ($rolenamesurl);
-//     } else {
-//         print_error('noparticipants');
-//     }
-// }
+}
 
 // Get the currently applied filters.
 $filtersapplied = optional_param_array('unified-filters', [], PARAM_NOTAGS);
@@ -149,6 +104,7 @@ if ($roleid) {
 // Default group ID.
 $groupid = false;
 $canaccessallgroups = has_capability('moodle/site:accessallgroups', $context);
+
 if ($course->groupmode != NOGROUPS) {
     if ($canaccessallgroups) {
         // Change the group if the user can access all groups and has specified group in the URL.
@@ -166,6 +122,7 @@ if ($course->groupmode != NOGROUPS) {
         }
     }
 }
+
 $hasgroupfilter = false;
 $lastaccess = 0;
 $searchkeywords = [];
@@ -239,23 +196,11 @@ if ($groupid && ($course->groupmode != SEPARATEGROUPS || $canaccessallgroups)) {
 $renderer = $PAGE->get_renderer('core_user');
 echo $renderer->unified_filter($course, $context, $filtersapplied);
 
-// echo '<div class="userlist">';
-
 // Should use this variable so that we don't break stuff every time a variable is added or changed.
 $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard2.php', array(
         'contextid' => $context->id,
         'id' => $course->id,
         'perpage' => $perpage));
-
-// $participanttable = new \core_user\participants_table($course->id, $groupid, $lastaccess, $roleid, $enrolid, $status,
-//     $searchkeywords, false, $selectall);
-// $participanttable->define_baseurl($baseurl);
-
-// Do this so we can get the total number of rows.
-// ob_start();
-// $participanttable->out($perpage, true);
-// $participanttablehtml = ob_get_contents();
-// ob_end_clean();
 
 // User search
 if ($sifirst !== 'all') {
@@ -291,38 +236,20 @@ if ($silast !== 'all') {
     $where_params['silast'] = $silast.'%';
 }
 
-
 $where = join(' AND ', $where);
-
-// echo $participanttablehtml;
-$users = user_get_participants($course->id, $groupid, 0, $roleid, 0, -1, '', $where, $where_params, '', $page, $perpage);
-
+$users = user_get_participants($course->id, $groupid, 0, $roleid, 0, -1, $searchkeywords, $where, $where_params, '', $page, $perpage);
 $grandtotal = user_get_total_participants($course->id);
-$total = user_get_total_participants($course->id, $groupid, 0, $roleid, 0, -1, '', $where, $where_params);
-
-
-
-// Search utility heading.
-// $content .= $OUTPUT->heading($heading.get_string('labelsep', 'langconfig') . $usercount . '/' . $grandtotal, 3);
-
-
+$total = user_get_total_participants($course->id, $groupid, 0, $roleid, 0, -1, $searchkeywords, $where, $where_params);
 
 // Initials bar.
 $prefixfirst = 'sifirst';
 $prefixlast = 'silast';
 $initialbar = $OUTPUT->initials_bar($sifirst, 'firstinitial', get_string('firstname'), $prefixfirst, $baseurl);
 $initialbar .= $OUTPUT->initials_bar($silast, 'lastinitial', get_string('lastname'), $prefixlast, $baseurl);
-
-
 echo $initialbar;
 
-
-
-// $renderer = $PAGE->get_renderer('core_user');
-// echo $renderer->user_search($baseurl, $firstinitial, $lastinitial, $total, $grandtotal, $groupid);
-
-
-
+// Search utility heading.
+echo $OUTPUT->heading(get_string('matched', 'format_cul') . get_string('labelsep', 'langconfig') . $total . '/' . $grandtotal, 3);
 
 if ($total > $perpage) {     
     $pagingbar = new paging_bar($total, $page, $perpage, $baseurl);
@@ -330,21 +257,17 @@ if ($total > $perpage) {
     echo $OUTPUT->render($pagingbar);
 }
 
-$o = '';
+$templates = [MODE_BRIEF => 'format_cul/briefphotoboard', MODE_USERDETAILS => 'format_cul/detailedphotoboard'];
+
 $photoboard = new photoboard($COURSE, $users);
 $templatecontext = $photoboard->export_for_template($OUTPUT);
-$o .= $OUTPUT->render_from_template('format_cul/photoboard', $templatecontext);
-
-echo $o;
-
+echo $OUTPUT->render_from_template($templates[$mode], $templatecontext);
 
 $PAGE->requires->js_call_amd('core_user/name_page_filter', 'init');
-
-
-// @TODO Need to add this back
-
 $perpageurl = clone($baseurl);
+
 $perpageurl->remove_params('perpage');
+
 if ($perpage == SHOW_ALL_PAGE_SIZE && $total > DEFAULT_PAGE_SIZE) {
     $perpageurl->param('perpage', DEFAULT_PAGE_SIZE);
     echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showperpage', '', DEFAULT_PAGE_SIZE)), array(), 'showall');
@@ -354,15 +277,5 @@ if ($perpage == SHOW_ALL_PAGE_SIZE && $total > DEFAULT_PAGE_SIZE) {
     echo $OUTPUT->container(html_writer::link($perpageurl, get_string('showall', '', $total)),
         array(), 'showall');
 }
-
-// Show a search box if all participants don't fit on a single screen.
-$data = ['courseid' => $course->id, 'roleid' => $roleid, 'mode' => $mode];
-
-// if ($grandtotal > $perpage) {
-//     $searchform = new format_cul_search_form(null, $data, 'post', '', array('id' => 'format_cul_search_form'));
-//     echo $searchform->render();
-// }
-
-
 
 echo $OUTPUT->footer();

@@ -1,27 +1,7 @@
-    <li>    
-        <div class="cul-photo">
-            {{{imghtml}}}
-        </div>
-        <div class="username">
-            {{{fullname}}}
-        </div>
-        <div class="cul-info">
-            {{# str }} email, format_cul {{/ str }}<a href="mailto:{{email}}">{{email}}</a>
-            <br />
-            {{# str }} mobile, format_cul {{/ str }} {{phone2}}
-            <br />
-            {{# str }} telephone, format_cul {{/ str }} {{stafftelephone}}
-            <br />
-            {{# str }} officehours, format_cul {{/ str }} {{staffofficehrs}}
-            <br />
-            {{# str }} buildinglocation, format_cul {{/ str }} {{stafflocation}}
-            <br />
-            {{# str }} lastaccess, format_cul {{/ str }} {{lastaccess}}
-        </div>
-        <div class="cul-links">
-            {{# links}}
-                {{{link}}}
-                <br />
-            {{/ links}}
-        </div>
-    </li>
+<ul class="userlist">
+{{# users}}
+	{{> format_cul/detaileduser}}
+{{/ users}}
+</ul>
+
+
