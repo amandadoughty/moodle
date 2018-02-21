@@ -44,7 +44,7 @@ $groupparam   = optional_param('group', 0, PARAM_INT);
 $sifirst = optional_param('sifirst', 'all', PARAM_NOTAGS);
 $silast  = optional_param('silast', 'all', PARAM_NOTAGS);
 
-$PAGE->set_url('/course/format/cul/dashboard/photoboard2.php', array(
+$PAGE->set_url('/course/format/cul/dashboard/photoboard.php', array(
         'page' => $page,
         'perpage' => $perpage,
         'contextid' => $contextid,
@@ -194,10 +194,11 @@ if ($groupid && ($course->groupmode != SEPARATEGROUPS || $canaccessallgroups)) {
 
 // Render the unified filter.
 $renderer = $PAGE->get_renderer('core_user');
-echo $renderer->unified_filter($course, $context, $filtersapplied);
+$unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied);
+// echo $unifiedfilter;
 
 // Should use this variable so that we don't break stuff every time a variable is added or changed.
-$baseurl = new moodle_url('/course/format/cul/dashboard/photoboard2.php', array(
+$baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
         'contextid' => $context->id,
         'id' => $course->id,
         'perpage' => $perpage));
@@ -246,22 +247,24 @@ $prefixfirst = 'sifirst';
 $prefixlast = 'silast';
 $initialbar = $OUTPUT->initials_bar($sifirst, 'firstinitial', get_string('firstname'), $prefixfirst, $baseurl);
 $initialbar .= $OUTPUT->initials_bar($silast, 'lastinitial', get_string('lastname'), $prefixlast, $baseurl);
-echo $initialbar;
+// echo $initialbar;
 
 // Search utility heading.
-echo $OUTPUT->heading(get_string('matched', 'format_cul') . get_string('labelsep', 'langconfig') . $total . '/' . $grandtotal, 3);
+// echo $OUTPUT->heading(get_string('matched', 'format_cul') . get_string('labelsep', 'langconfig') . $total . '/' . $grandtotal, 3);
 
 if ($total > $perpage) {     
     $pagingbar = new paging_bar($total, $page, $perpage, $baseurl);
     $pagingbar->pagevar = 'page';
-    echo $OUTPUT->render($pagingbar);
+    $pagingbar = $OUTPUT->render($pagingbar);
+    // echo $pagingbar;
 }
 
 $templates = [MODE_BRIEF => 'format_cul/briefphotoboard', MODE_USERDETAILS => 'format_cul/detailedphotoboard'];
 
-$photoboard = new photoboard($COURSE, $users);
+$photoboard = new photoboard($COURSE, $users, $mode, $unifiedfilter, $initialbar, $pagingbar, $baseurl);
 $templatecontext = $photoboard->export_for_template($OUTPUT);
-echo $OUTPUT->render_from_template($templates[$mode], $templatecontext);
+// echo $OUTPUT->render_from_template($templates[$mode], $templatecontext);
+echo $OUTPUT->render_from_template('format_cul/photoboard', $templatecontext);
 
 $PAGE->requires->js_call_amd('core_user/name_page_filter', 'init');
 $perpageurl = clone($baseurl);

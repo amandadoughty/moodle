@@ -58,7 +58,16 @@ class photoboard implements templatable, renderable {
      * @param moodle_page $page
      * @param string $target one of rendering target constants
      */
-    public function __construct($course, $users = []) {
+    public function __construct(
+        $course, 
+        $users = [], 
+        $mode = 1, 
+        $unifiedfilter = null, 
+        $initialbar = null,
+        $pagingbar = null,
+        $baseurl
+        ) 
+    {
         global $PAGE;
 
         // $this->userisediting = $PAGE->user_is_editing();
@@ -70,12 +79,21 @@ class photoboard implements templatable, renderable {
 
         $this->course = $course;
         $this->users = $users;
+        $this->mode = $mode;
+        $this->unifiedfilter = $unifiedfilter;
+        $this->initialbar = $initialbar;
+        $this->pagingbar = $pagingbar;
+        $this->baseurl = $baseurl;
     }
 
     public function export_for_template(renderer_base $output) {
         $export = new stdClass();
         $export->course = $this->course;
         $export->users = $this->get_users();
+        $export->modes = $this->get_modes();
+        $export->unifiedfilter = $this->unifiedfilter;
+        $export->initialbar = $this->initialbar;
+        $export->pagingbar = $this->pagingbar;
 
         
 
@@ -283,7 +301,7 @@ class photoboard implements templatable, renderable {
      * @param stdClass $user
      * @return string
      */
-    function get_user_picture($user, $course) {
+    public function get_user_picture($user, $course) {
         global $OUTPUT;
         // get photo from most appropriate place
         if ($user->picture > 0) { // show photo from Moodle first if exists
@@ -291,6 +309,33 @@ class photoboard implements templatable, renderable {
         } else { // then resort to Moodle grey man photo
             return $OUTPUT->user_picture($user, array('size' => 100, 'courseid' => $course->id));
         }
+    }
+
+    public function get_modes() {
+        $modes[MODE_BRIEF]['title'] = get_string('photogrid', 'format_cul');
+        $modes[MODE_USERDETAILS]['title'] = get_string('detailedlist', 'format_cul');
+
+        if ($this->mode == MODE_BRIEF) {
+            $modes[MODE_BRIEF]['active'] = 1;
+            $modes[MODE_BRIEF]['link'] = '#brief';
+        } else {
+            $modes[MODE_BRIEF]['active'] = 0;
+            // $this->baseurl->param('mode', MODE_BRIEF);
+            // $modes[MODE_BRIEF]['link'] = $this->baseurl->out();
+            $modes[MODE_BRIEF]['link'] = '#brief';
+        }
+
+        if ($this->mode == MODE_USERDETAILS) {
+            $modes[MODE_USERDETAILS]['active'] = 1;
+            $modes[MODE_USERDETAILS]['link'] = '#detailed';
+        } else {
+            $modes[MODE_USERDETAILS]['active'] = 0;
+            // $this->baseurl->param('mode', MODE_USERDETAILS);
+            // $modes[MODE_USERDETAILS]['link'] = $this->baseurl->out();
+            $modes[MODE_USERDETAILS]['link'] = '#detailed';
+        }
+
+        return $modes;
     }
 
 }

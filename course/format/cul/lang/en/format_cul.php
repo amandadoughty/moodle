@@ -225,9 +225,11 @@ $string['linktowebapps'] = 'Student info (intranet)';
 
 /* Photoboard fields */
 $string['buildinglocation'] = 'Building/location: ';
+$string['detailedlist'] = 'Detailed List';
 $string['email'] = 'Email: ';
 $string['lastaccess'] = 'Last access: ';
 $string['matched'] = 'Matched';
 $string['mobile'] = 'Mobile phone: ';
 $string['officehours'] = 'Office hours: ';
+$string['photogrid'] = 'Photo Grid';
 $string['telephone'] = 'Telephone: ';
