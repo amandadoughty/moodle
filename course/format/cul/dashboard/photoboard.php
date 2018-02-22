@@ -28,8 +28,10 @@ require_once('../../../../config.php');
 require_once($CFG->dirroot . '/user/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 require_once($CFG->libdir . '/filelib.php');
+require_once($CFG->dirroot . '/enrol/locallib.php');
+        require_once($CFG->dirroot . '/lib/grouplib.php');
 
-define('DEFAULT_PAGE_SIZE', 20);
+define('DEFAULT_PAGE_SIZE', 10);
 define('SHOW_ALL_PAGE_SIZE', 5000);
 define('MODE_BRIEF', 0);
 define('MODE_USERDETAILS', 1);
@@ -189,13 +191,59 @@ if ($groupid !== false) {
 if ($groupid && ($course->groupmode != SEPARATEGROUPS || $canaccessallgroups)) {
     $grouprenderer = $PAGE->get_renderer('core_group');
     $groupdetailpage = new \core_group\output\group_details($groupid);
-    echo $grouprenderer->group_details($groupdetailpage);
+    echo $grouprenderer->group_details($groupdetailpage); ///////////////////////////////////////////////////////
 }
+
+
+$unifiedfilter = null;
 
 // Render the unified filter.
 $renderer = $PAGE->get_renderer('core_user');
-$unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied);
+// $unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied);///////////////////////////
 // echo $unifiedfilter;
+
+
+// filter with just groups
+
+$manager = new course_enrolment_manager($PAGE, $course);
+$filteroptions = [];
+// Filter options for groups, if available.
+if (has_capability('moodle/site:accessallgroups', $context) || $course->groupmode != SEPARATEGROUPS) {
+    // List all groups if the user can access all groups, or we are in visible group mode or no groups mode.
+    $groups = $manager->get_all_groups();
+} else {
+    // Otherwise, just list the groups the user belongs to.
+    $groups = groups_get_all_groups($course->id, $USER->id);
+}
+$criteria = get_string('group');
+$groupoptions = [];
+foreach ($groups as $id => $group) {
+    $optionlabel = get_string('filteroption', 'moodle', (object)['criteria' => $criteria, 'value' => $group->name]);
+    $optionvalue = USER_FILTER_GROUP . ":$id";
+    $groupoptions += [$optionvalue => $optionlabel];
+
+
+
+    // $groupoptions += $renderer->format_filter_option(USER_FILTER_GROUP, $criteria, $id, $group->name);
+}
+
+$filteroptions += $groupoptions;
+
+if ($groups) {
+    $indexpage = new \core_user\output\unified_filter($filteroptions, $filtersapplied);
+    $templatecontext = $indexpage->export_for_template($OUTPUT);
+
+    $unifiedfilter = $OUTPUT->render_from_template('core_user/unified_filter', $templatecontext);
+}
+
+
+
+
+
+
+
+
+
 
 // Should use this variable so that we don't break stuff every time a variable is added or changed.
 $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
@@ -251,6 +299,7 @@ $initialbar .= $OUTPUT->initials_bar($silast, 'lastinitial', get_string('lastnam
 
 // Search utility heading.
 // echo $OUTPUT->heading(get_string('matched', 'format_cul') . get_string('labelsep', 'langconfig') . $total . '/' . $grandtotal, 3);
+$pagingbar = null;
 
 if ($total > $perpage) {     
     $pagingbar = new paging_bar($total, $page, $perpage, $baseurl);
