@@ -232,4 +232,5 @@ $string['matched'] = 'Matched';
 $string['mobile'] = 'Mobile phone: ';
 $string['officehours'] = 'Office hours: ';
 $string['photogrid'] = 'Photo Grid';
+$string['roleerror'] = 'View the photoboard for that role';
 $string['telephone'] = 'Telephone: ';

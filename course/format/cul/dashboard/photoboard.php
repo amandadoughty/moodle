@@ -46,11 +46,6 @@ $groupparam   = optional_param('group', 0, PARAM_INT);
 $sifirst = optional_param('sifirst', 'all', PARAM_NOTAGS);
 $silast  = optional_param('silast', 'all', PARAM_NOTAGS);
 
-$PAGE->set_url('/course/format/cul/dashboard/photoboard.php', array(
-        'page' => $page,
-        'perpage' => $perpage,
-        'contextid' => $contextid,
-        'id' => $courseid));
 
 if ($contextid) {
     $context = context::instance_by_id($contextid, MUST_EXIST);
@@ -69,6 +64,79 @@ unset($courseid);
 
 require_login($course);
 
+// Get the currently applied filters.
+$filtersapplied = optional_param_array('unified-filters', [], PARAM_NOTAGS);
+$filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
+
+
+
+
+
+if (has_capability('format/cul:viewallphotoboard', $context)) {
+    // If they passed a role make sure they can view that role.
+    if ($roleid) {
+        $viewableroles = get_profile_roles($context);
+
+        // Check if the user can view this role.
+        if (array_key_exists($roleid, $viewableroles)) {
+            $filtersapplied[] = USER_FILTER_ROLE . ':' . $roleid;
+        } else {
+            $roleid = 0;
+        }
+    }
+} else {
+    if ($roleid) {
+        // $viewableroles = get_profile_roles($context);
+        $photoboardroles = explode(',', $CFG->profileroles);
+        
+        // Check if the user can view this role.
+        if (in_array($roleid, $photoboardroles)) {
+            $filtersapplied[] = USER_FILTER_ROLE . ':' . $roleid;
+        } else {
+            print_error('invalidrequest');
+        }
+    } else {
+        print_error('invalidrequest');
+    }
+}
+
+
+
+if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
+    // $PAGE->set_url('/course/format/cul/dashboard/photoboard.php', array(
+    //         'page' => $page,
+    //         'perpage' => $perpage,
+    //         'contextid' => $context->id,
+    //         'id' => $course->id));
+
+    // Should use this variable so that we don't break stuff every time a variable is added or changed.
+    $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
+        'contextid' => $context->id,
+        'id' => $course->id,
+        'perpage' => $perpage));
+
+} else {
+    // Students cannot use role filter.
+    // $PAGE->set_url('/course/format/cul/dashboard/photoboard.php', array(
+    //     'page' => $page,
+    //     'perpage' => $perpage,
+    //     'contextid' => $context->id,
+    //     'id' => $course->id,
+    //     'roleid' => $roleid));
+
+    $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
+        'contextid' => $context->id,
+        'id' => $course->id,
+        'perpage' => $perpage,
+        'roleid' => $roleid));
+}
+
+// Add page parameter to page url.
+$pageurl = clone($baseurl);
+$pageurl->param('page', $page);
+$PAGE->set_url($pageurl);
+
+
 $PAGE->set_pagelayout('base');
 course_require_view_participants($context);
 
@@ -83,25 +151,9 @@ $PAGE->add_body_class('path-format-cul-photos'); // So we can style it independe
 
 echo $OUTPUT->header();
 
-if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
 
-}
 
-// Get the currently applied filters.
-$filtersapplied = optional_param_array('unified-filters', [], PARAM_NOTAGS);
-$filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
 
-// If they passed a role make sure they can view that role.
-if ($roleid) {
-    $viewableroles = get_profile_roles($context);
-
-    // Check if the user can view this role.
-    if (array_key_exists($roleid, $viewableroles)) {
-        $filtersapplied[] = USER_FILTER_ROLE . ':' . $roleid;
-    } else {
-        $roleid = 0;
-    }
-}
 
 // Default group ID.
 $groupid = false;
@@ -131,44 +183,82 @@ $searchkeywords = [];
 $enrolid = 0;
 $status = -1;
 
-foreach ($filtersapplied as $filter) {
-    $filtervalue = explode(':', $filter, 2);
-    $value = null;
-    if (count($filtervalue) == 2) {
-        $key = clean_param($filtervalue[0], PARAM_INT);
-        $value = clean_param($filtervalue[1], PARAM_INT);
-    } else {
-        // Search string.
-        $key = USER_FILTER_STRING;
-        $value = clean_param($filtervalue[0], PARAM_TEXT);
+if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
+
+
+
+    foreach ($filtersapplied as $filter) {
+        $filtervalue = explode(':', $filter, 2);
+        $value = null;
+        if (count($filtervalue) == 2) {
+            $key = clean_param($filtervalue[0], PARAM_INT);
+            $value = clean_param($filtervalue[1], PARAM_INT);
+        } else {
+            // Search string.
+            $key = USER_FILTER_STRING;
+            $value = clean_param($filtervalue[0], PARAM_TEXT);
+        }
+
+        switch ($key) {
+            case USER_FILTER_ENROLMENT:
+                $enrolid = $value;
+                break;
+            case USER_FILTER_GROUP:
+                $groupid = $value;
+                $hasgroupfilter = true;
+                break;
+            case USER_FILTER_LAST_ACCESS:
+                $lastaccess = $value;
+                break;
+            case USER_FILTER_ROLE:
+                $roleid = $value;
+                break;
+            case USER_FILTER_STATUS:
+                // We only accept active/suspended statuses.
+                if ($value == ENROL_USER_ACTIVE || $value == ENROL_USER_SUSPENDED) {
+                    $status = $value;
+                }
+                break;
+            default:
+                // Search string.
+                $searchkeywords[] = $value;
+                break;
+        }
+    }
+} else {
+
+    foreach ($filtersapplied as $filterkey => $filter) {
+        $filtervalue = explode(':', $filter, 2);
+        $value = null;
+        if (count($filtervalue) == 2) {
+            $key = clean_param($filtervalue[0], PARAM_INT);
+            $value = clean_param($filtervalue[1], PARAM_INT);
+        } else {
+            // Search string.
+            $key = USER_FILTER_STRING;
+            $value = clean_param($filtervalue[0], PARAM_TEXT);
+        }
+
+        switch ($key) {
+            case USER_FILTER_ENROLMENT:
+            case USER_FILTER_LAST_ACCESS:
+            case USER_FILTER_ROLE:
+            case USER_FILTER_STATUS:
+                unset($filtersapplied[$filterkey]);
+                break;
+            case USER_FILTER_GROUP:
+                $groupid = $value;
+                $hasgroupfilter = true;
+                break;
+            default:
+                // Search string.
+                $searchkeywords[] = $value;
+                break;
+        }
     }
 
-    switch ($key) {
-        case USER_FILTER_ENROLMENT:
-            $enrolid = $value;
-            break;
-        case USER_FILTER_GROUP:
-            $groupid = $value;
-            $hasgroupfilter = true;
-            break;
-        case USER_FILTER_LAST_ACCESS:
-            $lastaccess = $value;
-            break;
-        case USER_FILTER_ROLE:
-            $roleid = $value;
-            break;
-        case USER_FILTER_STATUS:
-            // We only accept active/suspended statuses.
-            if ($value == ENROL_USER_ACTIVE || $value == ENROL_USER_SUSPENDED) {
-                $status = $value;
-            }
-            break;
-        default:
-            // Search string.
-            $searchkeywords[] = $value;
-            break;
-    }
-}
+
+}    
 
 // If course supports groups we may need to set a default.
 if ($groupid !== false) {
@@ -197,44 +287,44 @@ if ($groupid && ($course->groupmode != SEPARATEGROUPS || $canaccessallgroups)) {
 
 $unifiedfilter = null;
 
-// Render the unified filter.
-$renderer = $PAGE->get_renderer('core_user');
-// $unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied);///////////////////////////
-// echo $unifiedfilter;
+if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
 
-
-// filter with just groups
-
-$manager = new course_enrolment_manager($PAGE, $course);
-$filteroptions = [];
-// Filter options for groups, if available.
-if (has_capability('moodle/site:accessallgroups', $context) || $course->groupmode != SEPARATEGROUPS) {
-    // List all groups if the user can access all groups, or we are in visible group mode or no groups mode.
-    $groups = $manager->get_all_groups();
+    // Render the unified filter.
+    $renderer = $PAGE->get_renderer('core_user');
+    $unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied);///////////////////////////
+    // echo $unifiedfilter;
 } else {
-    // Otherwise, just list the groups the user belongs to.
-    $groups = groups_get_all_groups($course->id, $USER->id);
+
+
+    // filter with just groups
+
+    $manager = new course_enrolment_manager($PAGE, $course);
+    $filteroptions = [];
+    // Filter options for groups, if available.
+    if (has_capability('moodle/site:accessallgroups', $context) || $course->groupmode != SEPARATEGROUPS) {
+        // List all groups if the user can access all groups, or we are in visible group mode or no groups mode.
+        $groups = $manager->get_all_groups();
+    } else {
+        // Otherwise, just list the groups the user belongs to.
+        $groups = groups_get_all_groups($course->id, $USER->id);
+    }
+    $criteria = get_string('group');
+    $groupoptions = [];
+    foreach ($groups as $id => $group) {
+        $optionlabel = get_string('filteroption', 'moodle', (object)['criteria' => $criteria, 'value' => $group->name]);
+        $optionvalue = USER_FILTER_GROUP . ":$id";
+        $groupoptions += [$optionvalue => $optionlabel];
+    }
+
+    $filteroptions += $groupoptions;
+
+    if ($groups) {
+        $indexpage = new \core_user\output\unified_filter($filteroptions, $filtersapplied);
+        $templatecontext = $indexpage->export_for_template($OUTPUT);
+
+        $unifiedfilter = $OUTPUT->render_from_template('core_user/unified_filter', $templatecontext);
+    }
 }
-$criteria = get_string('group');
-$groupoptions = [];
-foreach ($groups as $id => $group) {
-    $optionlabel = get_string('filteroption', 'moodle', (object)['criteria' => $criteria, 'value' => $group->name]);
-    $optionvalue = USER_FILTER_GROUP . ":$id";
-    $groupoptions += [$optionvalue => $optionlabel];
-
-
-
-    // $groupoptions += $renderer->format_filter_option(USER_FILTER_GROUP, $criteria, $id, $group->name);
-}
-
-$filteroptions += $groupoptions;
-
-if ($groups) {
-    $indexpage = new \core_user\output\unified_filter($filteroptions, $filtersapplied);
-    $templatecontext = $indexpage->export_for_template($OUTPUT);
-
-    $unifiedfilter = $OUTPUT->render_from_template('core_user/unified_filter', $templatecontext);
-}
 
 
 
@@ -245,11 +335,6 @@ if ($groups) {
 
 
 
-// Should use this variable so that we don't break stuff every time a variable is added or changed.
-$baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
-        'contextid' => $context->id,
-        'id' => $course->id,
-        'perpage' => $perpage));
 
 // User search
 if ($sifirst !== 'all') {
@@ -298,7 +383,7 @@ $initialbar .= $OUTPUT->initials_bar($silast, 'lastinitial', get_string('lastnam
 // echo $initialbar;
 
 // Search utility heading.
-// echo $OUTPUT->heading(get_string('matched', 'format_cul') . get_string('labelsep', 'langconfig') . $total . '/' . $grandtotal, 3);
+echo $OUTPUT->heading(get_string('matched', 'format_cul') . get_string('labelsep', 'langconfig') . $total . '/' . $grandtotal, 3);
 $pagingbar = null;
 
 if ($total > $perpage) {     
