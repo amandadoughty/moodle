@@ -6,16 +6,26 @@
             {{{fullname}}}
         </div>
         <div class="cul-info">
-            {{# str }} email, format_cul {{/ str }}<a href="mailto:{{email}}">{{email}}</a>
-            <br />
-            {{# str }} mobile, format_cul {{/ str }} {{phone2}}
-            <br />
-            {{# str }} telephone, format_cul {{/ str }} {{stafftelephone}}
-            <br />
-            {{# str }} officehours, format_cul {{/ str }} {{staffofficehrs}}
-            <br />
-            {{# str }} buildinglocation, format_cul {{/ str }} {{stafflocation}}
-            <br />
+            {{# email}}
+                {{# str }} email, format_cul {{/ str }}<a href="mailto:{{email}}">{{email}}</a>
+                <br />
+            {{/ email}}
+            {{# phone2}}
+                {{# str }} mobile, format_cul {{/ str }} {{phone2}}
+                <br />
+            {{/ phone2}}
+            {{# staff}}
+                {{# str }} telephone, format_cul {{/ str }} {{stafftelephone}}
+                <br />
+                {{# str }} officehours, format_cul {{/ str }} {{staffofficehrs}}
+                <br />
+                {{# str }} buildinglocation, format_cul {{/ str }} {{stafflocation}}
+                <br />
+            {{/ staff}}
+            {{# group}}
+                {{# str }} groups, format_cul {{/ str }} {{group}}
+                <br />
+            {{/ group}}            
             {{# str }} lastaccess, format_cul {{/ str }} {{lastaccess}}
         </div>
         <div class="cul-links">

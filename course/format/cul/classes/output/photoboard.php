@@ -48,14 +48,46 @@ class photoboard implements templatable, renderable {
     public $course = null;
 
     /**
-     * @var $course - The plugin settings.
+     * @var $users - The users.
      */
     public $users = [];
 
     /**
-     * Constructor method, calls the parent constructor - MDL-21097
+     * @var $mode - The template to show.
+     */
+    public $mode = [];
+
+    /**
+     * @var $unifiedfilter - HTML.
+     */
+    public $unifiedfilter = [];
+
+    /**
+     * @var $pagingbar - HTML.
+     */
+    public $pagingbar = [];
+
+    /**
+     * @var $initialbar - HTML.
+     */
+    public $initialbar = [];
+
+    /**
+     * @var $baseurl - The base url with all required params.
+     */
+    public $baseurl = [];       
+
+    /**
+     * Constructor method.
      *
-     * @param moodle_page $page
+     * @param stdClass $course
+     * @param array $users
+     * @param int $mode
+     * @param string $unifiedfilter
+     * @param string $initialbar
+     * @param string $pagingbar
+     * @param moodle_url $baseurl
+     * 
      * @param string $target one of rendering target constants
      */
     public function __construct(
@@ -69,13 +101,6 @@ class photoboard implements templatable, renderable {
         ) 
     {
         global $PAGE;
-
-        // $this->userisediting = $PAGE->user_is_editing();
-
-        // if ($this->userisediting) {
-        //     $adminurl = new \moodle_url('/course/format/cul/dashboard/quicklink_edit_ajax.php');
-        //     $this->adminurl = $adminurl->out();
-        // }
 
         $this->course = $course;
         $this->users = $users;
@@ -93,9 +118,7 @@ class photoboard implements templatable, renderable {
         $export->modes = $this->get_modes();
         $export->unifiedfilter = $this->unifiedfilter;
         $export->initialbar = $this->initialbar;
-        $export->pagingbar = $this->pagingbar;
-
-        
+        $export->pagingbar = $this->pagingbar;        
 
         return $export;
     }
@@ -130,183 +153,170 @@ class photoboard implements templatable, renderable {
         if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
             $hiddenfields = [];
         } else {
-            $hiddenfields = array_flip(explode(',', $CFG->hiddenuserfields));
-            $hiddenfields['mobile'] = 0;
-            $hiddenfields['forumposts'] = 0;
-            $hiddenfields['sendmessage'] = 0;
-            $hiddenfields['allusergroups'] = 0;
+            $hiddenfields = explode(',', $CFG->hiddenuserfields);
+            $hiddenfields[] = 'mobile';
+            $hiddenfields[] = 'forumposts';
+            $hiddenfields[] = 'sendmessage';
+            $hiddenfields[] = 'allusergroups';
         }
 
-
-            foreach ($this->users as $user) {
-                if (in_array($user->id, $usersprinted)) { // Prevent duplicates by r.hidden - MDL-13935.
-                    continue;
-                }
-                $usersprinted[] = $user->id; // Add new user to the array of users printed.
-
-                $xuser = $user;
-
-                \context_helper::preload_from_record($user);
-
-                
-                $usercontext = \context_user::instance($user->id);
-                $xuser->viewdetails = ($USER->id == $user->id) || has_capability('moodle/user:viewdetails', $context) || has_capability('moodle/user:viewdetails', $usercontext);
-
-                
-
-
-                $xuser->imghtml = $this->get_user_picture($user, $course);
-
-
-                $moduleleaderstr = '';
-
-                if (in_array($user->id, $moduleleaders)) {
-                    $moduleleaderstr = get_string('moduleleader', 'format_cul');
-                }
-
-                $fullname = fullname($user, has_capability('moodle/site:viewfullnames', $context)) . $moduleleaderstr;
-
-                if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
-                    $fullname = \html_writer::link(
-                        new \moodle_url('/user/view.php', array('id' => $user->id, 'course' => $course->id)),
-                        $fullname
-                        );
-                }
-
-                $xuser->fullname = $fullname;
-
-                // if (!empty($user->role)) {
-                //     $row->cells[1]->text .= get_string('role') . get_string('labelsep', 'langconfig') . $user->role . '<br />';
-                // }
-
-                // if ($user->maildisplay == 1 or ($user->maildisplay == 2 and ($course->id != SITEID) and !isguestuser()) or
-                //             has_capability('moodle/course:viewhiddenuserfields', $context) or
-                //             or ($user->id == $USER->id)) {
-                    
-                // } else {
-                //     $user->email = '';
-                // }
-
-                // foreach ($extrafields as $field) {
-                //     if ($field === 'email') {
-                //         // Skip email because it was displayed with different logic above
-                //         // because this page is intended for students too.
-                //         continue;
-                //     }
-
-                //     $row->cells[1]->text .= get_user_field_name($field) .
-                //             get_string('labelsep', 'langconfig') . s($user->{$field}) . '<br />';
-                // }
-
-                if (isset($hiddenfields['mobile'])) {
-                    $user->phone2 = '';
-                }
-
-
-
-                if (has_capability('moodle/course:viewhiddenuserfields', $context, $user)) {
-                    $sql = 'SELECT shortname, data
-                            FROM {user_info_data} uid
-                            JOIN {user_info_field} uif
-                            ON uid.fieldid = uif.id
-                            WHERE uid.userid = :userid';
-
-                    if ($result = $DB->get_records_sql($sql, array('userid' => $user->id))){
-                        $xuser->stafftelephone = $result['stafftelephone']->data;
-                        $xuser->staffofficehrs = $result['staffofficehrs']->data;
-                        $xuser->stafflocation = $result['stafflocation']->data;
-                    } else {
-                        $xuser->stafftelephone = '';
-                        $xuser->staffofficehrs = '';
-                        $xuser->stafflocation = '';                
-                    }
-
-                    $xuser->course = $this->course->id;
-                }
-
-                $showgroups = !isset($hiddenfields['allusergroups']) || (isset($hiddenfields['allusergroups']) && has_capability('moodle/course:viewhiddenuserfields', $context, $user));
-
-                if ($showgroups) {
-                    if ($currentgroup) {
-                        $group = groups_get_group($currentgroup);
-                        $xuser->group = 'Groups: ' . $group->name . '<br/>';
-                    } else {
-                        // show all groups user belongs to:
-                        $groups = groups_get_all_groups($this->course->id, $user->id);
-                        $groupnames = array();
-
-                        foreach ($groups as $group) {
-                            $groupnames[] = $group->name;
-                        }
-
-                        if (count($groups)) {
-                            $xuser->group = 'Groups: ' . implode(', ', $groupnames) . '<br/>';
-                        }
-                    }
-                }
-
-                if (!isset($hiddenfields['lastaccess'])) {
-                    if ($user->lastaccess) {
-                        $timesince = format_time(time() - $user->lastaccess);
-                        $xuser->lastaccess = userdate($user->lastaccess);
-                        $xuser->lastaccess .= " ($timesince)";
-                    } else {
-                        $xuser->lastaccess = get_string('never');
-                    }
-                } else {
-                    $xuser->lastaccess = '';
-                }
-
-
-                $links = [];
-                $link = [];
-
-                if (!isset($hiddenfields['forumposts'])) {
-                    $link['link'] = \html_writer::link(
-                                new \moodle_url('/mod/forum/user.php', array('id' => $user->id, 'course' => $course->id)),
-                                get_string('forumposts', 'mod_forum')
-                                );
-
-                    $links[] = $link;
-                }
-
-                if ($USER->id != $user->id && !\core\session\manager::is_loggedinas() && has_capability('moodle/user:loginas', $context) && !is_siteadmin($user->id)) {
-                    $link['link'] = \html_writer::link(
-                        new \moodle_url('/course/loginas.php', array('id' => $course->id, 'user' => $user->id, 'sesskey' => sesskey())),
-                        get_string('loginas')
-                        );
-
-                    $links[] = $link;
-                }
-
-                if (!isset($hiddenfields['sendmessage'])) {
-                    $link['link'] = \html_writer::link(
-                        new \moodle_url('/message/index.php', array('id' => $user->id, 'viewing' => 'course_' . $course->id)),
-                        get_string('sendmessage', 'format_cul')
-                        );
-
-                    $links[] = $link;
-                }
-
-                $xuser->links = $links;
-
-                $xusers[] = $xuser;
+        foreach ($this->users as $user) {
+            if (in_array($user->id, $usersprinted)) {
+                continue;
             }
-            return $xusers;
+
+            $usersprinted[] = $user->id; // Add new user to the array of users printed.
+            $xuser = new stdClass();
+
+
+            foreach ($user as $key => $value) {
+                if (!in_array($value, $hiddenfields)) {
+                    $xuser->$key = $value;
+                }
+            }
+
+
+            \context_helper::preload_from_record($user);                
+            $usercontext = \context_user::instance($user->id);
+            // $xuser->viewdetails = ($USER->id == $user->id) || has_capability('moodle/user:viewdetails', $context) || has_capability('moodle/user:viewdetails', $usercontext);
+            $xuser->imghtml = $this->get_user_picture($user, $course);
+            $moduleleaderstr = '';
+
+            if (in_array($user->id, $moduleleaders)) {
+                $moduleleaderstr = get_string('moduleleader', 'format_cul');
+            }
+
+            $fullname = fullname($user, has_capability('moodle/site:viewfullnames', $context)) . $moduleleaderstr;
+
+            if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
+                $fullname = \html_writer::link(
+                    new \moodle_url('/user/view.php', array('id' => $user->id, 'course' => $course->id)),
+                    $fullname
+                    );
+            }
+
+            $xuser->fullname = $fullname;
+
+            // Add temp sql to get maildisplay.
+
+            // if (
+            //     $user->maildisplay == 1 
+            //     || (
+            //         $user->maildisplay == 2 
+            //         && ($course->id != SITEID) 
+            //         && !isguestuser()
+            //         ) 
+            //     || has_capability('moodle/course:viewhiddenuserfields', $context)
+            //     || ($user->id == $USER->id)
+            // ) {
+            //     $xuser->email = $user->email;                
+            // }
+
+            if (has_capability('moodle/course:viewhiddenuserfields', $context, $user)) {
+                $xuser->staff = true;
+
+                $sql = 'SELECT shortname, data
+                        FROM {user_info_data} uid
+                        JOIN {user_info_field} uif
+                        ON uid.fieldid = uif.id
+                        WHERE uid.userid = :userid';
+
+                if ($result = $DB->get_records_sql($sql, array('userid' => $user->id))){                        
+                    $xuser->stafftelephone = $result['stafftelephone']->data;
+                    $xuser->staffofficehrs = $result['staffofficehrs']->data;
+                    $xuser->stafflocation = $result['stafflocation']->data;
+                } else {
+                    $xuser->stafftelephone = '';
+                    $xuser->staffofficehrs = '';
+                    $xuser->stafflocation = '';
+                }
+
+                $xuser->course = $this->course->id;
+            }
+
+            $showgroups = !in_array('allusergroups', $hiddenfields) || (in_array('allusergroups', $hiddenfields) && has_capability('moodle/course:viewhiddenuserfields', $context, $user));
+
+            if ($showgroups) {
+                if ($currentgroup) {
+                    $group = groups_get_group($currentgroup);
+                    $xuser->group = $group->name;
+                } else {
+                    // show all groups user belongs to:
+                    $groups = groups_get_all_groups($this->course->id, $user->id);
+                    $groupnames = array();
+
+                    foreach ($groups as $group) {
+                        $groupnames[] = $group->name;
+                    }
+
+                    if (count($groups)) {
+                        $xuser->group = implode(', ', $groupnames);
+                    }
+                }
+            }
+
+            if (!in_array('lastaccess', $hiddenfields)) {
+                if ($user->lastaccess) {
+                    $timesince = format_time(time() - $user->lastaccess);
+                    $xuser->lastaccess = userdate($user->lastaccess);
+                    $xuser->lastaccess .= " ($timesince)";
+                } else {
+                    $xuser->lastaccess = get_string('never');
+                }
+            } else {
+                $xuser->lastaccess = '';
+            }
+
+            $links = [];
+            $link = [];
+
+            if (!in_array('forumposts', $hiddenfields)) {
+                $link['link'] = \html_writer::link(
+                            new \moodle_url('/mod/forum/user.php', array('id' => $user->id, 'course' => $course->id)),
+                            get_string('forumposts', 'mod_forum')
+                            );
+
+                $links[] = $link;
+            }
+
+            if ($USER->id != $user->id && !\core\session\manager::is_loggedinas() && has_capability('moodle/user:loginas', $context) && !is_siteadmin($user->id)) {
+                $link['link'] = \html_writer::link(
+                    new \moodle_url('/course/loginas.php', array('id' => $course->id, 'user' => $user->id, 'sesskey' => sesskey())),
+                    get_string('loginas')
+                    );
+
+                $links[] = $link;
+            }
+
+            if (!in_array('sendmessage', $hiddenfields)) {
+                $link['link'] = \html_writer::link(
+                    new \moodle_url('/message/index.php', array('id' => $user->id, 'viewing' => 'course_' . $course->id)),
+                    get_string('sendmessage', 'format_cul')
+                    );
+
+                $links[] = $link;
+            }
+
+            $xuser->links = $links;
+            $xusers[] = $xuser;
+        }
+
+        return $xusers;
     }
 
     /**
      * Returns html for a user image.
      *
      * @param stdClass $user
+     * @param stdClass $course
      * @return string
      */
     public function get_user_picture($user, $course) {
         global $OUTPUT;
-        // get photo from most appropriate place
-        if ($user->picture > 0) { // show photo from Moodle first if exists
+        // get photo from most appropriate place.
+        if ($user->picture > 0) { // show photo from Moodle first if exists.
             return $OUTPUT->user_picture($user, array('size' => 100, 'courseid' => $course->id));
-        } else { // then resort to Moodle grey man photo
+        } else { // then resort to Moodle grey man photo.
             return $OUTPUT->user_picture($user, array('size' => 100, 'courseid' => $course->id));
         }
     }
@@ -320,8 +330,6 @@ class photoboard implements templatable, renderable {
             $modes[MODE_BRIEF]['link'] = '#brief';
         } else {
             $modes[MODE_BRIEF]['active'] = 0;
-            // $this->baseurl->param('mode', MODE_BRIEF);
-            // $modes[MODE_BRIEF]['link'] = $this->baseurl->out();
             $modes[MODE_BRIEF]['link'] = '#brief';
         }
 
@@ -330,8 +338,6 @@ class photoboard implements templatable, renderable {
             $modes[MODE_USERDETAILS]['link'] = '#detailed';
         } else {
             $modes[MODE_USERDETAILS]['active'] = 0;
-            // $this->baseurl->param('mode', MODE_USERDETAILS);
-            // $modes[MODE_USERDETAILS]['link'] = $this->baseurl->out();
             $modes[MODE_USERDETAILS]['link'] = '#detailed';
         }
 

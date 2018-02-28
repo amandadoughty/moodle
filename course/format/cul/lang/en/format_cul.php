@@ -227,6 +227,7 @@ $string['linktowebapps'] = 'Student info (intranet)';
 $string['buildinglocation'] = 'Building/location: ';
 $string['detailedlist'] = 'Detailed List';
 $string['email'] = 'Email: ';
+$string['groups'] = 'Groups: ';
 $string['lastaccess'] = 'Last access: ';
 $string['matched'] = 'Matched';
 $string['mobile'] = 'Mobile phone: ';

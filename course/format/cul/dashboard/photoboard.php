@@ -73,6 +73,13 @@ $filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
 
 
 if (has_capability('format/cul:viewallphotoboard', $context)) {
+    // Should use this variable so that we don't break stuff every time a variable 
+    // is added or changed.
+    $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
+        'contextid' => $context->id,
+        'id' => $course->id,
+        'perpage' => $perpage));
+
     // If they passed a role make sure they can view that role.
     if ($roleid) {
         $viewableroles = get_profile_roles($context);
@@ -85,6 +92,13 @@ if (has_capability('format/cul:viewallphotoboard', $context)) {
         }
     }
 } else {
+    // Need to include fixed roleid for students as they cannot access roles in the
+    // unified filter.
+    $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
+        'contextid' => $context->id,
+        'id' => $course->id,
+        'perpage' => $perpage,
+        'roleid' => $roleid));    
     if ($roleid) {
         // $viewableroles = get_profile_roles($context);
         $photoboardroles = explode(',', $CFG->profileroles);
@@ -100,42 +114,10 @@ if (has_capability('format/cul:viewallphotoboard', $context)) {
     }
 }
 
-
-
-if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
-    // $PAGE->set_url('/course/format/cul/dashboard/photoboard.php', array(
-    //         'page' => $page,
-    //         'perpage' => $perpage,
-    //         'contextid' => $context->id,
-    //         'id' => $course->id));
-
-    // Should use this variable so that we don't break stuff every time a variable is added or changed.
-    $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
-        'contextid' => $context->id,
-        'id' => $course->id,
-        'perpage' => $perpage));
-
-} else {
-    // Students cannot use role filter.
-    // $PAGE->set_url('/course/format/cul/dashboard/photoboard.php', array(
-    //     'page' => $page,
-    //     'perpage' => $perpage,
-    //     'contextid' => $context->id,
-    //     'id' => $course->id,
-    //     'roleid' => $roleid));
-
-    $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
-        'contextid' => $context->id,
-        'id' => $course->id,
-        'perpage' => $perpage,
-        'roleid' => $roleid));
-}
-
 // Add page parameter to page url.
 $pageurl = clone($baseurl);
 $pageurl->param('page', $page);
 $PAGE->set_url($pageurl);
-
 
 $PAGE->set_pagelayout('base');
 course_require_view_participants($context);
@@ -150,10 +132,6 @@ $PAGE->add_body_class('path-format-cul-photos'); // So we can style it independe
 // $PAGE->set_other_editing_capability('moodle/course:manageactivities');
 
 echo $OUTPUT->header();
-
-
-
-
 
 // Default group ID.
 $groupid = false;
@@ -184,8 +162,6 @@ $enrolid = 0;
 $status = -1;
 
 if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
-
-
 
     foreach ($filtersapplied as $filter) {
         $filtervalue = explode(':', $filter, 2);
@@ -256,8 +232,6 @@ if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
                 break;
         }
     }
-
-
 }    
 
 // If course supports groups we may need to set a default.
@@ -278,26 +252,14 @@ if ($groupid !== false) {
     }
 }
 
-if ($groupid && ($course->groupmode != SEPARATEGROUPS || $canaccessallgroups)) {
-    $grouprenderer = $PAGE->get_renderer('core_group');
-    $groupdetailpage = new \core_group\output\group_details($groupid);
-    echo $grouprenderer->group_details($groupdetailpage); ///////////////////////////////////////////////////////
-}
-
-
 $unifiedfilter = null;
 
 if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
-
     // Render the unified filter.
     $renderer = $PAGE->get_renderer('core_user');
-    $unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied);///////////////////////////
-    // echo $unifiedfilter;
+    $unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied);
 } else {
-
-
-    // filter with just groups
-
+    // Filter with just groups for students.
     $manager = new course_enrolment_manager($PAGE, $course);
     $filteroptions = [];
     // Filter options for groups, if available.
@@ -326,20 +288,11 @@ if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-// User search
+// User search.
 if ($sifirst !== 'all') {
     set_user_preference('ifirst', $sifirst);
 }
+
 if ($silast !== 'all') {
     set_user_preference('ilast', $silast);
 }
@@ -371,7 +324,7 @@ if ($silast !== 'all') {
 }
 
 $where = join(' AND ', $where);
-$users = user_get_participants($course->id, $groupid, 0, $roleid, 0, -1, $searchkeywords, $where, $where_params, '', $page, $perpage);
+$users = user_get_participants($course->id, $groupid, 0, $roleid, 0, -1, $searchkeywords, $where, $where_params, 'ORDER BY lastname ASC', $page, $perpage);
 $grandtotal = user_get_total_participants($course->id);
 $total = user_get_total_participants($course->id, $groupid, 0, $roleid, 0, -1, $searchkeywords, $where, $where_params);
 
@@ -393,7 +346,7 @@ if ($total > $perpage) {
     // echo $pagingbar;
 }
 
-$templates = [MODE_BRIEF => 'format_cul/briefphotoboard', MODE_USERDETAILS => 'format_cul/detailedphotoboard'];
+// $templates = [MODE_BRIEF => 'format_cul/briefphotoboard', MODE_USERDETAILS => 'format_cul/detailedphotoboard'];
 
 $photoboard = new photoboard($COURSE, $users, $mode, $unifiedfilter, $initialbar, $pagingbar, $baseurl);
 $templatecontext = $photoboard->export_for_template($OUTPUT);
