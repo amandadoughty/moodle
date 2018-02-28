@@ -128,25 +128,10 @@ class photoboard implements templatable, renderable {
         global $CFG, $USER, $OUTPUT, $DB;
 
         $course = $this->course;
-        $xusers = [];
+        $finalusers = [];
+        $draftusers = [];
         $usersprinted = [];
-
-        $courseformat = course_get_format($this->course)->get_format_options();
-
-        if($courseformat['selectmoduleleaders']) {
-            $moduleleaders = explode(',', $courseformat['selectmoduleleaders']);
-        } else {
-            $moduleleaders = [];
-        }
-
-        // Check to see if groups are being used in this course
-        // and if so, set $currentgroup to reflect the current group.
-        $groupmode    = groups_get_course_groupmode($this->course);   // Groups are being used.
-        $currentgroup = groups_get_course_group($this->course, true);
-
-        if (!$currentgroup) {      // To make some other functions work better later.
-            $currentgroup  = null;
-        }
+        $userids = [];
 
         $context = \context_course::instance($course->id);
         // Get the hidden field list.
@@ -161,24 +146,53 @@ class photoboard implements templatable, renderable {
         }
 
         foreach ($this->users as $user) {
-            if (in_array($user->id, $usersprinted)) {
-                continue;
-            }
-
-            $usersprinted[] = $user->id; // Add new user to the array of users printed.
+            $userids[] = $user->id;
             $xuser = new stdClass();
 
-
+            // Create a copy of the user with hidden fields removed if current
+            // USER does not have capability moodle/course:viewhiddenuserfields.
             foreach ($user as $key => $value) {
                 if (!in_array($value, $hiddenfields)) {
                     $xuser->$key = $value;
                 }
             }
+            
+            $users[$user->id] = $user;
+            $draftusers[$user->id] = $xuser;
+        }
 
+        // user_get_participants does not return all of the expected fields.
+        // I think this is a bug in user/lib.php #1273:
+        // $userfields = get_extra_user_fields($context, array('username', 'lang', 'timezone', 'maildisplay'));
+        // $userfieldssql = user_picture::fields('u', $userfields);
+        $usermaildisplay = $DB->get_records_list('user', 'id', $userids, '', 'id, maildisplay');
 
-            \context_helper::preload_from_record($user);                
-            $usercontext = \context_user::instance($user->id);
-            // $xuser->viewdetails = ($USER->id == $user->id) || has_capability('moodle/user:viewdetails', $context) || has_capability('moodle/user:viewdetails', $usercontext);
+        $courseformat = course_get_format($this->course)->get_format_options();
+
+        if($courseformat['selectmoduleleaders']) {
+            $moduleleaders = explode(',', $courseformat['selectmoduleleaders']);
+        } else {
+            $moduleleaders = [];
+        }
+
+        // Check to see if groups are being used in this course
+        // and if so, set $currentgroup to reflect the current group.
+        $groupmode = groups_get_course_groupmode($this->course);   // Groups are being used.
+        $currentgroup = groups_get_course_group($this->course, true);
+
+        if (!$currentgroup) {      // To make some other functions work better later.
+            $currentgroup  = null;
+        }
+
+        foreach ($users as $user) {
+            if (in_array($user->id, $usersprinted)) {
+                continue;
+            }
+
+            // Get the copy of the user with hidden fields removed if current
+            // user does not have capability moodle/course:viewhiddenuserfields.
+            $xuser = $draftusers[$user->id];
+            $usersprinted[] = $user->id; // Add new user to the array of users printed.
             $xuser->imghtml = $this->get_user_picture($user, $course);
             $moduleleaderstr = '';
 
@@ -197,20 +211,19 @@ class photoboard implements templatable, renderable {
 
             $xuser->fullname = $fullname;
 
-            // Add temp sql to get maildisplay.
-
-            // if (
-            //     $user->maildisplay == 1 
-            //     || (
-            //         $user->maildisplay == 2 
-            //         && ($course->id != SITEID) 
-            //         && !isguestuser()
-            //         ) 
-            //     || has_capability('moodle/course:viewhiddenuserfields', $context)
-            //     || ($user->id == $USER->id)
-            // ) {
-            //     $xuser->email = $user->email;                
-            // }
+            // Added temp sql to get maildisplay above.
+            if (
+                $usermaildisplay[$user->id]->maildisplay == 1 
+                || (
+                    $usermaildisplay[$user->id]->maildisplay == 2 
+                    && ($course->id != SITEID) 
+                    && !isguestuser()
+                    ) 
+                || has_capability('moodle/course:viewhiddenuserfields', $context)
+                || ($user->id == $USER->id)
+            ) {
+                $xuser->email = $user->email;                
+            }
 
             if (has_capability('moodle/course:viewhiddenuserfields', $context, $user)) {
                 $xuser->staff = true;
@@ -298,10 +311,10 @@ class photoboard implements templatable, renderable {
             }
 
             $xuser->links = $links;
-            $xusers[] = $xuser;
+            $finalusers[] = $xuser;
         }
 
-        return $xusers;
+        return $finalusers;
     }
 
     /**
