@@ -176,49 +176,68 @@ body.format-cul.jsenabled {
 
 /* css for photoboard */
 .path-format-cul-photos {
-    table.controls td {
-        padding: 0;
-    }
-    .rolesform {
-        margin-bottom: 1em;
-    }
-    .searchform {
-        clear: both;
-    }
-    table.userinfobox {
-        margin-bottom: 1em;
-        th,
-        td {
-            padding: 0px;
-            text-align: left;
-            .username {
-                padding-bottom: 5px;
+
+.cul-modelist {
+    border-bottom: 1px solid #ddd;
+}
+
+.cul-modelist {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.mode-item {
+    float: left;
+    margin-bottom: -1px;
+}
+
+.mode-link {
+    display: block;
+    padding: .5em 1em;
+    border: 1px solid transparent;
+    border-top-right-radius: .25rem;
+    border-top-left-radius: .25rem;
+}
+
+.mode-link.active, 
+.mode-item.open .mode-link, 
+.mode-link.active:focus, 
+.mode-item.open .mode-link:focus, 
+.mode-link.active:hover, 
+.mode-item.open .mode-link:hover {
+    color: #55595c;
+    background-color: #f4f4f4;
+    border-color: #ddd #ddd transparent;
+}
+
+
+
+    .userlist {
+        li {
+            display: inline-block;
+            list-style: none;
+            &.card {
+                display: block;
+            }
+            .card-img {
+                float: left;
+                width: 25%;                
+            }
+            .card-body {
+                float: left;
+                width: 50%
+            }
+            .card-footer {
+                float: right;
+                width: 25%;
+                height: 100%;
+            }
+            .userpicture {
+                border-radius: 0;
             }
         }
-        td.links {
-            width: 150px;
-            vertical-align: top;
-            font-size: 0.9em;
-        }
-    }
-    .gallerycontainer {
-        float: left;
-    }
-    .galleryItem {
-        float: left;
-        width: 130px;
-        height: 150px;
-        overflow: hidden;
-        margin: 0px 10px 10px 0px;
-        strong {
-            font-size: 95%;
-        }
-        img {
-            height: 100px;
-            width: 100px;
-            // .border-radius(@baseBorderRadius*1.5);
-        }
-    }
+    }    
 }
 
 @media (min-width: 480px) {

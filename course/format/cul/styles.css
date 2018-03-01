@@ -96,38 +96,47 @@ body.format-cul.jsenabled .course-content ul.cul li#toggle-all {
       background-position: left; }
 
 /* css for photoboard */
-.path-format-cul-photos table.controls td {
-  padding: 0; }
-.path-format-cul-photos .rolesform {
-  margin-bottom: 1em; }
-.path-format-cul-photos .searchform {
-  clear: both; }
-.path-format-cul-photos table.userinfobox {
-  margin-bottom: 1em; }
-  .path-format-cul-photos table.userinfobox th,
-  .path-format-cul-photos table.userinfobox td {
-    padding: 0px;
-    text-align: left; }
-    .path-format-cul-photos table.userinfobox th .username,
-    .path-format-cul-photos table.userinfobox td .username {
-      padding-bottom: 5px; }
-  .path-format-cul-photos table.userinfobox td.links {
-    width: 150px;
-    vertical-align: top;
-    font-size: 0.9em; }
-.path-format-cul-photos .gallerycontainer {
-  float: left; }
-.path-format-cul-photos .galleryItem {
+.path-format-cul-photos .cul-modelist {
+  border-bottom: 1px solid #ddd; }
+.path-format-cul-photos .cul-modelist {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none; }
+.path-format-cul-photos .mode-item {
   float: left;
-  width: 130px;
-  height: 150px;
-  overflow: hidden;
-  margin: 0px 10px 10px 0px; }
-  .path-format-cul-photos .galleryItem strong {
-    font-size: 95%; }
-  .path-format-cul-photos .galleryItem img {
-    height: 100px;
-    width: 100px; }
+  margin-bottom: -1px; }
+.path-format-cul-photos .mode-link {
+  display: block;
+  padding: .5em 1em;
+  border: 1px solid transparent;
+  border-top-right-radius: .25rem;
+  border-top-left-radius: .25rem; }
+.path-format-cul-photos .mode-link.active,
+.path-format-cul-photos .mode-item.open .mode-link,
+.path-format-cul-photos .mode-link.active:focus,
+.path-format-cul-photos .mode-item.open .mode-link:focus,
+.path-format-cul-photos .mode-link.active:hover,
+.path-format-cul-photos .mode-item.open .mode-link:hover {
+  color: #55595c;
+  background-color: #f4f4f4;
+  border-color: #ddd #ddd transparent; }
+.path-format-cul-photos .userlist li {
+  display: inline-block;
+  list-style: none; }
+  .path-format-cul-photos .userlist li.card {
+    display: block; }
+  .path-format-cul-photos .userlist li .card-img {
+    float: left;
+    width: 25%; }
+  .path-format-cul-photos .userlist li .card-body {
+    float: left;
+    width: 50%; }
+  .path-format-cul-photos .userlist li .card-footer {
+    float: right;
+    width: 25%;
+    height: 100%; }
+  .path-format-cul-photos .userlist li .userpicture {
+    border-radius: 0; }
 
 @media (min-width: 480px) {
   body.format-cul .course-content .dash-panel .linkscontainer ul.links li {

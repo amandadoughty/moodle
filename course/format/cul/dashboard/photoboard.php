@@ -78,7 +78,8 @@ if (has_capability('format/cul:viewallphotoboard', $context)) {
     $baseurl = new moodle_url('/course/format/cul/dashboard/photoboard.php', array(
         'contextid' => $context->id,
         'id' => $course->id,
-        'perpage' => $perpage));
+        'perpage' => $perpage,
+        'mode' => $mode));
 
     // If they passed a role make sure they can view that role.
     if ($roleid) {
@@ -98,6 +99,7 @@ if (has_capability('format/cul:viewallphotoboard', $context)) {
         'contextid' => $context->id,
         'id' => $course->id,
         'perpage' => $perpage,
+        'mode' => $mode,
         'roleid' => $roleid));    
     if ($roleid) {
         // $viewableroles = get_profile_roles($context);
@@ -129,7 +131,7 @@ $PAGE->set_title("$course->shortname: ".get_string('participants'));
 $PAGE->set_heading($course->fullname);
 $PAGE->set_pagetype('course-view-' . $course->format);
 $PAGE->add_body_class('path-format-cul-photos'); // So we can style it independently.
-// $PAGE->set_other_editing_capability('moodle/course:manageactivities');
+$PAGE->set_other_editing_capability('moodle/course:manageactivities');
 
 echo $OUTPUT->header();
 
@@ -206,6 +208,7 @@ if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
     foreach ($filtersapplied as $filterkey => $filter) {
         $filtervalue = explode(':', $filter, 2);
         $value = null;
+        
         if (count($filtervalue) == 2) {
             $key = clean_param($filtervalue[0], PARAM_INT);
             $value = clean_param($filtervalue[1], PARAM_INT);
@@ -333,7 +336,6 @@ $prefixfirst = 'sifirst';
 $prefixlast = 'silast';
 $initialbar = $OUTPUT->initials_bar($sifirst, 'firstinitial', get_string('firstname'), $prefixfirst, $baseurl);
 $initialbar .= $OUTPUT->initials_bar($silast, 'lastinitial', get_string('lastname'), $prefixlast, $baseurl);
-// echo $initialbar;
 
 // Search utility heading.
 echo $OUTPUT->heading(get_string('matched', 'format_cul') . get_string('labelsep', 'langconfig') . $total . '/' . $grandtotal, 3);
@@ -343,19 +345,15 @@ if ($total > $perpage) {
     $pagingbar = new paging_bar($total, $page, $perpage, $baseurl);
     $pagingbar->pagevar = 'page';
     $pagingbar = $OUTPUT->render($pagingbar);
-    // echo $pagingbar;
 }
-
-// $templates = [MODE_BRIEF => 'format_cul/briefphotoboard', MODE_USERDETAILS => 'format_cul/detailedphotoboard'];
 
 $photoboard = new photoboard($COURSE, $users, $mode, $unifiedfilter, $initialbar, $pagingbar, $baseurl);
 $templatecontext = $photoboard->export_for_template($OUTPUT);
-// echo $OUTPUT->render_from_template($templates[$mode], $templatecontext);
+
 echo $OUTPUT->render_from_template('format_cul/photoboard', $templatecontext);
 
 $PAGE->requires->js_call_amd('core_user/name_page_filter', 'init');
 $perpageurl = clone($baseurl);
-
 $perpageurl->remove_params('perpage');
 
 if ($perpage == SHOW_ALL_PAGE_SIZE && $total > DEFAULT_PAGE_SIZE) {
