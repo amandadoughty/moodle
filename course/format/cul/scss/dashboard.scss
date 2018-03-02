@@ -153,10 +153,10 @@ body.format-cul.jsenabled {
                         background-image: url(@collapsed);
                     }
                     .toggledsection {
-                        display: none; /* If JavaScript is enabled then this css will apply and the section will be hidden. */
+                        // display: none; /* If JavaScript is enabled then this css will apply and the section will be hidden. */
                     }
                     .toggledsection.sectionopen {
-                        display: block;
+                        // display: block;
                     }
                 }
             }

@@ -100,7 +100,8 @@ if (has_capability('format/cul:viewallphotoboard', $context)) {
         'id' => $course->id,
         'perpage' => $perpage,
         'mode' => $mode,
-        'roleid' => $roleid));    
+        'roleid' => $roleid));
+          
     if ($roleid) {
         // $viewableroles = get_profile_roles($context);
         $photoboardroles = explode(',', $CFG->profileroles);

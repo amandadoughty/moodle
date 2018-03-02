@@ -26,9 +26,9 @@ defined('MOODLE_INTERNAL') || die;
 
 /* Base course format.
 */
-$name = 'format_cul/baseclass';
-$title = get_string('baseclass', 'format_cul');
-$description = get_string('baseclass_desc', 'format_cul');
+$name = 'format_cul/defaultbaseclass';
+$title = get_string('defaultbaseclass', 'format_cul');
+$description = get_string('defaultbaseclass_desc', 'format_cul');
 $default = 1;
 $choices = [
     1 => new lang_string('pluginname', 'format_topics'),
@@ -40,7 +40,20 @@ $choices = [
         // 4 => new lang_string('setlayoutstructurecurrenttopicfirst', 'format_cul'), // Current Topic First.
         // 5 => new lang_string('setlayoutstructureday', 'format_cul')                // Day.
 ];
-$settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));    
+$settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+
+// Show the section summary when collapsed.
+// 1 => No.
+// 2 => Yes.
+$name = 'format_cul/defaultshowsectionsummary';
+$title = get_string('defaultshowsectionsummary', 'format_cul');
+$description = get_string('defaultshowsectionsummary_desc', 'format_cul');
+$default = 1;
+$choices = [
+    1 => new lang_string('no'),
+    2 => new lang_string('yes')
+];
+$settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 
 /* Default blocks.
 */

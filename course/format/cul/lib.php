@@ -223,10 +223,13 @@ class format_cul extends format_base {
         static $courseformatoptions = false;
 
         if ($courseformatoptions === false) {
-
             $courseformatoptions = [
                 'baseclass' => [
-                    'default' => get_config('format_cul', 'baseclass'),
+                    'default' => get_config('format_cul', 'defaultbaseclass'),
+                    'type' => PARAM_INT,
+                ],
+                'showsectionsummary' => [
+                    'default' => get_config('format_cul', 'defaultshowsectionsummary'),
                     'type' => PARAM_INT,
                 ]
             ];
@@ -249,15 +252,23 @@ class format_cul extends format_base {
                     'help_component' => 'format_cul',
                     'element_type' => 'select',
                     'element_attributes' => [$baseclasses]
+                ],
+                'showsectionsummary' => [
+                    'label' => new lang_string('showsectionsummary', 'format_cul'),
+                    'help' => 'showsectionsummary',
+                    'help_component' => 'format_cul',
+                    'element_type' => 'select',
+                    'element_attributes' => [[
+                        1 => new lang_string('no'),
+                        2 => new lang_string('yes')
+                    ]]
                 ]
             ];
 
             // Splice in the dashboard edit options.
             $dashboard->set_dashboard_edit_options($courseformatoptionsedit);
             $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
-        }
-
-        
+        }        
 
         $args = func_get_args();
         $pcourseformatoptions = $this->call_base_function(__FUNCTION__, $args);

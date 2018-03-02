@@ -38,6 +38,10 @@ use format_cul\output\dashboard;
  */
 class format_cul_renderer extends format_section_renderer_base {
 
+    /** @var array format Settings for the format
+    */
+    private $culconfig;
+
     /**
      * Constructor method, calls the parent constructor
      *
@@ -45,7 +49,11 @@ class format_cul_renderer extends format_section_renderer_base {
      * @param string $target one of rendering target constants
      */
     public function __construct(moodle_page $page, $target) {
+        global $COURSE;
+
         parent::__construct($page, $target);
+
+        $this->culconfig = course_get_format($COURSE)->get_format_options();
 
         // @TODO
         // Since format_cul_renderer::section_edit_controls() only displays the 'Set current section' control when editing mode is on
@@ -60,11 +68,8 @@ class format_cul_renderer extends format_section_renderer_base {
     protected function start_section_list() {
         global $COURSE;
 
-        $culconfig = course_get_format($COURSE)->get_format_options();
-        // $this->settings = $this->get_format_options();
-
         $o = '';
-        $dashboard = new dashboard($COURSE, $culconfig);
+        $dashboard = new dashboard($COURSE, $this->culconfig);
         $templatecontext = $dashboard->export_for_template($this);
         $o .= $this->render_from_template('format_cul/dashboard', $templatecontext);
         $o .=  html_writer::start_tag('ul', array('class' => 'cul'));
@@ -122,7 +127,7 @@ class format_cul_renderer extends format_section_renderer_base {
         global $PAGE;
 
         if (!$PAGE->user_is_editing()) {
-            return array();
+            return [];
         }
 
         $coursecontext = context_course::instance($course->id);
@@ -134,7 +139,8 @@ class format_cul_renderer extends format_section_renderer_base {
         }
         $url->param('sesskey', sesskey());
 
-        $controls = array();
+        $controls = [];
+        $culcontrols = [];
 
         // @TODO no highlight if weeks?
         if ($section->section && has_capability('moodle/course:setcurrentsection', $coursecontext)) {
@@ -142,20 +148,20 @@ class format_cul_renderer extends format_section_renderer_base {
                 $url->param('marker', 0);
                 $markedthistopic = get_string('markedthistopic');
                 $highlightoff = get_string('highlightoff');
-                $controls['highlight'] = array('url' => $url, "icon" => 'i/marked',
+                $controls['highlight'] = ['url' => $url, "icon" => 'i/marked',
                                                'name' => $highlightoff,
                                                'pixattr' => array('class' => '', 'alt' => $markedthistopic),
                                                'attr' => array('class' => 'editing_highlight', 'title' => $markedthistopic,
-                                                   'data-action' => 'removemarker'));
+                                                   'data-action' => 'removemarker')];
             } else {
                 $url->param('marker', $section->section);
                 $markthistopic = get_string('markthistopic');
                 $highlight = get_string('highlight');
-                $controls['highlight'] = array('url' => $url, "icon" => 'i/marker',
+                $controls['highlight'] = ['url' => $url, "icon" => 'i/marker',
                                                'name' => $highlight,
                                                'pixattr' => array('class' => '', 'alt' => $markthistopic),
                                                'attr' => array('class' => 'editing_highlight', 'title' => $markthistopic,
-                                                   'data-action' => 'setmarker'));
+                                                   'data-action' => 'setmarker')];
             }
         }
 
@@ -163,7 +169,7 @@ class format_cul_renderer extends format_section_renderer_base {
 
         // If the edit key exists, we are going to insert our controls after it.
         if (array_key_exists("edit", $parentcontrols)) {
-            $merged = array();
+            $merged = [];
             // We can't use splice because we are using associative arrays.
             // Step through the array and merge the arrays.
             foreach ($parentcontrols as $key => $action) {
@@ -174,11 +180,335 @@ class format_cul_renderer extends format_section_renderer_base {
                 }
             }
 
-            return $merged;
         } else {
-            return array_merge($controls, $parentcontrols);
+            $merged = array_merge($controls, $parentcontrols);
         }
+
+        foreach ($merged as $key => $item) {
+            $url = empty($item['url']) ? '' : $item['url'];
+            $icon = empty($item['icon']) ? '' : $item['icon'];
+            $name = empty($item['name']) ? '' : $item['name'];
+            $attr = empty($item['attr']) ? '' : $item['attr'];
+            $class = empty($item['pixattr']['class']) ? '' : $item['pixattr']['class'];
+            $alt = empty($item['pixattr']['alt']) ? '' : $item['pixattr']['alt'];
+            $url = new moodle_url($url);
+            $icon = $this->output->pix_icon($icon, $alt, 'moodle', $item['attr']);
+
+            $culcontrols[] = html_writer::link(
+                    $url,
+                    $icon,
+                    $attr
+                );
+        }
+
+        return $culcontrols;        
     }
+
+    /**
+     * Generate a summary of a section for display on the 'coruse index page'
+     *
+     * @param stdClass $section The course_section entry from DB
+     * @param stdClass $course The course entry from DB
+     * @param array    $mods (argument not used)
+     * @return string HTML to output.
+     */
+    protected function section_summary($section, $course, $mods) {
+        $classattr = 'section main section-summary clearfix';
+        $linkclasses = '';
+
+        // If section is hidden then display grey section link
+        if (!$section->visible) {
+            $classattr .= ' hidden';
+            $linkclasses .= ' dimmed_text';
+        } else if (course_get_format($course)->is_section_current($section)) {
+            $classattr .= ' current';
+        }
+
+        $title = get_section_name($course, $section);
+        $o = '';
+        $o .= html_writer::start_tag('li', array('id' => 'section-'.$section->section,
+            'class' => $classattr, 'role'=>'region', 'aria-label'=> $title));
+
+        $o .= html_writer::tag('div', '', array('class' => 'left side'));
+        $o .= html_writer::tag('span', ['class' => 'hidden sectionname']);
+        $o .= html_writer::tag('div', '', array('class' => 'right side'));
+        $o .= html_writer::start_tag('div', array('class' => 'content'));
+
+        if ($section->uservisible) {
+            $title = html_writer::tag('a', $title,
+                    array('href' => course_get_url($course, $section->section), 'class' => $linkclasses));
+        }
+        $o .= $this->output->heading($title, 3, 'section-title');
+
+        $o.= html_writer::start_tag('div', array('class' => 'summarytext'));
+        $o.= $this->format_summary_text($section);
+        $o.= html_writer::end_tag('div');
+        $o.= $this->section_activity_summary($section, $course, null);
+
+        $o .= $this->section_availability($section);
+
+        $o .= html_writer::end_tag('div');
+        $o .= html_writer::end_tag('li');
+
+        return $o;
+    }
+
+   /**
+     * Generate a summary of the activites in a section
+     *
+     * @param stdClass $section The course_section entry from DB
+     * @param stdClass $course the course record from DB
+     * @param array    $mods (argument not used)
+     * @return string HTML to output.
+     */
+    protected function section_activity_summary($section, $course, $mods) {
+        $modinfo = get_fast_modinfo($course);
+
+        if (empty($modinfo->sections[$section->section])) {
+            return '';
+        }
+
+        // Generate array with count of activities in this section:
+        $sectionmods = array();
+        $resource = get_string('resources');
+        $activity = get_string('activities');
+        $total = 0;
+        $complete = 0;
+        $cancomplete = isloggedin() && !isguestuser();
+        $completioninfo = new completion_info($course);
+
+        foreach ($modinfo->sections[$section->section] as $cmid) {
+            $thismod = $modinfo->cms[$cmid];
+
+            if ($thismod->modname == 'label') {
+                // Labels are special (not interesting for students)!
+                continue;
+            }
+
+            if ($thismod->uservisible) {
+                if (plugin_supports('mod', $thismod->modname, FEATURE_MOD_ARCHETYPE, MOD_ARCHETYPE_OTHER) == MOD_ARCHETYPE_RESOURCE) {
+                    $type = $resource;
+                } else {
+                    $type = $activity;
+                }
+
+                if (isset($sectionmods[$type]['name'])) {
+                    $sectionmods[$type]['count']++;
+                } else {
+                    $sectionmods[$type]['name'] = $type;
+                    $sectionmods[$type]['count'] = 1;
+                }
+
+                if ($cancomplete && $completioninfo->is_enabled($thismod) != COMPLETION_TRACKING_NONE) {
+                    $total++;
+                    $completiondata = $completioninfo->get_data($thismod, true);
+
+                    if ($completiondata->completionstate == COMPLETION_COMPLETE ||
+                            $completiondata->completionstate == COMPLETION_COMPLETE_PASS) {
+                        $complete++;
+                    }
+                }
+            }
+        }
+
+        asort($sectionmods);
+
+        if (empty($sectionmods)) {
+            // No sections
+            return '';
+        }
+
+        // Output section activities summary:
+        $o = '';
+        $o.= html_writer::start_tag('div', array('class' => 'section-summary-activities mdl-right'));
+        foreach ($sectionmods as $mod) {
+            $o.= html_writer::start_tag('span', array('class' => 'activity-count'));
+            $o.= $mod['name'].': '.$mod['count'];
+            $o.= html_writer::end_tag('span');
+        }
+        $o.= html_writer::end_tag('div');
+
+        // Output section completion data
+        if ($total > 0) {
+            $a = new stdClass;
+            $a->complete = $complete;
+            $a->total = $total;
+
+            $o.= html_writer::start_tag('div', array('class' => 'section-summary-progress mdl-right'));
+            $o.= html_writer::tag('span', get_string('progresstotal', 'completion', $a), array('class' => 'activity-count'));
+            $o.= html_writer::end_tag('div');
+        }
+
+        return $o;
+    }
+
+    /**
+     * Generate the content to displayed on the right part of a section
+     * before course modules are included
+     *
+     * @param stdClass $section The course_section entry from DB
+     * @param stdClass $course The course entry from DB
+     * @param bool $onsectionpage true if being printed on a section page
+     * @return string HTML to output.
+     */
+    protected function section_right_content($section, $course, $onsectionpage) {
+        $o = $this->output->spacer();
+
+        $controls = $this->section_edit_control_items($course, $section, $onsectionpage);
+        
+        if (!empty($controls)) {
+            $o .= implode('', $controls);
+        }
+
+        return $o;
+    }
+
+    /**
+     * Generate the display of the header part of a section before
+     * course modules are included
+     *
+     * @param stdClass $section The course_section entry from DB
+     * @param stdClass $course The course entry from DB
+     * @param bool $onsectionpage true if being printed on a single-section page
+     * @param int $sectionreturn The section to return to after an action
+     * @return string HTML to output.
+     */
+    protected function section_header($section, $course, $onsectionpage, $sectionreturn=null) {
+        global $PAGE, $COURSE;
+
+        $o = '';
+        $currenttext = '';
+        $sectionstyle = '';
+
+        if ($section->section != 0) {
+            // Only in the non-general sections.
+            if (!$section->visible) {
+                $sectionstyle = ' hidden';
+            }
+            if (course_get_format($course)->is_section_current($section)) {
+                $sectionstyle = ' current';
+            }
+        }
+
+        $o.= html_writer::start_tag('li', array('id' => 'section-'.$section->section,
+            'class' => 'section main clearfix'.$sectionstyle, 'role'=>'region',
+            'aria-label'=> get_section_name($course, $section)));
+
+        // Create a span that contains the section title to be used to create the keyboard section move menu.
+        $o .= html_writer::tag('span', get_section_name($course, $section), array('class' => 'hidden sectionname'));
+
+        $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
+        $o.= html_writer::tag('div', $leftcontent, array('class' => 'left side'));
+
+        $rightcontent = $this->section_right_content($section, $course, $onsectionpage);
+        $o.= html_writer::tag('div', $rightcontent, array('class' => 'right side'));
+        $o.= html_writer::start_tag('div', array('class' => 'content'));
+
+        // When not on a section page, we display the section titles except the general section if null
+        $hasnamenotsecpg = (!$onsectionpage && ($section->section != 0 || !is_null($section->name)));
+
+        // When on a section page, we only display the general section title, if title is not the default one
+        $hasnamesecpg = ($onsectionpage && ($section->section == 0 && !is_null($section->name)));
+
+        $classes = ' accesshide';
+        if ($hasnamenotsecpg || $hasnamesecpg) {
+            $classes = '';
+        }
+
+
+
+        // $sectionname = html_writer::tag('span', $this->section_title($section, $course));
+        // $o.= $this->output->heading($sectionname, 3, 'sectionname' . $classes);
+
+        // $o .= $this->section_availability($section);
+
+        // $o .= html_writer::start_tag('div', array('class' => 'summary'));
+        // $o .= $this->format_summary_text($section);
+        // $o .= html_writer::end_tag('div');
+
+
+
+
+
+        if ($section->section != 0) {
+            $o .= html_writer::start_tag('div',
+                [
+                    'class' => 'sectionhead toggle toggle-arrow show',
+                    'id' => 'toggle-' . $section->section,
+                    'data-toggle' => 'collapse',
+                    'data-target' => '#toggledsection-' . $section->section
+                ]
+            );
+
+            // @TODO get toggle state
+            // if ((!($section->toggle === null)) && ($section->toggle == true)) {
+                // $toggleclass = 'toggle_open';
+                // $ariapressed = 'true';
+                // $sectionclass = ' sectionopen';
+                // $summaryclass = ' summary_open';
+            // } else {
+            //     $toggleclass = 'toggle_closed';
+            //     $ariapressed = 'false';
+            //     $sectionclass = '';
+            //     $summaryclass = ' summary_closed';
+            // }
+
+            $toggleclass = ' ';
+                $ariapressed = 'true';
+                $sectionclass = ' ';
+                $summaryclass = ' ';
+
+            $toggleclass .= ' the_toggle tc-medium';
+            $o .= html_writer::start_tag('span',
+                array('class' => $toggleclass, 'role' => 'button', 'aria-pressed' => $ariapressed)
+            );
+
+            
+            $this->culconfig = course_get_format($COURSE)->get_format_options();
+           
+
+            $sectionname = html_writer::tag('span', $this->section_title($section, $course));
+            $o.= $this->output->heading($sectionname, 3, 'sectionname' . $classes);
+
+            $o .= $this->section_availability($section);
+
+            $o .= html_writer::end_tag('span');
+
+            if ($this->culconfig['showsectionsummary'] == 2) {
+                $o .= $this->section_summary_container($section, $summaryclass);
+            }
+
+            $o .= $this->section_activity_summary($section, $course, null);
+            $o .= html_writer::end_tag('div');
+            $o .= html_writer::start_tag('div',
+                array('class' => 'sectionbody toggledsection' . $sectionclass,
+                'id' => 'toggledsection-' . $section->section)
+            );
+
+            if ($this->culconfig['showsectionsummary'] == 1) {
+                $o .= $this->section_summary_container($section, $summaryclass);
+            }
+
+            $o .= $this->section_availability($section);
+        } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        return $o;
+    }    
 
     /**
      * Output the html for a multiple section page
@@ -325,6 +655,50 @@ class format_cul_renderer extends format_section_renderer_base {
                 array('class' => 'add_section', 'data-add-section' => $straddsections));
             echo html_writer::end_tag('div');
         }
+    } 
+
+   /**
+     * generate truncated html for a section summary text
+     *
+     * @param stdClass $section The course_section entry from DB
+     * @return string HTML to output.
+     */
+    protected function truncate_summary_text($section) {
+        $context = context_course::instance($section->course);
+        $summarytext = file_rewrite_pluginfile_urls($section->summary, 'pluginfile.php',
+            $context->id, 'course', 'section', $section->id);
+
+        if (strlen($summarytext) > 250) {
+            // $summarytext = substr($summarytext, 0, 249) . '...';
+        }
+
+        $options = new stdClass();
+        $options->noclean = false;
+        $options->overflowdiv = false;
+        $summarytext = format_text($summarytext, $section->summaryformat, $options);
+        $summarytext = html_writer::tag('div', $summarytext);
+        $summarytext = html_writer::tag('div', $summarytext, array('class' => 'truncate'));
+        return $summarytext;
+    }
+
+    protected function section_summary_container($section, $summaryclass) {
+        $summarytext = $this->format_summary_text($section);
+
+        if ($summarytext) {
+            $classextra = ($this->culconfig['showsectionsummary'] == 1) ? '' : ' summaryalwaysshown';
+            $o = html_writer::start_tag('div', array('class' => 'summary' . $classextra . $summaryclass));
+            $o .= $this->format_summary_text($section);
+
+            if ($this->culconfig['showsectionsummary'] == 2) {
+                $o .= $this->truncate_summary_text($section);
+            }
+
+            $o .= html_writer::end_tag('div');
+        } else {
+            $o = '';
+        }
+
+        return $o;
     }    
 
 }

@@ -40,7 +40,15 @@ $string['showfromothers'] = 'Show section';
 $string['baseclass'] = 'The format to use';
 $string['baseclass_desc'] = 'This setting specifies whether to use topics or weeks format.';
 $string['baseclass_help'] = 'This setting specifies whether to use topics or weeks format.';
+$string['defaultbaseclass'] = 'The format to use';
+$string['defaultbaseclass_desc'] = 'This setting specifies whether to use topics or weeks format.';
 
+// Show section summary.
+$string['showsectionsummary'] = 'Show the section summary';
+$string['showsectionsummary_desc'] = 'States if the section summary will be shown.';
+$string['showsectionsummary_help'] = 'States if the section summary will be shown.';
+$string['defaultshowsectionsummary'] = 'Show the section summary';
+$string['defaultshowsectionsummary_desc'] = 'States if the section summary will be shown.';
 
 $string['defaultblocks'] = 'Default blocks';
 $string['defaultblocks_desc'] = 'Default blocks to include in new course. String should be in the format \'block1,block2\'';
