@@ -579,11 +579,11 @@ class format_cul_renderer extends format_section_renderer_base {
                     echo $this->courserenderer->course_section_add_cm_control($course, $section, 0);
                 }
 
+                echo $this->section_footer();
+
                 if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
                     echo $this->change_number_sections($course, $section + 1);
                 }
-
-                echo $this->section_footer();
             }
         }
 
@@ -629,7 +629,7 @@ class format_cul_renderer extends format_section_renderer_base {
             // https://tracker.moodle.org/browse/MDL-61181
             // echo html_writer::start_tag('div', array('id' => 'changenumsections', 'class' => 'mdl-right'));
 
-            echo html_writer::start_tag('div', array('class' => 'mdl-right'));
+            echo html_writer::start_tag('div', array('class' => 'mdl-align'));
 
             if (get_string_manager()->string_exists('addsections', 'format_'.$course->format)) {
                 $straddsections = get_string('addsections', 'format_'.$course->format);
@@ -650,9 +650,12 @@ class format_cul_renderer extends format_section_renderer_base {
             //     // $url->param('sectionreturn', $sectionreturn);
             // }
 
-            $icon = $this->output->pix_icon('t/add', $straddsections);
-            echo html_writer::link($url, $icon . $straddsections,
-                array('class' => 'add_section', 'data-add-section' => $straddsections));
+            // $icon = $this->output->pix_icon('t/add', $straddsections);
+            // echo html_writer::link($url, $icon . $straddsections,
+            //     array('class' => 'add_section', 'data-add-section' => $straddsections));
+            $addsectionbutton = new single_button($url, $straddsections, 'get');
+            $addsectionbutton->class = 'sectionbutton btn-city';
+            echo $this->output->render($addsectionbutton);
             echo html_writer::end_tag('div');
         }
     } 
