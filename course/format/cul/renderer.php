@@ -433,7 +433,7 @@ class format_cul_renderer extends format_section_renderer_base {
         if ($section->section != 0) {
             $o .= html_writer::start_tag('div',
                 [
-                    'class' => 'sectionhead toggle toggle-arrow show',
+                    'class' => 'sectionhead toggle toggle-arrow',
                     'id' => 'toggle-' . $section->section,
                     'data-toggle' => 'collapse',
                     'data-target' => '#toggledsection-' . $section->section
@@ -481,7 +481,7 @@ class format_cul_renderer extends format_section_renderer_base {
             $o .= $this->section_activity_summary($section, $course, null);
             $o .= html_writer::end_tag('div');
             $o .= html_writer::start_tag('div',
-                array('class' => 'sectionbody toggledsection' . $sectionclass,
+                array('class' => 'sectionbody toggledsection collapse in' . $sectionclass,
                 'id' => 'toggledsection-' . $section->section)
             );
 
