@@ -151,7 +151,7 @@ class format_cul_renderer extends format_section_renderer_base {
                 $controls['highlight'] = ['url' => $url, "icon" => 'i/marked',
                                                'name' => $highlightoff,
                                                'pixattr' => array('class' => '', 'alt' => $markedthistopic),
-                                               'attr' => array('class' => 'editing_highlight', 'title' => $markedthistopic,
+                                               'attr' => array('class' => 'icon ', 'title' => $markedthistopic,
                                                    'data-action' => 'removemarker')];
             } else {
                 $url->param('marker', $section->section);
@@ -160,7 +160,7 @@ class format_cul_renderer extends format_section_renderer_base {
                 $controls['highlight'] = ['url' => $url, "icon" => 'i/marker',
                                                'name' => $highlight,
                                                'pixattr' => array('class' => '', 'alt' => $markthistopic),
-                                               'attr' => array('class' => 'editing_highlight', 'title' => $markthistopic,
+                                               'attr' => array('class' => 'icon ', 'title' => $markthistopic,
                                                    'data-action' => 'setmarker')];
             }
         }
@@ -205,7 +205,7 @@ class format_cul_renderer extends format_section_renderer_base {
     }
 
     /**
-     * Generate a summary of a section for display on the 'coruse index page'
+     * Generate a summary of a section for display on the 'course index page'
      *
      * @param stdClass $section The course_section entry from DB
      * @param stdClass $course The course entry from DB

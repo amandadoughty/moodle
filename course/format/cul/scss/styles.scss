@@ -30,55 +30,85 @@ body.format-cul {
                 /* Icon sets.  Note: Background images for the settings - does not work in Chrome or Safari - known issue. */
                 /* Arrow icon set. */
                 .toggle-arrow {
-                    span.toggle_closed, 
-                    span.toggle_open {
+                    span.the_toggle {
                         background-image: url([[pix:t/expanded]]); /* JavaScript disabled */
+                        background-position: 0% 50%;
                     }
-                    h4 span {
-                        cursor: pointer;
-                        font-size: 1.4rem;
-                        &.off {
-                            background-image: url([[pix:t/expanded]]);
-                        //     &:hover {
-                        //         background-image: url([[pix:t/collapsed]]);
-                        //     }
-                        }
-                        &.on{
-                            background-image: url([[pix:t/collapsed]]);
-                        //     &:hover {
-                        //         background-image: url([[pix:t/expanded]]);
-                        //     }
-                        }
-                    }           
+                    // h4 span {
+                    //     cursor: pointer;
+                    //     font-size: 1.4rem;
+                    //     &.off {
+                    //         background-image: url([[pix:t/expanded]]);
+                    //     //     &:hover {
+                    //     //         background-image: url([[pix:t/collapsed]]);
+                    //     //     }
+                    //     }
+                    //     &.on{
+                    //         background-image: url([[pix:t/collapsed]]);
+                    //     //     &:hover {
+                    //     //         background-image: url([[pix:t/expanded]]);
+                    //     //     }
+                    //     }
+                    // }           
+                }
+                .toggle-arrow.collapsed {
+                    span.the_toggle {
+                        background-image: url([[pix:t/collapsed]]); /* JavaScript disabled */
+                        background-position: 0% 50%;
+                    }
+                    // h4 span {
+                    //     cursor: pointer;
+                    //     font-size: 1.4rem;
+                    //     &.off {
+                    //         background-image: url([[pix:t/expanded]]);
+                    //     //     &:hover {
+                    //     //         background-image: url([[pix:t/collapsed]]);
+                    //     //     }
+                    //     }
+                    //     &.on{
+                    //         background-image: url([[pix:t/collapsed]]);
+                    //     //     &:hover {
+                    //     //         background-image: url([[pix:t/expanded]]);
+                    //     //     }
+                    //     }
+                    // }           
                 }
                 .sectionhead {
                     position: relative;
                     width: auto;
                     margin: 2px;               
                     padding-bottom: 1.5em;
-                    .summary_open {
-                        .truncate {
-                            display: none;
-                        }
-                        .no-overflow {
-                            display: inline-block;
-                        }
+                    .truncate {
+                        display: none;                                             
                     }
-                    .summary_closed {
+                    .no-overflow {
+                        display: block;
+                        min-height: 3.4em; 
+                    }                    
+                   
+                    &.collapsed {
                         .truncate {
-                            display: inline-block;
+                            display: block;
                             overflow: hidden;
                             height: 3.4em;
                             width: 100%;
-                            line-height: 16px;
+                            line-height: 1.5rem;
                             &::before {
-
+                                // content: "";
+                                // float: left;
+                                // width: 5px;
+                                // height: 3.4em;
+                            }
+                            > *:first-child {
+                                // float: right;
+                                // width: 100%;
+                                // margin-left: -5px;
                             }
                             &::after {
                                 content: "\02026";
                                 float: right;
                                 position: relative;
-                                top: -16px;
+                                top: -1.5rem;
                                 left: 100%;
                                 width: 50%;
                                 margin-left: -50%;
@@ -86,17 +116,14 @@ body.format-cul {
                                 text-align: right;
                                 @include gradient-horizontal(rgba($white, 0), $grey, 0, 50%);
                             }
-                            > *:first-child {
-                                float: right;
-                                width: 100%;
-                                margin-left: -5px;
-                            }
+                            
                         }
                         .no-overflow {
                             display: none;
-                        }
+                            line-height: 16px;
+                        }                        
                     }
-                    h3.sectionname {
+                    h3.section-title {
                         margin: 0 !important;
                         padding-top: 0;
                         padding-bottom: 0;
@@ -124,12 +151,10 @@ body.format-cul {
                             color: $nearlyblack;
                         }
                     }
-                    &:hover {
-                        .summary_closed {
-                            .truncate {
-                                &::after {
-                                    @include gradient-horizontal(rgba($white, 0), $darkgrey, 0, 50%);
-                                }
+                    &.collapsed:hover {
+                        .truncate {
+                            &::after {
+                                @include gradient-horizontal(rgba($white, 0), $darkgrey, 0, 50%);
                             }
                         }
                     }
@@ -137,18 +162,19 @@ body.format-cul {
                 .sectionbody {
                     margin: 2px;
                     background-color: $white;
-                    .summary_open {
+                    .truncate {
+                        display: none;
+                    }
+                    .no-overflow {
+                        display: inline-block;
+                    }
+                    .summary { // @TODO
                         margin-left: 0.2em;
                         padding-left: 0;
                         padding-top: 1em;
-                        .truncate {
-                            display: none;
-                        }
-                        .no-overflow {
-                            display: inline-block;
-                        }
+                        
                     }
-                    .summary_closed {
+                    &.collapsed {
                         .truncate {
                             display: none;
                         }
@@ -234,10 +260,7 @@ body.format-cul.editing .course-content ul.cul {
     }
 }
 
-body.format-cul#page-admin-setting-formatsettingcul select#id_s_format_cul_defaulttoggleiconset option[value="arrow"], 
-body#page-course-edit select#id_toggleiconset option[value="arrow"] {
-    background-image: url([[pix:t/collapsed]]);
-}
+
 
 
 .course-content ul.cul li.section .content .toggle span.the_toggle, #toggle-all .content h4 span {
@@ -265,8 +288,8 @@ body#page-course-edit select#id_toggleiconset option[value="arrow"] {
     margin: 0;
     word-wrap: break-word;
 }
-.course-content ul.cul li.section .content .toggle span.the_toggle h3.sectionname,
-.course-content ul.cul li.section .content.sectionhidden h3.sectionname {
+.course-content ul.cul li.section .content .toggle span.the_toggle h3.section-title,
+.course-content ul.cul li.section .content.sectionhidden h3.section-title {
     color: inherit;
     margin: 4px;
 }
