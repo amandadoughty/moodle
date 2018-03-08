@@ -56,45 +56,43 @@ body.format-culcollapsed {
                     width: auto;
                     margin: 2px;               
                     padding-bottom: 1.5em;
-                    .summary_open {
-                        .truncate {
-                            display: none;
+                    .truncate {
+                        display: inline-block;
+                        overflow: hidden;
+                        height: 3.4em;
+                        width: 100%;
+                        line-height: 16px;
+                        &::before {
+
                         }
-                        .no-overflow {
-                            display: inline-block;
+                        &::after {
+                            content: "\02026";
+                            float: right;
+                            position: relative;
+                            top: -16px;
+                            left: 100%;
+                            width: 50%;
+                            margin-left: -50%;
+                            padding-right: 5px;
+                            text-align: right;
+                            @include gradient-horizontal(rgba($white, 0), $grey, 0, 50%);
+                        }
+                        > *:first-child {
+                            float: right;
+                            width: 100%;
+                            margin-left: -5px;
                         }
                     }
-                    .summary_closed {
+                    .no-overflow {
+                        display: none;
+                    }
+                    &.collapsed {
                         .truncate {
-                            display: inline-block;
-                            overflow: hidden;
-                            height: 3.4em;
-                            width: 100%;
-                            line-height: 16px;
-                            &::before {
-
-                            }
-                            &::after {
-                                content: "\02026";
-                                float: right;
-                                position: relative;
-                                top: -16px;
-                                left: 100%;
-                                width: 50%;
-                                margin-left: -50%;
-                                padding-right: 5px;
-                                text-align: right;
-                                @include gradient-horizontal(rgba($white, 0), $grey, 0, 50%);
-                            }
-                            > *:first-child {
-                                float: right;
-                                width: 100%;
-                                margin-left: -5px;
-                            }
-                        }
-                        .no-overflow {
                             display: none;
                         }
+                        .no-overflow {
+                            display: inline-block;
+                        }                        
                     }
                     h3.sectionname {
                         margin: 0 !important;
