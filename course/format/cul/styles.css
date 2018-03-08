@@ -192,14 +192,25 @@ body.format-cul .course-content ul.cul li#toggle-all {
         text-align: left; }
     body.format-cul .course-content ul.cul li.section .content .toggle-arrow span.the_toggle,
     body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow span.the_toggle {
+      display: block;
+      width: auto;
+      background-color: transparent;
       background-image: url([[pix:t/expanded]]);
       /* JavaScript disabled */
-      background-position: 0% 50%; }
+      background-size: 1.75em 1.75em;
+      background-position: 0% 6px;
+      background-repeat: no-repeat;
+      margin: 0 4px;
+      padding-bottom: 6px;
+      padding-top: 6px;
+      padding-left: 24px;
+      /* The 24px allows the arrow to be with the text next to it. */
+      padding-right: 24px; }
     body.format-cul .course-content ul.cul li.section .content .toggle-arrow.collapsed span.the_toggle,
     body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow.collapsed span.the_toggle {
       background-image: url([[pix:t/collapsed]]);
       /* JavaScript disabled */
-      background-position: 0% 50%; }
+      background-position: 0% 6px; }
     body.format-cul .course-content ul.cul li.section .content .sectionhead,
     body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead {
       position: relative;
@@ -215,6 +226,7 @@ body.format-cul .course-content ul.cul li#toggle-all {
         min-height: 3.4em; }
       body.format-cul .course-content ul.cul li.section .content .sectionhead.collapsed .truncate,
       body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead.collapsed .truncate {
+        position: relative;
         display: block;
         overflow: hidden;
         height: 3.4em;
@@ -223,19 +235,17 @@ body.format-cul .course-content ul.cul li#toggle-all {
         body.format-cul .course-content ul.cul li.section .content .sectionhead.collapsed .truncate::after,
         body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead.collapsed .truncate::after {
           content: "\02026";
-          float: right;
-          position: relative;
-          top: -1.5rem;
-          left: 100%;
+          position: absolute;
+          bottom: 0;
+          right: 0;
           width: 50%;
-          margin-left: -50%;
           padding-right: 5px;
           text-align: right;
-          background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f5f5f5 50%);
-          background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f5f5f5 50%);
-          background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #f5f5f5 50%);
+          background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #eceeef 50%);
+          background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #eceeef 50%);
+          background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #eceeef 50%);
           background-repeat: repeat-x;
-          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFF5F5F5', GradientType=1); }
+          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFECEEEF', GradientType=1); }
       body.format-cul .course-content ul.cul li.section .content .sectionhead.collapsed .no-overflow,
       body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead.collapsed .no-overflow {
         display: none;
@@ -288,6 +298,7 @@ body.format-cul .course-content ul.cul li#toggle-all {
       body.format-cul .course-content ul.cul li.section .content .sectionbody .summary,
       body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody .summary {
         margin-left: 0.2em;
+        margin-bottom: 1em;
         padding-left: 0;
         padding-top: 1em; }
       body.format-cul .course-content ul.cul li.section .content .sectionbody.collapsed .truncate,
@@ -342,31 +353,11 @@ body.format-cul.editing .course-content ul.cul li.section .side {
     padding: 2px 0; }
 body.format-cul.editing .course-content ul.cul li.section.current {
   border-radius: 0; }
-  body.format-cul.editing .course-content ul.cul li.section.current .side .fa,
-  body.format-cul.editing .course-content ul.cul li.section.current .side .section-handle {
-    /*color: $white;*/ }
-
-.course-content ul.cul li.section .content .toggle span.the_toggle, #toggle-all .content h4 span {
-  background-color: transparent;
-  background-repeat: no-repeat;
-  margin: 0 4px; }
-
-#toggle-all .content .sectionbody h4 span.tc-medium,
-.course-content ul.cul li.section .content .toggle span.tc-medium {
-  background-size: 24px 24px; }
+  body.format-cul.editing .course-content ul.cul li.section.current .side .section-handle .icon {
+    /*color: $white;*/
+    margin-left: 0.5rem; }
 
 /* -- Set the clickable element of the Toggle -- */
-.course-content ul.cul li.section .content .toggle span.the_toggle {
-  display: block;
-  padding-bottom: 6px;
-  padding-top: 6px;
-  width: auto; }
-
-.course-content ul.cul li.section .content .toggle span.the_toggle.tc-medium {
-  padding-left: 24px;
-  /* The 24px allows the arrow to be with the text next to it. */
-  padding-right: 24px; }
-
 .course-content ul.cul li.section .content .toggle span.the_toggle h3,
 .course-content ul.cul li.section .content.sectionhidden h3 {
   margin: 0;

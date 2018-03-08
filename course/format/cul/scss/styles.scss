@@ -31,8 +31,18 @@ body.format-cul {
                 /* Arrow icon set. */
                 .toggle-arrow {
                     span.the_toggle {
+                        display: block;
+                        width: auto;
+                        background-color: transparent;
                         background-image: url([[pix:t/expanded]]); /* JavaScript disabled */
-                        background-position: 0% 50%;
+                        background-size: 1.75em 1.75em;
+                        background-position: 0% 6px;
+                        background-repeat: no-repeat;
+                        margin: 0 4px;                        
+                        padding-bottom: 6px;
+                        padding-top: 6px;
+                        padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
+                        padding-right: 24px;
                     }
                     // h4 span {
                     //     cursor: pointer;
@@ -54,7 +64,7 @@ body.format-cul {
                 .toggle-arrow.collapsed {
                     span.the_toggle {
                         background-image: url([[pix:t/collapsed]]); /* JavaScript disabled */
-                        background-position: 0% 50%;
+                        background-position: 0% 6px;
                     }
                     // h4 span {
                     //     cursor: pointer;
@@ -88,6 +98,7 @@ body.format-cul {
                    
                     &.collapsed {
                         .truncate {
+                            position: relative;
                             display: block;
                             overflow: hidden;
                             height: 3.4em;
@@ -106,15 +117,22 @@ body.format-cul {
                             }
                             &::after {
                                 content: "\02026";
-                                float: right;
-                                position: relative;
-                                top: -1.5rem;
-                                left: 100%;
+                                // float: right;s
+                                position: absolute;
+                                bottom: 0;
+                                // left: 100%;
+                                right: 0;
                                 width: 50%;
-                                margin-left: -50%;
+                                // height: 1em;
+                                // margin-left: -50%;
                                 padding-right: 5px;
                                 text-align: right;
+
+
                                 @include gradient-horizontal(rgba($white, 0), $grey, 0, 50%);
+
+
+
                             }
                             
                         }
@@ -170,6 +188,7 @@ body.format-cul {
                     }
                     .summary { // @TODO
                         margin-left: 0.2em;
+                        margin-bottom: 1em;
                         padding-left: 0;
                         padding-top: 1em;
                         
@@ -239,7 +258,6 @@ body.format-cul.editing .course-content ul.cul {
             .inplaceeditable.inplaceeditingon .editinstructions {
                 margin-top: -30px;
             }
-
         }
         .side {
             padding: 10px 0 0 0;
@@ -251,9 +269,9 @@ body.format-cul.editing .course-content ul.cul {
         &.current {
             border-radius: 0;
             .side {
-                .fa,
-                .section-handle {
+                .section-handle .icon {
                     /*color: $white;*/
+                    margin-left: 0.5rem;
                 }
             }
         }
@@ -263,26 +281,29 @@ body.format-cul.editing .course-content ul.cul {
 
 
 
-.course-content ul.cul li.section .content .toggle span.the_toggle, #toggle-all .content h4 span {
-    background-color: transparent;
-    background-repeat: no-repeat;
-    margin: 0 4px;
-}
-#toggle-all .content .sectionbody h4 span.tc-medium,
-.course-content ul.cul li.section .content .toggle span.tc-medium {
-    background-size: 24px 24px;
-}
+
+
+// .course-content ul.cul li.section .content .toggle span.the_toggle, 
+// #toggle-all .content h4 span {
+//     background-color: transparent;
+//     background-repeat: no-repeat;
+//     margin: 0 4px;
+// }
+// #toggle-all .content .sectionbody h4 span.tc-medium,
+// .course-content ul.cul li.section .content .toggle span.tc-medium {
+//     background-size: 24px 24px;
+// }
 /* -- Set the clickable element of the Toggle -- */
-.course-content ul.cul li.section .content .toggle span.the_toggle {
-    display: block;
-    padding-bottom: 6px;
-    padding-top: 6px;
-    width: auto;
-}
-.course-content ul.cul li.section .content .toggle span.the_toggle.tc-medium {
-    padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
-    padding-right: 24px;
-}
+// .course-content ul.cul li.section .content .toggle span.the_toggle {
+//     display: block;
+//     padding-bottom: 6px;
+//     padding-top: 6px;
+//     width: auto;
+// }
+// .course-content ul.cul li.section .content .toggle span.the_toggle.tc-medium {
+//     padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
+//     padding-right: 24px;
+// }
 .course-content ul.cul li.section .content .toggle span.the_toggle h3,
 .course-content ul.cul li.section .content.sectionhidden h3 {
     margin: 0;

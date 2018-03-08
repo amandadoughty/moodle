@@ -245,10 +245,12 @@ class format_cul_renderer extends format_section_renderer_base {
         $o.= html_writer::end_tag('div');
         $o.= $this->section_activity_summary($section, $course, null);
 
-        $o .= $this->section_availability($section);
+        // $o .= $this->section_availability($section);
 
         $o .= html_writer::end_tag('div');
         $o .= html_writer::end_tag('li');
+
+        // $o .= $this->section_availability($section);
 
         return $o;
     }
@@ -489,7 +491,7 @@ class format_cul_renderer extends format_section_renderer_base {
                 $o .= $this->section_summary_container($section, $summaryclass);
             }
 
-            $o .= $this->section_availability($section);
+            // $o .= $this->section_availability($section);
         } 
 
 
