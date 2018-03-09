@@ -17,18 +17,6 @@ body.format-cul {
                 // Default for non tablets / mobiles.  If the language file has 'culsidewidth' for the current language, then will be set in format.php. 
                 margin: 0 !important;
                 padding: 0 !important;
-                .toggle {
-                    background-color: #eceeef; // @TODO
-                    min-height: 7em;
-                    &:hover {
-                        background-color: #f4f4f4; // @TODO
-                    }
-                    span {
-                        text-align: left;
-                    }
-                }
-                /* Icon sets.  Note: Background images for the settings - does not work in Chrome or Safari - known issue. */
-                /* Arrow icon set. */
                 .toggle-arrow {
                     span.the_toggle {
                         display: block;
@@ -83,19 +71,38 @@ body.format-cul {
                     //     }
                     // }           
                 }
+                // .toggle {
+                //     background-color: #eceeef; // @TODO
+                //     min-height: 7em;
+                //     &:hover {
+                //         background-color: #f4f4f4; // @TODO
+                //         @include gradient-horizontal(rgba($white, 0), #f4f4f4, 0, 50%);
+                //     }
+                //     span {
+                //         text-align: left;
+                //     }
+                // }
                 .sectionhead {
                     position: relative;
                     width: auto;
                     margin: 2px;               
                     padding-bottom: 1.5em;
+                    background-color: #eceeef; // @TODO
+                    min-height: 7em;
+                    &:hover {
+                        background-color: #f4f4f4; // @TODO
+                        @include gradient-horizontal(rgba($white, 0), #f4f4f4, 0, 50%);
+                    }
+                    span {
+                        text-align: left;
+                    }
                     .truncate {
                         display: none;                                             
                     }
                     .no-overflow {
                         display: block;
                         min-height: 3.4em; 
-                    }                    
-                   
+                    }
                     &.collapsed {
                         .truncate {
                             position: relative;
@@ -127,14 +134,8 @@ body.format-cul {
                                 // margin-left: -50%;
                                 padding-right: 5px;
                                 text-align: right;
-
-
-                                @include gradient-horizontal(rgba($white, 0), $grey, 0, 50%);
-
-
-
+                                @include gradient-horizontal(rgba($white, 0), $grey, 0, 50%);                                
                             }
-                            
                         }
                         .no-overflow {
                             display: none;
@@ -172,7 +173,7 @@ body.format-cul {
                     &.collapsed:hover {
                         .truncate {
                             &::after {
-                                @include gradient-horizontal(rgba($white, 0), $darkgrey, 0, 50%);
+                                @include gradient-horizontal(rgba($white, 0), #f4f4f4, 0, 50%);
                             }
                         }
                     }

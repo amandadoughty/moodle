@@ -177,19 +177,7 @@ body.format-cul .course-content ul.cul li#toggle-all {
   body.format-cul .course-content ul.cul li.section .content,
   body.format-cul .course-content ul.cul li#toggle-all .content {
     margin: 0 !important;
-    padding: 0 !important;
-    /* Icon sets.  Note: Background images for the settings - does not work in Chrome or Safari - known issue. */
-    /* Arrow icon set. */ }
-    body.format-cul .course-content ul.cul li.section .content .toggle,
-    body.format-cul .course-content ul.cul li#toggle-all .content .toggle {
-      background-color: #eceeef;
-      min-height: 7em; }
-      body.format-cul .course-content ul.cul li.section .content .toggle:hover,
-      body.format-cul .course-content ul.cul li#toggle-all .content .toggle:hover {
-        background-color: #f4f4f4; }
-      body.format-cul .course-content ul.cul li.section .content .toggle span,
-      body.format-cul .course-content ul.cul li#toggle-all .content .toggle span {
-        text-align: left; }
+    padding: 0 !important; }
     body.format-cul .course-content ul.cul li.section .content .toggle-arrow span.the_toggle,
     body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow span.the_toggle {
       display: block;
@@ -216,7 +204,20 @@ body.format-cul .course-content ul.cul li#toggle-all {
       position: relative;
       width: auto;
       margin: 2px;
-      padding-bottom: 1.5em; }
+      padding-bottom: 1.5em;
+      background-color: #eceeef;
+      min-height: 7em; }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead:hover,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead:hover {
+        background-color: #f4f4f4;
+        background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFF4F4F4', GradientType=1); }
+      body.format-cul .course-content ul.cul li.section .content .sectionhead span,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead span {
+        text-align: left; }
       body.format-cul .course-content ul.cul li.section .content .sectionhead .truncate,
       body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .truncate {
         display: none; }
@@ -280,11 +281,11 @@ body.format-cul .course-content ul.cul li#toggle-all {
           color: #333333; }
       body.format-cul .course-content ul.cul li.section .content .sectionhead.collapsed:hover .truncate::after,
       body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead.collapsed:hover .truncate::after {
-        background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #e3e3e3 50%);
-        background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #e3e3e3 50%);
-        background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #e3e3e3 50%);
+        background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
         background-repeat: repeat-x;
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFE3E3E3', GradientType=1); }
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFF4F4F4', GradientType=1); }
     body.format-cul .course-content ul.cul li.section .content .sectionbody,
     body.format-cul .course-content ul.cul li#toggle-all .content .sectionbody {
       margin: 2px;
