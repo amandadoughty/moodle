@@ -233,8 +233,8 @@ body.format-cul .course-content ul.cul li#toggle-all {
         height: 3.4em;
         width: 100%;
         line-height: 1.5rem; }
-        body.format-cul .course-content ul.cul li.section .content .sectionhead.collapsed .truncate::after,
-        body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead.collapsed .truncate::after {
+        body.format-cul .course-content ul.cul li.section .content .sectionhead.collapsed .truncate.truncated::after,
+        body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead.collapsed .truncate.truncated::after {
           content: "\02026";
           position: absolute;
           bottom: 0;
@@ -279,8 +279,8 @@ body.format-cul .course-content ul.cul li#toggle-all {
         body.format-cul .course-content ul.cul li.section .content .sectionhead .section-summary-progress .activity-count,
         body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead .section-summary-progress .activity-count {
           color: #333333; }
-      body.format-cul .course-content ul.cul li.section .content .sectionhead.collapsed:hover .truncate::after,
-      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead.collapsed:hover .truncate::after {
+      body.format-cul .course-content ul.cul li.section .content .sectionhead.collapsed:hover .truncate.truncated::after,
+      body.format-cul .course-content ul.cul li#toggle-all .content .sectionhead.collapsed:hover .truncate.truncated::after {
         background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
         background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
         background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);

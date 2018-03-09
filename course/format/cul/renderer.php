@@ -663,9 +663,11 @@ class format_cul_renderer extends format_section_renderer_base {
         $context = context_course::instance($section->course);
         $summarytext = file_rewrite_pluginfile_urls($section->summary, 'pluginfile.php',
             $context->id, 'course', 'section', $section->id);
+        $extraclass = '';
 
         if (strlen($summarytext) > 250) {
             // $summarytext = substr($summarytext, 0, 249) . '...';
+            $extraclass = ' truncated';
         }
 
         $options = new stdClass();
@@ -673,7 +675,7 @@ class format_cul_renderer extends format_section_renderer_base {
         $options->overflowdiv = false;
         $summarytext = format_text($summarytext, $section->summaryformat, $options);
         $summarytext = html_writer::tag('div', $summarytext);
-        $summarytext = html_writer::tag('div', $summarytext, array('class' => 'truncate'));
+        $summarytext = html_writer::tag('div', $summarytext, array('class' => 'truncate' . $extraclass));
         return $summarytext;
     }
 
@@ -702,7 +704,7 @@ class format_cul_renderer extends format_section_renderer_base {
      */
     protected function toggle_all() {
         global $PAGE;
-        
+
         $o = html_writer::start_tag('li', array('class' => 'tcsection main clearfix', 'id' => 'toggle-all'));
 
         if ($PAGE->user_is_editing()) {
