@@ -494,21 +494,6 @@ class format_cul_renderer extends format_section_renderer_base {
             // $o .= $this->section_availability($section);
         } 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return $o;
     }    
 
@@ -538,7 +523,7 @@ class format_cul_renderer extends format_section_renderer_base {
 
         // Now the list of sections..
         echo $this->start_section_list();
-        $numsections = course_get_format($course)->get_last_section_number();
+        $numsections = course_get_format($course)->get_last_section_number();       
 
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
             if ($section == 0) {
@@ -551,6 +536,12 @@ class format_cul_renderer extends format_section_renderer_base {
                 }
                 continue;
             }
+
+            if ($numsections > 1 && $section == 1) {
+                // Collapse/Expand all.
+                echo $this->toggle_all();
+            }
+
             if ($section > $numsections) {
                 // activities inside this section are 'orphaned', this section will be printed as 'stealth' below
                 continue;
@@ -705,5 +696,33 @@ class format_cul_renderer extends format_section_renderer_base {
 
         return $o;
     }    
+    /**
+     * Displays the toggle all functionality.
+     * @return string HTML to output.
+     */
+    protected function toggle_all() {
+        global $PAGE;
+        
+        $o = html_writer::start_tag('li', array('class' => 'tcsection main clearfix', 'id' => 'toggle-all'));
 
+        if ($PAGE->user_is_editing()) {
+            $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'left side'));
+            $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'right side'));
+        }
+
+        $o .= html_writer::start_tag('div', array('class' => 'content'));
+        $iconsetclass = ' toggle-arrow';
+        $o .= html_writer::start_tag('div', array('class' => 'sectionbody'.$iconsetclass));
+        $o .= html_writer::start_tag('h4', null);
+        $o .= html_writer::tag('a', get_string('culcourseopened', 'format_culcourse'),
+                               array('class' => 'on ', 'href' => '#', 'id' => 'toggles-all-opened'));
+        $o .= html_writer::tag('a', get_string('culcourseclosed', 'format_culcourse'),
+                               array('class' => 'off ', 'href' => '#', 'id' => 'toggles-all-closed'));
+        $o .= html_writer::end_tag('h4');
+        $o .= html_writer::end_tag('div');
+        $o .= html_writer::end_tag('div');
+        $o .= html_writer::end_tag('li');
+
+        return $o;
+    }
 }
