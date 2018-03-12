@@ -185,8 +185,8 @@ body.format-cul .course-content ul.cul li#toggle-all {
       background-color: transparent;
       background-image: url([[pix:t/expanded]]);
       /* JavaScript disabled */
-      background-size: 1.75em 1.75em;
-      background-position: 0% 6px;
+      background-size: 1.75rem 1.75rem;
+      background-position: 0 6px;
       background-repeat: no-repeat;
       margin: 0 4px;
       padding-bottom: 6px;
@@ -194,6 +194,24 @@ body.format-cul .course-content ul.cul li#toggle-all {
       padding-left: 24px;
       /* The 24px allows the arrow to be with the text next to it. */
       padding-right: 24px; }
+    body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 a,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 a {
+      background-size: 1.75rem 1.75rem;
+      background-position: 0 0;
+      background-repeat: no-repeat;
+      margin: 0 4px;
+      padding-left: 24px;
+      /* The 24px allows the arrow to be with the text next to it. */
+      padding-right: 24px;
+      cursor: pointer;
+      font-size: 1.75rem;
+      line-height: 1.5rem; }
+      body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 a.off,
+      body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 a.off {
+        background-image: url([[pix:t/expanded]]); }
+      body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 a.on,
+      body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 a.on {
+        background-image: url([[pix:t/collapsed]]); }
     body.format-cul .course-content ul.cul li.section .content .toggle-arrow.collapsed span.the_toggle,
     body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow.collapsed span.the_toggle {
       background-image: url([[pix:t/collapsed]]);

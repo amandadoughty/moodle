@@ -23,8 +23,8 @@ body.format-cul {
                         width: auto;
                         background-color: transparent;
                         background-image: url([[pix:t/expanded]]); /* JavaScript disabled */
-                        background-size: 1.75em 1.75em;
-                        background-position: 0% 6px;
+                        background-size: 1.75rem 1.75rem;
+                        background-position: 0 6px;
                         background-repeat: no-repeat;
                         margin: 0 4px;                        
                         padding-bottom: 6px;
@@ -32,22 +32,29 @@ body.format-cul {
                         padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
                         padding-right: 24px;
                     }
-                    // h4 span {
-                    //     cursor: pointer;
-                    //     font-size: 1.4rem;
-                    //     &.off {
-                    //         background-image: url([[pix:t/expanded]]);
-                    //     //     &:hover {
-                    //     //         background-image: url([[pix:t/collapsed]]);
-                    //     //     }
-                    //     }
-                    //     &.on{
-                    //         background-image: url([[pix:t/collapsed]]);
-                    //     //     &:hover {
-                    //     //         background-image: url([[pix:t/expanded]]);
-                    //     //     }
-                    //     }
-                    // }           
+                    h4 a {
+                        background-size: 1.75rem 1.75rem;
+                        background-position: 0 0;
+                        background-repeat: no-repeat;
+                        margin: 0 4px;                        
+                        padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
+                        padding-right: 24px;
+                        cursor: pointer;
+                        font-size: 1.75rem;
+                        line-height: 1.5rem;
+                        &.off {
+                            background-image: url([[pix:t/expanded]]);
+                        //     &:hover {
+                        //         background-image: url([[pix:t/collapsed]]);
+                        //     }
+                        }
+                        &.on{
+                            background-image: url([[pix:t/collapsed]]);
+                        //     &:hover {
+                        //         background-image: url([[pix:t/expanded]]);
+                        //     }
+                        }
+                    }           
                 }
                 .toggle-arrow.collapsed {
                     span.the_toggle {
