@@ -24,7 +24,7 @@
  */
 
 /**
-  * @module format_cul/quicklinks
+  * @module format_cul/sectiontoggle
   */
 define(['jquery'], function($) {
 
@@ -33,10 +33,24 @@ define(['jquery'], function($) {
       * @access private
       */
     var SELECTORS = {
-        QUICKLINK: 'a.dash-link',
-        EDITLINK: 'a.quicklinkedit',
+        OPENALLLINK: 'a.dash-link',
+        CLOSEALLLINK: 'a.quicklinkedit',
         };
     var adminurl;
+
+
+    $(".open-button").on("click", function() {
+        $('ul.cul').find('.collapse').collapse('show');
+    });
+
+    $(".close-button").on("click", function() {
+        $('ul.cul').find('.collapse').collapse('hide');
+    });
+
+
+
+
+
 
     /**
      * Perform the UI changes after server change
@@ -107,16 +121,17 @@ define(['jquery'], function($) {
         changeVisibility(link, courseid, name, value);
     };
 
-    return /** @alias module:format_cul/quicklinks */ {
+    return /** @alias module:format_cul/sectiontoggle */ {
         /**
-         * Initialize quicklinksmanager
+         * Initialize sectiontogglemanager
          * @access public
          * @param {string} adminurl
          */
         init : function(url) {
             adminurl = url;
             var body = $('body');
-            body.delegate(SELECTORS.EDITLINK, 'click', handleToggleVisibility);
+            body.delegate(SELECTORS.OPENALLLINK, 'click', handleCloseAll);
+            body.delegate(SELECTORS.CLOSEALLLINK, 'click', handleOpenAll);
         }
     };
 });
