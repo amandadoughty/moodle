@@ -23,7 +23,6 @@
  * @since Moodle 2.3
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/format/renderer.php');
@@ -45,7 +44,7 @@ class format_cul_renderer extends format_section_renderer_base {
     /**
      * Constructor method, calls the parent constructor
      *
-     * @param moodle_page $page
+     * @param moodle_page $this->page
      * @param string $target one of rendering target constants
      */
     public function __construct(moodle_page $page, $target) {
@@ -58,7 +57,7 @@ class format_cul_renderer extends format_section_renderer_base {
         // @TODO
         // Since format_cul_renderer::section_edit_controls() only displays the 'Set current section' control when editing mode is on
         // we need to be sure that the link 'Turn editing mode on' is available for a user who does not have any other managing capability.
-        $page->set_other_editing_capability('moodle/course:setcurrentsection');
+        $this->page->set_other_editing_capability('moodle/course:setcurrentsection');
     }
 
     /**
@@ -124,9 +123,8 @@ class format_cul_renderer extends format_section_renderer_base {
      * @return array of edit control items
      */
     protected function section_edit_control_items($course, $section, $onsectionpage = false) {
-        global $PAGE;
 
-        if (!$PAGE->user_is_editing()) {
+        if (!$this->page->user_is_editing()) {
             return [];
         }
 
@@ -142,26 +140,28 @@ class format_cul_renderer extends format_section_renderer_base {
         $controls = [];
         $culcontrols = [];
 
-        // @TODO no highlight if weeks?
-        if ($section->section && has_capability('moodle/course:setcurrentsection', $coursecontext)) {
-            if ($course->marker == $section->section) {  // Show the "light globe" on/off.
-                $url->param('marker', 0);
-                $markedthistopic = get_string('markedthistopic');
-                $highlightoff = get_string('highlightoff');
-                $controls['highlight'] = ['url' => $url, "icon" => 'i/marked',
-                                               'name' => $highlightoff,
-                                               'pixattr' => array('class' => '', 'alt' => $markedthistopic),
-                                               'attr' => array('class' => 'icon ', 'title' => $markedthistopic,
-                                                   'data-action' => 'removemarker')];
-            } else {
-                $url->param('marker', $section->section);
-                $markthistopic = get_string('markthistopic');
-                $highlight = get_string('highlight');
-                $controls['highlight'] = ['url' => $url, "icon" => 'i/marker',
-                                               'name' => $highlight,
-                                               'pixattr' => array('class' => '', 'alt' => $markthistopic),
-                                               'attr' => array('class' => 'icon ', 'title' => $markthistopic,
-                                                   'data-action' => 'setmarker')];
+        if ($this->culconfig['baseclass'] == FORMATTOPICS) {
+            // @TODO no highlight if weeks?
+            if ($section->section && has_capability('moodle/course:setcurrentsection', $coursecontext)) {
+                if ($course->marker == $section->section) {  // Show the "light globe" on/off.
+                    $url->param('marker', 0);
+                    $markedthistopic = get_string('markedthistopic');
+                    $highlightoff = get_string('highlightoff');
+                    $controls['highlight'] = ['url' => $url, "icon" => 'i/marked',
+                                                   'name' => $highlightoff,
+                                                   'pixattr' => array('class' => '', 'alt' => $markedthistopic),
+                                                   'attr' => array('class' => 'icon ', 'title' => $markedthistopic,
+                                                       'data-action' => 'removemarker')];
+                } else {
+                    $url->param('marker', $section->section);
+                    $markthistopic = get_string('markthistopic');
+                    $highlight = get_string('highlight');
+                    $controls['highlight'] = ['url' => $url, "icon" => 'i/marker',
+                                                   'name' => $highlight,
+                                                   'pixattr' => array('class' => '', 'alt' => $markthistopic),
+                                                   'attr' => array('class' => 'icon ', 'title' => $markthistopic,
+                                                       'data-action' => 'setmarker')];
+                }
             }
         }
 
@@ -376,7 +376,6 @@ class format_cul_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function section_header($section, $course, $onsectionpage, $sectionreturn=null) {
-        global $PAGE, $COURSE;
 
         $o = '';
         $currenttext = '';
@@ -466,7 +465,7 @@ class format_cul_renderer extends format_section_renderer_base {
             );
 
             
-            $this->culconfig = course_get_format($COURSE)->get_format_options();
+            // $this->culconfig = course_get_format($COURSE)->get_format_options();
            
 
             $sectionname = html_writer::tag('span', $this->section_title($section, $course));
@@ -507,7 +506,6 @@ class format_cul_renderer extends format_section_renderer_base {
      * @param array $modnamesused (argument not used)
      */
     public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused) {
-        global $PAGE;
 
         $modinfo = get_fast_modinfo($course);
         $course = course_get_format($course)->get_course();
@@ -528,7 +526,7 @@ class format_cul_renderer extends format_section_renderer_base {
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
             if ($section == 0) {
                 // 0-section is displayed a little different then the others
-                if ($thissection->summary or !empty($modinfo->sections[0]) or $PAGE->user_is_editing()) {
+                if ($thissection->summary or !empty($modinfo->sections[0]) or $this->page->user_is_editing()) {
                     echo $this->section_header($thissection, $course, false, 0);
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                     echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
@@ -562,7 +560,7 @@ class format_cul_renderer extends format_section_renderer_base {
                 continue;
             }
 
-            if (!$PAGE->user_is_editing() && $course->coursedisplay == COURSE_DISPLAY_MULTIPAGE) {
+            if (!$this->page->user_is_editing() && $course->coursedisplay == COURSE_DISPLAY_MULTIPAGE) {
                 // Display section summary only.
                 echo $this->section_summary($thissection, $course, null);
             } else {
@@ -574,13 +572,13 @@ class format_cul_renderer extends format_section_renderer_base {
 
                 echo $this->section_footer();
 
-                if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
+                if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
                     echo $this->change_number_sections($course, $section + 1);
                 }
             }
         }
 
-        if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
+        if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
             // Print stealth sections if present.
             foreach ($modinfo->get_section_info_all() as $section => $thissection) {
                 if ($section <= $numsections or empty($modinfo->sections[$section])) {
@@ -703,11 +701,9 @@ class format_cul_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function toggle_all() {
-        global $PAGE;
-
         $o = html_writer::start_tag('li', array('class' => 'tcsection main clearfix', 'id' => 'toggle-all'));
 
-        if ($PAGE->user_is_editing()) {
+        if ($this->page->user_is_editing()) {
             $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'left side'));
             $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'right side'));
         }
