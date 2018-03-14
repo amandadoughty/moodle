@@ -437,7 +437,7 @@ class format_cul_renderer extends format_section_renderer_base {
                     'class' => 'sectionhead toggle toggle-arrow',
                     'id' => 'toggle-' . $section->section,
                     'data-toggle' => 'collapse',
-                    'data-target' => '#toggledsection-' . $section->section
+                    'data-target' => '#togglesection-' . $section->section
                 ]
             );
 
@@ -482,8 +482,8 @@ class format_cul_renderer extends format_section_renderer_base {
             $o .= $this->section_activity_summary($section, $course, null);
             $o .= html_writer::end_tag('div');
             $o .= html_writer::start_tag('div',
-                array('class' => 'sectionbody toggledsection collapse in' . $sectionclass,
-                'id' => 'toggledsection-' . $section->section)
+                array('class' => 'sectionbody togglesection collapse in' . $sectionclass,
+                'id' => 'togglesection-' . $section->section)
             );
 
             if ($this->culconfig['showsectionsummary'] == 1) {
