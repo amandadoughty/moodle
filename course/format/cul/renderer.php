@@ -322,7 +322,7 @@ class format_cul_renderer extends format_section_renderer_base {
 
         // Output section activities summary:
         $o = '';
-        $o.= html_writer::start_tag('div', array('class' => 'section-summary-activities mdl-right'));
+        $o.= html_writer::start_tag('div', array('class' => 'section-summary-activities'));
         foreach ($sectionmods as $mod) {
             $o.= html_writer::start_tag('span', array('class' => 'activity-count'));
             $o.= $mod['name'].': '.$mod['count'];
@@ -336,7 +336,7 @@ class format_cul_renderer extends format_section_renderer_base {
             $a->complete = $complete;
             $a->total = $total;
 
-            $o.= html_writer::start_tag('div', array('class' => 'section-summary-progress mdl-right'));
+            $o.= html_writer::start_tag('div', array('class' => 'section-summary-progress'));
             $o.= html_writer::tag('span', get_string('progresstotal', 'completion', $a), array('class' => 'activity-count'));
             $o.= html_writer::end_tag('div');
         }
@@ -483,6 +483,8 @@ class format_cul_renderer extends format_section_renderer_base {
 
             if ($this->culconfig['showsectionsummary'] == 1) {
                 $o .= $this->section_summary_container($section, $summaryclass);
+            } else {
+                $o .= html_writer::tag('div', '', ['class' => 'summary']); //@TODO
             }
 
             // $o .= $this->section_availability($section);
@@ -677,7 +679,7 @@ class format_cul_renderer extends format_section_renderer_base {
 
         if ($summarytext) {
             $classextra = ($this->culconfig['showsectionsummary'] == 1) ? '' : ' summaryalwaysshown';
-            $o = html_writer::start_tag('div', array('class' => 'summary' . $classextra . $summaryclass));
+            $o = html_writer::start_tag('div', ['class' => 'summary' . $classextra . $summaryclass]);
             $o .= $this->format_summary_text($section);
 
             if ($this->culconfig['showsectionsummary'] == 2) {
@@ -686,7 +688,7 @@ class format_cul_renderer extends format_section_renderer_base {
 
             $o .= html_writer::end_tag('div');
         } else {
-            $o = '';
+            $o .= '';
         }
 
         return $o;
