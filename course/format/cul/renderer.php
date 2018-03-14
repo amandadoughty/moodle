@@ -688,7 +688,7 @@ class format_cul_renderer extends format_section_renderer_base {
 
             $o .= html_writer::end_tag('div');
         } else {
-            $o .= '';
+            $o = '';
         }
 
         return $o;
