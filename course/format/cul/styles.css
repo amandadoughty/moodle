@@ -75,21 +75,6 @@ body.format-cul.editing .course-content .dash-panel .linkscontainer ul.links li 
   body.format-cul.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
     display: inline-block; }
 
-body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arrow a.toggle_open {
-  /* JavaScript enabled */
-  background-image: url(@expanded); }
-body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arrow a.toggle_closed {
-  /* JavaScript enabled */
-  background-image: url(@collapsed); }
-body.format-cul.jsenabled .course-content ul.cul li#toggle-all {
-  /* .tcsection ? */
-  background: none repeat scroll 0 0 transparent;
-  display: block; }
-  body.format-cul.jsenabled .course-content ul.cul li#toggle-all .content h4 {
-    font-size: 1.4em; }
-    body.format-cul.jsenabled .course-content ul.cul li#toggle-all .content h4 a {
-      background-position: left; }
-
 /* css for photoboard */
 .path-format-cul-photos .cul-modelist {
   border-bottom: 1px solid #ddd; }
@@ -178,8 +163,8 @@ body.format-cul .course-content ul.cul li#toggle-all {
   body.format-cul .course-content ul.cul li#toggle-all .content {
     margin: 0 !important;
     padding: 0 !important; }
-    body.format-cul .course-content ul.cul li.section .content .toggle-arrow span.sectionname_wrapper,
-    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow span.sectionname_wrapper {
+    body.format-cul .course-content ul.cul li.section .content .toggle h3,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle h3 {
       display: block;
       width: auto;
       background-color: transparent;
@@ -194,8 +179,15 @@ body.format-cul .course-content ul.cul li#toggle-all {
       padding-left: 24px;
       /* The 24px allows the arrow to be with the text next to it. */
       padding-right: 24px; }
-    body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 a,
-    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 a {
+    body.format-cul .course-content ul.cul li.section .content .toggle .section_availability,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle .section_availability {
+      margin: 0 4px;
+      padding-bottom: 6px;
+      padding-left: 24px;
+      /* The 24px allows the arrow to be with the text next to it. */
+      padding-right: 24px; }
+    body.format-cul .course-content ul.cul li.section .content .toggle h4 a,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle h4 a {
       background-size: 1.75rem 1.75rem;
       background-position: 0 0;
       background-repeat: no-repeat;
@@ -206,14 +198,14 @@ body.format-cul .course-content ul.cul li#toggle-all {
       cursor: pointer;
       font-size: 1.75rem;
       line-height: 1.5rem; }
-      body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 a.off,
-      body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 a.off {
+      body.format-cul .course-content ul.cul li.section .content .toggle h4 a.off,
+      body.format-cul .course-content ul.cul li#toggle-all .content .toggle h4 a.off {
         background-image: url([[pix:t/expanded]]); }
-      body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 a.on,
-      body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 a.on {
+      body.format-cul .course-content ul.cul li.section .content .toggle h4 a.on,
+      body.format-cul .course-content ul.cul li#toggle-all .content .toggle h4 a.on {
         background-image: url([[pix:t/collapsed]]); }
-    body.format-cul .course-content ul.cul li.section .content .toggle-arrow.collapsed span.sectionname_wrapper,
-    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow.collapsed span.sectionname_wrapper {
+    body.format-cul .course-content ul.cul li.section .content .toggle.collapsed h3,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle.collapsed h3 {
       background-image: url([[pix:t/collapsed]]);
       /* JavaScript disabled */
       background-position: 0% 6px; }
@@ -356,11 +348,6 @@ body.format-cul .insertsection {
   body.format-cul .insertsection .sectionbutton {
     display: inline-block;
     margin: 1rem; }
-
-body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arrow span.toggle_closed {
-  background-image: url([[pix:t/collapsed]]); }
-body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arrow span.toggle_open {
-  background-image: url([[pix:t/expanded]]); }
 
 body.format-cul.editing .course-content ul.cul li.section .content,
 body.format-cul.editing .course-content ul.cul li#toggle-all .content {

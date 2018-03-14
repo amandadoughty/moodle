@@ -141,38 +141,32 @@ body.format-cul.editing {
     }
 }
 
-body.format-cul.jsenabled {
-    .course-content {
-        ul.cul {
-            li.section {
-                .content {
-                    .toggle-arrow a.toggle_open { /* JavaScript enabled */
-                        background-image: url(@expanded);
-                    }
-                    .toggle-arrow a.toggle_closed { /* JavaScript enabled */
-                        background-image: url(@collapsed);
-                    }
-                    .toggledsection {
-                        // display: none; /* If JavaScript is enabled then this css will apply and the section will be hidden. */
-                    }
-                    .toggledsection.sectionopen {
-                        // display: block;
-                    }
-                }
-            }
-            li#toggle-all { /* .tcsection ? */
-                background: none repeat scroll 0 0 transparent;
-                display: block;
-                .content h4 {
-                    font-size: 1.4em;
-                    a {
-                        background-position: left;
-                    }
-                }
-            }
-        }
-    }
-}
+// body.format-cul.jsenabled {
+//     .course-content {
+//         ul.cul {
+//             li.section {
+//                 .content {
+//                     .sectionhead.toggle a.toggle_open { /* JavaScript enabled */
+//                         // background-image: url(@expanded);
+//                     }
+//                     .sectionhead.toggle a.toggle_closed { /* JavaScript enabled */
+//                         // background-image: url(@collapsed);
+//                     }
+//                 }
+//             }
+//             li#toggle-all { /* .tcsection ? */
+//                 background: none repeat scroll 0 0 transparent;
+//                 display: block;
+//                 .content h4 {
+//                     font-size: 1.4em;
+//                     a {
+//                         background-position: left;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
 
 /* css for photoboard */
 .path-format-cul-photos {

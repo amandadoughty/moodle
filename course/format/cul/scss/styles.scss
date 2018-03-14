@@ -17,8 +17,8 @@ body.format-cul {
                 // Default for non tablets / mobiles.  If the language file has 'culsidewidth' for the current language, then will be set in format.php. 
                 margin: 0 !important;
                 padding: 0 !important;
-                .toggle-arrow {
-                    span.sectionname_wrapper {
+                .toggle {
+                    h3 {
                         display: block;
                         width: auto;
                         background-color: transparent;
@@ -29,6 +29,12 @@ body.format-cul {
                         margin: 0 4px;                        
                         padding-bottom: 6px;
                         padding-top: 6px;
+                        padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
+                        padding-right: 24px;
+                    }
+                    .section_availability {
+                        margin: 0 4px;                        
+                        padding-bottom: 6px;
                         padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
                         padding-right: 24px;
                     }
@@ -56,8 +62,8 @@ body.format-cul {
                         }
                     }           
                 }
-                .toggle-arrow.collapsed {
-                    span.sectionname_wrapper {
+                .toggle.collapsed {
+                    h3 {
                         background-image: url([[pix:t/collapsed]]); /* JavaScript disabled */
                         background-position: 0% 6px;
                     }
@@ -249,12 +255,12 @@ body.format-cul {
 
 body.format-cul.jsenabled {
     .course-content ul.cul li.section .content {
-        .toggle-arrow {
+        .toggle {
             span.toggle_closed {
-                background-image: url([[pix:t/collapsed]]);
+                // background-image: url([[pix:t/collapsed]]);
             }
             span.toggle_open {
-                background-image: url([[pix:t/expanded]]);
+                // background-image: url([[pix:t/expanded]]);
             }
         }
     }

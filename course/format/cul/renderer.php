@@ -213,7 +213,7 @@ class format_cul_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function section_summary($section, $course, $mods) {
-        $classattr = 'section main section-summary clearfix';
+        $classattr = 'section section-summary clearfix';
         $linkclasses = '';
 
         // If section is hidden then display grey section link
@@ -392,7 +392,7 @@ class format_cul_renderer extends format_section_renderer_base {
         }
 
         $o.= html_writer::start_tag('li', array('id' => 'section-'.$section->section,
-            'class' => 'section main clearfix'.$sectionstyle, 'role'=>'region',
+            'class' => 'section clearfix'.$sectionstyle, 'role'=>'region',
             'aria-label'=> get_section_name($course, $section)));
 
         // Create a span that contains the section title to be used to create the keyboard section move menu.
@@ -428,16 +428,18 @@ class format_cul_renderer extends format_section_renderer_base {
         // $o .= html_writer::end_tag('div');
 
 
-
+        $ariapressed = 'true';
 
 
         if ($section->section != 0) {
             $o .= html_writer::start_tag('div',
                 [
-                    'class' => 'sectionhead toggle toggle-arrow',
+                    'class' => 'sectionhead toggle',
                     'id' => 'toggle-' . $section->section,
                     'data-toggle' => 'collapse',
-                    'data-target' => '#togglesection-' . $section->section
+                    'data-target' => '#togglesection-' . $section->section,
+                    'role' => 'button', 
+                    'aria-pressed' => $ariapressed
                 ]
             );
 
@@ -454,15 +456,8 @@ class format_cul_renderer extends format_section_renderer_base {
             //     $summaryclass = ' summary_closed';
             // }
 
-            $toggleclass = ' ';
-                $ariapressed = 'true';
-                $sectionclass = ' ';
-                $summaryclass = ' ';
-
-            $toggleclass .= ' sectionname_wrapper';
-            $o .= html_writer::start_tag('span',
-                array('class' => $toggleclass, 'role' => 'button', 'aria-pressed' => $ariapressed)
-            );
+            $sectionclass = ' ';
+            $summaryclass = ' '; // @TODO
 
             
             // $this->culconfig = course_get_format($COURSE)->get_format_options();
@@ -701,9 +696,7 @@ class format_cul_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function toggle_all() {
-        global $PAGE;
-
-        $o = html_writer::start_tag('li', array('class' => 'section main clearfix', 'id' => 'toggle-all'));
+        $o = html_writer::start_tag('li', array('class' => 'section clearfix', 'id' => 'toggle-all'));
 
         if ($this->page->user_is_editing()) {
             $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'left side'));
@@ -711,8 +704,8 @@ class format_cul_renderer extends format_section_renderer_base {
         }
 
         $o .= html_writer::start_tag('div', array('class' => 'content'));
-        $iconsetclass = ' toggle-arrow';
-        $o .= html_writer::start_tag('div', array('class' => 'sectionbody'.$iconsetclass));
+        $iconsetclass = 'toggle';
+        $o .= html_writer::start_tag('div', array('class' => $iconsetclass));
         $o .= html_writer::start_tag('h4', null);
         $o .= html_writer::tag('a', get_string('culcourseopened', 'format_culcourse'),
                                array('class' => 'on ', 'href' => '#', 'id' => 'toggles-all-opened'));
