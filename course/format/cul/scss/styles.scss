@@ -18,7 +18,7 @@ body.format-cul {
                 margin: 0 !important;
                 padding: 0 !important;
                 .toggle-arrow {
-                    span.the_toggle {
+                    span.sectionname_wrapper {
                         display: block;
                         width: auto;
                         background-color: transparent;
@@ -57,7 +57,7 @@ body.format-cul {
                     }           
                 }
                 .toggle-arrow.collapsed {
-                    span.the_toggle {
+                    span.sectionname_wrapper {
                         background-image: url([[pix:t/collapsed]]); /* JavaScript disabled */
                         background-position: 0% 6px;
                     }
@@ -295,7 +295,7 @@ body.format-cul.editing .course-content ul.cul {
 
 
 
-// .course-content ul.cul li.section .content .toggle span.the_toggle, 
+// .course-content ul.cul li.section .content .toggle span.sectionname_wrapper, 
 // #toggle-all .content h4 span {
 //     background-color: transparent;
 //     background-repeat: no-repeat;
@@ -306,22 +306,22 @@ body.format-cul.editing .course-content ul.cul {
 //     background-size: 24px 24px;
 // }
 /* -- Set the clickable element of the Toggle -- */
-// .course-content ul.cul li.section .content .toggle span.the_toggle {
+// .course-content ul.cul li.section .content .toggle span.sectionname_wrapper {
 //     display: block;
 //     padding-bottom: 6px;
 //     padding-top: 6px;
 //     width: auto;
 // }
-// .course-content ul.cul li.section .content .toggle span.the_toggle.tc-medium {
+// .course-content ul.cul li.section .content .toggle span.sectionname_wrapper.tc-medium {
 //     padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
 //     padding-right: 24px;
 // }
-// .course-content ul.cul li.section .content .toggle span.the_toggle h3,
+// .course-content ul.cul li.section .content .toggle span.sectionname_wrapper h3,
 // .course-content ul.cul li.section .content.sectionhidden h3 {
 //     margin: 0;
 //     word-wrap: break-word;
 // }
-// .course-content ul.cul li.section .content .toggle span.the_toggle h3.section-title,
+// .course-content ul.cul li.section .content .toggle span.sectionname_wrapper h3.section-title,
 // .course-content ul.cul li.section .content.sectionhidden h3.section-title {
 //     color: inherit;
 //     margin: 4px;

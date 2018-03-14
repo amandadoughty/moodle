@@ -459,7 +459,7 @@ class format_cul_renderer extends format_section_renderer_base {
                 $sectionclass = ' ';
                 $summaryclass = ' ';
 
-            $toggleclass .= ' the_toggle tc-medium';
+            $toggleclass .= ' sectionname_wrapper';
             $o .= html_writer::start_tag('span',
                 array('class' => $toggleclass, 'role' => 'button', 'aria-pressed' => $ariapressed)
             );

@@ -178,8 +178,8 @@ body.format-cul .course-content ul.cul li#toggle-all {
   body.format-cul .course-content ul.cul li#toggle-all .content {
     margin: 0 !important;
     padding: 0 !important; }
-    body.format-cul .course-content ul.cul li.section .content .toggle-arrow span.the_toggle,
-    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow span.the_toggle {
+    body.format-cul .course-content ul.cul li.section .content .toggle-arrow span.sectionname_wrapper,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow span.sectionname_wrapper {
       display: block;
       width: auto;
       background-color: transparent;
@@ -212,8 +212,8 @@ body.format-cul .course-content ul.cul li#toggle-all {
       body.format-cul .course-content ul.cul li.section .content .toggle-arrow h4 a.on,
       body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow h4 a.on {
         background-image: url([[pix:t/collapsed]]); }
-    body.format-cul .course-content ul.cul li.section .content .toggle-arrow.collapsed span.the_toggle,
-    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow.collapsed span.the_toggle {
+    body.format-cul .course-content ul.cul li.section .content .toggle-arrow.collapsed span.sectionname_wrapper,
+    body.format-cul .course-content ul.cul li#toggle-all .content .toggle-arrow.collapsed span.sectionname_wrapper {
       background-image: url([[pix:t/collapsed]]);
       /* JavaScript disabled */
       background-position: 0% 6px; }
