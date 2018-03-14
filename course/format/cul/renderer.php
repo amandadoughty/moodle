@@ -701,7 +701,9 @@ class format_cul_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function toggle_all() {
-        $o = html_writer::start_tag('li', array('class' => 'tcsection main clearfix', 'id' => 'toggle-all'));
+        global $PAGE;
+
+        $o = html_writer::start_tag('li', array('class' => 'section main clearfix', 'id' => 'toggle-all'));
 
         if ($this->page->user_is_editing()) {
             $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'left side'));

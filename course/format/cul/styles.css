@@ -345,9 +345,12 @@ body.format-cul .course-content ul.cul li#toggle-all {
   body.format-cul .course-content ul.cul li.section .side,
   body.format-cul .course-content ul.cul li#toggle-all .side {
     padding: 0; }
-    body.format-cul .course-content ul.cul li.section .side a:first-of-type > .icon,
-    body.format-cul .course-content ul.cul li#toggle-all .side a:first-of-type > .icon {
-      margin-left: 0; }
+    body.format-cul .course-content ul.cul li.section .side a,
+    body.format-cul .course-content ul.cul li#toggle-all .side a {
+      display: block; }
+      body.format-cul .course-content ul.cul li.section .side a:first-of-type > .icon,
+      body.format-cul .course-content ul.cul li#toggle-all .side a:first-of-type > .icon {
+        margin-left: 0; }
 body.format-cul .insertsection {
   text-align: center; }
   body.format-cul .insertsection .sectionbutton {
@@ -359,89 +362,31 @@ body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arr
 body.format-cul.jsenabled .course-content ul.cul li.section .content .toggle-arrow span.toggle_open {
   background-image: url([[pix:t/expanded]]); }
 
-body.format-cul.editing .course-content ul.cul li.section .content {
+body.format-cul.editing .course-content ul.cul li.section .content,
+body.format-cul.editing .course-content ul.cul li#toggle-all .content {
   /* Default for non tablets / mobiles.  If the language file has 'culsidewidth' for the current language, then will be set in format.php. */
   margin: 0 40px !important;
   padding: 0 !important; }
-  body.format-cul.editing .course-content ul.cul li.section .content .inplaceeditable.inplaceeditingon .editinstructions {
+  body.format-cul.editing .course-content ul.cul li.section .content .inplaceeditable.inplaceeditingon .editinstructions,
+  body.format-cul.editing .course-content ul.cul li#toggle-all .content .inplaceeditable.inplaceeditingon .editinstructions {
     margin-top: -30px; }
-body.format-cul.editing .course-content ul.cul li.section .side {
+body.format-cul.editing .course-content ul.cul li.section .side,
+body.format-cul.editing .course-content ul.cul li#toggle-all .side {
   padding: 10px 0 0 0; }
   body.format-cul.editing .course-content ul.cul li.section .side .fa,
-  body.format-cul.editing .course-content ul.cul li.section .side .section-handle {
+  body.format-cul.editing .course-content ul.cul li.section .side .section-handle,
+  body.format-cul.editing .course-content ul.cul li#toggle-all .side .fa,
+  body.format-cul.editing .course-content ul.cul li#toggle-all .side .section-handle {
     padding: 2px 0; }
-body.format-cul.editing .course-content ul.cul li.section.current {
+body.format-cul.editing .course-content ul.cul li.section.current,
+body.format-cul.editing .course-content ul.cul li#toggle-all.current {
   border-radius: 0; }
-  body.format-cul.editing .course-content ul.cul li.section.current .side .section-handle .icon {
+  body.format-cul.editing .course-content ul.cul li.section.current .side .section-handle .icon,
+  body.format-cul.editing .course-content ul.cul li#toggle-all.current .side .section-handle .icon {
     /*color: $white;*/
     margin-left: 0.5rem; }
 
 /* -- Set the clickable element of the Toggle -- */
-.course-content ul.cul li.section .content .toggle span.the_toggle h3,
-.course-content ul.cul li.section .content.sectionhidden h3 {
-  margin: 0;
-  word-wrap: break-word; }
-
-.course-content ul.cul li.section .content .toggle span.the_toggle h3.section-title,
-.course-content ul.cul li.section .content.sectionhidden h3.section-title {
-  color: inherit;
-  margin: 4px; }
-
-#toggle-all .content .sectionbody h4 span.tc-medium {
-  padding-left: 26px;
-  /* The 26px allows the arrow to be with the text next to it. */
-  padding-right: 26px; }
-
-.course-content ul.cul li.section .right a {
-  display: block;
-  /* So that section_right_content() does not implode with 'br's and get too many when the up arrow is removed by JS. */ }
-
-.course-content ul.cul li.current.main .right {
-  padding: 0 0 0 0;
-  /* Cancel out effect of above when having to use 'left' side selector for getting the correct text colour on the right for the current section.  This is because the selector '.course-content .current .left' defines the colour in the theme and therefore any CT specific 'right' implementation would not work for all themes. */ }
-
-.course-content ul.cul li.section .right,
-.course-content ul.cul li.tcsection .right {
-  float: right; }
-
-.course-content ul.cul li.section .right {
-  line-height: 1.3; }
-
-.course-content ul.cul li.section .right a {
-  display: block;
-  /* So that section_right_content() does not implode with 'br's and get too many when the up arrow is removed by JS. */ }
-
-.course-content ul.cul li.section .right a img.hide {
-  display: inline;
-  /* CONTRIB-5817 - Align the eye icon. */ }
-
 /* cul styles */
-.course-content ul.cul {
-  margin: 0;
-  list-style: none; }
-
-.course-content ul.cul li.section .content {
-  margin: 0 40px; }
-
-.course-content ul.cul li.section .left,
-.course-content ul.cul li.section .right {
-  width: 40px;
-  padding: 0 6px; }
-
-.course-content ul.cul li.section .left {
-  padding-top: 22px;
-  text-align: right; }
-
-.jsenabled .course-content ul.cul li.section .left,
-.jsenabled .course-content ul.cul li.section .right {
-  width: auto; }
-
-.course-content ul.cul li.section .left .section-handle img.icon {
-  padding: 0;
-  vertical-align: baseline; }
-
-.course-content ul.cul li.section .section_action_menu .textmenu,
-.course-content ul.cul li.section .section_action_menu .menu-action-text {
-  white-space: nowrap; }
 
 /*# sourceMappingURL=styles.css.map */
