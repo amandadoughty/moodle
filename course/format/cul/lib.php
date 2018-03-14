@@ -83,7 +83,7 @@ class format_cul extends format_base {
             $baseclass = $record->value;
         } else {
             $config = get_config('format_cul');
-            $baseclass = $config->baseclass;
+            $baseclass = $config->defaultbaseclass;
         }
 
         parent::__construct($format, $courseid);
