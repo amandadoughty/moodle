@@ -483,12 +483,12 @@ class format_cul_renderer extends format_section_renderer_base {
 
             if ($this->culconfig['showsectionsummary'] == 1) {
                 $o .= $this->section_summary_container($section, $summaryclass);
-            } else {
-                $o .= html_writer::tag('div', '', ['class' => 'summary']); //@TODO
             }
 
             // $o .= $this->section_availability($section);
-        } 
+        }  else {
+                $o .= html_writer::tag('div', '', ['class' => 'summary']); //@TODO
+            }
 
         return $o;
     }    
@@ -698,7 +698,7 @@ class format_cul_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function toggle_all() {
-        $o = html_writer::start_tag('li', array('class' => 'section clearfix', 'id' => 'toggle-all'));
+        $o = html_writer::start_tag('li', array('class' => 'clearfix', 'id' => 'toggle-all'));
 
         if ($this->page->user_is_editing()) {
             $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'left side'));
