@@ -246,9 +246,13 @@ class format_culcourse_renderer extends format_section_renderer_base {
 
             $o .= $this->section_activity_summary($section, $course, null);
             $o .= html_writer::end_tag('div'); // .sectionhead.
-            $o .= html_writer::start_tag('div',
-                array('class' => 'sectionbody togglesection collapse in',
-                'id' => 'togglesection-' . $section->section)
+            $o .= html_writer::start_tag(
+                'div',
+                [
+                    'class' => 'sectionbody togglesection collapse in',
+                    'id' => 'togglesection-' . $section->section,
+                    'data-preference-key' => $course->id . '_' . $section->section,
+                ]
             );
 
             if ($this->culconfig['showsectionsummary'] == 1) {
