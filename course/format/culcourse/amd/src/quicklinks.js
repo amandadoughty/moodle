@@ -17,7 +17,7 @@
  * Helper functions for CUL Course Format
  *
  * @package    course/format
- * @subpackage culcourse
+ * @subpackage cul
  * @copyright  2016 Amanda Doughty <amanda.doughty.1@city.ac.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -26,9 +26,9 @@
 /**
   * @module format_culcourse/quicklinks
   */
-define(['jquery','core/notification'], function($, notification) {
+define(['jquery','core/notification', 'core/templates'], function($, notification, templates) {
 
-	 /**
+     /**
       * Used CSS selectors
       * @access private
       */
@@ -37,7 +37,7 @@ define(['jquery','core/notification'], function($, notification) {
         EDITLINK: 'a.quicklinkedit',
         };
     var adminurl;
- 
+
     /**
      * Perform the UI changes after server change
      *
@@ -55,17 +55,22 @@ define(['jquery','core/notification'], function($, notification) {
             value: value,
             sesskey: M.cfg.sesskey
         };
+        window.console.log('change');
         $.post(adminurl, params, function() {})
         .done(function(data) {
             try {
-            	var span = link.parent();
-            	link.replaceWith(data);
-            	
-            	if(span.hasClass('linkhidden')) {
-            		span.removeClass('linkhidden');
-            	} else {
-            		span.addClass('linkhidden');
-            	}
+                var span = link.parent();
+                link.remove();
+
+                templates.render('format_culcourse/editlink', data).done(function(html, js) {
+                    templates.appendNodeContents(span, html, js);
+                }).fail(notification.exception);
+
+                if(span.hasClass('linkhidden')) {
+                    span.removeClass('linkhidden');
+                } else {
+                    span.addClass('linkhidden');
+                }
             }
             catch(err) {
                 notification.exception(err);
@@ -77,8 +82,11 @@ define(['jquery','core/notification'], function($, notification) {
     };
 
     var getUrlParameter = function (url, name) {
-	    return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
-	}
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(url);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
 
     /**
      * Prompts user when removing permission
@@ -92,22 +100,21 @@ define(['jquery','core/notification'], function($, notification) {
 
         var link = $(e.currentTarget);
         var url = (link.attr('href'));
-    	var courseid = getUrlParameter(url, 'courseid');
-    	var name = getUrlParameter(url, 'name');
-    	var value = getUrlParameter(url, 'value');
+        var courseid = getUrlParameter(url, 'courseid');
+        var name = getUrlParameter(url, 'name');
+        var value = getUrlParameter(url, 'value');
 
-    	changeVisibility(link, courseid, name, value);
+        changeVisibility(link, courseid, name, value);
+    };
 
-    };    
-
-    return /** @alias module:core/permissionmanager */ {
+    return /** @alias module:format_culcourse/quicklinks */ {
         /**
          * Initialize quicklinksmanager
          * @access public
          * @param {string} adminurl
          */
-        initialize : function(args) {
-            adminurl = args.adminurl;
+        init : function(url) {
+            adminurl = url;
             var body = $('body');
             body.delegate(SELECTORS.EDITLINK, 'click', handleToggleVisibility);
         }

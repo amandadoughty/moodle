@@ -15,25 +15,43 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Collapsed Topics Information
+ * This file contains main class for the course format CUL Course
  *
- * A topic based format that solves the issue of the 'Scroll of Death' when a course has many topics. All topics
- * except zero have a toggle that displays that topic. One or more topics can be displayed at any given time.
- * Toggles are persistent on a per browser session per course basis but can be made to persist longer by a small
- * code change. Full installation instructions, code adaptions and credits are included in the 'Readme.md' file.
- *
- * @package    course/format
- * @subpackage culcourse
- * @version    See the value of '$plugin->version' in below.
- * @author     Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
- *
+ * @since     Moodle 2.0
+ * @package   format_culcourse
+ * @copyright 2009 Sam Hemelryk
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once($CFG->dirroot . '/course/format/lib.php'); // For format_base.
 
+defined('MOODLE_INTERNAL') || die();
+
+global $DB, $COURSE;
+
+require_once($CFG->dirroot. '/course/format/lib.php');
+require_once($CFG->dirroot. '/course/format/topics/lib.php');
+require_once($CFG->dirroot. '/course/format/weeks/lib.php');
+require_once($CFG->dirroot. '/course/format/culcourse/topics_trait.php');
+require_once($CFG->dirroot. '/course/format/culcourse/weeks_trait.php');
+require_once($CFG->dirroot . '/course/format/culcourse/dashboard/lib.php');
+
+define('FORMATTOPICS', 1);
+define('FORMATWEEKS', 2);
+
+/**
+ * Main class for the CUL Course course format
+ *
+ * @package    format_culcourse
+ * @copyright  2012 Marina Glancy
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class format_culcourse extends format_base {
 
-    private $settings;
+    use format_topics_trait;
+    use format_weeks_trait;
+
+    /** @var string baseformat used for this course. Please note that it can be different from
+     * course.format field if course referes to non-existing or disabled format */
+    protected $baseclass;
 
     /**
      * Creates a new instance of class
@@ -42,118 +60,98 @@ class format_culcourse extends format_base {
      *
      * @param string $format
      * @param int $courseid
-     * @return format_culcourse
+     * @return format_base
      */
-    protected function __construct($format, $courseid) {
-        if ($courseid === 0) {
-            global $COURSE;
-            $courseid = $COURSE->id;  // Save lots of global $COURSE as we will never be the site course.
-        }        
+    protected function __construct($format, $courseid) {        
+        global $DB;
+
+        $baseclasses = [
+            1 => 'format_topics_',
+            2 => 'format_weeks_'
+        ];
+
+        // Get record from db or default.
+        $record = $DB->get_record('course_format_options',
+                                array('courseid' => $courseid,
+                                      'format' => 'cul',
+                                      'name' => 'baseclass'
+                                    ), 'value');
+
+        // course_get_format($course) @TODO
+
+        if ($record) {
+            $baseclass = $record->value;
+        } else {
+            $config = get_config('format_culcourse');
+            $baseclass = $config->defaultbaseclass;
+        }
 
         parent::__construct($format, $courseid);
+
+        $this->baseclass = $baseclasses[$baseclass];
     }
 
     /**
-     * Returns the format's settings and gets them if they do not exist.
-     * @return type The settings as an array.
-     */
-    public function get_settings() {
-        if (empty($this->settings) == true) {
-            $this->settings = $this->get_format_options();
-        }
-        return $this->settings;
-    }
-
-    /**
-     * Indicates this format uses sections.
+     * Returns true if this course format uses sections
      *
-     * @return bool Returns true
+     * @return bool
      */
     public function uses_sections() {
-        return true;
-    }
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
+    }    
 
     /**
-     * Gets the name for the provided section.
+     * Returns the display name of the given section that the course prefers.
      *
-     * @param int|stdClass $section Section object from database or just field section.section
-     * @return string The section name.
+     * @param int|stdClass $section Section object from database or just field course_sections.section
+     * @return Display name that the course format prefers, e.g. "Topic 2"
      */
     public function get_section_name($section) {
-        $course = $this->get_course();
-        // Don't add additional text as called in creating the navigation.
-        return $this->get_culcourse_section_name($course, $section, false);
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
-     * Gets the name for the provided course, section and state if need to add addional text.
+     * Returns the default section using format_base's implementation of get_section_name.
      *
-     * @param stdClass $course The course entry from DB
-     * @param int|stdClass $section Section object from database or just field section.section
-     * @param boolean $additional State to add additional text yes = true or no = false.
-     * @return string The section name.
+     * @param int|stdClass $section Section object from database or just field course_sections section
+     * @return string The default value for the section name based on the given course format.
      */
-    public function get_culcourse_section_name($course, $section, $additional) {
-        $thesection = $this->get_section($section);
-        if (is_null($thesection)) {
-            $thesection = new stdClass;
-            $thesection->name = '';
-            if (is_object($section)) {
-                $thesection->section = $section->section;
-            } else {
-                $thesection->section = $section;
-            }
-        }
-        $o = '';
-        $tcsettings = $this->get_settings();
-        $tcsectionsettings = $this->get_format_options($thesection->section);
-        $coursecontext = context_course::instance($course->id);
+    public function get_default_section_name($section) {
+        $args = func_get_args();
 
-        // We can't add a node without any text.
-        if ((string) $thesection->name !== '') {
-            $o .= format_string($thesection->name, true, array('context' => $coursecontext));
-            if (($thesection->section != 0) && (($tcsettings['layoutstructure'] == 2) ||
-                ($tcsettings['layoutstructure'] == 3) || ($tcsettings['layoutstructure'] == 5))) {
-                $o .= ' ';
-                if ($additional == true) { // Break 'br' tags break backups!
-                    $o .= html_writer::empty_tag('br');
-                }
-                if (empty($tcsectionsettings['donotshowdate'])) {
-                    $o .= $this->get_section_dates($section, $course, $tcsettings);
-                }
-            }
-        } else if ($thesection->section == 0) {
-            $o = get_string('section0name', 'format_culcourse');
-        } else {
-            if (($tcsettings['layoutstructure'] == 1) || ($tcsettings['layoutstructure'] == 4)) {
-                $o = get_string('sectionname', 'format_culcourse') . ' ' . $thesection->section;
-            } else {
-                $o .= $this->get_section_dates($section, $course, $tcsettings);
-            }
-        }
-
-        return $o;
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
-    public function get_section_dates($section, $course, $tcsettings) {
-        $dateformat = get_string('strftimedateshort');
-        $o = '';
-        if ($tcsettings['layoutstructure'] == 5) {
-            $day = $this->format_culcourse_get_section_day($section, $course);
+    /**
+     * Returns the information about the ajax support in the given source format
+     *
+     * The returned object's property (boolean)capable indicates that
+     * the course format supports Moodle course ajax features.
+     *
+     * @return stdClass
+     */
+    public function supports_ajax() {
+        $ajaxsupport = new stdClass();
+        $ajaxsupport->capable = true;
 
-            $weekday = userdate($day, $dateformat);
-            $o = $weekday;
-        } else {
-            $dates = $this->format_culcourse_get_section_dates($section, $course);
+        return $ajaxsupport;
+    }
 
-            // We subtract 24 hours for display purposes.
-            $dates->end = ($dates->end - 86400);
+    /**
+     * Custom action after section has been moved in AJAX mode
+     *
+     * Used in course/rest.php
+     *
+     * @return array This will be passed in ajax respose
+     */
+    public function ajax_section_move() {
+        $args = func_get_args();
 
-            $weekday = userdate($dates->start, $dateformat);
-            $endweekday = userdate($dates->end, $dateformat);
-            $o = $weekday . ' - ' . $endweekday;
-        }
-        return $o;
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
@@ -167,67 +165,27 @@ class format_culcourse extends format_base {
      * @return null|moodle_url
      */
     public function get_view_url($section, $options = array()) {
-        global $CFG;
-        $course = $this->get_course();
-        $url = new moodle_url('/course/view.php', array('id' => $course->id));
+        $args = func_get_args();
 
-        if (is_object($section)) {
-            $sectionno = $section->section;
-        } else {
-            $sectionno = $section;
-        }
-        if ($sectionno !== null) {
-            $url->set_anchor('section-'.$sectionno);
-        }
-        return $url;
-    }   
-
-    /**
-     * Returns the information about the ajax support in the given source format
-     *
-     * The returned object's property (boolean)capable indicates that
-     * the course format supports Moodle course ajax features.
-     * The property (array)testedbrowsers can be used as a parameter for {@link ajaxenabled()}.
-     *
-     * @return stdClass
-     */
-    public function supports_ajax() {
-        $ajaxsupport = new stdClass();
-        $ajaxsupport->capable = true;
-        return $ajaxsupport;
+        return $this->call_base_function(__FUNCTION__, $args);
     }
-
+ 
     /**
-     * Custom action after section has been moved in AJAX mode
+     * Loads all of the course sections into the navigation
      *
-     * Used in course/rest.php
-     *
-     * @return array This will be passed in ajax respose
+     * @param global_navigation $navigation
+     * @param navigation_node $node The course node within the navigation
      */
-    public function ajax_section_move() {
-        $titles = array();
-        $current = -1;  // MDL-33546.
-        $weekformat = false;
-        $tcsettings = $this->get_settings();
-        if (($tcsettings['layoutstructure'] == 2) || ($tcsettings['layoutstructure'] == 3) ||
-            ($tcsettings['layoutstructure'] == 5)) {
-            $weekformat = true;
-        }
-        $course = $this->get_course();
-        $modinfo = get_fast_modinfo($course);
-        if ($sections = $modinfo->get_section_info_all()) {
-            foreach ($sections as $number => $section) {
-                $titles[$number] = $this->get_culcourse_section_name($course, $section, true);
-                if (($weekformat == true) && ($this->is_section_current($section))) {
-                    $current = $number;  // Only set if a week based course to keep the current week in the same place.
-                }
-            }
-        }
-        return array('sectiontitles' => $titles, 'current' => $current, 'action' => 'move');
-    }
+    public function extend_course_navigation($navigation, navigation_node $node) {
+        $args = func_get_args();
 
+        return $this->call_base_function(__FUNCTION__, $args);
+    }
+  
     /**
      * Returns the list of blocks to be automatically added for the newly created course
+     *
+     * @see blocks_add_default_course_blocks()
      *
      * @return array of default blocks, must contain two keys BLOCK_POS_LEFT and BLOCK_POS_RIGHT
      *     each of values is an array of block names (for left and right side columns)
@@ -236,7 +194,7 @@ class format_culcourse extends format_base {
         global $DB;
 
         $blocks = $DB->get_records('block', null, '', 'name');
-        $defaultblocks = get_config('format_culcourse', 'defaultblocks_culcourse');
+        $defaultblocks = get_config('format_culcourse', 'defaultblocks_cul');
         $defaultblocks = preg_replace('/\s+/', '', $defaultblocks);
         $defaultblocks = explode(',', $defaultblocks);
 
@@ -246,264 +204,75 @@ class format_culcourse extends format_base {
             }
         }
 
-        return array(
-            BLOCK_POS_LEFT => array(),
+        return [
+            BLOCK_POS_LEFT => [],
             BLOCK_POS_RIGHT => $defaultblocks
-        );
+        ];
     }
 
-    public function section_format_options($foreditform = false) {
-        static $sectionformatoptions = false;
-
-        if ($sectionformatoptions === false) {
-            $sectionformatoptions = array(
-                'donotshowdate' => array(
-                    'default' => 0,
-                    'type' => PARAM_INT
-                )
-            );
-        }
-        if ($foreditform && !isset($sectionformatoptions['donotshowdate']['label'])) {
-            $sectionformatoptionsedit = array(
-                'donotshowdate' => array(
-                    'label' => new lang_string('donotshowdate', 'format_culcourse'),
-                    'help' => 'donotshowdate',
-                    'help_component' => 'format_culcourse',
-                    'element_type' => 'checkbox'
-                )
-            );
-            $sectionformatoptions = array_merge_recursive($sectionformatoptions, $sectionformatoptionsedit);
-        }
-
-        $tcsettings = $this->get_settings();
-        if (($tcsettings['layoutstructure'] == 2) || ($tcsettings['layoutstructure'] == 3) ||
-            ($tcsettings['layoutstructure'] == 5)) {
-            // Weekly layout.
-            return $sectionformatoptions;
-        } else {
-            return array();
-        }
-    }
     /**
      * Definitions of the additional options that this course format uses for course
      *
-     * Collapsed Topics format uses the following options (until extras are migrated):
-     * - coursedisplay
-     * - numsections
-     * - hiddensections
+     * cul format uses the following options:
+     * - baseclass
      *
      * @param bool $foreditform
      * @return array of options
      */
-    public function course_format_options($foreditform = false) {
+    public function course_format_options($foreditform = false) { 
         static $courseformatoptions = false;
-        global $DB, $COURSE;
-
-        $elements = array(
-            'readinglists',  
-            'timetable', 
-            'graderreport', 
-            'calendar', 
-            'students',
-            'lecturers',
-            'courseofficers',
-            'media'
-            );
-
-        $modfullnames = self::format_culcourse_get_modfullnames($COURSE);
-        $ltitypes = self::format_culcourse_get_ltitypes($COURSE);
 
         if ($courseformatoptions === false) {
-            $courseconfig = get_config('moodlecourse');
-
-            $courseformatoptions = array(
-                'numsections' => array(
-                    'default' => $courseconfig->numsections,
+            $courseformatoptions = [
+                'baseclass' => [
+                    'default' => get_config('format_culcourse', 'defaultbaseclass'),
                     'type' => PARAM_INT,
-                ),
-                'hiddensections' => array(
-                    'default' => $courseconfig->hiddensections,
-                    'type' => PARAM_INT,
-                ),
-
-                'layoutstructure' => array(
-                    'default' => get_config('format_culcourse', 'defaultlayoutstructure'),
-                    'type' => PARAM_INT,
-                ),
-
-                'showsectionsummary' => array(
+                ],
+                'showsectionsummary' => [
                     'default' => get_config('format_culcourse', 'defaultshowsectionsummary'),
                     'type' => PARAM_INT,
-                ),
-
-                'showcoursesummary' => array(
-                    'default' => get_config('format_culcourse', 'defaultshowcoursesummary'),
-                    'type' => PARAM_INT,
-                )
-            );
-
-            foreach ($elements as $element) {
-                $courseformatoptions['show' . $element] = array(
-                    'default' => get_config('format_culcourse', 'defaultshow' . $element),
-                    'type' => PARAM_INT,
-                );
-            }
-
-            foreach ($modfullnames as $mod => $modplural) {
-                $courseformatoptions['show' . $mod] = array(
-                    'default' => 2,
-                    'type' => PARAM_INT,
-                );
-            }
-
-            foreach ($ltitypes as $typeid => $name) {
-                $courseformatoptions['showltitype' . $typeid] = array(
-                    'default' => 2,
-                    'type' => PARAM_INT,
-                );
-            }
-
-            $courseformatoptions['selectmoduleleaders'] = array(
-                'default' => null,
-                'type' => PARAM_RAW,
-            );
+                ]
+            ];
         }
 
-        if ($foreditform && !isset($courseformatoptions['coursedisplay']['label'])) {
-            $coursecontext = context_course::instance($this->courseid);
-            $courseconfig = get_config('moodlecourse');
-            $sectionmenu = array();
+        // Splice in the dashboard options.
+        $dashboard = new format_culcourse_dashboard();
+        $dashboard->set_dashboard_options($courseformatoptions);
 
-            for ($i = 0; $i <= $courseconfig->maxsections; $i++) {
-                $sectionmenu[$i] = "$i";
-            }
+        if ($foreditform && !isset($courseformatoptions['baseclass']['label'])) {
+            $baseclasses = [
+                1 => new lang_string('pluginname', 'format_topics'),
+                2 => new lang_string('pluginname', 'format_weeks')
+            ];
 
-            $courseformatoptionsedit = array(
-                'numsections' => array(
-                    'label' => new lang_string('numbersections', 'format_culcourse'),
-                    'element_type' => 'select',
-                    'element_attributes' => array($sectionmenu),
-                ),
-                'hiddensections' => array(
-                    'label' => new lang_string('hiddensections'),
-                    'help' => 'hiddensections',
-                    'help_component' => 'moodle',
-                    'element_type' => 'select',
-                    'element_attributes' => array(
-                        array(0 => new lang_string('hiddensectionscollapsed'),
-                              1 => new lang_string('hiddensectionsinvisible')
-                        )
-                    ),
-                ),
-            );
-
-            $courseformatoptionsedit['layoutstructure'] = array(
-                'label' => new lang_string('setlayoutstructure', 'format_culcourse'),
-                'help' => 'setlayoutstructure',
-                'help_component' => 'format_culcourse',
-                'element_type' => 'select',
-                'element_attributes' => array(
-                    array(1 => new lang_string('setlayoutstructuretopic', 'format_culcourse'),             // Topic.
-                          2 => new lang_string('setlayoutstructureweek', 'format_culcourse'),              // Week.
-                          3 => new lang_string('setlayoutstructurelatweekfirst', 'format_culcourse'),      // Latest Week First.
-                          4 => new lang_string('setlayoutstructurecurrenttopicfirst', 'format_culcourse'), // Current Topic First.
-                          5 => new lang_string('setlayoutstructureday', 'format_culcourse'))               // Day.
-                )
-            );
-
-            $courseformatoptionsedit['showsectionsummary'] = array(
-                'label' => new lang_string('setshowsectionsummary', 'format_culcourse'),
-                'help' => 'setshowsectionsummary',
-                'help_component' => 'format_culcourse',
-                'element_type' => 'select',
-                'element_attributes' => array(
-                    array(1 => new lang_string('no'),
-                          2 => new lang_string('yes'))
-                )
-            );
-
-            $courseformatoptionsedit['showcoursesummary'] = array(
-                'label' => new lang_string('setshowcoursesummary', 'format_culcourse'),
-                'help' => 'setshowcoursesummary',
-                'help_component' => 'format_culcourse',
-                'element_type' => 'select',
-                'element_attributes' => array(
-                    array(1 => new lang_string('no'),
-                          2 => new lang_string('yes'))
-                )
-            );
-
-            foreach ($elements as $element) {
-                $courseformatoptionsedit['show' . $element] = array(
-                    'label' => new lang_string('setshow' . $element, 'format_culcourse'),
-                    'help' => 'setshow' . $element,
+            $courseformatoptionsedit = [
+                'baseclass' => [
+                    'label' => new lang_string('baseclass', 'format_culcourse'),
+                    'help' => 'baseclass',
                     'help_component' => 'format_culcourse',
                     'element_type' => 'select',
-                    'element_attributes' => array(
-                        array(1 => new lang_string('no'),
-                              2 => new lang_string('yes'))
-                    )
-                );
-            }
-
-            foreach ($modfullnames as $mod => $modplural) {
-                $courseformatoptionsedit['show' . $mod] = array(
-                    'label' => new lang_string('setshowmodname', 'format_culcourse', $modplural),
-                    'help' => 'setshowmod',
+                    'element_attributes' => [$baseclasses]
+                ],
+                'showsectionsummary' => [
+                    'label' => new lang_string('showsectionsummary', 'format_culcourse'),
+                    'help' => 'showsectionsummary',
                     'help_component' => 'format_culcourse',
                     'element_type' => 'select',
-                    'element_attributes' => array(
-                        array(1 => new lang_string('no'),
-                              2 => new lang_string('yes'))
-                    )
-                );
-            }
+                    'element_attributes' => [[
+                        1 => new lang_string('no'),
+                        2 => new lang_string('yes')
+                    ]]
+                ]
+            ];
 
-            foreach ($ltitypes as $typeid => $name) {
-                $courseformatoptionsedit['showltitype' . $typeid] = array(
-                    'label' => new lang_string('setshowmodname', 'format_culcourse', $name),
-                    'help' => 'setshowmod',
-                    'help_component' => 'format_culcourse',
-                    'element_type' => 'select',
-                    'element_attributes' => array(
-                        array(1 => new lang_string('no'),
-                              2 => new lang_string('yes'))
-                    )
-                );
-            }
-
-            // Get all the lecturers.
-            $lecturers = array();
-            $lecturerrole = $DB->get_record('role', array('shortname'=>'lecturer'));
-
-            if ($lecturerrole) {
-                $lecturers = get_role_users($lecturerrole->id, $coursecontext);
-            }
-
-            // Create a multi select box?
-            $selectbox = array();
-
-            if (count($lecturers)) {
-                foreach ($lecturers as $lecturer) {
-                    $selectbox[$lecturer->id] = fullname($lecturer);
-                }
-            } else {
-                $selectbox[0] = get_string('nolecturers', 'format_culcourse');
-            }
-
-            $courseformatoptionsedit['selectmoduleleaders'] = array(
-                'label' => new lang_string('setselectmoduleleaders', 'format_culcourse'),
-                'help' => 'setselectmoduleleaders',
-                'help_component' => 'format_culcourse',
-                'element_type' => 'select',
-                'element_attributes' => array(
-                    $selectbox,
-                    array('multiple' => 'multiple', 'size' => 6)
-                )
-            );
-
+            // Splice in the dashboard edit options.
+            $dashboard->set_dashboard_edit_options($courseformatoptionsedit);
             $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
-        }
+        }        
+
+        $args = func_get_args();
+        $pcourseformatoptions = $this->call_base_function(__FUNCTION__, $args);
+        $courseformatoptions = $pcourseformatoptions + $courseformatoptions;
 
         return $courseformatoptions;
     }
@@ -513,62 +282,55 @@ class format_culcourse extends format_base {
      *
      * This function is called from {@link course_edit_form::definition_after_data()}
      *
+     * Format singleactivity adds a warning when format of the course is about to be changed.
+     *
      * @param MoodleQuickForm $mform form the elements are added to
      * @param bool $forsection 'true' if this is a section edit form, 'false' if this is course edit form
      * @return array array of references to the added form elements
      */
     public function create_edit_form_elements(&$mform, $forsection = false) {
-        $elements = parent::create_edit_form_elements($mform, $forsection);
+        global $PAGE;
 
-        // Convert saved course_format_options value back to an array to set the value.
-        if ($selectmoduleleaders = $mform->getElementValue('selectmoduleleaders')) {
-            if (!is_array($selectmoduleleaders)) {
-                $mform->setDefault('selectmoduleleaders', explode(',', $selectmoduleleaders ));
-            } else {
-                $mform->setDefault('selectmoduleleaders', $selectmoduleleaders);
-            }
-        }
+        $args = func_get_args();
+        $elements = $this->call_base_function(__FUNCTION__, [&$mform, $forsection]);
+        // Weekly format unsets a key which leads to an error as the 
+        // combined parent and child array have a gap in the key sequence.
+        // /course/edit_form.php #373.
+        // So we reindex the array.
+        $elements = array_values($elements);
 
-        foreach ($elements as $key => $element) {
-            if($elements[$key]->getName() == 'selectmoduleleaders') {
-                $selectmoduleleadersel = $elements[$key];
-                unset($elements[$key]);
-            }
-                    
-        }
-
-        // Increase the number of sections combo box values if the user has increased the number of sections
-        // using the icon on the course page beyond course 'maxsections' or course 'maxsections' has been
-        // reduced below the number of sections already set for the course on the site administration course
-        // defaults page.  This is so that the number of sections is not reduced leaving unintended orphaned
-        // activities / resources.
-        if (!$forsection) {
-            $maxsections = get_config('moodlecourse', 'maxsections');
-            $numsections = $mform->getElementValue('numsections');
-            $numsections = $numsections[0];
-            if ($numsections > $maxsections) {
-                $element = $mform->getElement('numsections');
-                for ($i = $maxsections+1; $i <= $numsections; $i++) {
-                    $element->addOption("$i", $i);
+        if ($forsection == false) {
+            global $USER;
+  
+            // Convert saved course_format_options value back to an array to set the value.
+            if ($selectmoduleleaders = $mform->getElementValue('selectmoduleleaders')) {
+                if (!is_array($selectmoduleleaders)) {
+                    $mform->setDefault('selectmoduleleaders', explode(',', $selectmoduleleaders ));
+                } else {
+                    $mform->setDefault('selectmoduleleaders', $selectmoduleleaders);
                 }
             }
-        }
 
-        $elements[] = $mform->addElement('header', 'selectmoduleleadershdr', get_string('setselectmoduleleadershdr', 'format_culcourse'));
-        $mform->addHelpButton('selectmoduleleadershdr', 'setselectmoduleleadershdr', 'format_culcourse', '', true);
-        $elements[] = $selectmoduleleadersel;
-        $elements = array_values($elements);
+            // Put module leader setting in own dropdown.
+            $selectmoduleleaderhdr = $mform->addElement('header', 'selectmoduleleadershdr', get_string('setselectmoduleleadershdr', 'format_culcourse'));
+            $mform->addHelpButton('selectmoduleleadershdr', 'setselectmoduleleadershdr', 'format_culcourse', '', true);
+            array_splice($elements, -1, 0, [$selectmoduleleaderhdr]);
+
+            // Put dashboard settings in own dropdown.
+            $dashboardhdr = $mform->addElement('header', 'dashboardhdr', get_string('setdashboardhdr', 'format_culcourse'));
+            array_splice($elements, 4, 0, [$dashboardhdr]);
+        }        
 
         return $elements;
     }
 
-    /**
+   /**
      * Updates format options for a course
      *
-     * In case if course format was changed to 'Collapsed Topics', we try to copy options
+     * In case if course format was changed to 'weeks', we try to copy options
      * 'coursedisplay', 'numsections' and 'hiddensections' from the previous format.
      * If previous course format did not have 'numsections' option, we populate it with the
-     * current number of sections.  The layout and colour defaults will come from 'course_format_options'.
+     * current number of sections
      *
      * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
      * @param stdClass $oldcourse if this function is called from {@link update_course()}
@@ -576,68 +338,44 @@ class format_culcourse extends format_base {
      * @return bool whether there were any changes to the options values
      */
     public function update_course_format_options($data, $oldcourse = null) {
-        global $DB;
+        $dashboard = new format_culcourse_dashboard();
+        $data = $dashboard->update_dashboard_options($data, $oldcourse);
 
-        // Convert the form array to a string to enable saving to course_format_options table.
-        // Without this, an error is thrown:
-        // Warning: mysqli::real_escape_string() expects parameter 1 to be string, array given
-        if (isset($data->selectmoduleleaders) && is_array($data->selectmoduleleaders)) {
-            $data->selectmoduleleaders = join(',', $data->selectmoduleleaders);
-        }
-
-        if ($oldcourse !== null) {
-            $data = (array)$data;
-            $oldcourse = (array)$oldcourse;
-            $options = $this->course_format_options();
-            foreach ($options as $key => $unused) {
-                if (!array_key_exists($key, $data)) {
-                    if (array_key_exists($key, $oldcourse)) {
-                        $data[$key] = $oldcourse[$key];
-                    } else if ($key === 'numsections') {
-                        // If previous format does not have the field 'numsections'
-                        // and $data['numsections'] is not set,
-                        // we fill it with the maximum section number from the DB
-                        $maxsection = $DB->get_field_sql('SELECT max(section) from {course_sections}
-                            WHERE course = ?', array($this->courseid));
-                        if ($maxsection) {
-                            // If there are no sections, or just default 0-section, 'numsections' will be set to default
-                            $data['numsections'] = $maxsection;
-                        }
-                    }
-                }
-            }
-        }
-        return $this->update_format_options($data);
+        return $this->call_base_function(__FUNCTION__, [$data, $oldcourse]);
     }
 
     /**
-     * Return an instance of moodleform to edit a specified section
+     * Return the start and end date of the passed section
      *
-     * Format extends editsection_form to change the default for usedefaultname.
-     *
-     * @param mixed $action the action attribute for the form. If empty defaults to auto detect the
-     *              current url. If a moodle_url object then outputs params as hidden variables.
-     * @param array $customdata the array with custom data to be passed to the form
-     *     /course/editsection.php passes section_info object in 'cs' field
-     *     for filling availability fields
-     * @return moodleform
+     * @param int|stdClass|section_info $section section to get the dates for
+     * @param int $startdate Force course start date, useful when the course is not yet created
+     * @return stdClass property start for startdate, property end for enddate
      */
-    public function editsection_form($action, $customdata = array()) {
-        global $CFG;
-        require_once($CFG->dirroot. '/course/format/culcourse/editsection_form.php');
-        $context = context_course::instance($this->courseid);
+    public function get_section_dates($section, $startdate = false) {
+        $args = func_get_args();
 
-        if (!array_key_exists('course', $customdata)) {
-            $customdata['course'] = $this->get_course();
-        }
+        return $this->call_base_function(__FUNCTION__, $args);
+    }
 
-        $mform = new format_culcourse_editsection_form($action, $customdata);
-        
-        return $mform;
-    }    
+    /**
+     * Returns true if the specified section is current
+     *
+     * By default we analyze $course->marker
+     *
+     * @param int|stdClass|section_info $section
+     * @return bool
+     */
+    public function is_section_current($section) {
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
+    }
 
     /**
      * Whether this format allows to delete sections
+     *
+     * If format supports deleting sections it is also recommended to define language string
+     * 'deletesection' inside the format.
      *
      * Do not call this function directly, instead use {@link course_can_delete_section()}
      *
@@ -645,180 +383,137 @@ class format_culcourse extends format_base {
      * @return bool
      */
     public function can_delete_section($section) {
-        return true;
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
+    }
+
+   /**
+     * Prepares the templateable object to display section name
+     *
+     * @param \section_info|\stdClass $section
+     * @param bool $linkifneeded
+     * @param bool $editable
+     * @param null|lang_string|string $edithint
+     * @param null|lang_string|string $editlabel
+     * @return \core\output\inplace_editable
+     */
+    public function inplace_editable_render_section_name($section, $linkifneeded = true,
+                                                         $editable = null, $edithint = null, $editlabel = null) {
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
-     * Indicates whether the course format supports the creation of a news forum.
+     * Returns the default end date value based on the start date.
+     *
+     * This is the default implementation for course formats, it is based on
+     * moodlecourse/courseduration setting. Course formats like format_weeks for
+     * example can overwrite this method and return a value based on their internal options.
+     *
+     * @param moodleform $mform
+     * @param array $fieldnames The form - field names mapping.
+     * @return int
+     */
+    public function get_default_course_enddate($mform, $fieldnames = array()) {
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
+    }
+
+    /**
+     * Indicates whether the course format supports the creation of the Announcements forum.
+     *
+     * For course format plugin developers, please override this to return true if you want the Announcements forum
+     * to be created upon course creation.
      *
      * @return bool
      */
     public function supports_news() {
-        return true;
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
     }
 
     /**
-     * Is the section passed in the current section?
+     * Returns whether this course format allows the activity to
+     * have "triple visibility state" - visible always, hidden on course page but available, hidden.
      *
-     * @param stdClass $section The course_section entry from the DB
-     * @return bool true if the section is current
+     * @param stdClass|cm_info $cm course module (may be null if we are displaying a form for adding a module)
+     * @param stdClass|section_info $section section where this module is located or will be added to
+     * @return bool
      */
-    public function is_section_current($section) {
-        $tcsettings = $this->get_settings();
-        if (($tcsettings['layoutstructure'] == 2) || ($tcsettings['layoutstructure'] == 3)) {
-            if ($section->section < 1) {
-                return false;
-            }
+    public function allow_stealth_module_visibility($cm, $section) {
+        // Allow the third visibility state inside visible sections or in section 0.
+        return !$section->section || $section->visible;
+    }
 
-            $timenow = time();
-            $dates = $this->format_culcourse_get_section_dates($section, $this->get_course());
+    /**
+     * Callback used in WS core_course_edit_section when teacher performs an AJAX action on a section (show/hide)
+     *
+     * Access to the course is already validated in the WS but the callback has to make sure
+     * that particular action is allowed by checking capabilities
+     *
+     * Course formats should register
+     *
+     * @param stdClass|section_info $section
+     * @param string $action
+     * @param int $sr
+     * @return null|array|stdClass any data for the Javascript post-processor (must be json-encodeable)
+     */
+    public function section_action($section, $action, $sr) {
+        $args = func_get_args();
 
-            return (($timenow >= $dates->start) && ($timenow < $dates->end));
-        } else if ($tcsettings['layoutstructure'] == 5) {
-            if ($section->section < 1) {
-                return false;
-            }
+        return $this->call_base_function(__FUNCTION__, $args);
+    }
 
-            $timenow = time();
-            $day = $this->format_culcourse_get_section_day($section, $this->get_course());
-            $onedayseconds = 86400;
-            return (($timenow >= $day) && ($timenow < ($day + $onedayseconds)));
+    /**
+     * There is no way to dynamically inherit from a choice of course formats. So to ease
+     * upgrades, the methods of each course format we may want to inherit from have been
+     * copied into traits. Each function has been prepended with the format name eg
+     * format_weeks_section_action(). This function can then use the format_culcourse.baseclass 
+     * ($this->baseclass) to determine which of the functions to call.
+     *
+     * The functions in the traits will be easier to compare to the format_<name>/lib.php they mock 
+     * when these are upgraded. It is not a perfect solution but the course id is not always
+     * available when lib.php is called. Therefore format_culcourse.baseclass is only available after
+     * instantiation. This prevents the use of dynamic inheritance, dynamic traits,
+     * decorator pattern, returning a class instantiated in format_culcourse.__construct (the classname 
+     * format_culcourse is used under the hood) and anything else I thought of!
+     *
+     *
+     * @param string $method
+     * @param array $args
+     * @return mixed result of the function called.
+     */
+    protected function call_base_function ($method, $args) {
+        $function = $this->baseclass . $method;
+
+        if (is_callable([$this, $function])) {
+            return call_user_func_array([$this, $function], $args);
         } else {
-            return parent::is_section_current($section);
-        }
+            $method = 'parent::' . $method;
+            return call_user_func_array([$this, $method], $args);
+        }        
     }
-
-    /**
-     * Return the start and end date of the passed section.
-     *
-     * @param int|stdClass $section The course_section entry from the DB.
-     * @param stdClass $course The course entry from DB.
-     * @return stdClass property start for startdate, property end for enddate.
-     */
-    private function format_culcourse_get_section_dates($section, $course) {
-        $oneweekseconds = 604800;
-        /* Hack alert. We add 2 hours to avoid possible DST problems. (e.g. we go into daylight
-           savings and the date changes. */
-        $startdate = $course->startdate + 7200;
-
-        $dates = new stdClass();
-        if (is_object($section)) {
-            $section = $section->section;
-        }
-
-        $dates->start = $startdate + ($oneweekseconds * ($section - 1));
-        $dates->end = $dates->start + $oneweekseconds;
-
-        return $dates;
-    }
-
-    /**
-     * Return the date of the passed section.
-     *
-     * @param int|stdClass $section The course_section entry from the DB.
-     * @param stdClass $course The course entry from DB.
-     * @return stdClass property date.
-     */
-    private function format_culcourse_get_section_day($section, $course) {
-        $onedayseconds = 86400;
-        /* Hack alert. We add 2 hours to avoid possible DST problems. (e.g. we go into daylight
-           savings and the date changes. */
-        $startdate = $course->startdate + 7200;
-
-        if (is_object($section)) {
-            $section = $section->section;
-        }
-
-        $day = $startdate + ($onedayseconds * ($section - 1));
-
-        return $day;
-    }
-
-    /**
-     * TODO
-     */
-    static function format_culcourse_get_modfullnames($course) {
-        $modinfo = get_array_of_activities($course->id);
-        $plurals = get_module_types_names(true);
-
-        $modfullnames = array();
-        $archetypes   = array();
-
-        foreach($modinfo as $cm) {
-            if ($cm->mod == 'lti') {
-                continue;
-            }
-
-            if (array_key_exists($cm->mod, $modfullnames)) {
-                continue;
-            }
-
-            if (!array_key_exists($cm->mod, $archetypes)) {
-                $archetypes[$cm->mod] = plugin_supports('mod', $cm->mod, FEATURE_MOD_ARCHETYPE, MOD_ARCHETYPE_OTHER);
-            }
-
-            if ($archetypes[$cm->mod] == MOD_ARCHETYPE_RESOURCE) {
-                if (!array_key_exists('resources', $modfullnames)) {
-                    $modfullnames['resources'] = get_string('resources');
-                }
-
-            } else {
-                if (isset($plurals[$cm->mod])) {
-                    $modfullnames[$cm->mod] = $plurals[$cm->mod];
-                } else {
-                    $modfullnames[$cm->mod] = ucfirst($cm->mod);
-                }
-            }
-        }
-
-        return $modfullnames;
-    }
-
-    static function format_culcourse_get_ltitypes($course) {
-        global $DB;
-
-        $plurals = get_module_types_names(true);
-
-        $sql = "SELECT DISTINCT l.typeid, m.name
-                FROM {course_modules} cm
-                JOIN {modules} m
-                ON cm.module = m.id
-                JOIN {lti} l
-                ON cm.instance = l.id
-                WHERE cm.course = :courseid
-                AND m.name = 'lti'";
-
-        $params = ['courseid' => $course->id];
-
-        $records = $DB->get_recordset_sql($sql, $params);
-        $ltitypes = array();
-
-        foreach($records as $record) {
-            $type = lti_get_type($record->typeid);
-
-            if ($type) {
-                if (array_key_exists($record->typeid, $ltitypes)) {
-                    continue;
-                }
-
-                if (!$record->typeid) {
-                    $ltitypes[$record->typeid] = $plurals[$record->name];
-                } else {
-                    $ltitypes[$type->id] = $type->name;
-                }
-            }          
-        }       
-
-        return $ltitypes;
-    }
-
 }
 
 /**
- * The string that is used to describe a section of the course.
+ * Implements callback inplace_editable() allowing to edit values in-place
  *
- * @return string The section description.
+ * @param string $itemtype
+ * @param int $itemid
+ * @param mixed $newvalue
+ * @return \core\output\inplace_editable
  */
-function callback_culcourse_definition() {
-    return get_string('sectionname', 'format_culcourse');
+function format_culcourse_inplace_editable($itemtype, $itemid, $newvalue) {
+    global $DB, $CFG;
+    require_once($CFG->dirroot . '/course/lib.php');
+    if ($itemtype === 'sectionname' || $itemtype === 'sectionnamenl') {
+        $section = $DB->get_record_sql(
+            'SELECT s.* FROM {course_sections} s JOIN {course} c ON s.course = c.id WHERE s.id = ? AND c.format = ?',
+            array($itemid, 'cul'), MUST_EXIST);
+        return course_get_format($section->course)->inplace_editable_update_section_name($section, $itemtype, $newvalue);
+    }
 }

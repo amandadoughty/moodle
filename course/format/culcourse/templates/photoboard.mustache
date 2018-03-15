@@ -1,0 +1,34 @@
+<ul class="nav nav-tabs" role="tablist">
+{{# modes}}
+    <li class="nav-item">
+    	{{# active}}        
+	        <a class="nav-link active" href="{{link}}" role="tab">
+	        {{title}}</a>
+        {{/ active}}
+        {{^ active}}
+	        <a class="nav-link" href="{{link}}" role="tab">
+	        {{title}}</a>            
+        {{/ active}}
+    </li>
+{{/ modes}}
+</ul>
+
+{{{unifiedfilter}}}
+{{{initialbar}}}
+{{{pagingbar}}}
+
+{{# mode}}
+    <ul class="userlist">
+        {{# users}}
+            {{> format_culcourse/detaileduser}}
+        {{/ users}}
+    </ul>
+{{/ mode}}
+{{^ mode}}
+    <ul class="userlist">
+        {{# users}}
+            {{> format_culcourse/briefuser}}
+        {{/ users}}
+    </ul>
+{{/ mode}}
+</div>

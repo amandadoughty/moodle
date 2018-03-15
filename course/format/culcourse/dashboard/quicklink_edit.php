@@ -15,17 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Quicklinks settings for CUL Course Format
  *
- * @package    format
- * @subpackage culcourse
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @package    course/format
+ * @subpackage cul
+ * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>, Tim Gagen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once(dirname(__FILE__) . '/../../../../config.php');
+require_once(dirname(__FILE__) . '/locallib.php');
 
-$plugin->version   = 2018010913;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2017110800;        // Requires this Moodle version.
-$plugin->component = 'format_culcourse';    // Full name of the plugin (used for diagnostics).
-$plugin->maturity  = MATURITY_BETA; // this version's maturity level.
+require_sesskey();
+require_login();
+
+$courseid = required_param('courseid', PARAM_INT);
+$name = required_param('name', PARAM_RAW);
+$value = required_param('value', PARAM_INT);
+
+// Check permision
+if (has_capability('moodle/course:update', context_course::instance($courseid))) {
+    format_culcourse_quicklink_visibility($courseid, $name, $value);
+	redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
+} else {
+	print_error('noeditcoursesettings','format_culcourse');
+}
+
+

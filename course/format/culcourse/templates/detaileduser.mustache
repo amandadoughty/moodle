@@ -1,0 +1,39 @@
+    <li class="card clearfix">    
+        <div class="cul-photo card-img">
+            {{{imghtml}}}
+        </div>
+        <div class="card-body">
+            <div class="cul-username card-title">
+                <a href="{{userlink}}">{{{fullname}}}</a>
+            </div>
+            <div class="cul-info">
+                {{# email}}
+                    {{# str }} email, format_culcourse {{/ str }}<a href="mailto:{{email}}">{{email}}</a>
+                    <br />
+                {{/ email}}
+                {{# phone2}}
+                    {{# str }} mobile, format_culcourse {{/ str }} {{phone2}}
+                    <br />
+                {{/ phone2}}
+                {{# staff}}
+                    {{# str }} telephone, format_culcourse {{/ str }} {{stafftelephone}}
+                    <br />
+                    {{# str }} officehours, format_culcourse {{/ str }} {{staffofficehrs}}
+                    <br />
+                    {{# str }} buildinglocation, format_culcourse {{/ str }} {{stafflocation}}
+                    <br />
+                {{/ staff}}
+                {{# group}}
+                    {{# str }} groups, format_culcourse {{/ str }} {{group}}
+                    <br />
+                {{/ group}}            
+                {{# str }} lastaccess, format_culcourse {{/ str }} {{lastaccess}}
+            </div>            
+        </div>
+        <div class="cul-links card-footer">
+            {{# links}}
+                <a href="{{url}} class="card-link">{{{title}}}</a>
+                <br />
+            {{/ links}}
+        </div>
+    </li>

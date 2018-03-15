@@ -15,72 +15,48 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CUL Course Format Information
+ * Topics course format.  Display the whole course as "CUL Course" made of modules.
  *
- * A collapsed format that solves the issue of the 'Scroll of Death' when a course has many sections. All sections
- * except zero have a toggle that displays that section. One or more sections can be displayed at any given time.
- * Toggles are persistent on a per browser session per course basis but can be made to persist longer.
- *
- * @package    course/format
- * @subpackage culcourse
- * @version    See the value of '$plugin->version' in below.
- * @author     Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
+ * @package format_culcourse
+ * @copyright 2006 The Open University
+ * @author N.D.Freear@open.ac.uk, and others.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir . '/filelib.php');
-require_once($CFG->libdir . '/completionlib.php');
-require_once($CFG->dirroot . '/course/format/culcourse/togglelib.php');
+require_once($CFG->libdir.'/filelib.php');
+require_once($CFG->libdir.'/completionlib.php');
+
+// Horrible backwards compatible parameter aliasing..
+if ($topic = optional_param('topic', 0, PARAM_INT)) {
+    $url = $PAGE->url;
+    $url->param('section', $topic);
+    debugging('Outdated topic param passed to course/view.php', DEBUG_DEVELOPER);
+    redirect($url);
+}
+// End backwards-compatible aliasing..
 
 $context = context_course::instance($course->id);
+// Retrieve course format option fields and add them to the $course object.
+$course = course_get_format($course)->get_course();
 
-if (($marker >= 0) && has_capability('moodle/course:setcurrentsection', $context) && confirm_sesskey()) {
+if (($marker >=0) && has_capability('moodle/course:setcurrentsection', $context) && confirm_sesskey()) {
     $course->marker = $marker;
     course_set_marker($course->id, $marker);
 }
 
-// Make sure all sections are created.
-$courseformat = course_get_format($course);
-$course = $courseformat->get_course();
-course_create_sections_if_missing($course, range(0, $course->numsections));
+// Make sure section 0 is created.
+course_create_sections_if_missing($course, 0);
 
 $renderer = $PAGE->get_renderer('format_culcourse');
 
-$defaulttogglepersistence = clean_param(get_config('format_culcourse', 'defaulttogglepersistence'), PARAM_INT);
-
-if ($defaulttogglepersistence == 1) {
-    user_preference_allow_ajax_update('culcourse_toggle_' . $course->id, PARAM_RAW);
-    $userpreference = get_user_preferences('culcourse_toggle_' . $course->id);
+if (!empty($displaysection)) {
+    $renderer->print_single_section_page($course, null, null, null, null, $displaysection);
 } else {
-    $userpreference = null;
+    $renderer->print_multiple_section_page($course, null, null, null, null);
 }
-$renderer->set_user_preference($userpreference);
 
-$defaultuserpreference = clean_param(get_config('format_culcourse', 'defaultuserpreference'), PARAM_INT);
-$renderer->set_default_user_preference($defaultuserpreference);
-
-$PAGE->requires->string_for_js('hidefromothers', 'format_culcourse');
-$PAGE->requires->string_for_js('showfromothers', 'format_culcourse');
-
-$PAGE->requires->js_init_call('M.format_culcourse.init', array(
-    $course->id,
-    $userpreference,
-    $course->numsections,
-    $defaulttogglepersistence,
-    $defaultuserpreference));
-
-// $PAGE->requires->yui_module('moodle-format_culcourse-dragdrop-interceptor', 'M.format_culcourse.init_dragdrop_interceptor',
-//             array(array(
-//                 'courseid' => $course->id,
-//                 'ajaxurl' => 0,
-//                 'config' => 0,
-//             )), null, true);
-
-$tcsettings = $courseformat->get_settings();
-
-$renderer->print_multiple_section_page($course, null, null, null, null);
-
-// Include course format js module.
+// Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');
+$PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init');
