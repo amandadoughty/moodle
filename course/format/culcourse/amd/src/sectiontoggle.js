@@ -26,7 +26,7 @@
 /**
   * @module format_culcourse/sectiontoggle
   */
-define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notification) {
+define(['jquery', 'core/config', 'core/notification'], function($, config, Notification) {
 
      /**
       * Used CSS selectors
@@ -37,6 +37,8 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
         CLOSEALLLINK: 'a#toggles-all-closed',
         SECTIONBODY: '.sectionbody'
         };
+
+    var URL = config.wwwroot + '/course/format/culcourse/setuserpreference.php';
 
 
     /**
@@ -73,20 +75,36 @@ define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notificat
     var handleOpen = function(e){
         var coursesection = $(e.currentTarget).data('preference-key');
 
-        var request = {
-                methodname: 'core_user_update_user_preferences',
-                args: {
-                     preferences: [
-                        {
-                            type: 'format_culcourse_' + coursesection,
-                            value: 1
-                        }
-                    ]
-                }
+        // var request = {
+        //         methodname: 'core_user_update_user_preferences',
+        //         args: {
+        //              preferences: [
+        //                 {
+        //                     type: 'format_culcourse_' + coursesection,
+        //                     value: 1
+        //                 }
+        //             ]
+        //         }
+        //     };
+
+
+
+            var data = {
+                type: 'format_culcourse_' + coursesection,
+                value: 1,
+                sesskey: config.sesskey,
             };
 
-        Ajax.call([request])[0]
-            .fail(Notification.exception);
+            var settings = {
+                type: 'POST',
+                dataType: 'json',
+                data: data
+            };
+
+            $.ajax(URL, settings)
+                .fail(Notification.exception);
+        }
+
     };
 
     /**
