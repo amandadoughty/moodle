@@ -152,7 +152,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             // $(SELECTORS.SECTIONHEAD).addClass('collapsed');
 
             for(userpref in userprefs) {
-                if(string.startsWith(userpref, 'format_culcourse_expanded')) {
+                if(userpref.startsWith('format_culcourse_expanded')) {
                     var matches =  userpref.match(/\d+/);
 
                     if(matches) {
