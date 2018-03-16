@@ -163,8 +163,8 @@ body.format-culcourse .course-content ul.culcourse li#toggle-all {
   body.format-culcourse .course-content ul.culcourse li#toggle-all .content {
     margin: 0 !important;
     padding: 0 !important; }
-    body.format-culcourse .course-content ul.culcourse li.section .content .toggle h3,
-    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle h3 {
+    body.format-culcourse .course-content ul.culcourse li.section .content .toggle h3.sectionname,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle h3.sectionname {
       display: block;
       width: auto;
       background-color: transparent;
@@ -204,8 +204,8 @@ body.format-culcourse .course-content ul.culcourse li#toggle-all {
       body.format-culcourse .course-content ul.culcourse li.section .content .toggle h4 a.on,
       body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle h4 a.on {
         background-image: url([[pix:t/collapsed]]); }
-    body.format-culcourse .course-content ul.culcourse li.section .content .toggle.collapsed h3,
-    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle.collapsed h3 {
+    body.format-culcourse .course-content ul.culcourse li.section .content .toggle.collapsed h3.sectionname,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle.collapsed h3.sectionname {
       background-image: url([[pix:t/collapsed]]);
       /* JavaScript disabled */
       background-position: 0% 6px; }

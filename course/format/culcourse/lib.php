@@ -509,7 +509,9 @@ class format_culcourse extends format_base {
  */
 function format_culcourse_inplace_editable($itemtype, $itemid, $newvalue) {
     global $DB, $CFG;
+
     require_once($CFG->dirroot . '/course/lib.php');
+
     if ($itemtype === 'sectionname' || $itemtype === 'sectionnamenl') {
         $section = $DB->get_record_sql(
             'SELECT s.* FROM {course_sections} s JOIN {course} c ON s.course = c.id WHERE s.id = ? AND c.format = ?',
@@ -517,3 +519,36 @@ function format_culcourse_inplace_editable($itemtype, $itemid, $newvalue) {
         return course_get_format($section->course)->inplace_editable_update_section_name($section, $itemtype, $newvalue);
     }
 }
+
+/**
+ * Returns the name of the user preferences as well as the details this plugin uses.
+ *
+ * @return array
+ */
+// function format_culcourse_user_preferences() {
+//     global $COURSE;
+
+//     $preferences = [];
+
+//     $sections = get_sections();
+
+//     foreach ($sections as $section) {
+//         $preferences['format_culcourse_expanded' . $section->id] = [
+//             'type' => PARAM_INT,
+//             'null' => NULL_NOT_ALLOWED,
+//             'default' => 0,
+//             'choices' => [0, 1]
+//         ];
+//     }    
+
+//     return $preferences;
+// }
+
+/**
+ * Get icon mapping for font-awesome.
+ */
+// function format_flexsections_get_fontawesome_icon_map() {
+//     return [
+//         'format_flexsections:mergeup' => 'fa-level-up',
+//     ];
+// }

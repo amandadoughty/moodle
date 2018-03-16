@@ -150,6 +150,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $o = '';
         $currenttext = '';
         $sectionstyle = '';
+        $userprefs = get_user_preferences();
 
         if ($section->section != 0) {
             // Only in the non-general sections.
@@ -186,25 +187,28 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $classes = '';
         }
 
-
-
-        // $sectionname = html_writer::tag('span', $this->section_title($section, $course));
-        // $o.= $this->output->heading($sectionname, 3, 'sectionname' . $classes);
-
-        // $o .= $this->section_availability($section);
-
-        // $o .= html_writer::start_tag('div', array('class' => 'summary'));
-        // $o .= $this->format_summary_text($section);
-        // $o .= html_writer::end_tag('div');
-
-
-        $ariapressed = 'true';
-
+        $ariapressed = 'true'; // @TODO
 
         if ($section->section != 0) {
-            $o .= html_writer::start_tag('div',
+            user_preference_allow_ajax_update('format_culcourse_expanded' . $section->id, PARAM_INT);
+
+            $userpref = 'format_culcourse_expanded' . $section->id;
+
+            if (isset($userprefs[$userpref]) && ($userprefs[$userpref])) {
+                $sectionheadclass = '';
+                $sectionbodyclass = ' in';
+                $ariapressed = 'true';
+
+            } else {
+                $sectionheadclass = ' collapsed';
+                $sectionbodyclass = '';
+                $ariapressed = 'false';
+            }
+
+            $o .= html_writer::start_tag(
+                'div',
                 [
-                    'class' => 'sectionhead toggle',
+                    'class' => 'sectionhead toggle' . $sectionheadclass,
                     'id' => 'toggle-' . $section->section,
                     'data-toggle' => 'collapse',
                     'data-target' => '#togglesection-' . $section->section,
@@ -213,28 +217,13 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 ]
             );
 
-            // @TODO get toggle state
-            // if ((!($section->toggle === null)) && ($section->toggle == true)) {
-                // $toggleclass = 'toggle_open';
-                // $ariapressed = 'true';
-                // $sectionclass = ' sectionopen';
-                // $summaryclass = ' summary_open';
-            // } else {
-            //     $toggleclass = 'toggle_closed';
-            //     $ariapressed = 'false';
-            //     $sectionclass = '';
-            //     $summaryclass = ' summary_closed';
-            // }
-
-            // $sectionclass = ' ';
-            // $summaryclass = ' '; // @TODO
-
+            
             
             // $this->culconfig = course_get_format($COURSE)->get_format_options();
            
 
             $sectionname = html_writer::tag('span', $this->section_title($section, $course));
-            $o.= $this->output->heading($sectionname, 3, 'sectionname' . $classes);
+            $o .= $this->output->heading($sectionname, 3, 'sectionname' . $classes);
 
             $o .= $this->section_availability($section);
 
@@ -249,9 +238,9 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $o .= html_writer::start_tag(
                 'div',
                 [
-                    'class' => 'sectionbody togglesection collapse in',
+                    'class' => 'sectionbody togglesection collapse' . $sectionbodyclass,
                     'id' => 'togglesection-' . $section->section,
-                    'data-preference-key' => $course->id . '_' . $section->section,
+                    'data-preference-key' => $userpref,
                 ]
             );
 

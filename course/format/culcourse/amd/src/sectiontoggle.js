@@ -26,7 +26,7 @@
 /**
   * @module format_culcourse/sectiontoggle
   */
-define(['jquery', 'core/config', 'core/notification'], function($, config, Notification) {
+define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, Ajax, config, Notification) {
 
      /**
       * Used CSS selectors
@@ -73,37 +73,23 @@ define(['jquery', 'core/config', 'core/notification'], function($, config, Notif
      * @param {event} e
      */
     var handleOpen = function(e){
-        var coursesection = $(e.currentTarget).data('preference-key');
+        var pref = $(e.currentTarget).data('preference-key');
 
-        // var request = {
-        //         methodname: 'core_user_update_user_preferences',
-        //         args: {
-        //              preferences: [
-        //                 {
-        //                     type: 'format_culcourse_' + coursesection,
-        //                     value: 1
-        //                 }
-        //             ]
-        //         }
-        //     };
+        var data = {
+            type: pref,
+            value: 1,
+            sesskey: config.sesskey,
+        };
 
+        var settings = {
+            type: 'POST',
+            dataType: 'json',
+            data: data
+        };
 
-
-            var data = {
-                type: 'format_culcourse_' + coursesection,
-                value: 1,
-                sesskey: config.sesskey,
-            };
-
-            var settings = {
-                type: 'POST',
-                dataType: 'json',
-                data: data
-            };
-
-            $.ajax(URL, settings)
-                .fail(Notification.exception);
-        }
+        $.ajax(URL, settings);
+            // .fail(Notification.exception);
+        
 
     };
 
@@ -115,22 +101,21 @@ define(['jquery', 'core/config', 'core/notification'], function($, config, Notif
      * @param {event} e
      */
     var handleClose = function(e){
-        var coursesection = $(e.currentTarget).data('preference-key');
+        var pref = $(e.currentTarget).data('preference-key');
 
-        var request = {
-                methodname: 'core_user_update_user_preferences',
-                args: {
-                    preferences: [
-                        {
-                            type: 'format_culcourse_' + coursesection,
-                            value: 0
-                        }
-                    ]
-                }
-            };
+        var data = {
+            type: pref,
+            value: 0,
+            sesskey: config.sesskey,
+        };
 
-        Ajax.call([request])[0]
-            .fail(Notification.exception);
+        var settings = {
+            type: 'POST',
+            dataType: 'json',
+            data: data
+        };
+
+        $.ajax(URL, settings);
     };
 
     return /** @alias module:format_culcourse/sectiontoggle */ {
@@ -139,13 +124,31 @@ define(['jquery', 'core/config', 'core/notification'], function($, config, Notif
          * @access public
          * @param {string} adminurl
          */
-        init : function() {
+        init : function(userprefs) {
             var body = $('body');
             body.delegate(SELECTORS.OPENALLLINK, 'click', handleOpenAll);
             body.delegate(SELECTORS.CLOSEALLLINK, 'click', handleCloseAll);
 
             body.delegate(SELECTORS.SECTIONBODY, 'hide.bs.collapse', handleClose);
             body.delegate(SELECTORS.SECTIONBODY, 'show.bs.collapse', handleOpen);
+
+            // Set up the sections based on user preferences.
+            // var request = {
+            //     methodname: 'core_user_get_user_preferences',
+            //     args: {
+            //         preferences: [
+            //             {
+            //                 type: 'block_myoverview_last_tab',
+            //                 value: tabname
+            //             }
+            //         ]
+            //     }
+            // };
+
+            // Ajax.call([request])[0]
+            //     .fail(Notification.exception);
+
+            
         }
     };
 });
