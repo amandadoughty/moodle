@@ -59,4 +59,6 @@ if (!empty($displaysection)) {
 
 // Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');
-$PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['userid' => $USER->id]);
+
+$userprefs = get_user_preferences();
+$PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['userprefs' => $userprefs]);

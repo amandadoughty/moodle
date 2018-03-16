@@ -35,6 +35,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
     var SELECTORS = {
         OPENALLLINK: 'a#toggles-all-opened',
         CLOSEALLLINK: 'a#toggles-all-closed',
+        SECTIONHEAD: '.sectionhead',
         SECTIONBODY: '.sectionbody'
         };
 
@@ -148,7 +149,21 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             // Ajax.call([request])[0]
             //     .fail(Notification.exception);
 
-            
+            // $(SELECTORS.SECTIONHEAD).addClass('collapsed');
+
+            for(userpref in userprefs) {
+                if(string.startsWith(userpref, 'format_culcourse_expanded')) {
+                    var matches =  userpref.match(/\d+/);
+
+                    if(matches) {
+                        var sectionid = matches[0];
+                        console.log(sectionid);
+                    }
+
+                    
+                }
+                
+            }
         }
     };
 });

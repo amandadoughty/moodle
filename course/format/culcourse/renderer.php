@@ -150,7 +150,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $o = '';
         $currenttext = '';
         $sectionstyle = '';
-        $userprefs = get_user_preferences();
+        // $userprefs = get_user_preferences();
 
         if ($section->section != 0) {
             // Only in the non-general sections.
@@ -194,24 +194,24 @@ class format_culcourse_renderer extends format_section_renderer_base {
 
             $userpref = 'format_culcourse_expanded' . $section->id;
 
-            if (isset($userprefs[$userpref]) && ($userprefs[$userpref])) {
-                $sectionheadclass = '';
-                $sectionbodyclass = ' in';
-                $ariapressed = 'true';
+            // if (isset($userprefs[$userpref]) && ($userprefs[$userpref])) {
+            //     $sectionheadclass = '';
+            //     $sectionbodyclass = ' in';
+            //     $ariapressed = 'true';
 
-            } else {
-                $sectionheadclass = ' collapsed';
-                $sectionbodyclass = '';
-                $ariapressed = 'false';
-            }
+            // } else {
+            //     $sectionheadclass = ' collapsed';
+            //     $sectionbodyclass = '';
+            //     $ariapressed = 'false';
+            // }
 
             $o .= html_writer::start_tag(
                 'div',
                 [
-                    'class' => 'sectionhead toggle' . $sectionheadclass,
-                    'id' => 'toggle-' . $section->section,
+                    'class' => 'sectionhead toggle',
+                    'id' => 'toggle-' . $section->id,
                     'data-toggle' => 'collapse',
-                    'data-target' => '#togglesection-' . $section->section,
+                    'data-target' => '#togglesection-' . $section->id,
                     'role' => 'button', 
                     'aria-pressed' => $ariapressed
                 ]
@@ -238,8 +238,8 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $o .= html_writer::start_tag(
                 'div',
                 [
-                    'class' => 'sectionbody togglesection collapse' . $sectionbodyclass,
-                    'id' => 'togglesection-' . $section->section,
+                    'class' => 'sectionbody togglesection',
+                    'id' => 'togglesection-' . $section->id,
                     'data-preference-key' => $userpref,
                 ]
             );
