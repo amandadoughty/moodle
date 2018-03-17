@@ -71,7 +71,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $dashboard = new dashboard($COURSE, $this->culconfig);
         $templatecontext = $dashboard->export_for_template($this);
         $o .= $this->render_from_template('format_culcourse/dashboard', $templatecontext);
-        $o .=  html_writer::start_tag('ul', array('class' => 'culcourse'));
+        $o .=  html_writer::start_tag('ul', ['class' => 'culcourse']);
 
         return $o;
     }
@@ -125,7 +125,6 @@ class format_culcourse_renderer extends format_section_renderer_base {
      */
     protected function section_right_content($section, $course, $onsectionpage) {
         $o = $this->output->spacer();
-
         $controls = $this->section_edit_control_items($course, $section, $onsectionpage);
         
         if (!empty($controls)) {
@@ -150,7 +149,6 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $o = '';
         $currenttext = '';
         $sectionstyle = '';
-        // $userprefs = get_user_preferences();
 
         if ($section->section != 0) {
             // Only in the non-general sections.
@@ -162,48 +160,54 @@ class format_culcourse_renderer extends format_section_renderer_base {
             }
         }
 
-        $o.= html_writer::start_tag('li', array('id' => 'section-'.$section->section,
-            'class' => 'section clearfix'.$sectionstyle, 'role'=>'region',
-            'aria-label'=> get_section_name($course, $section)));
+        $o.= html_writer::start_tag(
+            'li', 
+            [
+                'id' => 'section-'.$section->section,
+                'class' => 'section clearfix'.$sectionstyle, 
+                'role'=>'region',
+                'aria-label'=> get_section_name($course, $section)
+            ]
+        );
 
         // Create a span that contains the section title to be used to create the keyboard section move menu.
-        $o .= html_writer::tag('span', get_section_name($course, $section), array('class' => 'hidden sectionname'));
+        $o .= html_writer::tag(
+            'span', 
+            get_section_name($course, $section), 
+            ['class' => 'hidden sectionname']
+        );
 
         $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
-        $o.= html_writer::tag('div', $leftcontent, array('class' => 'left side'));
+        $o.= html_writer::tag(
+            'div', 
+            $leftcontent, 
+            ['class' => 'left side']
+        );
 
         $rightcontent = $this->section_right_content($section, $course, $onsectionpage);
-        $o.= html_writer::tag('div', $rightcontent, array('class' => 'right side'));
-        $o.= html_writer::start_tag('div', array('class' => 'content'));
+        $o.= html_writer::tag(
+            'div', 
+            $rightcontent, 
+            ['class' => 'right side']
+        );
+        $o.= html_writer::start_tag('div', ['class' => 'content']);
 
-        // When not on a section page, we display the section titles except the general section if null
+        // When not on a section page, we display the section titles except the general section if null.
         $hasnamenotsecpg = (!$onsectionpage && ($section->section != 0 || !is_null($section->name)));
 
-        // When on a section page, we only display the general section title, if title is not the default one
+        // When on a section page, we only display the general section title, if title is not the default one.
         $hasnamesecpg = ($onsectionpage && ($section->section == 0 && !is_null($section->name)));
-
         $classes = ' accesshide';
+
         if ($hasnamenotsecpg || $hasnamesecpg) {
             $classes = '';
         }
 
-        $ariapressed = 'true'; // @TODO
+        $ariapressed = 'true';
 
         if ($section->section != 0) {
             user_preference_allow_ajax_update('format_culcourse_expanded' . $section->id, PARAM_INT);
-
             $userpref = 'format_culcourse_expanded' . $section->id;
-
-            // if (isset($userprefs[$userpref]) && ($userprefs[$userpref])) {
-            //     $sectionheadclass = '';
-            //     $sectionbodyclass = ' in';
-            //     $ariapressed = 'true';
-
-            // } else {
-            //     $sectionheadclass = ' collapsed';
-            //     $sectionbodyclass = '';
-            //     $ariapressed = 'false';
-            // }
 
             $o .= html_writer::start_tag(
                 'div',
@@ -217,17 +221,9 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 ]
             );
 
-            
-            
-            // $this->culconfig = course_get_format($COURSE)->get_format_options();
-           
-
             $sectionname = html_writer::tag('span', $this->section_title($section, $course));
             $o .= $this->output->heading($sectionname, 3, 'sectionname' . $classes);
-
             $o .= $this->section_availability($section);
-
-            // $o .= html_writer::end_tag('span');
 
             if ($this->culconfig['showsectionsummary'] == 2) {
                 $o .= $this->section_summary_container($section);
@@ -248,7 +244,6 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 $o .= $this->section_summary_container($section);
             }
 
-            // $o .= $this->section_availability($section);
         }  else {
             $o .= html_writer::tag('div', '', ['class' => 'summary']); //@TODO
         }
@@ -294,32 +289,43 @@ class format_culcourse_renderer extends format_section_renderer_base {
         } else {
             $url = course_get_url($course);
         }
-        $url->param('sesskey', sesskey());
 
+        $url->param('sesskey', sesskey());
         $controls = [];
         $culcontrols = [];
 
         if ($this->culconfig['baseclass'] == FORMATTOPICS) {
-            // @TODO no highlight if weeks?
             if ($section->section && has_capability('moodle/course:setcurrentsection', $coursecontext)) {
                 if ($course->marker == $section->section) {  // Show the "light globe" on/off.
                     $url->param('marker', 0);
                     $markedthistopic = get_string('markedthistopic');
                     $highlightoff = get_string('highlightoff');
-                    $controls['highlight'] = ['url' => $url, "icon" => 'i/marked',
-                                                   'name' => $highlightoff,
-                                                   'pixattr' => array('class' => '', 'alt' => $markedthistopic),
-                                                   'attr' => array('class' => 'icon ', 'title' => $markedthistopic,
-                                                       'data-action' => 'removemarker')];
+                    $controls['highlight'] = [
+                        'url' => $url, 
+                        'icon' => 'i/marked',
+                        'name' => $highlightoff,
+                        'pixattr' => ['class' => '', 'alt' => $markedthistopic],
+                        'attr' => [
+                            'class' => 'icon ', 
+                            'title' => $markedthistopic,
+                            'data-action' => 'removemarker'
+                        ]
+                    ];
                 } else {
                     $url->param('marker', $section->section);
                     $markthistopic = get_string('markthistopic');
                     $highlight = get_string('highlight');
-                    $controls['highlight'] = ['url' => $url, "icon" => 'i/marker',
-                                                   'name' => $highlight,
-                                                   'pixattr' => array('class' => '', 'alt' => $markthistopic),
-                                                   'attr' => array('class' => 'icon ', 'title' => $markthistopic,
-                                                       'data-action' => 'setmarker')];
+                    $controls['highlight'] = [
+                        'url' => $url, 
+                        'icon' => 'i/marker',
+                        'name' => $highlight,
+                        'pixattr' => ['class' => '', 'alt' => $markthistopic],
+                        'attr' => [
+                            'class' => 'icon ', 
+                            'title' => $markthistopic,
+                            'data-action' => 'setmarker'
+                        ]
+                    ];
                 }
             }
         }
@@ -333,6 +339,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             // Step through the array and merge the arrays.
             foreach ($parentcontrols as $key => $action) {
                 $merged[$key] = $action;
+
                 if ($key == "edit") {
                     // If we have come to the edit key, merge these controls here.
                     $merged = array_merge($merged, $controls);
@@ -385,31 +392,38 @@ class format_culcourse_renderer extends format_section_renderer_base {
 
         $title = get_section_name($course, $section);
         $o = '';
-        $o .= html_writer::start_tag('li', array('id' => 'section-'.$section->section,
-            'class' => $classattr, 'role'=>'region', 'aria-label'=> $title));
-
-        $o .= html_writer::tag('div', '', array('class' => 'left side'));
+        $o .= html_writer::start_tag(
+            'li', 
+            [
+                'id' => 'section-'.$section->section,
+                'class' => $classattr, 
+                'role'=>'region', 
+                'aria-label'=> $title
+            ]
+        );
+        $o .= html_writer::tag('div', '', ['class' => 'left side']);
         $o .= html_writer::tag('span', ['class' => 'hidden sectionname']);
-        $o .= html_writer::tag('div', '', array('class' => 'right side'));
-        $o .= html_writer::start_tag('div', array('class' => 'content'));
+        $o .= html_writer::tag('div', '', ['class' => 'right side']);
+        $o .= html_writer::start_tag('div', ['class' => 'content']);
 
         if ($section->uservisible) {
-            $title = html_writer::tag('a', $title,
-                    array('href' => course_get_url($course, $section->section), 'class' => $linkclasses));
+            $title = html_writer::tag(
+                'a', 
+                $title,
+                [
+                    'href' => course_get_url($course, $section->section), 
+                    'class' => $linkclasses
+                ]
+            );
         }
-        $o .= $this->output->heading($title, 3, 'section-title');
 
-        $o.= html_writer::start_tag('div', array('class' => 'summarytext'));
+        $o .= $this->output->heading($title, 3, 'section-title');
+        $o.= html_writer::start_tag('div', ['class' => 'summarytext']);
         $o.= $this->format_summary_text($section);
         $o.= html_writer::end_tag('div');
         $o.= $this->section_activity_summary($section, $course, null);
-
-        // $o .= $this->section_availability($section);
-
         $o .= html_writer::end_tag('div');
         $o .= html_writer::end_tag('li');
-
-        // $o .= $this->section_availability($section);
 
         return $o;
     }
@@ -430,7 +444,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         }
 
         // Generate array with count of activities in this section:
-        $sectionmods = array();
+        $sectionmods = [];
         $resource = get_string('resources');
         $activity = get_string('activities');
         $total = 0;
@@ -475,36 +489,35 @@ class format_culcourse_renderer extends format_section_renderer_base {
         asort($sectionmods);
 
         if (empty($sectionmods)) {
-            // No sections
+            // No sections.
             return '';
         }
 
         // Output section activities summary:
         $o = '';
-        $o.= html_writer::start_tag('div', array('class' => 'section-summary-activities'));
+        $o.= html_writer::start_tag('div', ['class' => 'section-summary-activities']);
+
         foreach ($sectionmods as $mod) {
-            $o.= html_writer::start_tag('span', array('class' => 'activity-count'));
+            $o.= html_writer::start_tag('span', ['class' => 'activity-count']);
             $o.= $mod['name'].': '.$mod['count'];
             $o.= html_writer::end_tag('span');
         }
+
         $o.= html_writer::end_tag('div');
 
-        // Output section completion data
+        // Output section completion data.
         if ($total > 0) {
             $a = new stdClass;
             $a->complete = $complete;
             $a->total = $total;
 
-            $o.= html_writer::start_tag('div', array('class' => 'section-summary-progress'));
-            $o.= html_writer::tag('span', get_string('progresstotal', 'completion', $a), array('class' => 'activity-count'));
+            $o.= html_writer::start_tag('div', ['class' => 'section-summary-progress']);
+            $o.= html_writer::tag('span', get_string('progresstotal', 'completion', $a), ['class' => 'activity-count']);
             $o.= html_writer::end_tag('div');
         }
 
         return $o;
     }
-
-
-
 
     /**
      * Output the html for a multiple section page
@@ -519,18 +532,17 @@ class format_culcourse_renderer extends format_section_renderer_base {
 
         $modinfo = get_fast_modinfo($course);
         $course = course_get_format($course)->get_course();
-
         $context = context_course::instance($course->id);
         // Title with completion help icon.
         $completioninfo = new completion_info($course);
+
         echo $completioninfo->display_help_icon();
         echo $this->output->heading($this->page_title(), 2, 'accesshide');
-
         // Copy activity clipboard..
         echo $this->course_activity_clipboard($course, 0);
-
         // Now the list of sections..
         echo $this->start_section_list();
+
         $numsections = course_get_format($course)->get_last_section_number();       
 
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
@@ -551,10 +563,10 @@ class format_culcourse_renderer extends format_section_renderer_base {
             }
 
             if ($section > $numsections) {
-                // activities inside this section are 'orphaned', this section will be printed as 'stealth' below
+                // activities inside this section are 'orphaned', this section will be printed as 'stealth' below.
                 continue;
             }
-            // Show the section if the user is permitted to access it, OR if it's not available
+            // Show the section if the user is permitted to access it, OR if it's not available.
             // but there is some available info text which explains the reason & should display.
             $showsection = $thissection->uservisible ||
                     ($thissection->visible && !$thissection->available &&
@@ -583,14 +595,9 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 }
         
 
-                if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
-                    
+                if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
                     echo $this->injected_section_footer($course, $section);
-
-                    // echo $this->change_number_sections($course, $section + 1);
-
                 }
-
             }
         }
 
@@ -601,6 +608,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     // this is not stealth section or it is empty
                     continue;
                 }
+
                 echo $this->stealth_section_header($section);
                 echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                 echo $this->stealth_section_footer();
@@ -610,7 +618,6 @@ class format_culcourse_renderer extends format_section_renderer_base {
         } else {
             echo $this->end_section_list();
         }
-
     }
 
     /**
@@ -634,10 +641,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             // Note to course format developers: inserting sections in the other positions should check both
             // capabilities 'moodle/course:update' and 'moodle/course:movesections'.
 
-            // https://tracker.moodle.org/browse/MDL-61181
-            // echo html_writer::start_tag('div', array('id' => 'changenumsections', 'class' => 'mdl-right'));
-
-            $o .= html_writer::start_tag('div', array('class' => 'add_section mdl-align'));
+            $o .= html_writer::start_tag('div', ['class' => 'add_section mdl-align']);
 
             if (get_string_manager()->string_exists('addsections', 'format_'.$course->format)) {
                 $straddsections = get_string('addsections', 'format_'.$course->format);
@@ -654,13 +658,6 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 ]
             );
 
-            // if ($sectionreturn !== null) {
-            //     // $url->param('sectionreturn', $sectionreturn);
-            // }
-
-            // $icon = $this->output->pix_icon('t/add', $straddsections);
-            // echo html_writer::link($url, $icon . $straddsections,
-            //     array('class' => 'add_section', 'data-add-section' => $straddsections));
             $addsectionbutton = new single_button($url, $straddsections, 'get');
             $addsectionbutton->class = 'sectionbutton btn-city';
             $o .= $this->output->render($addsectionbutton);
@@ -683,7 +680,6 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $extraclass = '';
 
         if (strlen($summarytext) > 250) {
-            // $summarytext = substr($summarytext, 0, 249) . '...';
             $extraclass = ' truncated';
         }
 
@@ -692,7 +688,8 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $options->overflowdiv = false;
         $summarytext = format_text($summarytext, $section->summaryformat, $options);
         $summarytext = html_writer::tag('div', $summarytext);
-        $summarytext = html_writer::tag('div', $summarytext, array('class' => 'truncate' . $extraclass));
+        $summarytext = html_writer::tag('div', $summarytext, ['class' => 'truncate' . $extraclass]);
+
         return $summarytext;
     }
 
@@ -720,21 +717,38 @@ class format_culcourse_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function toggle_all() {
-        $o = html_writer::start_tag('li', array('class' => 'clearfix', 'id' => 'toggle-all'));
+        $o = html_writer::start_tag(
+            'li', 
+            ['class' => 'clearfix', 'id' => 'toggle-all']
+        );
 
         if ($this->page->user_is_editing()) {
-            $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'left side'));
-            $o .= html_writer::tag('div', $this->output->spacer(), array('class' => 'right side'));
+            $o .= html_writer::tag(
+                'div', 
+                $this->output->spacer(), 
+                ['class' => 'left side']
+            );
+            $o .= html_writer::tag(
+                'div', 
+                $this->output->spacer(), 
+                ['class' => 'right side']
+            );
         }
 
-        $o .= html_writer::start_tag('div', array('class' => 'content'));
+        $o .= html_writer::start_tag('div', ['class' => 'content']);
         $iconsetclass = 'toggle';
-        $o .= html_writer::start_tag('div', array('class' => $iconsetclass));
+        $o .= html_writer::start_tag('div', ['class' => $iconsetclass]);
         $o .= html_writer::start_tag('h4', null);
-        $o .= html_writer::tag('a', get_string('culcourseopened', 'format_culcourse'),
-                               array('class' => 'on ', 'href' => '#', 'id' => 'toggles-all-opened'));
-        $o .= html_writer::tag('a', get_string('culcourseclosed', 'format_culcourse'),
-                               array('class' => 'off ', 'href' => '#', 'id' => 'toggles-all-closed'));
+        $o .= html_writer::tag(
+            'a', 
+            get_string('culcourseopened', 'format_culcourse'),
+            ['class' => 'on ', 'href' => '#', 'id' => 'toggles-all-opened']
+        );
+        $o .= html_writer::tag(
+            'a', 
+            get_string('culcourseclosed', 'format_culcourse'),
+            ['class' => 'off ', 'href' => '#', 'id' => 'toggles-all-closed']
+        );
         $o .= html_writer::end_tag('h4');
         $o .= html_writer::end_tag('div');
         $o .= html_writer::end_tag('div');

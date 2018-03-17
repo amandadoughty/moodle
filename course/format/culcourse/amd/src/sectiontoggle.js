@@ -24,8 +24,8 @@
  */
 
 /**
-  * @module format_culcourse/sectiontoggle
-  */
+ * @module format_culcourse/sectiontoggle
+ */
 define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, Ajax, config, Notification) {
 
      /**
@@ -36,11 +36,12 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         OPENALLLINK: 'a#toggles-all-opened',
         CLOSEALLLINK: 'a#toggles-all-closed',
         SECTIONHEAD: '.sectionhead',
-        SECTIONBODY: '.sectionbody'
+        SECTIONBODY: '.sectionbody',
+        TOGGLEHEAD: '#toggle-',
+        TOGGLEBODY: '#togglesection-'
         };
 
     var URL = config.wwwroot + '/course/format/culcourse/setuserpreference.php';
-
 
     /**
      * Opens all collapsed sections.
@@ -89,9 +90,10 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         };
 
         $.ajax(URL, settings);
-            // .fail(Notification.exception);
-        
-
+            // .fail(function (request, status, error) {
+            //     Notification.exception(request);
+            //     console.log(error);
+            // });
     };
 
     /**
@@ -123,7 +125,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         /**
          * Initialize sectiontogglemanager
          * @access public
-         * @param {string} adminurl
+         * @param {array} userprefs
          */
         init : function(userprefs) {
             var body = $('body');
@@ -132,37 +134,26 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
 
             body.delegate(SELECTORS.SECTIONBODY, 'hide.bs.collapse', handleClose);
             body.delegate(SELECTORS.SECTIONBODY, 'show.bs.collapse', handleOpen);
+            // Add the classes for expanding all of the sections. This is the
+            // default.
+            $(SELECTORS.SECTIONBODY).addClass('collapse in');
 
-            // Set up the sections based on user preferences.
-            // var request = {
-            //     methodname: 'core_user_get_user_preferences',
-            //     args: {
-            //         preferences: [
-            //             {
-            //                 type: 'block_myoverview_last_tab',
-            //                 value: tabname
-            //             }
-            //         ]
-            //     }
-            // };
-
-            // Ajax.call([request])[0]
-            //     .fail(Notification.exception);
-
-            // $(SELECTORS.SECTIONHEAD).addClass('collapsed');
-
-            for(userpref in userprefs) {
-                if(userpref.startsWith('format_culcourse_expanded')) {
+            for (userpref in userprefs) {
+                if (userpref.startsWith('format_culcourse_expanded')) {
+                    // Find the numeric suffix which identifies the secion id.
+                    // format_culcourse_expandedxxx
                     var matches =  userpref.match(/\d+/);
 
-                    if(matches) {
+                    if (matches) {
                         var sectionid = matches[0];
-                        console.log(sectionid);
-                    }
-
-                    
-                }
-                
+                        // If expanded is set to false then change the classes to
+                        // collapse the section.
+                        if (userprefs[userpref] == 0) {
+                            $(SELECTORS.TOGGLEHEAD + sectionid).addClass('collapsed');
+                            $(SELECTORS.TOGGLEBODY + sectionid).removeClass('in');
+                        }
+                    }                    
+                }               
             }
         }
     };
