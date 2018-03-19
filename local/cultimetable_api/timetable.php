@@ -2,7 +2,7 @@
 require_once('../../config.php'); // arg_separator.output breaks the curl, so you need third param for http_buld_query
 require_once('classes/timetable_class.php');
 
-list($weekoptions, $defaultweeks, $formatoptions, $defaultformat) = timetable::format_culcourse_get_timetable_config();
+list($weekoptions, $defaultweeks, $formatoptions, $defaultformat) = local_cultimetable_api\timetable::get_timetable_config();
 
 $cid = required_param('cid', PARAM_RAW);
 $module = required_param('mcode', PARAM_RAW);
@@ -18,12 +18,12 @@ if (!array_key_exists($format, $formatoptions)) {
     $format = $defaultformat;
 }
 
-$timetable = new timetable();
+$timetable = new local_cultimetable_api\timetable();
 // TODO write a parser - html has odd lines in body - mismatched head?
-$result = $timetable->displayModuleTimetable($module, $weeks, $format, $cid);
+$result = $timetable->display_module_timetable($module, $weeks, $format, $cid);
 
 if ($result['http'] == 200) {
-    $doc = new DOMDocument();
+    $doc = new \DOMDocument();
     $doc->loadHTML($result['html']);
     $elem = $doc->getElementsByTagName('head')->item(0);
     $title = $elem->getElementsByTagName('title')->item(0);
@@ -35,16 +35,16 @@ if ($result['http'] == 200) {
     $elem->appendChild($title);
     echo $doc->saveHTML();
 } else {
-    $timetable = new timetable();
+    $timetable = new local_cultimetable_api\timetable();
     // TODO write a parser - html has odd lines in body - mismatched head?
-    $modulecodes = $timetable->getAlternativeModuleCodes($module);
+    $modulecodes = $timetable->get_alternative_module_codes($module);
     $alturlstring = '';
 
     if($modulecodes) {
         $alternativeurls = array();
 
         foreach ($modulecodes as $modulecode) {
-            $url = new moodle_url(
+            $url = new \moodle_url(
                 '/local/cultimetable_api/timetable.php',
                 array(
                     'cid' => $cid,
