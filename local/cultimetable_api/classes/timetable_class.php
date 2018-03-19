@@ -1,4 +1,7 @@
 <?php
+namespace local_cultimetable_api;
+
+defined('MOODLE_INTERNAL') || die();
 
 class timetable {
     private $doc;
@@ -23,20 +26,20 @@ class timetable {
         $this->login_url = trim(get_config('local_cultimetable_api', 'login_url'));
         $this->default_url = trim(get_config('local_cultimetable_api', 'default_url'));
         $this->timetable_url = trim(get_config('local_cultimetable_api', 'timetable_url'));
-        list($weekoptions, $defaultweeks, $formatoptions, $defaultformat) = self::format_culcourse_get_timetable_config();            
+        list($weekoptions, $defaultweeks, $formatoptions, $defaultformat) = self::get_timetable_config();            
         $this->weekoptions = $weekoptions;
         $this->formatoptions = $formatoptions;
         $this->cookie_file_path = '/var/tmp/cook' . uniqid();
-        $this->doc  = new DOMDocument();        
+        $this->doc  = new \DOMDocument();        
     }
 
-    public function displayModuleTimetable($module, $weeks, $format, $cid) {
+    public function display_module_timetable($module, $weeks, $format, $cid) {
         $html = '';
 
-        if($this->timetableLogin()) {    
-            if($this->timetableModuleForm()) {
-                $html .= $this->getModuleTimetable($module, $weeks, $format, $cid);
-                $html .= $this->getTimetableForm($weeks, $format, $cid, $module);
+        if($this->timetable_login()) {    
+            if($this->timetable_module_form()) {
+                $html .= $this->get_module_timetable($module, $weeks, $format, $cid);
+                $html .= $this->get_timetable_form($weeks, $format, $cid, $module);
             }
         }
         
@@ -47,7 +50,7 @@ class timetable {
             );
     }   
 
-    private function timetableLogin() {
+    private function timetable_login() {
         #Get login page and set hidden values.
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $this->connect_timeout);
@@ -86,10 +89,10 @@ class timetable {
         #print $this->viewstate;
     }
 
-    private function timetableModuleForm() {
+    private function timetable_module_form() {
         # Get module page and hidden values..
 
-        $fields_string =  http_build_query(
+        $fields_string = http_build_query(
             array(
                 '__VIEWSTATE' => $this->viewstate,
                 '__EVENTVALIDATION' => $this->eventvalidation,
@@ -131,7 +134,7 @@ class timetable {
         return true;
     }
 
-    private function getModuleTimetable($module, $weeks, $format, $cid) {
+    private function get_module_timetable($module, $weeks, $format, $cid) {
         $fields_string =  http_build_query(
             array(
                 '__EVENTTARGET' => NULL ,
@@ -200,7 +203,7 @@ class timetable {
         return $result;
     }
 
-    private function parseTimetableOutput($ch, $module, $format, $cid) {
+    private function parse_timetable_output($ch, $module, $format, $cid) {
         global $DB;
 
         $course = $DB->get_record('course', array('id' => $cid), '*', MUST_EXIST);
@@ -214,7 +217,7 @@ class timetable {
         }
 
         if($result) {
-            $doc = new DOMDocument();
+            $doc = new \DOMDocument();
             $doc->loadHTML($result);
 
             if ($this->formatoptions[$format]['display'] == 'Grid') {
@@ -226,13 +229,13 @@ class timetable {
                 $table = $tr->parentNode;
                 $a = $table->parentNode->removeChild($table);
                 // Add the course fullname to the title.
-                $finder = new DomXPath($doc);
+                $finder = new \DomXPath($doc);
                 $classname = 'header-0-0-1';
                 $nodes = $finder->query("//*[contains(@class, '$classname')]");
                 $node = $nodes->item(0);
 
                 if($node) {
-                    $newtitle = new DOMText($course->fullname);
+                    $newtitle = new \DOMText($course->fullname);
                     $node->removeChild($node->firstChild);
                     $node->appendChild($newtitle);
                 }
@@ -240,13 +243,13 @@ class timetable {
                 $result = $doc->saveHTML();
             } else if ($this->formatoptions[$format]['display'] == 'Event') {
                 // Add the course fullname to the title.
-                $finder = new DomXPath($doc);
+                $finder = new \DomXPath($doc);
                 $classname = 'header-0-0-0';
                 $nodes = $finder->query("//*[contains(@class, '$classname')]");
                 $node = $nodes->item(0);
 
                 if($node) {                
-                    $newtitle = new DOMText('Timetable for ' . $course->fullname);
+                    $newtitle = new \DOMText('Timetable for ' . $course->fullname);
                     $node->removeChild($node->firstChild);
                     $node->appendChild($newtitle);
                 }
@@ -254,13 +257,13 @@ class timetable {
                 $result = $doc->saveHTML();
             } else if ($this->formatoptions[$format]['display'] == 'Module List') {
                 // Standardise heading to use 'Timetable for'.
-                $finder = new DomXPath($doc);
+                $finder = new \DomXPath($doc);
                 $classname = 'header-0-0-0';
                 $nodes = $finder->query("//*[contains(@class, '$classname')]");
                 $node = $nodes->item(0);
                 
                 if($node) {                
-                    $newtitle = new DOMText('Timetable for ');
+                    $newtitle = new \DOMText('Timetable for ');
                     $node->removeChild($node->firstChild);
                     $node->appendChild($newtitle);
                 }
@@ -271,7 +274,7 @@ class timetable {
                 $node = $nodes->item(0);
                 
                 if($node) {                
-                    $newtitle = new DOMText($course->fullname);
+                    $newtitle = new \DOMText($course->fullname);
                     $node->removeChild($node->firstChild);
                     $node->appendChild($newtitle);
                 }
@@ -283,7 +286,7 @@ class timetable {
         return $result;
     }
 
-    private function getTimetableForm($weeks, $format, $cid, $module) {
+    private function get_timetable_form($weeks, $format, $cid, $module) {
         $selectstring = $this->construct_select($weeks);
         $radiostring = $this->construct_radio($format);
 
@@ -344,7 +347,7 @@ EOT;
         return($radiostring );
     }
 
-    public static function format_culcourse_get_timetable_config() {
+    public static function get_timetable_config() {
         $weekoptionstring = trim(get_config('local_cultimetable_api', 'timetable_weekoptions'));
         $formatoptionstring = trim(get_config('local_cultimetable_api', 'timetable_formatoptions'));
         
@@ -406,7 +409,7 @@ EOT;
             );    
     }
 
-    public function getAlternativeModuleCodes($module) {
+    public function get_alternative_module_codes($module) {
         $fields_string = http_build_query(
             array(
                 '__EVENTTARGET' => NULL ,
@@ -454,7 +457,7 @@ EOT;
         $modulecodes = array();
 
         if($result){
-            $doc = new DOMDocument();
+            $doc = new \DOMDocument();
             $doc->loadHTML($result);
 
             if($select = $doc->getElementById('dlObject')) {

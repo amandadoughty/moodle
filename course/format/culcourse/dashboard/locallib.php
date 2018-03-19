@@ -224,9 +224,9 @@ function format_culcourse_get_timetable_url($course) {
 
     try {
         require_once($CFG->dirroot . '/local/cultimetable_api/classes/timetable_class.php');
-        list($weekoptions, $defaultweeks, $formatoptions, $defaultformat) = timetable::format_culcourse_get_timetable_config();
-        $timetable = new timetable();
-        $result = $timetable->displayModuleTimetable($module, $defaultweeks, $defaultformat, $COURSE->id);
+        list($weekoptions, $defaultweeks, $formatoptions, $defaultformat) = local_cultimetable_api\timetable::get_timetable_config();
+        $timetable = new local_cultimetable_api\timetable();
+        $result = $timetable->display_module_timetable($module, $defaultweeks, $defaultformat, $COURSE->id);
 
         $ttdata['error'] = $result['error'];
         $ttdata['httpcode'] = $result['http'];
