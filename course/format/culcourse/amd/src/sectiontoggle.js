@@ -41,7 +41,9 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         TOGGLEBODY: '#togglesection-'
         };
 
-    var URL = config.wwwroot + '/course/format/culcourse/setuserpreference.php';
+    var GETURL = config.wwwroot + '/course/format/culcourse/getuserpreference.php';
+    var SETURL = config.wwwroot + '/course/format/culcourse/setuserpreference.php';
+    var courseId;
 
     /**
      * Opens all collapsed sections.
@@ -75,12 +77,13 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      * @param {event} e
      */
     var handleOpen = function(e){
-        var pref = $(e.currentTarget).data('preference-key');
+        var sectionid = $(e.currentTarget).data('preference-key');
 
         var data = {
-            type: pref,
+            courseid: courseId,
+            sectionid: sectionid,
             value: 1,
-            sesskey: config.sesskey,
+            // sesskey: config.sesskey,
         };
 
         var settings = {
@@ -89,7 +92,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             data: data
         };
 
-        $.ajax(URL, settings);
+        $.ajax(SETURL, settings);
             // .fail(function (request, status, error) {
             //     Notification.exception(request);
             //     console.log(error);
@@ -104,12 +107,13 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      * @param {event} e
      */
     var handleClose = function(e){
-        var pref = $(e.currentTarget).data('preference-key');
+        var sectionid = $(e.currentTarget).data('preference-key');
 
         var data = {
-            type: pref,
+            courseid: courseId,
+            sectionid: sectionid,
             value: 0,
-            sesskey: config.sesskey,
+            // sesskey: config.sesskey,
         };
 
         var settings = {
@@ -118,16 +122,17 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             data: data
         };
 
-        $.ajax(URL, settings);
+        $.ajax(SETURL, settings);
     };
 
     return /** @alias module:format_culcourse/sectiontoggle */ {
         /**
          * Initialize sectiontogglemanager
          * @access public
-         * @param {array} userprefs
+         * @param {int} courseid
          */
-        init : function(userprefs) {
+        init : function(courseid) {console.log(courseid);
+            courseId = courseid;
             var body = $('body');
             body.delegate(SELECTORS.OPENALLLINK, 'click', handleOpenAll);
             body.delegate(SELECTORS.CLOSEALLLINK, 'click', handleCloseAll);
@@ -138,23 +143,28 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             // default.
             $(SELECTORS.SECTIONBODY).addClass('collapse in');
 
-            for (userpref in userprefs) {
-                if (userpref.startsWith('format_culcourse_expanded')) {
-                    // Find the numeric suffix which identifies the secion id.
-                    // format_culcourse_expandedxxx
-                    var matches =  userpref.match(/\d+/);
+            // Get the userprefs. They are too large to pass to the function.
+            var params = {
+                courseid: courseid,
+                // userid: userid,
+                // sesskey: M.cfg.sesskey
+            };
+            $.post(GETURL, params, function() {})
+                .done(function(data) {
+                    var sectiontoggles = data;
 
-                    if (matches) {
-                        var sectionid = matches[0];
+                    for (sectionid in sectiontoggles) {
                         // If expanded is set to false then change the classes to
                         // collapse the section.
-                        if (userprefs[userpref] == 0) {
+                        if (sectiontoggles[sectionid] == 0) {
                             $(SELECTORS.TOGGLEHEAD + sectionid).addClass('collapsed');
                             $(SELECTORS.TOGGLEBODY + sectionid).removeClass('in');
-                        }
-                    }                    
-                }               
-            }
+                        }               
+                    }
+                })
+                .fail(function(jqXHR, status, error) {
+                    Notification.exception(error);
+                });            
         }
     };
 });

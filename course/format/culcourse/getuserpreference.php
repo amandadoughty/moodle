@@ -33,32 +33,13 @@ if (!empty($CFG->forcelogin)) {
     require_login();
 }
 
-// Get the name of the preference to update, and check that it is allowed.
 $courseid = required_param('courseid', PARAM_INT);
-$sectionid = required_param('sectionid', PARAM_INT);
 $name = 'format_culcourse_expanded' . $courseid;
+$userpref = get_user_preferences($name);
 
-if (!isset($USER->ajax_updatable_user_prefs[$name])) {
-    print_error('notallowedtoupdateprefremotely');
+if(!$userpref) {
+	$userpref = json_encode([], true);
 }
 
-$value = required_param('value', PARAM_INT);
-$sectiontoggles = [];
-
-if($userpref = get_user_preferences($name)) {
-	$sectiontoggles = json_decode($userpref, true);
-}
-
-$sectiontoggles[$sectionid] = $value;
-$newsectiontoggles = json_encode($sectiontoggles, true);
-
-// Update.
-if (isset($value)) {
-    if (!set_user_preference($name, $newsectiontoggles)) {
-        print_error('errorsettinguserpref');
-    }
-    echo 'OK';
-} else {
-    header('HTTP/1.1 406 Not Acceptable');
-    echo 'Not Acceptable';
-}
+// The value has been saved as a json string.
+echo $userpref;

@@ -57,8 +57,10 @@ if (!empty($displaysection)) {
     $renderer->print_multiple_section_page($course, null, null, null, null);
 }
 
+user_preference_allow_ajax_update('format_culcourse_expanded' . $course->id, PARAM_INT);
+
 // Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');
 
-$userprefs = get_user_preferences();
-$PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['userprefs' => $userprefs]);
+// $userprefs = get_user_preferences();
+$PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['courseid' => $course->id]);

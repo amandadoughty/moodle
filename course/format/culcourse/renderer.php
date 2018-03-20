@@ -206,8 +206,8 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $ariapressed = 'true';
 
         if ($section->section != 0) {
-            user_preference_allow_ajax_update('format_culcourse_expanded' . $section->id, PARAM_INT);
-            $userpref = 'format_culcourse_expanded' . $section->id;
+            // user_preference_allow_ajax_update('format_culcourse_expanded' . $section->id, PARAM_INT);
+            // $userpref = 'format_culcourse_expanded' . $section->id;
 
             $o .= html_writer::start_tag(
                 'div',
@@ -236,7 +236,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 [
                     'class' => 'sectionbody togglesection',
                     'id' => 'togglesection-' . $section->id,
-                    'data-preference-key' => $userpref,
+                    'data-preference-key' => $section->id,
                 ]
             );
 
