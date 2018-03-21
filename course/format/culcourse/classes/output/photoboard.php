@@ -203,10 +203,11 @@ class photoboard implements templatable, renderable {
 
             if (has_capability('moodle/course:viewhiddenuserfields', $context)) {
                 $userlink = new \moodle_url('/user/view.php', array('id' => $user->id, 'course' => $course->id));
+                $xuser->userlink = $userlink;
             }
 
             $xuser->fullname = $fullname;
-            $xuser->userlink = $userlink;
+            // $xuser->userlink = $userlink;
 
             // Added temp sql to get maildisplay above.
             if (
@@ -281,19 +282,19 @@ class photoboard implements templatable, renderable {
             $link = [];
 
             if (!in_array('forumposts', $hiddenfields)) {
-                $link['url'] = new \moodle_url('/mod/forum/user.php', array('id' => $user->id, 'course' => $course->id));
+                $link['url'] = new \moodle_url('/mod/forum/user.php', ['id' => $user->id, 'course' => $course->id]);
                 $link['title'] = get_string('forumposts', 'mod_forum');
                 $links[] = $link;
             }
 
             if ($USER->id != $user->id && !\core\session\manager::is_loggedinas() && has_capability('moodle/user:loginas', $context) && !is_siteadmin($user->id)) {
-                $link['url'] = new \moodle_url('/course/loginas.php', array('id' => $course->id, 'user' => $user->id, 'sesskey' => sesskey()));
+                $link['url'] = new \moodle_url('/course/loginas.php', ['id' => $course->id, 'user' => $user->id, 'sesskey' => sesskey()]);
                 $link['title'] = get_string('loginas');
                 $links[] = $link;
             }
 
             if (!in_array('sendmessage', $hiddenfields)) {
-                $link['url'] = new \moodle_url('/message/index.php', array('id' => $user->id, 'viewing' => 'course_' . $course->id));
+                $link['url'] = new \moodle_url('/message/index.php', ['id' => $user->id, 'viewing' => 'course_' . $course->id]);
                 $link['title'] = get_string('sendmessage', 'format_culcourse');
                 $links[] = $link;
             }
