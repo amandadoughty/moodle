@@ -73,7 +73,7 @@ class format_culcourse extends format_base {
         // Get record from db or default.
         $record = $DB->get_record('course_format_options',
                                 array('courseid' => $courseid,
-                                      'format' => 'cul',
+                                      'format' => 'culcourse',
                                       'name' => 'baseclass'
                                     ), 'value');
 

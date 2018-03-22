@@ -117,5 +117,12 @@ class restore_format_culcourse_plugin extends restore_format_plugin {
                 }
             }
         }
+
+        if ($backupinfo->original_course_format === 'culcourse' && isset($data['tags']['layoutstructure'])) {
+            if ($data['tags']['layoutstructure'] !== 1 && $data['tags']['layoutstructure'] !== 4) {
+                $DB->execute("UPDATE {course_format_options} SET value = 2 WHERE courseid = ? AND format = 'culcourse' AND name = 'baseclass'",
+                        [$this->step->get_task()->get_courseid()]);
+            }
+        }
     }
 }

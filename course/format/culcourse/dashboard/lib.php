@@ -177,10 +177,6 @@ class format_culcourse_dashboard {
    /**
      * Updates format options for a course
      *
-     * In case if course format was changed to 'weeks', we try to copy options
-     * 'coursedisplay', 'numsections' and 'hiddensections' from the previous format.
-     * If previous course format did not have 'numsections' option, we populate it with the
-     * current number of sections
      *
      * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
      * @param stdClass $oldcourse if this function is called from {@link update_course()}
