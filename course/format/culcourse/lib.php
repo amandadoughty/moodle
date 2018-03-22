@@ -547,8 +547,9 @@ function format_culcourse_inplace_editable($itemtype, $itemid, $newvalue) {
 /**
  * Get icon mapping for font-awesome.
  */
-// function format_flexsections_get_fontawesome_icon_map() {
+// function format_culcourse_get_fontawesome_icon_map() {
 //     return [
-//         'format_flexsections:mergeup' => 'fa-level-up',
+//         'core:i/marked' => 'fa-lightbulb',
+//         'format_culcourse:highlightoff' => 'fa-lightbulb-o',
 //     ];
 // }

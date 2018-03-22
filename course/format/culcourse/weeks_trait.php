@@ -513,7 +513,7 @@ trait format_weeks_trait {
         }
 
         // Create an instance of this class and mock the course object.
-        $format = new format_weeks('weeks', $courseid);
+        $format = new format_culcourse('culcourse', $courseid);
         $format->course = $course;
 
         // If automaticenddate is not specified take the default value.
