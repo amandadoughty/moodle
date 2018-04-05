@@ -28,8 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot. '/course/format/culcourse/backup/moodle2/restore_format_topics_trait.php');
 require_once($CFG->dirroot. '/course/format/culcourse/backup/moodle2/restore_format_weeks_trait.php');
 
-define('FORMATTOPICS', 1);
-define('FORMATWEEKS', 2);
+// define('FORMATTOPICS', 1);
+// define('FORMATWEEKS', 2);
 
 /**
  * Specialised restore for format_culcourse
@@ -47,45 +47,53 @@ class restore_format_culcourse_plugin extends restore_format_plugin {
     use restore_format_weeks_trait;
 
     /** @var int */
-    // protected $baseclass;
+    protected $baseclass;
 
-    // /**
-    //  * Creates a new instance of class
-    //  *
-    //  * Please use {@link course_get_format($courseorid)} to get an instance of the format class
-    //  *
-    //  * @param string $format
-    //  * @param int $courseid
-    //  * @return format_base
-    //  */
-    // protected function __construct($plugintype, $pluginname, $step) {        
-    //     global $DB;
+    /**
+     * Creates a new instance of class
+     *
+     * Please use {@link course_get_format($courseorid)} to get an instance of the format class
+     *
+     * @param string $format
+     * @param int $courseid
+     * @return format_base
+     */
+    public function __construct($plugintype, $pluginname, $step) {        
+        global $DB;
 
-    //     $baseclasses = [
-    //         1 => 'format_topics_',
-    //         2 => 'format_weeks_'
-    //     ];
+        $baseclasses = [
+            1 => 'format_topics_',
+            2 => 'format_weeks_'
+        ];
 
-    //     // // Get record from db or default.
-    //     // $record = $DB->get_record('course_format_options',
-    //     //                         array('courseid' => $courseid,
-    //     //                               'format' => 'culcourse',
-    //     //                               'name' => 'baseclass'
-    //     //                             ), 'value');
+        // // Get record from db or default.
+        // $record = $DB->get_record('course_format_options',
+        //                         array('courseid' => $courseid,
+        //                               'format' => 'culcourse',
+        //                               'name' => 'baseclass'
+        //                             ), 'value');
 
-    //     // // course_get_format($course) @TODO
+        // // course_get_format($course) @TODO
 
-    //     // if ($record) {
-    //     //     $baseclass = $record->value;
-    //     // } else {
-    //     //     $config = get_config('format_culcourse');
-    //     //     $baseclass = $config->defaultbaseclass;
-    //     // }
+        // if ($record) {
+        //     $baseclass = $record->value;
+        // } else {
+        //     $config = get_config('format_culcourse');
+        //     $baseclass = $config->defaultbaseclass;
+        // }
 
-    //     parent::__construct($plugintype, $pluginname, $step);
+        parent::__construct($plugintype, $pluginname, $step);
 
-    //     $this->baseclass = $baseclasses[$baseclass];
-    // }    
+        $data = $this->connectionpoint->get_data();
+
+        $baseclass = $data['tags']['baseclass'];
+
+        die($baseclass);
+
+        
+
+        $this->baseclass = $baseclasses[$baseclass];
+    }    
 
     /**
      * Creates a dummy path element in order to be able to execute code after restore
@@ -114,7 +122,8 @@ class restore_format_culcourse_plugin extends restore_format_plugin {
 
 
 
-
+        $data = $this->connectionpoint->get_data();
+        $backupinfo = $this->step->get_task()->get_info();
 
 
         if ($backupinfo->original_course_format === 'culcourse' && isset($data['tags']['layoutstructure'])) {
