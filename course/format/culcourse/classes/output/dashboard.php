@@ -541,8 +541,9 @@ class dashboard implements templatable, renderable {
 
         $modinfo = get_fast_modinfo($course);
 
-        $modfullnames = array();
-        $archetypes   = array();
+        $modfullnames = [];
+        $archetypes = [];
+        $activities = [];
 
         foreach($modinfo->cms as $cm) {
 

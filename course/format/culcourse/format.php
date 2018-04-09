@@ -61,6 +61,5 @@ user_preference_allow_ajax_update('format_culcourse_expanded' . $course->id, PAR
 
 // Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');
-
-// $userprefs = get_user_preferences();
 $PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['courseid' => $course->id]);
+// $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');

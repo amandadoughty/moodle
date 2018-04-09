@@ -131,7 +131,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
          * @access public
          * @param {int} courseid
          */
-        init : function(courseid) {console.log(courseid);
+        init : function(courseid) {
             courseId = courseid;
             var body = $('body');
             body.delegate(SELECTORS.OPENALLLINK, 'click', handleOpenAll);
@@ -153,18 +153,18 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
                 .done(function(data) {
                     var sectiontoggles = data;
 
-                    for (sectionid in sectiontoggles) {
+                    for (var sectionid in sectiontoggles) {
                         // If expanded is set to false then change the classes to
                         // collapse the section.
                         if (sectiontoggles[sectionid] == 0) {
                             $(SELECTORS.TOGGLEHEAD + sectionid).addClass('collapsed');
                             $(SELECTORS.TOGGLEBODY + sectionid).removeClass('in');
-                        }               
+                        }
                     }
                 })
                 .fail(function(jqXHR, status, error) {
                     Notification.exception(error);
-                });            
+                });
         }
     };
 });

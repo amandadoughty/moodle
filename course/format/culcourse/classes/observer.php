@@ -43,13 +43,50 @@ class format_culcourse_observer {
     /**
      * Observer for the event course_content_deleted.
      *
-     * Deletes the user preference entries for the given course upon course deletion.
-     * CONTRIB-3520.
-     *
      * @param \core\event\course_content_deleted $event
      */
     public static function course_content_deleted(\core\event\course_content_deleted $event) {
         global $DB;
-        $DB->delete_records("user_preferences", array("name" => 'cul_toggle_'.$event->objectid)); // This is the $courseid.
+
+        $DB->delete_records('user_preferences', array('name' => 'format_culcourse_expanded' . $event->objectid)); // This is the $courseid.
     }
+
+    /**
+     * Triggered via \core\event\course_updated event.
+     *
+     * @param \core\event\course_updated $event
+     */
+    public static function course_updated(\core\event\course_updated $event) {
+        if (class_exists('format_culcourse', false)) {
+            // If class format_culcourse was never loaded, this is definitely not a course in 'format_culcourse' format.
+            // Course may still be in another format but format_culcourse::format_weeks_update_end_date() will check it.
+            format_culcourse::format_weeks_update_end_date($event->courseid);
+        }
+    }
+
+    /**
+     * Triggered via \core\event\course_section_created event.
+     *
+     * @param \core\event\course_section_created $event
+     */
+    public static function course_section_created(\core\event\course_section_created $event) {
+        if (class_exists('format_culcourse', false)) {
+            // If class format_culcourse was never loaded, this is definitely not a course in 'format_culcourse' format.
+            // Course may still be in another format but format_culcourse::format_weeks_update_end_date() will check it.
+            format_culcourse::format_weeks_update_end_date($event->courseid);
+        }
+    }
+
+    /**
+     * Triggered via \core\event\course_section_deleted event.
+     *
+     * @param \core\event\course_section_deleted $event
+     */
+    public static function course_section_deleted(\core\event\course_section_deleted $event) {
+        if (class_exists('format_culcourse', false)) {
+            // If class format_culcourse was never loaded, this is definitely not a course in 'format_culcourse' format.
+            // Course may still be in another format but format_culcourse::format_weeks_update_end_date() will check it.
+            format_culcourse::format_weeks_update_end_date($event->courseid);
+        }
+    }    
 }

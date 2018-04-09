@@ -319,7 +319,9 @@ class format_culcourse extends format_base {
             // Put dashboard settings in own dropdown.
             $dashboardhdr = $mform->addElement('header', 'dashboardhdr', get_string('setdashboardhdr', 'format_culcourse'));
             array_splice($elements, 4, 0, [$dashboardhdr]);
-        }        
+        }
+
+        $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');      
 
         return $elements;
     }

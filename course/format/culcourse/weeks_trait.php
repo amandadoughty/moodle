@@ -472,7 +472,7 @@ trait format_weeks_trait {
 
         // Call the parent method and return the new content for .section_availability element.
         $rv = parent::section_action($section, $action, $sr);
-        $renderer = $PAGE->get_renderer('format_weeks');
+        $renderer = $PAGE->get_renderer('format_culcourse');
         $rv['section_availability'] = $renderer->section_availability($this->get_section($section));
         return $rv;
     }
@@ -505,7 +505,7 @@ trait format_weeks_trait {
                    AND fo.name = :optionname
                    AND fo.sectionid = 0";
         $course = $DB->get_record_sql($sql,
-            ['optionname' => 'automaticenddate', 'format' => 'weeks', 'courseid' => $courseid]);
+            ['optionname' => 'automaticenddate', 'format' => 'culcourse', 'courseid' => $courseid]);
 
         if (!$course) {
             // Looks like it is a course in a different format, nothing to do here.
