@@ -51,6 +51,10 @@ class format_culcourse_upgrade_testcase extends advanced_testcase {
         $DB->insert_record('course_format_options', ['courseid' => $course->id, 'format' => "culcourse",
             'sectionid' => 0, 'name' => 'numsections', 'value' => '5']);
 
+        $data = (object)['id' => $course->id, 'baseclass' => 1];
+        $courseformat = course_get_format($course);
+        $courseformat->update_course_format_options($data);
+
         // There are 6 sections in the course (0-section and sections 1, ... 5).
         $this->assertEquals(6, $DB->count_records('course_sections', ['course' => $course->id]));
 
@@ -78,8 +82,17 @@ class format_culcourse_upgrade_testcase extends advanced_testcase {
         $course2 = $this->getDataGenerator()->create_course($params2);
         // This test is executed after 'numsections' option was already removed, add it manually and
         // set it to be 2 less than actual number of sections.
+
+        $data = (object)['id' => $course2->id, 'baseclass' => 1];
+        $courseformat = course_get_format($course2);
+        $courseformat->update_course_format_options($data);
+
         $DB->insert_record('course_format_options', ['courseid' => $course1->id, 'format' => "culcourse",
             'sectionid' => 0, 'name' => 'numsections', 'value' => '3']);
+
+        $data = (object)['id' => $course1->id, 'baseclass' => 1];
+        $courseformat = course_get_format($course1);
+        $courseformat->update_course_format_options($data);
 
         // There are 6 sections in the first course (0-section and sections 1, ... 5).
         $this->assertEquals(6, $DB->count_records('course_sections', ['course' => $course1->id]));
@@ -105,6 +118,10 @@ class format_culcourse_upgrade_testcase extends advanced_testcase {
 
         $params = array('format' => "culcourse", 'numsections' => 5, 'startdate' => 1445644800);
         $course = $this->getDataGenerator()->create_course($params);
+
+        $data = (object)['id' => $course->id, 'baseclass' => 1];
+        $courseformat = course_get_format($course);
+        $courseformat->update_course_format_options($data);
 
         // Add a module to the second last section.
         $cm = $this->getDataGenerator()->create_module('forum', ['course' => $course->id, 'section' => 4]);

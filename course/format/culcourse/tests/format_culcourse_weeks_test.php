@@ -46,14 +46,17 @@ class format_culcourse_testcase extends advanced_testcase {
         // Generate a course with 5 sections.
         $generator = $this->getDataGenerator();
         $numsections = 5;
-        $course = $generator->create_course(array('numsections' => $numsections, 'format' => "culcourse"),
+        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'culcourse'),
             array('createsections' => true));
+
+        $data = (object)['id' => $course->id, 'baseclass' => 2];
+        $courseformat = course_get_format($course);
+        $courseformat->update_course_format_options($data);
 
         // Get section names for course.
         $coursesections = $DB->get_records('course_sections', array('course' => $course->id));
 
         // Test get_section_name with default section names.
-        $courseformat = course_get_format($course);
         foreach ($coursesections as $section) {
             // Assert that with unmodified section names, get_section_name returns the same result as get_default_section_name.
             $this->assertEquals($courseformat->get_default_section_name($section), $courseformat->get_section_name($section));
@@ -70,8 +73,12 @@ class format_culcourse_testcase extends advanced_testcase {
         // Generate a course with 5 sections.
         $generator = $this->getDataGenerator();
         $numsections = 5;
-        $course = $generator->create_course(array('numsections' => $numsections, 'format' => "culcourse"),
+        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'culcourse'),
             array('createsections' => true));
+
+        $data = (object)['id' => $course->id, 'baseclass' => 2];
+        $courseformat = course_get_format($course);
+        $courseformat->update_course_format_options($data);
 
         // Get section names for course.
         $coursesections = $DB->get_records('course_sections', array('course' => $course->id));
@@ -85,7 +92,7 @@ class format_culcourse_testcase extends advanced_testcase {
 
         // Requery updated section names then test get_section_name.
         $coursesections = $DB->get_records('course_sections', array('course' => $course->id));
-        $courseformat = course_get_format($course);
+
         foreach ($coursesections as $section) {
             // Assert that with modified section names, get_section_name returns the modified section name.
             $this->assertEquals($section->name, $courseformat->get_section_name($section));
@@ -102,20 +109,29 @@ class format_culcourse_testcase extends advanced_testcase {
         // Generate a course with 5 sections.
         $generator = $this->getDataGenerator();
         $numsections = 5;
-        $course = $generator->create_course(array('numsections' => $numsections, 'format' => "culcourse"),
+        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'culcourse'),
             array('createsections' => true));
+
+        $data = (object)['id' => $course->id, 'baseclass' => 2];
+        $courseformat = course_get_format($course);
+        $courseformat->update_course_format_options($data);
 
         // Get section names for course.
         $coursesections = $DB->get_records('course_sections', array('course' => $course->id));
 
         // Test get_default_section_name with default section names.
-        $courseformat = course_get_format($course);
         foreach ($coursesections as $section) {
             if ($section->section == 0) {
                 $sectionname = get_string('section0name', 'format_culcourse');
                 $this->assertEquals($sectionname, $courseformat->get_default_section_name($section));
             } else {
-                $sectionname = get_string('sectionname', 'format_culcourse') . ' ' . $section->section;
+                $dates = $courseformat->get_section_dates($section);
+                $dates->end = ($dates->end - 86400);
+                $dateformat = get_string('strftimedateshort');
+                $weekday = userdate($dates->start, $dateformat);
+                $endweekday = userdate($dates->end, $dateformat);
+                $sectionname = $weekday.' - '.$endweekday;
+
                 $this->assertEquals($sectionname, $courseformat->get_default_section_name($section));
             }
         }
@@ -131,8 +147,13 @@ class format_culcourse_testcase extends advanced_testcase {
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
-        $course = $this->getDataGenerator()->create_course(array('numsections' => 5, 'format' => "culcourse"),
+        $course = $this->getDataGenerator()->create_course(array('numsections' => 5, 'format' => 'culcourse'),
             array('createsections' => true));
+
+        $data = (object)['id' => $course->id, 'baseclass' => 2];
+        $courseformat = course_get_format($course);
+        $courseformat->update_course_format_options($data);
+
         $section = $DB->get_record('course_sections', array('course' => $course->id, 'section' => 2));
 
         // Call webservice without necessary permissions.
@@ -158,12 +179,17 @@ class format_culcourse_testcase extends advanced_testcase {
      * Test callback updating section name
      */
     public function test_inplace_editable() {
-        global $DB, $PAGE;
+        global $CFG, $DB, $PAGE;
 
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
-        $course = $this->getDataGenerator()->create_course(array('numsections' => 5, 'format' => "culcourse"),
+        $course = $this->getDataGenerator()->create_course(array('numsections' => 5, 'format' => 'culcourse'),
             array('createsections' => true));
+
+        $data = (object)['id' => $course->id, 'baseclass' => 2];
+        $courseformat = course_get_format($course);
+        $courseformat->update_course_format_options($data);
+
         $teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
         $this->getDataGenerator()->enrol_user($user->id, $course->id, $teacherrole->id);
         $this->setUser($user);
@@ -179,7 +205,7 @@ class format_culcourse_testcase extends advanced_testcase {
 
         // Try updating using callback from mismatching course format.
         try {
-            $tmpl = component_callback('format_weeks', 'inplace_editable', array('sectionname', $section->id, 'New name'));
+            $tmpl = component_callback('format_topics', 'inplace_editable', array('sectionname', $section->id, 'New name'));
             $this->fail('Exception expected');
         } catch (moodle_exception $e) {
             $this->assertEquals(1, preg_match('/^Can not find data record in database/', $e->getMessage()));
@@ -192,7 +218,7 @@ class format_culcourse_testcase extends advanced_testcase {
      * @return void
      */
     public function test_default_course_enddate() {
-        global $CFG, $DB;
+        global $CFG, $DB, $PAGE;
 
         $this->resetAfterTest(true);
 
@@ -200,8 +226,13 @@ class format_culcourse_testcase extends advanced_testcase {
 
         $this->setTimezone('UTC');
 
-        $params = array('format' => "culcourse", 'numsections' => 5, 'startdate' => 1445644800);
+        $params = array('format' => 'culcourse', 'numsections' => 5, 'startdate' => 1445644800);
         $course = $this->getDataGenerator()->create_course($params);
+
+        $data = (object)['id' => $course->id, 'baseclass' => 2];
+        $courseformat = course_get_format($course);
+        $courseformat->update_course_format_options($data);
+
         $category = $DB->get_record('course_categories', array('id' => $course->category));
 
         $args = [
@@ -215,14 +246,14 @@ class format_culcourse_testcase extends advanced_testcase {
             'returnurl' => new moodle_url('/'),
         ];
 
+        $PAGE->set_course($course);
         $courseform = new testable_course_edit_form(null, $args);
         $courseform->definition_after_data();
 
-        $enddate = $params['startdate'] + get_config('moodlecourse', 'courseduration');
+        // format_culcourse::get_section_dates is adding 2h to avoid DST problems, we need to replicate it here.
+        $enddate = $params['startdate'] + (WEEKSECS * $params['numsections']) + 7200;
 
-        $weeksformat = course_get_format($course->id);
-        $this->assertEquals($enddate, $weeksformat->get_default_course_enddate($courseform->get_quick_form()));
-
+        $this->assertEquals($enddate, $courseformat->get_default_course_enddate($courseform->get_quick_form()));
     }
 
     /**
@@ -236,7 +267,12 @@ class format_culcourse_testcase extends advanced_testcase {
 
         // Generate a course with two sections (0 and 1) and two modules.
         $generator = $this->getDataGenerator();
-        $course1 = $generator->create_course(array('format' => "culcourse"));
+        $course1 = $generator->create_course(array('format' => 'culcourse'));
+
+        $data = (object)['id' => $course->id, 'baseclass' => 2];
+        $courseformat = course_get_format($course);
+        $courseformat->update_course_format_options($data);
+        
         course_create_sections_if_missing($course1, array(0, 1));
 
         $data = (object)['id' => $course1->id];
@@ -245,20 +281,21 @@ class format_culcourse_testcase extends advanced_testcase {
 
         // In page.
         $CFG->linkcoursesections = 0;
-        $this->assertNotEmpty($format->get_view_url(null));
-        $this->assertNotEmpty($format->get_view_url(0));
-        $this->assertNotEmpty($format->get_view_url(1));
+        $this->assertNotEmpty($courseformat->get_view_url(null));
+        $this->assertNotEmpty($courseformat->get_view_url(0));
+        $this->assertNotEmpty($courseformat->get_view_url(1));
         $CFG->linkcoursesections = 1;
-        $this->assertNotEmpty($format->get_view_url(null));
-        $this->assertNotEmpty($format->get_view_url(0));
-        $this->assertNotEmpty($format->get_view_url(1));
+        $this->assertNotEmpty($courseformat->get_view_url(null));
+        $this->assertNotEmpty($courseformat->get_view_url(0));
+        $this->assertNotEmpty($courseformat->get_view_url(1));
 
         // Navigation.
         $CFG->linkcoursesections = 0;
-        $this->assertNull($format->get_view_url(1, ['navigation' => 1]));
-        $this->assertNull($format->get_view_url(0, ['navigation' => 1]));
+        $this->assertNull($courseformat->get_view_url(1, ['navigation' => 1]));
+        $this->assertNull($courseformat->get_view_url(0, ['navigation' => 1]));
         $CFG->linkcoursesections = 1;
-        $this->assertNotEmpty($format->get_view_url(1, ['navigation' => 1]));
-        $this->assertNotEmpty($format->get_view_url(0, ['navigation' => 1]));
+        $this->assertNotEmpty($courseformat->get_view_url(1, ['navigation' => 1]));
+        $this->assertNotEmpty($courseformat->get_view_url(0, ['navigation' => 1]));
     }
+
 }
