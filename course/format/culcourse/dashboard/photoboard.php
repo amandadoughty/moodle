@@ -72,7 +72,7 @@ $filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
 
 
 
-if (has_capability('format/cul:viewallphotoboard', $context)) {
+if (has_capability('format/culcourse:viewallphotoboard', $context)) {
     // Should use this variable so that we don't break stuff every time a variable 
     // is added or changed.
     $baseurl = new moodle_url('/course/format/culcourse/dashboard/photoboard.php', array(
@@ -164,7 +164,7 @@ $searchkeywords = [];
 $enrolid = 0;
 $status = -1;
 
-if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
+if (has_capability('format/culcourse:viewallphotoboard', $context)) {
 
     foreach ($filtersapplied as $filter) {
         $filtervalue = explode(':', $filter, 2);
@@ -258,7 +258,7 @@ if ($groupid !== false) {
 
 $unifiedfilter = null;
 
-if (has_capability('block/culcourse_dashboard:viewallphotoboard', $context)) {
+if (has_capability('format/culcourse:viewallphotoboard', $context)) {
     // Render the unified filter.
     $renderer = $PAGE->get_renderer('core_user');
     $unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied);
