@@ -488,6 +488,15 @@ trait format_weeks_trait {
     public static function format_weeks_update_end_date($courseid) {
         global $DB, $COURSE;
 
+        // Check this is a weeks format as the observer class uses this function.
+        $options = $DB->get_records('course_format_options', ['courseid' => $courseid, 'format' => 'culcourse', 'name' => 'baseclass']);
+
+        $option = array_pop($options);
+
+        if (isset($option->value) && $option->value == 1) {
+            return;
+        }
+
         // Use one DB query to retrieve necessary fields in course, value for automaticenddate and number of the last
         // section. This query will also validate that the course is indeed in 'weeks' format.
         $insql = "SELECT c.id, c.format, c.startdate, c.enddate, MAX(s.section) AS lastsection

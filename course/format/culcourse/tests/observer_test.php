@@ -53,11 +53,8 @@ class format_culcourse_observer_testcase extends advanced_testcase {
             'numsections' => $numsections,
             'format' => 'culcourse',
             'startdate' => $startdate,
-            'automaticenddate' => 1));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 2];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
+            'automaticenddate' => 1,
+            'baseclass' => 2));
 
         // Ok, let's update the course start date.
         $newstartdate = $startdate + WEEKSECS;
@@ -84,11 +81,8 @@ class format_culcourse_observer_testcase extends advanced_testcase {
             'numsections' => 6,
             'format' => 'culcourse',
             'startdate' => time(),
-            'automaticenddate' => 1));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 1];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
+            'automaticenddate' => 1,
+            'baseclass' => 2));
 
         // Get the end date from the DB as the results will have changed from $course above after observer processing.
         $createenddate = $DB->get_field('course', 'enddate', array('id' => $course->id));
@@ -117,11 +111,8 @@ class format_culcourse_observer_testcase extends advanced_testcase {
             'format' => 'culcourse',
             'startdate' => $startdate,
             'enddate' => $enddate,
-            'automaticenddate' => 0));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 1];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
+            'automaticenddate' => 0,
+            'baseclass' => 2));
 
         // Ok, let's update the course start date.
         $newstartdate = $startdate + WEEKSECS;
@@ -145,18 +136,15 @@ class format_culcourse_observer_testcase extends advanced_testcase {
             'numsections' => $numsections,
             'format' => 'culcourse',
             'startdate' => time(),
-            'automaticenddate' => 1));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 1];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
+            'automaticenddate' => 1,
+            'baseclass' => 2));
 
         // Add a section to the course.
         course_create_section($course->id);
 
         // Get the updated course end date.
         $enddate = $DB->get_field('course', 'enddate', array('id' => $course->id));
-
+        $courseformat = course_get_format($course);
         $dates = $courseformat->get_section_dates($numsections + 1);
 
         // Confirm end date was updated.
@@ -177,11 +165,8 @@ class format_culcourse_observer_testcase extends advanced_testcase {
             'format' => 'culcourse',
             'startdate' => $startdate,
             'enddate' => $enddate,
-            'automaticenddate' => 0));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 2];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
+            'automaticenddate' => 0,
+            'baseclass' => 2));
 
         // Delete automatic end date from the database.
         $DB->delete_records('course_format_options', ['courseid' => $course->id, 'name' => 'automaticenddate']);
@@ -193,8 +178,9 @@ class format_culcourse_observer_testcase extends advanced_testcase {
         $updateenddate = $DB->get_field('course', 'enddate', array('id' => $course->id));
 
         // Confirm enddate is automatic now - since automatic end date is not set it is assumed default (which is '1').
+        $courseformat = course_get_format($course);
         $this->assertEquals(7, $courseformat->get_last_section_number());
-        $dates = $format->get_section_dates(7);
+        $dates = $courseformat->get_section_dates(7);
         $this->assertEquals($dates->end, $updateenddate);
     }
 
@@ -210,18 +196,15 @@ class format_culcourse_observer_testcase extends advanced_testcase {
             'numsections' => $numsections,
             'format' => 'culcourse',
             'startdate' => time(),
-            'automaticenddate' => 1));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 2];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
+            'automaticenddate' => 1,
+            'baseclass' => 2));
 
         // Add a section to the course.
         course_delete_section($course, $numsections);
 
         // Get the updated course end date.
         $enddate = $DB->get_field('course', 'enddate', array('id' => $course->id));
-
+        $courseformat = course_get_format($course);
         $dates = $courseformat->get_section_dates($numsections - 1);
 
         // Confirm end date was updated.

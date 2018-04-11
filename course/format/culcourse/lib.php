@@ -51,7 +51,7 @@ class format_culcourse extends format_base {
 
     /** @var string baseformat used for this course. Please note that it can be different from
      * course.format field if course referes to non-existing or disabled format */
-    protected $baseclass;
+    public $baseclass;
 
     /**
      * Creates a new instance of class

@@ -173,7 +173,6 @@ class format_culcourse_dashboard {
         $courseformatoptionsedit = $courseformatoptionsedit + $dashboardoptionsedit;
     }
 
-
    /**
      * Updates format options for a course
      *

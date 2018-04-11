@@ -46,17 +46,15 @@ class format_culcourse_topics_testcase extends advanced_testcase {
         // Generate a course with 5 sections.
         $generator = $this->getDataGenerator();
         $numsections = 5;
-        $course = $generator->create_course(array('numsections' => $numsections, 'format' => "culcourse"),
+        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'culcourse', 'baseclass' => 1),
             array('createsections' => true));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 1];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
 
         // Get section names for course.
         $coursesections = $DB->get_records('course_sections', array('course' => $course->id));
 
         // Test get_section_name with default section names.
+        $courseformat = course_get_format($course);
+
         foreach ($coursesections as $section) {
             // Assert that with unmodified section names, get_section_name returns the same result as get_default_section_name.
             $this->assertEquals($courseformat->get_default_section_name($section), $courseformat->get_section_name($section));
@@ -73,12 +71,8 @@ class format_culcourse_topics_testcase extends advanced_testcase {
         // Generate a course with 5 sections.
         $generator = $this->getDataGenerator();
         $numsections = 5;
-        $course = $generator->create_course(array('numsections' => $numsections, 'format' => "culcourse"),
+        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'culcourse', 'baseclass' => 1),
             array('createsections' => true));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 1];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
 
         // Get section names for course.
         $coursesections = $DB->get_records('course_sections', array('course' => $course->id));
@@ -92,6 +86,7 @@ class format_culcourse_topics_testcase extends advanced_testcase {
 
         // Requery updated section names then test get_section_name.
         $coursesections = $DB->get_records('course_sections', array('course' => $course->id));
+        $courseformat = course_get_format($course);
 
         foreach ($coursesections as $section) {
             // Assert that with modified section names, get_section_name returns the modified section name.
@@ -109,17 +104,15 @@ class format_culcourse_topics_testcase extends advanced_testcase {
         // Generate a course with 5 sections.
         $generator = $this->getDataGenerator();
         $numsections = 5;
-        $course = $generator->create_course(array('numsections' => $numsections, 'format' => "culcourse"),
+        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'culcourse', 'baseclass' => 1),
             array('createsections' => true));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 1];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
 
         // Get section names for course.
         $coursesections = $DB->get_records('course_sections', array('course' => $course->id));
 
         // Test get_default_section_name with default section names.
+        $courseformat = course_get_format($course);
+
         foreach ($coursesections as $section) {
             if ($section->section == 0) {
                 $sectionname = get_string('section0name', 'format_culcourse');
@@ -141,13 +134,8 @@ class format_culcourse_topics_testcase extends advanced_testcase {
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
-        $course = $this->getDataGenerator()->create_course(array('numsections' => 5, 'format' => "culcourse"),
+        $course = $this->getDataGenerator()->create_course(array('numsections' => 5, 'format' => 'culcourse', 'baseclass' => 1),
             array('createsections' => true));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 1];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
-
         $section = $DB->get_record('course_sections', array('course' => $course->id, 'section' => 2));
 
         // Call webservice without necessary permissions.
@@ -177,17 +165,11 @@ class format_culcourse_topics_testcase extends advanced_testcase {
 
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
-        $course = $this->getDataGenerator()->create_course(array('numsections' => 5, 'format' => "culcourse"),
+        $course = $this->getDataGenerator()->create_course(array('numsections' => 5, 'format' => 'culcourse', 'baseclass' => 1),
             array('createsections' => true));
-
-        $data = (object)['id' => $course->id, 'baseclass' => 1];
-        $courseformat = course_get_format($course);
-        $courseformat->update_course_format_options($data);
-
         $teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
         $this->getDataGenerator()->enrol_user($user->id, $course->id, $teacherrole->id);
         $this->setUser($user);
-
         $section = $DB->get_record('course_sections', array('course' => $course->id, 'section' => 2));
 
         // Call callback format_culcourse_inplace_editable() directly.
