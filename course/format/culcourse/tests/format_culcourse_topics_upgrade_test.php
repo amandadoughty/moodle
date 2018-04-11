@@ -35,7 +35,7 @@ require_once($CFG->dirroot . '/course/format/culcourse/db/upgradelib.php');
  * @copyright  2017 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class format_culcourse_upgrade_testcase extends advanced_testcase {
+class format_culcourse_topics_upgrade_testcase extends advanced_testcase {
 
     /**
      * Test upgrade step to remove orphaned sections.

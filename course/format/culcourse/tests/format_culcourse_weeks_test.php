@@ -34,7 +34,7 @@ require_once($CFG->dirroot . '/course/lib.php');
  * @copyright  2015 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class format_culcourse_testcase extends advanced_testcase {
+class format_culcourse_weeks_testcase extends advanced_testcase {
 
     /**
      * Tests for format_culcourse::get_section_name method with default section names.
