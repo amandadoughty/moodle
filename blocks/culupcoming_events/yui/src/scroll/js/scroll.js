@@ -39,7 +39,17 @@ M.block_culupcoming_events.scroll = {
         }
 
         var reloaddiv = Y.one('.block_culupcoming_events .reload');
-        var h2 = Y.one('.block_culupcoming_events .header .title h2');
+
+        var block = Y.one('.block_culupcoming_events');
+        var id = block.get('id');
+
+        id = id.replace('inst', '');
+
+        var h2 = Y.one('#instance-' + id + '-header');
+
+
+
+        // var h2 = Y.one('.block_culupcoming_events .header .title h2');
         h2.append(reloaddiv);
         reloaddiv.setStyle('display', 'inline-block');
         Y.one('.reload .block_culupcoming_events_reload').on('click', this.reloadblock, this);
