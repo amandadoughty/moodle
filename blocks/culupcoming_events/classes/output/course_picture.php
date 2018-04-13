@@ -105,7 +105,7 @@ class course_picture implements templatable, renderable {
     /**
      * @var string Image class attribute
      */
-    public $class = 'coursepicture';
+    public $class = 'this';
 
     /**
      * Course picture constructor.
@@ -124,7 +124,7 @@ class course_picture implements templatable, renderable {
 
         // Only touch the DB if we are missing data and complain loudly.
         $needrec = false;
-        
+
         foreach (self::$fields as $field) {
             if (!array_key_exists($field, $course)) {
                 $needrec = true;
@@ -150,7 +150,10 @@ class course_picture implements templatable, renderable {
      */
     public function export_for_template(renderer_base $output) {
 
+        $courseimg = $this->get_course_picture();
 
+
+        return $courseimg;
 
 
     }
@@ -158,51 +161,50 @@ class course_picture implements templatable, renderable {
     /**
      * Internal implementation of course image rendering.
      *
-     * @param course_picture $coursepicture
+     * @param course_picture $this
      * @return string
      */
-    protected function get_course_picture(course_picture $coursepicture) {
-        global $CFG, $DB;
+    protected function get_course_picture() {
+        global $CFG, $DB, $PAGE;
 
-        $course = $coursepicture->course;
+        $course = $this->course;
         $coursedisplayname = $course->shortname;
 
-        if ($coursepicture->alttext) {
+        if ($this->alttext) {
             $alt = get_string('pictureof', '', $coursedisplayname);
         } else {
             $alt = '';
         }
 
-        if (empty($coursepicture->size)) {
+        if (empty($this->size)) {
             $size = 35;
-        } else if ($coursepicture->size === true or $coursepicture->size == 1) {
+        } else if ($this->size === true or $this->size == 1) {
             $size = 100;
         } else {
-            $size = $coursepicture->size;
+            $size = $this->size;
         }
 
-        $class = $coursepicture->class;
-        $src = $coursepicture->get_url($this->page, $this);
-        $attributes = array('src' => $src, 'alt' => $alt, 'title' => $alt, 'class' => $class);
-
-        // Get the image html output first.
-        $output = \html_writer::empty_tag('img', $attributes);;
+        $class = $this->class;
+        $src = $this->get_url($PAGE, $this->output);
+        $courseimg = ['src' => $src, 'alt' => $alt, 'title' => $alt, 'class' => $class];
 
         // Then wrap it in link if needed.
-        if (!$coursepicture->link) {
-            return $output;
+        if ($this->link) {
+            $courseimg['url'] = new \moodle_url('/course/view.php', array('id' => $course->id));
         }
 
-        $url = new \moodle_url('/course/view.php', array('id' => $course->id));
-        $attributes = array('href' => $url);
+        
 
-        if ($coursepicture->popup) {
-            $id = \html_writer::random_id('coursepicture');
-            $attributes['id'] = $id;
-            $this->add_action_handler(new popup_action('click', $url), $id);
-        }
+        return $courseimg;
+        // $attributes = array('href' => $url);
 
-        return \html_writer::tag('a', $output, $attributes);
+        // if ($this->popup) {
+        //     $id = \html_writer::random_id('this');
+        //     $attributes['id'] = $id;
+        //     $this->add_action_handler(new popup_action('click', $url), $id);
+        // }
+
+        // return \html_writer::tag('a', $output, $attributes);
     }    
 
 

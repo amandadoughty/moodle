@@ -364,22 +364,28 @@ class eventlist implements templatable, renderable {
             $coursepic = new course_picture($course);
             $coursepic->link = true;
             $coursepic->class = 'coursepicture';
-            $courseimg = $this->output->render($coursepic);
+
+            // $courseimg = $this->output->render($coursepic);
+
+            $templatecontext = $coursepic->export_for_template($this->output);
+            $courseimg = $this->output->render_from_template('block_culupcoming_events/course_picture', $templatecontext);
+
         } else {
-            $url = $OUTPUT->pix_url('u/f2');
-            $attributes = array(
-                'src' => $url,
-                'alt' => get_string('pictureof', '', $coursedisplayname),
-                'class' => 'courseimage'
-            );
-            $img = html_writer::empty_tag('img', $attributes);
-            $attributes = array('href' => $CFG->wwwroot);
-            $courseimg = html_writer::tag('a', $img, $attributes);
+            // $url = $OUTPUT->pix_url('u/f2');
+            // $attributes = array(
+            //     'src' => $url,
+            //     'alt' => get_string('pictureof', '', $coursedisplayname),
+            //     'class' => 'courseimage'
+            // );
+            // $img = html_writer::empty_tag('img', $attributes);
+            // $attributes = array('href' => $CFG->wwwroot);
+
+            // $courseimg = html_writer::tag('a', $img, $attributes);
         }
 
         return $courseimg;
 
-        return '';
+
     }
 
     /**
