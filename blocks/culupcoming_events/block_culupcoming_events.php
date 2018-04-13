@@ -94,14 +94,14 @@ class block_culupcoming_events extends block_base {
                 $limitfrom,
                 $limitnum);
 
-            $renderer = $this->page->get_renderer('block_culupcoming_events');
-            $this->content->text = $renderer->culupcoming_events_reload();
+            // $renderer = $this->page->get_renderer('block_culupcoming_events');
+            // $this->content->text = $renderer->culupcoming_events_reload();
             // $this->content->text .= $renderer->culupcoming_events($events);
-$context = new stdClass();
-$context->events = $events;
+// $context = new stdClass();
+// $context->events = $events;
 // print_r($events);
             // $renderer = $this->page->get_renderer('core_calendar');
-        $this->content->text .= $renderer->render_from_template('block_culupcoming_events/culupcoming_events', $context);
+            
 // print_r($events);
             $prev = false;
             $next = false;
@@ -116,15 +116,29 @@ $context->events = $events;
                 $next = $page + 1;
             }
 
-            $this->content->text .= $renderer->culupcoming_events_pagination($prev, $next);
+            // $this->content->text .= $renderer->render_culupcoming_events($events, $prev, $next);
+
+            // $this->content->text .= $renderer->culupcoming_events_pagination($prev, $next);
 
             // $this->content->text .= $renderer->culupcoming_events_pagination($prevlastid, $nextlastid, $currentlastid);
 
-            if (empty($this->content->text)) {
-                $this->content->text = html_writer::tag('div',
-                                                        get_string('noupcomingevents', 'calendar'),
-                                                        array('class' => 'post', 'style' => 'margin-left: 1em'));
-            }
+            // if (empty($this->content->text)) {
+            //     $this->content->text = html_writer::tag('div',
+            //                                             get_string('noupcomingevents', 'calendar'),
+            //                                             array('class' => 'post', 'style' => 'margin-left: 1em'));
+            // }
+
+
+            $renderable = new \block_culupcoming_events\output\main($lookahead,
+        $courseid,
+        $lastid,
+        $lastdate,
+        $limitfrom,
+        $limitnum, $prev, $next, $prev, $next);
+            
+            $renderer = $this->page->get_renderer('block_culupcoming_events');
+
+            $this->content->text = $renderer->render($renderable);
 
             $this->page->requires->yui_module(
                 'moodle-block_culupcoming_events-scroll',
