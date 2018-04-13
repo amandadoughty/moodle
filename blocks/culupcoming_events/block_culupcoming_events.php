@@ -96,8 +96,13 @@ class block_culupcoming_events extends block_base {
 
             $renderer = $this->page->get_renderer('block_culupcoming_events');
             $this->content->text = $renderer->culupcoming_events_reload();
-            $this->content->text .= $renderer->culupcoming_events($events);
-
+            // $this->content->text .= $renderer->culupcoming_events($events);
+$context = new stdClass();
+$context->events = $events;
+// print_r($events);
+            // $renderer = $this->page->get_renderer('core_calendar');
+        $this->content->text .= $renderer->render_from_template('block_culupcoming_events/culupcoming_events', $context);
+// print_r($events);
             $prev = false;
             $next = false;
 

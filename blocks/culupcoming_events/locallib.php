@@ -317,10 +317,9 @@ function block_culupcoming_events_get_all_events ($lookahead, $courseid, $lastda
  * @return stdClass $event with additional attributes
  */
 function block_upcoming_events_add_event_metadata($event) {
-
     // calendar_add_event_metadata($event);
     $event->timeuntil = block_culupcoming_events_human_timing($event->timestart);
-    $courseid  = is_numeric($event->course->id) ? $event->course->id : 0;
+    $courseid = isset($event->course->id) ? $event->course->id : 0;
 
     $a = new stdClass();
     $a->name = $event->name;
@@ -584,7 +583,6 @@ function block_culupcoming_events_ajax_reload($lookahead, $courseid, $lastid) {
     $eventnum = $limitnum + 1;
     $events = block_culupcoming_events_get_all_events($lookahead, $courseid, 0, $lastid, $eventnum);
     // $events = $events->events;
-
 
     if ($events !== false) {
         if (count($events) > ($limitnum)) {

@@ -38,21 +38,19 @@ M.block_culupcoming_events.scroll = {
             Y.one('.pages').hide();
         }
 
-        var reloaddiv = Y.one('.block_culupcoming_events .reload');
+        try {
+            var reloaddiv = Y.one('.block_culupcoming_events .reload');
+            var block = Y.one('.block_culupcoming_events');
+            var id = block.get('id');
+            id = id.replace('inst', '');
+            var h2 = Y.one('#instance-' + id + '-header');
+            h2.append(reloaddiv);
+            reloaddiv.setStyle('display', 'inline-block');
+            Y.one('.reload .block_culupcoming_events_reload').on('click', this.reloadblock, this);
+        } catch (e) {
+            Y.log('Problem adding reload button');
+        }
 
-        var block = Y.one('.block_culupcoming_events');
-        var id = block.get('id');
-
-        id = id.replace('inst', '');
-
-        var h2 = Y.one('#instance-' + id + '-header');
-
-
-
-        // var h2 = Y.one('.block_culupcoming_events .header .title h2');
-        h2.append(reloaddiv);
-        reloaddiv.setStyle('display', 'inline-block');
-        Y.one('.reload .block_culupcoming_events_reload').on('click', this.reloadblock, this);
         this.scroller = Y.one('.block_culupcoming_events .culupcoming_events');
         this.scroller.on('scroll', this.filltobelowblock, this);
         this.limitnum = params.limitnum;
@@ -70,16 +68,20 @@ M.block_culupcoming_events.scroll = {
             Y.Array.each(dock.dockeditems, function(dockeditem) {
                 dockeditem.on('dockeditem:showcomplete', function() {
                     if (dockeditem.get('blockclass') === 'culupcoming_events') {
-                        var reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
-                        if (!reloader) {
-                            var reloaddiv = Y.one('.block_culupcoming_events .reload').cloneNode(true);
-                            var h2 = Y.one('#instance-' + dockeditem.get('blockinstanceid') + '-header' );
-                            h2.append(reloaddiv);
-                            reloaddiv.setStyle('display', 'inline-block');
-                            reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
-                        }
-                        if (reloader) {
-                            reloader.on('click', this.reloadblock, this);
+                        try {
+                            var reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
+                            if (!reloader) {
+                                var reloaddiv = Y.one('.block_culupcoming_events .reload').cloneNode(true);
+                                var h2 = Y.one('#instance-' + dockeditem.get('blockinstanceid') + '-header' );
+                                h2.append(reloaddiv);
+                                reloaddiv.setStyle('display', 'inline-block');
+                                reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
+                            }
+                            if (reloader) {
+                                reloader.on('click', this.reloadblock, this);
+                            }
+                        } catch (e) {
+                            Y.log('Problem adding reload button');
                         }
                     }
                 },this);

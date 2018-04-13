@@ -43,9 +43,9 @@ list($more, $events) = block_culupcoming_events_ajax_reload($lookahead, $coursei
 $renderer = $PAGE->get_renderer('block_culupcoming_events');
 
 if ($events) {
-    $list .= $renderer->culupcoming_events_items ($events);
+    $list .= $renderer->culupcoming_events_items($events);
 }
-
+// print_r($more);
 if (!$more) {
     $list .= html_writer::tag('li', get_string('nomoreevents', 'block_culupcoming_events'));
     $end = true;
