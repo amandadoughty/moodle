@@ -52,16 +52,16 @@ class eventlist implements templatable, renderable {
         $lastid,
         $lastdate,
         $limitfrom,
-        $limitnum) 
+        $limitnum,
+        $page) 
     {
-        // $this->events = $events;
-
         $this->lookahead = $lookahead;
         $this->courseid = $courseid;
         $this->lastid = $lastid;
         $this->lastdate = $lastdate;
         $this->limitfrom = $limitfrom;
         $this->limitnum = $limitnum;
+        $this->page = $page;
     }
 
     /**
@@ -71,23 +71,40 @@ class eventlist implements templatable, renderable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-        // @TODO move locallib functions here
-
-        // return  $this->events;
         $this->output = $output;
 
-        list($more, $events) = $this->block_culupcoming_events_get_events(
+        list($more, $events) = $this->get_events(
             $this->lookahead,
             $this->courseid,
             $this->lastid,
             $this->lastdate,
             $this->limitfrom,
-            $this->limitnum);
+            $this->limitnum
+            );
+        
+        $prev = false;
+        $next = false;
 
-        return $events;
+        if ($this->page > 1) {
+            // Add a 'sooner' link.
+            $prev = $this->page - 1;
+        }
+
+        if ($more) {
+            // Add an 'later' link.
+            $next = $this->page + 1;
+        }
+
+        $paginationobj = new pagination($prev, $next);
+        $pagination = $paginationobj->export_for_template($this->output);
+
+        return [
+            'events' => $events,
+            'pagination' => $pagination
+        ];
     }
 
-    public function block_culupcoming_get_view(\calendar_information $calendar, $tstart = 0, $tstartaftereventid = 0, $eventlimit = 5) {
+    public function get_view(\calendar_information $calendar, $tstart = 0, $tstartaftereventid = 0, $eventlimit = 5) {
         global $PAGE, $CFG;
 
         $renderer = $PAGE->get_renderer('core_calendar');
@@ -98,51 +115,51 @@ class eventlist implements templatable, renderable {
 
         $date = new \DateTime('now', \core_date::get_user_timezone_object(99));
 
+        // Number of days in the future that will be used to fetch events.
+        if (isset($CFG->calendar_lookahead)) {
+            $defaultlookahead = intval($CFG->calendar_lookahead);
+        } else {
+            $defaultlookahead = CALENDAR_DEFAULT_UPCOMING_LOOKAHEAD;
+        }
+        $lookahead = get_user_preferences('calendar_lookahead', $defaultlookahead);
 
-            // Number of days in the future that will be used to fetch events.
-            if (isset($CFG->calendar_lookahead)) {
-                $defaultlookahead = intval($CFG->calendar_lookahead);
-            } else {
-                $defaultlookahead = CALENDAR_DEFAULT_UPCOMING_LOOKAHEAD;
-            }
-            $lookahead = get_user_preferences('calendar_lookahead', $defaultlookahead);
-
-            // Maximum number of events to be displayed on upcoming view.
-            $defaultmaxevents = CALENDAR_DEFAULT_UPCOMING_MAXEVENTS;
-            if (isset($CFG->calendar_maxevents)) {
-                $defaultmaxevents = intval($CFG->calendar_maxevents);
-            }
+        // Maximum number of events to be displayed on upcoming view.
+        $defaultmaxevents = CALENDAR_DEFAULT_UPCOMING_MAXEVENTS;
+        if (isset($CFG->calendar_maxevents)) {
+            $defaultmaxevents = intval($CFG->calendar_maxevents);
+        }
 
 
-            $tstart = $type->convert_to_timestamp($calendardate['year'], $calendardate['mon'], $calendardate['mday'],
-                    $calendardate['hours']);
-            $date->setTimestamp($tstart);
-            $date->modify('+' . $lookahead . ' days');
-
+        $tstart = $type->convert_to_timestamp($calendardate['year'], $calendardate['mon'], $calendardate['mday'],
+                $calendardate['hours']);
+        $date->setTimestamp($tstart);
+        $date->modify('+' . $lookahead . ' days');
 
         // We need to extract 1 second to ensure that we don't get into the next day.
         $date->modify('-1 second');
         $tend = $date->getTimestamp();
 
         list($userparam, $groupparam, $courseparam, $categoryparam) = array_map(function($param) {
-            // If parameter is true, return null.
-            if ($param === true) {
-                return null;
-            }
+                // If parameter is true, return null.
+                if ($param === true) {
+                    return null;
+                }
 
-            // If parameter is false, return an empty array.
-            if ($param === false) {
-                return [];
-            }
+                // If parameter is false, return an empty array.
+                if ($param === false) {
+                    return [];
+                }
 
-            // If the parameter is a scalar value, enclose it in an array.
-            if (!is_array($param)) {
-                return [$param];
-            }
+                // If the parameter is a scalar value, enclose it in an array.
+                if (!is_array($param)) {
+                    return [$param];
+                }
 
-            // No normalisation required.
-            return $param;
-        }, [$calendar->users, $calendar->groups, $calendar->courses, $calendar->categories]);
+                // No normalisation required.
+                return $param;
+            }, 
+            [$calendar->users, $calendar->groups, $calendar->courses, $calendar->categories]
+        );
 
         $events = \core_calendar\local\api::get_events(
             $tstart,
@@ -181,13 +198,9 @@ class eventlist implements templatable, renderable {
             'type' => $type,
         ];
 
-        $data = [];
-     
-            $upcoming = new \core_calendar\external\calendar_upcoming_exporter($calendar, $related);
-            $data = $upcoming->export($renderer);
-
-
-
+        $data = [];     
+        $upcoming = new \core_calendar\external\calendar_upcoming_exporter($calendar, $related);
+        $data = $upcoming->export($renderer);
 
         return $data;
     }
@@ -203,7 +216,7 @@ class eventlist implements templatable, renderable {
      * @param int $limitnum maximum number of events
      * @return array $more bool if there are more events to load, $output array of upcoming events
      */
-    public function block_culupcoming_events_get_events(
+    public function get_events(
         $lookahead = 365,
         $courseid = SITEID,
         $lastid = 0,
@@ -218,7 +231,7 @@ class eventlist implements templatable, renderable {
         // and backwards. So we retrieve all the events for previous and current page plus one to check if there are more to
         // page through.
         $eventnum = $limitfrom + $limitnum + 1;
-        $events = $this->block_culupcoming_events_get_all_events($lookahead, $courseid, $lastdate, $lastid, $eventnum);
+        $events = $this->get_all_events($lookahead, $courseid, $lastdate, $lastid, $eventnum);
 
         if ($events !== false) {
             if (count($events) > ($limitfrom + $limitnum)) {
@@ -227,12 +240,12 @@ class eventlist implements templatable, renderable {
             }
 
             foreach ($events as $key => $event) {
-                $event = $this->block_upcoming_events_add_event_metadata($event);
+                $event = $this->add_event_metadata($event);
                 $output[] = $event;
             }
         }
 
-        return array($more, $output);
+        return [$more, $output];
     }
 
     /* Gets the raw calendar upcoming events
@@ -242,17 +255,15 @@ class eventlist implements templatable, renderable {
      * @param array|int $lastdate the date of the last event loaded
      * @return array $filterclass, $events
      */
-    public function block_culupcoming_events_get_all_events ($lookahead, $courseid, $lastdate = 0, $lastid = 0, $limitnum = 5) {
+    public function get_all_events ($lookahead, $courseid, $lastdate = 0, $lastid = 0, $limitnum = 5) {
         global $USER, $PAGE;
 
         $categoryid = ($PAGE->context->contextlevel === CONTEXT_COURSECAT) ? $PAGE->category->id : null;
         $calendar = \calendar_information::create(time(), $courseid, $categoryid);
-        $events = $this->block_culupcoming_get_view($calendar, $lastdate, $lastid, $limitnum);
+        $events = $this->get_view($calendar, $lastdate, $lastid, $limitnum);
 
         return $events->events;
     }
-
-
 
     /**
      * Gets the calendar upcoming event metadata
@@ -260,15 +271,15 @@ class eventlist implements templatable, renderable {
      * @param stdClass $event
      * @return stdClass $event with additional attributes
      */
-    public function block_upcoming_events_add_event_metadata($event) {
-        $event->timeuntil = $this->block_culupcoming_events_human_timing($event->timestart);
+    public function add_event_metadata($event) {
+        $event->timeuntil = $this->human_timing($event->timestart);
         $courseid = isset($event->course->id) ? $event->course->id : 0;
 
         $a = new \stdClass();
         $a->name = $event->name;
 
         if ($courseid && $courseid != SITEID) {
-            $a->course = $this->block_culupcoming_events_get_course_displayname ($courseid);
+            $a->course = $this->get_course_displayname ($courseid);
             $event->description = get_string('courseevent', 'block_culupcoming_events', $a);
         } else {
             $event->description = get_string('event', 'block_culupcoming_events', $a);
@@ -276,16 +287,16 @@ class eventlist implements templatable, renderable {
 
         switch (strtolower($event->eventtype)) {
             case 'user':
-                $event->img = $this->block_culupcoming_events_get_user_img($event->userid);
+                $event->img = $this->get_user_img($event->userid);
                 break;
             case 'course':
-                $event->img = $this->block_culupcoming_events_get_course_img($event->courseid);
+                $event->img = $this->get_course_img($event->courseid);
                 break;
             case 'site':
-                $event->img = $this->block_culupcoming_events_get_site_img();
+                $event->img = $this->get_site_img();
                 break;
             default:
-                $event->img = $this->block_culupcoming_events_get_course_img($event->course->id);
+                $event->img = $this->get_course_img($event->course->id);
         }
 
         return $event;
@@ -299,7 +310,7 @@ class eventlist implements templatable, renderable {
      * @param int $time unix time stamp
      * @return string representing time since message created
      */
-    public function block_culupcoming_events_human_timing ($time) {
+    public function human_timing ($time) {
         // To get the time until that moment.
         $time = $time - time();
         $timeuntil = get_string('today');
@@ -334,7 +345,7 @@ class eventlist implements templatable, renderable {
      * @param  int $courseid
      * @return string
      */
-    public function block_culupcoming_events_get_course_displayname ($courseid) {
+    public function get_course_displayname ($courseid) {
         global $DB;
 
         if (!$courseid) {
@@ -353,39 +364,20 @@ class eventlist implements templatable, renderable {
      * @param  int $courseid
      * @return string Image tag, wrapped in a hyperlink.
      */
-    public function block_culupcoming_events_get_course_img ($courseid) {
-        global $CFG, $DB, $PAGE, $OUTPUT;
-
-        $courseid  = is_numeric($courseid) ? $courseid : null;
-        $coursedisplayname = $this->block_culupcoming_events_get_course_displayname ($courseid);
+    public function get_course_img ($courseid) {
+        global $DB;
 
         if ($course = $DB->get_record('course', array('id' => $courseid))) {
-            // $courseimgrenderer = $PAGE->get_renderer('course_picture');
             $coursepic = new course_picture($course);
             $coursepic->link = true;
             $coursepic->class = 'coursepicture';
-
-            // $courseimg = $this->output->render($coursepic);
-
             $templatecontext = $coursepic->export_for_template($this->output);
+            // get_user_img returns html and we need to be consistent.
             $courseimg = $this->output->render_from_template('block_culupcoming_events/course_picture', $templatecontext);
 
-        } else {
-            // $url = $OUTPUT->pix_url('u/f2');
-            // $attributes = array(
-            //     'src' => $url,
-            //     'alt' => get_string('pictureof', '', $coursedisplayname),
-            //     'class' => 'courseimage'
-            // );
-            // $img = html_writer::empty_tag('img', $attributes);
-            // $attributes = array('href' => $CFG->wwwroot);
-
-            // $courseimg = html_writer::tag('a', $img, $attributes);
         }
 
         return $courseimg;
-
-
     }
 
     /**
@@ -394,7 +386,7 @@ class eventlist implements templatable, renderable {
      * @param  int $userid
      * @return string Image tag, possibly wrapped in a hyperlink.
      */
-    public function block_culupcoming_events_get_user_img ($userid) {
+    public function get_user_img ($userid) {
         global $CFG, $DB, $OUTPUT;
 
         $userid  = is_numeric($userid) ? $userid : null;
@@ -424,7 +416,7 @@ class eventlist implements templatable, renderable {
      * 
      * @return string full image tag, possibly wrapped in a link.
      */
-    public function block_culupcoming_events_get_site_img () {
+    public function get_site_img () {
 
         $admins      = get_admins();
         $adminuserid = 2;
@@ -436,11 +428,10 @@ class eventlist implements templatable, renderable {
             }
         }
 
-        $siteimg = $this->block_culupcoming_events_get_user_img($adminuserid);
+        $siteimg = $this->get_user_img($adminuserid);
 
         return $siteimg;
     }
-
 
     /**
      * Reload the events including newer ones via ajax call
@@ -449,18 +440,17 @@ class eventlist implements templatable, renderable {
      * @param  int $lastdate the date of the last event loaded
      * @return array $events array of upcoming event events
      */
-    public function block_culupcoming_events_ajax_reload($lookahead, $courseid, $lastid) {
+    public function ajax_reload($lookahead, $courseid, $lastid) {
         global $DB;
      
-        $output = array();
+        $output = [];
         $more = false;
 
         // We need a subset of the events and we cannot use timestartafterevent because we want to be able to page forward
         // and backwards. So we retrieve all the events for previous and current page plus one to check if there are more to
         // page through.
         $eventnum = $limitnum + 1;
-        $events = $this->block_culupcoming_events_get_all_events($lookahead, $courseid, 0, $lastid, $eventnum);
-        // $events = $events->events;
+        $events = $this->get_all_events($lookahead, $courseid, 0, $lastid, $eventnum);
 
         if ($events !== false) {
             if (count($events) > ($limitnum)) {
@@ -470,13 +460,11 @@ class eventlist implements templatable, renderable {
             }
 
             foreach ($events as $key => $event) {
-                $event = $this->block_upcoming_events_add_event_metadata($event);
+                $event = $this->add_event_metadata($event);
                 $output[] = $event;
             }
         }
 
-        return array($more, $output);
+        return [$more, $output];
     }
-
-
 }

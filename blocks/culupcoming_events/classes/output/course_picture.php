@@ -38,36 +38,6 @@ defined('MOODLE_INTERNAL') || die();
 
 class course_picture implements templatable, renderable {
     /**
-     * @var string The tab to display.
-     */
-    // public $events;
-
-    // /**
-    //  * Constructor.
-    //  *
-    //  * @param string $tab The tab to display.
-    //  */
-    // public function __construct(
-    //     $lookahead,
-    //     $courseid,
-    //     $lastid,
-    //     $lastdate,
-    //     $limitfrom,
-    //     $limitnum) 
-    // {
-    //     // $this->events = $events;
-
-    //     $this->lookahead = $lookahead;
-    //     $this->courseid = $courseid;
-    //     $this->lastid = $lastid;
-    //     $this->lastdate = $lastdate;
-    //     $this->limitfrom = $limitfrom;
-    //     $this->limitnum = $limitnum;
-    // }
-
-
-
-        /**
      * @var array List of mandatory fields in user record here. (do not include
      * TEXT columns because it would break SELECT DISTINCT in MSSQL and ORACLE)
      */
@@ -138,8 +108,10 @@ class course_picture implements templatable, renderable {
         if ($needrec) {
             $this->course = $DB->get_record('course', array('id' => $course->id), self::fields(), MUST_EXIST);
         } else {
-            $this->course = new \course_in_list($course);
+            // $this->course = new \course_in_list($course);
         }
+
+        $this->course = new \course_in_list($course);        
     }
 
     /**
@@ -149,13 +121,10 @@ class course_picture implements templatable, renderable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-
+        $this->output = $output;
         $courseimg = $this->get_course_picture();
 
-
         return $courseimg;
-
-
     }
 
     /**
@@ -191,23 +160,10 @@ class course_picture implements templatable, renderable {
         // Then wrap it in link if needed.
         if ($this->link) {
             $courseimg['url'] = new \moodle_url('/course/view.php', array('id' => $course->id));
-        }
-
-        
+        }        
 
         return $courseimg;
-        // $attributes = array('href' => $url);
-
-        // if ($this->popup) {
-        //     $id = \html_writer::random_id('this');
-        //     $attributes['id'] = $id;
-        //     $this->add_action_handler(new popup_action('click', $url), $id);
-        // }
-
-        // return \html_writer::tag('a', $output, $attributes);
-    }    
-
-
+    }
 
     /**
      * Works out the URL for the course picture.
@@ -272,7 +228,6 @@ class course_picture implements templatable, renderable {
                     return $url;
                 }
             }
-
         } else if ($CFG->enablegravatar) {
             // Normalise the size variable to acceptable bounds.
             if ($size < 1 || $size > 512) {
@@ -312,5 +267,4 @@ class course_picture implements templatable, renderable {
 
         return $defaulturl;
     }
-
 }

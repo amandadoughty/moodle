@@ -40,44 +40,62 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  */
 class main implements templatable, renderable {
-
-    // require_once($CFG->dirroot . '/blocks/culupcoming_events/locallib.php');
+    /**
+     * @var string The tab to display.
+     */
+    public $lookahead;
 
     /**
      * @var string The tab to display.
      */
-    public $events;
+    public $courseid;
 
     /**
      * @var string The tab to display.
      */
-    public $prev;
+    public $lastid;
 
     /**
      * @var string The tab to display.
      */
-    public $next;
+    public $lastdate;
+
+            /**
+     * @var string The tab to display.
+     */
+    public $limitfrom;
+
+    /**
+     * @var string The tab to display.
+     */
+    public $limitnum;    
+
+    /**
+     * @var string The tab to display.
+     */
+    public $page;
 
     /**
      * Constructor.
      *
      * @param string $tab The tab to display.
      */
-    public function __construct($lookahead,
+    public function __construct(
+        $lookahead,
         $courseid,
         $lastid,
         $lastdate,
         $limitfrom,
-        $limitnum, $prev, $next) {
-        // $this->events = $events;
+        $limitnum, 
+        $page) 
+    {
         $this->lookahead = $lookahead;
         $this->courseid = $courseid;
         $this->lastid = $lastid;
         $this->lastdate = $lastdate;
         $this->limitfrom = $limitfrom;
         $this->limitnum = $limitnum;
-        $this->prev = $prev;
-        $this->next = $next;
+        $this->page = $page;
     }
 
     /**
@@ -87,30 +105,21 @@ class main implements templatable, renderable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
+        global $PAGE;
 
+        $events = new eventlist(
+            $this->lookahead,
+            $this->courseid,
+            $this->lastid,
+            $this->lastdate,
+            $this->limitfrom,
+            $this->limitnum,
+            $this->page
+        );
 
+        $templatecontext = $events->export_for_template($output);
+        $templatecontext['reloadurl'] = $PAGE->url;
 
-        // $context = new stdClass();
-     //    $context->events = $events;
-     //    $context->reloadurl = $this->page->url;
-
-     //    $context->pagination = $renderer->culupcoming_events_pagination($prev, $next);
-
-     //    return $this->render_from_template('block_culupcoming_events/culupcoming_events', $context);
-
-        $events = new eventlist($this->lookahead,
-        $this->courseid,
-        $this->lastid,
-        $this->lastdate,
-        $this->limitfrom,
-        $this->limitnum);
-        // $pagination = new events($this->prev, $this->next);
-
-        return [
-            'events' => $events->export_for_template($output),
-            // 'reloadurl' => $output->page->url,
-            // 'pagination' => $pagination->export_for_template($output)
-        ];
-
+        return $templatecontext;
     }
 }

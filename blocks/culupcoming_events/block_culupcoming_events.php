@@ -24,7 +24,7 @@
  *
  */
 
-require_once($CFG->dirroot.'/blocks/culupcoming_events/locallib.php');
+// require_once($CFG->dirroot.'/blocks/culupcoming_events/locallib.php');
 
 /**
  * block_culupcoming_events
@@ -76,8 +76,6 @@ class block_culupcoming_events extends block_base {
             $limitfrom = $page > 1 ? ($page * $limitnum) - $limitnum : 0;
             $lastdate = 0;
             $lastid = 0;
-            // $currentlastid = optional_param('block_culupcoming_events_cid', 0, PARAM_RAW);
-            // $prevlastid = optional_param('block_culupcoming_events_pid', 0, PARAM_RAW);
             $courseid = $COURSE->id;
 
             if(isset($this->config->lookahead)) {
@@ -86,58 +84,16 @@ class block_culupcoming_events extends block_base {
                 $lookahead = get_config('block_culupcoming_events', 'lookahead');
             }
 
-            list($more, $events) = block_culupcoming_events_get_events(
-                $lookahead,
+            $renderable = new \block_culupcoming_events\output\main($lookahead,
                 $courseid,
                 $lastid,
                 $lastdate,
                 $limitfrom,
-                $limitnum);
+                $limitnum, 
+                $page
+            );
 
-            // $renderer = $this->page->get_renderer('block_culupcoming_events');
-            // $this->content->text = $renderer->culupcoming_events_reload();
-            // $this->content->text .= $renderer->culupcoming_events($events);
-// $context = new stdClass();
-// $context->events = $events;
-// print_r($events);
-            // $renderer = $this->page->get_renderer('core_calendar');
-            
-// print_r($events);
-            $prev = false;
-            $next = false;
-
-            if ($page > 1) {
-                // Add a 'sooner' link.
-                $prev = $page - 1;
-            }
-
-            if ($more) {
-                // Add an 'later' link.
-                $next = $page + 1;
-            }
-
-            // $this->content->text .= $renderer->render_culupcoming_events($events, $prev, $next);
-
-            // $this->content->text .= $renderer->culupcoming_events_pagination($prev, $next);
-
-            // $this->content->text .= $renderer->culupcoming_events_pagination($prevlastid, $nextlastid, $currentlastid);
-
-            // if (empty($this->content->text)) {
-            //     $this->content->text = html_writer::tag('div',
-            //                                             get_string('noupcomingevents', 'calendar'),
-            //                                             array('class' => 'post', 'style' => 'margin-left: 1em'));
-            // }
-
-
-            $renderable = new \block_culupcoming_events\output\main($lookahead,
-        $courseid,
-        $lastid,
-        $lastdate,
-        $limitfrom,
-        $limitnum, $prev, $next, $prev, $next);
-            
             $renderer = $this->page->get_renderer('block_culupcoming_events');
-
             $this->content->text = $renderer->render($renderable);
 
             $this->page->requires->yui_module(
