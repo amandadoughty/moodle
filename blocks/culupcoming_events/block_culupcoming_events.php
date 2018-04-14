@@ -96,11 +96,16 @@ class block_culupcoming_events extends block_base {
             $renderer = $this->page->get_renderer('block_culupcoming_events');
             $this->content->text = $renderer->render($renderable);
 
-            // $this->page->requires->yui_module(
-            //     'moodle-block_culupcoming_events-scroll',
-            //     'M.block_culupcoming_events.scroll.init',
-            //     array(array('limitnum' => $limitnum, 'courseid' => $COURSE->id, 'lookahead' => $lookahead))
-            // );
+            $this->page->requires->yui_module(
+                'moodle-block_culupcoming_events-scroll',
+                'M.block_culupcoming_events.scroll.init',
+                [[
+                    'lookahead' => $lookahead,
+                    'courseid' => $courseid, 
+                    'limitnum' => $limitnum, 
+                    'page' => $page
+                ]]
+            );
 
             // Footer.
             $courseshown = $COURSE->id;

@@ -25,12 +25,13 @@
 M.block_culupcoming_events = M.block_culupcoming_events || {};
 M.block_culupcoming_events.scroll = {
 
+    lookahead: 365,
+    courseid: 0,
     limitnum: null,
+    page: 0,
     scroller: null,
     reloader: null,
     timer: null,
-    courseid: 0,
-    lookahead: 365,
 
     init: function(params) {
 
@@ -53,9 +54,10 @@ M.block_culupcoming_events.scroll = {
 
         this.scroller = Y.one('.block_culupcoming_events .culupcoming_events');
         this.scroller.on('scroll', this.filltobelowblock, this);
-        this.limitnum = params.limitnum;
-        this.courseid = params.courseid;
         this.lookahead = params.lookahead;
+        this.courseid = params.courseid;
+        this.limitnum = params.limitnum;
+        this.page = params.page;
         // Refresh the feed every 5 mins.
         this.timer = Y.later(1000 * 60 * 5, this, this.reloadevents, [], true);
         this.filltobelowblock();
@@ -180,9 +182,10 @@ M.block_culupcoming_events.scroll = {
 
         var params = {
             sesskey : M.cfg.sesskey,
-            lastid : lastid,
+            lookahead: this.lookahead,
             courseid: this.courseid,
-            lookahead: this.lookahead
+            limitnum : this.limitnum,
+            page : this.page
         };
 
         Y.io(M.cfg.wwwroot + '/blocks/culupcoming_events/reload_ajax.php', {

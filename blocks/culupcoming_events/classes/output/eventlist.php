@@ -81,7 +81,7 @@ class eventlist implements templatable, renderable {
             $this->limitfrom,
             $this->limitnum
             );
-        
+
         $prev = false;
         $next = false;
 
@@ -450,8 +450,8 @@ class eventlist implements templatable, renderable {
         // and backwards. So we retrieve all the events for previous and current page plus one to check if there are more to
         // page through.
         $eventnum = $limitnum + 1;
-        $events = $this->get_all_events($lookahead, $courseid, 0, $lastid, $eventnum);
-
+        $events = $this->get_events($lookahead, $courseid, 0, $lastid, $eventnum);
+print_r($events);
         if ($events !== false) {
             if (count($events) > ($limitnum)) {
                 $more = true;
