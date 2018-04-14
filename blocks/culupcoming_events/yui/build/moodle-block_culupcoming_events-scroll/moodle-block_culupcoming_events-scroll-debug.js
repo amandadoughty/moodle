@@ -132,12 +132,13 @@ M.block_culupcoming_events.scroll = {
 
         var params = {
             sesskey : M.cfg.sesskey,
-            limitfrom: 1,
-            limitnum: this.limitnum,
+            lookahead: this.lookahead,
+            courseid: this.courseid,
             lastid : lastid,
             lastdate : lastdate,
-            courseid: this.courseid,
-            lookahead: this.lookahead
+            limitfrom: 1,
+            limitnum: this.limitnum,
+            page: this.page
         };
 
         Y.io(M.cfg.wwwroot + '/blocks/culupcoming_events/scroll_ajax.php', {

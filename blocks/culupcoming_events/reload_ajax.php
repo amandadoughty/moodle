@@ -27,12 +27,9 @@
 define('AJAX_SCRIPT', true);
 
 require_once(dirname(__FILE__) . '/../../config.php');
-// require_once(dirname(__FILE__) . '/locallib.php');
-// require_once(dirname(__FILE__) . '/classes/output/eventlist.php');
 require_once(dirname(__FILE__) . '/../../calendar/lib.php');
 
 use block_culupcoming_events\output\eventlist;
-// use \calendar_information;
 
 require_sesskey();
 require_login();
@@ -55,15 +52,6 @@ $events = new eventlist(
             $limitnum,
             $page
         );
-// $lookahead,
-//         $courseid,
-//         $lastid,
-//         $lastdate,
-//         $limitfrom,
-//         $limitnum,
-//         $page
-
-// list($more, $events) = $events->export_for_template($renderer);
 
 $templatecontext = $events->export_for_template($renderer);
 $events = $templatecontext['events'];
