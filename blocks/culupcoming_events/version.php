@@ -26,8 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2016062301;  // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2015111600;  // Requires this Moodle version.
+$plugin->version   = 2018041400;  // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2017110800;  // Requires this Moodle version.
 $plugin->component = 'block_culupcoming_events'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.3.0 (Build: 2016062300)';
+$plugin->maturity = MATURITY_BETA;
+$plugin->release = '3.0.0 (Build: 2018041400)';
