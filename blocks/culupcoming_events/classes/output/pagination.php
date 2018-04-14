@@ -87,8 +87,8 @@ class pagination implements templatable, renderable {
         $pagination = new stdClass();
         if ($prev) {
             $pagination->prev = new stdClass();
-            $pagination->prev->url = new moodle_url($PAGE->url, array('block_culupcoming_events_page' => $prev));
-            $pagination->prev->text = get_string('sooner', 'block_culupcoming_events');
+            $pagination->prev->prevurl = new moodle_url($PAGE->url, array('block_culupcoming_events_page' => $prev));
+            $pagination->prev->prevtext = get_string('sooner', 'block_culupcoming_events');
         }
         if ($prev && $next) {
             $pagination->sep = '&nbsp;|&nbsp;';
@@ -97,8 +97,8 @@ class pagination implements templatable, renderable {
         }
         if ($next) {
             $pagination->next = new stdClass();
-            $pagination->nexturl = new moodle_url($PAGE->url, array('block_culupcoming_events_page' => $next));
-            $pagination->nexttext = get_string('later', 'block_culupcoming_events');
+            $pagination->next->nexturl = new moodle_url($PAGE->url, array('block_culupcoming_events_page' => $next));
+            $pagination->next->nexttext = get_string('later', 'block_culupcoming_events');
         }
         return $pagination;
     }    

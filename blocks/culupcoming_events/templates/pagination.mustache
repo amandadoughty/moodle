@@ -32,3 +32,18 @@
     }
 }}
 
+{{#pagination}}
+<div class="pages">
+    {{#prev}}
+        <a href="{{{prevurl}}}">
+            {{prevtext}}
+        </a>
+    {{/prev}}
+    {{{sep}}}
+    {{#next}}
+        <a href="{{{nexturl}}}">
+            {{nexttext}}
+        </a>
+    {{/next}}
+</div>
+{{/pagination}}
