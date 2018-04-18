@@ -82,7 +82,8 @@ class block_culupcoming_events extends block_base {
                 $lookahead = get_config('block_culupcoming_events', 'lookahead');
             }
 
-            $renderable = new \block_culupcoming_events\output\main($lookahead,
+            $renderable = new \block_culupcoming_events\output\main(
+                $lookahead,
                 $courseid,
                 $lastid,
                 $lastdate,
@@ -106,19 +107,33 @@ class block_culupcoming_events extends block_base {
             );
 
             // Footer.
-            $courseshown = $COURSE->id;
-            $context = context_course::instance($courseshown);
-            $hrefcal = new moodle_url('/calendar/view.php', array('view' => 'upcoming', 'course' => $courseshown));
-            $iconcal = $OUTPUT->pix_icon('i/calendar', '', 'moodle', array('class' => 'iconsmall'));
-            $linkcal = html_writer::link($hrefcal, $iconcal . get_string('gotocalendar', 'calendar') . '...');
-            $this->content->footer .= html_writer::tag('div', $linkcal);
+            // $courseshown = $COURSE->id;
+            // $context = context_course::instance($courseshown);
+            // $hrefcal = new moodle_url('/calendar/view.php', array('view' => 'upcoming', 'course' => $courseshown));
+            // $iconcal = $OUTPUT->pix_icon('i/calendar', '', 'moodle', array('class' => 'iconsmall'));
+            // $linkcal = html_writer::link($hrefcal, $iconcal . get_string('gotocalendar', 'calendar') . '...');
+            // $this->content->footer .= html_writer::tag('div', $linkcal);
 
-            if (has_any_capability(array('moodle/calendar:manageentries', 'moodle/calendar:manageownentries'), $context)) {
-                $hrefnew = new moodle_url('/calendar/event.php', array('action' => 'new', 'course' => $courseshown));
-                $iconnew = $OUTPUT->pix_icon('t/add', '', 'moodle', array('class' => 'iconsmall'));
-                $linknew = html_writer::link($hrefnew, $iconnew . get_string('newevent', 'calendar').'...');
-                $this->content->footer .= html_writer::tag('div', $linknew);
-            }
+            // if (has_any_capability(array('moodle/calendar:manageentries', 'moodle/calendar:manageownentries'), $context)) {
+            //     $hrefnew = new moodle_url('/calendar/event.php', array('action' => 'new', 'course' => $courseshown));
+            //     $iconnew = $OUTPUT->pix_icon('t/add', '', 'moodle', array('class' => 'iconsmall'));
+            //     $linknew = html_writer::link($hrefnew, $iconnew . get_string('newevent', 'calendar').'...');
+            //     $this->content->footer .= html_writer::tag('div', $linknew);
+            // }
+
+            $renderable = new \block_culupcoming_events\output\footer(
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                ''
+            );
+
+            $this->content->footer .= $renderer->render($renderable);
+
+
         }
         return $this->content;
     }

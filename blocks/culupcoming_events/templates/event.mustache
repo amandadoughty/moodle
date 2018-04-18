@@ -35,33 +35,31 @@
 <li id="{{id}}_{{timestart}}">
     <!-- <div class="clearfix notifictionitem"> -->
     <div{{!
-        }} class="event"{{!
+        }} class="event clearfix"{{!
         }} data-eventtype-{{calendareventtype}}="1"{{!
         }} data-region="event-item"{{!
     }}>
         <div class="avatar">
             {{{img}}}
         </div>
-        <a{{!
-            }} data-type="event"{{!
-            }} data-action="view-event"{{!
-            }} data-event-id="{{id}}"{{!
-            }} href="{{viewurl}}"{{!
-        }}>{{{name}}}</a>
-        <div class="date">{{{formattedtime}}}</div>
+        <div class="notificationtext">
+            <a{{!
+                }} data-type="event"{{!
+                }} data-action="view-event"{{!
+                }} data-event-id="{{id}}"{{!
+                }} href="{{viewurl}}"{{!
+            }}>{{{name}}}</a>
+            {{{formattedtime}}}
+        </div>
         <div class="activityicon">
             {{#icon}}{{#pix}} {{key}}, {{component}}, {{alttext}} {{/pix}}{{/icon}}
         </div>
     </div>
     <div class="meta">
-        <div class="timeuntil">
-            <span>{{timeuntil}}</span>
-        </div>
-        <div class="contexturls">
-            <a href="{{viewurl}}">
-                Visit
-            </a>
-        </div>
+        <span class="timeuntil">{{timeuntil}}</span>
+        <a class="contexturls" href="{{viewurl}}">
+            Visit
+        </a>
     </div>
 </li>
 </hr>

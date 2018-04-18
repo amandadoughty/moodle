@@ -47,4 +47,14 @@ class renderer extends plugin_renderer_base {
     public function render_main(main $main) {
         return $this->render_from_template('block_culupcoming_events/main', $main->export_for_template($this));
     }
+
+    /**
+     * Return the footer content for the block culupcoming_events.
+     *
+     * @param footer $footer The main renderable
+     * @return string HTML string
+     */
+    public function render_footer(footer $footer) {
+        return $this->render_from_template('block_culupcoming_events/footer', $footer->export_for_template($this));
+    }
 }

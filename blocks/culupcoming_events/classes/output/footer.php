@@ -30,7 +30,6 @@ use renderer_base;
 use renderable;
 use templatable;
 use stdClass;
-use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -40,25 +39,62 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  */
-class pagination implements templatable, renderable {
+class footer implements templatable, renderable {
     /**
-     * @var string The tab to display.
+     * @var int The number of days to look ahead.
      */
-    public $prev;
+    public $lookahead;
 
     /**
-     * @var string The tab to display.
+     * @var int The course id.
      */
-    public $next;
+    public $courseid;
+
+    /**
+     * @var int The id of the last event.
+     */
+    public $lastid;
+
+    /**
+     * @var int The date of the last event.
+     */
+    public $lastdate;
+
+    /**
+     * @var int The event number to start from.
+     */
+    public $limitfrom;
+
+    /**
+     * @var int  The number of events to show.
+     */
+    public $limitnum;
+
+    /**
+     * @var int The current page if JS is disabled.
+     */
+    public $page;
 
     /**
      * Constructor.
      *
      * @param string $tab The tab to display.
      */
-    public function __construct($prev, $next) {
-        $this->prev = $prev;
-        $this->next = $next;
+    public function __construct(
+        $lookahead,
+        $courseid,
+        $lastid,
+        $lastdate,
+        $limitfrom,
+        $limitnum,
+        $page) {
+        $this->lookahead = $lookahead;
+        $this->courseid = $courseid;
+        $this->lastid = $lastid;
+        $this->lastdate = $lastdate;
+        $this->limitfrom = $limitfrom;
+        $this->limitnum = $limitnum;
+        $this->page = $page;
     }
 
     /**
@@ -68,40 +104,14 @@ class pagination implements templatable, renderable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-        $pagination = $this->get_pagination($this->prev, $this->next);
-
-        return $pagination;
-    }
-
-    /**
-     * Function to create the pagination. This will only show up for non-js
-     * enabled browsers.
-     *
-     * @param int $prev the previous page number
-     * @param int $next the next page number
-     * @return string $output html
-     */
-    public function get_pagination($prev = false, $next = false) {
         global $PAGE;
 
-        $pagination = new stdClass();
-        
-        if ($prev) {
-            $pagination->prev = new stdClass();
-            $pagination->prev->prevurl = new moodle_url($PAGE->url, array('block_culupcoming_events_page' => $prev));
-            $pagination->prev->prevtext = get_string('sooner', 'block_culupcoming_events');
-        }
-        if ($prev && $next) {
-            $pagination->sep = '&nbsp;|&nbsp;';
-        } else {
-            $pagination->sep = '';
-        }
-        if ($next) {
-            $pagination->next = new stdClass();
-            $pagination->next->nexturl = new moodle_url($PAGE->url, array('block_culupcoming_events_page' => $next));
-            $pagination->next->nexttext = get_string('later', 'block_culupcoming_events');
-        }
+        $footer = new stdClass();
 
-        return $pagination;
+        $footer->calendarurl = 'fdffd';
+        $footer->addeventurl = '';
+        $footer->manageentries = true;
+
+        return ['footer' => $footer];
     }
 }
