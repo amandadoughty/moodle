@@ -322,6 +322,7 @@ class eventlist implements templatable, renderable {
                 $event->img = $this->get_course_img($event->courseid);
                 break;
             case 'site':
+            case 'category':
                 $event->img = $this->get_site_img();
                 break;
             default:
