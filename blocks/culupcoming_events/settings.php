@@ -13,14 +13,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Admin settings for CUL Upcoming Events
+ * CUL Course Format Information
  *
- * @package    block
- * @subpackage cupcoming_events
- * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * A format that can be weeks or topics based and collapses content into section
+ * headers.
+ *
+ * @package    block/culupcoming_events
+ * @copyright  Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  *
  */
 
@@ -33,10 +34,12 @@ if ($ADMIN->fulltree) {
         get_string('gravatardefaulturl_help', 'admin'), 'mm'
     ));
 
-    $options = array();
+    $options = [];
+
     for ($i = 0; $i <= 365; $i++) {
         $options[$i] = $i;
     }
+
     $settings->add(new admin_setting_configselect(
         'block_culupcoming_events/lookahead',
         new lang_string('lookahead', 'block_culupcoming_events'),

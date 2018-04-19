@@ -1,8 +1,8 @@
-@block  @block_calendar_upcoming
-Feature: Enable the upcoming events block in a course
+@block  @block_culupcoming_events
+Feature: Enable the CUL upcoming events block in a course
   In order to enable the calendar block in a course
   As a teacher
-  I can view the event in the upcoming events block
+  I can view the event in the CUL upcoming events block
 
   Background:
     Given the following "users" exist:
@@ -23,4 +23,4 @@ Feature: Enable the upcoming events block in a course
       | id_name | My Site Event |
     And I log out
     When I log in as "teacher1"
-    Then I should see "My Site Event" in the "Upcoming events" "block"
+    Then I should see "My Site Event" in the "CUL Upcoming events" "block"

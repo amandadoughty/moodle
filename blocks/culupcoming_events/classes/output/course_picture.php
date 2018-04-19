@@ -16,13 +16,11 @@
 /**
  * CUL Course Format Information
  *
- * A collapsed format that solves the issue of the 'Scroll of Death' when a course has many sections. All sections
- * except zero have a toggle that displays that section. One or more sections can be displayed at any given time.
- * Toggles are persistent on a per browser session per course basis but can be made to persist longer.
+ * A format that can be weeks or topics based and collapses content into section
+ * headers.
  *
  * @package    block/culupcoming_events
- * @version    See the value of '$plugin->version' in below.
- * @author     Amanda Doughty
+ * @copyright  Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  *
  */
@@ -41,7 +39,7 @@ class course_picture implements templatable, renderable {
      * @var array List of mandatory fields in user record here. (do not include
      * TEXT columns because it would break SELECT DISTINCT in MSSQL and ORACLE)
      */
-    protected static $fields = array('id', 'shortname', 'idnumber');
+    protected static $fields = ['id', 'shortname', 'idnumber'];
 
     /**
      * @var stdClass A course object with at least fields all columns specified
@@ -106,7 +104,7 @@ class course_picture implements templatable, renderable {
         }
 
         if ($needrec) {
-            $this->course = $DB->get_record('course', array('id' => $course->id), self::fields(), MUST_EXIST);
+            $this->course = $DB->get_record('course', ['id' => $course->id], self::fields(), MUST_EXIST);
         }
 
         $this->course = new \course_in_list($course);
@@ -116,7 +114,7 @@ class course_picture implements templatable, renderable {
      * Export this data so it can be used as the context for a mustache template.
      *
      * @param \renderer_base $output
-     * @return stdClass
+     * @return array
      */
     public function export_for_template(renderer_base $output) {
         $this->output = $output;
@@ -128,7 +126,6 @@ class course_picture implements templatable, renderable {
     /**
      * Internal implementation of course image rendering.
      *
-     * @param course_picture $this
      * @return string
      */
     protected function get_course_picture() {
@@ -157,7 +154,7 @@ class course_picture implements templatable, renderable {
 
         // Then wrap it in link if needed.
         if ($this->link) {
-            $courseimg['url'] = new \moodle_url('/course/view.php', array('id' => $course->id));
+            $courseimg['url'] = new \moodle_url('/course/view.php', ['id' => $course->id]);
         }
 
         return $courseimg;
@@ -252,12 +249,12 @@ class course_picture implements templatable, renderable {
                     $gravatardefault = str_replace($CFG->wwwroot, $CFG->httpswwwroot, $gravatardefault); // Replace by secure url.
                     return new moodle_url(
                         "https://secure.gravatar.com/avatar/{$md5}",
-                        array('s' => $size, 'd' => $gravatardefault)
+                        ['s' => $size, 'd' => $gravatardefault]
                         );
                 } else {
                     return new moodle_url(
                         "http://www.gravatar.com/avatar/{$md5}",
-                        array('s' => $size, 'd' => $gravatardefault)
+                        ['s' => $size, 'd' => $gravatardefault]
                         );
                 }
             }

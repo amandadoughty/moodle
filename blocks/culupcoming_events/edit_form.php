@@ -13,23 +13,26 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Instance settings for CUL Upcoming Events
+ * CUL Course Format Information
  *
- * @package    block
- * @subpackage cupcoming_events
- * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * A format that can be weeks or topics based and collapses content into section
+ * headers.
+ *
+ * @package    block/culupcoming_events
+ * @copyright  Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  *
  */
+
+defined('MOODLE_INTERNAL') || die();
 
 class block_culupcoming_events_edit_form extends block_edit_form {
 
     protected function specific_definition($mform) {
         $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
 
-        $options = array();
+        $options = [];
 
         for ($i = 0; $i <= 365; $i++) {
             $options[$i] = $i;

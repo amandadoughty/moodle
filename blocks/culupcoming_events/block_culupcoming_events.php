@@ -13,22 +13,26 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * CUL Upcoming Events block
+ * CUL Course Format Information
  *
- * @package    block
- * @subpackage culupcoming_events
- * @copyright  2013 Tim Gagen <Tim.Gagen.1@city.ac.uk>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * A format that can be weeks or topics based and collapses content into section
+ * headers.
+ *
+ * @package    block/culupcoming_events
+ * @copyright  Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  *
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
- * block_culupcoming_events
+ * Handles displaying the CUL upcoming events block.
  *
- * @package block
- * @copyright
+ * @package    block_culupcoming_events
+ * @copyright  Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  */
 class block_culupcoming_events extends block_base {
     /**
@@ -94,6 +98,8 @@ class block_culupcoming_events extends block_base {
 
             $renderer = $this->page->get_renderer('block_culupcoming_events');
             $this->content->text = $renderer->render($renderable);
+            $renderable = new \block_culupcoming_events\output\footer($courseid);
+            $this->content->footer .= $renderer->render($renderable);
 
             $this->page->requires->yui_module(
                 'moodle-block_culupcoming_events-scroll',
@@ -105,36 +111,8 @@ class block_culupcoming_events extends block_base {
                     'page' => $page
                 ]]
             );
-
-            // Footer.
-            // $courseshown = $COURSE->id;
-            // $context = context_course::instance($courseshown);
-            // $hrefcal = new moodle_url('/calendar/view.php', array('view' => 'upcoming', 'course' => $courseshown));
-            // $iconcal = $OUTPUT->pix_icon('i/calendar', '', 'moodle', array('class' => 'iconsmall'));
-            // $linkcal = html_writer::link($hrefcal, $iconcal . get_string('gotocalendar', 'calendar') . '...');
-            // $this->content->footer .= html_writer::tag('div', $linkcal);
-
-            // if (has_any_capability(array('moodle/calendar:manageentries', 'moodle/calendar:manageownentries'), $context)) {
-            //     $hrefnew = new moodle_url('/calendar/event.php', array('action' => 'new', 'course' => $courseshown));
-            //     $iconnew = $OUTPUT->pix_icon('t/add', '', 'moodle', array('class' => 'iconsmall'));
-            //     $linknew = html_writer::link($hrefnew, $iconnew . get_string('newevent', 'calendar').'...');
-            //     $this->content->footer .= html_writer::tag('div', $linknew);
-            // }
-
-            $renderable = new \block_culupcoming_events\output\footer(
-                '',
-                '',
-                '',
-                '',
-                '',
-                '',
-                ''
-            );
-
-            $this->content->footer .= $renderer->render($renderable);
-
-
         }
+
         return $this->content;
     }
 }

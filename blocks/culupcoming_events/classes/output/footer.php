@@ -13,13 +13,14 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Class containing data for CUL Upcoming Events block.
+ * CUL Course Format Information
+ *
+ * A format that can be weeks or topics based and collapses content into section
+ * headers.
  *
  * @package    block/culupcoming_events
- * @version    See the value of '$plugin->version' in below.
- * @author     Amanda Doughty
+ * @copyright  Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  *
  */
@@ -33,84 +34,39 @@ use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Class containing data for CUL Upcoming Events block.
- *
- * @author     Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
- */
 class footer implements templatable, renderable {
-    /**
-     * @var int The number of days to look ahead.
-     */
-    public $lookahead;
-
     /**
      * @var int The course id.
      */
     public $courseid;
 
     /**
-     * @var int The id of the last event.
-     */
-    public $lastid;
-
-    /**
-     * @var int The date of the last event.
-     */
-    public $lastdate;
-
-    /**
-     * @var int The event number to start from.
-     */
-    public $limitfrom;
-
-    /**
-     * @var int  The number of events to show.
-     */
-    public $limitnum;
-
-    /**
-     * @var int The current page if JS is disabled.
-     */
-    public $page;
-
-    /**
      * Constructor.
      *
      * @param string $tab The tab to display.
      */
-    public function __construct(
-        $lookahead,
-        $courseid,
-        $lastid,
-        $lastdate,
-        $limitfrom,
-        $limitnum,
-        $page) {
-        $this->lookahead = $lookahead;
+    public function __construct($courseid) {
         $this->courseid = $courseid;
-        $this->lastid = $lastid;
-        $this->lastdate = $lastdate;
-        $this->limitfrom = $limitfrom;
-        $this->limitnum = $limitnum;
-        $this->page = $page;
     }
 
     /**
      * Export this data so it can be used as the context for a mustache template.
      *
      * @param \renderer_base $output
-     * @return stdClass
+     * @return array
      */
     public function export_for_template(renderer_base $output) {
         global $PAGE;
 
         $footer = new stdClass();
+        $footer->manageentries = false;
+        $context = \context_course::instance($this->courseid);
+        $footer->calendarurl = new \moodle_url('/calendar/view.php', ['view' => 'upcoming', 'course' => $this->courseid]);
 
-        $footer->calendarurl = 'fdffd';
-        $footer->addeventurl = '';
-        $footer->manageentries = true;
+        if (has_any_capability(['moodle/calendar:manageentries', 'moodle/calendar:manageownentries'], $context)) {
+            $footer->addeventurl = new \moodle_url('/calendar/event.php', ['action' => 'new', 'course' => $this->courseid]);
+            $footer->manageentries = true;
+        }
 
         return ['footer' => $footer];
     }

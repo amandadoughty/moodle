@@ -13,42 +13,42 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * CUL Upcoming Events
+ * CUL Course Format Information
  *
- * @package    block
- * @subpackage culupcoming_events
- * @copyright  2013 Tim Gagen <Tim.Gagen.1@city.ac.uk>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * A format that can be weeks or topics based and collapses content into section
+ * headers.
+ *
+ * @package    block/culupcoming_events
+ * @copyright  Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  *
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
+$capabilities = [
 
-    'block/culupcoming_events:myaddinstance' => array(
+    'block/culupcoming_events:myaddinstance' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array(
+        'archetypes' => [
             'user' => CAP_ALLOW
-        ),
+        ],
 
         'clonepermissionsfrom' => 'moodle/my:manageblocks'
-    ),
+    ],
 
-    'block/culupcoming_events:addinstance' => array(
+    'block/culupcoming_events:addinstance' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        ),
+        ],
 
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
-    ),
-);
+    ],
+];
 

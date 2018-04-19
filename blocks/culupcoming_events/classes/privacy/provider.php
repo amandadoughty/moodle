@@ -13,16 +13,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Privacy provider for culupcoming_events block.
+ * CUL Course Format Information
  *
- * @package    block
- * @subpackage culupcoming_events
- * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * A format that can be weeks or topics based and collapses content into section
+ * headers.
+ *
+ * @package    block/culupcoming_events
+ * @copyright  Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  *
  */
+
+defined('MOODLE_INTERNAL') || die();
 
 namespace culupcoming_events\privacy;
 

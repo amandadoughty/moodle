@@ -13,14 +13,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * culupcoming_events block renderer
+ * CUL Course Format Information
  *
- * @package    block_culupcoming_events
- * @copyright  2018 Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * A format that can be weeks or topics based and collapses content into section
+ * headers.
+ *
+ * @package    block/culupcoming_events
+ * @copyright  Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
+ *
  */
+
 namespace block_culupcoming_events\output;
 
 defined('MOODLE_INTERNAL') || die;
@@ -29,13 +33,6 @@ use plugin_renderer_base;
 use renderable;
 use stdClass;
 
-/**
- * culupcoming_events block renderer
- *
- * @package    block_culupcoming_events
- * @copyright  2018 Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 class renderer extends plugin_renderer_base {
 
     /**
@@ -51,7 +48,7 @@ class renderer extends plugin_renderer_base {
     /**
      * Return the footer content for the block culupcoming_events.
      *
-     * @param footer $footer The main renderable
+     * @param footer $footer The footer renderable
      * @return string HTML string
      */
     public function render_footer(footer $footer) {
