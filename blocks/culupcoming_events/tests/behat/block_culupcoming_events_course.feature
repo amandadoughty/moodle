@@ -21,6 +21,9 @@ Feature: Enable the CUL upcoming events block in a course
     And I create a calendar event with form data:
       | id_eventtype | Site |
       | id_name | My Site Event |
+    And I am on "Course 1" course homepage with editing mode on
+    And I add the "CUL Upcoming events" block
     And I log out
     When I log in as "teacher1"
-    Then I should see "My Site Event" in the "CUL Upcoming events" "block"
+    And I am on "Course 1" course homepage
+    Then I should see "My Site Event" in the "Module events" "block"

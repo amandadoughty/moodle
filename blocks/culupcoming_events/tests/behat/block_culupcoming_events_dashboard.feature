@@ -17,4 +17,7 @@ Feature: View a upcoming site event on the dashboard
       | id_name | My Site Event |
     And I log out
     When I log in as "student1"
-    Then I should see "My Site Event"
+    And I am on homepage
+    And I press "Customise this page"
+    And I add the "CUL Upcoming events" block
+    Then I should see "My Site Event" in the "CUL Upcoming events" "block"
