@@ -116,14 +116,25 @@ class dashboard implements templatable, renderable {
     public function quicklink_display($course) {
         global $CFG, $DB, $OUTPUT;
 
-        $linkitems = array();
+        $linkitems = [];
+        $sortedlinkitems = [];
         $coursecontext = \context_course::instance($course->id);
+        $sequence = [
+            'students',
+            'readinglists',
+            'timetable',
+            'graderreport',
+            'calendar',            
+            'lecturers',
+            'courseofficers',
+            'media'
+        ];
 
         // Reading list
         if ($this->culconfig['showreadinglists'] == 2 || $this->userisediting) {
             $lnktxt = get_string('aspirelists', 'format_culcourse');
-            $attrs  = array ();
-            $liattrs = array();
+            $attrs  = [];
+            $liattrs = [];
             $class = '';
             $editurl = '';
             $editicon = '';
@@ -172,7 +183,7 @@ class dashboard implements templatable, renderable {
                 }
             }
 
-            $linkitems[] = [
+            $linkitems['readinglists'] = [
                 'url' => $url,
                 'icon' => 'fa fa-bookmark',
                 'text' => $lnktxt,
@@ -183,15 +194,13 @@ class dashboard implements templatable, renderable {
                 'editicon' => $editicon, 
                 'editattrs' => $editattrs
             ];
-
-
         }
 
         // Timetable link
         if ($this->culconfig['showtimetable'] == 2 || $this->userisediting) {
             $lnktxt = get_string('timetable', 'format_culcourse');
-            $attrs = array ();
-            $liattrs = array();
+            $attrs = [];
+            $liattrs = [];
             $class = '';
             $editurl = '';
             $editicon = '';
@@ -233,7 +242,7 @@ class dashboard implements templatable, renderable {
                 }
             }
 
-            $linkitems[] = [
+            $linkitems['timetable'] = [
                 'url' => $url,
                 'icon' => 'fa-clock-o',
                 'text' => $lnktxt,
@@ -249,8 +258,8 @@ class dashboard implements templatable, renderable {
         // Grades
         if ($this->culconfig['showgraderreport'] == 2 || $this->userisediting) {
             $lnktxt = get_string('grades', 'grades');
-            $attrs  = array ();
-            $liattrs = array();
+            $attrs  = [];
+            $liattrs = [];
             $class = '';
             $editurl = '';
             $editicon = '';
@@ -281,7 +290,7 @@ class dashboard implements templatable, renderable {
                 $url = 'javascript:void(0);';
             }
 
-            $linkitems[] = [
+            $linkitems['graderreport'] = [
                 'url' => $url,
                 'icon' => 'fa-mortar-board',
                 'text' => $lnktxt,
@@ -297,8 +306,8 @@ class dashboard implements templatable, renderable {
         // Calendar
         if ($this->culconfig['showcalendar'] == 2 || $this->userisediting) {
             $lnktxt = get_string('calendar', 'calendar');
-            $attrs  = array ();
-            $liattrs = array();
+            $attrs  = [];
+            $liattrs = [];
             $class = '';
             $editurl = '';
             $editicon = '';
@@ -319,7 +328,7 @@ class dashboard implements templatable, renderable {
             $attrs['title'] = get_string('view-calendar', 'format_culcourse');
             $url  = new \moodle_url('/calendar/view.php', array('view' => 'month', 'course' => $course->id));
 
-            $linkitems[] = [
+            $linkitems['calendar'] = [
                 'url' => $url,
                 'icon' => 'fa-calendar',
                 'text' => $lnktxt,
@@ -341,8 +350,8 @@ class dashboard implements templatable, renderable {
             $studentrole = $DB->get_record('role', array('shortname'=>'student'));
 
             if ($studentrole){
-                $attrs  = array ();
-                $liattrs = array();
+                $attrs  = [];
+                $liattrs = [];
                 $class = '';
                 $editurl = '';$editicon = '';$editattrs = '';
 
@@ -371,7 +380,7 @@ class dashboard implements templatable, renderable {
                     $url = 'javascript:void(0);';
                 }
 
-                $linkitems[] = [
+                $linkitems['students'] = [
                     'url' => $url,
                     'icon' => 'fa-users',
                     'text' => $lnktxt,
@@ -390,8 +399,8 @@ class dashboard implements templatable, renderable {
             $lecturerrole = $DB->get_record('role', array('shortname'=>'lecturer'));
 
             if ($lecturerrole){
-                $attrs  = array ();
-                $liattrs = array();
+                $attrs  = [];
+                $liattrs = [];
                 $class = '';
                 $editurl = '';
                 $editicon = '';
@@ -422,7 +431,7 @@ class dashboard implements templatable, renderable {
                     $url = 'javascript:void(0);';
                 }
 
-                $linkitems[] = [
+                $linkitems['lecturers'] = [
                     'url' => $url,
                     'icon' => 'fa-users',
                     'text' => $lnktxt,
@@ -441,8 +450,8 @@ class dashboard implements templatable, renderable {
             $courseofficerrole = $DB->get_record('role', array('shortname'=>'courseofficer'));
 
             if ($courseofficerrole){
-                $attrs  = array ();
-                $liattrs = array();
+                $attrs  = [];
+                $liattrs = [];
                 $class = '';
                 $editurl = '';
                 $editicon = '';
@@ -473,7 +482,7 @@ class dashboard implements templatable, renderable {
                     $url = 'javascript:void(0);';
                 }
 
-                $linkitems[] = [
+                $linkitems['courseofficers'] = [
                     'url' => $url,
                     'icon' => 'fa-users',
                     'text' => $lnktxt,
@@ -490,8 +499,8 @@ class dashboard implements templatable, renderable {
         // Media gallery
         if ($this->culconfig['showmedia'] == 2 || $this->userisediting) {
             $lnktxt = get_string('media', 'format_culcourse');
-            $attrs  = array ();
-            $liattrs = array();
+            $attrs  = [];
+            $liattrs = [];
             $class = '';
             $editurl = '';
             $editicon = '';
@@ -512,7 +521,7 @@ class dashboard implements templatable, renderable {
             $attrs['title'] = get_string('view-media', 'format_culcourse');
             $url  = new \moodle_url('/local/kalturamediagallery/index.php', array('courseid' => $course->id));
 
-            $linkitems[] = [
+            $linkitems['media'] = [
                 'url' => $url,
                 'icon' => 'fa-file-video-o',
                 'text' => $lnktxt,
@@ -525,7 +534,24 @@ class dashboard implements templatable, renderable {
             ];
         }
 
-        return $linkitems;
+        if ($sequence) {
+            foreach ($sequence as $linkitem) {
+                // Items may have changed since the sequence was last edited.
+                if(isset($linkitems[$linkitem])) {
+                    $sortedlinkitems[] = $linkitems[$linkitem];
+                    unset($linkitems[$linkitem]);
+                }
+            }            
+        }
+
+        // Remove the associative keys from any remaining items as
+        // mustache does not like them.
+        $linkitems = array_values($linkitems);
+        // Merge any remaining items in case they have changed since sequence
+        // was last edited.
+        $sortedlinkitems = array_merge($sortedlinkitems, $linkitems);
+
+        return $sortedlinkitems;
     }
 
     /**
@@ -544,6 +570,10 @@ class dashboard implements templatable, renderable {
         $modfullnames = [];
         $archetypes = [];
         $activities = [];
+        $sortedactivities = [];
+        $sequence = [
+            'forum'
+        ];
 
         foreach($modinfo->cms as $cm) {
 
@@ -575,7 +605,7 @@ class dashboard implements templatable, renderable {
             return '';
         }
 
-        \core_collator::asort($modfullnames);
+        \core_collator::asort($modfullnames); // sort by setting if it exists
 
         foreach ($modfullnames as $modname => $modfullname) {
             if($modname == 'lti') {
@@ -586,7 +616,7 @@ class dashboard implements templatable, renderable {
             if ((isset($this->culconfig['show' . $modname]) && $this->culconfig['show' . $modname] == 2)
                 || $this->userisediting) 
             {
-                $liattrs = array();
+                $liattrs = [];
                 $liattrs['title']  = get_string('view-mod', 'format_culcourse', strtolower($modfullname));
                 $class = '';
                 $editurl = '';
@@ -618,7 +648,7 @@ class dashboard implements templatable, renderable {
                     $icon = $OUTPUT->pix_icon('icon', '', $modname, array('class' => 'iconsmall'));
                 }
 
-                $activities[] = [
+                $activities[$modname] = [
                     'url' => $url,
                     'icon' => $icon,
                     'text' => $modfullname,
@@ -631,6 +661,25 @@ class dashboard implements templatable, renderable {
                 ];
             }            
         }
+
+        if ($sequence) {
+            foreach ($sequence as $activity) {
+                // Items may have changed since the sequence was last edited.
+                if(isset($activities[$activity])) {
+                    $sortedactivities[] = $activities[$activity];
+                    unset($activities[$activity]);
+                }
+            }            
+        }
+
+        // Remove the associative keys from any remaining items as
+        // mustache does not like them.
+        $activities = array_values($activities);
+        // Merge any remaining items in case they have changed since sequence
+        // was last edited.
+        $sortedactivities = array_merge($sortedactivities, $activities);
+
+        return $sortedactivities;
 
         return $activities;
     }
@@ -648,7 +697,7 @@ class dashboard implements templatable, renderable {
         require_once($CFG->dirroot. '/mod/lti/locallib.php');
 
         $content = '';
-        $modfullnames = array();
+        $modfullnames = [];
         $cms = $modinfo->get_instances_of('lti');
 
         foreach($cms as $cm) {
@@ -703,7 +752,7 @@ class dashboard implements templatable, renderable {
             if ((isset($this->culconfig['show' . $nametype]) && $this->culconfig['show' . $nametype] == 2)
                 || $this->userisediting) 
             {
-                $liattrs = array();
+                $liattrs = [];
                 $liattrs['title']  = get_string('view-mod', 'format_culcourse', strtolower($modnames['modfullname']));
                 $class = '';
                 $editurl = '';
