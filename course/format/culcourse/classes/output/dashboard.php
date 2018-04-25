@@ -63,10 +63,10 @@ class dashboard implements templatable, renderable {
     public $adminurl = null;
 
     /**
-     * Constructor method, calls the parent constructor - MDL-21097
+     * Constructor method, calls the parent constructor
      *
-     * @param moodle_page $page
-     * @param string $target one of rendering target constants
+     * @param stdClass $course
+     * @param array $culconfig
      */
     public function __construct($course, $culconfig) {
         global $PAGE;
@@ -119,16 +119,11 @@ class dashboard implements templatable, renderable {
         $linkitems = [];
         $sortedlinkitems = [];
         $coursecontext = \context_course::instance($course->id);
-        $sequence = [
-            'students',
-            'readinglists',
-            'timetable',
-            'graderreport',
-            'calendar',            
-            'lecturers',
-            'courseofficers',
-            'media'
-        ];
+        $sequence = [];
+
+        if (isset($this->culconfig['quicklinksequence'])) {
+            $sequence = explode(',', $this->culconfig['quicklinksequence']);
+        }
 
         // Reading list
         if ($this->culconfig['showreadinglists'] == 2 || $this->userisediting) {
@@ -139,12 +134,20 @@ class dashboard implements templatable, renderable {
             $editurl = '';
             $editicon = '';
             $editattrs = '';
+            $moveurl = '';
+            $moveicon = '';
+            $moveattrs = '';
 
             if ($this->userisediting) {
                 list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                     $course->id, 
                     'readinglists', 
                     $this->culconfig['showreadinglists']
+                    );
+
+                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                    $course->id, 
+                    'readinglists'
                     );
             }
 
@@ -192,7 +195,10 @@ class dashboard implements templatable, renderable {
                 'liattrs' => $liattrs,
                 'editurl' => $editurl, 
                 'editicon' => $editicon, 
-                'editattrs' => $editattrs
+                'editattrs' => $editattrs,
+                'moveurl' => $moveurl, 
+                'moveicon' => $moveicon, 
+                'moveattrs' => $moveattrs
             ];
         }
 
@@ -205,12 +211,20 @@ class dashboard implements templatable, renderable {
             $editurl = '';
             $editicon = '';
             $editattrs = '';
+            $moveurl = '';
+            $moveicon = '';
+            $moveattrs = '';
 
             if ($this->userisediting) {
                 list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                     $course->id, 
                     'showtimetable', 
                     $this->culconfig['showtimetable']
+                    );
+
+                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                    $course->id, 
+                    'timetable'
                     );
             }
 
@@ -251,7 +265,10 @@ class dashboard implements templatable, renderable {
                 'liattrs' => $liattrs,
                 'editurl' => $editurl, 
                 'editicon' => $editicon, 
-                'editattrs' => $editattrs
+                'editattrs' => $editattrs,
+                'moveurl' => $moveurl, 
+                'moveicon' => $moveicon, 
+                'moveattrs' => $moveattrs
             ];
         }
 
@@ -264,12 +281,20 @@ class dashboard implements templatable, renderable {
             $editurl = '';
             $editicon = '';
             $editattrs = '';
+            $moveurl = '';
+            $moveicon = '';
+            $moveattrs = '';
 
             if ($this->userisediting) {
                 list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                     $course->id, 
                     'showgraderreport', 
                     $this->culconfig['showgraderreport']
+                    );
+
+                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                    $course->id, 
+                    'graderreport'
                     );
             }            
 
@@ -299,7 +324,10 @@ class dashboard implements templatable, renderable {
                 'liattrs' => $liattrs,
                 'editurl' => $editurl, 
                 'editicon' => $editicon, 
-                'editattrs' => $editattrs
+                'editattrs' => $editattrs,
+                'moveurl' => $moveurl, 
+                'moveicon' => $moveicon, 
+                'moveattrs' => $moveattrs
             ];
         }
 
@@ -312,12 +340,20 @@ class dashboard implements templatable, renderable {
             $editurl = '';
             $editicon = '';
             $editattrs = '';
+            $moveurl = '';
+            $moveicon = '';
+            $moveattrs = '';
 
             if ($this->userisediting) {
                 list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                     $course->id, 
                     'showcalendar', 
                     $this->culconfig['showcalendar']
+                    );
+
+                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                    $course->id, 
+                    'calendar'
                     );
             }            
 
@@ -337,7 +373,10 @@ class dashboard implements templatable, renderable {
                 'liattrs' => $liattrs,
                 'editurl' => $editurl, 
                 'editicon' => $editicon, 
-                'editattrs' => $editattrs
+                'editattrs' => $editattrs,
+                'moveurl' => $moveurl, 
+                'moveicon' => $moveicon, 
+                'moveattrs' => $moveattrs
             ];
         }
 
@@ -353,13 +392,23 @@ class dashboard implements templatable, renderable {
                 $attrs  = [];
                 $liattrs = [];
                 $class = '';
-                $editurl = '';$editicon = '';$editattrs = '';
+                $editurl = '';
+                $editicon = '';
+                $editattrs = '';
+                $moveurl = '';
+                $moveicon = '';
+                $moveattrs = '';
 
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                         $course->id, 
                         'showstudents', 
                         $this->culconfig['showstudents']
+                        );
+
+                    list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                        $course->id, 
+                        'students'
                         );
                 }
 
@@ -389,7 +438,10 @@ class dashboard implements templatable, renderable {
                     'liattrs' => $liattrs,
                     'editurl' => $editurl, 
                     'editicon' => $editicon, 
-                    'editattrs' => $editattrs
+                    'editattrs' => $editattrs,
+                    'moveurl' => $moveurl, 
+                    'moveicon' => $moveicon, 
+                    'moveattrs' => $moveattrs
                 ];
             }
         }
@@ -405,12 +457,20 @@ class dashboard implements templatable, renderable {
                 $editurl = '';
                 $editicon = '';
                 $editattrs = '';
+                $moveurl = '';
+                $moveicon = '';
+                $moveattrs = '';
 
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                         $course->id, 
                         'showlecturers', 
                         $this->culconfig['showlecturers']
+                        );
+
+                    list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                        $course->id, 
+                        'lecturers'
                         );
                 }
 
@@ -440,7 +500,10 @@ class dashboard implements templatable, renderable {
                     'liattrs' => $liattrs,
                     'editurl' => $editurl, 
                     'editicon' => $editicon, 
-                    'editattrs' => $editattrs
+                    'editattrs' => $editattrs,
+                    'moveurl' => $moveurl, 
+                    'moveicon' => $moveicon, 
+                    'moveattrs' => $moveattrs
                 ];
             }
         }
@@ -456,12 +519,20 @@ class dashboard implements templatable, renderable {
                 $editurl = '';
                 $editicon = '';
                 $editattrs = '';
+                $moveurl = '';
+                $moveicon = '';
+                $moveattrs = '';
 
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                         $course->id, 
                         'showcourseofficers', 
                         $this->culconfig['showcourseofficers']
+                        );
+
+                    list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                        $course->id, 
+                        'courseofficers'
                         );
                 }
 
@@ -491,7 +562,10 @@ class dashboard implements templatable, renderable {
                     'liattrs' => $liattrs,
                     'editurl' => $editurl, 
                     'editicon' => $editicon, 
-                    'editattrs' => $editattrs
+                    'editattrs' => $editattrs,
+                    'moveurl' => $moveurl, 
+                    'moveicon' => $moveicon, 
+                    'moveattrs' => $moveattrs
                 ];
             }           
         }
@@ -505,12 +579,20 @@ class dashboard implements templatable, renderable {
             $editurl = '';
             $editicon = '';
             $editattrs = '';
+            $moveurl = '';
+            $moveicon = '';
+            $moveattrs = '';
 
             if ($this->userisediting) {
                 list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                     $course->id, 
                     'showmedia', 
                     $this->culconfig['showmedia']
+                    );
+
+                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                    $course->id, 
+                    'media'
                     );
             }            
 
@@ -530,7 +612,10 @@ class dashboard implements templatable, renderable {
                 'liattrs' => $liattrs,
                 'editurl' => $editurl, 
                 'editicon' => $editicon, 
-                'editattrs' => $editattrs
+                'editattrs' => $editattrs,
+                'moveurl' => $moveurl, 
+                'moveicon' => $moveicon, 
+                'moveattrs' => $moveattrs
             ];
         }
 
@@ -571,9 +656,11 @@ class dashboard implements templatable, renderable {
         $archetypes = [];
         $activities = [];
         $sortedactivities = [];
-        $sequence = [
-            'forum'
-        ];
+        $sequence = [];
+
+        if (isset($this->culconfig['activitysequence'])) {
+            $sequence = explode(',', $this->culconfig['activitysequence']);
+        }
 
         foreach($modinfo->cms as $cm) {
 
@@ -622,12 +709,20 @@ class dashboard implements templatable, renderable {
                 $editurl = '';
                 $editicon = '';
                 $editattrs = '';
+                $moveurl = '';
+                $moveicon = '';
+                $moveattrs = '';
                 
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                         $course->id, 
                         'show' . $modname, 
                         $this->culconfig['show' . $modname]
+                        );
+
+                    list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                        $course->id, 
+                        $modname
                         );
                 }
 
@@ -657,7 +752,10 @@ class dashboard implements templatable, renderable {
                     'liattrs' => $liattrs,
                     'editurl' => $editurl, 
                     'editicon' => $editicon, 
-                    'editattrs' => $editattrs
+                    'editattrs' => $editattrs,
+                    'moveurl' => $moveurl, 
+                    'moveicon' => $moveicon, 
+                    'moveattrs' => $moveattrs
                 ];
             }            
         }
@@ -758,12 +856,20 @@ class dashboard implements templatable, renderable {
                 $editurl = '';
                 $editicon = '';
                 $editattrs = '';
+                $moveurl = '';
+                $moveicon = '';
+                $moveattrs = '';
                 
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                         $course->id, 
                         'show' . $nametype, 
                         $this->culconfig['show' . $nametype]
+                        );
+
+                    list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                        $course->id, 
+                        $nametype
                         );
                 }
 
@@ -787,7 +893,10 @@ class dashboard implements templatable, renderable {
                     'liattrs' => $liattrs,
                     'editurl' => $editurl, 
                     'editicon' => $editicon, 
-                    'editattrs' => $editattrs
+                    'editattrs' => $editattrs,
+                    'moveurl' => $moveurl, 
+                    'moveicon' => $moveicon, 
+                    'moveattrs' => $moveattrs
                 ];
             }
         }

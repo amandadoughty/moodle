@@ -169,8 +169,11 @@ $string['defaultshowmedia'] = 'Show the media gallery';
 $string['defaultshowmedia_desc'] = 'States if the media gallery will be shown.';
 $string['quickshowmedia'] = 'Show the media gallery';
 $string['quickhidemedia'] = 'Hide the media gallery';
+
+// Editing links
 $string['quickshowlink'] = 'Show this link';
 $string['quickhidelink'] = 'Hide this link';
+$string['quickmovelink'] = 'Move this link';
 $string['noeditcoursesettings'] = 'You are not permitted to edit course settings.';
 
 // NEEDS TIDYING

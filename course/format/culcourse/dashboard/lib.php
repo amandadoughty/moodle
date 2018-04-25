@@ -81,10 +81,20 @@ class format_culcourse_dashboard {
             ];
         }
 
+        $dashboardoptions['quicklinksequence'] = [
+            'default' => join(',', $this->elements),
+            'type' => PARAM_RAW,
+        ];
+
+        $dashboardoptions['activitysequence'] = [
+            'default' => '',
+            'type' => PARAM_RAW,
+        ];
+
         $dashboardoptions['selectmoduleleaders'] = [
             'default' => null,
             'type' => PARAM_RAW,
-        ];
+        ];        
 
         $courseformatoptions = $courseformatoptions + $dashboardoptions;
     }
@@ -158,6 +168,16 @@ class format_culcourse_dashboard {
         } else {
             $selectbox[0] = get_string('nolecturers', 'format_culcourse');
         }
+
+        $dashboardoptionsedit['quicklinksequence'] = [
+            'label' => '',
+            'element_type' => 'hidden'
+        ];
+
+        $dashboardoptionsedit['activitysequence'] = [
+            'label' => '',
+            'element_type' => 'hidden'
+        ];
 
         $dashboardoptionsedit['selectmoduleleaders'] = [
             'label' => new lang_string('setselectmoduleleaders', 'format_culcourse'),

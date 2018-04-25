@@ -396,12 +396,12 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
     // Course format settings are 2 = show, 1 = hide.
     if ($value == 2) {
         $newvalue = 1;
-        $editicon = 'fa fa-eye';        
+        $editicon = 'fa-eye';        
         // $title = 'quickhide' . $name;
         $title = 'quickhidelink';
     } else {
         $newvalue = 2;
-        $editicon = 'fa fa-eye-slash';
+        $editicon = 'fa-eye-slash';
         // $title = 'quickshow' . $name;
         $title = 'quickshowlink';
     }
@@ -422,6 +422,55 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
     $editurl = $editurl->out();
 
     return [$editurl, $editicon, $editattrs];
+}
+
+function format_culcourse_get_move_link($courseid, $name) {    
+    $moveicon = 'fa-arrows';        
+    $title = 'quickmovelink';
+    $moveattrs['title'] = get_string($title, 'format_culcourse');
+    $moveattrs['class'] = 'quicklinkedit';
+    $moveurl = new moodle_url(
+        '/course/format/culcourse/dashboard/quicklink_move.php',
+        array(
+            'courseid' => $courseid, 
+            'name' => $name,
+            'sesskey' => sesskey()
+            )
+        );
+
+    $moveurl = $moveurl->out();
+
+    return [$moveurl, $moveicon, $moveattrs];
+}
+
+/**
+ * Determines if the logged in user is currently moving an activity
+ *
+ * @param int $courseid The id of the course being tested
+ * @return bool
+ */
+function ismovingquicklink($courseid) {
+    global $USER;
+
+    if (!empty($USER->quicklinkcopy)) {
+        return ($USER->quicklinkcopycourse == $courseid);
+    }
+    return false;
+}
+
+/**
+ * Determines if the logged in user is currently moving an activity
+ *
+ * @param int $courseid The id of the course being tested
+ * @return bool
+ */
+function ismovingactivitylink($courseid) {
+    global $USER;
+
+    if (!empty($USER->activitylinkcopy)) {
+        return ($USER->activitylinkcopycourse == $courseid);
+    }
+    return false;
 }
 
 function format_culcourse_get_lti_instances($course, $type) {
