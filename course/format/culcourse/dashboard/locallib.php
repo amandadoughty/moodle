@@ -383,7 +383,8 @@ function format_culcourse_get_coursecode_data($coursecode) { //TODO: Candidate f
     return $codedata;
 }
 
-function format_culcourse_quicklink_visibility($courseid, $name, $value) {
+function format_culcourse_quicklink_visibility($courseid, $name, $value) { 
+    // @TODO should this use $format = course_get_format($this->course); $format->update_course_format_options($data);
     global $DB;
 
     $options = $DB->get_records('course_format_options', array('courseid' => $courseid, 'name' => $name));

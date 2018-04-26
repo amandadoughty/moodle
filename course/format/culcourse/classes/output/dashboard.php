@@ -135,6 +135,7 @@ class dashboard implements templatable, renderable {
         $sortedlinkitems = [];
         $coursecontext = \context_course::instance($course->id);
         $sequence = [];
+        $deletefromsequence = false;
 
         if (isset($this->culconfig['quicklinksequence']) && $this->culconfig['quicklinksequence']) {
             $sequence = explode(',', $this->culconfig['quicklinksequence']);
@@ -635,16 +636,19 @@ class dashboard implements templatable, renderable {
         }
 
         if ($sequence) {
-            foreach ($sequence as $linkitem) {
+            foreach ($sequence as $key => $linkitem) {
                 // Items may have changed since the sequence was last edited.
                 if(isset($linkitems[$linkitem])) {
                     $sortedlinkitems[] = $linkitems[$linkitem];
                     unset($linkitems[$linkitem]);
+                } else {
+                    unset($sequence[$key]);
+                    $deletefromsequence = true;
                 }
             }            
         }
 
-        if (count($linkitems)) {
+        if (count($linkitems) || $deletefromsequence) {
             // Add the remaining linkitems to the sequence and update the 
             // setting.
             $addsequence = array_keys($linkitems);
@@ -682,6 +686,7 @@ class dashboard implements templatable, renderable {
         $activities = [];
         $sortedactivities = [];
         $sequence = [];
+        $deletefromsequence = false;
 
         if (isset($this->culconfig['activitysequence']) && $this->culconfig['activitysequence']) {
             $sequence = explode(',', $this->culconfig['activitysequence']);
@@ -786,16 +791,19 @@ class dashboard implements templatable, renderable {
         }
 
         if ($sequence) {
-            foreach ($sequence as $activity) {
+            foreach ($sequence as $key => $activity) {
                 // Items may have changed since the sequence was last edited.
-                if(isset($activities[$activity])) {
+                if (isset($activities[$activity])) {
                     $sortedactivities[] = $activities[$activity];
                     unset($activities[$activity]);
+                } else {
+                    unset($sequence[$key]);
+                    $deletefromsequence = true;
                 }
             }            
         }        
 
-        if (count($activities)) {
+        if (count($activities) || $deletefromsequence) {
             // Add the remaining linkitems to the sequence and update the 
             // setting.
             $addsequence = array_keys($activities);
