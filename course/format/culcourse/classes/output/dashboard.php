@@ -48,9 +48,14 @@ class dashboard implements templatable, renderable {
     public $course = null;
 
     /**
-     * @var $course - The plugin settings.
+     * @var $culconfig - The plugin settings.
      */
     public $culconfig = null;
+
+    /**
+     * @var $culconfigchanged - Boolean indicating if settings require updating.
+     */
+    public $culconfigchanged = false;    
 
     /**
      * @var $course - The plugin settings.
@@ -103,6 +108,13 @@ class dashboard implements templatable, renderable {
         $export->ismovingquicklink = $this->show_is_moving($export->quicklinks, 'ismovingquicklink');
         $export->ismovingactivitylink = $this->show_is_moving($export->activities, 'ismovingactivitylink');
 
+        if ($this->culconfigchanged) {
+            // Update course format settings.
+            $data = (object)$this->culconfig;
+            $format = course_get_format($this->course);
+            $format->update_course_format_options($data);
+        }
+
         return $export;
     }
 
@@ -124,7 +136,7 @@ class dashboard implements templatable, renderable {
         $coursecontext = \context_course::instance($course->id);
         $sequence = [];
 
-        if (isset($this->culconfig['quicklinksequence'])) {
+        if (isset($this->culconfig['quicklinksequence']) && $this->culconfig['quicklinksequence']) {
             $sequence = explode(',', $this->culconfig['quicklinksequence']);
         }
 
@@ -365,7 +377,7 @@ class dashboard implements templatable, renderable {
             }
 
             $attrs['title'] = get_string('view-calendar', 'format_culcourse');
-            $url  = new \moodle_url('/calendar/view.php', array('view' => 'month', 'course' => $course->id));
+            $url  = new \moodle_url('/calendar/view.php', ['view' => 'month', 'course' => $course->id]);
 
             $linkitems['calendar'] = [
                 'url' => $url,
@@ -389,7 +401,7 @@ class dashboard implements templatable, renderable {
         }
         // Student Photoboard
         if ($this->culconfig['showstudents'] == 2 || $this->userisediting) {
-            $studentrole = $DB->get_record('role', array('shortname'=>'student'));
+            $studentrole = $DB->get_record('role', ['shortname'=>'student']);
 
             if ($studentrole){
                 $attrs  = [];
@@ -632,20 +644,22 @@ class dashboard implements templatable, renderable {
             }            
         }
 
-        // Remove the associative keys from any remaining items as
-        // mustache does not like them.
-        $linkitems = array_values($linkitems);
-        // Merge any remaining items in case they have changed since sequence
-        // was last edited.
-        $sortedlinkitems = array_merge($sortedlinkitems, $linkitems);
+        if (count($linkitems)) {
+            // Add the remaining linkitems to the sequence and update the 
+            // setting.
+            $addsequence = array_keys($linkitems);
+            $sequence = array_merge($sequence, $addsequence);
+            $value = join(',', $sequence);
+            $this->culconfig['quicklinksequence'] = $value;
+            $this->culconfigchanged = true;
+            // Remove the associative keys from any remaining items as
+            // mustache does not like them.
+            $linkitems = array_values($linkitems);
+            // Merge any remaining items in case they have changed since sequence
+            // was last edited.
+            $sortedlinkitems = array_merge($sortedlinkitems, $linkitems);
 
-
-
-
-
-
-
-
+        }
 
         return $sortedlinkitems;
     }
@@ -669,7 +683,7 @@ class dashboard implements templatable, renderable {
         $sortedactivities = [];
         $sequence = [];
 
-        if (isset($this->culconfig['activitysequence'])) {
+        if (isset($this->culconfig['activitysequence']) && $this->culconfig['activitysequence']) {
             $sequence = explode(',', $this->culconfig['activitysequence']);
         }
 
@@ -706,7 +720,7 @@ class dashboard implements templatable, renderable {
         \core_collator::asort($modfullnames); // sort by setting if it exists
 
         foreach ($modfullnames as $modname => $modfullname) {
-            if($modname == 'lti') {
+            if ($modname == 'lti') {
                 $activities = $this->exttools_modules_display($course, $modinfo);
                 continue;
             }
@@ -779,18 +793,25 @@ class dashboard implements templatable, renderable {
                     unset($activities[$activity]);
                 }
             }            
+        }        
+
+        if (count($activities)) {
+            // Add the remaining linkitems to the sequence and update the 
+            // setting.
+            $addsequence = array_keys($activities);
+            $sequence = array_merge($sequence, $addsequence);
+            $value = join(',', $sequence);
+            $this->culconfig['activitysequence'] = $value;
+            $this->culconfigchanged = true;
+            // Remove the associative keys from any remaining items as
+            // mustache does not like them.
+            $activities = array_values($activities);
+            // Merge any remaining items in case they have changed since sequence
+            // was last edited.
+            $sortedactivities = array_merge($sortedactivities, $activities);
         }
 
-        // Remove the associative keys from any remaining items as
-        // mustache does not like them.
-        $activities = array_values($activities);
-        // Merge any remaining items in case they have changed since sequence
-        // was last edited.
-        $sortedactivities = array_merge($sortedactivities, $activities);
-
         return $sortedactivities;
-
-        return $activities;
     }
 
     /**
@@ -896,7 +917,7 @@ class dashboard implements templatable, renderable {
                     $icon = \html_writer::empty_tag('img', array('src' => $modnames['type']->icon, 'alt' => $modnames['type']->name, 'class' => 'iconsmall'));
                 }
 
-                $activities[] = [
+                $activities[$nametype] = [
                     'url' => $url,
                     'icon' => $icon,
                     'text' => $modnames['modfullname'],
