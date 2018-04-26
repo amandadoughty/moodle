@@ -82,7 +82,7 @@ class dashboard implements templatable, renderable {
         $this->culconfig = $culconfig;
     }
 
-    public function export_for_template(renderer_base $output) {
+    public function export_for_template(renderer_base $output) {        
         $export = new stdClass();
         $export->quicklinksexist = false;
         $export->activitiesexist = false;
@@ -99,6 +99,9 @@ class dashboard implements templatable, renderable {
         if(count($export->activities)) {
             $export->activitiesexist = true;
         }
+
+        $export->ismovingquicklink = $this->show_is_moving($export->quicklinks, 'ismovingquicklink');
+        $export->ismovingactivitylink = $this->show_is_moving($export->activities, 'ismovingactivitylink');
 
         return $export;
     }
@@ -636,6 +639,14 @@ class dashboard implements templatable, renderable {
         // was last edited.
         $sortedlinkitems = array_merge($sortedlinkitems, $linkitems);
 
+
+
+
+
+
+
+
+
         return $sortedlinkitems;
     }
 
@@ -902,5 +913,21 @@ class dashboard implements templatable, renderable {
         }
 
         return $activities;
+    }
+
+    public function show_is_moving($links, $fn) {
+        global $USER;
+
+        // check if we are currently in the process of moving a link with JavaScript disabled
+        $ismoving = $this->userisediting && $fn($this->course->id);
+
+        if ($ismoving) {
+            $movingpix = new pix_icon('movehere', get_string('movehere'), 'moodle', array('class' => 'movetarget'));
+            $strmovefull = strip_tags(get_string("movefull", "", "'$USER->linkcopyname'"));
+
+            unset($links[$USER->linkcopy]);
+        }
+
+        return $ismoving;
     }
 }

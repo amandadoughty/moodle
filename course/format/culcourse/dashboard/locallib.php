@@ -28,11 +28,21 @@
 if (!defined('OK')) {
     define('OK', 1);
 }
+
 if (!defined('NODATA')) {
     define('NODATA', 0);
 }
+
 if (!defined('ERROR')) {
     define('ERROR', -1);
+}
+
+if (!defined('SHOWHIDE')) {
+    define('SHOWHIDE', 1);
+}
+
+if (!defined('MOVE')) {
+    define('MOVE', 2);
 }
 
 /**
@@ -387,8 +397,33 @@ function format_culcourse_quicklink_visibility($courseid, $name, $value) {
         $option->courseid = $courseid;
         $option->name = $name;
         $option->value = $value;
-        $option->format = 'cul';
+        $option->format = 'culcourse';
         $DB->insert_record('course_format_options', $option);
+    }
+}
+
+function format_culcourse_quicklinklink_move($courseid, $name, $link, $beforelink) {
+    global $DB;
+
+    $options = $DB->get_records('course_format_options', array('courseid' => $courseid, 'name' => $name));
+    
+    if ($options) {
+        $value = array_pop($options);
+        $value = explode(',', $value);
+        $flipped = array_flip($value);
+        $fromindex = $flipped[$link];
+        $toindex = $flipped[$beforelink];
+        $out = array_splice($value, $fromindex, 1);
+        array_splice($value, $toindex, 0, $out);
+        $option->value = $value;
+        $DB->update_record('course_format_options', $option);
+    } else {
+        // $option = new stdClass();
+        // $option->courseid = $courseid;
+        // $option->name = $name;
+        // $option->value = $value;
+        // $option->format = 'culcourse';
+        // $DB->insert_record('course_format_options', $option);
     }
 }
 
@@ -412,7 +447,8 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
     $editurl = new moodle_url(
         '/course/format/culcourse/dashboard/quicklink_edit.php',
         array(
-            'courseid' => $courseid, 
+            'courseid' => $courseid,
+            'action' => SHOWHIDE,
             'name' => $name,
             'value' => $newvalue,
             'sesskey' => sesskey()
@@ -430,10 +466,11 @@ function format_culcourse_get_move_link($courseid, $name) {
     $moveattrs['title'] = get_string($title, 'format_culcourse');
     $moveattrs['class'] = 'quicklinkedit';
     $moveurl = new moodle_url(
-        '/course/format/culcourse/dashboard/quicklink_move.php',
+        '/course/format/culcourse/dashboard/quicklink_edit.php',
         array(
-            'courseid' => $courseid, 
-            'name' => $name,
+            'courseid' => $courseid,
+            'action' => MOVE,
+            'copy' => $name,
             'sesskey' => sesskey()
             )
         );
@@ -444,7 +481,7 @@ function format_culcourse_get_move_link($courseid, $name) {
 }
 
 /**
- * Determines if the logged in user is currently moving an activity
+ * Determines if the logged in user is currently moving a quicklink
  *
  * @param int $courseid The id of the course being tested
  * @return bool
@@ -459,7 +496,7 @@ function ismovingquicklink($courseid) {
 }
 
 /**
- * Determines if the logged in user is currently moving an activity
+ * Determines if the logged in user is currently moving an activity link
  *
  * @param int $courseid The id of the course being tested
  * @return bool

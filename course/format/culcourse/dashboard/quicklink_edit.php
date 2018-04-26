@@ -31,15 +31,37 @@ require_sesskey();
 require_login();
 
 $courseid = required_param('courseid', PARAM_INT);
-$name = required_param('name', PARAM_RAW);
-$value = required_param('value', PARAM_INT);
+$action = required_param('value', PARAM_INT);
+$name = optional_param('name', null, PARAM_RAW);
+$value = optional_param('value', 0, PARAM_INT);
+$copy = optional_param('copy', null, PARAM_RAW);
+$moveto = optional_param('moveto', null, PARAM_RAW);
 
-// Check permision
-if (has_capability('moodle/course:update', context_course::instance($courseid))) {
-    format_culcourse_quicklink_visibility($courseid, $name, $value);
-	redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
-} else {
-	print_error('noeditcoursesettings','format_culcourse');
+$usercanedit = has_capability('moodle/course:update', context_course::instance($courseid));
+
+if (!$usercanedit) {
+    print_error('noeditcoursesettings', 'format_culcourse');
 }
+
+if ($action == SHOWHIDE) {
+    if ($name) {
+        format_culcourse_quicklink_visibility($courseid, $name, $value);
+        redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
+    } else {
+        print_error('noname', 'format_culcourse');
+    }
+}
+
+if ($action == MOVE) {
+
+}
+
+// // Check permision
+// if (has_capability('moodle/course:update', context_course::instance($courseid))) {
+//     format_culcourse_quicklink_visibility($courseid, $name, $value);
+//  redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
+// } else {
+//  print_error('noeditcoursesettings','format_culcourse');
+// }
 
 

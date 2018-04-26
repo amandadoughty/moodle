@@ -1,4 +1,7 @@
-<li>
+{{#ismovingquicklink}}
+    {{> format_culcourse/position}}
+{{/ismovingquicklink}}
+<li class="dash">
     <span class="dash-link {{class}}">
         {{^attrs.class}}
         <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">

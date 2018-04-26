@@ -74,6 +74,9 @@ body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.lin
   /** 'disabled'/unavailable links **/ }
   body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
     display: inline-block; }
+body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li.movehere img.movetarget {
+  height: 16px;
+  width: 80px; }
 
 /* css for photoboard */
 .path-format-culcourse-photos .cul-modelist {

@@ -37,21 +37,30 @@ if (!confirm_sesskey()) {
 }
 
 $courseid = required_param('courseid', PARAM_INT);
-$name = required_param('name', PARAM_RAW);
-$value = required_param('value', PARAM_INT);
+$action = required_param('value', PARAM_INT);
+$name = optional_param('name', null, PARAM_RAW);
+$value = optional_param('value', 0, PARAM_INT);
+$copy = optional_param('copy', null, PARAM_RAW);
+$moveto = optional_param('moveto', null, PARAM_RAW);
 
-// require_login();
-// require_capability('moodle/course:update', context_course::instance($courseid));
-// require_sesskey();
+$usercanedit = has_capability('moodle/course:update', context_course::instance($courseid));
 
 // Check permision
-if (!has_capability('moodle/course:update', context_course::instance($courseid))) {
+if (!$usercanedit) {
     header('HTTP/1.1 403 Forbidden');
     die();
 }
 
-format_culcourse_quicklink_visibility($courseid, $name, $value);
-list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link($courseid, $name, $value);
+if ($action == SHOWHIDE) {
+    if ($name) {
+    	format_culcourse_quicklink_visibility($courseid, $name, $value);
+        list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link($courseid, $name, $value);
+		echo json_encode(['editurl' => $editurl, 'editicon' => $editicon, 'editattrs' => $editattrs]);
+    } else {
+        
+    }
+}
 
-echo json_encode(['editurl' => $editurl, 'editicon' => $editicon, 'editattrs' => $editattrs]);
-die();
+if ($action == MOVE) {
+
+}
