@@ -419,6 +419,9 @@ function format_culcourse_quicklinklink_move($courseid, $name, $link, $beforelin
         $option->value = $value;
         $DB->update_record('course_format_options', $option);
     } else {
+        // Error? because it should always be set
+
+        
         // $option = new stdClass();
         // $option->courseid = $courseid;
         // $option->name = $name;
