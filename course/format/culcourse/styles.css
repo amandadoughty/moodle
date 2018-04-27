@@ -47,13 +47,13 @@ body.format-culcourse .course-content .dash-panel {
             text-decoration: none !important;
             color: #888888 !important;
             cursor: default; }
-          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.quicklinkedit {
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dashlinkedit {
             position: absolute;
             right: 0; }
-            body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.quicklinkedit i {
+            body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dashlinkedit i {
               margin-top: 7px;
               color: inherit; }
-              body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.quicklinkedit i:hover {
+              body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dashlinkedit i:hover {
                 color: inherit; }
           body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-icon {
             height: 100%;

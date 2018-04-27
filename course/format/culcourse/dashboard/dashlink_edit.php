@@ -93,7 +93,7 @@ if ($action == MOVE) {
             unset($USER->activitylinkcopycourse);
         }
 
-//         redirect(course_get_url($course));
+        redirect(course_get_url($course));
 
     } else if (!empty($copy) && !empty($name) && confirm_sesskey()) { // value = link
         if ($name == 'quicklinksequence') {

@@ -63,7 +63,7 @@ body.format-culcourse {
                                 color: $midgrey !important;
                                 cursor: default;
                             }
-                            &.quicklinkedit{
+                            &.dashlinkedit{
                                 position: absolute;
                                 right: 0;
                                 i {
@@ -117,7 +117,7 @@ body.format-culcourse.editing {
                             &:hover.nolink,
                             &:visited.nolink {
                             }
-                            &.quicklinkedit{
+                            &.dashlinkedit{
                                 i {
                                     &:hover {
                                     }

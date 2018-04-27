@@ -415,19 +415,23 @@ function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink) {
     // @TODO should this use $format = course_get_format($this->course); $format->update_course_format_options($data);
     global $DB;
 
-    $options = $DB->get_records('course_format_options', array('courseid' => $courseid, 'name' => $name));
+    $options = $DB->get_records('course_format_options', ['courseid' => $courseid, 'name' => $name]);
+
+    $format = course_get_format($courseid);
     
 
     if ($options) {
-        $value = array_pop($options);print_r($value);
-        $value = explode(',', $value);
+        $option = array_pop($options);
+        $value = explode(',', $option->value);
         $flipped = array_flip($value);
         $fromindex = $flipped[$link];
         $toindex = $flipped[$beforelink];
         $out = array_splice($value, $fromindex, 1);
         array_splice($value, $toindex, 0, $out);
         $option->value = $value;
-        $DB->update_record('course_format_options', $option);
+
+        // $DB->update_record('course_format_options', (array)$option);
+        $format->update_course_format_options((array)$option);
     } else {
         // Error? because it should always be set
 
@@ -457,7 +461,7 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
 
     // $name = 'show' . $name;
     $editattrs['title'] = get_string($title, 'format_culcourse');
-    $editattrs['class'] = 'quicklinkedit';
+    $editattrs['class'] = 'dashlinkedit';
     $params = [
         'courseid' => $courseid,
         'action' => SHOWHIDE,

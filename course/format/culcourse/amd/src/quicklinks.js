@@ -34,7 +34,7 @@ define(['jquery','core/notification', 'core/templates'], function($, notificatio
       */
     var SELECTORS = {
         QUICKLINK: 'a.dash-link',
-        EDITLINK: 'a.quicklinkedit',
+        EDITLINK: 'a.dashlinkedit',
         };
     var adminurl;
 
