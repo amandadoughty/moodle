@@ -177,7 +177,7 @@ $string['quickmovelink'] = 'Move this link';
 $string['noeditcoursesettings'] = 'You are not permitted to edit course settings.';
 
 // NEEDS TIDYING
-$string['aspirelists'] = 'Reading Lists';
+$string['readinglists'] = 'Reading Lists';
 $string['activities'] = 'Activities';
 $string['config_connection_timeout'] = 'Connection timeout';
 $string['config_connection_timeout_desc'] = 'Enter the maximum time in seconds to wait for a connection to the Reading Lists server (upper limit: 6).';
@@ -248,3 +248,10 @@ $string['officehours'] = 'Office hours: ';
 $string['photogrid'] = 'Photo Grid';
 $string['roleerror'] = 'View the photoboard for that role';
 $string['telephone'] = 'Telephone: ';
+
+$string['calendar'] = get_string('calendar', 'calendar');
+$string['graderreport'] = get_string('graderreport', 'grades');
+// $string['students'] = get_string('students', 'core');
+// $string['lecturers'] = get_string('lecturers', 'core');
+// $string['courseofficers'] = get_string('courseofficers', 'core');
+

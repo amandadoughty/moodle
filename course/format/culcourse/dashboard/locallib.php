@@ -45,6 +45,14 @@ if (!defined('MOVE')) {
     define('MOVE', 2);
 }
 
+if (!defined('QUICKLINK')) {
+    define('QUICKLINK', 1);
+}
+
+if (!defined('ACTIVITYLINK')) {
+    define('ACTIVITYLINK', 2);
+}
+
 /**
  * format_culcourse_get_reading_list_url_data()
  *
@@ -403,7 +411,8 @@ function format_culcourse_quicklink_visibility($courseid, $name, $value) {
     }
 }
 
-function format_culcourse_quicklinklink_move($courseid, $name, $link, $beforelink) {
+function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink) {
+    // @TODO should this use $format = course_get_format($this->course); $format->update_course_format_options($data);
     global $DB;
 
     $options = $DB->get_records('course_format_options', array('courseid' => $courseid, 'name' => $name));
@@ -449,7 +458,7 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
     $editattrs['title'] = get_string($title, 'format_culcourse');
     $editattrs['class'] = 'quicklinkedit';
     $editurl = new moodle_url(
-        '/course/format/culcourse/dashboard/quicklink_edit.php',
+        '/course/format/culcourse/dashboard/dashlink_edit.php',
         array(
             'courseid' => $courseid,
             'action' => SHOWHIDE,
@@ -464,17 +473,18 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
     return [$editurl, $editicon, $editattrs];
 }
 
-function format_culcourse_get_move_link($courseid, $name) {    
+function format_culcourse_get_move_link($courseid, $copy, $name) {    
     $moveicon = 'fa-arrows';        
     $title = 'quickmovelink';
     $moveattrs['title'] = get_string($title, 'format_culcourse');
     $moveattrs['class'] = 'quicklinkedit';
     $moveurl = new moodle_url(
-        '/course/format/culcourse/dashboard/quicklink_edit.php',
+        '/course/format/culcourse/dashboard/dashlink_edit.php',
         array(
             'courseid' => $courseid,
             'action' => MOVE,
-            'copy' => $name,
+            'copy' => $copy,
+            'name' => $name,
             'sesskey' => sesskey()
             )
         );

@@ -79,7 +79,7 @@ class dashboard implements templatable, renderable {
         $this->userisediting = $PAGE->user_is_editing();
 
         if ($this->userisediting) {
-            $adminurl = new \moodle_url('/course/format/culcourse/dashboard/quicklink_edit_ajax.php');
+            $adminurl = new \moodle_url('/course/format/culcourse/dashboard/dashlink_edit_ajax.php');
             $this->adminurl = $adminurl->out();
         }
 
@@ -118,6 +118,95 @@ class dashboard implements templatable, renderable {
         return $export;
     }
 
+    public function get_quicklink($name, $course) {
+        $lnktxt = '';
+
+        try {
+            $lnktxt = get_string($name, 'format_culcourse');
+        } catch (\Exception $e) {
+            // Do nothing.
+        }
+
+        $class = '';
+        $editurl = '';
+        $editicon = '';
+        $editattrs = '';
+        $moveurl = '';
+        $moveicon = '';
+        $moveattrs = '';
+
+        if ($this->userisediting) {
+            list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
+                $course->id, 
+                $name, 
+                $this->culconfig['show' . $name]
+                );
+
+            list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
+                $course->id, 
+                $name,
+                'quicklinksequence'
+                );
+        }            
+
+        if ($this->userisediting&& ($this->culconfig['show' . $name] != 2)) {
+                $class = 'linkhidden';                
+        }
+
+        return [
+            'name' => $name,
+            'text' => $lnktxt,
+            'class' => $class,
+            'editurl' => $editurl, 
+            'editicon' => $editicon, 
+            'editattrs' => $editattrs,
+            'moveurl' => $moveurl, 
+            'moveicon' => $moveicon, 
+            'moveattrs' => $moveattrs
+        ];
+    }
+
+    public function get_photoboard_quicklink($rolename, $name, $course, $options) {
+        global $DB;
+
+        $role = $DB->get_record('role', ['shortname' => $rolename]);
+        $coursecontext = \context_course::instance($course->id);
+
+        if ($role){
+            $name = $name;
+            $icon = 'fa-users';
+            $data = [];
+            $extradata =[];
+            $attrs  = [];
+            $liattrs = [];
+            $data = $this->get_quicklink($name, $course);
+            $alias = $options[$role->id];
+            $lnktxt = $alias . 's';
+
+            if (count_role_users($role->id, $coursecontext, false)){
+                $attrs['title']  = get_string("view-$rolename-photoboard", 'format_culcourse', $alias);
+                $attrs['target'] = '';
+                $url = format_culcourse_get_photoboard_url($course, $role->id);
+            } else {
+                $attrs['class'] = 'nolink';
+                $attrs['title']  = get_string("no-view-$rolename-photoboard", 'format_culcourse', $alias);
+                $url = 'javascript:void(0);';
+            }
+
+            $extradata = [
+                'url' => $url,
+                'icon' => $icon,
+                'attrs' => $attrs,
+                'liattrs' => $liattrs,
+                'lnktxt' => $lnktxt
+            ];
+
+            return array_merge($data, $extradata);
+        }
+
+        return false;
+    }
+
     /**
      * 
      *
@@ -143,35 +232,14 @@ class dashboard implements templatable, renderable {
 
         // Reading list
         if ($this->culconfig['showreadinglists'] == 2 || $this->userisediting) {
-            $lnktxt = get_string('aspirelists', 'format_culcourse');
+            $name = 'readinglists';
+            $icon = 'fa-bookmark';
+            $data = [];
+            $extradata =[];
             $attrs  = [];
             $liattrs = [];
-            $class = '';
-            $editurl = '';
-            $editicon = '';
-            $editattrs = '';
-            $moveurl = '';
-            $moveicon = '';
-            $moveattrs = '';
-
-            if ($this->userisediting) {
-                list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
-                    $course->id, 
-                    'readinglists', 
-                    $this->culconfig['showreadinglists']
-                    );
-
-                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
-                    $course->id, 
-                    'readinglists'
-                    );
-            }
-
+            $data = $this->get_quicklink($name, $course);
             $urldata = format_culcourse_get_reading_list_url_data($course);
-
-            if ($this->userisediting&& ($this->culconfig['showreadinglists'] != 2)) {
-                    $class = 'linkhidden';                
-            }
 
             if (!$urldata) {
                 // Not installed or not configured                
@@ -200,55 +268,29 @@ class dashboard implements templatable, renderable {
                     $attrs['class'] = 'nolink';
                     $url = 'javascript:void(0);';
                 }
-            }
+            }          
 
-            $linkitems['readinglists'] = [
+            $extradata = [
                 'url' => $url,
-                'icon' => 'fa fa-bookmark',
-                'text' => $lnktxt,
+                'icon' => $icon,
                 'attrs' => $attrs,
-                'class' => $class,
                 'liattrs' => $liattrs,
-                'editurl' => $editurl, 
-                'editicon' => $editicon, 
-                'editattrs' => $editattrs,
-                'moveurl' => $moveurl, 
-                'moveicon' => $moveicon, 
-                'moveattrs' => $moveattrs
             ];
+
+            $linkitems[$name] = array_merge($data, $extradata);
         }
 
         // Timetable link
         if ($this->culconfig['showtimetable'] == 2 || $this->userisediting) {
-            $lnktxt = get_string('timetable', 'format_culcourse');
-            $attrs = [];
+            $name = 'timetable';
+            $icon = 'fa-clock-o';
+            $data = [];
+            $extradata =[];
+            $attrs  = [];
             $liattrs = [];
-            $class = '';
-            $editurl = '';
-            $editicon = '';
-            $editattrs = '';
-            $moveurl = '';
-            $moveicon = '';
-            $moveattrs = '';
-
-            if ($this->userisediting) {
-                list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
-                    $course->id, 
-                    'showtimetable', 
-                    $this->culconfig['showtimetable']
-                    );
-
-                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
-                    $course->id, 
-                    'timetable'
-                    );
-            }
+            $data = $this->get_quicklink($name, $course);
 
             $ttdata = format_culcourse_get_timetable_url($course);
-
-            if ($this->userisediting&& ($this->culconfig['showtimetable'] != 2)) {
-                    $class = 'linkhidden';                
-            }
 
             if (!$ttdata) {
                 // Not installed or not configured.
@@ -272,51 +314,25 @@ class dashboard implements templatable, renderable {
                 }
             }
 
-            $linkitems['timetable'] = [
+            $extradata = [
                 'url' => $url,
-                'icon' => 'fa-clock-o',
-                'text' => $lnktxt,
+                'icon' => $icon,
                 'attrs' => $attrs,
-                'class' => $class,
                 'liattrs' => $liattrs,
-                'editurl' => $editurl, 
-                'editicon' => $editicon, 
-                'editattrs' => $editattrs,
-                'moveurl' => $moveurl, 
-                'moveicon' => $moveicon, 
-                'moveattrs' => $moveattrs
             ];
+
+            $linkitems[$name] = array_merge($data, $extradata);
         }
 
         // Grades
         if ($this->culconfig['showgraderreport'] == 2 || $this->userisediting) {
-            $lnktxt = get_string('grades', 'grades');
+            $name = 'graderreport';
+            $icon = 'fa-mortar-board';
+            $data = [];
+            $extradata =[];
             $attrs  = [];
             $liattrs = [];
-            $class = '';
-            $editurl = '';
-            $editicon = '';
-            $editattrs = '';
-            $moveurl = '';
-            $moveicon = '';
-            $moveattrs = '';
-
-            if ($this->userisediting) {
-                list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
-                    $course->id, 
-                    'showgraderreport', 
-                    $this->culconfig['showgraderreport']
-                    );
-
-                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
-                    $course->id, 
-                    'graderreport'
-                    );
-            }            
-
-            if ($this->userisediting&& ($this->culconfig['showgraderreport'] != 2)) {
-                    $class = 'linkhidden';                
-            }
+            $data = $this->get_quicklink($name, $course);
 
             if (has_capability('gradereport/grader:view', $coursecontext)) { // Teacher, ...
                 $lnktxt = get_string('graderreport', 'grades');
@@ -331,308 +347,96 @@ class dashboard implements templatable, renderable {
                 $url = 'javascript:void(0);';
             }
 
-            $linkitems['graderreport'] = [
+            $extradata = [
                 'url' => $url,
-                'icon' => 'fa-mortar-board',
-                'text' => $lnktxt,
+                'icon' => $icon,
                 'attrs' => $attrs,
-                'class' => $class,
                 'liattrs' => $liattrs,
-                'editurl' => $editurl, 
-                'editicon' => $editicon, 
-                'editattrs' => $editattrs,
-                'moveurl' => $moveurl, 
-                'moveicon' => $moveicon, 
-                'moveattrs' => $moveattrs
             ];
+
+            $linkitems[$name] = array_merge($data, $extradata);
         }
 
         // Calendar
         if ($this->culconfig['showcalendar'] == 2 || $this->userisediting) {
-            $lnktxt = get_string('calendar', 'calendar');
+            $name = 'calendar';
+            $icon = 'fa-calendar';
+            $data = [];
+            $extradata =[];
             $attrs  = [];
             $liattrs = [];
-            $class = '';
-            $editurl = '';
-            $editicon = '';
-            $editattrs = '';
-            $moveurl = '';
-            $moveicon = '';
-            $moveattrs = '';
-
-            if ($this->userisediting) {
-                list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
-                    $course->id, 
-                    'showcalendar', 
-                    $this->culconfig['showcalendar']
-                    );
-
-                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
-                    $course->id, 
-                    'calendar'
-                    );
-            }            
-
-            if ($this->userisediting&& ($this->culconfig['showcalendar'] != 2)) {
-                    $class = 'linkhidden';                
-            }
-
+            $data = $this->get_quicklink($name, $course);
             $attrs['title'] = get_string('view-calendar', 'format_culcourse');
             $url  = new \moodle_url('/calendar/view.php', ['view' => 'month', 'course' => $course->id]);
 
-            $linkitems['calendar'] = [
+            $extradata = [
                 'url' => $url,
-                'icon' => 'fa-calendar',
-                'text' => $lnktxt,
+                'icon' => $icon,
                 'attrs' => $attrs,
-                'class' => $class,
                 'liattrs' => $liattrs,
-                'editurl' => $editurl, 
-                'editicon' => $editicon, 
-                'editattrs' => $editattrs,
-                'moveurl' => $moveurl, 
-                'moveicon' => $moveicon, 
-                'moveattrs' => $moveattrs
             ];
+
+            $linkitems[$name] = array_merge($data, $extradata);
         }
 
         // Photoboards
         foreach (role_get_names($coursecontext, ROLENAME_ALIAS) as $role) {
             $options[$role->id] = $role->localname;
         }
+
         // Student Photoboard
         if ($this->culconfig['showstudents'] == 2 || $this->userisediting) {
-            $studentrole = $DB->get_record('role', ['shortname'=>'student']);
+            $role = 'student';
+            $name = 'students';
+            $data = $this->get_photoboard_quicklink($role, $name, $course, $options);
 
-            if ($studentrole){
-                $attrs  = [];
-                $liattrs = [];
-                $class = '';
-                $editurl = '';
-                $editicon = '';
-                $editattrs = '';
-                $moveurl = '';
-                $moveicon = '';
-                $moveattrs = '';
-
-                if ($this->userisediting) {
-                    list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
-                        $course->id, 
-                        'showstudents', 
-                        $this->culconfig['showstudents']
-                        );
-
-                    list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
-                        $course->id, 
-                        'students'
-                        );
-                }
-
-                $alias = $options[$studentrole->id];
-                $lnktxt = $alias . 's';
-
-                if ($this->userisediting && ($this->culconfig['showstudents'] != 2)) {
-                        $class = 'linkhidden';                
-                }
-
-                if (count_role_users($studentrole->id, $coursecontext, false)){
-                    $attrs['title']  = get_string('view-student-photoboard', 'format_culcourse', $alias);
-                    $attrs['target'] = '';
-                    $url = format_culcourse_get_photoboard_url($course, $studentrole->id);
-                } else {
-                    $attrs['class'] = 'nolink';
-                    $attrs['title']  = get_string('no-view-student-photoboard', 'format_culcourse', $alias);
-                    $url = 'javascript:void(0);';
-                }
-
-                $linkitems['students'] = [
-                    'url' => $url,
-                    'icon' => 'fa-users',
-                    'text' => $lnktxt,
-                    'attrs' => $attrs,
-                    'class' => $class,
-                    'liattrs' => $liattrs,
-                    'editurl' => $editurl, 
-                    'editicon' => $editicon, 
-                    'editattrs' => $editattrs,
-                    'moveurl' => $moveurl, 
-                    'moveicon' => $moveicon, 
-                    'moveattrs' => $moveattrs
-                ];
+            if ($data) {
+                $linkitems[$name] = $data;
             }
         }
 
         // Lecturer Photoboard
         if ($this->culconfig['showlecturers'] == 2 || $this->userisediting) {
-            $lecturerrole = $DB->get_record('role', array('shortname'=>'lecturer'));
+            $role = 'lecturer';
+            $name = 'lecturers';
+            $data = $this->get_photoboard_quicklink($role, $name, $course, $options);
 
-            if ($lecturerrole){
-                $attrs  = [];
-                $liattrs = [];
-                $class = '';
-                $editurl = '';
-                $editicon = '';
-                $editattrs = '';
-                $moveurl = '';
-                $moveicon = '';
-                $moveattrs = '';
-
-                if ($this->userisediting) {
-                    list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
-                        $course->id, 
-                        'showlecturers', 
-                        $this->culconfig['showlecturers']
-                        );
-
-                    list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
-                        $course->id, 
-                        'lecturers'
-                        );
-                }
-
-                $alias = $options[$lecturerrole->id];
-                $lnktxt = $alias . 's';
-
-                if ($this->userisediting && ($this->culconfig['showlecturers'] != 2)) {
-                        $class = 'linkhidden';                
-                }
-
-                if (count_role_users($lecturerrole->id, $coursecontext, false)){
-                    $attrs['title']  = get_string('view-lecturer-photoboard', 'format_culcourse', $alias);
-                    $attrs['target'] = '';
-                    $url = format_culcourse_get_photoboard_url($course, $lecturerrole->id);
-                } else {
-                    $attrs['class'] = 'nolink';
-                    $attrs['title']  = get_string('no-view-lecturer-photoboard', 'format_culcourse', $alias);
-                    $url = 'javascript:void(0);';
-                }
-
-                $linkitems['lecturers'] = [
-                    'url' => $url,
-                    'icon' => 'fa-users',
-                    'text' => $lnktxt,
-                    'attrs' => $attrs,
-                    'class' => $class,
-                    'liattrs' => $liattrs,
-                    'editurl' => $editurl, 
-                    'editicon' => $editicon, 
-                    'editattrs' => $editattrs,
-                    'moveurl' => $moveurl, 
-                    'moveicon' => $moveicon, 
-                    'moveattrs' => $moveattrs
-                ];
+            if ($data) {
+                $linkitems[$name] = $data;
             }
         }
 
         // Course Officer Photoboard
         if ($this->culconfig['showcourseofficers'] == 2 || $this->userisediting) {
-            $courseofficerrole = $DB->get_record('role', array('shortname'=>'courseofficer'));
+            $role = 'courseofficer';
+            $name = 'courseofficers';
+            $data = $this->get_photoboard_quicklink($role, $name, $course, $options);
 
-            if ($courseofficerrole){
-                $attrs  = [];
-                $liattrs = [];
-                $class = '';
-                $editurl = '';
-                $editicon = '';
-                $editattrs = '';
-                $moveurl = '';
-                $moveicon = '';
-                $moveattrs = '';
-
-                if ($this->userisediting) {
-                    list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
-                        $course->id, 
-                        'showcourseofficers', 
-                        $this->culconfig['showcourseofficers']
-                        );
-
-                    list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
-                        $course->id, 
-                        'courseofficers'
-                        );
-                }
-
-                $alias = $options[$courseofficerrole->id];
-                $lnktxt = $alias . 's';
-
-                if ($this->userisediting && ($this->culconfig['showcourseofficers'] != 2)) {
-                        $class = 'linkhidden';                
-                }
-
-                if (count_role_users($courseofficerrole->id, $coursecontext, false)){
-                    $attrs['title']  = get_string('view-courseofficer-photoboard', 'format_culcourse', $alias);
-                    $attrs['target'] = '';
-                    $url = format_culcourse_get_photoboard_url($course, $courseofficerrole->id);
-                } else {
-                    $attrs['class'] = 'nolink';
-                    $attrs['title']  = get_string('no-view-courseofficer-photoboard', 'format_culcourse', $alias);
-                    $url = 'javascript:void(0);';
-                }
-
-                $linkitems['courseofficers'] = [
-                    'url' => $url,
-                    'icon' => 'fa-users',
-                    'text' => $lnktxt,
-                    'attrs' => $attrs,
-                    'class' => $class,
-                    'liattrs' => $liattrs,
-                    'editurl' => $editurl, 
-                    'editicon' => $editicon, 
-                    'editattrs' => $editattrs,
-                    'moveurl' => $moveurl, 
-                    'moveicon' => $moveicon, 
-                    'moveattrs' => $moveattrs
-                ];
-            }           
+            if ($data) {
+                $linkitems[$name] = $data;
+            }
         }
 
         // Media gallery
         if ($this->culconfig['showmedia'] == 2 || $this->userisediting) {
-            $lnktxt = get_string('media', 'format_culcourse');
+            $name = 'media';
+            $icon = 'fa-file-video-o';
+            $data = [];
+            $extradata =[];
             $attrs  = [];
             $liattrs = [];
-            $class = '';
-            $editurl = '';
-            $editicon = '';
-            $editattrs = '';
-            $moveurl = '';
-            $moveicon = '';
-            $moveattrs = '';
-
-            if ($this->userisediting) {
-                list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
-                    $course->id, 
-                    'showmedia', 
-                    $this->culconfig['showmedia']
-                    );
-
-                list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
-                    $course->id, 
-                    'media'
-                    );
-            }            
-
-            if ($this->userisediting&& ($this->culconfig['showmedia'] != 2)) {
-                    $class = 'linkhidden';                
-            }
-
+            $data = $this->get_quicklink($name, $course);
             $attrs['title'] = get_string('view-media', 'format_culcourse');
             $url  = new \moodle_url('/local/kalturamediagallery/index.php', array('courseid' => $course->id));
 
-            $linkitems['media'] = [
+            $extradata = [
                 'url' => $url,
-                'icon' => 'fa-file-video-o',
-                'text' => $lnktxt,
+                'icon' => $icon,
                 'attrs' => $attrs,
-                'class' => $class,
                 'liattrs' => $liattrs,
-                'editurl' => $editurl, 
-                'editicon' => $editicon, 
-                'editattrs' => $editattrs,
-                'moveurl' => $moveurl, 
-                'moveicon' => $moveicon, 
-                'moveattrs' => $moveattrs
             ];
+
+            $linkitems[$name] = array_merge($data, $extradata);
         }
 
         if ($sequence) {
@@ -662,7 +466,6 @@ class dashboard implements templatable, renderable {
             // Merge any remaining items in case they have changed since sequence
             // was last edited.
             $sortedlinkitems = array_merge($sortedlinkitems, $linkitems);
-
         }
 
         return $sortedlinkitems;
@@ -752,7 +555,8 @@ class dashboard implements templatable, renderable {
 
                     list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
                         $course->id, 
-                        $modname
+                        $modname,
+                        'activitysequence'
                         );
                 }
 
@@ -774,6 +578,7 @@ class dashboard implements templatable, renderable {
                 }
 
                 $activities[$modname] = [
+                    'name' => $modname,
                     'url' => $url,
                     'icon' => $icon,
                     'text' => $modfullname,
@@ -926,6 +731,7 @@ class dashboard implements templatable, renderable {
                 }
 
                 $activities[$nametype] = [
+                    'name' => $nametype,
                     'url' => $url,
                     'icon' => $icon,
                     'text' => $modnames['modfullname'],
@@ -944,17 +750,23 @@ class dashboard implements templatable, renderable {
         return $activities;
     }
 
-    public function show_is_moving($links, $fn) {
+    public function show_is_moving(&$links, $fn) {
         global $USER;
 
         // check if we are currently in the process of moving a link with JavaScript disabled
         $ismoving = $this->userisediting && $fn($this->course->id);
 
         if ($ismoving) {
-            $movingpix = new pix_icon('movehere', get_string('movehere'), 'moodle', array('class' => 'movetarget'));
-            $strmovefull = strip_tags(get_string("movefull", "", "'$USER->linkcopyname'"));
+            // $movingpix = new \pix_icon('movehere', get_string('movehere'), 'moodle', array('class' => 'movetarget'));
+            // $strmovefull = strip_tags(get_string("movefull", "", "'$USER->linkcopy'"));
 
-            unset($links[$USER->linkcopy]);
+            foreach ($links as $key => $link) {
+                if ($link['name'] == $USER->linkcopy) {
+                    unset($links[$key]);
+                    $links = array_values($links);
+                    break;               
+                }
+            }            
         }
 
         return $ismoving;
