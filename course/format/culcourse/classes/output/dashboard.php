@@ -105,8 +105,8 @@ class dashboard implements templatable, renderable {
             $export->activitiesexist = true;
         }
 
-        $export->ismovingquicklink = $this->show_is_moving($export->quicklinks, 'ismovingquicklink');
-        $export->ismovingactivitylink = $this->show_is_moving($export->activities, 'ismovingactivitylink');
+        $export->ismovingquicklink = $this->show_is_moving($export->quicklinks);
+        $export->ismovingactivitylink = $this->show_is_moving($export->activities);
 
         if ($this->culconfigchanged) {
             // Update course format settings.
@@ -750,11 +750,11 @@ class dashboard implements templatable, renderable {
         return $activities;
     }
 
-    public function show_is_moving(&$links, $fn) {
+    public function show_is_moving(&$links) {
         global $USER;
 
         // check if we are currently in the process of moving a link with JavaScript disabled
-        $ismoving = $this->userisediting && $fn($this->course->id);
+        $ismoving = $this->userisediting && ismovingdashlink($this->course->id);
 
         if ($ismoving) {
             // $movingpix = new \pix_icon('movehere', get_string('movehere'), 'moodle', array('class' => 'movetarget'));
