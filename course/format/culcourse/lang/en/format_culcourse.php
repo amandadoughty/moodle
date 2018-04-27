@@ -171,9 +171,9 @@ $string['quickshowmedia'] = 'Show the media gallery';
 $string['quickhidemedia'] = 'Hide the media gallery';
 
 // Editing links
-$string['quickshowlink'] = 'Show this link';
-$string['quickhidelink'] = 'Hide this link';
-$string['quickmovelink'] = 'Move this link';
+$string['dashshowlink'] = 'Show this link';
+$string['dashhidelink'] = 'Hide this link';
+$string['dashmovelink'] = 'Move \'{$a}\' to this location';
 $string['noeditcoursesettings'] = 'You are not permitted to edit course settings.';
 
 // NEEDS TIDYING

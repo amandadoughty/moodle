@@ -121,6 +121,8 @@ class dashboard implements templatable, renderable {
     }
 
     public function get_quicklink($name, $course) {
+        global $USER;
+
         $lnktxt = '';
 
         if (get_string_manager()->string_exists($name, 'format_culcourse')) {
@@ -134,6 +136,9 @@ class dashboard implements templatable, renderable {
         $moveurl = '';
         $moveicon = '';
         $moveattrs = '';
+        $movetourl = '';
+        $movetoicon = '';
+        $movetoattrs = '';
 
         if ($this->userisediting) {
             list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
@@ -145,8 +150,16 @@ class dashboard implements templatable, renderable {
             list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
                 $course->id, 
                 $name,
-                'quicklinksequence'
+                'quicklink'
                 );
+
+            if (isset($USER->quicklinkcopy)) { ///@TODO
+                list($movetourl, $movetoicon, $movetoattrs) = format_culcourse_get_moveto_link(
+                    $course->id, 
+                    $USER->quicklinkcopy,
+                    'quicklink'
+                    );
+            }
         }            
 
         if ($this->userisediting&& ($this->culconfig['show' . $name] != 2)) {
@@ -162,7 +175,10 @@ class dashboard implements templatable, renderable {
             'editattrs' => $editattrs,
             'moveurl' => $moveurl, 
             'moveicon' => $moveicon, 
-            'moveattrs' => $moveattrs
+            'moveattrs' => $moveattrs,
+            'movetourl' => $movetourl,
+            'movetoicon' => $movetoicon,
+            'movetoattrs' => $movetoattrs
         ];
     }
 
@@ -545,6 +561,9 @@ class dashboard implements templatable, renderable {
                 $moveurl = '';
                 $moveicon = '';
                 $moveattrs = '';
+                $movetourl = '';
+                $movetoicon = '';
+                $movetoattrs = '';
                 
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
@@ -590,7 +609,10 @@ class dashboard implements templatable, renderable {
                     'editattrs' => $editattrs,
                     'moveurl' => $moveurl, 
                     'moveicon' => $moveicon, 
-                    'moveattrs' => $moveattrs
+                    'moveattrs' => $moveattrs,
+                    'movetourl' => $movetourl,
+                    'movetoicon' => $movetoicon,
+                    'movetoattrs' => $movetoattrs
                 ];
             }            
         }
@@ -754,6 +776,7 @@ class dashboard implements templatable, renderable {
         global $USER;
 
         $fn = 'ismoving' . $type;
+        $name = $type . 'copy';
 
         // check if we are currently in the process of moving a link with JavaScript disabled
         $ismoving = $this->userisediting && $fn($this->course->id);
@@ -763,7 +786,7 @@ class dashboard implements templatable, renderable {
             // $strmovefull = strip_tags(get_string("movefull", "", "'$USER->linkcopy'"));
 
             foreach ($links as $key => $link) {
-                if ($link['name'] == $USER->linkcopy) {
+                if ($link['name'] == $USER->$name) {
                     unset($links[$key]);
                     $links = array_values($links);
                     break;               
