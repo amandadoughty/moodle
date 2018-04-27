@@ -38,6 +38,8 @@ $moveto = optional_param('moveto', null, PARAM_RAW);
 $cancelcopy = optional_param('cancelcopy', 0, PARAM_BOOL);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
 
+$course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
+
 // This page should always redirect
 $url = new moodle_url('/course/format/culcourse/dashlink_edit.php');
 
@@ -61,59 +63,63 @@ if (!$usercanedit) {
 if ($action == SHOWHIDE) {
     if ($name) {
         format_culcourse_quicklink_visibility($courseid, $name, $value);
-        redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
+        redirect(course_get_url($course));
     } else {
         print_error('noname', 'format_culcourse');
     }
 }
-var_dump($copy);
-var_dump($name);
+
 if ($action == MOVE) {
     if (!empty($moveto) && !empty($name) && confirm_sesskey()) {
-//         $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+        if ($name == 'quicklinksequence') {
+            $linkcopy = $USER->quicklinkcopy;
 
-//         if ($name == 'quicklinksequence') {
-//             $linkcopy = $USER->linkcopy;
+            if (!ismovingquicklink($courseid)) {
+                print_error('needcopy', '', "view.php?id=$courseid");
+            }
 
-//             if (!ismovingquicklink($courseid)) {
-//                 print_error('needcopy', '', "view.php?id=$courseid");
-//             }
+            format_culcourse_dashlink_move($courseid, $name, $linkcopy, $moveto);
+            unset($USER->quicklinkcopy);
+            unset($USER->quicklinkcopycourse);        
+        } else if ($name == 'activitylinksequence') {
+            $linkcopy = $USER->activitylinkcopy;
 
-//             format_culcourse_dashlink_move($courseid, $name, $linkcopy, $moveto);
-//             unset($USER->linkcopy);
-//             unset($USER->linkcopycourse);        
-//         } else if ($name == 'activitysequence') {
-//             $linkcopy = $USER->linkcopy;
+            if (!ismovingactivitylink($courseid)) {
+                print_error('needcopy', '', "view.php?id=$courseid");
+            }
 
-//             if (!ismovingactivitylink($courseid)) {
-//                 print_error('needcopy', '', "view.php?id=$courseid");
-//             }
-
-//             format_culcourse_dashlink_move($courseid, $name, $linkcopy, $moveto);
-//             unset($USER->linkcopy);
-//             unset($USER->linkcopycourse);
-//         }
+            format_culcourse_dashlink_move($courseid, $name, $linkcopy, $moveto);
+            unset($USER->activitylinkcopy);
+            unset($USER->activitylinkcopycourse);
+        }
 
 //         redirect(course_get_url($course));
 
     } else if (!empty($copy) && !empty($name) && confirm_sesskey()) { // value = link
-        $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
-
         if ($name == 'quicklinksequence') {
-            $USER->linkcopy = $copy;
-            $USER->linkcopycourse = $courseid;
-        } else if ($name == 'activitysequence') {
-            $USER->linkcopy = $copy;
-            $USER->linkcopycourse = $courseid;
+            $USER->quicklinkcopy = $copy;
+            $USER->quicklinkcopycourse = $courseid;
+            unset($USER->activitylinkcopy);
+            unset($USER->activitylinkcopycourse);
+        } else if ($name == 'activitylinksequence') {
+            $USER->activitylinkcopy = $copy;
+            $USER->activitylinkcopycourse = $courseid;
+            unset($USER->quicklinkcopy);
+            unset($USER->quicklinkcopycourse);
         }
 
         redirect(course_get_url($course));
 
-    } else if (!empty($cancelcopy) and confirm_sesskey()) { // value = course module
-//         $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
-//         unset($USER->linkcopy);
-//         unset($USER->linkcopy);
-//         redirect(course_get_url($course);
+    } else if (!empty($cancelcopy) && !empty($name) and confirm_sesskey()) { // value = course module
+        if ($name == 'quicklinksequence') {
+            unset($USER->quicklinkcopy);
+            unset($USER->quicklinkcopycourse);
+        } else if ($name == 'activitylinksequence') {
+            unset($USER->activitylinkcopy);
+            unset($USER->activitylinkcopycourse);
+        }
+
+        redirect(course_get_url($course));
     } else {
         print_error('unknowaction');
     }
@@ -121,4 +127,3 @@ if ($action == MOVE) {
     print_error('unknowaction');
 }
 
-// die('vboo');

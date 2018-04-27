@@ -517,7 +517,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         }
 
         return $o;
-    }
+    }    
 
     /**
      * Output the html for a multiple section page

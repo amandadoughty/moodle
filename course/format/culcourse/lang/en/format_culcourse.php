@@ -251,7 +251,7 @@ $string['telephone'] = 'Telephone: ';
 
 $string['calendar'] = get_string('calendar', 'calendar');
 $string['graderreport'] = get_string('graderreport', 'grades');
-$string['students'] = 'students tmp';
+// $string['students'] = 'students tmp';
 // $string['lecturers'] = get_string('lecturers', 'core');
 // $string['courseofficers'] = get_string('courseofficers', 'core');
-
+$string['moving'] = 'Moving dash link: {$a}';

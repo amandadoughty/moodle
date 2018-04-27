@@ -86,7 +86,7 @@ class format_culcourse_dashboard {
             'type' => PARAM_RAW,
         ];
 
-        $dashboardoptions['activitysequence'] = [
+        $dashboardoptions['activitylinksequence'] = [
             'default' => '',
             'type' => PARAM_RAW,
         ];
@@ -174,7 +174,7 @@ class format_culcourse_dashboard {
             'element_type' => 'hidden'
         ];
 
-        $dashboardoptionsedit['activitysequence'] = [
+        $dashboardoptionsedit['activitylinksequence'] = [
             'label' => '',
             'element_type' => 'hidden'
         ];

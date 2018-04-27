@@ -105,8 +105,10 @@ class dashboard implements templatable, renderable {
             $export->activitiesexist = true;
         }
 
-        $export->ismovingquicklink = $this->show_is_moving($export->quicklinks);
-        $export->ismovingactivitylink = $this->show_is_moving($export->activities);
+        $export->ismovingquicklink = $this->show_is_moving($export->quicklinks, 'quicklink');
+        $export->ismovingactivitylink = $this->show_is_moving($export->activities, 'activitylink');
+        $export->cancelquicklink = $this->dashboard_clipboard('quicklink');
+        $export->cancelactivitylink = $this->dashboard_clipboard('activitylink');
 
         if ($this->culconfigchanged) {
             // Update course format settings.
@@ -121,10 +123,8 @@ class dashboard implements templatable, renderable {
     public function get_quicklink($name, $course) {
         $lnktxt = '';
 
-        try {
+        if (get_string_manager()->string_exists($name, 'format_culcourse')) {
             $lnktxt = get_string($name, 'format_culcourse');
-        } catch (\Exception $e) {
-            // Do nothing.
         }
 
         $class = '';
@@ -198,7 +198,7 @@ class dashboard implements templatable, renderable {
                 'icon' => $icon,
                 'attrs' => $attrs,
                 'liattrs' => $liattrs,
-                'lnktxt' => $lnktxt
+                'text' => $lnktxt
             ];
 
             return array_merge($data, $extradata);
@@ -491,8 +491,8 @@ class dashboard implements templatable, renderable {
         $sequence = [];
         $deletefromsequence = false;
 
-        if (isset($this->culconfig['activitysequence']) && $this->culconfig['activitysequence']) {
-            $sequence = explode(',', $this->culconfig['activitysequence']);
+        if (isset($this->culconfig['activitylinksequence']) && $this->culconfig['activitylinksequence']) {
+            $sequence = explode(',', $this->culconfig['activitylinksequence']);
         }
 
         foreach($modinfo->cms as $cm) {
@@ -556,7 +556,7 @@ class dashboard implements templatable, renderable {
                     list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
                         $course->id, 
                         $modname,
-                        'activitysequence'
+                        'activitylinksequence'
                         );
                 }
 
@@ -614,7 +614,7 @@ class dashboard implements templatable, renderable {
             $addsequence = array_keys($activities);
             $sequence = array_merge($sequence, $addsequence);
             $value = join(',', $sequence);
-            $this->culconfig['activitysequence'] = $value;
+            $this->culconfig['activitylinksequence'] = $value;
             $this->culconfigchanged = true;
             // Remove the associative keys from any remaining items as
             // mustache does not like them.
@@ -750,11 +750,13 @@ class dashboard implements templatable, renderable {
         return $activities;
     }
 
-    public function show_is_moving(&$links) {
+    public function show_is_moving(&$links, $type) {
         global $USER;
 
+        $fn = 'ismoving' . $type;
+
         // check if we are currently in the process of moving a link with JavaScript disabled
-        $ismoving = $this->userisediting && ismovingdashlink($this->course->id);
+        $ismoving = $this->userisediting && $fn($this->course->id);
 
         if ($ismoving) {
             // $movingpix = new \pix_icon('movehere', get_string('movehere'), 'moodle', array('class' => 'movetarget'));
@@ -771,4 +773,48 @@ class dashboard implements templatable, renderable {
 
         return $ismoving;
     }
+
+
+    /**
+     * Show if something is on on the course clipboard (moving around)
+     *
+     * @param stdClass $course The course entry from DB
+     * @param int $sectionno The section number in the coruse which is being dsiplayed
+     * @return string HTML to output.
+     */
+    protected function dashboard_clipboard($type) {
+        global $USER;
+
+        $fn = 'ismoving' . $type;
+        $setting = $type . 'sequence';
+        $name = $type . 'copy';
+
+        // If currently moving a file then show the current clipboard.
+        if ($fn($this->course->id)) {
+            $cancel = new stdClass();
+
+            $cancel->url = new \moodle_url(
+                '/course/format/culcourse/dashboard/dashlink_edit.php',
+                [
+                    'courseid' => $this->course->id,
+                    'action' => MOVE,
+                    'sesskey' => sesskey(),
+                    'cancelcopy' => true,
+                    'name' => $setting
+                ]
+            );
+
+            if (get_string_manager()->string_exists($USER->$name, 'format_culcourse')) {
+                $cancel->name = get_string($USER->$name, 'format_culcourse');
+            } else if (get_string_manager()->string_exists('pluginname', 'mod_' . $USER->$name)) {
+                $cancel->name = get_string('pluginname', 'mod_' . $USER->$name);
+            } else {
+                $cancel->name = $USER->$name;
+            }       
+
+            return $cancel;
+        } 
+            
+        return false;
+    }    
 }

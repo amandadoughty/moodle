@@ -500,21 +500,6 @@ function format_culcourse_get_move_link($courseid, $copy, $name) {
  * @param int $courseid The id of the course being tested
  * @return bool
  */
-function ismovingdashlink($courseid) {
-    global $USER;
-
-    if (!empty($USER->linkcopy)) {
-        return ($USER->linkcopycourse == $courseid);
-    }
-    return false;
-}
-
-/**
- * Determines if the logged in user is currently moving a quicklink
- *
- * @param int $courseid The id of the course being tested
- * @return bool
- */
 function ismovingquicklink($courseid) {
     global $USER;
 
