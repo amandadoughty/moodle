@@ -78,7 +78,7 @@ if ($action == MOVE) {
                 print_error('needcopy', '', "view.php?id=$courseid");
             }
 
-            format_culcourse_dashlink_move($courseid, $name, $linkcopy, $moveto);
+            $updated = format_culcourse_dashlink_move($courseid, $name, $linkcopy, $moveto);
             unset($USER->quicklinkcopy);
             unset($USER->quicklinkcopycourse);        
         } else if ($name == 'activitylinksequence') {
@@ -88,9 +88,13 @@ if ($action == MOVE) {
                 print_error('needcopy', '', "view.php?id=$courseid");
             }
 
-            format_culcourse_dashlink_move($courseid, $name, $linkcopy, $moveto);
+            $updated = format_culcourse_dashlink_move($courseid, $name, $linkcopy, $moveto);
             unset($USER->activitylinkcopy);
             unset($USER->activitylinkcopycourse);
+        }
+
+        if (!$updated) {
+            print_error('courseformatmissing');
         }
 
         redirect(course_get_url($course));

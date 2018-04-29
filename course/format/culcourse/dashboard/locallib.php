@@ -412,37 +412,28 @@ function format_culcourse_quicklink_visibility($courseid, $name, $value) {
 }
 
 function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink) {
-    // @TODO should this use $format = course_get_format($this->course); $format->update_course_format_options($data);
-    global $DB;
-
-    $options = $DB->get_records('course_format_options', ['courseid' => $courseid, 'name' => $name]);
-
     $format = course_get_format($courseid);
-    
+    $options = $format->get_format_options();    
 
     if ($options) {
-        $option = array_pop($options);
-        $value = explode(',', $option->value);
-        $flipped = array_flip($value);
-        $fromindex = $flipped[$link];
-        $toindex = $flipped[$beforelink];
-        $out = array_splice($value, $fromindex, 1);
-        array_splice($value, $toindex, 0, $out);
-        $option->value = $value;
+        if (isset($options[$name])) {
+            $value = $options[$name];
+            $value = explode(',', $value);
+            $flipped = array_flip($value);
+            $fromindex = $flipped[$link];
+            $toindex = $flipped[$beforelink];
+            $out = array_splice($value, $fromindex, 1);
+            array_splice($value, $toindex, 0, $out);
+            $value = join(',', $value);
+            $options[$name] = $value;
+            $options = (object)$options;
+            $format->update_course_format_options($options);
 
-        // $DB->update_record('course_format_options', (array)$option);
-        $format->update_course_format_options((array)$option);
-    } else {
-        // Error? because it should always be set
-
-        
-        // $option = new stdClass();
-        // $option->courseid = $courseid;
-        // $option->name = $name;
-        // $option->value = $value;
-        // $option->format = 'culcourse';
-        // $DB->insert_record('course_format_options', $option);
+            return true;            
+        } 
     }
+
+    return false;
 }
 
 function format_culcourse_get_edit_link($courseid, $name, $value) {    
@@ -501,7 +492,7 @@ function format_culcourse_get_move_link($courseid, $copy, $name) {
     return [$moveurl, $moveicon, $moveattrs];
 }
 
-function format_culcourse_get_moveto_link($courseid, $copy, $type) {
+function format_culcourse_get_moveto_link($courseid, $moveto, $type) {
     global $USER, $OUTPUT;
 
     $setting = $type . 'sequence';
@@ -524,7 +515,7 @@ function format_culcourse_get_moveto_link($courseid, $copy, $type) {
         'courseid' => $courseid,
         'action' => MOVE,
         'name' => $setting,
-        'moveto' => $copy,
+        'moveto' => $moveto,
         'sesskey' => sesskey()
     ];
     $moveurl = new moodle_url(

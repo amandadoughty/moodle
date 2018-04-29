@@ -156,7 +156,7 @@ class dashboard implements templatable, renderable {
             if (isset($USER->quicklinkcopy)) { ///@TODO
                 list($movetourl, $movetoicon, $movetoattrs) = format_culcourse_get_moveto_link(
                     $course->id, 
-                    $USER->quicklinkcopy,
+                    $name,
                     'quicklink'
                     );
             }
@@ -494,7 +494,7 @@ class dashboard implements templatable, renderable {
      * @return
      */
     public function activity_modules_display($course) {
-        global $CFG, $OUTPUT;
+        global $CFG, $USER, $OUTPUT;
 
         require_once($CFG->dirroot . '/course/lib.php');
 
@@ -575,8 +575,16 @@ class dashboard implements templatable, renderable {
                     list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
                         $course->id, 
                         $modname,
-                        'activitylinksequence'
+                        'activitylink'
                         );
+
+                    if (isset($USER->activitylinkcopy)) { ///@TODO
+                        list($movetourl, $movetoicon, $movetoattrs) = format_culcourse_get_moveto_link(
+                            $course->id, 
+                            $modname,
+                            'activitylink'
+                            );
+                    }
                 }
 
                 if ($this->userisediting && ($this->culconfig['show' . $modname] != 2)) {
@@ -739,6 +747,8 @@ class dashboard implements templatable, renderable {
                         $nametype
                         );
                 }
+
+
 
                 if ($this->userisediting && ($this->culconfig['show' . $nametype] != 2)) {
                         $class = 'linkhidden';                

@@ -255,3 +255,6 @@ $string['graderreport'] = get_string('graderreport', 'grades');
 // $string['lecturers'] = get_string('lecturers', 'core');
 // $string['courseofficers'] = get_string('courseofficers', 'core');
 $string['moving'] = 'Moving dash link: {$a}';
+
+$string['courseformatmissing'] = 'Course format has no settings';
+
