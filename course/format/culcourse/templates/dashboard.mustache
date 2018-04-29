@@ -45,6 +45,9 @@
             {{# quicklinks}}
             {{> format_culcourse/quicklink}}
             {{/ quicklinks}}
+            {{#ismovingquicklink}}
+                {{> format_culcourse/lastquicklinkposition}}
+            {{/ismovingquicklink}}
         </ul>
     </nav>
 </div>
@@ -58,6 +61,9 @@
             {{# activities}}
             {{> format_culcourse/activity}}
             {{/ activities}}
+            {{#ismovingactivitylink}}
+                {{> format_culcourse/lastactivityposition}}
+            {{/ismovingactivitylink}}
         </ul>
     </nav>
 </div>

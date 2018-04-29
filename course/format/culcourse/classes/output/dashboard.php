@@ -110,6 +110,18 @@ class dashboard implements templatable, renderable {
         $export->cancelquicklink = $this->dashboard_clipboard('quicklink');
         $export->cancelactivitylink = $this->dashboard_clipboard('activitylink');
 
+        list($export->qmovetourl, $export->qmovetoicon, $export->qmovetoattrs) = format_culcourse_get_moveto_link(
+                            $this->course->id, 
+                            'end',
+                            'quicklink'
+                            );
+
+        list($export->amovetourl, $export->amovetoicon, $export->amovetoattrs) = format_culcourse_get_moveto_link(
+                            $this->course->id, 
+                            'end',
+                            'activitylink'
+                            );
+
         if ($this->culconfigchanged) {
             // Update course format settings.
             $data = (object)$this->culconfig;
@@ -153,13 +165,13 @@ class dashboard implements templatable, renderable {
                 'quicklink'
                 );
 
-            if (isset($USER->quicklinkcopy)) { ///@TODO
+            // if (isset($USER->quicklinkcopy)) { ///@TODO
                 list($movetourl, $movetoicon, $movetoattrs) = format_culcourse_get_moveto_link(
                     $course->id, 
                     $name,
                     'quicklink'
                     );
-            }
+            // }
         }            
 
         if ($this->userisediting&& ($this->culconfig['show' . $name] != 2)) {
@@ -578,13 +590,13 @@ class dashboard implements templatable, renderable {
                         'activitylink'
                         );
 
-                    if (isset($USER->activitylinkcopy)) { ///@TODO
+                    // if (isset($USER->activitylinkcopy)) { ///@TODO
                         list($movetourl, $movetoicon, $movetoattrs) = format_culcourse_get_moveto_link(
                             $course->id, 
                             $modname,
                             'activitylink'
                             );
-                    }
+                    // }
                 }
 
                 if ($this->userisediting && ($this->culconfig['show' . $modname] != 2)) {

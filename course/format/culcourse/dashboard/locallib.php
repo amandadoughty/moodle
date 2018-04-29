@@ -411,7 +411,7 @@ function format_culcourse_quicklink_visibility($courseid, $name, $value) {
     }
 }
 
-function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink) {
+function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink = false) {
     $format = course_get_format($courseid);
     $options = $format->get_format_options();    
 
@@ -421,9 +421,32 @@ function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink) {
             $value = explode(',', $value);
             $flipped = array_flip($value);
             $fromindex = $flipped[$link];
-            $toindex = $flipped[$beforelink];
-            $out = array_splice($value, $fromindex, 1);
-            array_splice($value, $toindex, 0, $out);
+
+            if ($beforelink == 'end') {
+                $out = array_splice($value, $fromindex, 1);
+                array_push($out, $value);
+            } else {
+                $toindex = $flipped[$beforelink];
+                $newvalue = [];
+                $out = $value[$fromindex];
+
+                foreach ($value as $key => $item) {
+                    if ($key == $fromindex || $key == $toindex) {
+                        if ($key == $fromindex) {
+                            // We do not insert the moved item in the same place.
+                            continue;
+                        } else {
+                            // We insert the moved item in the new position.
+                            $newvalue[] = $out;
+                        }
+                    }
+                    // All other items are inserted in their original order.
+                    $newvalue[] = $item;
+                }
+
+                $value = $newvalue;
+            }
+
             $value = join(',', $value);
             $options[$name] = $value;
             $options = (object)$options;
@@ -473,7 +496,7 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
 function format_culcourse_get_move_link($courseid, $copy, $name) {    
     $moveicon = 'fa-arrows';        
     $title = 'dashmovelink';
-    $moveattrs['title'] = get_string($title, 'format_culcourse');
+    $moveattrs['title'] = get_string('move');
     $moveattrs['class'] = 'dashlinkedit';
     $params = [
         'courseid' => $courseid,
@@ -497,6 +520,13 @@ function format_culcourse_get_moveto_link($courseid, $moveto, $type) {
 
     $setting = $type . 'sequence';
     $name = $type . 'copy';
+    $movetourl = '';
+    $movetoicon = '';
+    $movetoattrs = '';
+
+    if (!isset($USER->$name)) {
+        return [$movetourl, $movetoicon, $movetoattrs];
+    }
 
     if (get_string_manager()->string_exists($USER->$name, 'format_culcourse')) {
         $copyfullname = get_string($USER->$name, 'format_culcourse');
@@ -506,10 +536,10 @@ function format_culcourse_get_moveto_link($courseid, $moveto, $type) {
         $copyfullname = $USER->$name;
     }
 
-    $moveicon = $OUTPUT->image_url('movehere', 'core');     
+    $movetoicon = $OUTPUT->image_url('movehere', 'core');     
     $title = 'dashmovelink';
-    $moveattrs['title'] = get_string($title, 'format_culcourse', $copyfullname);
-    $moveattrs['class'] = 'dashlinkedit';
+    $movetoattrs['title'] = get_string($title, 'format_culcourse', $copyfullname);
+    $movetoattrs['class'] = 'dashlinkedit';
 
     $params = [
         'courseid' => $courseid,
@@ -518,13 +548,13 @@ function format_culcourse_get_moveto_link($courseid, $moveto, $type) {
         'moveto' => $moveto,
         'sesskey' => sesskey()
     ];
-    $moveurl = new moodle_url(
+    $movetourl = new moodle_url(
         '/course/format/culcourse/dashboard/dashlink_edit.php', $params
         );
 
-    $moveurl = $moveurl->out();
+    $movetourl = $movetourl->out();
 
-    return [$moveurl, $moveicon, $moveattrs];
+    return [$movetourl, $movetoicon, $movetoattrs];
 }
 
 /**
