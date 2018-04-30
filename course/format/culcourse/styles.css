@@ -9,6 +9,7 @@ body.format-culcourse .course-content .dash-panel {
     padding: 2px;
     list-style: none; }
     body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li {
+      position: relative;
       display: block;
       float: left;
       text-align: left;
@@ -16,11 +17,20 @@ body.format-culcourse .course-content .dash-panel {
       margin: 0;
       width: auto;
       border: none; }
+      body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li .dashlinkmove {
+        position: absolute;
+        left: 0; }
+        body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li .dashlinkmove i {
+          margin-top: 7px;
+          color: inherit; }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li .dashlinkmove i:hover {
+            color: inherit; }
       body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link {
         position: relative;
         display: block;
         height: 2.5rem;
         margin: 3px;
+        margin-left: 1.2rem;
         border: 1px solid #888888;
         overflow: hidden; }
         body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {

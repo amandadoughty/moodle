@@ -12,7 +12,8 @@ body.format-culcourse {
                 margin: 0;
                 padding: 2px;
                 list-style: none;
-                li {                    
+                li {
+                    position: relative;                  
                     display: block;
                     float: left;
                     text-align: left;
@@ -20,11 +21,24 @@ body.format-culcourse {
                     margin: 0;
                     width: auto;
                     border: none;
+                    .dashlinkmove{
+                        position: absolute;
+                        left: 0;
+                        i {
+                            margin-top: 7px;
+                            color: inherit;
+                            &:hover {
+                                color: inherit;
+                            }
+
+                        }
+                    }
                     span.dash-link {
                         position: relative;
                         display: block;
                         height: 2.5rem;                       
                         margin: 3px;
+                        margin-left: 1.2rem;
                         border: 1px solid $midgrey;
                         overflow: hidden;                        
                         a {

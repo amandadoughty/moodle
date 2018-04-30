@@ -32,7 +32,7 @@ $courseid = required_param('courseid', PARAM_INT);
 $action = required_param('action', PARAM_INT);
 // $linktype = optional_param('linktype', 0, PARAM_INT);
 $name = optional_param('name', null, PARAM_RAW);
-$value = optional_param('value', 0, PARAM_INT);
+$showhide = optional_param('showhide', 0, PARAM_INT);
 $copy = optional_param('copy', null, PARAM_RAW);
 $moveto = optional_param('moveto', null, PARAM_RAW);
 $cancelcopy = optional_param('cancelcopy', 0, PARAM_BOOL);
@@ -49,7 +49,7 @@ foreach (compact('name', 'copy', 'moveto', 'cancelcopy', 'confirm') as $key => $
     }
 }
 
-$url->param('value', $value);
+$url->param('showhide', $showhide);
 $PAGE->set_url($url);
 
 require_login();
@@ -62,7 +62,7 @@ if (!$usercanedit) {
 
 if ($action == SHOWHIDE) {
     if ($name) {
-        format_culcourse_quicklink_visibility($courseid, $name, $value);
+        format_culcourse_quicklink_visibility($courseid, $name, $showhide);
         redirect(course_get_url($course));
     } else {
         print_error('noname', 'format_culcourse');

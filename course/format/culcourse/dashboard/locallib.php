@@ -392,23 +392,20 @@ function format_culcourse_get_coursecode_data($coursecode) { //TODO: Candidate f
 }
 
 function format_culcourse_quicklink_visibility($courseid, $name, $value) { 
-    // @TODO should this use $format = course_get_format($this->course); $format->update_course_format_options($data);
-    global $DB;
+    $format = course_get_format($courseid);
+    $options = $format->get_format_options();    
 
-    $options = $DB->get_records('course_format_options', array('courseid' => $courseid, 'name' => $name));
-    
-    if($options) {
-        $option = array_pop($options);
-        $option->value = $value;
-        $DB->update_record('course_format_options', $option);
+    if ($options) {
+        $options[$name] = $value;
+        $options = (object)$options;
+        $format->update_course_format_options($options);
     } else {
-        $option = new stdClass();
-        $option->courseid = $courseid;
-        $option->name = $name;
-        $option->value = $value;
-        $option->format = 'culcourse';
-        $DB->insert_record('course_format_options', $option);
+        $options = [];
+        $options[$name] = $value;
     }
+
+    $options = (object)$options;
+    $format->update_course_format_options($options);
 }
 
 function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink = false) {
@@ -464,23 +461,21 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
     if ($value == 2) {
         $newvalue = 1;
         $editicon = 'fa-eye';        
-        // $title = 'quickhide' . $name;
         $title = 'dashhidelink';
     } else {
         $newvalue = 2;
         $editicon = 'fa-eye-slash';
-        // $title = 'quickshow' . $name;
         $title = 'dashshowlink';
     }
 
-    // $name = 'show' . $name;
+    $name = 'show' . $name;
     $editattrs['title'] = get_string($title, 'format_culcourse');
     $editattrs['class'] = 'dashlinkedit';
     $params = [
         'courseid' => $courseid,
         'action' => SHOWHIDE,
         'name' => $name,
-        'value' => $newvalue,
+        'showhide' => $newvalue,
         'sesskey' => sesskey()
     ];
     $editurl = new moodle_url(
@@ -497,7 +492,7 @@ function format_culcourse_get_move_link($courseid, $copy, $name) {
     $moveicon = 'fa-arrows';        
     $title = 'dashmovelink';
     $moveattrs['title'] = get_string('move');
-    $moveattrs['class'] = 'dashlinkedit';
+    $moveattrs['class'] = 'dashlinkmove';
     $params = [
         'courseid' => $courseid,
         'action' => MOVE,
@@ -539,7 +534,7 @@ function format_culcourse_get_moveto_link($courseid, $moveto, $type) {
     $movetoicon = $OUTPUT->image_url('movehere', 'core');     
     $title = 'dashmovelink';
     $movetoattrs['title'] = get_string($title, 'format_culcourse', $copyfullname);
-    $movetoattrs['class'] = 'dashlinkedit';
+    $movetoattrs['class'] = 'dashlinkmove';
 
     $params = [
         'courseid' => $courseid,

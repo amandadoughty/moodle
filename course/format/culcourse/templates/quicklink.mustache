@@ -1,7 +1,9 @@
 {{#ismovingquicklink}}
     {{> format_culcourse/position}}
 {{/ismovingquicklink}}
+
 <li class="dash">
+    {{> format_culcourse/movelink}}
     <span class="dash-link {{class}}">
         {{^attrs.class}}
         <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
@@ -19,7 +21,6 @@
         <a title="{{attrs.title}}" class="dash-text {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
             {{text}}
         </a>
-        {{> format_culcourse/editlink}}
-        {{> format_culcourse/movelink}}
+        {{> format_culcourse/editlink}}        
     </span>
 </li>
