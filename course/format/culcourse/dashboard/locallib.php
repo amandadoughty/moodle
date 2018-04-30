@@ -517,7 +517,7 @@ function format_culcourse_get_moveto_link($courseid, $moveto, $type) {
     $name = $type . 'copy';
     $movetourl = '';
     $movetoicon = '';
-    $movetoattrs = '';
+    $movetoattrs = [];
 
     if (!isset($USER->$name)) {
         return [$movetourl, $movetoicon, $movetoattrs];
