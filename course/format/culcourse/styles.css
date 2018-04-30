@@ -39,8 +39,7 @@ body.format-culcourse .course-content .dash-panel {
           border-bottom: medium none !important;
           /** 'disabled'/unavailable links **/ }
           body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a i {
-            width: 100%;
-            margin: 0 auto;
+            margin: 0 0.3rem;
             color: #ffffff;
             text-align: center; }
           body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a .fa-stack {
@@ -74,8 +73,7 @@ body.format-culcourse .course-content .dash-panel {
           body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-text {
             display: none; }
           body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
-            display: none;
-            width: 2.5rem; }
+            display: none; }
         body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link.linkhidden {
           border: 1px dashed #333333;
           opacity: 0.7; }

@@ -1,0 +1,11 @@
+{
+    "name": "moodle-culcourse-dragdrop",
+    "builds": {
+        "moodle-culcourse-dragdrop": {
+            "jsfiles": [
+                "dragdrop.js",
+                "dashlink.js"
+            ]
+        }
+    }
+}

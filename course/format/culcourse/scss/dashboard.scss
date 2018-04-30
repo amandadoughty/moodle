@@ -46,8 +46,7 @@ body.format-culcourse {
                             line-height: 2.5rem;
                             border-bottom: medium none !important;                            
                             i {
-                                width: 100%;
-                                margin: 0 auto;
+                                margin: 0 0.3rem;
                                 color: $white;
                                 text-align: center;                                                            
                             }
@@ -101,7 +100,6 @@ body.format-culcourse {
                             }
                             &.dash-edit {
                                 display: none;
-                                width: 2.5rem;
                             }
                         }                       
                         &.linkhidden {
