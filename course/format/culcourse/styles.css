@@ -30,7 +30,6 @@ body.format-culcourse .course-content .dash-panel {
         display: block;
         height: 2.5rem;
         margin: 3px;
-        margin-left: 1.2rem;
         border: 1px solid #888888;
         overflow: hidden; }
         body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {
@@ -39,12 +38,13 @@ body.format-culcourse .course-content .dash-panel {
           border-bottom: medium none !important;
           /** 'disabled'/unavailable links **/ }
           body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a i {
-            margin: 0 0.3rem;
+            width: 100%;
             color: #ffffff;
             text-align: center; }
           body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a .fa-stack {
             width: 100%;
-            font-size: 0.7rem; }
+            font-size: 0.7rem;
+            text-align: center; }
             body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a .fa-stack .fa.fa-stack-2x {
               color: #888888; }
           body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a img.iconsmall {
@@ -78,10 +78,12 @@ body.format-culcourse .course-content .dash-panel {
           border: 1px dashed #333333;
           opacity: 0.7; }
 
-body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {
-  /** 'disabled'/unavailable links **/ }
-  body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
-    display: inline-block; }
+body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link {
+  margin-left: 1.2rem; }
+  body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {
+    /** 'disabled'/unavailable links **/ }
+    body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
+      display: inline-block; }
 body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li.movehere img.movetarget {
   height: 16px;
   width: 80px; }
