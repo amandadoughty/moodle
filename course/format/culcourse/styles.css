@@ -61,6 +61,7 @@ body.format-culcourse .course-content .dash-panel {
             right: 0; }
             body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dashlinkedit i {
               margin-top: 7px;
+              margin-right: 0.3rem;
               color: inherit; }
               body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dashlinkedit i:hover {
                 color: inherit; }
