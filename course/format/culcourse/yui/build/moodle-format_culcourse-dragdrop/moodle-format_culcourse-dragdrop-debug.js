@@ -13,6 +13,7 @@ var DASHLINK = function() {
 
 var CSS = {
         BLOCK: 'dash-panel',
+        QUICKLINK: 'quick',
         DASHLINK: 'dash',
         QUICKLINKDRAGGABLE: 'quicklinkdraggable',
         QUICKLINKCONTAINER: 'course-content',
@@ -154,8 +155,39 @@ Y.extend(DASHLINK, M.core.dragdrop, {
     //     return (nodeIndex - zeroIndex);
     // },
 
+    drop_over: function(e) {
+        Y.log('over');
+        // Get a reference to our drag and drop nodes.
+        var drag = e.drag.get('node'),
+            drop = e.drop.get('node');
+
+        // Are we dropping on a li node?
+        if (drop.hasClass(CSS.QUICKLINK)) {
+            // Are we not going up?
+            // if (!goingUp) {
+            //     drop = drop.get('nextSibling');
+            // }
+            // Add the node to this list.
+            e.drop.get('node').get('parentNode').insertBefore(drag, drop);
+            // Resize this nodes shim, so we can drop on it later.
+            e.drop.sizeShim();
+        }
+    },
+
     drop_hit: function(e) {
         Y.log('hit');
+
+        var drop = e.drop.get('node'),
+            drag = e.drag.get('node');
+Y.log(drop);
+            // if we are not on an li, we must have been dropped on a ul.
+            if (!drop.hasClass(CSS.QUICKLINK)) {
+                // if (!drop.contains(drag)) {
+                    drop.appendChild(drag);
+                // }
+            }
+
+
         // var drag = e.drag;
 
         // // Get references to our nodes and their IDs.
