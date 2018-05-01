@@ -5,29 +5,17 @@
  * @module moodle-course-dragdrop
  */
 
-var CSS = {
-    // ACTIONAREA: '.actions',
-    DASHLINK: 'dash',
-    QUICKLINK: 'quick',
-    ACTIVITYLINK: 'activity',
-    // ACTIVITYINSTANCE: 'activityinstance',
-    // CONTENT: 'content',
-    DASHPANEL: 'dash-panel',
-    EDITINGMOVE: 'dash_move',
-    ICONCLASS: 'iconsmall',
-    // JUMPMENU: 'jumpmenu',
-    // LEFT: 'left',
-    // LIGHTBOX: 'lightbox',
-    // MOVEDOWN: 'movedown',
-    // MOVEUP: 'moveup',
-    // PAGECONTENT: 'page-content',
-    // RIGHT: 'right',
-    QUICKLINKSCONTAINER: 'quicklinks',
-    ACTIVITYLINKSCONTAINER: 'activitylinks',
-    // SECTIONADDMENUS: 'section_add_menus',
-    // SECTIONHANDLE: 'section-handle',
-    // SUMMARY: 'summary',
-    // SECTIONDRAGGABLE: 'sectiondraggable'
-};
+// var CSS = {
+//     DASHLINK: 'dash',
+//     QUICKLINK: 'quick',
+//     ACTIVITYLINK: 'activity',
+//     DASHPANEL: 'dash-panel',
+//     EDITINGMOVE: 'dash_move',
+//     ICONCLASS: 'iconsmall',
+//     QUICKLINKSCONTAINER: 'quicklinks',
+//     ACTIVITYLINKSCONTAINER: 'activitylinks'
+// };
 
-M.course = M.course || {};
+M.format_culcourse = M.format_culcourse || {};
+Y.log('bah');
+Y.log(M.format_culcourse);

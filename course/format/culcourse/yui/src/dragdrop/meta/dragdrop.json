@@ -1,5 +1,5 @@
 {
-    "moodle-course-dragdrop": {
+    "moodle-format_culcourse-dragdrop": {
         "requires": [
             "base",
             "node",

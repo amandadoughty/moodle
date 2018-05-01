@@ -63,3 +63,12 @@ user_preference_allow_ajax_update('format_culcourse_expanded' . $course->id, PAR
 $PAGE->requires->js('/course/format/culcourse/format.js');
 $PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['courseid' => $course->id]);
 // $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');
+// $PAGE->requires->yui_module('moodle-course-dragdrop', 'M.course.init_section_dragdrop',
+//             array(array(
+//                 'courseid' => $course->id,
+//                 'ajaxurl' => $config->sectionurl,
+//                 'config' => $config,
+//             )), null, true);
+
+$PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_dragdrop');
+

@@ -1,9 +1,8 @@
 {
-    "name": "moodle-culcourse-dragdrop",
+    "name": "moodle-format_culcourse-dragdrop",
     "builds": {
-        "moodle-culcourse-dragdrop": {
+        "moodle-format_culcourse-dragdrop": {
             "jsfiles": [
-                "dragdrop.js",
                 "dashlink.js"
             ]
         }
