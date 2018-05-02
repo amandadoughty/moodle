@@ -10,59 +10,56 @@ var DASHLINK = function() {
 };
 
 var CSS = {
-        BLOCK: 'dash-panel',
         QUICKLINK: 'quick',
+        QUICKLINKCONTAINER: 'quicklinks',
         DASHLINK: 'dash',
         QUICKLINKDRAGGABLE: 'quicklinkdraggable',
-        QUICKLINKCONTAINER: 'course-content',
+        COURSECONTENT: 'course-content',
         MOVE: 'dash-move',
         ICONCLASS: 'iconsmall'
     },
     SELECTORS = {
         QUICKLINK: '.dash.quick',
         QUICKLINKCONTAINER: '.links.quicklinks',
+        COURSECONTENT: '.course-content',
         ACTIVITYLINK: '.dash.activity',
         ACTIVITYLINKCONTAINER: '.links.activitylinks',
         MOVE: '.dash-move',
         DASHLINK: '.dash',
         QUICKLINKDRAGGABLE: '.quicklinkdraggable'
     };
-    // URL = M.cfg.wwwroot + '/course/format/culcourse/dashboard/dashlink_edit_ajax.php.php';
+    URL = M.cfg.wwwroot + '/course/format/culcourse/dashboard/dashlink_edit_ajax.php.php';
 
 Y.extend(DASHLINK, M.core.dragdrop, {
 
     initializer: function() {
         // Set group for parent class
         this.groups = [CSS.QUICKLINKDRAGGABLE];
-        // this.samenodeclass = 'quick dash';
-        // this.parentnodeclass = 'quicklinks links clearfix';
-
         // Initialise quicklinks dragging
         this.quicklinklistselector = SELECTORS.QUICKLINK;
-        // if (this.quicklinklistselector) {
-            // this.quicklinklistselector = '.' + CSS.QUICKLINKCONTAINER + ' ' + this.quicklinklistselector;
-
             this.setup_for_quicklink(this.quicklinklistselector);
+        this.samenodeclass = CSS.QUICKLINK;
+        this.parentnodeclass = CSS.QUICKLINKCONTAINER;
 
-            // Make each li element in the lists of quicklinks draggable
-            var del = new Y.DD.Delegate({
-                container: SELECTORS.QUICKLINKCONTAINER,
-                nodes: SELECTORS.QUICKLINKDRAGGABLE,
-                target: true,
-                handles: [SELECTORS.MOVE],
-                dragConfig: {groups: this.groups}
-            });
-            del.dd.plug(Y.Plugin.DDProxy, {
-                // Don't move the node at the end of the drag
-                moveOnEnd: false,
-                cloneNode: true
-            });
-            del.dd.plug(Y.Plugin.DDConstrained, {
-                // Keep it inside the .course-content
-                constrain: SELECTORS.QUICKLINKCONTAINER
-            });
-            del.dd.plug(Y.Plugin.DDWinScroll);
-        // }
+        // Make each li element in the lists of quicklinks draggable
+        var del = new Y.DD.Delegate({
+            container: SELECTORS.QUICKLINKCONTAINER,
+            nodes: SELECTORS.QUICKLINKDRAGGABLE,
+            target: true,
+            handles: [SELECTORS.MOVE],
+            dragConfig: {groups: this.groups}
+        });
+        del.dd.plug(Y.Plugin.DDProxy, {
+            // Don't move the node at the end of the drag
+            moveOnEnd: false,
+            cloneNode: true
+        });
+        del.dd.plug(Y.Plugin.DDConstrained, {
+            // Keep it inside the .course-content
+            constrain: SELECTORS.COURSECONTENT
+        });
+        del.dd.plug(Y.Plugin.DDWinScroll);
+
         //Create targets for drop.
         var droparea = Y.Node.one(SELECTORS.QUICKLINKCONTAINER);
         var tar = new Y.DD.Drop({
@@ -72,7 +69,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
  
     },
 
-        /**
+    /**
      * Apply dragdrop features to the specified selector or node that refers to resource(s)
      *
      * @method setup_for_resource
@@ -95,10 +92,6 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             // Replace move icons
             var move = quicklinknode.one('a' + SELECTORS.MOVE);
             if (move) {
-                // var sr = move.getData('sectionreturn');
-                // move.replace(this.get_drag_handle(M.util.get_string('movecoursemodule', 'moodle'),
-                //              CSS.EDITINGMOVE, CSS.ICONCLASS, true).setAttribute('data-sectionreturn', sr));
-
                 move.replace(this.get_drag_handle(M.util.get_string('movecoursemodule', 'moodle'),
                              CSS.MOVE, CSS.ICONCLASS, true));
             }
@@ -109,20 +102,6 @@ Y.extend(DASHLINK, M.core.dragdrop, {
      * Drag-dropping related functions
      */
     drag_start: function(e) {
-        Y.log('start');
-        // // Get our drag object
-        // var drag = e.target;
-        // // Creat a dummy structure of the outer elemnents for clean styles application
-        // var containernode = Y.Node.create('<ul></ul>');
-        // containernode.addClass('quicklinks links clearfix');
-        // var quicklinknode = Y.Node.create('<li></li>');
-        // quicklinknode.addClass('dash quick');
-        // quicklinknode.setStyle('margin', 0);
-        // quicklinknode.setContent(drag.get('node').get('innerHTML'));
-        // containernode.appendChild(quicklinknode);
-        // drag.get('dragNode').setContent(containernode);
-        // drag.get('dragNode').addClass(CSS.QUICKLINKCONTAINER);
-
         //Get our drag object
         var drag = e.target;
 
@@ -136,54 +115,45 @@ Y.extend(DASHLINK, M.core.dragdrop, {
         });
     },
 
-    drag_dropmiss: function(e) {
-        Y.log('miss');
-        // Missed the target, but we assume the user intended to drop it
-        // on the last last ghost node location, e.drag and e.drop should be
-        // prepared by global_drag_dropmiss parent so simulate drop_hit(e).
-        this.drop_hit(e);
-    },
-
-    // get_quicklink_index: function(node) {
-    //     var quicklinklistselector = '.' + CSS.QUICKLINKCONTAINER + ' ' + M.course.format.get_quicklink_selector(Y),
-    //         quicklinkList = Y.all(quicklinklistselector),
-    //         nodeIndex = quicklinkList.indexOf(node),
-    //         zeroIndex = quicklinkList.indexOf(Y.one('#quicklink-0'));
-
-    //     return (nodeIndex - zeroIndex);
+    // drag_dropmiss: function(e) {
+    //     // Missed the target, but we assume the user intended to drop it
+    //     // on the last last ghost node location, e.drag and e.drop should be
+    //     // prepared by global_drag_dropmiss parent so simulate drop_hit(e).
+    //     this.drop_hit(e);
     // },
 
-    drop_over: function(e) {
-        Y.log('over');
-        // Get a reference to our drag and drop nodes.
-        var drag = e.drag.get('node'),
-            drop = e.drop.get('node');
+    // drop_over: function(e) {
+    //     Y.log('over');
+    //     // Get a reference to our drag and drop nodes.
+    //     var drag = e.drag.get('node'),
+    //         drop = e.drop.get('node');
 
-        // Are we dropping on a li node?
-        if (drop.hasClass(CSS.QUICKLINK)) {
-            // Are we not going up?
-            // if (!goingUp) {
-            //     drop = drop.get('nextSibling');
-            // }
-            // Add the node to this list.
-            e.drop.get('node').get('parentNode').insertBefore(drag, drop);
-            // Resize this nodes shim, so we can drop on it later.
-            e.drop.sizeShim();
-        }
-    },
+    //     // Are we dropping on a li node?
+    //     if (drop.hasClass(CSS.QUICKLINK)) {
+    //         // Are we not going up?
+    //         // if (!goingUp) {
+    //             drop = drop.get('nextSibling');
+    //         // }
+    //         // Add the node to this list.
+    //         e.drop.get('node').get('parentNode').insertBefore(drag, drop);
+    //         // Resize this nodes shim, so we can drop on it later.
+    //         e.drop.sizeShim();
+    //     }
+    // },
 
     drop_hit: function(e) {
         Y.log('hit');
 
-        var drop = e.drop.get('node'),
-            drag = e.drag.get('node');
-Y.log(drop);
-            // if we are not on an li, we must have been dropped on a ul.
-            if (!drop.hasClass(CSS.QUICKLINK)) {
-                // if (!drop.contains(drag)) {
-                    drop.appendChild(drag);
-                // }
-            }
+        // var drop = e.drop.get('node'),
+        //     drag = e.drag.get('node');
+        //     Y.log(drop);
+
+        //     // if we are not on an li, we must have been dropped on a ul.
+        //     if (!drop.hasClass(CSS.QUICKLINK)) {
+        //         // if (!drop.contains(drag)) {
+        //             drop.appendChild(drag);
+        //         // }
+        //     }
 
 
         // var drag = e.drag;
