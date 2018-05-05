@@ -27,10 +27,12 @@ var CSS = {
         MOVE: '.dash-move',
         DASHLINK: '.dash',
         QUICKLINKDRAGGABLE: '.quicklinkdraggable'
-    };
-    URL = M.cfg.wwwroot + '/course/format/culcourse/dashboard/dashlink_edit_ajax.php.php';
+    },
+    URL = M.cfg.wwwroot + '/course/format/culcourse/dashboard/dashlink_edit_ajax.php';
 
 Y.extend(DASHLINK, M.core.dragdrop, {
+
+    goingup: null,
 
     initializer: function() {
         // Set group for parent class
@@ -56,16 +58,16 @@ Y.extend(DASHLINK, M.core.dragdrop, {
         });
         del.dd.plug(Y.Plugin.DDConstrained, {
             // Keep it inside the .course-content
-            constrain: SELECTORS.COURSECONTENT
+            constrain: SELECTORS.QUICKLINKCONTAINER
         });
         del.dd.plug(Y.Plugin.DDWinScroll);
 
-        //Create targets for drop.
-        var droparea = Y.Node.one(SELECTORS.QUICKLINKCONTAINER);
-        var tar = new Y.DD.Drop({
-            groups: this.groups,
-            node: droparea
-        });
+        // Create targets for drop.
+        // var droparea = Y.Node.one(SELECTORS.QUICKLINKCONTAINER);
+        // var tar = new Y.DD.Drop({
+        //     groups: this.groups,
+        //     node: droparea
+        // });
  
     },
 
@@ -81,7 +83,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             if (!draggroups) {
                 // This Drop Node has not been set up. Configure it now.
                 quicklinknode.setAttribute('data-draggroups', this.groups.join(' '));
-                // Define empty ul as droptarget, so that item could be moved to empty list
+                
                 new Y.DD.Drop({
                     node: quicklinknode,
                     groups: this.groups,
@@ -115,170 +117,140 @@ Y.extend(DASHLINK, M.core.dragdrop, {
         });
     },
 
-    // drag_dropmiss: function(e) {
-    //     // Missed the target, but we assume the user intended to drop it
-    //     // on the last last ghost node location, e.drag and e.drop should be
-    //     // prepared by global_drag_dropmiss parent so simulate drop_hit(e).
-    //     this.drop_hit(e);
-    // },
+    drag_drag: function(e) {
+        // Core dragdrop checks for goingUp but our list is fluid
+        // so we also need to check goingLeft.
+        var x = e.target.lastXY[0];
 
-    // drop_over: function(e) {
-    //     Y.log('over');
-    //     // Get a reference to our drag and drop nodes.
-    //     var drag = e.drag.get('node'),
-    //         drop = e.drop.get('node');
+        // Is it greater than the lastX var?s
+        if (x < this.lastX) {
+            // We are going left.
+            this.goingLeft = true;
+        } else {
+            // We are going right.
+            this.goingLeft = false;
+        }
 
-    //     // Are we dropping on a li node?
-    //     if (drop.hasClass(CSS.QUICKLINK)) {
-    //         // Are we not going up?
-    //         // if (!goingUp) {
-    //             drop = drop.get('nextSibling');
-    //         // }
-    //         // Add the node to this list.
-    //         e.drop.get('node').get('parentNode').insertBefore(drag, drop);
-    //         // Resize this nodes shim, so we can drop on it later.
-    //         e.drop.sizeShim();
-    //     }
-    // },
+        // Cache for next check.
+        this.lastX = x;
+
+    },
+
+    drag_dropmiss: function(e) {
+        // Missed the target, but we assume the user intended to drop it
+        // on the last last ghost node location, e.drag and e.drop should be
+        // prepared by global_drag_dropmiss parent so simulate drop_hit(e).
+        this.drop_hit(e);
+    },
+
+    drop_over: function(e) {
+        // Get a reference to our drag and drop nodes.
+        var drag = e.drag.get('node'),
+            drop = e.drop.get('node');
+
+        // Are we dropping on a li node?
+        if (drop.hasClass(CSS.QUICKLINK)) {
+            // Are we not going up?
+            if (!this.goingLeft && !this.goingUp) {
+                drop = drop.get('nextSibling');
+            }
+
+            // Add the node to this list.
+            e.drop.get('node').get('parentNode').insertBefore(drag, drop);
+            // Resize this nodes shim, so we can drop on it later.
+            e.drop.sizeShim();
+        }
+    },
 
     drop_hit: function(e) {
-        Y.log('hit');
+        var drop = e.drop.get('node'),
+            drag = e.drag.get('node'),
+            params = {};
 
-        // var drop = e.drop.get('node'),
-        //     drag = e.drag.get('node');
-        //     Y.log(drop);
+        // if we are not on an li, we must have been dropped on a ul.
+        if (!drop.hasClass(CSS.QUICKLINK)) {
+            // if (!drop.contains(drag)) {
+                // drop.appendChild(drag);
+            // }
+        }
 
-        //     // if we are not on an li, we must have been dropped on a ul.
-        //     if (!drop.hasClass(CSS.QUICKLINK)) {
-        //         // if (!drop.contains(drag)) {
-        //             drop.appendChild(drag);
-        //         // }
-        //     }
+        // Prepare request parameters
+        params.sesskey = M.cfg.sesskey;
+        params.courseid = 7;
+        params.moveto = drop.getData('position');
+        params.copy = drag.getData('position');
+        params.action = 2;
+        params.name = 'quicklinksequence';
+        params.before = true;
 
-
-        // var drag = e.drag;
-
-        // // Get references to our nodes and their IDs.
-        // var dragnode = drag.get('node'),
-        //     dragnodeid = Y.Moodle.core_course.util.quicklink.getId(dragnode),
-        //     loopstart = dragnodeid,
-
-        //     dropnodeindex = this.get_quicklink_index(dragnode),
-        //     loopend = dropnodeindex;
-
-        // if (dragnodeid === dropnodeindex) {
-        //     Y.log("Skipping move - same location moving " + dragnodeid + " to " + dropnodeindex, 'debug', 'moodle-course-dragdrop');
-        //     return;
-        // }
-
-        // Y.log("Moving from position " + dragnodeid + " to position " + dropnodeindex, 'debug', 'moodle-course-dragdrop');
-
-        // if (loopstart > loopend) {
-        //     // If we're going up, we need to swap the loop order
-        //     // because loops can't go backwards.
-        //     loopstart = dropnodeindex;
-        //     loopend = dragnodeid;
-        // }
-
-        // // Get the list of nodes.
-        // drag.get('dragNode').removeClass(CSS.QUICKLINKCONTAINER);
-        // var quicklinklist = Y.Node.all(this.quicklinklistselector);
-
-        // Add a lightbox if it's not there.
-        // var lightbox = M.util.add_lightbox(Y, dragnode);
-
-        // Handle any variables which we must pass via AJAX.
-        // var params = {},
-        //     pageparams = this.get('config').pageparams,
-        //     varname;
-
-        // for (varname in pageparams) {
-        //     if (!pageparams.hasOwnProperty(varname)) {
-        //         continue;
-        //     }
-        //     params[varname] = pageparams[varname];
-        // }
-
-        // // Prepare request parameters
-        // params.sesskey = M.cfg.sesskey;
-        // params.courseId = this.get('courseid');
-        // params['class'] = 'quicklink';
-        // params.field = 'move';
-        // params.id = dragnodeid;
-        // params.value = dropnodeindex;
-
-        // // Perform the AJAX request.
+        // Perform the AJAX request.
         // var uri = M.cfg.wwwroot + this.get('ajaxurl');
-        // Y.io(uri, {
-        //     method: 'POST',
-        //     data: params,
-        //     on: {
-        //         start: function() {
-        //             lightbox.show();
-        //         },
-        //         success: function(tid, response) {
-        //             // Update quicklink titles, we can't simply swap them as
-        //             // they might have custom title
-        //             // try {
-        //             //     var responsetext = Y.JSON.parse(response.responseText);
-        //             //     if (responsetext.error) {
-        //             //         new M.core.ajaxException(responsetext);
-        //             //     }
-        //             //     M.course.format.process_quicklinks(Y, quicklinklist, responsetext, loopstart, loopend);
-        //             // } catch (e) {
-        //             //     // Ignore.
-        //             // }
+        Y.io(URL, {
+            method: 'POST',
+            data: params,
+            on: {
+                start: function() {
+                    // lightbox.show();
+                },
+                success: function(tid, response) {
+                    // Update quicklink titles, we can't simply swap them as
+                    // they might have custom title
+                    // try {
+                    //     var responsetext = Y.JSON.parse(response.responseText);
+                    //     if (responsetext.error) {
+                    //         new M.core.ajaxException(responsetext);
+                    //     }
+                    //     M.course.format.process_quicklinks(Y, quicklinklist, responsetext, loopstart, loopend);
+                    // } catch (e) {
+                    //     // Ignore.
+                    // }
 
-        //             // // Update all of the quicklink IDs - first unset them, then set them
-        //             // // to avoid duplicates in the DOM.
-        //             // var index;
+                    // // Update all of the quicklink IDs - first unset them, then set them
+                    // // to avoid duplicates in the DOM.
+                    // var index;
 
-        //             // // Classic bubble sort algorithm is applied to the quicklink
-        //             // // nodes between original drag node location and the new one.
-        //             // var swapped = false;
-        //             // do {
-        //             //     swapped = false;
-        //             //     for (index = loopstart; index <= loopend; index++) {
-        //             //         if (Y.Moodle.core_course.util.quicklink.getId(quicklinklist.item(index - 1)) >
-        //             //                     Y.Moodle.core_course.util.quicklink.getId(quicklinklist.item(index))) {
-        //             //             Y.log("Swapping " + Y.Moodle.core_course.util.quicklink.getId(quicklinklist.item(index - 1)) +
-        //             //                     " with " + Y.Moodle.core_course.util.quicklink.getId(quicklinklist.item(index)));
-        //             //             // Swap quicklink id.
-        //             //             var quicklinkid = quicklinklist.item(index - 1).get('id');
-        //             //             quicklinklist.item(index - 1).set('id', quicklinklist.item(index).get('id'));
-        //             //             quicklinklist.item(index).set('id', quicklinkid);
+                    // // Classic bubble sort algorithm is applied to the quicklink
+                    // // nodes between original drag node location and the new one.
+                    // var swapped = false;
+                    // do {
+                    //     swapped = false;
+                    //     for (index = loopstart; index <= loopend; index++) {
+                    //         if (Y.Moodle.core_course.util.quicklink.getId(quicklinklist.item(index - 1)) >
+                    //                     Y.Moodle.core_course.util.quicklink.getId(quicklinklist.item(index))) {
+                    //             Y.log("Swapping " + Y.Moodle.core_course.util.quicklink.getId(quicklinklist.item(index - 1)) +
+                    //                     " with " + Y.Moodle.core_course.util.quicklink.getId(quicklinklist.item(index)));
+                    //             // Swap quicklink id.
+                    //             var quicklinkid = quicklinklist.item(index - 1).get('id');
+                    //             quicklinklist.item(index - 1).set('id', quicklinklist.item(index).get('id'));
+                    //             quicklinklist.item(index).set('id', quicklinkid);
 
-        //             //             // See what format needs to swap.
-        //             //             M.course.format.swap_quicklinks(Y, index - 1, index);
+                    //             // See what format needs to swap.
+                    //             M.course.format.swap_quicklinks(Y, index - 1, index);
 
-        //             //             // Update flag.
-        //             //             swapped = true;
-        //             //         }
-        //             //     }
-        //             //     loopend = loopend - 1;
-        //             // } while (swapped);
+                    //             // Update flag.
+                    //             swapped = true;
+                    //         }
+                    //     }
+                    //     loopend = loopend - 1;
+                    // } while (swapped);
 
-        //             window.setTimeout(function() {
-        //                 lightbox.hide();
-        //             }, 250);
-            //     },
+                    // window.setTimeout(function() {
+                    //     lightbox.hide();
+                    // }, 250);
+                },
 
-            //     failure: function(tid, response) {
-            //         this.ajax_failure(response);
-            //         lightbox.hide();
-            //     }
-            // },
-        //     context: this
-        // });
+                failure: function(tid, response) {
+                    this.ajax_failure(response);
+                    // lightbox.hide();
+                }
+            },
+            context: this
+        });
     }
 
 }, {
     NAME : 'format_culcourse_dragdrop'
-    // ATTRS : {
-        // node : {
-        //     value : null
-        // }
-    // }
+
 });
 
 M.format_culcourse = M.format_culcourse || {};

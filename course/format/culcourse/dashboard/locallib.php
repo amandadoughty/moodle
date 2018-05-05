@@ -408,7 +408,7 @@ function format_culcourse_quicklink_visibility($courseid, $name, $value) {
     $format->update_course_format_options($options);
 }
 
-function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink = false) {
+function format_culcourse_dashlink_move($courseid, $name, $link, $moveto = null, $ajax = false) {
     $format = course_get_format($courseid);
     $options = $format->get_format_options();    
 
@@ -419,11 +419,11 @@ function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink = f
             $flipped = array_flip($value);
             $fromindex = $flipped[$link];
 
-            if ($beforelink == 'end') {
+            if ($moveto == 'end') {
                 $out = array_splice($value, $fromindex, 1);
                 array_push($out, $value);
             } else {
-                $toindex = $flipped[$beforelink];
+                $toindex = $flipped[$moveto];
                 $newvalue = [];
                 $out = $value[$fromindex];
 
@@ -432,9 +432,14 @@ function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink = f
                         if ($key == $fromindex) {
                             // We do not insert the moved item in the same place.
                             continue;
-                        } else {
+                        } else if ($fromindex < $toindex) {
+                            $newvalue[] = $item;
                             // We insert the moved item in the new position.
                             $newvalue[] = $out;
+                            continue;
+                        } else {
+                            // We insert the moved item in the new position.
+                            $newvalue[] = $out; 
                         }
                     }
                     // All other items are inserted in their original order.
@@ -448,7 +453,7 @@ function format_culcourse_dashlink_move($courseid, $name, $link, $beforelink = f
             $options[$name] = $value;
             $options = (object)$options;
             $format->update_course_format_options($options);
-
+echo(print_r($options));
             return true;            
         } 
     }

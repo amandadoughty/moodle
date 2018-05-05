@@ -1,0 +1,12 @@
+{
+    "moodle-format_culcourse-dragdrop": {
+        "requires": [
+            "base", 
+            "dd-constrain", 
+            "dd-proxy", 
+            "dd-drop", 
+            "dd-delegate", 
+            "dd-plugin"
+        ]
+    }
+}
