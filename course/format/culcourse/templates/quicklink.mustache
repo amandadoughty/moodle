@@ -2,7 +2,11 @@
     {{> format_culcourse/position}}
 {{/ismovingquicklink}}
 
-<li class="dash quick quicklinkdraggable" data-position="{{name}}">
+<li 
+    class="dash quick dashlinkdraggable"
+    data-setting="quicklinksequence"
+    data-position="{{name}}"
+>
     {{> format_culcourse/movelink}}
     <span class="dash-link {{class}}">
         {{^attrs.class}}

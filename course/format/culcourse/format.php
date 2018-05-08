@@ -28,18 +28,10 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir.'/filelib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
-// Horrible backwards compatible parameter aliasing..
-// if ($topic = optional_param('topic', 0, PARAM_INT)) {
-//     $url = $PAGE->url;
-//     $url->param('section', $topic);
-//     debugging('Outdated topic param passed to course/view.php', DEBUG_DEVELOPER);
-//     redirect($url);
-// }
-// End backwards-compatible aliasing..
-
 $context = context_course::instance($course->id);
 // Retrieve course format option fields and add them to the $course object.
 $course = course_get_format($course)->get_course();
+$ajaxurl = '/course/format/culcourse/dashboard/dashlink_edit_ajax.php';
 
 if (($marker >=0) && has_capability('moodle/course:setcurrentsection', $context) && confirm_sesskey()) {
     $course->marker = $marker;
@@ -70,5 +62,10 @@ $PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['coursei
 //                 'config' => $config,
 //             )), null, true);
 
-$PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_dragdrop');
 
+$PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_dragdrop',
+            [[
+                'courseid' => $course->id,
+                'ajaxurl' => $ajaxurl,
+                'config' => 0,
+            ]], null, true);

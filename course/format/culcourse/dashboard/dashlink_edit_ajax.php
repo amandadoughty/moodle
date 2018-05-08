@@ -39,7 +39,6 @@ $copy = optional_param('copy', null, PARAM_RAW);
 $moveto = optional_param('moveto', null, PARAM_RAW);
 $cancelcopy = optional_param('cancelcopy', 0, PARAM_BOOL);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
-$before = optional_param('before', 0, PARAM_BOOL);
 
 $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
 
@@ -75,7 +74,7 @@ if ($action == SHOWHIDE) {
 if ($action == MOVE) {
     if (!empty($moveto) && !empty($copy) && !empty($name) && confirm_sesskey()) {
 
-        $updated = format_culcourse_dashlink_move($courseid, $name, $copy, $moveto, $before); 
+        $updated = format_culcourse_dashlink_move($courseid, $name, $copy, $moveto); 
 
         if (!$updated) {
             print_error('courseformatmissing');

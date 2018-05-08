@@ -10,12 +10,12 @@ var DASHLINK = function() {
 };
 
 var CSS = {
-        ACTIONAREA: 'dash-edit',
-        ACTIONLINKCONTAINER: 'activitylinks',
+        ACTIONAREA: 'actions',
         DASHLINK: 'dash',
-        DASHLINKDRAGGABLE: 'dashlinkdraggable',
         MOVE: 'dash-move',
-        QUICKLINKCONTAINER: 'quicklinks'
+        QUICKLINK: 'quick',
+        QUICKLINKCONTAINER: 'quicklinks',        
+        QUICKLINKDRAGGABLE: 'quicklinkdraggable'               
     };
 
 
@@ -25,17 +25,17 @@ Y.extend(DASHLINK, M.core.dragdrop, {
 
     initializer: function() {     
         // Set group for parent class
-        this.groups = [CSS.DASHLINKDRAGGABLE];
+        this.groups = [CSS.QUICKLINKDRAGGABLE];
         // Initialise quicklinks dragging
-        this.dashlinklistselector = '.' + CSS.DASHLINK;
-        this.setup_for_dashlink(this.dashlinklistselector);
-        this.samenodeclass = CSS.DASHLINK;
+        this.quicklinklistselector = '.' + CSS.QUICKLINK;
+        this.setup_for_quicklink(this.quicklinklistselector);
+        this.samenodeclass = CSS.QUICKLINK;
         this.parentnodeclass = CSS.QUICKLINKCONTAINER;
 
         // Make each li element in the lists of quicklinks draggable.
         var del = new Y.DD.Delegate({
             container: '.' + CSS.QUICKLINKCONTAINER,
-            nodes: '.' + CSS.DASHLINKDRAGGABLE,
+            nodes: '.' + CSS.QUICKLINKDRAGGABLE,
             target: true,
             handles: ['.' + CSS.MOVE],
             dragConfig: {groups: this.groups}
@@ -57,25 +57,6 @@ Y.extend(DASHLINK, M.core.dragdrop, {
         //     groups: this.groups,
         //     node: droparea
         // });
-
-        // Make each li element in the lists of activitylinks draggable.
-        var del = new Y.DD.Delegate({
-            container: '.' + CSS.ACTIONLINKCONTAINER,
-            nodes: '.' + CSS.DASHLINKDRAGGABLE,
-            target: true,
-            handles: ['.' + CSS.MOVE],
-            dragConfig: {groups: this.groups}
-        });
-        del.dd.plug(Y.Plugin.DDProxy, {
-            // Don't move the node at the end of the drag
-            moveOnEnd: false,
-            cloneNode: true
-        });
-        del.dd.plug(Y.Plugin.DDConstrained, {
-            // Keep it inside the ul.
-            constrain: '.' + CSS.ACTIONLINKCONTAINER
-        });
-        del.dd.plug(Y.Plugin.DDWinScroll);
  
     },
 
@@ -85,22 +66,22 @@ Y.extend(DASHLINK, M.core.dragdrop, {
      * @method setup_for_resource
      * @param {String} baseselector The CSS selector or node to limit scope to
      */
-    setup_for_dashlink: function(baseselector) {
-        Y.Node.all(baseselector).each(function(dashlinknode) {
-            var draggroups = dashlinknode.getData('draggroups');
+    setup_for_quicklink: function(baseselector) {
+        Y.Node.all(baseselector).each(function(quicklinknode) {
+            var draggroups = quicklinknode.getData('draggroups');
             if (!draggroups) {
                 // This Drop Node has not been set up. Configure it now.
-                dashlinknode.setAttribute('data-draggroups', this.groups.join(' '));
+                quicklinknode.setAttribute('data-draggroups', this.groups.join(' '));
                 
                 new Y.DD.Drop({
-                    node: dashlinknode,
+                    node: quicklinknode,
                     groups: this.groups,
                     padding: '20 0 20 0'
                 });
             }
 
             // Replace move icons
-            var move = dashlinknode.one('a' + '.' + CSS.MOVE);
+            var move = quicklinknode.one('a' + '.' + CSS.MOVE);
             if (move) {
                 move.replace(this.get_drag_handle(M.util.get_string('movedashlink', 'format_culcourse'),
                              CSS.MOVE, CSS.ICONCLASS, true));
@@ -150,7 +131,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             drop = e.drop.get('node');
 
         // Are we dropping on a li node?
-        if (drop.hasClass(CSS.DASHLINK)) {
+        if (drop.hasClass(CSS.QUICKLINK)) {
             // Are we not going up?
             if (!this.goingLeft && !this.goingUp) {
                 drop = drop.get('nextSibling');
@@ -159,7 +140,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             // Add the node to this list.
             e.drop.get('node').get('parentNode').insertBefore(drag, drop);
             // Resize this nodes shim, so we can drop on it later.
-            // e.drop.sizeShim();
+            e.drop.sizeShim();
         }
     },
 
@@ -169,11 +150,11 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             params = {};
 
         // Add spinner if it not there.
-        var actionarea = drag.one('.' + CSS.ACTIONAREA);
-        var spinner = M.util.add_spinner(Y, actionarea);
+        // var actionarea = drag.one('.' + CSS.ACTIONAREA);
+        // var spinner = M.util.add_spinner(Y, actionarea);
 
         // if we are not on an li, we must have been dropped on a ul.
-        if (!drop.hasClass(CSS.DASHLINK)) {
+        if (!drop.hasClass(CSS.QUICKLINK)) {
             // if (!drop.contains(drag)) {
                 drop.appendChild(drag);
             // }
@@ -185,7 +166,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
         params.moveto = drop.getData('position');
         params.copy = drag.getData('position');
         params.action = 2;
-        params.name = drag.getData('setting');
+        params.name = 'quicklinksequence';
 
         // Perform the AJAX request.
         var uri = M.cfg.wwwroot + this.get('ajaxurl');       
@@ -196,18 +177,18 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             on: {
                 start: function() {
                     // this.lock_drag_handle(drag, CSS.MOVE);
-                    spinner.show();
+                    // spinner.show();
                 },
                 success: function(tid, response) {
                     // this.unlock_drag_handle(drag, CSS.MOVE);
-                    window.setTimeout(function() {
-                        spinner.hide();
-                    }, 250);
+                    // window.setTimeout(function() {
+                    //     spinner.hide();
+                    // }, 250);
                 },
                 failure: function(tid, response) {
                     this.ajax_failure(response);
                     // this.unlock_drag_handle(drag, CSS.MOVE);
-                    spinner.hide();
+                    // spinner.hide();
                     // TODO: revert nodes location
                 }
             },

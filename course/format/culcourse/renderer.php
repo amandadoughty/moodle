@@ -58,9 +58,6 @@ class format_culcourse_renderer extends format_section_renderer_base {
         // Since format_culcourse_renderer::section_edit_controls() only displays the 'Set current section' control when editing mode is on
         // we need to be sure that the link 'Turn editing mode on' is available for a user who does not have any other managing capability.
         $this->page->set_other_editing_capability('moodle/course:setcurrentsection');
-
-        // $this->page->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_dragdrop',
-        //         array(array('aparam'=>'paramvalue')));
     }
 
     /**

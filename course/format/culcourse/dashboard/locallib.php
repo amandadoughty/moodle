@@ -408,7 +408,7 @@ function format_culcourse_quicklink_visibility($courseid, $name, $value) {
     $format->update_course_format_options($options);
 }
 
-function format_culcourse_dashlink_move($courseid, $name, $link, $moveto = null, $ajax = false) {
+function format_culcourse_dashlink_move($courseid, $name, $link, $moveto = null) {
     $format = course_get_format($courseid);
     $options = $format->get_format_options();    
 
