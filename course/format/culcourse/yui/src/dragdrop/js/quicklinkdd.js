@@ -11,7 +11,7 @@ var QUICKLINK = function() {
 
 Y.extend(QUICKLINK, M.core.dragdrop, {
 
-    goingup: null,
+    goingLeft: null,
     // keydown: false,
 
     initializer: function() {     
@@ -78,6 +78,19 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
                 });
             }
 
+            // links = Y.Node.create('<li></li>');
+            // links.addClass(CSS.QUICKLINK);
+
+            // quicklinknode.insert(links, 'after');
+
+            // links.setAttribute('data-draggroups', this.groups.join(' '));
+            // // Define empty ul as droptarget, so that item could be moved to empty list
+            // new Y.DD.Drop({
+            //     node: links,
+            //     groups: this.groups,
+            //     padding: '20 0 20 0'
+            // });            
+
             // Replace move icons
             var move = quicklinknode.one('a' + '.' + CSS.MOVE);
             if (move) {
@@ -133,12 +146,14 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         if (drop.hasClass(CSS.QUICKLINK)) {
             // Are we not going up?
             // if (!this.goingLeft && !this.goingUp && !this.keydown) {
+            // if (!this.goingLeft && !this.goingUp) {
             if (!this.goingLeft && !this.goingUp) {
                 drop = drop.get('nextSibling');
+                e.drop.get('node').get('parentNode').insertBefore(drag, drop);
             }
 
             // Add the node to this list.
-            e.drop.get('node').get('parentNode').insertBefore(drag, drop);
+            // e.drop.get('node').get('parentNode').insertBefore(drag, drop);
             // Resize this nodes shim, so we can drop on it later.
             // e.drop.sizeShim();
         }
@@ -154,11 +169,11 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         var spinner = M.util.add_spinner(Y, actionarea);
 
         // if we are not on an li, we must have been dropped on a ul.
-        if (!drop.hasClass(CSS.QUICKLINK)) {
-            // if (!drop.contains(drag)) {
-                drop.appendChild(drag);
-            // }
-        }
+        // if (!drop.hasClass(CSS.QUICKLINK)) {
+        //     if (!drop.contains(drag)) {
+        //         drop.appendChild(drag);
+        //     }
+        // }
 
         // Prepare request parameters
         params.sesskey = M.cfg.sesskey;

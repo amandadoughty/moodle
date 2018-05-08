@@ -11,7 +11,7 @@ var ACTIVITYLINK = function() {
 
 Y.extend(ACTIVITYLINK, M.core.dragdrop, {
 
-    goingup: null,
+    goingLeft: null,
     // keydown: false,
 
     initializer: function() {     
@@ -135,10 +135,11 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
             // if (!this.goingLeft && !this.goingUp && !this.keydown) {
             if (!this.goingLeft && !this.goingUp) {
                 drop = drop.get('nextSibling');
+                e.drop.get('node').get('parentNode').insertBefore(drag, drop);
             }
 
             // Add the node to this list.
-            e.drop.get('node').get('parentNode').insertBefore(drag, drop);
+            
             // Resize this nodes shim, so we can drop on it later.
             // e.drop.sizeShim();
         }
