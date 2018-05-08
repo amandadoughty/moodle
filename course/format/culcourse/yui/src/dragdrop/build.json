@@ -3,7 +3,9 @@
     "builds": {
         "moodle-format_culcourse-dragdrop": {
             "jsfiles": [
-                "dashlink.js"
+            	"selectors.js",
+                "quicklinkdd.js",
+                "activitylinkdd.js"
             ]
         }
     }

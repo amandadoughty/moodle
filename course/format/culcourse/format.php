@@ -63,7 +63,14 @@ $PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['coursei
 //             )), null, true);
 
 
-$PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_dragdrop',
+$PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_quicklinkdd',
+            [[
+                'courseid' => $course->id,
+                'ajaxurl' => $ajaxurl,
+                'config' => 0,
+            ]], null, true);
+
+$PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_activitylinkdd',
             [[
                 'courseid' => $course->id,
                 'ajaxurl' => $ajaxurl,

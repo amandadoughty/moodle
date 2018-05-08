@@ -5,23 +5,14 @@
  * @constructor
  */
 
-var DASHLINK = function() {
-    DASHLINK.superclass.constructor.apply(this, arguments);
+var QUICKLINK = function() {
+    QUICKLINK.superclass.constructor.apply(this, arguments);
 };
 
-var CSS = {
-        ACTIONAREA: 'actions',
-        DASHLINK: 'dash',
-        MOVE: 'dash-move',
-        QUICKLINK: 'quick',
-        QUICKLINKCONTAINER: 'quicklinks',        
-        QUICKLINKDRAGGABLE: 'quicklinkdraggable'               
-    };
-
-
-Y.extend(DASHLINK, M.core.dragdrop, {
+Y.extend(QUICKLINK, M.core.dragdrop, {
 
     goingup: null,
+    // keydown: false,
 
     initializer: function() {     
         // Set group for parent class
@@ -31,6 +22,10 @@ Y.extend(DASHLINK, M.core.dragdrop, {
         this.setup_for_quicklink(this.quicklinklistselector);
         this.samenodeclass = CSS.QUICKLINK;
         this.parentnodeclass = CSS.QUICKLINKCONTAINER;
+
+        // Make the accessible drag/drop respond to a single click.
+        // this.listeners.push(Y.one(Y.config.doc.body).delegate('click', this.local_keydown,
+        //         '.' + CSS.MOVE, this));
 
         // Make each li element in the lists of quicklinks draggable.
         var del = new Y.DD.Delegate({
@@ -56,9 +51,12 @@ Y.extend(DASHLINK, M.core.dragdrop, {
         // var tar = new Y.DD.Drop({
         //     groups: this.groups,
         //     node: droparea
-        // });
- 
+        // }); 
     },
+
+    // local_keydown: function(e) {
+    //     this.keydown = true;
+    // },
 
     /**
      * Apply dragdrop features to the specified selector or node that refers to resource(s)
@@ -83,7 +81,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             // Replace move icons
             var move = quicklinknode.one('a' + '.' + CSS.MOVE);
             if (move) {
-                move.replace(this.get_drag_handle(M.util.get_string('movedashlink', 'format_culcourse'),
+                move.replace(this.get_drag_handle(M.util.get_string('movequicklink', 'format_culcourse'),
                              CSS.MOVE, CSS.ICONCLASS, true));
             }
         }, this);
@@ -100,6 +98,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
     },
 
     drag_drag: function(e) {
+        this.keydown = false;
         // Core dragdrop checks for goingUp but our list is fluid
         // so we also need to check goingLeft.
         var x = e.target.lastXY[0];
@@ -133,6 +132,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
         // Are we dropping on a li node?
         if (drop.hasClass(CSS.QUICKLINK)) {
             // Are we not going up?
+            // if (!this.goingLeft && !this.goingUp && !this.keydown) {
             if (!this.goingLeft && !this.goingUp) {
                 drop = drop.get('nextSibling');
             }
@@ -140,7 +140,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             // Add the node to this list.
             e.drop.get('node').get('parentNode').insertBefore(drag, drop);
             // Resize this nodes shim, so we can drop on it later.
-            e.drop.sizeShim();
+            // e.drop.sizeShim();
         }
     },
 
@@ -150,8 +150,8 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             params = {};
 
         // Add spinner if it not there.
-        // var actionarea = drag.one('.' + CSS.ACTIONAREA);
-        // var spinner = M.util.add_spinner(Y, actionarea);
+        var actionarea = drag.one('.' + CSS.ACTIONAREA);
+        var spinner = M.util.add_spinner(Y, actionarea);
 
         // if we are not on an li, we must have been dropped on a ul.
         if (!drop.hasClass(CSS.QUICKLINK)) {
@@ -166,7 +166,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
         params.moveto = drop.getData('position');
         params.copy = drag.getData('position');
         params.action = 2;
-        params.name = 'quicklinksequence';
+        params.name = drag.getData('setting');
 
         // Perform the AJAX request.
         var uri = M.cfg.wwwroot + this.get('ajaxurl');       
@@ -177,18 +177,18 @@ Y.extend(DASHLINK, M.core.dragdrop, {
             on: {
                 start: function() {
                     // this.lock_drag_handle(drag, CSS.MOVE);
-                    // spinner.show();
+                    spinner.show();
                 },
                 success: function(tid, response) {
                     // this.unlock_drag_handle(drag, CSS.MOVE);
-                    // window.setTimeout(function() {
-                    //     spinner.hide();
-                    // }, 250);
+                    window.setTimeout(function() {
+                        spinner.hide();
+                    }, 250);
                 },
                 failure: function(tid, response) {
                     this.ajax_failure(response);
                     // this.unlock_drag_handle(drag, CSS.MOVE);
-                    // spinner.hide();
+                    spinner.hide();
                     // TODO: revert nodes location
                 }
             },
@@ -197,7 +197,7 @@ Y.extend(DASHLINK, M.core.dragdrop, {
     }
 
 }, {
-    NAME : 'format_culcourse_dragdrop',
+    NAME : 'format_culcourse_quicklinkdd',
         ATTRS: {
         courseid: {
             value: null
@@ -212,8 +212,8 @@ Y.extend(DASHLINK, M.core.dragdrop, {
 });
 
 M.format_culcourse = M.format_culcourse || {};
-M.format_culcourse.init_dragdrop = function(params) {
-    new DASHLINK(params);
+M.format_culcourse.init_quicklinkdd = function(params) {
+    new QUICKLINK(params);
 };
 
 
