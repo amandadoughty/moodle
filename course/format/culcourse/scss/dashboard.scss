@@ -21,14 +21,15 @@ body.format-culcourse {
                     margin: 0;
                     width: auto;
                     border: none;
-                    .dashlinkmove{
+                    .dash-move{
                         position: absolute;
                         left: 0;
                         i {
                             margin-top: 7px;
-                            color: inherit;
+                            margin-left: 0;
+                            color: $nearlyblack;
                             &:hover {
-                                color: inherit;
+                                color: $nearlyblack;
                             }
 
                         }
