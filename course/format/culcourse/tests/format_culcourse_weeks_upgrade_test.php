@@ -17,9 +17,9 @@
 /**
  * format_culcourse unit tests for upgradelib
  *
- * @package    format_culcourse
- * @copyright  2015 Marina Glancy
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   format_culcourse
+ * @copyright 2018 Amanda Doughty
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();

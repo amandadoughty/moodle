@@ -15,22 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CUL Course Information
+ * Observer for format_culcourse (based on format_weeks).
  *
- * A topic based format that solves the issue of the 'Scroll of Death' when a course has many topics. All topics
- * except zero have a toggle that displays that topic. One or more topics can be displayed at any given time.
- * Toggles are persistent on a per browser session per course basis but can be made to persist longer by a small
- * code change. Full installation instructions, code adaptions and credits are included in the 'Readme.txt' file.
- *
- * @package    course/format
- * @subpackage cul
- * @category   event
- * @version    See the value of '$plugin->version' in below.
- * @copyright  &copy; 2017-onwards G J Barnard based upon work done by Marina Glancy.
- * @author     G J Barnard - gjbarnard at gmail dot com and {@link http://moodle.org/user/profile.php?id=442195}
- * @link       http://docs.moodle.org/en/Collapsed_Topics_course_format
- * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
- *
+ * @package   format_culcourse
+ * @copyright 2018 Amanda Doughty
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();

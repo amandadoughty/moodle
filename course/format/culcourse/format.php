@@ -15,12 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Topics course format.  Display the whole course as "CUL Course" made of modules.
+ * Outputs the course page.
  *
- * @package format_culcourse
- * @copyright 2006 The Open University
- * @author N.D.Freear@open.ac.uk, and others.
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   format_culcourse
+ * @copyright 2018 Amanda Doughty
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -54,14 +53,7 @@ user_preference_allow_ajax_update('format_culcourse_expanded' . $course->id, PAR
 // Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');
 $PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['courseid' => $course->id]);
-// $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');
-// $PAGE->requires->yui_module('moodle-course-dragdrop', 'M.course.init_section_dragdrop',
-//             array(array(
-//                 'courseid' => $course->id,
-//                 'ajaxurl' => $config->sectionurl,
-//                 'config' => $config,
-//             )), null, true);
-
+$PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');
 
 $PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_quicklinkdd',
             [[

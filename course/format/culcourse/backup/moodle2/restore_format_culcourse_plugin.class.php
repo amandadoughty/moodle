@@ -19,7 +19,7 @@
  *
  * @package   format_culcourse
  * @category  backup
- * @copyright 2017 Marina Glancy
+ * @copyright 2018 Amanda Doughty
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

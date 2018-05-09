@@ -15,21 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CUL Course Information
+ * lib.php for format_culcourse.
  *
- * A topic based format that solves the issue of the 'Scroll of Death' when a course has many topics. All topics
- * except zero have a toggle that displays that topic. One or more topics can be displayed at any given time.
- * Toggles are persistent on a per browser session per course basis but can be made to persist longer by a small
- * code change. Full installation instructions, code adaptions and credits are included in the 'Readme.md' file.
- *
- * @package    course/format
- * @subpackage cul
- * @version    See the value of '$plugin->version' in below.
- * @author     Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
- *
+ * @package   format_culcourse
+ * @copyright 2018 Amanda Doughty
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-// require_once($CFG->dirroot . '/course/format/lib.php'); // For format_base.
 
 class format_culcourse_dashboard {
 

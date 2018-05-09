@@ -15,11 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format CUL Course
+ * This file contains main class for format_culcourse.
  *
- * @since     Moodle 2.0
  * @package   format_culcourse
- * @copyright 2009 Sam Hemelryk
+ * @copyright 2018 Amanda Doughty
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

@@ -15,12 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file is used to deliver a branch from the navigation structure
- * in XML format back to a page from an AJAX call
+ * Ajax script for saving toggle state of sections.
  *
- * @since Moodle 2.0
- * @package core
- * @copyright 2009 Sam Hemelryk
+ * @package   format_culcourse
+ * @copyright 2018 Amanda Doughty
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

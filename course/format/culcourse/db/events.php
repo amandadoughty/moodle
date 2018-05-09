@@ -17,9 +17,9 @@
 /**
  * Format culcourse event handler definition.
  *
- * @package format_culcourse
+ * @package   format_culcourse
  * @copyright 2018 Amanda Doughty
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
