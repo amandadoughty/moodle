@@ -123,12 +123,18 @@ class format_culcourse_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function section_right_content($section, $course, $onsectionpage) {
-        $o = $this->output->spacer();
+        // $o = $this->output->spacer();
         $controls = $this->section_edit_control_items($course, $section, $onsectionpage);
         
         if (!empty($controls)) {
-            $o .= implode('', $controls);
+            $o = implode('', $controls);
         }
+
+        $o = html_writer::div(
+            $o, 
+            'section_action_menu',
+            ['data-sectionid' => $section->id]
+        );
 
         return $o;
     }

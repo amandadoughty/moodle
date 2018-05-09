@@ -320,7 +320,7 @@ class format_culcourse extends format_base {
             array_splice($elements, 4, 0, [$dashboardhdr]);
         }
 
-        $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');      
+        $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');   
 
         return $elements;
     }
