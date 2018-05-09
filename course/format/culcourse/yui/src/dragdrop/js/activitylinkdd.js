@@ -1,5 +1,5 @@
 /**
- * Dash link drag and drop.
+ * Activity link drag and drop.
  *
  * @class M.format_culcourse_dragdrop
  * @constructor
@@ -12,20 +12,15 @@ var ACTIVITYLINK = function() {
 Y.extend(ACTIVITYLINK, M.core.dragdrop, {
 
     goingLeft: null,
-    // keydown: false,
 
-    initializer: function() {     
-        // Set group for parent class
+    initializer: function() {
+        // Set group for parent class.
         this.groups = [CSS.ACTIVITYLINKDRAGGABLE];
         // Initialise activitylinks dragging
         this.activitylinklistselector = '.' + CSS.ACTIVITYLINK;
         this.setup_for_activitylink(this.activitylinklistselector);
         this.samenodeclass = CSS.ACTIVITYLINK;
         this.parentnodeclass = CSS.ACTIVITYLINKCONTAINER;
-
-        // Make the accessible drag/drop respond to a single click.
-        // this.listeners.push(Y.one(Y.config.doc.body).delegate('click', this.local_keydown,
-        //         '.' + CSS.MOVE, this));
 
         // Make each li element in the lists of activitylinks draggable.
         var del = new Y.DD.Delegate({
@@ -36,7 +31,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
             dragConfig: {groups: this.groups}
         });
         del.dd.plug(Y.Plugin.DDProxy, {
-            // Don't move the node at the end of the drag
+            // Don't move the node at the end of the drag.
             moveOnEnd: false,
             cloneNode: true
         });
@@ -45,18 +40,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
             constrain: '.' + CSS.ACTIVITYLINKCONTAINER
         });
         del.dd.plug(Y.Plugin.DDWinScroll);
-
-        // Create targets for drop.
-        // var droparea = Y.Node.one('.' + CSS.ACTIVITYLINKCONTAINER);
-        // var tar = new Y.DD.Drop({
-        //     groups: this.groups,
-        //     node: droparea
-        // }); 
     },
-
-    // local_keydown: function(e) {
-    //     this.keydown = true;
-    // },
 
     /**
      * Apply dragdrop features to the specified selector or node that refers to resource(s)
@@ -78,7 +62,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
                 });
             }
 
-            // Replace move icons
+            // Replace move icons.
             var move = activitylinknode.one('a' + '.' + CSS.MOVE);
             if (move) {
                 move.replace(this.get_drag_handle(M.util.get_string('moveactivitylink', 'format_culcourse'),
@@ -91,9 +75,9 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
      * Drag-dropping related functions
      */
     drag_start: function(e) {
-        //Get our drag object
+        // Get our drag object.
         var drag = e.target;
-        //Set some styles here
+        // Set some styles here.
         drag.get('dragNode').set('innerHTML', drag.get('node').get('innerHTML'));
     },
 
@@ -131,17 +115,11 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
 
         // Are we dropping on a li node?
         if (drop.hasClass(CSS.ACTIVITYLINK)) {
-            // Are we not going up?
-            // if (!this.goingLeft && !this.goingUp && !this.keydown) {
+            // Are we not going left or up?
             if (!this.goingLeft && !this.goingUp) {
                 drop = drop.get('nextSibling');
                 e.drop.get('node').get('parentNode').insertBefore(drag, drop);
             }
-
-            // Add the node to this list.
-            
-            // Resize this nodes shim, so we can drop on it later.
-            // e.drop.sizeShim();
         }
     },
 
@@ -154,13 +132,6 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         var actionarea = drag.one('.' + CSS.ACTIONAREA);
         var spinner = M.util.add_spinner(Y, actionarea);
 
-        // if we are not on an li, we must have been dropped on a ul.
-        if (!drop.hasClass(CSS.ACTIVITYLINK)) {
-            // if (!drop.contains(drag)) {
-                drop.appendChild(drag);
-            // }
-        }
-
         // Prepare request parameters
         params.sesskey = M.cfg.sesskey;
         params.courseid = this.get('courseid');
@@ -170,7 +141,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         params.name = drag.getData('setting');
 
         // Perform the AJAX request.
-        var uri = M.cfg.wwwroot + this.get('ajaxurl');       
+        var uri = M.cfg.wwwroot + this.get('ajaxurl');
 
         Y.io(uri, {
             method: 'POST',
@@ -180,7 +151,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
                     // this.lock_drag_handle(drag, CSS.MOVE);
                     spinner.show();
                 },
-                success: function(tid, response) {
+                success: function() {
                     // this.unlock_drag_handle(drag, CSS.MOVE);
                     window.setTimeout(function() {
                         spinner.hide();

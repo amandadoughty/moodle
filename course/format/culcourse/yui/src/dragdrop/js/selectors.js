@@ -1,5 +1,11 @@
+/**
+ * Dash link drag and drop.
+ *
+ * @class M.format_culcourse_dragdrop
+ */
+
 var CSS = {
-        ACTIONAREA: 'dash-edit',        
+        ACTIONAREA: 'dash-edit',
         ACTIVITYLINK: 'activitylink',
         ACTIVITYLINKCONTAINER: 'activitylinks',
         ACTIVITYLINKDRAGGABLE: 'activitylinkdraggable',
