@@ -108,20 +108,20 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    drop_over: function(e) {
-        // Get a reference to our drag and drop nodes.
-        var drag = e.drag.get('node'),
-            drop = e.drop.get('node');
+    // drop_over: function(e) {
+    //     // Get a reference to our drag and drop nodes.
+    //     var drag = e.drag.get('node'),
+    //         drop = e.drop.get('node');
 
-        // Are we dropping on a li node?
-        if (drop.hasClass(CSS.QUICKLINK)) {
-            // Are we not going left or up?
-            if (!this.goingLeft && !this.goingUp) {
-                drop = drop.get('nextSibling');
-                e.drop.get('node').get('parentNode').insertBefore(drag, drop);
-            }
-        }
-    },
+    //     // Are we dropping on a li node?
+    //     if (drop.hasClass(CSS.QUICKLINK)) {
+    //         // Are we not going left or up?
+    //         if (!this.goingLeft && !this.goingUp) {
+    //             drop = drop.get('nextSibling');
+    //             e.drop.get('node').get('parentNode').insertBefore(drag, drop);
+    //         }
+    //     }
+    // },
 
     drop_hit: function(e) {
         var drop = e.drop.get('node'),

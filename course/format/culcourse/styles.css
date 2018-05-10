@@ -80,12 +80,14 @@ body.format-culcourse .course-content .dash-panel {
           border: 1px dashed #262626;
           opacity: 0.7; }
 
-body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link {
-  margin-left: 1.2rem; }
-  body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {
-    /** 'disabled'/unavailable links **/ }
-    body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
-      display: inline-block; }
+body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li {
+  margin: 1rem; }
+  body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link {
+    margin-left: 1.2rem; }
+    body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {
+      /** 'disabled'/unavailable links **/ }
+      body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
+        display: inline-block; }
 body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li.movehere img.movetarget {
   height: 16px;
   width: 80px; }
