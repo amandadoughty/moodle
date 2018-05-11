@@ -107,7 +107,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
             this.vertical = true;
         } else {
             this.vertical = false;
-        }        
+        }
     },
 
     drag_dropmiss: function(e) {
@@ -117,7 +117,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    drop_over: function(e) {
+    global_drop_over: function(e) {
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
             drop = e.drop.get('node'),

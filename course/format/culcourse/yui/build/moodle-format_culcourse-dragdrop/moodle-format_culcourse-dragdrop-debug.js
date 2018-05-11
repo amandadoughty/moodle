@@ -67,18 +67,6 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
      */
     setup_for_quicklink: function(baseselector) {
         Y.Node.all(baseselector).each(function(quicklinknode) {
-            var draggroups = quicklinknode.getData('draggroups');
-            if (!draggroups) {
-                // This Drop Node has not been set up. Configure it now.
-                quicklinknode.setAttribute('data-draggroups', this.groups.join(' '));
-                
-                new Y.DD.Drop({
-                    node: quicklinknode,
-                    groups: this.groups,
-                    padding: '20 0 20 0'
-                });
-            }
-
             // Replace move icons.
             var move = quicklinknode.one('a' + '.' + CSS.MOVE);
             if (move) {
@@ -99,23 +87,44 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
     },
 
     drag_drag: function(e) {
-        this.keydown = false;
         // Core dragdrop checks for goingUp but our list is fluid
         // so we also need to check goingLeft.
-        var x = e.target.lastXY[0];
+        var drag = e.target,
+            info = e.info;
 
-        // Is it greater than the lastX var?s
-        if (x < this.lastX) {
-            // We are going left.
-            this.goingLeft = true;
-        } else {
-            // We are going right.
-            this.goingLeft = false;
+        // Check that drag object belongs to correct group.
+        if (!this.in_group(drag)) {
+            return;
         }
 
-        // Cache for next check.
-        this.lastX = x;
+        // Note, we test both < and > situations here. We don't want to
+        // effect a change in direction if the user is only moving up
+        // and down with no X position change.
 
+        // Detect changes in the position relative to the start point.
+        if (info.start[0] < info.xy[0]) {
+            this.absgoingleft = true;
+
+        } else if (info.start[0] > info.xy[0]) {
+            // Otherwise we're going right.
+            this.absgoingleft = false;
+        }
+
+        // Detect changes in the position relative to the last movement.
+        if (info.delta[0] < 0) {
+            this.goingleft = true;
+
+        } else if (info.delta[0] > 0) {
+            // Otherwise we're going right.
+            this.goingleft = false;
+        }
+
+        // Detect if we are going up or down.
+        if (info.delta[1] != info.xy[1]) {
+            this.vertical = true;
+        } else {
+            this.vertical = false;
+        }
     },
 
     drag_dropmiss: function(e) {
@@ -125,20 +134,21 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    // drop_over: function(e) {
-    //     // Get a reference to our drag and drop nodes.
-    //     var drag = e.drag.get('node'),
-    //         drop = e.drop.get('node');
+    global_drop_over: function(e) {
+        // Get a reference to our drag and drop nodes.
+        var drag = e.drag.get('node'),
+            drop = e.drop.get('node'),
+            where;
 
-    //     // Are we dropping on a li node?
-    //     if (drop.hasClass(CSS.QUICKLINK)) {
-    //         // Are we not going left or up?
-    //         if (!this.goingLeft && !this.goingUp) {
-    //             drop = drop.get('nextSibling');
-    //             e.drop.get('node').get('parentNode').insertBefore(drag, drop);
-    //         }
-    //     }
-    // },
+        if (this.goingleft) {
+            where = 'before';
+        } else {
+            where = 'after';
+        }
+
+        // Add the node contents so that it's moved, otherwise only the drag handle is moved.
+        drop.insert(drag, where);
+    },
 
     drop_hit: function(e) {
         var drop = e.drop.get('node'),
@@ -258,18 +268,6 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
      */
     setup_for_activitylink: function(baseselector) {
         Y.Node.all(baseselector).each(function(activitylinknode) {
-            // var draggroups = activitylinknode.getData('draggroups');
-            // if (!draggroups) {
-            //     // This Drop Node has not been set up. Configure it now.
-            //     activitylinknode.setAttribute('data-draggroups', this.groups.join(' '));
-                
-            //     new Y.DD.Drop({
-            //         node: activitylinknode,
-            //         groups: this.groups,
-            //         padding: '20 0 20 0'
-            //     });
-            // }
-
             // Replace move icons.
             var move = activitylinknode.one('a' + '.' + CSS.MOVE);
             if (move) {
@@ -327,7 +325,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
             this.vertical = true;
         } else {
             this.vertical = false;
-        }        
+        }
     },
 
     drag_dropmiss: function(e) {
@@ -337,7 +335,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    drop_over: function(e) {
+    global_drop_over: function(e) {
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
             drop = e.drop.get('node'),
