@@ -258,17 +258,17 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
      */
     setup_for_activitylink: function(baseselector) {
         Y.Node.all(baseselector).each(function(activitylinknode) {
-            var draggroups = activitylinknode.getData('draggroups');
-            if (!draggroups) {
-                // This Drop Node has not been set up. Configure it now.
-                activitylinknode.setAttribute('data-draggroups', this.groups.join(' '));
+            // var draggroups = activitylinknode.getData('draggroups');
+            // if (!draggroups) {
+            //     // This Drop Node has not been set up. Configure it now.
+            //     activitylinknode.setAttribute('data-draggroups', this.groups.join(' '));
                 
-                new Y.DD.Drop({
-                    node: activitylinknode,
-                    groups: this.groups,
-                    padding: '20 0 20 0'
-                });
-            }
+            //     new Y.DD.Drop({
+            //         node: activitylinknode,
+            //         groups: this.groups,
+            //         padding: '20 0 20 0'
+            //     });
+            // }
 
             // Replace move icons.
             var move = activitylinknode.one('a' + '.' + CSS.MOVE);
@@ -290,10 +290,6 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
     },
 
     drag_drag: function(e) {
-
-        this.goingUp = this.goingup;
-        this.goingup = true;
-        // this.keydown = false;
         // Core dragdrop checks for goingUp but our list is fluid
         // so we also need to check goingLeft.
         var drag = e.target,
@@ -331,9 +327,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
             this.vertical = true;
         } else {
             this.vertical = false;
-        }
-
-        
+        }        
     },
 
     drag_dropmiss: function(e) {
@@ -343,11 +337,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    global_drop_over: function(e) {
-        Y.log('over');
-        Y.log('up' + this.goingUp);
-        Y.log('left' + this.goingleft);
-        // Y.log('v' + this.vertical);
+    drop_over: function(e) {
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
             drop = e.drop.get('node'),
@@ -359,10 +349,6 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
             where = 'after';
         }
 
-        if (!this.goingUp && this.goingleft) {
-            where = 'after';
-        }
-Y.log(where);
         // Add the node contents so that it's moved, otherwise only the drag handle is moved.
         drop.insert(drag, where);
     },

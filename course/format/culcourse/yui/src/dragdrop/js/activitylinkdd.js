@@ -50,18 +50,6 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
      */
     setup_for_activitylink: function(baseselector) {
         Y.Node.all(baseselector).each(function(activitylinknode) {
-            var draggroups = activitylinknode.getData('draggroups');
-            if (!draggroups) {
-                // This Drop Node has not been set up. Configure it now.
-                activitylinknode.setAttribute('data-draggroups', this.groups.join(' '));
-                
-                new Y.DD.Drop({
-                    node: activitylinknode,
-                    groups: this.groups,
-                    padding: '20 0 20 0'
-                });
-            }
-
             // Replace move icons.
             var move = activitylinknode.one('a' + '.' + CSS.MOVE);
             if (move) {
@@ -129,7 +117,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    global_drop_over: function(e) {
+    drop_over: function(e) {
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
             drop = e.drop.get('node'),
@@ -138,10 +126,6 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         if (this.goingleft) {
             where = 'before';
         } else {
-            where = 'after';
-        }
-
-        if (!this.goingUp && this.goingleft) {
             where = 'after';
         }
 
