@@ -26,7 +26,7 @@
 /**
   * @module format_culcourse/updatebaseclass
   */
-define(['jquery'], function($) {
+define(['jquery', 'core/config', 'core/notification'], function($, config, Notification) {
 
      /**
       * Used CSS selectors
@@ -39,6 +39,7 @@ define(['jquery'], function($) {
         FORM: 'form.mform'
         };
 
+    var URL = config.wwwroot + '/course/format/culcourse/setbaseclass.php';
 
     return /** @alias module:format_culcourse/updatebaseclass */ {
         /**
@@ -47,9 +48,21 @@ define(['jquery'], function($) {
          */
         init : function() {
             var ancestor = $(SELECTORS.BASECLASSSELECT).closest(SELECTORS.ANCESTOR);
-            var action = $(SELECTORS.FORM).attr('action');
+            var action = $(SELECTORS.FORM).attr('action');            
 
             $(SELECTORS.BASECLASSSELECT).on('change', function() {
+                var baseclass = $(SELECTORS.BASECLASSSELECT).val();
+
+                var params = {
+                    baseclass: baseclass
+                    // sesskey: M.cfg.sesskey
+                };
+
+                $.post(URL, params, function() {})
+                    .fail(function(jqXHR, status, error) {
+                        Notification.exception(error);
+                    });
+
                 $(SELECTORS.FORM).attr('action', action + '#' + ancestor.attr('id'));
                 $(SELECTORS.UPDATEBUTTON).trigger('click');
             });

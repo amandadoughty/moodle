@@ -117,7 +117,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    global_drop_over: function(e) {
+    drop_over: function(e) {
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
             drop = e.drop.get('node'),
@@ -127,6 +127,10 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
             where = 'before';
         } else {
             where = 'after';
+        }
+
+        if (this.goingup) {
+            where = 'before';
         }
 
         // Add the node contents so that it's moved, otherwise only the drag handle is moved.

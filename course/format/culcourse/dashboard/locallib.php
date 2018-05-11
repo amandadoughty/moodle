@@ -84,8 +84,8 @@ function format_culcourse_get_reading_list_url_data($course) {
     $url  = "{$path}/lists/{$codedata['year_description']}.json";
 
     // Get the config timeout values.
-    $connectiontimeout = trim(get_config('cul', 'connection_timeout'));
-    $transfertimeout   = trim(get_config('cul', 'transfer_timeout'));
+    $connectiontimeout = trim(get_config('culcourse', 'connection_timeout'));
+    $transfertimeout   = trim(get_config('culcourse', 'transfer_timeout'));
 
     $data = format_culcourse_get_reading_list_data($path, $url, $connectiontimeout, $transfertimeout);
 

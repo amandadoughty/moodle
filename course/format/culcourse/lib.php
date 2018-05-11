@@ -62,27 +62,36 @@ class format_culcourse extends format_base {
      * @return format_base
      */
     protected function __construct($format, $courseid) {        
-        global $DB;
+        global $DB, $USER;
 
         $baseclasses = [
             1 => 'format_topics_',
             2 => 'format_weeks_'
         ];
 
-        // Get record from db or default.
-        $record = $DB->get_record('course_format_options',
-                                array('courseid' => $courseid,
-                                      'format' => 'culcourse',
-                                      'name' => 'baseclass'
-                                    ), 'value');
-
-        // course_get_format($course) @TODO
-
-        if ($record) {
-            $baseclass = $record->value;
+        if (isset($USER->baseclass)) {
+            // Set when the user changes the baseclass
+            // in the course edit form. We need to show the
+            // correct format options.
+            $baseclass = $USER->baseclass;
+            // Unset the temporary user value storing the edited baseclass.
+            unset($USER->baseclass);
         } else {
-            $config = get_config('format_culcourse');
-            $baseclass = $config->defaultbaseclass;
+            // Get record from db or default.
+            $record = $DB->get_record('course_format_options',
+                                    [
+                                        'courseid' => $courseid,
+                                        'format' => 'culcourse',
+                                        'name' => 'baseclass'
+                                    ], 
+                                    'value');
+
+            if ($record) {
+                $baseclass = $record->value;
+            } else {
+                $config = get_config('format_culcourse');
+                $baseclass = $config->defaultbaseclass;
+            }
         }
 
         parent::__construct($format, $courseid);
@@ -320,7 +329,7 @@ class format_culcourse extends format_base {
             array_splice($elements, 4, 0, [$dashboardhdr]);
         }
 
-        $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');   
+        $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');
 
         return $elements;
     }

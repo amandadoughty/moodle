@@ -53,7 +53,8 @@ user_preference_allow_ajax_update('format_culcourse_expanded' . $course->id, PAR
 // Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');
 $PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['courseid' => $course->id]);
-
+$PAGE->requires->string_for_js('moveactivitylink', 'format_culcourse');
+$PAGE->requires->string_for_js('movequicklink', 'format_culcourse');
 $PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_quicklinkdd',
             [[
                 'courseid' => $course->id,
