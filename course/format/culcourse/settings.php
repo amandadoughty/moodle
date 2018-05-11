@@ -87,3 +87,19 @@ foreach ($elements as $element) {
     ];
     $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
 }
+
+// Connection timeout in s.
+$name = 'format_culcourse/connect_timeout';
+$title = get_string('connect_timeout', 'format_culcourse');
+$description = get_string('connect_timeout_desc', 'format_culcourse');
+$default = 4;
+$type = PARAM_INT;
+$settings->add(new admin_setting_configtext($name, $title, $description, $default, $type));
+
+// Transfer timeout in s.
+$name = 'format_culcourse/transfer_timeout';
+$title = get_string('transfer_timeout', 'format_culcourse');
+$description = get_string('transfer_timeout_desc', 'format_culcourse');
+$default = 8;
+$type = PARAM_INT;
+$settings->add(new admin_setting_configtext($name, $title, $description, $default, $type));

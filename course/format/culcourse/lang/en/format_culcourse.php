@@ -139,15 +139,11 @@ click each of the other lecturers you want to select as Module Leaders.
 ';
 $string['nolecturers'] = 'No Lecturers';
 
-// Timeout heading.
-$string['headerconfig'] = 'Config section header';
 // Timeout settings for curl.
-$string['config_connection_timeout'] = 'Connection timeout';
-$string['config_connection_timeout_desc'] = 'Enter the maximum time in seconds to wait for a connection to the Reading Lists server (upper limit: 6).';
-$string['config_connection_timeout_ex'] = '4';
-$string['config_transfer_timeout'] = 'Transfer timeout';
-$string['config_transfer_timeout_desc'] = 'Enter the maximum time in seconds to wait for data transfer from the Reading Lists server to complete, before displaying an error message (upper limit 16).';
-$string['config_transfer_timeout_ex'] = '8';
+$string['connect_timeout'] = 'Connection timeout';
+$string['connect_timeout_desc'] = 'Enter the maximum time in seconds to wait for a connection to the Reading Lists server (upper limit: 6).';
+$string['transfer_timeout'] = 'Transfer timeout';
+$string['transfer_timeout_desc'] = 'Enter the maximum time in seconds to wait for data transfer from the Reading Lists server to complete, before displaying an error message (upper limit 16).';
 
 /***** LINKS ON COURSE PAGE *****/
 $string['activities'] = 'Activities';

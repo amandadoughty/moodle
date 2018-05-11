@@ -451,7 +451,7 @@ function format_culcourse_dashlink_move($courseid, $name, $link, $moveto = null)
             $options[$name] = $value;
             $options = (object)$options;
             $format->update_course_format_options($options);
-echo(print_r($options));
+
             return true;            
         } 
     }
@@ -592,7 +592,6 @@ function format_culcourse_get_lti_instances($course, $type) {
 
     $ltis = [];
     $basicltis = get_coursemodules_in_course('lti', $course->id, 'm.typeid');
-
     $basicltis = get_all_instances_in_course('lti', $course, $USER->id, true);
 
     // lti_filter_get_types($course)
