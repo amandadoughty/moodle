@@ -204,6 +204,8 @@ $string['noeditcoursesettings'] = 'You are not permitted to edit course settings
 
 /* PHOTOBOARD */
 $string['buildinglocation'] = 'Building/location: ';
+$string['culcourse:viewallphotoboard'] = 'View all roles in the photoboard';
+$string['culcourse:viewphotoboard'] = 'View the photoboard';
 $string['detailedlist'] = 'Detailed List';
 $string['email'] = 'Email: ';
 $string['groups'] = 'Groups: ';
