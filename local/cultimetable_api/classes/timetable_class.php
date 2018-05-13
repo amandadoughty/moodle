@@ -193,7 +193,7 @@ class timetable {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookie_file_path);
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->cookie_file_path);
-        $result = $this->parseTimetableOutput($ch, $module, $format, $cid);
+        $result = $this->parse_timetable_output($ch, $module, $format, $cid);
         #print_r($this->tt_data);
         // $result = curl_exec($ch);
         // $this->error = curl_error($ch);
