@@ -441,7 +441,7 @@ class eventlist implements templatable, renderable {
             $userpic->class = 'personpicture';
             $userimg = $OUTPUT->render($userpic);
         } else {
-            $url = $OUTPUT->pix_url('u/f2');
+            $url = $OUTPUT->image_url('u/f2');
             $attributes = [
                 'src' => $url,
                 'alt' => get_string('anon', 'block_culupcoming_events'),
