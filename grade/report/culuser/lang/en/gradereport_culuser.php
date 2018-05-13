@@ -28,6 +28,7 @@ $string['accumulativetitle'] = 'Accumulative feedback';
 $string['comment'] = 'Comment';
 $string['comments'] = 'Feedback comments';
 $string['commentstitle'] = 'Comments feedback';
+$string['culuser:view'] = 'View CUL User grade report';
 $string['eventgradereportviewed'] = 'Grade user report viewed';
 $string['files'] = 'Feedback files';
 $string['grade'] = 'Grade - ';
