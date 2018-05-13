@@ -517,7 +517,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         // or summary files.
         if ($course->has_summary() || $course->has_course_contacts() || $course->has_course_overviewfiles()) {
             $url = new moodle_url('/course/info.php', array('id' => $course->id));
-            $image = html_writer::empty_tag('img', array('src' => $this->output->pix_url('i/info'),
+            $image = html_writer::empty_tag('img', array('src' => $this->output->image_url('i/info'),
                 'alt' => get_string('summary')));
             $content .= html_writer::link($url, $image, array('title' => get_string('summary')));
             // Make sure JS file to expand course content is included.
@@ -769,9 +769,9 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         $movedown[] = null;
         $url = new moodle_url('/blocks/culcourse_listing/move_post.php', array('sesskey' => sesskey()));
         $moveup['str'] = get_string('moveup');
-        $moveup['icon'] = $this->pix_url('t/up');
+        $moveup['icon'] = $this->image_url('t/up');
         $movedown['str'] = get_string('movedown');
-        $movedown['icon'] = $this->pix_url('t/down');
+        $movedown['icon'] = $this->image_url('t/down');
 
         foreach ($courses as $course) {
             $caption = '';
@@ -789,7 +789,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                         array('title' => $moveup['str'], 'class' => 'moveup'));
                 } else {
                     // Add a spacer to keep keep down arrow icons at right position.
-                    $caption .= html_writer::empty_tag('img', array('src' => $this->pix_url('spacer'),
+                    $caption .= html_writer::empty_tag('img', array('src' => $this->image_url('spacer'),
                         'class' => 'movedownspacer'));
                 }
                 // Add an arrow to move course down.
@@ -800,7 +800,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                         array('title' => $movedown['str'], 'class' => 'movedown'));
                 } else {
                     // Add a spacer to keep keep up arrow icons at right position.
-                    $caption .= html_writer::empty_tag('img', array('src' => $this->pix_url('spacer'),
+                    $caption .= html_writer::empty_tag('img', array('src' => $this->image_url('spacer'),
                         'class' => 'moveupspacer'));
                 }
                 $caption .= html_writer::end_tag('div');
