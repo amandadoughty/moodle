@@ -24,14 +24,15 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  *
  */
+namespace culupcoming_events\privacy;
 
 defined('MOODLE_INTERNAL') || die();
-
-namespace culupcoming_events\privacy;
 
 class provider implements
     // This plugin does not store any personal user data.
     \core_privacy\local\metadata\null_provider {
+
+    use \core_privacy\local\legacy_polyfill;
 
     /**
      * Get the language string identifier with the component's language
@@ -39,7 +40,7 @@ class provider implements
      *
      * @return  string
      */
-    public static function get_reason() : string {
+    public static function _get_reason(){
         return 'privacy:metadata';
     }
 }
