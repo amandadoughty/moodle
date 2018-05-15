@@ -37,7 +37,9 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2018 Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\local\metadata\provider {
+class provider implements 
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider {
 
     use \core_privacy\local\legacy_polyfill;
 
