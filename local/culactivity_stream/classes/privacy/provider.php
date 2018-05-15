@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation for message_output_culactivity_stream.
+ * Privacy Subsystem implementation for local_culactivity_stream.
  *
- * @package    message_output_culactivity_stream
+ * @package    local_culactivity_stream
  * @copyright  2018 Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace message_output_culactivity_stream\privacy;
+namespace local_culactivity_stream\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
@@ -32,7 +32,7 @@ use core_privacy\local\request\writer;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Privacy Subsystem implementation for message_output_culactivity_stream.
+ * Privacy Subsystem implementation for local_culactivity_stream.
  *
  * @copyright  2018 Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -52,20 +52,26 @@ class provider implements
      */
     public static function _get_metadata($items) {
         $items->add_database_table(
-            'message_culactivity_stream',
+            'message_culactivity_stream_q',
             [
-                'userid' => 'privacy:metadata:message_culactivity_stream:userid',
-                'userfromid' => 'privacy:metadata:message_culactivity_stream:userfromid',
-                'courseid' => 'privacy:metadata:message_culactivity_stream:courseid',
-                'smallmessage' => 'privacy:metadata:message_culactivity_stream:smallmessage',
-                'component' => 'privacy:metadata:message_culactivity_stream:component',
-                'timecreated' => 'privacy:metadata:message_culactivity_stream:timecreated',
-                'contexturl' => 'privacy:metadata:message_culactivity_stream:contexturl',
-                'deleted' => 'privacy:metadata:message_culactivity_stream:deleted',
-                'timedeleted' => 'privacy:metadata:message_culactivity_stream:timedeleted',
-                
+                'sent' => 'privacy:metadata:message_culactivity_stream_q:sent',
+                'userfromid' => 'privacy:metadata:message_culactivity_stream_q:userfromid',
+                'courseid' => 'privacy:metadata:message_culactivity_stream_q:courseid',
+                'cmid' => 'privacy:metadata:message_culactivity_stream_q:cmid',
+                'smallmessage' => 'privacy:metadata:message_culactivity_stream_q:smallmessage',
+                'component' => 'privacy:metadata:message_culactivity_stream_q:component',
+                'modulename' => 'privacy:metadata:message_culactivity_stream_q:modulename',
+                'timecreated' => 'privacy:metadata:message_culactivity_stream_q:timecreated',
+                'contexturl' => 'privacy:metadata:message_culactivity_stream_q:contexturl',
+                'contexturlname' => 'privacy:metadata:message_culactivity_stream_q:contexturlname'
             ],
-            'privacy:metadata:message_culactivity_stream'
+            'privacy:metadata:message_culactivity_stream_q'
+        );
+
+        $items->add_subsystem_link(
+            'core_message',
+            [],
+            'privacy:metadata:core_message'
         );
 
         return $items;
@@ -106,8 +112,8 @@ class provider implements
 
         $userid = $contextlist->get_user()->id;
 
-        // Export the message_culactivity_stream.
-        self::export_user_data_message_culactivity_stream($userid);
+        // Export the message_culactivity_stream_q.
+        self::export_user_data_message_culactivity_stream_q($userid);
     }
 
     /**
@@ -122,7 +128,7 @@ class provider implements
             return;
         }
 
-        $DB->delete_records('message_culactivity_stream');
+        $DB->delete_records('message_culactivity_stream_q');
     }
 
     /**
@@ -148,7 +154,7 @@ class provider implements
 
         $userid = $contextlist->get_user()->id;
 
-        $DB->delete_records_select('message_culactivity_stream', 'userid = ? OR userfromid = ?', [$userid, $userid]);
+        $DB->delete_records_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);
     }
 
     /**
@@ -156,31 +162,33 @@ class provider implements
      *
      * @param int $userid
      */
-    protected static function _export_user_data_message_culactivity_stream($userid) {
+    protected static function _export_user_data_message_culactivity_stream_q($userid) {
         global $DB;
 
         $context = \context_system::instance();
 
         $notificationdata = [];
-        $select = "userid = ? OR userfromid = ?";
-        $message_culactivity_stream = $DB->get_recordset_select('message_culactivity_stream', $select, [$userid, $userid], 'timecreated ASC');
-        foreach ($message_culactivity_stream as $notification) {
+        $select = "userfromid = ?";
+        $message_culactivity_stream_q = $DB->get_recordset_select('message_culactivity_stream_q', $select, [$userid, $userid], 'timecreated ASC');
+        foreach ($message_culactivity_stream_q as $notification) {
             $timedeleted = !is_null($notification->timedeleted) ? transform::datetime($notification->timedeleted) : '-';
 
             $data = (object) [
+                'sent' => transform::yesno($notification->sent),
                 'courseid' => $notification->courseid,
+                'cmid' => $notification->cmid,
                 'smallmessage' => $notification->smallmessage,
                 'component' => $notification->component,
+                'modulename' => $notification->modulename,
                 'timecreated' => transform::datetime($notification->timecreated),
                 'contexturl' => $notification->contexturl,
-                'deleted' => transform::yesno($notification->deleted),
-                'timedeleted' => $timedeleted                
+                'contexturlname' => $notification->contexturlname
             ];
 
             $notificationdata[] = $data;
         }
-        $message_culactivity_stream->close();
+        $message_culactivity_stream_q->close();
 
-        writer::with_context($context)->export_data([get_string('message_culactivity_stream', 'message_output_culactivity_stream')], (object) $notificationdata);
+        writer::with_context($context)->export_data([get_string('message_culactivity_stream_q', 'local_culactivity_stream')], (object) $notificationdata);
     }
 }
