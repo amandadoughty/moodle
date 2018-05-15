@@ -23,6 +23,7 @@
  */
 
 $string['pluginname'] = 'CUL Timetable API';
+$string['privacy:metadata'] = 'The CUL Course Timetable plugin fetches and displays data from an external system. It does not store data.';
 $string['timetable_connection_details'] = 'Timetable URLs';
 $string['timetable_connection_details_description'] = 'Pages that the api needs to connect to login and then display results.';
 $string['connect_timeout'] = 'Connection timeout';

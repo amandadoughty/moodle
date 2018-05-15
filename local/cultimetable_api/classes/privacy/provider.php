@@ -15,18 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Privacy Subsystem implementation for local_cultimetable_api.
  *
  * @package    local_cultimetable_api
- * @copyright  2015 Amanda Doughty
+ * @copyright  2018 Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+namespace local_cultimetable_api\privacy;
 
-$plugin->version   = 2016071804;
-$plugin->release   = '1.1.2';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->requires  = 2014111000; // Moodle 2.8 release and upwards
-$plugin->component = 'local_cultimetable_api';
+defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Privacy Subsystem for local_cultimetable_api implementing null_provider.
+ *
+ * @copyright  2018 Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+	
+	use \core_privacy\local\legacy_polyfill;
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function _get_reason() {
+        return 'privacy:metadata';
+    }
+}

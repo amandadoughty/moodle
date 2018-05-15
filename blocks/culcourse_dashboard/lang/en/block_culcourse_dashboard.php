@@ -52,6 +52,7 @@ $string['not-installed-readinglist'] = 'Reading List (not installed)';
 $string['not-installed-timetable'] = 'Timetable link (not installed)';
 $string['photoboard'] = 'Photoboard';
 $string['photoboard_info'] = '';
+$string['privacy:metadata'] = 'The CUL Course Dashboard block displays links. It does not store data.';
 $string['breadcrumb_photo'] = 'Photoboard';
 $string['allparticipants'] = 'Number of Participants';
 $string['pluginname'] = 'CUL Course Dashboard';

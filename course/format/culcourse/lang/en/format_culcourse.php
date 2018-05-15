@@ -221,13 +221,19 @@ $string['telephone'] = 'Telephone: ';
 
 /***** SECTIONS *****/
 $string['addsections'] = 'Add sections';
+$string['collapsed'] = 'collapsed';
 $string['culcourseclosed'] = 'Close all';
 $string['culcourseopened'] = 'Open all';
 $string['editsection'] = 'Edit section';
 $string['editsectionname'] = 'Edit section name';
+$string['expanded'] = 'expanded';
 $string['deletesection'] = 'Delete section';
 $string['hidefromothers'] = 'Hide section';
 $string['newsectionname'] = 'New name for section {$a}';
 $string['sectionname'] = 'Section';
 $string['section0name'] = 'General';
 $string['showfromothers'] = 'Show section';
+
+/***** PRIVACY API *****/
+$string['privacy:metadata:preference:format_culcourse_expanded'] = 'The collapsed state of each section in a course.';
+$string['privacy:request:preference:format_culcourse_expanded'] = 'You last left the sections in the course "{$a->course}" as "{$a->sectionstates}".';
