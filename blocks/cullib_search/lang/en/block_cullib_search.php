@@ -28,3 +28,4 @@ $string['headerconfig'] = 'Config section header';
 $string['cullib_search:addinstance'] = 'Add a new CityLibrary Search Block';
 $string['cullib_search:myaddinstance'] = 'Add a new CityLibrary Search Block to my moodle';
 $string['pluginname'] = 'CityLibrary Search';
+$string['privacy:metadata'] = 'The CUL City Library Search fetches search results from an external systema nd stores no data.';
