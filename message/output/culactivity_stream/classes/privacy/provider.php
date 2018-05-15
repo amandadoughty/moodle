@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation for message_output_culactivity_stream.
+ * Privacy Subsystem implementation for message_culactivity_stream.
  *
- * @package    message_output_culactivity_stream
+ * @package    message_culactivity_stream
  * @copyright  2018 Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace message_output_culactivity_stream\privacy;
+namespace message_culactivity_stream\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
@@ -32,7 +32,7 @@ use core_privacy\local\request\writer;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Privacy Subsystem implementation for message_output_culactivity_stream.
+ * Privacy Subsystem implementation for message_culactivity_stream.
  *
  * @copyright  2018 Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -181,6 +181,6 @@ class provider implements
         }
         $message_culactivity_stream->close();
 
-        writer::with_context($context)->export_data([get_string('message_culactivity_stream', 'message_output_culactivity_stream')], (object) $notificationdata);
+        writer::with_context($context)->export_data([get_string('message_culactivity_stream', 'message_culactivity_stream')], (object) $notificationdata);
     }
 }
