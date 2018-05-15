@@ -38,6 +38,7 @@ $string['myself'] = 'Myself';
 $string['numerrorstitle'] = 'Numerrors feedback';
 $string['otheruser'] = 'User';
 $string['peerfeedback'] = 'Feedback from peer/s';
+$string['privacy:metadata'] = 'The CUL User Grade Report displays existing data from the gradebook and activity mods.';
 $string['rubric'] = 'Rubric';
 $string['rubrictitle'] = 'Rubric feedback';
 $string['tablesummary'] = 'The table is arranged as a list of graded items including categories of graded items. When items are in a category they will be indicated as such.';

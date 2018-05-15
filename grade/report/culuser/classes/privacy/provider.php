@@ -15,15 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details for the user gradebook report
+ * Privacy Subsystem implementation for gradereport_culuser.
  *
- * @package    gradereport_user
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @package    gradereport_culuser
+ * @copyright  2018 Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace gradereport_culuser\privacy;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017012503;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2016112900;        // Requires this Moodle version
-$plugin->component = 'gradereport_culuser'; // Full name of the plugin (used for diagnostics)
+/**
+ * Privacy Subsystem for gradereport_culuser implementing null_provider.
+ *
+ * @copyright  2018 Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+	
+	use \core_privacy\local\legacy_polyfill;
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function _get_reason() {
+        return 'privacy:metadata';
+    }
+}
