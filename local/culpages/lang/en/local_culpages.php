@@ -36,3 +36,4 @@ $string['passwordforgottentxt'] = '<h2 id="pageheading" class="main">Forgotten p
 </ul>';
 
 $string['heading'] = '<h2 id="pageheading" class="main">Your Computer</h2>';
+$string['privacy:metadata'] = 'The CUL pages plugin stores no data.';
