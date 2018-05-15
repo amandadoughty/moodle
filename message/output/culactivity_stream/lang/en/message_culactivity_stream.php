@@ -26,6 +26,7 @@
 $string['eventdata'] = 'Cron Job';
 $string['eventdata_update_desc'] = 'Cron job to reduce the size of the message_culactivity_stream
 table by moving relevant data from eventdata field to other fields.';
+$string['message_culactivity_stream'] = 'message_culactivity_stream';
 $string['pluginname'] = 'CUL Activity Feed';
 
 $string['privacy:metadata:message_culactivity_stream'] = 'CUL Activity Stream Messages';

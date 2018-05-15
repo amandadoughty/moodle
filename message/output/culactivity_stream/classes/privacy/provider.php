@@ -37,10 +37,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2018 Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements
-    \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\subsystem\provider,
-    \core_privacy\local\request\user_preference_provider {
+class provider implements \core_privacy\local\metadata\provider {
 
     use \core_privacy\local\legacy_polyfill;
 
@@ -156,7 +153,7 @@ class provider implements
      *
      * @param int $userid
      */
-    protected static function _export_user_data_message_culactivity_stream($userid) {
+    protected static function export_user_data_message_culactivity_stream($userid) {
         global $DB;
 
         $context = \context_system::instance();
