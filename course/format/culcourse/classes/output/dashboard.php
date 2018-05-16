@@ -734,6 +734,10 @@ class dashboard implements templatable, renderable {
                 $moveurl = '';
                 $moveicon = '';
                 $moveattrs = '';
+                $movetourl = '';
+                $movetoicon = '';
+                $movetoattrs = '';
+
                 
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
