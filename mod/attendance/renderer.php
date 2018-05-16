@@ -421,7 +421,8 @@ class mod_attendance_renderer extends plugin_renderer_base {
                 'class' => 'btn btn-primary',
                 'value' => get_string('save', 'attendance'));
         $table .= html_writer::tag('center', html_writer::empty_tag('input', $params));
-        $table = html_writer::tag('form', $table, array('method' => 'post', 'action' => $takedata->url_path()));
+        $table = html_writer::tag('form', $table, array('method' => 'post', 'action' => $takedata->url_path(),
+                                                        'id' => 'attendancetakeform'));
 
         foreach ($takedata->statuses as $status) {
             $sessionstats[$status->id] = 0;
@@ -487,7 +488,6 @@ class mod_attendance_renderer extends plugin_renderer_base {
      * @return string
      */
     private function construct_take_controls(attendance_take_data $takedata) {
-        global $CFG;
 
         $controls = '';
         $context = context_module::instance($takedata->cm->id);
@@ -613,11 +613,21 @@ class mod_attendance_renderer extends plugin_renderer_base {
             $table->align[] = 'left';
         }
         foreach ($takedata->statuses as $st) {
-            $table->head[] = html_writer::link("javascript:select_all_in(null, 'st" . $st->id . "', null);", $st->acronym,
-                                               array('title' => get_string('setallstatusesto', 'attendance', $st->description)));
+            $table->head[] = html_writer::link("#", $st->acronym, array('id' => 'checkstatus'.$st->id,
+                'title' => get_string('setallstatusesto', 'attendance', $st->description)));
             $table->align[] = 'center';
             $table->size[] = '20px';
+            // JS to select all radios of this status and prevent default behaviour of # link.
+            $PAGE->requires->js_amd_inline("
+                require(['jquery'], function($) {
+                    $('#checkstatus".$st->id."').click(function(e) {
+                        $('#attendancetakeform').find('.st".$st->id."').prop('checked', true);
+                        e.preventDefault();
+                    });
+                });");
+
         }
+
         $table->head[] = get_string('remarks', 'attendance');
         $table->align[] = 'center';
         $table->size[] = '20px';
@@ -632,13 +642,20 @@ class mod_attendance_renderer extends plugin_renderer_base {
         $row->cells[] = html_writer::div(get_string('setallstatuses', 'attendance'), 'setallstatuses');
         foreach ($takedata->statuses as $st) {
             $attribs = array(
+                'id' => 'radiocheckstatus'.$st->id,
                 'type' => 'radio',
                 'title' => get_string('setallstatusesto', 'attendance', $st->description),
-                'onclick' => "select_all_in(null, 'st" . $st->id . "', null);",
                 'name' => 'setallstatuses',
                 'class' => "st{$st->id}",
             );
             $row->cells[] = html_writer::empty_tag('input', $attribs);
+            // Select all radio buttons of the same status.
+            $PAGE->requires->js_amd_inline("
+                require(['jquery'], function($) {
+                    $('#radiocheckstatus".$st->id."').click(function(e) {
+                        $('#attendancetakeform').find('.st".$st->id."').prop('checked', true);
+                    });
+                });");
         }
         $row->cells[] = '';
         $table->data[] = $row;
@@ -686,6 +703,7 @@ class mod_attendance_renderer extends plugin_renderer_base {
      * @return string
      */
     protected function render_attendance_take_grid(attendance_take_data $takedata) {
+        global $PAGE;
         $table = new html_table();
         for ($i = 0; $i < $takedata->pageparams->gridcols; $i++) {
             $table->align[] = 'center';
@@ -695,8 +713,16 @@ class mod_attendance_renderer extends plugin_renderer_base {
         $table->headspan = $takedata->pageparams->gridcols;
         $head = array();
         foreach ($takedata->statuses as $st) {
-            $head[] = html_writer::link("javascript:select_all_in(null, 'st" . $st->id . "', null);", $st->acronym,
-                                        array('title' => get_string('setallstatusesto', 'attendance', $st->description)));
+            $head[] = html_writer::link("#", $st->acronym, array('id' => 'checkstatus'.$st->id,
+                                              'title' => get_string('setallstatusesto', 'attendance', $st->description)));
+            // JS to select all radios of this status and prevent default behaviour of # link.
+            $PAGE->requires->js_amd_inline("
+                 require(['jquery'], function($) {
+                     $('#checkstatus".$st->id."').click(function(e) {
+                         $('#attendancetakeform').find('.st".$st->id."').prop('checked', true);
+                         e.preventDefault();
+                     });
+                 });");
         }
         $table->head[] = implode('&nbsp;&nbsp;', $head);
 
@@ -924,7 +950,6 @@ class mod_attendance_renderer extends plugin_renderer_base {
             $o .= construct_user_data_stat($userdata->summary->get_all_sessions_summary_for($userdata->user->id),
                 $userdata->pageparams->view);
         } else {
-            $prevcid = 0;
             $table = new html_table();
             $table->head  = array(get_string('course'),
                 get_string('pluginname', 'mod_attendance'),
@@ -934,6 +959,8 @@ class mod_attendance_renderer extends plugin_renderer_base {
             $table->align = array('left', 'left', 'center', 'center', 'center');
             $table->colclasses = array('colcourse', 'colatt', 'colsessionscompleted',
                                        'colpointssessionscompleted', 'colpercentagesessionscompleted');
+
+            $table2 = clone($table); // Duplicate table for ungraded sessions.
             $totalattendance = 0;
             $totalpercentage = 0;
             foreach ($userdata->coursesatts as $ca) {
@@ -958,20 +985,46 @@ class mod_attendance_renderer extends plugin_renderer_base {
                     }
 
                 }
-                $table->data[] = $row;
-                if ($usersummary->numtakensessions > 0) {
-                    $totalattendance++;
-                    $totalpercentage = $totalpercentage + format_float($usersummary->takensessionspercentage * 100);
+                if (empty($ca->attgrade)) {
+                    $table2->data[] = $row;
+                } else {
+                    $table->data[] = $row;
+                    if ($usersummary->numtakensessions > 0) {
+                        $totalattendance++;
+                        $totalpercentage = $totalpercentage + format_float($usersummary->takensessionspercentage * 100);
+                    }
                 }
             }
             $row = new html_table_row();
-            $average = format_float($totalpercentage / $totalattendance).'%';
-            $col = new html_table_cell(get_string('averageattendance', 'mod_attendance'));
+            if (empty($totalattendance)) {
+                $average = '-';
+            } else {
+                $average = format_float($totalpercentage / $totalattendance).'%';
+            }
+
+            $col = new html_table_cell(get_string('averageattendancegraded', 'mod_attendance'));
             $col->attributes['class'] = 'averageattendance';
-            $row->cells = array($col, '', '', '', $average);
+            $col->colspan = 4;
+
+            $col2 = new html_table_cell($average);
+            $col2->style = 'text-align: center';
+            $row->cells = array($col, $col2);
             $table->data[] = $row;
 
-            $o .= html_writer::table($table);
+            if (!empty($table2->data) && !empty($table->data)) {
+                // Print graded header if both tables are being shown.
+                $o .= html_writer::div("<h3>".get_string('graded', 'mod_attendance')."</h3>");
+            }
+            if (!empty($table->data)) {
+                // Don't bother printing the table if no sessions are being shown.
+                $o .= html_writer::table($table);
+            }
+
+            if (!empty($table2->data)) {
+                // Don't print this if it doesn't contain any data.
+                $o .= html_writer::div("<h3>".get_string('ungraded', 'mod_attendance')."</h3>");
+                $o .= html_writer::table($table2);
+            }
         }
 
         return $o;
@@ -1160,8 +1213,6 @@ class mod_attendance_renderer extends plugin_renderer_base {
         if ($bulkmessagecapability) { // Require that the user can bulk message users.
             // Display check boxes that will allow the user to send a message to the students that have been checked.
             $output = html_writer::empty_tag('input', array('name' => 'sesskey', 'type' => 'hidden', 'value' => sesskey()));
-            $output .= html_writer::empty_tag('input', array('name' => 'formaction', 'type' => 'hidden',
-                                                             'value' => 'messageselect.php'));
             $output .= html_writer::empty_tag('input', array('name' => 'id', 'type' => 'hidden', 'value' => $COURSE->id));
             $output .= html_writer::empty_tag('input', array('name' => 'returnto', 'type' => 'hidden', 'value' => s(me())));
             $output .= html_writer::table($table).html_writer::tag('div', get_string('users').': '.count($reportdata->users));;
@@ -1170,7 +1221,7 @@ class mod_attendance_renderer extends plugin_renderer_base {
                                                                    'value' => get_string('messageselectadd'),
                                                                    'class' => 'btn btn-secondary')),
                     array('class' => 'buttons'));
-            $url = new moodle_url('/user/action_redir.php');
+            $url = new moodle_url('/mod/attendance/messageselect.php');
             return html_writer::tag('form', $output, array('action' => $url->out(), 'method' => 'post'));
         } else {
             return html_writer::table($table).html_writer::tag('div', get_string('users').': '.count($reportdata->users));
@@ -1185,13 +1236,31 @@ class mod_attendance_renderer extends plugin_renderer_base {
      * @return array Array of html_table_row objects
      */
     protected function get_user_rows(attendance_report_data $reportdata) {
+        global $OUTPUT;
         $rows = array();
         $extrafields = get_extra_user_fields($reportdata->att->context);
+        $showextrauserdetails = $reportdata->pageparams->showextrauserdetails;
+        $params = $reportdata->pageparams->get_significant_params();
+        $text = get_string('users');
+        if ($extrafields) {
+            if ($showextrauserdetails) {
+                $params['showextrauserdetails'] = 0;
+                $url = $reportdata->att->url_report($params);
+                $text .= $OUTPUT->action_icon($url, new pix_icon('t/switch_minus',
+                            get_string('hideextrauserdetails', 'attendance')), null, null);
+            } else {
+                $params['showextrauserdetails'] = 1;
+                $url = $reportdata->att->url_report($params);
+                $text .= $OUTPUT->action_icon($url, new pix_icon('t/switch_plus',
+                            get_string('showextrauserdetails', 'attendance')), null, null);
+                $extrafields = array();
+            }
+        }
         $usercolspan = 1 + count($extrafields);
 
         $row = new html_table_row();
         $row->cells[] = $this->build_header_cell('');
-        $row->cells[] = $this->build_header_cell(get_string('users'), false, false, $usercolspan);
+        $row->cells[] = $this->build_header_cell($text, false, false, $usercolspan);
         $rows[] = $row;
 
         $row = new html_table_row();
@@ -1436,18 +1505,27 @@ class mod_attendance_renderer extends plugin_renderer_base {
                     'mod/attendance:changeattendances'
                 );
                 if (is_null($sess->lasttaken) and has_any_capability($capabilities, $reportdata->att->context)) {
-                    $sesstext = html_writer::link($reportdata->url_take($sess->id, $sess->groupid), $sesstext);
+                    $sesstext = html_writer::link($reportdata->url_take($sess->id, $sess->groupid), $sesstext,
+                        array('class' => 'attendancereporttakelink'));
                 }
-                $sesstext .= html_writer::empty_tag('br');
+                $sesstext .= html_writer::empty_tag('br', array('class' => 'attendancereportseparator'));
+                if (!empty($sess->description) &&
+                    !empty(get_config('attendance', 'showsessiondescriptiononreport'))) {
+                    $sesstext .= html_writer::tag('small', format_text($sess->description),
+                        array('class' => 'attendancereportcommon'));
+                }
                 if ($sess->groupid) {
                     if (empty($reportdata->groups[$sess->groupid])) {
-                        $sesstext .= html_writer::tag('small', get_string('deletedgroup', 'attendance'));
+                        $sesstext .= html_writer::tag('small', get_string('deletedgroup', 'attendance'),
+                            array('class' => 'attendancereportgroup'));
                     } else {
-                        $sesstext .= html_writer::tag('small', $reportdata->groups[$sess->groupid]->name);
+                        $sesstext .= html_writer::tag('small', $reportdata->groups[$sess->groupid]->name,
+                            array('class' => 'attendancereportgroup'));
                     }
 
                 } else {
-                    $sesstext .= html_writer::tag('small', get_string('commonsession', 'attendance'));
+                    $sesstext .= html_writer::tag('small', get_string('commonsession', 'attendance'),
+                        array('class' => 'attendancereportcommon'));
                 }
 
                 $row->cells[] = $this->build_header_cell($sesstext, false, true, null, null, false);

@@ -22,9 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$plugin->version = 2017020700;
+defined('MOODLE_INTERNAL') || die();
+
+$plugin->version = 2018022100;
 $plugin->requires = 2012120300;
 $plugin->component = 'block_attendance';
-$plugin->dependencies = array('mod_attendance' => 2016052000);
+$plugin->dependencies = array('mod_attendance' => 2017050208);
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '3.2.1';
+$plugin->release   = '3.2.3';

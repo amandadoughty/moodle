@@ -67,6 +67,10 @@ class block_attendance extends block_base {
         foreach ($attendances as $attinst) {
             $cmid = $attinst->coursemodule;
             $cm  = get_coursemodule_from_id('attendance', $cmid, $COURSE->id, false, MUST_EXIST);
+            if (!empty($cm->deletioninprogress)) {
+                // Don't display if this attendance is in recycle bin.
+                continue;
+            }
             $context = context_module::instance($cmid, MUST_EXIST);
             $divided = $this->divide_databasetable_and_coursemodule_data($attinst);
 
@@ -99,6 +103,15 @@ class block_attendance extends block_base {
             }
             $this->content->text .= "<br />";
         }
+
+        $categorycontext = context_coursecat::instance($COURSE->category);
+        if (has_capability('mod/attendance:viewsummaryreports', $categorycontext)) {
+            $url = new moodle_url('/mod/attendance/coursesummary.php',
+                array('category' => $COURSE->category, 'fromcourse' => $COURSE->id));
+            $this->content->text .= html_writer::link($url, get_string('categoryreport', 'attendance'));
+            $this->content->text .= html_writer::empty_tag('br');
+        }
+
         return $this->content;
     }
 
