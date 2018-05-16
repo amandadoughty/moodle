@@ -198,7 +198,7 @@ class turnitintooltwo_view {
     public function show_notice($notice) {
         global $OUTPUT;
 
-        return $OUTPUT->box($notice["message"], 'generalbox noticebox', $notice["type"]);
+        return $OUTPUT->box($notice["message"], 'alert alert-'.$notice["type"], "alert");
     }
 
     public function show_digital_receipt($digitalreceipt) {
@@ -296,7 +296,16 @@ class turnitintooltwo_view {
             $elements[] = array('hidden', 'submissionassignment', $turnitintooltwoassignment->turnitintooltwo->id);
             $elements[] = array('hidden', 'action', 'submission');
 
+            // Get any previous submission to determine if this is a resubmission.
+            $prevsubmission = $turnitintooltwoassignment->get_user_submissions($userid, $turnitintooltwoassignment->turnitintooltwo->id, $partid);
+
             if ($istutor || $eulaaccepted == 1) {
+
+                if ($prevsubmission) {
+                    $genparams = turnitintooltwo_get_report_gen_speed_params();
+                    $elements[] = array('html', '<div class="tii_checkagainstnote">' . get_string('reportgenspeed_resubmission', 'turnitintooltwo', $genparams) . '</div>');
+                }
+
                 // Upload type.
                 switch ($turnitintooltwoassignment->turnitintooltwo->type) {
                     case 0:
@@ -378,9 +387,7 @@ class turnitintooltwo_view {
             $customdata["elements"] = $elements;
             $customdata["show_cancel"] = false;
 
-            // Get any previous submission to determine if this is a resubmission.
-            $prevsubmission = $turnitintooltwoassignment->get_user_submissions($userid,
-                                        $turnitintooltwoassignment->turnitintooltwo->id, $partid);
+            // Determine which label to show based on whether this is a resubmission.
             $submitstr = (count($prevsubmission) == 0) ? 'addsubmission' : 'resubmission';
             $customdata["submit_label"] = get_string($submitstr, 'turnitintooltwo');
             $customdata["disable_form_change_checker"] = true;
@@ -1977,45 +1984,6 @@ class turnitintooltwo_view {
         $form = new turnitintooltwo_form($CFG->wwwroot.'/mod/turnitintooltwo/view.php'.'?id='.$cm->id.'&do=tutors', $customdata);
 
         $output = $OUTPUT->box($form->display(), 'generalbox boxaligncenter', 'general');
-        return $output;
-    }
-
-    /**
-     * build_migration_activation_page
-     * Builds the visual page for activate_migration
-     * @return string $output
-     */
-    public static function build_migration_activation_page() {
-        global $DB, $CFG, $OUTPUT;
-        $already_active = $DB->get_record('config_plugins', array(
-            'plugin' => 'turnitintooltwo',
-            'name' => 'migration_enabled'
-        ));
-
-        if ($already_active && $already_active->value == 1) {
-            $urlparams = array('cmd' => 'v1migration');
-            redirect(new moodle_url('/mod/turnitintooltwo/settings_extras.php', $urlparams));
-        }
-        
-        $notice = html_writer::tag(
-            'div',
-            get_string('activatemigrationnotice', 'turnitintooltwo'),
-            array('class'=>'alert alert-info')
-        );
-
-        $button = html_writer::link(
-            new moodle_url('/mod/turnitintooltwo/activate_migration.php', array('do_migration' => 1)),
-            get_string('activatemigration', 'turnitintooltwo'),
-            array('class' => 'btn btn-default', 'role' => 'button')
-        );
-
-        $output = $OUTPUT->header();
-        $output .= html_writer::start_tag('div', array('class' => 'mod_turnitintooltwo'));
-        $output .= $OUTPUT->heading(get_string('pluginname', 'turnitintooltwo'), 2, 'main');
-        $output .= $notice;
-        $output .= $button;
-        $output .= html_writer::end_tag("div");
-
         return $output;
     }
 }

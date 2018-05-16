@@ -73,16 +73,16 @@ class mod_lib_testcase extends test_lib {
 
         turnitintooltwo_cron_migrate_gradebook();
 
-        /** 
+        /**
          * Test that we migrate the gradebook when using the cron workflow.
          * There should be no grades that require a migration.
          */
         $submissions = $DB->get_records('turnitintooltwo_submissions', array('turnitintooltwoid' => $v2assignment->id, 'migrate_gradebook' => 1));
         $this->assertEquals(0, count($submissions));
 
-        // Test that the title gets updated after the migration.
+        // Test that the V1 assignment has been deleted.
         $updatedassignment = $DB->get_record('turnitintool', array('id' => $v1assignment->id));
-        $this->assertEquals("Test Assignment (Migrated)", $updatedassignment->name);
+        $this->assertFalse($updatedassignment);
     }
 
     /**
@@ -114,13 +114,15 @@ class mod_lib_testcase extends test_lib {
 
         // Create V1 Assignment.
         $v1assignmenttitle = "Test Assignment (Migration in progress...)";
-        $v1assignment = $v1migrationtest->make_test_assignment($course->id, 'turnitintool', $v1assignmenttitle);
+        $v1assignment = $v1migrationtest->make_test_assignment($course->id, 'turnitintool', $v1assignmenttitle, 1, 1);
+        $v1migrationtest->make_test_assignment($course->id, 'turnitintool', $v1assignmenttitle, 1, 2);
+        $v1migrationtest->make_test_assignment($course->id, 'turnitintool', $v1assignmenttitle, 1, 3);
         $v1migration = new v1migration($course->id, $v1assignment);
 
         // Create V2 Assignment.
-        $v2assignment1 = $v1migrationtest->make_test_assignment($course->id, 'turnitintooltwo', "Test Assignment 1", 400);
-        $v2assignment2 = $v1migrationtest->make_test_assignment($course->id, 'turnitintooltwo', "Test Assignment 2", 400);
-        $v2assignment3 = $v1migrationtest->make_test_assignment($course->id, 'turnitintooltwo', "Test Assignment 3", 400);
+        $v2assignment1 = $v1migrationtest->make_test_assignment($course->id, 'turnitintooltwo', "Test Assignment 1", 400, 1);
+        $v2assignment2 = $v1migrationtest->make_test_assignment($course->id, 'turnitintooltwo', "Test Assignment 2", 400, 2);
+        $v2assignment3 = $v1migrationtest->make_test_assignment($course->id, 'turnitintooltwo', "Test Assignment 3", 400, 3);
 
         // Set migrate gradebook to 1 so the assignments will get migrated when we call the function.
         $DB->set_field('turnitintooltwo_submissions', "migrate_gradebook", 1);
@@ -186,8 +188,6 @@ class mod_lib_testcase extends test_lib {
      * Test that the data passed in from a course reset is handled the way we expect it to be.
      */
     public function test_turnitintooltwo_generate_part_dates() {
-        global $DB;
-
         $this->resetAfterTest();
 
         $turnitintooltwoassignment = $this->make_test_tii_assignment();
@@ -205,7 +205,7 @@ class mod_lib_testcase extends test_lib {
         $this->assertEquals(gmdate("Y-m-d\TH:i:s\Z", $turnitintooltwoassignment->turnitintooltwo->dtpost1), $response_post);
 
         // Check functionality with new dates. We won't know what the current time will be when the function is called so we check that new dates is not equal to the assignment date.
-        
+
         $response_start = turnitintooltwo_generate_part_dates(1, "start", $turnitintooltwoassignment->turnitintooltwo, 1);
         $response_due   = turnitintooltwo_generate_part_dates(1, "due", $turnitintooltwoassignment->turnitintooltwo, 1);
         $response_post  = turnitintooltwo_generate_part_dates(1, "post", $turnitintooltwoassignment->turnitintooltwo, 1);
@@ -217,5 +217,20 @@ class mod_lib_testcase extends test_lib {
         // We can check that the start and due dates are more than 7 days ahead of the start date by comparing the timestamps returned. 7 days in seconds = 604,800
         $this->assertGreaterThanOrEqual(604800, strtotime($response_due) - strtotime($response_start));
         $this->assertGreaterThanOrEqual(604800, strtotime($response_post) - strtotime($response_start));
+    }
+
+    /**
+     * Test that the data returned from the report gen speed param function is what we expect.
+     */
+    public function test_turnitintooltwo_get_report_gen_speed_params() {
+	    $this->resetAfterTest();
+
+	    $expected = new stdClass();
+	    $expected->num_resubmissions = 3;
+	    $expected->num_hours = 24;
+
+	    $result = turnitintooltwo_get_report_gen_speed_params();
+
+	    $this->assertEquals($expected, $result);
     }
 }

@@ -37,6 +37,8 @@ define('TURNITIN_SUPPORT_FORM', 'http://turnitin.com/self-service/support-form.h
 define('TURNITIN_COURSE_TITLE_LIMIT', 300);
 define('TURNITIN_ASSIGNMENT_TITLE_LIMIT', 300);
 define('MIGRATION_SUBMISSIONS_CUTOFF', 1000);
+define('REPORT_GEN_SPEED_NUM_RESUBMISSIONS', 3);
+define('REPORT_GEN_SPEED_NUM_HOURS', 24);
 
 // For use in course migration.
 $tiiintegrationids = array(0 => get_string('nointegration', 'turnitintooltwo'), 1 => 'Blackboard Basic',
@@ -689,12 +691,13 @@ function turnitintooltwo_cron() {
  * Migrate the gradebook for submissions which were not migrated during the migration tool.
  */
 function turnitintooltwo_cron_migrate_gradebook() {
-    global $DB, $CFG;
+    global $DB;
 
     // Get a list of assignments with outstanding gradebook migrations.
     require_once(__DIR__.'/classes/v1migration/v1migration.php');
     $sql = "migrate_gradebook = 1 GROUP BY turnitintooltwoid";
     $assignments = $DB->get_records_select("turnitintooltwo_submissions", $sql, NULL, 'turnitintooltwoid', "turnitintooltwoid, count(turnitintooltwoid) AS numsubmissions");
+
     $numsubmissions = 0;
     foreach ($assignments as $assignment) {
         // We will break out unless the number of submissions migrated + to be migrated is MIGRATION_SUBMISSIONS_CUTOFF or less.
@@ -703,28 +706,27 @@ function turnitintooltwo_cron_migrate_gradebook() {
 
             $numsubmissions += $assignment->numsubmissions;
 
-            $gradeupdates = v1migration::migrate_gradebook($assignment->turnitintooltwoid, "cron");
+            // Get the course ID.
+            $courseid = $DB->get_field('turnitintooltwo', 'course', array('id' => $assignment->turnitintooltwoid));
+
+            // Get a TII assignment ID on this assignment so we can link back to V1.
+            $sql = "turnitintooltwoid = " . $assignment->turnitintooltwoid . " LIMIT 1";
+            $tiiid = $DB->get_field_select('turnitintooltwo_parts', 'tiiassignid', $sql);
+
+            // Get a V1 part belonging to this assignment.
+            $sql = "tiiassignid = " . $tiiid . " LIMIT 1";
+            $turnitintoolid = $DB->get_field_select('turnitintool_parts', 'turnitintoolid', $sql);
+
+            $gradeupdates = v1migration::migrate_gradebook($assignment->turnitintooltwoid, $turnitintoolid, $courseid, "cron");
 
             // If we have migrated, update the titles.
             if ($gradeupdates == "migrated") {
-
-                // Get the course ID.
-                $courseid = $DB->get_field('turnitintooltwo', 'course', array('id' => $assignment->turnitintooltwoid));
-
-                // Get a TII assignment ID on this assignment so we can link back to V1.
-                $sql = "turnitintooltwoid = " . $assignment->turnitintooltwoid . " LIMIT 1";
-                $tiiid = $DB->get_field_select('turnitintooltwo_parts', 'tiiassignid', $sql);
-
-                // Get a V1 part belonging to this assignment.
-                $sql = "tiiassignid = " . $tiiid . " LIMIT 1";
-                $turnitintoolid = $DB->get_field_select('turnitintool_parts', 'turnitintoolid', $sql);
-
                 // Get the V1 assignment.
                 $v1assignment = $DB->get_record('turnitintool', array("id" => $turnitintoolid));
 
-                // Set assignment title back to old title for assignments where all grades have been migrated.
+                // Perform post-migration tasks.
                 $v1migration = new v1migration($courseid, $v1assignment);
-                $v1migration->update_titles_post_migration($assignment->turnitintooltwoid);
+                $v1migration->post_migration($assignment->turnitintooltwoid);
             }
         } else {
             break;
@@ -1777,4 +1779,15 @@ function turnitintooltwo_get_course_type($legacy = 0) {
     } else {
         return "TT";
     }
+}
+
+/**
+ * @return object The parameters for report gen speed.
+ */
+function turnitintooltwo_get_report_gen_speed_params() {
+    $genparams = new stdClass();
+    $genparams->num_resubmissions = REPORT_GEN_SPEED_NUM_RESUBMISSIONS;
+    $genparams->num_hours = REPORT_GEN_SPEED_NUM_HOURS;
+
+    return $genparams;
 }
