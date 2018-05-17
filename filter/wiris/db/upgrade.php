@@ -15,11 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Database upgrade for WIRIS plugin.
+ * Database upgrade for MathType.
  *
  * @package    filter
  * @subpackage wiris
- * @copyright  Maths for More S.L. <info@wiris.com>
+ * @copyright  WIRIS Europe (Maths for more S.L)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ function xmldb_filter_wiris_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion <= 2016101700) {
+    if ($oldversion < 2016101701) {
          // Define table filter_wiris to be created.
         $table = new xmldb_table('filter_wiris_formulas');
 

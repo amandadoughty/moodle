@@ -232,6 +232,15 @@ class com_wiris_util_json_JSon extends com_wiris_util_json_StringParser {
 		$sb->add($s);
 		$sb->add("\"");
 	}
+	public function encodeArrayInt($sb, $v) {
+		$v2 = new _hx_array(array());
+		$i = 0;
+		while($i < $v->length) {
+			$v2->push($v[$i]);
+			++$i;
+		}
+		$this->encodeArray($sb, $v2);
+	}
 	public function encodeArray($sb, $v) {
 		$newLines = $this->addNewLines && com_wiris_util_json_JSon::getDepth($v) > 2;
 		$this->depth++;
@@ -300,25 +309,29 @@ class com_wiris_util_json_JSon extends com_wiris_util_json_StringParser {
 			if(com_wiris_system_TypeTools::isArray($o)) {
 				$this->encodeArray($sb, $o);
 			} else {
-				if(Std::is($o, _hx_qtype("String"))) {
-					$this->encodeString($sb, $o);
+				if(Std::is($o, _hx_qtype("Array"))) {
+					$this->encodeArrayInt($sb, $o);
 				} else {
-					if(Std::is($o, _hx_qtype("Int"))) {
-						$this->encodeInteger($sb, $o);
+					if(Std::is($o, _hx_qtype("String"))) {
+						$this->encodeString($sb, $o);
 					} else {
-						if(Std::is($o, _hx_qtype("haxe.Int64"))) {
-							$this->encodeLong($sb, $o);
+						if(Std::is($o, _hx_qtype("Int"))) {
+							$this->encodeInteger($sb, $o);
 						} else {
-							if(Std::is($o, _hx_qtype("com.wiris.util.json.JSonIntegerFormat"))) {
-								$this->encodeIntegerFormat($sb, $o);
+							if(Std::is($o, _hx_qtype("haxe.Int64"))) {
+								$this->encodeLong($sb, $o);
 							} else {
-								if(Std::is($o, _hx_qtype("Bool"))) {
-									$this->encodeBoolean($sb, $o);
+								if(Std::is($o, _hx_qtype("com.wiris.util.json.JSonIntegerFormat"))) {
+									$this->encodeIntegerFormat($sb, $o);
 								} else {
-									if(Std::is($o, _hx_qtype("Float"))) {
-										$this->encodeFloat($sb, $o);
+									if(Std::is($o, _hx_qtype("Bool"))) {
+										$this->encodeBoolean($sb, $o);
 									} else {
-										throw new HException("Impossible to convert to json object of type " . Std::string(Type::getClass($o)));
+										if(Std::is($o, _hx_qtype("Float"))) {
+											$this->encodeFloat($sb, $o);
+										} else {
+											throw new HException("Impossible to convert to json object of type " . Std::string(Type::getClass($o)));
+										}
 									}
 								}
 							}
@@ -340,14 +353,14 @@ class com_wiris_util_json_JSon extends com_wiris_util_json_StringParser {
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->ï¿½dynamics[$m]) && is_callable($this->ï¿½dynamics[$m]))
-			return call_user_func_array($this->ï¿½dynamics[$m], $a);
+		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
+			return call_user_func_array($this->»dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call ï¿½'.$m.'ï¿½');
+			throw new HException('Unable to call «'.$m.'»');
 	}
-	static function sb() { $ï¿½args = func_get_args(); return call_user_func_array(self::$sb, $ï¿½args); }
+	static function sb() { $»args = func_get_args(); return call_user_func_array(self::$sb, $»args); }
 	static $sb;
 	static function encode($o) {
 		$js = new com_wiris_util_json_JSon();
@@ -531,66 +544,66 @@ class com_wiris_util_json_JSon extends com_wiris_util_json_StringParser {
 	}
 	function __toString() { return 'com.wiris.util.json.JSon'; }
 }
-function com_wiris_util_json_JSon_0(&$ï¿½this, &$floating, &$hex, &$sb) {
+function com_wiris_util_json_JSon_0(&$»this, &$floating, &$hex, &$sb) {
 	{
 		$s = new haxe_Utf8(null);
-		$s->addChar($ï¿½this->c);
+		$s->addChar($»this->c);
 		return $s->toString();
 	}
 }
-function com_wiris_util_json_JSon_1(&$ï¿½this, &$floating, &$hex, &$sb) {
+function com_wiris_util_json_JSon_1(&$»this, &$floating, &$hex, &$sb) {
 	{
 		$s = new haxe_Utf8(null);
-		$s->addChar($ï¿½this->c);
+		$s->addChar($»this->c);
 		return $s->toString();
 	}
 }
-function com_wiris_util_json_JSon_2(&$ï¿½this, &$d, &$sb) {
+function com_wiris_util_json_JSon_2(&$»this, &$d, &$sb) {
 	{
 		$s = new haxe_Utf8(null);
-		$s->addChar($ï¿½this->c);
+		$s->addChar($»this->c);
 		return $s->toString();
 	}
 }
-function com_wiris_util_json_JSon_3(&$ï¿½this, &$code, &$d, &$sb) {
+function com_wiris_util_json_JSon_3(&$»this, &$code, &$d, &$sb) {
 	{
 		$s = new haxe_Utf8(null);
-		$s->addChar($ï¿½this->c);
+		$s->addChar($»this->c);
 		return $s->toString();
 	}
 }
-function com_wiris_util_json_JSon_4(&$ï¿½this, &$code, &$d, &$sb) {
+function com_wiris_util_json_JSon_4(&$»this, &$code, &$d, &$sb) {
 	{
 		$s = new haxe_Utf8(null);
-		$s->addChar($ï¿½this->c);
+		$s->addChar($»this->c);
 		return $s->toString();
 	}
 }
-function com_wiris_util_json_JSon_5(&$ï¿½this, &$code, &$d, &$sb) {
+function com_wiris_util_json_JSon_5(&$»this, &$code, &$d, &$sb) {
 	{
 		$s = new haxe_Utf8(null);
-		$s->addChar($ï¿½this->c);
+		$s->addChar($»this->c);
 		return $s->toString();
 	}
 }
-function com_wiris_util_json_JSon_6(&$ï¿½this, &$code, &$d, &$dec, &$sb) {
+function com_wiris_util_json_JSon_6(&$»this, &$code, &$d, &$dec, &$sb) {
 	{
 		$s = new haxe_Utf8(null);
 		$s->addChar($dec);
 		return $s->toString();
 	}
 }
-function com_wiris_util_json_JSon_7(&$ï¿½this, &$d, &$sb) {
+function com_wiris_util_json_JSon_7(&$»this, &$d, &$sb) {
 	{
 		$s = new haxe_Utf8(null);
-		$s->addChar($ï¿½this->c);
+		$s->addChar($»this->c);
 		return $s->toString();
 	}
 }
-function com_wiris_util_json_JSon_8(&$ï¿½this, &$d, &$sb) {
+function com_wiris_util_json_JSon_8(&$»this, &$d, &$sb) {
 	{
 		$s = new haxe_Utf8(null);
-		$s->addChar($ï¿½this->c);
+		$s->addChar($»this->c);
 		return $s->toString();
 	}
 }

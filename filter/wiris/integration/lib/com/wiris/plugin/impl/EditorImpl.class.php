@@ -67,7 +67,7 @@ class com_wiris_plugin_impl_EditorImpl implements com_wiris_plugin_api_Editor{
 		$this->addLine($output, "<script type=\"text/javascript\" src=\"" . $editorUrl . "?lang=" . rawurlencode($language) . "\"></script>");
 		$this->addLine($output, "<script type=\"text/javascript\" src=\"../core/editor.js\"></script>");
 		$this->addLine($output, "<script type=\"text/javascript\" src=\"../lang/" . rawurlencode($language) . "/strings.js\"></script>");
-		$this->addLine($output, "<title>WIRIS editor</title>");
+		$this->addLine($output, "<title>MathType</title>");
 		$this->addLine($output, "<style type=\"text/css\">/*<!--*/html, body, #container { height: 100%; } body { margin: 0; }");
 		$this->addLine($output, "#links { text-align: right; margin-right: 20px; } #links_rtl {text-align: left; margin-left: 20px;} #controls { float: left; } #controls_rtl {float: right;}/*-->*/</style>");
 		$this->addLine($output, "</head><body topmargin=\"0\" leftmargin=\"0\" marginwidth=\"0\" marginheight=\"0\">");
@@ -80,12 +80,12 @@ class com_wiris_plugin_impl_EditorImpl implements com_wiris_plugin_api_Editor{
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->ï¿½dynamics[$m]) && is_callable($this->ï¿½dynamics[$m]))
-			return call_user_func_array($this->ï¿½dynamics[$m], $a);
+		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
+			return call_user_func_array($this->»dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call ï¿½'.$m.'ï¿½');
+			throw new HException('Unable to call «'.$m.'»');
 	}
 	function __toString() { return 'com.wiris.plugin.impl.EditorImpl'; }
 }

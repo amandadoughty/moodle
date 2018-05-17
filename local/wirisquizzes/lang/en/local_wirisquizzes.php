@@ -19,8 +19,9 @@
  *
  * @package    local
  * @subpackage wirisquizzes
- * @copyright  Maths for More S.L. <info@wiris.com>
+ * @copyright  WIRIS Europe (Maths for more S.L)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['privacy:null_reason'] = 'Wiris Quizzes for Moodle local plugin does not effect or store any data itself.';
 $string['pluginname'] = 'Wiris Quizzes for Moodle';

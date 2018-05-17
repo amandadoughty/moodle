@@ -21,25 +21,25 @@ class com_wiris_plugin_impl_TestImpl implements com_wiris_plugin_api_Test{
 		return $output;
 	}
 	public function getTestPage() {
-		$random = "" . _hx_string_rec(Math::floor(Math::random() * 9999), "");
+		$random = "" . _hx_string_rec(intval(Math::random() * 9999), "");
 		$mml = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\"><mrow><msqrt><mn>" . $random . "</mn></msqrt></mrow></math>";
 		$testName = null; $reportText = null; $solutionLink = null;
 		$this->conf = $this->plugin->getConfiguration();
 		$condition = null;
 		$output = "";
 		$output .= "<html><head>\x0D\x0A";
-		$output .= "<title>WIRIS plugin test page</title><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" /><style type=\"text/css\">/*<!--*/html {font-family: sans-serif;}h2 {margin-left: 1em;}h3 {margin-left: 2em;}p {margin-left: 3em;}p.concrete {margin-left: 4em;}.ok {font-weight: bold;color: #0c0;}.error {font-weight: bold;color: #f00;}/*-->*/</style><style type=\"text/css\">body{font-family: Arial;}span{font-weight: bold;}span.ok {color: #009900;}span.error {color: #dd0000;}table, th, td, tr {border: solid 1px #000000;border-collapse:collapse;padding: 5px;}th{background-color: #eeeeee;}img{border:none;}</style>\x0D\x0A";
+		$output .= "<title>MathType integration test page</title><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" /><style type=\"text/css\">/*<!--*/html {font-family: sans-serif;}h2 {margin-left: 1em;}h3 {margin-left: 2em;}p {margin-left: 3em;}p.concrete {margin-left: 4em;}.ok {font-weight: bold;color: #0c0;}.error {font-weight: bold;color: #f00;}/*-->*/</style><style type=\"text/css\">body{font-family: Arial;}span{font-weight: bold;}span.ok {color: #009900;}span.error {color: #dd0000;}table, th, td, tr {border: solid 1px #000000;border-collapse:collapse;padding: 5px;}th{background-color: #eeeeee;}img{border:none;}</style>\x0D\x0A";
 		$output .= "<script src=\"../core/WIRISplugins.js?viewer=image\" ></script>\x0D\x0A";
-		$output .= "</head><body><h1>WIRIS plugin test page</h1>\x0D\x0A";
+		$output .= "</head><body><h1>MathType integration test page</h1>\x0D\x0A";
 		$output .= "<table><tr><th>Test</th><th>Report</th><th>Status</th></tr>\x0D\x0A";
-		$testName = "WIRIS plugin version";
+		$testName = "MathType integration version";
 		try {
 			$s = com_wiris_system_Storage::newResourceStorage("VERSION")->read();
 			$reportText = "<b>" . $s . "</b>";
 			$solutionLink = "";
 			$condition = true;
-		}catch(Exception $ï¿½e) {
-			$_ex_ = ($ï¿½e instanceof HException) ? $ï¿½e->e : $ï¿½e;
+		}catch(Exception $»e) {
+			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
 			$ex = $_ex_;
 			{
 				$reportText = "Missing version";
@@ -101,14 +101,14 @@ class com_wiris_plugin_impl_TestImpl implements com_wiris_plugin_api_Test{
 		try {
 			$h = new com_wiris_plugin_impl_HttpImpl("http://www.wiris.net", null);
 			$h->request(true);
-		}catch(Exception $ï¿½e) {
-			$_ex_ = ($ï¿½e instanceof HException) ? $ï¿½e->e : $ï¿½e;
+		}catch(Exception $»e) {
+			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
 			$ex2 = $_ex_;
 			{
 				$condition = false;
 			}
 		}
-		$reportText = "Checking if WIRIS server is reachable";
+		$reportText = "Checking if server is reachable";
 		$output .= $this->createTableRow($testName, $reportText, $solutionLink, $condition);
 		if(Type::resolveClass("com.wiris.editor.services.PublicServices") !== null) {
 			$condition = true;
@@ -118,11 +118,11 @@ class com_wiris_plugin_impl_TestImpl implements com_wiris_plugin_api_Test{
 			$output .= $this->createTableRow($testName, $reportText, $solutionLink, $condition);
 			$isLicensed = $this->plugin->isEditorLicensed();
 			$condition = false;
-			$testName = "WIRIS editor license";
-			$reportText = "Checking WIRIS editor valid license";
+			$testName = "MathType license";
+			$reportText = "Checking MathType valid license";
 			$output .= $this->createTableRow($testName, $reportText, $solutionLink, $isLicensed);
 		} else {
-			$reportText = "WIRIS Services not installed";
+			$reportText = "MathType services not installed";
 		}
 		$debug = $this->plugin->getConfiguration()->getProperty(com_wiris_plugin_api_ConfigurationKeys::$DEBUG, "false") === "true";
 		if($debug) {
@@ -191,30 +191,30 @@ class com_wiris_plugin_impl_TestImpl implements com_wiris_plugin_api_Test{
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->ï¿½dynamics[$m]) && is_callable($this->ï¿½dynamics[$m]))
-			return call_user_func_array($this->ï¿½dynamics[$m], $a);
+		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
+			return call_user_func_array($this->»dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call ï¿½'.$m.'ï¿½');
+			throw new HException('Unable to call «'.$m.'»');
 	}
 	function __toString() { return 'com.wiris.plugin.impl.TestImpl'; }
 }
-function com_wiris_plugin_impl_TestImpl_0(&$ï¿½this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$provider, &$random, &$reportText, &$solutionLink, &$testName) {
+function com_wiris_plugin_impl_TestImpl_0(&$»this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$provider, &$random, &$reportText, &$solutionLink, &$testName) {
 	{
 		$s = new haxe_Utf8(null);
 		$s->addChar(171);
 		return $s->toString();
 	}
 }
-function com_wiris_plugin_impl_TestImpl_1(&$ï¿½this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$provider, &$random, &$reportText, &$s2, &$solutionLink, &$testName) {
+function com_wiris_plugin_impl_TestImpl_1(&$»this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$provider, &$random, &$reportText, &$s2, &$solutionLink, &$testName) {
 	{
 		$s = new haxe_Utf8(null);
 		$s->addChar(187);
 		return $s->toString();
 	}
 }
-function com_wiris_plugin_impl_TestImpl_2(&$ï¿½this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$provider, &$random, &$reportText, &$s2, &$solutionLink, &$testName) {
+function com_wiris_plugin_impl_TestImpl_2(&$»this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$provider, &$random, &$reportText, &$s2, &$solutionLink, &$testName) {
 	{
 		$s = new haxe_Utf8(null);
 		$s->addChar(168);

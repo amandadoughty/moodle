@@ -83,16 +83,19 @@ class com_wiris_plugin_impl_TextFilter {
 		}
 		$mml = $this->plugin->getConfiguration()->getProperty(com_wiris_plugin_api_ConfigurationKeys::$FILTER_OUTPUT_MATHML, "false") === "true";
 		$f = 96 / $dpi;
-		$dwidth = $f * Std::parseFloat($width);
-		$dheight = $f * Std::parseFloat($height);
-		$dbaseline = $f * Std::parseFloat($baseline);
+		$imageFormatController = $this->plugin->getImageFormatController();
+		$metricsHash = new Hash();
+		$metricsHash->set("width", Std::parseInt($width));
+		$metricsHash->set("height", Std::parseInt($height));
+		$metricsHash->set("baseline", Std::parseInt($baseline));
+		$imageFormatController->scalateMetrics($dpi, $metricsHash);
 		$alt = $this->html_entity_encode($alt);
 		$img .= " class=\"Wirisformula\"";
 		$img .= " alt=\"" . $alt . "\"";
-		$img .= " width=\"" . _hx_string_rec($dwidth, "") . "\"";
-		$img .= " height=\"" . _hx_string_rec($dheight, "") . "\"";
-		$d = $dbaseline - $dheight;
-		$img .= " style=\"vertical-align:" . _hx_string_rec($d, "") . "px\"";
+		$img .= " width=\"" . _hx_string_rec($metricsHash->get("width"), "") . "\"";
+		$img .= " height=\"" . _hx_string_rec($metricsHash->get("height"), "") . "\"";
+		$verticalAlign = $metricsHash->get("baseline") - $metricsHash->get("height");
+		$img .= " style=\"vertical-align:" . _hx_string_rec($verticalAlign, "") . "px\"";
 		if($mml) {
 			$tag = $this->plugin->getConfiguration()->getProperty(com_wiris_plugin_api_ConfigurationKeys::$EDITOR_MATHML_ATTRIBUTE, "data-mathml");
 			$img .= " " . $tag . "='" . $this->save_xml_encode($str) . "'";
@@ -185,8 +188,8 @@ class com_wiris_plugin_impl_TextFilter {
 				$subtext = null;
 				try {
 					$subtext = $this->math2Img($sub, $prop);
-				}catch(Exception $ï¿½e) {
-					$_ex_ = ($ï¿½e instanceof HException) ? $ï¿½e->e : $ï¿½e;
+				}catch(Exception $»e) {
+					$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
 					$e = $_ex_;
 					{
 						$subtext = $sub;
@@ -234,12 +237,12 @@ class com_wiris_plugin_impl_TextFilter {
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->ï¿½dynamics[$m]) && is_callable($this->ï¿½dynamics[$m]))
-			return call_user_func_array($this->ï¿½dynamics[$m], $a);
+		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
+			return call_user_func_array($this->»dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call ï¿½'.$m.'ï¿½');
+			throw new HException('Unable to call «'.$m.'»');
 	}
 	static $NBSP;
 	function __toString() { return 'com.wiris.plugin.impl.TextFilter'; }

@@ -41,7 +41,7 @@ class qtype_wq_question extends question_with_responses {
         $this->base = $base;
     }
     /**
-     * Initializes WIRIS question calling the service in order to get the value
+     * Initializes Wiris Quizzes question calling the service in order to get the value
      * of the variables to render the question.
      *
      * @param question_attempt_step $step
@@ -50,13 +50,15 @@ class qtype_wq_question extends question_with_responses {
      *   The random seed to be used in this question.
      * **/
     public function start_attempt(question_attempt_step $step, $variant) {
+        global $USER;
         $this->base->start_attempt($step, $variant);
 
-        // Get variables from WIRIS quizzes service.
+        // Get variables from Wiris Quizzes service.
         $builder = com_wiris_quizzes_api_QuizzesBuilder::getInstance();
         $text = $this->join_all_text();
         $this->wirisquestioninstance = $builder->newQuestionInstance($this->wirisquestion);
         $this->wirisquestioninstance->setRandomSeed($variant);
+        $this->wirisquestioninstance->setParameter('user_id', $USER->id);
 
         // Begin testing code. It's never used in production.
         global $CFG;
@@ -266,7 +268,7 @@ class qtype_wq_question extends question_with_responses {
      * **/
 
     /**
-     * @return All the text of the question in a single string so WIRIS quizzes
+     * @return All the text of the question in a single string so Wiris Quizzes
      * can extract the variable placeholders.
      */
     public function join_all_text() {
@@ -293,7 +295,7 @@ class qtype_wq_question extends question_with_responses {
 
     /**
      *
-     * @return String Return the general feedback text in a single string so WIRIS
+     * @return String Return the general feedback text in a single string so Wiris
      * quizzes can extract the variable placeholders.
      */
     public function join_feedback_text() {

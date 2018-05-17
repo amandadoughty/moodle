@@ -27,12 +27,12 @@ class com_wiris_plugin_impl_CleanCacheImpl implements com_wiris_plugin_api_Clean
 		if($this->gui) {
 			$output = "";
 			$output .= "<html><head>\x0D\x0A";
-			$output .= "<title>WIRIS plugin clean cache service</title><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\x0D\x0A";
+			$output .= "<title>MathType integration clean cache service</title><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\x0D\x0A";
 			$output .= "<link rel=stylesheet type=text/css href=" . $this->resourcePath . "?resourcefile=wirisplugin.css />";
 			$output .= "</head>";
 			$output .= "<div class=wirismaincontainer>";
 			$output .= "<body class=wirisplugincleancache>";
-			$output .= "<h2 class=wirisplugincleancache>WIRIS plugin clean cache service</h2>\x0D\x0A";
+			$output .= "<h2 class=wirisplugincleancache>MathType integration clean cache service</h2>\x0D\x0A";
 			$output .= "<div class=wirisplugincleancacheform>";
 			if($this->wirisCleanCacheToken !== null) {
 				$output .= "<form action=" . $this->cleanCachePath . " method=post>";
@@ -103,12 +103,12 @@ class com_wiris_plugin_impl_CleanCacheImpl implements com_wiris_plugin_api_Clean
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->ï¿½dynamics[$m]) && is_callable($this->ï¿½dynamics[$m]))
-			return call_user_func_array($this->ï¿½dynamics[$m], $a);
+		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
+			return call_user_func_array($this->»dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call ï¿½'.$m.'ï¿½');
+			throw new HException('Unable to call «'.$m.'»');
 	}
 	function __toString() { return 'com.wiris.plugin.impl.CleanCacheImpl'; }
 }

@@ -15,11 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * WIRIS Filter settings.
+ * MathType filter settings.
  *
  * @package    filter
  * @subpackage wiris
- * @copyright  Maths for More S.L. <info@wiris.com>
+ * @copyright  WIRIS Europe (Maths for more S.L)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -49,9 +49,11 @@ if ($ADMIN->fulltree) {
         // users to copy the file from the older location to the new one.
         if ($oldconfile = filter_wiris_pluginwrapper::get_old_configuration()) {
             $warningoutput = get_string('oldconfiguration', 'filter_wiris', $oldconfile);
-
-            \core\notification::warning($warningoutput);
-            $settings->add(new admin_setting_heading('filter_wiris_old_configuration', '', $warningoutput));
+            if ($CFG->version > 2016052300) {
+                \core\notification::warning($warningoutput);
+            } else {
+                $settings->add(new admin_setting_heading('filter_wiris_old_configuration', '', $warningoutput));
+            }
         }
 
         $settings->add(new admin_setting_heading('filter_wiris/editorsettings',
@@ -65,10 +67,10 @@ if ($ADMIN->fulltree) {
 
         if ($waschemeditorenabled) {
             $settings->add(new admin_setting_configcheckbox('filter_wiris/chem_editor_enable',
-                                                            get_string('wirischemeditor', 'filter_wiris'), '', '0'));
+                                                            get_string('wirischemeditor', 'filter_wiris'), '', '1'));
         }
 
-        // Allow WIRIS Editor plugin be enabled despite of the filter is disabled on a course.
+        // Allow MathType be enabled despite of the filter is disabled on a course.
         $settings->add(new admin_setting_configcheckbox('filter_wiris/allow_editorplugin_active_course',
                                                             get_string('alloweditorpluginactive', 'filter_wiris'),
                                                             get_string('alloweditorpluginactive_help', 'filter_wiris'), '0'));
@@ -93,17 +95,10 @@ if ($ADMIN->fulltree) {
                                                             '/demo/editor/render',
                                                             PARAM_LOCALURL));
 
-        $settings->add(new admin_setting_configtext('filter_wiris/imageserviceport',
-                                                            get_string('imageserviceport', 'filter_wiris'),
-                                                            get_string('imageserviceport_help', 'filter_wiris'),
-                                                            80,
-                                                            PARAM_INT,
-                                                            4));
-
         $settings->add(new admin_setting_configselect('filter_wiris/imageserviceprotocol',
                                                             get_string('imageserviceprotocol', 'filter_wiris'),
                                                             get_string('imageserviceprotocol_help', 'filter_wiris'),
-                                                            'http',
+                                                            'https',
                                                             array('http' => 'http', 'https' => 'https')));
 
         // Image properties
@@ -136,7 +131,7 @@ if ($ADMIN->fulltree) {
                                                             get_string('editormodalwindowfullscreen', 'filter_wiris'),
                                                             get_string('editormodalwindowfullscreen_help', 'filter_wiris'), '0'));
 
-        // Access Provider: If enabled WIRIS PLUGIN services can not be accessed from non logged users.
+        // Access Provider: If enabled MathType services can not be accessed from non logged users.
 
         $settings->add(new admin_setting_heading('securitysettings',
                                                             get_string('securitysettings', 'filter_wiris'),
@@ -157,6 +152,7 @@ if ($ADMIN->fulltree) {
                 $tinyurl = 'https://moodle.org/plugins/tinymce_tiny_mce_wiris';
                 $attourl = 'https://moodle.org/plugins/atto_wiris';
                 $linkattributes = array('target' => '_blank');
+                $attributes = array();
                 $message .= html_writer::link($attourl, get_string('wirispluginforatto', 'filter_wiris'), $attributes);
                 $message .= get_string('or', 'filter_wiris');
                 $message .= html_writer::link($tinyurl, get_string('wirispluginfortinymce', 'filter_wiris'), $attributes);
@@ -187,7 +183,7 @@ if ($ADMIN->fulltree) {
 
     if ($quizzesinstalled) {
         $url = $CFG->wwwroot . '/admin/settings.php?section=qtypesettingwq';
-        $url = '<a href="' . $url . '">WIRIS quizzes settings</a>';
+        $url = '<a href="' . $url . '">Wiris Quizzes settings</a>';
         $settings->add(new admin_setting_heading('filter_wirisquizzesheading', $url, ''));
     }
 
