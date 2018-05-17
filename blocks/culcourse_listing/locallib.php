@@ -44,9 +44,6 @@ function block_culcourse_listing_get_preferences() {
     $userpref = 'culcourse_listing_course_favourites';
     user_preference_allow_ajax_update($userpref, PARAM_RAW);
     $preferences[$userpref] = get_user_preferences($userpref);
-    $userpref = 'culcourse_listing_show_staff';
-    user_preference_allow_ajax_update($userpref, PARAM_BOOL);
-    $preferences[$userpref] = (bool)get_user_preferences($userpref, true);
     // These ones are not currently used, so just the default value is used.
     $userpref = 'culcourse_listing_category_collapsed';
     user_preference_allow_ajax_update($userpref, PARAM_BOOL);

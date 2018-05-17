@@ -88,3 +88,11 @@ $string['save'] = 'Save';
 $string['setdateranges_header'] = 'Set Filter Dates';
 $string['year'] = 'Select by Year';
 $string['yeartype'] = 'Year';
+
+/***** PRIVACY API *****/
+$string['privacy:metadata:preference:culcourse_listing_course_favourites'] = 'The list of courses you have marked as favourites.';
+$string['privacy:request:preference:culcourse_listing_course_favourites'] = 'Your favourite courses are "{$a->favourites}"';
+$string['privacy:metadata:preference:culcourse_listing_filter_year'] = 'The year you have filtered your courses by.';
+$string['privacy:request:preference:culcourse_listing_filter_year'] = 'You have filtered your courses by the year "{$a->filteryear}".';
+$string['privacy:metadata:preference:culcourse_listing_filter_period'] = 'The period you have filtered your courses by.';
+$string['privacy:request:preference:culcourse_listing_filter_period'] = 'You have filtered your courses by the period "{$a->filterperiod}"';
