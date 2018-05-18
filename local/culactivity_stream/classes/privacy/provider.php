@@ -170,8 +170,6 @@ class provider implements
         $select = "userfromid = ?";
         $message_culactivity_stream_q = $DB->get_recordset_select('message_culactivity_stream_q', $select, [$userid, $userid], 'timecreated ASC');
         foreach ($message_culactivity_stream_q as $notification) {
-            $timedeleted = !is_null($notification->timedeleted) ? transform::datetime($notification->timedeleted) : '-';
-
             $data = (object) [
                 'sent' => transform::yesno($notification->sent),
                 'courseid' => $notification->courseid,
