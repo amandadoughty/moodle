@@ -75,33 +75,28 @@ class provider implements
 
             if (strpos($name, 'culcourse_listing_course_favourites') === 0) {
                 $descriptionidentifier = 'privacy:request:preference:culcourse_listing_course_favourites';
-            }
-
-            if ($descriptionidentifier !== null) {
-                $decoded = json_decode($value);
-                $decoded = (array)$decoded;
-                $courses = $DB->get_records_list('courses', 'id', $decoded);
+                $decoded = unserialize($value);
+                $courses = $DB->get_records_list('course', 'id', $decoded);
                 $favourites = [];
 
                 foreach ($courses as $course) {
                     $favourites[] = $course->fullname;
                 }
 
+                $favourites = join(', ', $favourites);
+
                 writer::export_user_preference(
                     'block_culcourse_listing',
                     $name,
                     $value,
                     get_string($descriptionidentifier, 'block_culcourse_listing', (object) [
-                        'favourites' => join(',', $favourites)
+                        'favourites' => $favourites
                     ])
                 );                
             }
 
             if (strpos($name, 'culcourse_listing_filter_year') === 0) {
                 $descriptionidentifier = 'privacy:request:preference:culcourse_listing_filter_year';
-            }
-
-            if ($descriptionidentifier !== null) {
  
                 writer::export_user_preference(
                     'block_culcourse_listing',
@@ -115,16 +110,13 @@ class provider implements
 
             if (strpos($name, 'culcourse_listing_filter_period') === 0) {
                 $descriptionidentifier = 'privacy:request:preference:culcourse_listing_filter_period';
-            }
-
-            if ($descriptionidentifier !== null) {
  
                 writer::export_user_preference(
                     'block_culcourse_listing',
                     $name,
                     $value,
                     get_string($descriptionidentifier, 'block_culcourse_listing', (object) [
-                        'filterperiod' => $value
+                        'filterperiod' => get_string($value, 'block_culcourse_listing')
                     ])
                 );                
             }
