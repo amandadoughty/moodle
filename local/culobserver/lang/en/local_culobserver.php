@@ -25,4 +25,5 @@
 
 $string['pluginname'] = 'CUL Observer';
 $string['uploaded'] = '{$a} file(s) uploaded: ';
+$string['privacy:metadata'] = 'The CUL Observer plugin does not store any data.';
 
