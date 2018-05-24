@@ -51,4 +51,37 @@ class provider implements
         return $collection;
     }
 
+
+    /**
+     * Get the list of contexts that contain user information for the specified user.
+     *
+     * @param   int           $userid       The user to search.
+     * @return  contextlist   $contextlist  The list of contexts used in this plugin.
+     */
+    public static function get_contexts_for_userid(int $userid) : contextlist {
+        $contextlist = new \core_privacy\local\request\contextlist();
+ 
+        $sql = "SELECT c.id
+                 FROM {context} c
+           INNER JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
+           INNER JOIN {modules} m ON m.id = cm.module AND m.name = :modname
+           INNER JOIN {peerassessment} pa ON pa.id = cm.instance
+            LEFT JOIN {peerassessment_submission} ps ON ps.assignment = pa.id
+            
+                WHERE (
+                d.userid        = :peerassessmentuserid
+                )
+        ";
+ 
+        $params = [
+            'modname'           => 'peerassessment',
+            'contextlevel'      => CONTEXT_MODULE,
+            'peerassessmentuserid'  => $userid,
+        ];
+ 
+        $contextlist->add_from_sql($sql, $params);
+ 
+        return $contextlist;
+    }
+
 }
