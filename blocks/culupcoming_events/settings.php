@@ -14,10 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- * CUL Course Format Information
+ * CUL upcoming events block
  *
- * A format that can be weeks or topics based and collapses content into section
- * headers.
+ * Settings for the CUL upcoming events block.
  *
  * @package    block/culupcoming_events
  * @copyright  Amanda Doughty
