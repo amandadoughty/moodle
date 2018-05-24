@@ -35,6 +35,6 @@ defined('MOODLE_INTERNAL') || die;
     $settings->add(new admin_setting_configtext('peerassessment/moderation', get_string('moderation', 'peerassessment'),
         get_string('defaultmoderation', 'peerassessment'), '2'));
 
-    // $multiplybyvalues = array(3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7);
-    // $settings->add(new admin_setting_configselect('peerassessment/multiplyby', get_string('multiplyby', 'peerassessment'),
-    //     get_string('defaultmultiplyby', 'peerassessment'), 5, $multiplybyvalues));
+    $multiplybyvalues = array(3 => 3, 4 => 4, 5 => 5);
+    $settings->add(new admin_setting_configselect('peerassessment/multiplyby', get_string('multiplyby', 'peerassessment'),
+        get_string('multiplyby', 'peerassessment'), 4, $multiplybyvalues));

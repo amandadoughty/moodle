@@ -63,9 +63,9 @@ $string['moderation'] = 'Mark moderation';
 $string['moderation_help'] = 'Average grades which differ more than this number from the group average will be moderated .';
 $string['defaultmoderation'] = 'Default Mark Moderation';
 
-// $string['multiplyby'] = 'This is the multiplier used to calculate the final mark';
-// $string['multiplyby_help'] = 'This is the number used to multiply the average by to get the final mark moderation.';
-// $string['defaultmultiplyby'] = 'Default Multiplier';
+$string['multiplyby'] = 'This is the multiplier used to calculate the final mark';
+$string['multiplyby_help'] = 'This is the number used to multiply the average by to get the final mark moderation.';
+$string['defaultmultiplyby'] = 'Default Multiplier';
 
 $string['fromdate'] = 'Allow submissions from';
 $string['fromdate_help'] = 'If enabled, students will not be able to submit before this date. If disabled, students will be able to start submitting right away.';
@@ -126,3 +126,32 @@ $string['eventsubmissions_exported'] = 'peerassessment export all';
 
 $string['multiplegroups'] = 'The following people belong to more than one group: {$a}. Their grades have not been updated.';
 $string['messageprovider:late_submission'] = 'Late submission';
+
+$string['privacy:metadata:peerassessment_submission'] = 'Information about the group submissions made in a Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:id'] = 'The ID of the user who has made a submission in Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:assignment'] = 'The ID of the Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:userid'] = 'The ID of the user who has created a Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:timecreated'] = 'The time that the submission was submitted in Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:timemodified'] = 'If the submission has been modified. The time that the submission was modified in Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:status'] = 'Not used';
+$string['privacy:metadata:peerassessment_submission:groupid'] = 'The ID of the group who has made a submission in Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:attemptnumber'] = 'The ID of the group who has made a submission in Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:grade'] = 'The grade that the group submission was given by the lecturer in Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:feedbacktext'] = 'The feedback text given to the group given by the lecturer who graded the group submission in Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:feedbackformat'] = 'TRUE or NULL';
+$string['privacy:metadata:peerassessment_submission:timegraded'] = 'The time that the group submission was graded in Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:gradedby'] = 'The ID of the lecturer who graded the group submission in Peer Assessment';
+$string['privacy:metadata:peerassessment_submission:finalgrade'] = 'Not used';
+$string['privacy:metadata:peerassessment_submission:groupaverage'] = 'Not used';
+$string['privacy:metadata:peerassessment_submission:individualaverage'] = 'Not used';
+
+$string['privacy:metadata:peerassessment_peers'] = 'Information about the peer grades and feedback given in a Peer Assessment';
+$string['privacy:metadata:peerassessment_peers:id'] = 'The ID of the feedback in Peer Assessment';
+$string['privacy:metadata:peerassessment_peers:peerassessment'] = 'The ID of the Peer Assessment';
+$string['privacy:metadata:peerassessment_peers:groupid'] = 'The ID of the group who has made a submission in Peer Assessment';
+$string['privacy:metadata:peerassessment_peers:grade'] = 'The grade given to a group member by a group peer in Peer Assessment';
+$string['privacy:metadata:peerassessment_peers:groupid'] = 'The ID of the group who has submitted in Peer Assessment';
+$string['privacy:metadata:peerassessment_peers:gradedby'] = 'The ID of the user who has graded a peer in Peer Assessment';
+$string['privacy:metadata:peerassessment_peers:gradefor'] = 'The ID of the user who has been graded by a peer in Peer Assessment';
+$string['privacy:metadata:peerassessment_peers:feedback'] = 'The feedback given to a group member by a group peer in Peer Assessment';
+$string['privacy:metadata:peerassessment_peers:timecreated'] = 'The time that the submission was submitted in Peer Assessment';
