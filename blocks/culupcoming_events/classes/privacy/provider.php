@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  *
  */
+
 namespace block_culupcoming_events\privacy;
 
 class provider implements \core_privacy\local\metadata\null_provider {
