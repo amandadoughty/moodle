@@ -170,6 +170,25 @@ $string['eventrollover_failed'] = "Rollover failed";
 // Task strings.
 $string['rollovertask'] = "Rollover processing";
 
+// Privacy API
+$string['local_culrollover'] = 'local_culrollover';
+$string['privacy:metadata:local_culrollover'] = '';
+$string['privacy:metadata:local_culrollover:sourceid'] = '';
+$string['privacy:metadata:local_culrollover:destid'] = '';
+$string['privacy:metadata:local_culrollover:userid'] = '';
+$string['privacy:metadata:local_culrollover:datesubmitted'] = '';
+$string['privacy:metadata:local_culrollover:status'] = '';
+$string['privacy:metadata:local_culrollover:schedule'] = '';
+$string['privacy:metadata:local_culrollover:type'] = '';
+$string['privacy:metadata:local_culrollover:merge'] = '';
+$string['privacy:metadata:local_culrollover:groups'] = '';
+$string['privacy:metadata:local_culrollover:enrolments'] = '';
+$string['privacy:metadata:local_culrollover:visible'] = '';
+$string['privacy:metadata:local_culrollover:visibledate'] = '';
+$string['privacy:metadata:local_culrollover:completiondate'] = '';
+$string['privacy:metadata:local_culrollover:notify'] = '';
+$string['privacy:metadata:local_culrollover:template'] = '';
+
 
 
 

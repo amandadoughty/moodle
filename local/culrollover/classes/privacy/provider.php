@@ -1,0 +1,199 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Privacy Subsystem implementation for local_culrollover.
+ *
+ * @package    local_culrollover
+ * @copyright  2018 Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+namespace local_culrollover\privacy;
+
+use core_privacy\local\metadata\collection;
+use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\contextlist;
+use core_privacy\local\request\transform;
+use core_privacy\local\request\writer;
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Privacy Subsystem implementation for local_culrollover.
+ *
+ * @copyright  2018 Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements 
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider {
+
+    use \core_privacy\local\legacy_polyfill;
+
+    /**
+     * Return the fields which contain personal data.
+     *
+     * @param collection $items a reference to the collection to use to store the metadata.
+     * @return collection the updated collection of metadata items.
+     */
+    public static function _get_metadata($items) {
+        $items->add_database_table(
+            'cul_rollover',
+            [
+                'sourceid' => 'privacy:metadata:local_culrollover:sourceid',
+                'destid' => 'privacy:metadata:local_culrollover:destid',
+                'userid' => 'privacy:metadata:local_culrollover:userid',
+                'datesubmitted' => 'privacy:metadata:local_culrollover:datesubmitted',
+                'status' => 'privacy:metadata:local_culrollover:status',
+                'schedule' => 'privacy:metadata:local_culrollover:schedule',
+                'type' => 'privacy:metadata:local_culrollover:type',
+                'merge' => 'privacy:metadata:local_culrollover:merge',
+                'groups' => 'privacy:metadata:local_culrollover:groups',
+                'enrolments' => 'privacy:metadata:local_culrollover:enrolments',
+                'visible' => 'privacy:metadata:local_culrollover:visible',
+                'visibledate' => 'privacy:metadata:local_culrollover:visibledate',
+                'completiondate' => 'privacy:metadata:local_culrollover:completiondate',
+                'notify' => 'privacy:metadata:local_culrollover:notify',
+                'template' => 'privacy:metadata:local_culrollover:template',                
+            ],
+            'privacy:metadata:local_culrollover'
+        );
+
+        return $items;
+    }
+
+    /**
+     * Get the list of contexts that contain user information for the specified user.
+     *
+     * @param int $userid the userid.
+     * @return contextlist the list of contexts containing user info for the user.
+     */
+    public static function _get_contexts_for_userid($userid) {
+        // Rollovers are in the system context.
+        $contextlist = new contextlist();
+        $contextlist->add_system_context();
+
+        return $contextlist;
+    }
+
+    /**
+     * Export personal data for the given approved_contextlist. User and context information is contained within the contextlist.
+     *
+     * @param approved_contextlist $contextlist a list of contexts approved for export.
+     */
+    public static function _export_user_data($contextlist) {
+        if (empty($contextlist->count())) {
+            return;
+        }
+
+        // Remove non-system contexts. If it ends up empty then early return.
+        $contexts = array_filter($contextlist->get_contexts(), function($context) {
+            return $context->contextlevel == CONTEXT_SYSTEM;
+        });
+
+        if (empty($contexts)) {
+            return;
+        }
+
+        $userid = $contextlist->get_user()->id;
+
+        // Export the local_culrollover.
+        self::export_user_data_local_culrollover($userid);
+    }
+
+    /**
+     * Delete all data for all users in the specified context.
+     *
+     * @param \context $context the context to delete in.
+     */
+    public static function _delete_data_for_all_users_in_context($context) {
+        global $DB;
+
+        if (!$context instanceof \context_system) {
+            return;
+        }
+
+        $DB->delete_records('cul_rollover');
+    }
+
+    /**
+     * Delete all user data for the specified user, in the specified contexts.
+     *
+     * @param approved_contextlist $contextlist a list of contexts approved for deletion.
+     */
+    public static function _delete_data_for_user($contextlist) {
+        global $DB;
+
+        if (empty($contextlist->count())) {
+            return;
+        }
+
+        // Remove non-system contexts. If it ends up empty then early return.
+        $contexts = array_filter($contextlist->get_contexts(), function($context) {
+            return $context->contextlevel == CONTEXT_SYSTEM;
+        });
+
+        if (empty($contexts)) {
+            return;
+        }
+
+        $userid = $contextlist->get_user()->id;
+
+        $DB->delete_records_select('cul_rollover', 'userid = ?', [$userid]);
+    }
+
+    /**
+     * Export the rollover data.
+     *
+     * @param int $userid
+     */
+    protected static function export_user_data_local_culrollover($userid) {
+        global $DB;
+
+        $context = \context_system::instance();
+
+        $rolloverdata = [];
+        $select = 'userid = ?';
+        $local_culrollover = $DB->get_recordset_select('cul_rollover', $select, [$userid], 'timecreated ASC');
+        foreach ($local_culrollover as $rollover) {
+            $visibledate = !is_null($rollover->visibledate) ? transform::datetime($rollover->visibledate) : '-';
+            $completiondate = !is_null($rollover->completiondate) ? transform::datetime($rollover->completiondate) : '-';
+
+            $data = (object) [
+                'sourceid' => $rollover->sourceid,
+                'destid' => $rollover->destid,
+                'userid' => $rollover->userid,
+                'datesubmitted' => transform::datetime($rollover->datesubmitted),
+                'status' => $rollover->status,
+                'schedule' => transform::datetime($rollover->schedule),
+                'type' => $rollover->type,
+                'merge' => $rollover->merge,
+                'groups' => transform::yesno($rollover->groups),
+                'enrolments' => $rollover->enrolments,
+                'visible' => transform::yesno($rollover->visible),
+                'visibledate' => $visibledate,
+                'completiondate' => $completiondate,
+                'notify' => $rollover->notify,
+                'template' => $rollover->template                             
+            ];
+
+            $rolloverdata[] = $data;
+        }
+        $local_culrollover->close();
+
+        writer::with_context($context)->export_data([get_string('local_culrollover', 'local_culrollover')], (object) $rolloverdata);
+    }
+}
