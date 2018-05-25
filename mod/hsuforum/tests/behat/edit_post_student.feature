@@ -18,7 +18,7 @@ Feature: Students can edit or delete their Moodlerooms forum posts within a set 
       | activity   | name                   | intro                   | course  | idnumber  |
       | hsuforum   | Test forum name        | Test forum description  | C1      | forum     |
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I add a new discussion to "Test forum name" Moodlerooms forum with:
       | Subject | Forum post subject |
       | Message | This is the body |
@@ -27,7 +27,7 @@ Feature: Students can edit or delete their Moodlerooms forum posts within a set 
   Scenario: Edit forum post
     Given I follow "Forum post subject"
     And I follow "Edit"
-    And I follow link "Use advanced editor" ignoring js onclick
+    And I follow "Use advanced editor and additional options"
     When I set the following fields to these values:
       | Subject | Edited post subject |
       | Message | Edited post body |
@@ -50,16 +50,14 @@ Feature: Students can edit or delete their Moodlerooms forum posts within a set 
       | maxeditingtime | 1 minutes |
     And I log out
     And I log in as "admin"
-    And I am on site homepage
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Moodlerooms Forum" to section "1" and I fill the form with:
       | Forum name | Test forum name |
       | Forum type | Standard forum for general use |
       | Description | Test forum description |
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     When I wait "61" seconds
     And I follow "Test forum name"
     And I follow "Forum post subject"

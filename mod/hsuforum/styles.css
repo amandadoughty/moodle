@@ -567,6 +567,8 @@ FUN WITH FORMS
     }
     #hsuforum-filter-options {
         text-align: right;
+        clear: both;
+        margin-top: 0.3em;
     }
     .hsuforum-discussion-sort {
         display: inline-block;
@@ -594,8 +596,10 @@ FUN WITH FORMS
 
 @media all and (min-width: 62em) {
     /* REALLY BIG SCREENS */
-    #page-mod-hsuforum-view #region-main{
+
+    #page-mod-hsuforum-view #region-main div[role="main"] {
         max-width: 60.5em;
+        margin: auto;
         padding: 1em 2%;
     }
 

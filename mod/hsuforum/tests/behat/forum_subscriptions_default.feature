@@ -17,9 +17,7 @@ Feature: In Moodlerooms forums a user can control their default discussion subsc
       | student1 | C1 | student |
       | student2 | C1 | student |
     And I log in as "admin"
-    And I am on site homepage
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
 
   Scenario: Creating a new discussion in an optional forum follows user preferences
     Given I add a "Moodlerooms Forum" to section "1" and I fill the form with:
@@ -29,13 +27,13 @@ Feature: In Moodlerooms forums a user can control their default discussion subsc
       | Subscription mode | Optional subscription |
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     When I press "Add a new discussion"
     Then the "subscribe" select box should contain "Send me notifications of new posts in this forum"
     And I log out
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I press "Add a new discussion"
     Then the "subscribe" select box should contain "I don't want to be notified of new posts in this forum"
@@ -51,14 +49,14 @@ Feature: In Moodlerooms forums a user can control their default discussion subsc
       | Message | Test post message |
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I follow "Test post subject"
     When I follow "Reply"
     Then the "subscribe" select box should contain "Send me notifications of new posts in this forum"
     And I log out
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I follow "Test post subject"
     And I follow "Reply"
@@ -72,13 +70,13 @@ Feature: In Moodlerooms forums a user can control their default discussion subsc
       | Subscription mode | Auto subscription |
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     When I press "Add a new discussion"
     Then the "subscribe" select box should contain "Send me notifications of new posts in this forum"
     And I log out
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I press "Add a new discussion"
     Then the "subscribe" select box should contain "Send me notifications of new posts in this forum"
@@ -94,14 +92,14 @@ Feature: In Moodlerooms forums a user can control their default discussion subsc
       | Message | Test post message |
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I follow "Test post subject"
     When I follow "Reply"
     Then the "subscribe" select box should contain "Send me notifications of new posts in this forum"
     And I log out
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I follow "Test post subject"
     And I follow "Reply"
@@ -118,7 +116,7 @@ Feature: In Moodlerooms forums a user can control their default discussion subsc
       | Message | Test post message |
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I click on "subscribe" "link"
     And I follow "Test post subject"
@@ -126,7 +124,7 @@ Feature: In Moodlerooms forums a user can control their default discussion subsc
     Then the "subscribe" select box should contain "Send me notifications of new posts in this forum"
     And I log out
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I click on "subscribe" "link"
     And I follow "Test post subject"

@@ -75,11 +75,6 @@ ARTICLE.ATTRS = {
     liveLog: { readOnly: true },
 
     /**
-     * Observers mutation events for editor.
-     */
-    editorMutateObserver: null,
-
-    /**
      * The show advanced edit link that was clicked most recently,
      */
     currentEditLink: null
@@ -133,9 +128,6 @@ Y.extend(ARTICLE, Y.Base,
                 form    = this.get('form'),
                 router  = this.get('router');
 
-            /* Clean html on paste */
-            Y.delegate('paste', form.handleFormPaste, document, '.hsuforum-textarea', form);
-
             // Implement toggling for post to all groups checkbox and groups select
             var posttoallgroups = '.hsuforum-discussion input[name="posttomygroups"]';
             Y.delegate('click', form.handlePostToGroupsToggle, document, posttoallgroups, form);
@@ -188,7 +180,6 @@ Y.extend(ARTICLE, Y.Base,
             var dom     = this.get('dom'),
                 form    = this.get('form'),
                 router  = this.get('router');
-            form.restoreDateFields();
             dom.handleUpdateDiscussion(e);
             router.handleViewDiscussion(e);
             dom.handleNotification(e);
@@ -296,39 +287,3 @@ M.mod_hsuforum.dispatchClick = function(el) {
         el.fireEvent('onclick');
     }
 };
-
-/**
- * Restore editor to original position in DOM.
- */
-M.mod_hsuforum.restoreEditor = function() {
-    var editCont = Y.one('#hiddenadvancededitorcont');
-    if (editCont) {
-        var editArea = Y.one('#hiddenadvancededitoreditable');
-        if (!editArea) {
-            return;
-        }
-        var editor = editArea.ancestor('.editor_atto'),
-        advancedEditLink = M.mod_hsuforum.Article.currentEditLink,
-        contentEditable = false;
-
-        if (advancedEditLink) {
-            contentEditable = advancedEditLink.previous('.hsuforum-textarea');
-        }
-
-        var editorHidden = (!editor || editor.getComputedStyle('display') === 'none');
-
-        // If the editor is visible then we need to make sure content is passed back to content editable div.
-        // Are we in source mode?
-        if (!editorHidden) {
-            if (editor.one('.atto_html_button.highlight')) {
-                // Trigger click on atto source button - we need to update the editor content.
-                M.mod_hsuforum.dispatchClick(editor.one('.atto_html_button.highlight')._node);
-            }
-            // Update content editable div.
-            if (contentEditable) {
-                contentEditable.setContent(editArea.getContent());
-            }
-        }
-    }
-};
-

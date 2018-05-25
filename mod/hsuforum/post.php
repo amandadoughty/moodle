@@ -561,15 +561,12 @@ if (!empty($parent)) {
     }
 }
 
-if (hsuforum_is_subscribed($USER->id, $forum->id)) {
+if (hsuforum_is_subscribed($USER->id, $forum->id) || $USER->autosubscribe) {
     $subscribe = true;
-
 } else if (hsuforum_user_has_posted($forum->id, 0, $USER->id)) {
     $subscribe = false;
-
 } else {
-    // user not posted yet - use subscription default specified in profile
-    $subscribe = !empty($USER->autosubscribe);
+    $subscribe = false;
 }
 
 $postid = empty($post->id) ? null : $post->id;
@@ -650,6 +647,10 @@ if ($fromform = $mform_post->get_data()) {
                             || has_capability('mod/hsuforum:startdiscussion', $modcontext))) ||
                             has_capability('mod/hsuforum:editanypost', $modcontext)) ) {
             print_error('cannotupdatepost', 'hsuforum');
+        }
+
+        if ($realpost->userid != $USER->id || !has_capability('mod/hsuforum:revealpost', $modcontext)) {
+            unset($fromform->reveal);
         }
 
         // If the user has access to all groups and they are changing the group, then update the post.
@@ -802,10 +803,15 @@ if ($fromform = $mform_post->get_data()) {
         $redirectto = new moodle_url('view.php', array('f' => $fromform->forum));
 
         $fromform->mailnow = empty($fromform->mailnow) ? 0 : 1;
-        $fromform->reveal = empty($fromform->reveal) ? 0 : 1;
 
         $discussion = $fromform;
         $discussion->name = $fromform->subject;
+
+        if (!empty($fromform->reveal) && has_capability('mod/hsuforum:revealpost', $modcontext)) {
+            $discussion->reveal = 1;
+        } else {
+            $discussion->reveal = 0;
+        }
 
         $newstopic = false;
         if ($forum->type == 'news' && !$fromform->parent) {
@@ -1012,5 +1018,12 @@ if (!empty($parent)) {
 if (!empty($formheading)) {
     echo $OUTPUT->heading($formheading, 4);
 }
+
+$data = new StdClass();
+if (isset($postid)) {
+    $data->tags = core_tag_tag::get_item_tags_array('mod_hsuforum', 'hsuforum_posts', $postid);
+    $mform_post->set_data($data);
+}
+
 $mform_post->display();
 echo $OUTPUT->footer();

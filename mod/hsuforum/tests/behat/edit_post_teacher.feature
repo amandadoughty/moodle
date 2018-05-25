@@ -17,8 +17,7 @@ Feature: Teachers can edit or delete any Moodlerooms forum post
       | teacher1 | C1 | editingteacher |
       | student1 | C1 | student |
     And I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Moodlerooms Forum" to section "1" and I fill the form with:
       | Forum name | Test forum name |
       | Description | Test forum description |
@@ -27,7 +26,7 @@ Feature: Teachers can edit or delete any Moodlerooms forum post
       | Message | Teacher post message |
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I reply "Teacher post subject" post from "Test forum name" Moodlerooms forum with:
       | Subject | Student post subject |
       | Message | Student post message |
@@ -36,7 +35,7 @@ Feature: Teachers can edit or delete any Moodlerooms forum post
   Scenario: A teacher can delete another user's posts
     Given I log out
     And I log in as "teacher1"
-    When I follow "Course 1"
+    When I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I follow "Teacher post subject"
     And I follow link "Delete" ignoring js onclick
@@ -49,11 +48,11 @@ Feature: Teachers can edit or delete any Moodlerooms forum post
   Scenario: A teacher can edit another user's posts
     Given I log out
     And I log in as "teacher1"
-    When I follow "Course 1"
+    When I am on "Course 1" course homepage
     And I follow "Test forum name"
     And I follow "Teacher post subject"
     And I click on "Edit" "link" in the "//li[contains(concat(' ', normalize-space(@class), ' '), ' hsuforum-post ')][contains(., 'Student post subject')]" "xpath_element"
-    And I follow link "Use advanced editor" ignoring js onclick
+    And I follow "Use advanced editor and additional options"
     And I set the following fields to these values:
       | Subject | Edited student subject |
     And I press "Save changes"

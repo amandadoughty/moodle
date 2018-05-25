@@ -36,7 +36,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
 
   Scenario: Teacher with accessallgroups can view all groups
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     When I follow "Standard forum name"
     Then the "Visible groups" select box should contain "All participants"
     Then the "Visible groups" select box should contain "Group A"
@@ -45,7 +45,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
 
   Scenario: Teacher with accessallgroups can select any group when posting
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Standard forum name"
     When I click on "Add a new discussion" "button"
     Then the "Group" select box should contain "All participants"
@@ -57,7 +57,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
   @javascript
   Scenario: Teacher with accessallgroups can select any group when posting via ajax
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Standard forum name"
     When I click on "Add a new discussion" "button"
     Then the "Group" select box should contain "All participants"
@@ -68,7 +68,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
 
   Scenario: Teacher with accessallgroups can post in groups they are a member of
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Standard forum name"
     And I select "Group A" from the "Visible groups" singleselect
     When I click on "Add a new discussion" "button"
@@ -102,16 +102,14 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
   @javascript
   Scenario: Teacher with accessallgroups can post in groups they are a member of via ajax
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Standard forum name"
     And I select "Group A" from the "Visible groups" singleselect
     And I create the following inline discussions:
       | subject              | message              | group   |
       | Teacher 1 -> Group B | Teacher 1 -> Group B | Group B |
     # We should be redirected to the group that we selected when posting.
-    # TODO: the following line fails due to a redirect bug
-    #And the field "Visible groups" matches value "Group B"
-    # instead just manually switch to that group
+    And I follow "Standard forum name"
     And I select "Group B" from the "Visible groups" singleselect
     And I should see "Group B" in the "article[data-author='Teacher 1'] .hsuforum-thread-byline" "css_element"
     And I should not see "Group A" in the "article[data-author='Teacher 1'] .hsuforum-thread-byline" "css_element"
@@ -129,7 +127,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
 
   Scenario: Teacher with accessallgroups can post in groups they are not a member of
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Standard forum name"
     And I select "Group A" from the "Visible groups" singleselect
     When I click on "Add a new discussion" "button"
@@ -163,7 +161,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
   @javascript
   Scenario: Teacher with accessallgroups can post in groups they are not a member of via ajax
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Standard forum name"
     And I select "Group A" from the "Visible groups" singleselect
     And I create the following inline discussions:
@@ -173,6 +171,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
     # TODO: the following line fails due to a redirect bug
     # And the field "Visible groups" matches value "Group C"
     # instead just manually switch to that group
+    And I follow "Standard forum name"
     And I select "Group C" from the "Visible groups" singleselect
     # We redirect to the group posted in automatically.
     And I should see "Group C" in the "article[data-author='Teacher 1'] .hsuforum-thread-byline" "css_element"
@@ -191,7 +190,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
 
   Scenario: Teacher with accessallgroups can post to all groups
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Standard forum name"
     When I click on "Add a new discussion" "button"
     And I set the following fields to these values:
@@ -219,13 +218,13 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
   @javascript
   Scenario: Teacher with accessallgroups can post to all groups via ajax
     Given I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Standard forum name"
     And I create the following inline discussions:
       | subject                  | message                  | posttomygroups |
       | Teacher 1 -> Post to all | Teacher 1 -> Post to all | 1              |
     # Posting to all groups means that we should be redirected to the page we started from.
-    And the field "Visible groups" matches value "All participants"
+    And I follow "Standard forum name"
     And I select "Group A" from the "Visible groups" singleselect
     Then I should see "Group A" in the "article[data-author='Teacher 1'] .hsuforum-thread-byline" "css_element"
     And I should not see "Group B" in the "article[data-author='Teacher 1'] .hsuforum-thread-byline" "css_element"
@@ -242,7 +241,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
 
   Scenario: Students can view all groups
     Given I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     When I follow "Standard forum name"
     Then the "Visible groups" select box should contain "All participants"
     Then the "Visible groups" select box should contain "Group A"
@@ -251,7 +250,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
 
   Scenario: Students in one group can only post in their group
     Given I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     When I follow "Standard forum name"
     Then I should see "Group A"
     And I click on "Add a new discussion" "button"
@@ -269,7 +268,7 @@ Feature: Posting to all groups in Moodlerooms forums in a visible group discussi
 
   Scenario: Students in multiple group can post in all of their group individually
     Given I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     When I follow "Standard forum name"
     And I select "Group A" from the "Visible groups" singleselect
     And I click on "Add a new discussion" "button"

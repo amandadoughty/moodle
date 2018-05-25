@@ -18,8 +18,7 @@ Feature: Add Moodlerooms forum activities and discussions
       | teacher1 | C1 | editingteacher |
       | student1 | C1 | student |
     And I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Moodlerooms Forum" to section "1" and I fill the form with:
       | Forum name | Test forum name |
       | Forum type | Standard forum for general use |
@@ -29,7 +28,7 @@ Feature: Add Moodlerooms forum activities and discussions
       | Message | This is the body |
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     When I add a new discussion to "Test forum name" Moodlerooms forum with:
       | Subject | Post with attachment |
       | Message | This is the body |
@@ -44,5 +43,5 @@ Feature: Add Moodlerooms forum activities and discussions
     And I follow "Post with attachment"
     And I should see "empty.txt"
     And I follow "Edit"
-    And I follow link "Use advanced editor" ignoring js onclick
+    And I follow "Use advanced editor and additional options"
     And the field "Attachment" matches value "empty.txt"

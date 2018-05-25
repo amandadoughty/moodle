@@ -59,7 +59,7 @@ class mod_hsuforum_renderer extends plugin_renderer_base {
         $config = get_config('hsuforum');
         $mode    = optional_param('mode', 0, PARAM_INT); // Display mode (for single forum)
         $page    = optional_param('page', 0, PARAM_INT); // which page to show
-        $forumicon = "<img src='".$OUTPUT->pix_url('icon', 'hsuforum')."' alt='' class='iconlarge activityicon'/> ";
+        $forumicon = "<img src='".$OUTPUT->image_url('icon', 'hsuforum')."' alt='' class='iconlarge activityicon'/> ";
         echo '<div id="hsuforum-header"><h2>'.$forumicon.format_string($forum->name).'</h2>';
         if (!empty($forum->intro)) {
             echo '<div class="hsuforum_introduction">'.format_module_intro('hsuforum', $forum, $cm->id).'</div>';
@@ -953,9 +953,6 @@ HTML;
                 array('manualwarning', 'hsuforum'),
                 array('subscribeshort', 'hsuforum'),
                 array('unsubscribeshort', 'hsuforum'),
-                array('useadvancededitor', 'hsuforum'),
-                array('hideadvancededitor', 'hsuforum'),
-                array('loadingeditor', 'hsuforum'),
                 array('toggle:bookmark', 'hsuforum'),
                 array('toggle:subscribe', 'hsuforum'),
                 array('toggle:substantive', 'hsuforum'),
@@ -1163,7 +1160,7 @@ HTML;
                     <input type='hidden' name='id' value='{$cm->id}'>
                     <label for='dsortkey' class='accesshide'>".get_string('orderdiscussionsby', 'hsuforum')."</label>
                     $sortselect
-                    <input type='submit' value='".get_string('sortdiscussionsby', 'hsuforum')."'>
+                    <input type='submit' class='btn btn-secondary' value='".get_string('sortdiscussionsby', 'hsuforum')."'>
                     </form>";
 
         return $sortform;
@@ -1187,6 +1184,7 @@ HTML;
      * @author Mark Nielsen
      */
     public function post_message($post, $cm, $search = '') {
+        global $OUTPUT;
 
         $options = new stdClass;
         $options->para    = false;
@@ -1210,7 +1208,9 @@ HTML;
             $postcontent .= "<div class='attachedimages'>".$attachedimages."</div>";
         }
 
-
+        if (\core_tag_tag::is_enabled('mod_hsuforum', 'hsuforum_posts')) {
+             $postcontent .= $OUTPUT->tag_list(\core_tag_tag::get_item_tags('mod_hsuforum', 'hsuforum_posts', $post->id), null, 'forum-tags');
+        }
 
         $forum = hsuforum_get_cm_forum($cm);
         if (!empty($forum->displaywordcount)) {
@@ -1396,13 +1396,16 @@ HTML;
             $params = array('edit' => $postid);
             $legend = get_string('editingpost', 'hsuforum');
             $post = $DB->get_record('hsuforum_posts', ['id' => $postid]);
+            $ownpost = true;
             if ($post->userid != $USER->id) {
+                $ownpost = false;
                 $user = $DB->get_record('user', ['id' => $post->userid]);
                 $user = hsuforum_anonymize_user($user, $forum, $post);
                 $data['userpicture'] = $this->output->user_picture($user, array('link' => false, 'size' => 100));
             }
         } else {
             $params  = array('forum' => $cm->instance);
+            $ownpost = true;
             $post = new stdClass();
             $post->parent = false;
             $legend = get_string('addyourdiscussion', 'hsuforum');
@@ -1431,6 +1434,11 @@ HTML;
         ));
 
         $extrahtml = '';
+
+        if ($forum->anonymous && $ownpost && has_capability('mod/hsuforum:revealpost', $context)) {
+            $extrahtml .= html_writer::tag('label', get_string('reveal', 'hsuforum') . ' ' .
+                    html_writer::checkbox('reveal', 1, !empty($post->reveal)));
+        }
 
         if (groups_get_activity_groupmode($cm)) {
             $groupdata = groups_get_activity_allowed_groups($cm);
@@ -1481,16 +1489,6 @@ HTML;
             } else {
                 $actionurl->param('groupinfo', groups_get_activity_group($cm));
             }
-        }
-        if ($forum->anonymous) {
-            $extrahtml .= html_writer::tag('label', get_string('reveal', 'hsuforum') . ' ' .
-                    html_writer::checkbox('reveal', 1, !empty($data['reveal'])));
-        }
-
-        $config = get_config('hsuforum');
-        if (!empty($config->enabletimedposts) && !$post->parent && has_capability('mod/hsuforum:viewhiddentimedposts', $context)) {
-            // Target for pulling in date form.
-            $extrahtml .= '<div class="dateformtarget"></div>';
         }
 
         $data += array(
@@ -1572,8 +1570,7 @@ HTML;
             $extrahtml .= html_writer::tag('label', get_string('privatereply', 'hsuforum') . ' ' .
                     html_writer::checkbox('privatereply', 1, !empty($data['privatereply'])));
         }
-        if ($forum->anonymous && !$isedit
-            || $forum->anonymous && $isedit && $ownpost) {
+        if ($forum->anonymous && $ownpost && has_capability('mod/hsuforum:revealpost', $context)) {
             $extrahtml .= html_writer::tag('label', get_string('reveal', 'hsuforum') . ' ' .
                     html_writer::checkbox('reveal', 1, !empty($data['reveal'])));
         }
@@ -1695,16 +1692,14 @@ HTML;
                 <div id="editor-target-container-$timestamp" data-placeholder="$t->messageplaceholder" aria-label="$messagelabel" contenteditable="true" required="required" spellcheck="true" role="textbox" aria-multiline="true" class="hsuforum-textarea">$t->message</div>
 
                 $files
-
                 <div class="advancedoptions">
-                    $mailnowcb
                     $t->extrahtml
                 </div>
                 $hidden
 
                     <button type="submit" class="btn btn-primary">$t->submitlabel</button>
                     <a href="#" class="hsuforum-cancel disable-router btn btn-link">$t->cancellabel</a>
-                    <a href="$advancedurl" aria-pressed="false" class="hsuforum-use-advanced disable-router btn btn-link">$t->advancedlabel</a>
+                    <a href="$advancedurl" class="hsuforum-use-advanced disable-router btn btn-link">$t->advancedlabel</a>
 
             </div>
         </fieldset>
