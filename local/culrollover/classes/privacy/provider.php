@@ -167,7 +167,7 @@ class provider implements
 
         $rolloverdata = [];
         $select = 'userid = ?';
-        $local_culrollover = $DB->get_recordset_select('cul_rollover', $select, [$userid], 'timecreated ASC');
+        $local_culrollover = $DB->get_recordset_select('cul_rollover', $select, [$userid], 'datesubmitted ASC');
         foreach ($local_culrollover as $rollover) {
             $visibledate = !is_null($rollover->visibledate) ? transform::datetime($rollover->visibledate) : '-';
             $completiondate = !is_null($rollover->completiondate) ? transform::datetime($rollover->completiondate) : '-';
