@@ -184,6 +184,12 @@ function ouwiki_get_subwiki($course, $ouwiki, $cm, $context, $groupid, $userid, 
                 $groupid = reset($groups)->id;
             }
             $othergroup = !groups_is_member($groupid);
+            if ($othergroup && $cm->groupmode == SEPARATEGROUPS) {
+                if (!has_capability('moodle/site:accessallgroups', $context) &&
+                        !has_capability('mod/ouwiki:editothers', $context)) {
+                    ouwiki_error(get_string('error_nopermission', 'ouwiki'));
+                }
+            }
             $subwiki = $DB->get_record_select('ouwiki_subwikis', 'wikiid = ? AND groupid = ?
                     AND userid IS NULL', array($ouwiki->id, $groupid));
             if ($subwiki) {
@@ -706,6 +712,7 @@ function ouwiki_get_current_page($subwiki, $pagename, $option = OUWIKI_GETPAGE_R
         $pageversion->title = $pagename ? $pagename : '';
         $pageversion->locked = 0;
         $pageversion->firstversionid = null; // new page
+        $pageversion->timemodified = time();
         try {
             $pageversion->pageid = $DB->insert_record('ouwiki_pages', $pageversion);
         } catch (Exception $e) {
@@ -2534,7 +2541,7 @@ function ouwiki_setup_annotation_markers($xhtmlcontent) {
 function ouwiki_get_annotation_marker($position) {
     global $OUTPUT;
 
-    $icon = '<img src="'.$OUTPUT->pix_url('annotation-marker', 'ouwiki').'" alt="'.
+    $icon = '<img src="'.$OUTPUT->image_url('annotation-marker', 'ouwiki').'" alt="'.
             get_string('annotationmarker', 'ouwiki').'" title="'.
             get_string('annotationmarker', 'ouwiki').'" />';
     return '<span class="ouwiki-annotation-marker" id="marker'.$position.'">'.$icon.'</span>';
@@ -2554,7 +2561,7 @@ function ouwiki_highlight_existing_annotations($xhtmlcontent, $annotations, $pag
 
     $content = $xhtmlcontent;
 
-    $icon = '<img src="'.$OUTPUT->pix_url('annotation', 'ouwiki').'" alt="'.
+    $icon = '<img src="'.$OUTPUT->image_url('annotation', 'ouwiki').'" alt="'.
             get_string('expandannotation', 'ouwiki').'" title="'.
             get_string('expandannotation', 'ouwiki').'" />';
 
@@ -2964,7 +2971,7 @@ function ouwiki_get_search_form($subwiki, $cmid) {
             'id' => 'ouwiki_searchquery', 'value' => $query));
     $out .= html_writer::empty_tag('input', array('type' => 'image',
             'id' => 'ousearch_searchbutton', 'alt' => get_string('search'),
-            'title' => get_string('search'), 'src' => $OUTPUT->pix_url('i/search')));
+            'title' => get_string('search'), 'src' => $OUTPUT->image_url('i/search')));
     $out .= html_writer::end_tag('div');
     $out .= html_writer::end_tag('form');
     return $out;
