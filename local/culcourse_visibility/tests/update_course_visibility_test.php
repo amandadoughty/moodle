@@ -101,13 +101,15 @@ class local_culcourse_visibility_update_course_visibility_testcase extends advan
     public function test_update_course_visibility_none() {
         global $CFG;
 
-        $this->resetAfterTest(true);       
+        $this->resetAfterTest(true);
+        ob_start();      
         $task = \core\task\manager::get_scheduled_task('\\local_culcourse_visibility\\task\\update_course_visibility');
         $this->assertInstanceOf('\local_culcourse_visibility\task\update_course_visibility', $task);
         // Change task settings.
         set_config('showcourses', 0, 'local_culcourse_visibility');
         set_config('hidecourses', 0, 'local_culcourse_visibility');
         $task->execute();
+        ob_get_clean();
         $this->reload_courses();
 
         // Course 1 should be hidden.
@@ -130,12 +132,14 @@ class local_culcourse_visibility_update_course_visibility_testcase extends advan
         global $CFG;
 
         $this->resetAfterTest(true);
+        ob_start();
         $task = \core\task\manager::get_scheduled_task('\\local_culcourse_visibility\\task\\update_course_visibility');
         $this->assertInstanceOf('\local_culcourse_visibility\task\update_course_visibility', $task);
         // Change task settings.
         set_config('showcourses', 1, 'local_culcourse_visibility');
         set_config('hidecourses', 0, 'local_culcourse_visibility');
         $task->execute();
+        ob_get_clean();
         $this->reload_courses();
 
         // Course 1 should be visible.
@@ -158,6 +162,7 @@ class local_culcourse_visibility_update_course_visibility_testcase extends advan
         global $CFG;
 
         $this->resetAfterTest(true);
+        ob_start();
         $task = \core\task\manager::get_scheduled_task('\\local_culcourse_visibility\\task\\update_course_visibility');
         $this->assertInstanceOf('\local_culcourse_visibility\task\update_course_visibility', $task);
 
@@ -165,6 +170,7 @@ class local_culcourse_visibility_update_course_visibility_testcase extends advan
         set_config('showcourses', 0, 'local_culcourse_visibility');
         set_config('hidecourses', 1, 'local_culcourse_visibility');
         $task->execute();
+        ob_get_clean();
         $this->reload_courses();
 
         // Course 1 should be hidden.
@@ -187,13 +193,15 @@ class local_culcourse_visibility_update_course_visibility_testcase extends advan
         global $CFG;
 
         $this->resetAfterTest(true);
-        $task = \core\task\manager::get_scheduled_task('\\local_culcourse_visibility\\task\\update_course_visibility');
+        ob_start();
+        $task = \core\task\manager::get_scheduled_task('\\local_culcourse_visibility\\task\\update_course_visibility');        
         $this->assertInstanceOf('\local_culcourse_visibility\task\update_course_visibility', $task);
 
         // Change task settings.
         set_config('showcourses', 1, 'local_culcourse_visibility');
         set_config('hidecourses', 1, 'local_culcourse_visibility');
         $task->execute();
+        ob_get_clean();
         $this->reload_courses();
 
         // Course 1 should be visible.
