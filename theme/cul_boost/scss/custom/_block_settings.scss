@@ -1,0 +1,232 @@
+// Width of each branch list
+$branchwidth: 265px;
+
+aside[id*="block-region-nav-settings"] {
+    position: absolute;
+    z-index: 2;
+    top: 100%;
+    right: 0;
+    margin-bottom: $spacer;
+    width: auto;
+    min-width: calc(#{$branchwidth} + #{$spacer * 2});
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .2s ease, visibility .2s ease;
+    &.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+    .block_settings .block-controls {
+        float: none!important;
+        text-align: right;
+        position: absolute;
+        bottom: 0;
+        left: $spacer / 2;
+        transform: translateY(-50%);
+        z-index: 1;
+        .moodle-core-dragdrop-draghandle {
+            >.icon {
+                margin-left: 0;
+            }
+        }
+    }
+    ul.block_tree.list {
+        position: relative;
+        min-height: 300px;
+        max-height: 450px;
+        height: 100vh;
+        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        min-width: calc(#{$branchwidth} + #{$spacer * 2});
+        padding: $spacer / 2 0;
+        overflow-x: hidden;
+        font-weight: $font-weight-bold;
+        transition: width .2s ease;
+    }
+    .settingsnav {
+        padding: 0 !important;
+    }
+
+    .block_settings #settingsnav {
+        padding: 0 !important;
+    }
+
+    .block_settings .block-title {
+        display: none !important;
+    }
+
+    .block_settings {
+        border: none;
+        z-index: 3;
+    }
+
+    .block_settings .block-inner {
+        padding: 0;
+    }
+
+    .block_settings .footer {
+        display: none;
+    }
+
+    .block_settings .block_tree .tree_item.branch {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin: 0;
+        padding: $spacer / 2;
+        &[aria-expanded="false"].loading {
+            background-position: calc(100% - #{$spacer / 2}) 45%;
+        }
+    }
+
+    .block_settings .block_tree .root_node+ul {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        padding: $spacer;
+        li>p[aria-expanded="true"]:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: $spacer * 2;
+            height: 100%;
+        }
+    }
+
+    .block.block_settings .block_tree p {
+        padding: ($spacer / 2) $spacer ($spacer / 2) ($spacer / 2);
+        &.hasicon {
+            text-indent: 0;
+            margin: 0;
+        }
+    }
+
+    .block_navigation .block_tree p.hasicon .icon,
+    .block_settings .block_tree p.hasicon .icon {
+        margin: (-$spacer / 4) ($spacer / 2) 0 0;
+        color: $brand-primary;
+        min-width: 16px;
+    }
+
+    .block.block_settings .block_tree p>a,
+    .block.block_settings .block_tree p>a>span {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        word-break: break-word;
+        flex-basis: 0%;
+        flex-grow: 1;
+        max-width: 100%;
+        width: 100%;
+        line-height: 1.1;
+        color: $body-color;
+    }
+
+    .block_settings .block_tree .tree_item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        line-height: 1.1;
+    }
+
+    .block.block_settings .block_tree .tree_item ul,
+    .block.block_settings .block_tree .tree_item.branch:before {
+        text-align: center;
+        font-size: $font-size-lg;
+        margin-top: -$spacer / 4;
+        margin-right: $spacer / 2;
+        color: $brand-primary;
+    }
+
+    .block.block_settings .block_tree .tree_item.root_node.branch {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        line-height: 1.1;
+        padding: $spacer / 2;
+        &[aria-expanded="true"] {
+            background-color: $gray-lighter;
+            &:after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: $spacer * 2;
+                height: 100%;
+            }
+            &:hover {
+                background-color: $gray-lighter;
+            }
+        }
+        &:hover {
+            background-color: $gray-lightest;
+        }
+    }
+
+    .block_settings .block_tree .root_node+ul li {
+        >p[aria-expanded="true"] {
+            background-color: $gray-lighter;
+            &:hover {
+                background-color: $gray-lighter;
+            }
+        }
+        >p:hover {
+            background-color: $gray-lightest;
+        }
+    }
+
+    .block.block_settings .contains_branch {
+        >p {
+            >a {
+                pointer-events: none;
+            }
+        }
+        p {
+            +ul {
+                display: block;
+                opacity: 0;
+                visibility: hidden;
+                position: absolute;
+                top: 0;
+                left: $spacer * 2;
+                background-color: #fff;
+                padding: ($spacer / 2) 0;
+                width: 100%;
+                min-width: $branchwidth;
+                max-width: calc(100% - #{$spacer * 2});
+                height: auto;
+                box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.3);
+                min-height: 100%;
+                transition: transform .2s ease;
+                transform: translateX(100%);
+            }
+        }
+    }
+
+    .block.block_settings .contains_branch p.branch[aria-expanded="true"] {
+        &:hover {
+            &+ul {
+                transform: translateX($spacer);
+            }
+        }
+        &+ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+    }
+
+    .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded="true"]+ul {
+        z-index: 1;
+        max-width: calc(100% - #{$spacer * 2});
+    }
+
+    .block.block_settings .contains_branch>hr {
+        display: none;
+    }
+}

@@ -1,0 +1,200 @@
+/* 
+ * Global overrides to standard HTML elements
+ * Needed to retain consistency across theme
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Mukta:300,400,500,600,700');
+
+*:focus,
+a:focus {
+    outline: 0;
+}
+
+html {
+    height: auto;
+    min-height: 100%;
+    &.htmllayout-embedded {
+        height: 100%;
+    }
+}
+
+body {
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .1px;
+    text-rendering: optimizeLegibility;
+    &.pagelayout-embedded {
+        padding-top: 0;
+        height: 100%;
+        div[role="main"],
+        #region-main,
+        #page-content,
+        #page {
+            height: 100%;
+        }
+    }
+}
+
+#page {
+    margin-top: 0;
+}
+
+.container-fluid {
+    max-width: $container-max-width;
+}
+
+h1,
+.h1 {
+    font-weight: $font-weight-medium;
+}
+
+h4,
+.h4 {
+    color: $body-color;
+}
+
+h5,
+.h5,
+h6,
+.h6 {
+    font-weight: $font-weight-medium;
+}
+
+p {
+    margin: 0 0 $spacer 0;
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+}
+
+hr {
+    margin-top: $spacer / 2;
+    margin-bottom: $spacer / 2;
+}
+
+input,
+button {
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .1px;
+    text-rendering: optimizeLegibility;
+}
+
+img {
+    width: auto\9;
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    &.hidden {
+        display: none;
+    }
+}
+
+ul,
+ol {
+    li {
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+}
+
+a {
+    @include transition(all 0.2s);
+}
+
+.no-overflow {
+    margin-bottom: $spacer / 2;
+    overflow-y: visible;
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    display: block;
+    padding-bottom: 1px;
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+}
+
+.col {
+    flex-basis: 0%;
+    flex-grow: 1;
+    max-width: 100%;
+    width: 100%;
+}
+
+.col-12 {
+    @extend .col-xs-12;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.font-weight-medium {
+    font-weight: $font-weight-medium;
+}
+
+.text-break {
+    word-break: break-word;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.h-100 {
+    height: 100% !important;
+}
+
+.row-x {
+    margin-left: -($spacer);
+    margin-right: -($spacer);
+}
+
+.row-y {
+    margin-top: -($spacer);
+    margin-bottom: -($spacer);
+}
+
+.border-0 {
+    border: none !important;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.hidden {
+    display: none;
+}
+
+.userpicture {
+    border-radius: 50%;
+}
+
+.overlay {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($gray-dark, .6);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease, visibility .2s ease;
+    pointer-events: none;
+    &.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+}
+
+.userpicture {
+    border-radius: 50%;
+    overflow: hidden;
+}

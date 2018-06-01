@@ -1,0 +1,37 @@
+/**
+ * Default preset file.
+ *
+ * Use this space to customise variables, create mixins and override SCSS.
+ */
+/*# sourceMappingURL=moodle.css.map */
+
+// Overriding Variables
+@import "variables";
+
+// Boost Styles
+@import "boost";
+
+// Some really useful bootstrap 4 Alpha 6 implementations
+@import "bootstrap/breakpoints";
+@import "bootstrap/display";
+@import "bootstrap/flex";
+@import "bootstrap/spacing";
+@import "bootstrap/text";
+@import "bootstrap/background";
+
+// Custom Overrides
+@import "mixins";
+@import "custom/blocks";
+@import "custom/block_settings";
+@import "custom/text";
+@import "custom/nav";
+@import "custom/breadcrumb";
+@import "custom/forms";
+@import "custom/slick";
+@import "custom/dashboard";
+@import "custom/course";
+@import "custom/footer";
+
+// Global overrides
+@import "icons";
+@import "global";

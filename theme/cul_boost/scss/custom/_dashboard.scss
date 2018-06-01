@@ -1,0 +1,102 @@
+// Slider 
+.slidercontainer {
+    position: relative;
+    .slider {
+        width: 100%;
+        min-height: 430px;
+        overflow: hidden;
+        .slick-list {
+            height: auto;
+            .slick-track {
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: stretch;
+            }
+        }
+        .slide {
+            position: relative;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            max-width: 100%;
+            float: none;
+            height: auto;
+            padding-bottom: calc(#{$spacer * 3} + 40px);
+            &:not(.slick-slide) {
+                min-width: 100%;
+            }
+            &:before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba($black, .5);
+            }
+            .slide-caption {
+                position: relative;
+                width: 100%;
+                @include media-breakpoint-up(md) {
+                    width: 585px;
+                }
+                h3,
+                h4,
+                h5,
+                h6 {
+                    color: #fff;
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+                h3 {
+                    font-size: $font-size-h1;
+                    font-weight: $font-weight-medium;
+                }
+                h4 {
+                    font-size: $font-size-h2;
+                    font-weight: $font-weight-normal;
+                }
+                h5 {
+                    font-size: $font-size-h3;
+                    font-weight: $font-weight-normal;
+                }
+            }
+        }
+    }
+    .slide-controls {
+        position: absolute;
+        bottom: $spacer * 3;
+        left: 0;
+        width: 100%;
+    }
+}
+
+.recentcourses-wrap {
+    .recentmodules-item {
+        &.featured {
+            .course-image {
+                width: 100%;
+                height: 210px;
+            }
+        }
+        &.list {
+            border-bottom: 1px solid $gray-lighter;
+            &:last-of-type {
+                border-bottom: none;
+            }
+        }
+        .course-image {
+            width: 95px;
+            height: 95px;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            .badge {
+                background-color: $gray-lightest;
+                color: $brand-primary;
+                border-radius: 0;
+            }
+        }
+    }
+}

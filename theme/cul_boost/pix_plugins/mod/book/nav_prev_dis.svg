@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>pix_plugins/mod/book/nav_prev_dis</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="pix_plugins/mod/book/nav_prev_dis" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="circle_background"></g>
+        <polygon id="Shape" fill="#A22833" fill-rule="nonzero" transform="translate(15.060617, 16.484531) rotate(-90.000000) translate(-15.060617, -16.484531) " points="10.9406166 7.29167411 9.82061663 8.39167411 18.0606166 16.4845312 9.82061663 24.5773884 10.9406166 25.6773884 20.3006166 16.4845312"></polygon>
+    </g>
+</svg>

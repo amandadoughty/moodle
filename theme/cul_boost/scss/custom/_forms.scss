@@ -1,0 +1,16 @@
+form {
+    margin-bottom: 0;
+    .formsettingheading {
+        margin-bottom: $spacer;
+    }
+    &#adminsettings {
+        .editor_atto {
+            h3 {
+                border: none;
+                line-height: $headings-line-height;
+                font-size: $font-size-h3;
+                width: auto;
+            }
+        }
+    }
+}

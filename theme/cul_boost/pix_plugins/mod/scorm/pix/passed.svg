@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>pix_plugins/mod/scorm/pix/passed</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="pix_plugins/mod/scorm/pix/passed" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M3,3 L3,13 L13,13 L13,3 L3,3 Z M2,2 L14,2 L14,14 L2,14 L2,2 Z" id="Rectangle-2" fill="#A22833" fill-rule="nonzero"></path>
+        <path d="M5.31568574,11.3064329 L14.5933469,2.80191015 L16.0463085,4.13379159 L15.6761354,4.47311687 L6.00503237,13.3381423 L5.31568574,13.9425694 L5.01220928,13.6764778 L4.61876738,13.3313539 L-0.0463084816,9.05503441 L1.40665309,7.72315297 L5.31568574,11.3064329 Z M5.31568574,12.5553385 L1.40665309,8.97205853 L1.31612678,9.05504099 L5.23329202,12.645915 L5.31575409,12.7182187 L5.39050773,12.6527034 L14.683866,4.13379159 L14.5933469,4.05081572 L5.31568574,12.5553385 Z" id="Shape" fill="#A22833" fill-rule="nonzero"></path>
+    </g>
+</svg>

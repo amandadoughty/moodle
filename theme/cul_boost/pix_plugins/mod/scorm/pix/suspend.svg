@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="13px" viewBox="0 0 12 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>pix_plugins/mod/scorm/pix/suspend</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="pix_plugins/mod/scorm/pix/suspend" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M1,1.50201342 L1,10.4979866 L11,10.4979866 L11,1.50201342 L1,1.50201342 Z M0,0.502013423 L12,0.502013423 L12,11.4979866 L0,11.4979866 L0,0.502013423 Z" id="Rectangle-2" fill="#A22833" fill-rule="nonzero"></path>
+        <ellipse id="Oval-2" fill="#A22833" cx="6.09130859" cy="6" rx="3.90869141" ry="3.58165548"></ellipse>
+    </g>
+</svg>

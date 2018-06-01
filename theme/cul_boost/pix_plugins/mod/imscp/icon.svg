@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>pix_plugins/mod/imscp/icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="pix_plugins/mod/imscp/icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="circle_background"></g>
+        <path d="M3,14.6568542 L8.65685425,9 L14.3137085,14.6568542 L8.65685425,20.3137085 L3,14.6568542 Z M10.0710678,21.7279221 L15.7279221,16.0710678 L21.3847763,21.7279221 L15.7279221,27.3847763 L10.0710678,21.7279221 Z M17.1421356,14.6568542 L22.7989899,9 L28.4558441,14.6568542 L22.7989899,20.3137085 L17.1421356,14.6568542 Z" id="Combined-Shape" fill="#A22833"></path>
+    </g>
+</svg>

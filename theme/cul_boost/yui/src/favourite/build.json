@@ -1,0 +1,10 @@
+{
+  "name": "moodle-theme_cul_boost-favourite",
+  "builds": {
+    "moodle-theme_cul_boost-favourite": {
+      "jsfiles": [
+        "favourite.js"
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+._*
+*.zip
+.DS_Store
+._.DS_Store
+*.DS_Store
+node_modules
+.phpintel/
+.sublime-grunt.cache
+package-lock.json
