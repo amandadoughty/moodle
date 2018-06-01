@@ -101,6 +101,7 @@ class local_culcourse_visibility_update_course_visibility_testcase extends advan
     public function test_update_course_visibility_none() {
         global $CFG;
 
+        $this->resetAfterTest(true);       
         $task = \core\task\manager::get_scheduled_task('\\local_culcourse_visibility\\task\\update_course_visibility');
         $this->assertInstanceOf('\local_culcourse_visibility\task\update_course_visibility', $task);
         // Change task settings.
@@ -128,12 +129,13 @@ class local_culcourse_visibility_update_course_visibility_testcase extends advan
     public function test_update_course_visibility_start() {
         global $CFG;
 
+        $this->resetAfterTest(true);
         $task = \core\task\manager::get_scheduled_task('\\local_culcourse_visibility\\task\\update_course_visibility');
         $this->assertInstanceOf('\local_culcourse_visibility\task\update_course_visibility', $task);
         // Change task settings.
         set_config('showcourses', 1, 'local_culcourse_visibility');
         set_config('hidecourses', 0, 'local_culcourse_visibility');
-        $task->execute();$this->reload_courses();
+        $task->execute();
         $this->reload_courses();
 
         // Course 1 should be visible.
@@ -155,6 +157,7 @@ class local_culcourse_visibility_update_course_visibility_testcase extends advan
     public function test_update_course_visibility_end() {
         global $CFG;
 
+        $this->resetAfterTest(true);
         $task = \core\task\manager::get_scheduled_task('\\local_culcourse_visibility\\task\\update_course_visibility');
         $this->assertInstanceOf('\local_culcourse_visibility\task\update_course_visibility', $task);
 
@@ -183,6 +186,7 @@ class local_culcourse_visibility_update_course_visibility_testcase extends advan
     public function test_update_course_visibility_both() {
         global $CFG;
 
+        $this->resetAfterTest(true);
         $task = \core\task\manager::get_scheduled_task('\\local_culcourse_visibility\\task\\update_course_visibility');
         $this->assertInstanceOf('\local_culcourse_visibility\task\update_course_visibility', $task);
 
