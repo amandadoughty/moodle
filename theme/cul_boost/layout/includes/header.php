@@ -1,6 +1,6 @@
 <?php
 
-echo html_writer::start_tag('nav', ['role'=>'header', 'class'=>'navbar navbar-default']);
+echo html_writer::start_tag('nav', ['id'=>'top', 'role'=>'header', 'class'=>'navbar navbar-default']);
 
     echo html_writer::start_tag('div', ['class'=>'topmenu']);
         echo html_writer::start_tag('div', ['class'=>'container-fluid']);
@@ -27,7 +27,7 @@ echo html_writer::start_tag('nav', ['role'=>'header', 'class'=>'navbar navbar-de
                         echo html_writer::start_tag('div', ['class'=>'nav-inner d-flex flex-wrap align-items-center py-2 ml-auto']);
                             echo $citycore->custom_menu();
                             $search = $OUTPUT->global_search();
-                            echo html_writer::tag('div', $search, ['class'=>'global_search d-flex flex-wrap justify-content-end col p-0 ml-4']);
+                            echo html_writer::tag('div', $search, ['class'=>'global_search d-flex flex-wrap justify-content-end p-0 ml-4']);
                             echo $OUTPUT->user_menu();
                         echo html_writer::end_tag('div');
 

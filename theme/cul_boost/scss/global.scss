@@ -116,6 +116,10 @@ a {
     &:last-of-type {
         margin-bottom: 0;
     }
+    .path-mod-assign & {
+        overflow-y: visible;
+        overflow-x: auto;
+    }
 }
 
 .col {

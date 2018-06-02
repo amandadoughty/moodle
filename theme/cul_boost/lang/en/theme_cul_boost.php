@@ -77,6 +77,11 @@ $string['recentmodules'] = 'Recent Modules';
 $string['allmodules'] = 'All Modules';
 $string['favourites'] = 'Favourites';
 
+
+// Course
+$string['hideblocks'] = 'Hide Sidebar';
+$string['showblocks'] = 'Show Sidebar';
+
 /* 
  * theme_cul strings
  */

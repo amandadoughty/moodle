@@ -109,6 +109,7 @@
                     text-align: center;
                     >div {
                         position: relative;
+                        width: 100%;
                         >i {
                             display: none;
                             position: absolute;
@@ -133,7 +134,7 @@
                         justify-content: center;
                         transition: opacity 0.2s ease;
                         li {
-                            width: auto;
+                            width: 100%;
                             max-width: 400px;
                             padding: 0;
                             line-height: inherit;

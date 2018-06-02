@@ -27,7 +27,7 @@
 	    	}
 
             $icon = html_writer::tag('i', '', ['class'=>'fa fa-angle-up ml-2']);
-	    	echo html_writer::tag('div', get_string('scrolltop', 'theme_cul_boost').$icon, ['class'=>'scrolltop mx-auto']);
+	    	echo html_writer::link('#top', get_string('scrolltop', 'theme_cul_boost').$icon, ['class'=>'scrolltop text-white mx-auto']);
 
 	    	// Copyright
 	    	if ($footerlinks) {

@@ -134,48 +134,24 @@ svg.activityicon {
     @extend img.activityicon;
 }
 
-.fixed-anchor {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50px;
-    height: 1px;
-}
-
-.fixed-buttons {
-    position: absolute;
-    top: 85px;
-    right: 0;
-    transition: transform .2s ease;
-    &:not(.stick) {
-        transform: translateY(0) !important;
-    }
-
-    &.stick {
-        position: fixed;
-        z-index: 2;
-    }
-
-    .fixed-btn {
-        width: 50px;
-        height: 50px;
-        &+.fixed-btn {
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-        }
-    }
-}
-
 .section {
     .activity {
+        padding: 0;
+        .editing & {
+            .editing_move {
+                top: 20px;
+                transform: translateY(-50%);
+            }
+        }
         .activityinstance,
         .activityinstance div {
             a {
                 &:first-of-type {
                     display: inline-flex;
+                    flex-wrap: nowrap;
+                    align-items: center;
                     text-indent: 0;
                     padding: 0;
-                    flex-wrap: wrap;
-                    align-items: center;
                     padding-right: $spacer;
                     background-color: #fff;
                     img,
@@ -184,6 +160,7 @@ svg.activityicon {
                             vertical-align: middle;
                             width: 40px;
                             height: 40px;
+                            min-width: 40px;
                             padding: $spacer / 2;
                             background-color: $brand-primary;
                             margin-right: $spacer;
@@ -197,13 +174,13 @@ svg.activityicon {
                         }
                     }
                     .instancename {
-                        flex-basis: 0%;
-                        flex-grow: 1;
-                        max-width: 100%;
-                        width: 100%;
                         padding: $spacer / 2 0;
                     }
                 }
+            }
+            span.inplaceeditable {
+                display: flex;
+                align-items: center;
             }
         }
         .availabilityinfo,
@@ -267,10 +244,9 @@ $culcourse-arrow-active-color: #fff;
         .content {
             margin: 0;
             h4 {
-                margin-bottom: 20px;
                 border: 1px solid darken($body-bg, 5%);
                 padding: 0;
-                margin-top: 0;
+                margin: 0;
                 font-weight: normal;
             }
             #toggles-all-opened,
@@ -355,9 +331,14 @@ $culcourse-arrow-active-color: #fff;
                             font-size: $font-size-h4;
                             color: #fff;
                             a {
+                                display: flex;
+                                align-items: center;
                                 color: #fff;
                                 span {
                                     color: #fff;
+                                    .icon {
+                                        color: #fff;
+                                    }
                                 }
                             }
                         }
@@ -400,11 +381,22 @@ $culcourse-arrow-active-color: #fff;
                                         color: #fff;
                                         span {
                                             color: #fff;
+                                            .icon {
+                                                color: #fff;
+                                            }
                                         }
                                     }
                                 }
                                 .summary {
                                     color: #fff;
+                                    .truncate {
+                                        height: auto;
+                                        >div>* {
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+                                    }
                                 }
                                 .section-summary-activities {
                                     .activity-count {
@@ -423,6 +415,9 @@ $culcourse-arrow-active-color: #fff;
                                     color: $culcourse-header-editing-color;
                                     span {
                                         color: $culcourse-header-editing-color;
+                                        .icon {
+                                            color: $culcourse-header-editing-color;
+                                        }
                                     }
                                 }
                             }
@@ -496,5 +491,61 @@ $culcourse-arrow-active-color: #fff;
                 }
             }
         }
+    }
+}
+
+.fixed-anchor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 1px;
+}
+
+.fixed-buttons {
+    position: absolute;
+    top: 85px;
+    right: 0;
+    transition: transform .2s ease;
+    &:not(.stick) {
+        transform: translateY(0) !important;
+    }
+    &.stick {
+        position: fixed;
+        z-index: 2;
+    }
+    .fixed-btn {
+        width: 50px;
+        height: 50px;
+        &+.fixed-btn {
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    }
+}
+
+// Show/Hide Blocks
+.toggleblocks-btn {
+    cursor: pointer;
+    .fa-angle-double-left {
+        display: none;
+    }
+}
+
+.hiddenblocks {
+    .toggleblocks-btn {
+        .fa-angle-double-left {
+            display: block;
+        }
+        .fa-angle-double-right {
+            display: none;
+        }
+    }
+    #block-region-side-post {
+        display: none;
+    }
+    #main-region {
+        flex: 0 0 100%;
+        max-width: 100%;
+        transition: flex 0.2s ease, max-width 0.2s ease;
     }
 }

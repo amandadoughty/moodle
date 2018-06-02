@@ -67,6 +67,13 @@ define(['jquery', 'core/log'], function($, log) {
                 $(window).resize(function() {
                     sticky_nav();
                 });
+
+                // Scroll to top of page
+                $('a[href="#top"]').click(function() {
+                    $('html, body').animate({ scrollTop: 0 }, 'slow');
+                    console.log('done');
+                    return false;
+                });
             }
 
         }

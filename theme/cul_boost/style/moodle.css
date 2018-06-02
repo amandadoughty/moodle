@@ -19258,7 +19258,8 @@ a.bg-black:focus, a.bg-black:hover {
         color: #fff;
         text-align: center; }
         .block.block_culupcoming_events .block-inner .content .culupcoming_events > div {
-          position: relative; }
+          position: relative;
+          width: 100%; }
           .block.block_culupcoming_events .block-inner .content .culupcoming_events > div > i {
             display: none;
             position: absolute;
@@ -19287,7 +19288,7 @@ a.bg-black:focus, a.bg-black:hover {
           -o-transition: opacity 0.2s ease;
           transition: opacity 0.2s ease; }
           .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li {
-            width: auto;
+            width: 100%;
             max-width: 400px;
             padding: 0;
             line-height: inherit; }
@@ -21190,98 +21191,77 @@ form {
 .dash.activitylink svg.icon > g[id^="pix_plugins"] > g g > path {
   fill: #A22833; }
 
-.fixed-anchor {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50px;
-  height: 1px; }
-
-.fixed-buttons {
-  position: absolute;
-  top: 85px;
-  right: 0;
-  -webkit-transition: -webkit-transform .2s ease;
-  transition: -webkit-transform .2s ease;
-  -o-transition: -o-transform .2s ease;
-  transition: transform .2s ease;
-  transition: transform .2s ease, -webkit-transform .2s ease, -o-transform .2s ease; }
-  .fixed-buttons:not(.stick) {
-    -webkit-transform: translateY(0) !important;
-        -ms-transform: translateY(0) !important;
-         -o-transform: translateY(0) !important;
-            transform: translateY(0) !important; }
-  .fixed-buttons.stick {
-    position: fixed;
-    z-index: 2; }
-  .fixed-buttons .fixed-btn {
-    width: 50px;
-    height: 50px; }
-    .fixed-buttons .fixed-btn + .fixed-btn {
-      border-top: 1px solid rgba(255, 255, 255, 0.3); }
-
-.section .activity .activityinstance a:first-of-type,
-.section .activity .activityinstance div a:first-of-type {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  text-indent: 0;
-  padding: 0;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding-right: 1rem;
-  background-color: #fff; }
-  .section .activity .activityinstance a:first-of-type img.activityicon, .section .activity .activityinstance a:first-of-type svg.activityicon,
-  .section .activity .activityinstance a:first-of-type svg.activityicon,
-  .section .activity .activityinstance div a:first-of-type img.activityicon,
-  .section .activity .activityinstance div a:first-of-type svg.activityicon,
-  .section .activity .activityinstance div a:first-of-type svg.activityicon {
-    vertical-align: middle;
-    width: 40px;
-    height: 40px;
-    padding: 0.5rem;
-    background-color: #A22833;
-    margin-right: 1rem; }
-    .section .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] path, .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
-    .section .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g + path,
-    .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
-    .section .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g > path,
-    .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
-    .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
-    .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
-    .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
-    .section .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] path,
-    .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
-    .section .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g + path,
-    .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
-    .section .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g > path,
-    .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
-    .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
-    .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
-    .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path {
-      fill: #fff; }
-  .section .activity .activityinstance a:first-of-type .instancename,
-  .section .activity .activityinstance div a:first-of-type .instancename {
-    -webkit-flex-basis: 0%;
-        -ms-flex-preferred-size: 0%;
-            flex-basis: 0%;
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    max-width: 100%;
-    width: 100%;
-    padding: 0.5rem 0; }
-
-.section .activity .availabilityinfo,
-.section .activity .contentafterlink {
-  margin-left: 0; }
+.section .activity {
+  padding: 0; }
+  .editing .section .activity .editing_move {
+    top: 20px;
+    -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+         -o-transform: translateY(-50%);
+            transform: translateY(-50%); }
+  .section .activity .activityinstance a:first-of-type,
+  .section .activity .activityinstance div a:first-of-type {
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+            flex-wrap: nowrap;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    text-indent: 0;
+    padding: 0;
+    padding-right: 1rem;
+    background-color: #fff; }
+    .section .activity .activityinstance a:first-of-type img.activityicon, .section .activity .activityinstance a:first-of-type svg.activityicon,
+    .section .activity .activityinstance a:first-of-type svg.activityicon,
+    .section .activity .activityinstance div a:first-of-type img.activityicon,
+    .section .activity .activityinstance div a:first-of-type svg.activityicon,
+    .section .activity .activityinstance div a:first-of-type svg.activityicon {
+      vertical-align: middle;
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      padding: 0.5rem;
+      background-color: #A22833;
+      margin-right: 1rem; }
+      .section .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] path, .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
+      .section .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g + path,
+      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
+      .section .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g > path,
+      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
+      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
+      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
+      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
+      .section .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] path,
+      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
+      .section .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g + path,
+      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
+      .section .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g > path,
+      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
+      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
+      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
+      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path {
+        fill: #fff; }
+    .section .activity .activityinstance a:first-of-type .instancename,
+    .section .activity .activityinstance div a:first-of-type .instancename {
+      padding: 0.5rem 0; }
+  .section .activity .activityinstance span.inplaceeditable,
+  .section .activity .activityinstance div span.inplaceeditable {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center; }
+  .section .activity .availabilityinfo,
+  .section .activity .contentafterlink {
+    margin-left: 0; }
 
 @-webkit-keyframes grow {
   0% {
@@ -21333,10 +21313,9 @@ form {
 #main-region .course-content #toggle-all .content {
   margin: 0; }
   #main-region .course-content #toggle-all .content h4 {
-    margin-bottom: 20px;
     border: 1px solid #f2f2f2;
     padding: 0;
-    margin-top: 0;
+    margin: 0;
     font-weight: normal; }
   #main-region .course-content #toggle-all .content #toggles-all-opened,
   #main-region .course-content #toggle-all .content #toggles-all-closed {
@@ -21428,9 +21407,19 @@ form {
             font-size: 1.375rem;
             color: #fff; }
             #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a {
+              display: -webkit-box;
+              display: -webkit-flex;
+              display: -ms-flexbox;
+              display: flex;
+              -webkit-box-align: center;
+              -webkit-align-items: center;
+                  -ms-flex-align: center;
+                      align-items: center;
               color: #fff; }
               #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a span {
                 color: #fff; }
+                #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a span .icon {
+                  color: #fff; }
           #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle:before {
             content: "";
             position: absolute;
@@ -21475,8 +21464,16 @@ form {
                   color: #fff; }
                   #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a span, #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a span {
                     color: #fff; }
+                    #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a span .icon, #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a span .icon {
+                      color: #fff; }
               #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .summary, #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .summary {
                 color: #fff; }
+                #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .summary .truncate, #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .summary .truncate {
+                  height: auto; }
+                  #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .summary .truncate > div > *, #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .summary .truncate > div > * {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis; }
               #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .section-summary-activities .activity-count, #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .section-summary-activities .activity-count {
                 color: #fff; }
             #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:before {
@@ -21492,6 +21489,8 @@ form {
                 color: #3C3C3C; }
                 #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a span {
                   color: #3C3C3C; }
+                  #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a span .icon {
+                    color: #3C3C3C; }
             #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary {
               color: #3C3C3C; }
             #main-region .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .section-summary-activities .activity-count {
@@ -21541,6 +21540,62 @@ form {
       margin-bottom: 1rem; }
     #main-region .course-content ul.culcourse > li.section.orphaned .content {
       padding: 25px; }
+
+.fixed-anchor {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 1px; }
+
+.fixed-buttons {
+  position: absolute;
+  top: 85px;
+  right: 0;
+  -webkit-transition: -webkit-transform .2s ease;
+  transition: -webkit-transform .2s ease;
+  -o-transition: -o-transform .2s ease;
+  transition: transform .2s ease;
+  transition: transform .2s ease, -webkit-transform .2s ease, -o-transform .2s ease; }
+  .fixed-buttons:not(.stick) {
+    -webkit-transform: translateY(0) !important;
+        -ms-transform: translateY(0) !important;
+         -o-transform: translateY(0) !important;
+            transform: translateY(0) !important; }
+  .fixed-buttons.stick {
+    position: fixed;
+    z-index: 2; }
+  .fixed-buttons .fixed-btn {
+    width: 50px;
+    height: 50px; }
+    .fixed-buttons .fixed-btn + .fixed-btn {
+      border-top: 1px solid rgba(255, 255, 255, 0.3); }
+
+.toggleblocks-btn {
+  cursor: pointer; }
+  .toggleblocks-btn .fa-angle-double-left {
+    display: none; }
+
+.hiddenblocks .toggleblocks-btn .fa-angle-double-left {
+  display: block; }
+
+.hiddenblocks .toggleblocks-btn .fa-angle-double-right {
+  display: none; }
+
+.hiddenblocks #block-region-side-post {
+  display: none; }
+
+.hiddenblocks #main-region {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 100%;
+      -ms-flex: 0 0 100%;
+          flex: 0 0 100%;
+  max-width: 100%;
+  -webkit-transition: max-width 0.2s ease, -webkit-box-flex 0.2s ease, -webkit-flex 0.2s ease;
+  transition: max-width 0.2s ease, -webkit-box-flex 0.2s ease, -webkit-flex 0.2s ease;
+  -o-transition: flex 0.2s ease, max-width 0.2s ease;
+  transition: flex 0.2s ease, max-width 0.2s ease;
+  transition: flex 0.2s ease, max-width 0.2s ease, -webkit-box-flex 0.2s ease, -webkit-flex 0.2s ease, -ms-flex 0.2s ease; }
 
 .footer {
   color: #fff; }
@@ -21645,6 +21700,9 @@ ol li:last-of-type {
   padding-bottom: 1px; }
   .no-overflow:last-of-type {
     margin-bottom: 0; }
+  .path-mod-assign .no-overflow {
+    overflow-y: visible;
+    overflow-x: auto; }
 
 .col {
   -webkit-flex-basis: 0%;

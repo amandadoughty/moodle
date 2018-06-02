@@ -3,7 +3,7 @@ define(['jquery', 'core/log'], function($, log) {
     return {
         init: function() {
 
-            // Sticky Menu
+            // Sticky Buttons on Course Page
             $('.fixed-buttons').each(function() {
 
                 var navbar = $(this);
@@ -41,6 +41,23 @@ define(['jquery', 'core/log'], function($, log) {
 
                 $(window).resize(function() {
                     sticky_navbar();
+                });
+
+
+                // Show/Hide Blocks
+                $('.pagelayout-course').toggleClass(window.localStorage.toggled);
+
+                // Toggle 
+                $('.toggleblocks-btn').on('click',function(){
+
+                   if (window.localStorage.toggled != "hiddenblocks" ) {
+                      $('.pagelayout-course').toggleClass("hiddenblocks", true );
+                      window.localStorage.toggled = "hiddenblocks";
+                   } else {
+                      $('.pagelayout-course').toggleClass("hiddenblocks", false );
+                      window.localStorage.toggled = "";
+                   }
+
                 });
 
             });
