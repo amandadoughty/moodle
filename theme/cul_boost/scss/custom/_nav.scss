@@ -329,6 +329,17 @@
             &+.singlebutton {
                 margin-left: $spacer;
             }
+            &.editbutton {
+                button {
+                    &:hover,
+                    &:focus {
+                        text-decoration: none;
+                        .edit-text {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
             button {
                 padding: 0;
                 background-color: transparent;

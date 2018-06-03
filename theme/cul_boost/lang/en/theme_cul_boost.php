@@ -45,6 +45,8 @@ $string['copyright'] = 'Copyright';
 $string['copyrightdesc'] = 'The name of your organisation.';
 $string['footerlinks'] = 'Footer Links';
 $string['footerlinksdesc'] = 'Content area used for the bottom right of the footer.';
+$string['on'] = 'Turn editing on';
+$string['off'] = 'Turn editing off';
 
 // Dashboard
 $string['dashboard'] = 'Dashboard';
@@ -81,6 +83,8 @@ $string['favourites'] = 'Favourites';
 // Course
 $string['hideblocks'] = 'Hide Sidebar';
 $string['showblocks'] = 'Show Sidebar';
+$string['viewmore'] = 'View More';
+$string['viewless'] = 'View Less';
 
 /* 
  * theme_cul strings

@@ -95,6 +95,46 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    return $this->single_button($url, $editstring);
 	}
 
+	public function single_button($url, $label, $method='post', array $options=null) {
+	    if (!($url instanceof moodle_url)) {
+	        $url = new moodle_url($url);
+	    }
+
+	    if ($label == get_string('blockseditoff')
+	            || $label == get_string('turneditingoff')
+	            || $label == get_string('updatemymoodleoff')) {
+	        $label = get_string('on', 'theme_cul_boost');
+	        $options['state'] = 'on';
+	    } else if($label == get_string('blocksediton')
+	            || $label == get_string('turneditingon')
+	            || $label == get_string('updatemymoodleon')) {
+	        $label = get_string('off', 'theme_cul_boost');
+	        $options['state'] = 'off';
+	    }
+
+	    $button = new single_button($url, $label, $method);
+	    foreach ((array)$options as $key=>$value) {
+	        $button->$key = $value;
+	    }
+
+	    if ($label == get_string('on', 'theme_cul_boost')
+	            || $label == get_string('off', 'theme_cul_boost')) {
+	        return $this->render_edit_button($button);
+	    }
+	    if (!isset($button->large)) {
+	        $button->small = true;
+	    }
+
+
+	    return $this->render($button);
+	}
+
+	protected function render_edit_button(single_button $button) {
+	    $data = $button->export_for_template($this);
+	    $data->state = $button->state;
+	    return $this->render_from_template('theme_cul_boost/edit_button', $data);
+	}
+
 	/*
 	 * This renders the navbar.
 	 * Uses bootstrap compatible html.
@@ -354,9 +394,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    require_once($CFG->dirroot.'/course/renderer.php');
 	    include_once($CFG->dirroot.'/lib/coursecatlib.php');
 
-	    if (!empty($USER->currentcourseaccess)) {
-	        $courses = $USER->currentcourseaccess;
-	    } else if (!empty($USER->lastcourseaccess)) {
+	    if (!empty($USER->lastcourseaccess)) {
 	        $courses = $USER->lastcourseaccess;
 	    } else {
 	        return '';

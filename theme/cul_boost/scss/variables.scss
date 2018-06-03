@@ -646,7 +646,8 @@ $tooltip-arrow-color:         $tooltip-bg;
 // Popovers
 
 $popover-inner-padding:               1px;
-$popover-bg:                          #fff;
+$popover-bg:                          $brand-primary;
+$popover-text-color:                  #fff;
 $popover-max-width:                   276px;
 $popover-border-width:                $border-width;
 $popover-border-color:                rgba(0,0,0,.2);
@@ -659,7 +660,7 @@ $popover-title-padding-y:             8px;
 $popover-content-padding-x:           14px;
 $popover-content-padding-y:           9px;
 
-$popover-arrow-width:                 10px;
+$popover-arrow-width:                 5px;
 $popover-arrow-color:                 $popover-bg;
 
 $popover-arrow-outer-width:           ($popover-arrow-width + 1px);

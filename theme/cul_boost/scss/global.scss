@@ -198,6 +198,16 @@ a {
     }
 }
 
+.popover {
+    .popover-title,
+    .popover-content {
+        color: $popover-text-color;
+        * {
+            color: $popover-text-color;
+        }
+    }
+}
+
 .userpicture {
     border-radius: 50%;
     overflow: hidden;

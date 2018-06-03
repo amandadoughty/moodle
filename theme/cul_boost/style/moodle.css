@@ -6655,73 +6655,73 @@ button.close, .moodle-dialogue-base button.closebutton {
   word-spacing: normal;
   font-size: 0.875rem;
   word-wrap: break-word;
-  background-color: #fff;
+  background-color: #A22833;
   -webkit-background-clip: padding-box;
           background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.2); }
   .popover.popover-top, .popover.bs-tether-element-attached-bottom {
-    margin-top: -10px; }
+    margin-top: -5px; }
     .popover.popover-top .popover-arrow, .popover.bs-tether-element-attached-bottom .popover-arrow {
-      bottom: -11px;
+      bottom: -6px;
       left: 50%;
-      margin-left: -11px;
+      margin-left: -6px;
       border-top-color: rgba(0, 0, 0, 0.25);
       border-bottom-width: 0; }
       .popover.popover-top .popover-arrow::after, .popover.bs-tether-element-attached-bottom .popover-arrow::after {
         bottom: 1px;
-        margin-left: -10px;
+        margin-left: -5px;
         content: "";
-        border-top-color: #fff;
+        border-top-color: #A22833;
         border-bottom-width: 0; }
   .popover.popover-right, .popover.bs-tether-element-attached-left {
-    margin-left: 10px; }
+    margin-left: 5px; }
     .popover.popover-right .popover-arrow, .popover.bs-tether-element-attached-left .popover-arrow {
       top: 50%;
-      left: -11px;
-      margin-top: -11px;
+      left: -6px;
+      margin-top: -6px;
       border-right-color: rgba(0, 0, 0, 0.25);
       border-left-width: 0; }
       .popover.popover-right .popover-arrow::after, .popover.bs-tether-element-attached-left .popover-arrow::after {
-        bottom: -10px;
+        bottom: -5px;
         left: 1px;
         content: "";
-        border-right-color: #fff;
+        border-right-color: #A22833;
         border-left-width: 0; }
   .popover.popover-bottom, .popover.bs-tether-element-attached-top {
-    margin-top: 10px; }
+    margin-top: 5px; }
     .popover.popover-bottom .popover-arrow, .popover.bs-tether-element-attached-top .popover-arrow {
-      top: -11px;
+      top: -6px;
       left: 50%;
-      margin-left: -11px;
+      margin-left: -6px;
       border-top-width: 0;
       border-bottom-color: rgba(0, 0, 0, 0.25); }
       .popover.popover-bottom .popover-arrow::after, .popover.bs-tether-element-attached-top .popover-arrow::after {
         top: 1px;
-        margin-left: -10px;
+        margin-left: -5px;
         content: "";
         border-top-width: 0;
-        border-bottom-color: #fff; }
+        border-bottom-color: #A22833; }
   .popover.popover-left, .popover.bs-tether-element-attached-right {
-    margin-left: -10px; }
+    margin-left: -5px; }
     .popover.popover-left .popover-arrow, .popover.bs-tether-element-attached-right .popover-arrow {
       top: 50%;
-      right: -11px;
-      margin-top: -11px;
+      right: -6px;
+      margin-top: -6px;
       border-right-width: 0;
       border-left-color: rgba(0, 0, 0, 0.25); }
       .popover.popover-left .popover-arrow::after, .popover.bs-tether-element-attached-right .popover-arrow::after {
         right: 1px;
-        bottom: -10px;
+        bottom: -5px;
         content: "";
         border-right-width: 0;
-        border-left-color: #fff; }
+        border-left-color: #A22833; }
 
 .popover-title {
   padding: 8px 14px;
   margin: 0;
   font-size: 1rem;
-  background-color: #f7f7f7;
-  border-bottom: 1px solid #ebebeb; }
+  background-color: #96252f;
+  border-bottom: 1px solid #812029; }
   .popover-title:empty {
     display: none; }
 
@@ -6737,12 +6737,12 @@ button.close, .moodle-dialogue-base button.closebutton {
   border-style: solid; }
 
 .popover-arrow {
-  border-width: 11px; }
+  border-width: 6px; }
 
 /* rtl:end:ignore */
 .popover-arrow::after {
   content: "";
-  border-width: 10px; }
+  border-width: 5px; }
 
 .carousel {
   position: relative; }
@@ -15328,7 +15328,7 @@ body {
   height: 30px;
   text-align: center;
   border-top: 1px solid #ddd;
-  background-color: #fff;
+  background-color: #A22833;
   padding-top: 3px; }
 
 .popover-region-header-text {
@@ -15607,7 +15607,7 @@ span[data-flexitour="container"] .modal-dialog {
   margin: 0; }
 
 span[data-flexitour="container"] div[data-role="arrow"] {
-  border-width: 11px; }
+  border-width: 6px; }
 
 span[data-flexitour="container"] div[data-role="arrow"],
 span[data-flexitour="container"] div[data-role="arrow"]:after {
@@ -15617,67 +15617,67 @@ span[data-flexitour="container"] div[data-role="arrow"]:after {
   height: 0;
   border-color: transparent;
   border-style: solid;
-  border-width: 10px; }
+  border-width: 5px; }
 
 span[data-flexitour="container"][x-placement="top"], span[data-flexitour="container"][x-placement="top-start"] {
-  margin-bottom: 10px; }
+  margin-bottom: 5px; }
   span[data-flexitour="container"][x-placement="top"] div[data-role="arrow"], span[data-flexitour="container"][x-placement="top-start"] div[data-role="arrow"] {
-    bottom: -11px;
+    bottom: -6px;
     left: 50%;
-    margin-left: -11px;
+    margin-left: -6px;
     border-bottom-width: 0;
     border-top-color: rgba(0, 0, 0, 0.25); }
   span[data-flexitour="container"][x-placement="top"] div[data-role="arrow"]:after, span[data-flexitour="container"][x-placement="top-start"] div[data-role="arrow"]:after {
     bottom: 1px;
-    margin-left: -10px;
+    margin-left: -5px;
     content: " ";
     border-bottom-width: 0;
-    border-top-color: #fff; }
+    border-top-color: #A22833; }
 
 span[data-flexitour="container"][x-placement="bottom"], span[data-flexitour="container"][x-placement="bottom-start"] {
-  margin-top: 10px; }
+  margin-top: 5px; }
   span[data-flexitour="container"][x-placement="bottom"] div[data-role="arrow"], span[data-flexitour="container"][x-placement="bottom-start"] div[data-role="arrow"] {
-    top: -11px;
+    top: -6px;
     left: 50%;
-    margin-left: -11px;
+    margin-left: -6px;
     border-top-width: 0;
     border-bottom-color: rgba(0, 0, 0, 0.25); }
   span[data-flexitour="container"][x-placement="bottom"] div[data-role="arrow"]:after, span[data-flexitour="container"][x-placement="bottom-start"] div[data-role="arrow"]:after {
     top: 1px;
-    margin-left: -10px;
+    margin-left: -5px;
     content: " ";
     border-top-width: 0;
-    border-bottom-color: #fff; }
+    border-bottom-color: #A22833; }
 
 span[data-flexitour="container"][x-placement="left"], span[data-flexitour="container"][x-placement="left-start"] {
-  margin-right: 10px; }
+  margin-right: 5px; }
   span[data-flexitour="container"][x-placement="left"] div[data-role="arrow"], span[data-flexitour="container"][x-placement="left-start"] div[data-role="arrow"] {
-    right: -11px;
+    right: -6px;
     top: 50%;
-    margin-top: -11px;
+    margin-top: -6px;
     border-right-width: 0;
     border-left-color: rgba(0, 0, 0, 0.25); }
   span[data-flexitour="container"][x-placement="left"] div[data-role="arrow"]:after, span[data-flexitour="container"][x-placement="left-start"] div[data-role="arrow"]:after {
     right: 1px;
-    margin-top: -10px;
+    margin-top: -5px;
     content: " ";
     border-right-width: 0;
-    border-left-color: #fff; }
+    border-left-color: #A22833; }
 
 span[data-flexitour="container"][x-placement="right"], span[data-flexitour="container"][x-placement="right-start"] {
-  margin-left: 10px; }
+  margin-left: 5px; }
   span[data-flexitour="container"][x-placement="right"] div[data-role="arrow"], span[data-flexitour="container"][x-placement="right-start"] div[data-role="arrow"] {
-    left: -11px;
+    left: -6px;
     top: 50%;
-    margin-top: -11px;
+    margin-top: -6px;
     border-left-width: 0;
     border-right-color: rgba(0, 0, 0, 0.25); }
   span[data-flexitour="container"][x-placement="right"] div[data-role="arrow"]:after, span[data-flexitour="container"][x-placement="right-start"] div[data-role="arrow"]:after {
     left: 1px;
-    margin-top: -10px;
+    margin-top: -5px;
     content: " ";
     border-left-width: 0;
-    border-right-color: #fff; }
+    border-right-color: #A22833; }
 
 [data-region="drawer"] [data-flexitour="container"] {
   /*rtl:ignore*/
@@ -20749,6 +20749,10 @@ a.dimmed_text:visited,
     margin: 0; }
     .right-navbar .breadcrumb-button .singlebutton + .singlebutton {
       margin-left: 1rem; }
+    .right-navbar .breadcrumb-button .singlebutton.editbutton button:hover, .right-navbar .breadcrumb-button .singlebutton.editbutton button:focus {
+      text-decoration: none; }
+      .right-navbar .breadcrumb-button .singlebutton.editbutton button:hover .edit-text, .right-navbar .breadcrumb-button .singlebutton.editbutton button:focus .edit-text {
+        text-decoration: underline; }
     .right-navbar .breadcrumb-button .singlebutton button {
       padding: 0;
       background-color: transparent;
@@ -21098,90 +21102,118 @@ form {
     color: #A22833;
     border-radius: 0; }
 
-.courseheader .course-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 240px;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  -webkit-background-size: cover;
-          background-size: cover; }
-
-.courseheader .dash-panel.quicklinks-wrap {
-  background-color: #8e232d; }
-  .courseheader .dash-panel.quicklinks-wrap .dash-link {
-    background-color: #A22833; }
-    .courseheader .dash-panel.quicklinks-wrap .dash-link:hover, .courseheader .dash-panel.quicklinks-wrap .dash-link:focus {
-      background-color: #fff; }
-
-.courseheader .dash-panel.activities-wrap {
-  background-color: #A22833; }
-  .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link {
-    background-color: #8e232d; }
-    .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:hover, .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:focus {
-      background-color: #fff; }
-      .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:hover .dash-icon svg > g[id^="pix_plugins"] path,
-      .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:hover .dash-icon svg > g[id^="pix_plugins"] > g g + path,
-      .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:hover .dash-icon svg > g[id^="pix_plugins"] > g g > path, .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:focus .dash-icon svg > g[id^="pix_plugins"] path,
-      .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:focus .dash-icon svg > g[id^="pix_plugins"] > g g + path,
-      .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:focus .dash-icon svg > g[id^="pix_plugins"] > g g > path {
-        fill: #A22833; }
-
-.courseheader .dash-panel h2 {
-  color: #fff; }
-
-.courseheader .dash-panel .linkscontainer ul.links {
-  list-style: none;
-  padding: 0;
-  margin: -0.25rem; }
-  .courseheader .dash-panel .linkscontainer ul.links .dash {
-    padding: 0.25rem; }
-    .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link {
-      display: block;
+.courseheader {
+  min-height: 240px; }
+  .courseheader .course-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 240px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+            background-size: cover; }
+  body:not(.editing) .courseheader .dash-panel.reveal .dash {
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: flex !important; }
+  body:not(.editing) .courseheader .dash-panel.reveal .viewmorelink .viewmore-text {
+    display: none; }
+  body:not(.editing) .courseheader .dash-panel.reveal .viewmorelink .viewless-text {
+    display: block; }
+  body:not(.editing) .courseheader .dash-panel .dash {
+    display: none; }
+    body:not(.editing) .courseheader .dash-panel .dash:first-child, body:not(.editing) .courseheader .dash-panel .dash:nth-child(2), body:not(.editing) .courseheader .dash-panel .dash:nth-child(3), body:not(.editing) .courseheader .dash-panel .dash:nth-child(4), body:not(.editing) .courseheader .dash-panel .dash:nth-child(5), body:not(.editing) .courseheader .dash-panel .dash:nth-child(6), body:not(.editing) .courseheader .dash-panel .dash:nth-child(7) {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex; }
+    body:not(.editing) .courseheader .dash-panel .dash:nth-child(8) ~ .viewmorelink {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex; }
+  body:not(.editing) .courseheader .dash-panel .viewmorelink {
+    display: none;
+    cursor: pointer; }
+    body:not(.editing) .courseheader .dash-panel .viewmorelink:hover .viewmore-inner, body:not(.editing) .courseheader .dash-panel .viewmorelink:focus .viewmore-inner {
+      background-color: rgba(255, 255, 255, 0.05); }
+    body:not(.editing) .courseheader .dash-panel .viewmorelink .viewmore-inner {
       min-height: 100px; }
-      .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link:hover a, .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link:focus a {
-        color: #A22833; }
-      .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link:hover .dash-move, .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link:focus .dash-move {
-        color: #A22833;
-        background-color: rgba(0, 0, 0, 0.1); }
-      .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link a.dash-edit {
-        position: absolute;
-        bottom: 0.5rem;
-        left: 0.5rem;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: flex; }
-      .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-move {
-        position: absolute;
-        top: 0.25rem;
-        right: 0.25rem;
-        color: #fff;
-        padding: 0.5rem;
-        margin: 0;
-        background-color: rgba(255, 255, 255, 0.1); }
-        .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-move .icon:first-of-type {
-          margin: 0; }
-      .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link a {
-        color: #fff; }
-      .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon {
-        width: 100%;
-        min-height: 3rem; }
-        .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img,
-        .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg {
-          width: 2rem;
-          height: auto; }
-          .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img > g[id^="pix_plugins"] path,
-          .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img > g[id^="pix_plugins"] > g g + path,
-          .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img > g[id^="pix_plugins"] > g g > path,
-          .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg > g[id^="pix_plugins"] path,
-          .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg > g[id^="pix_plugins"] > g g + path,
-          .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg > g[id^="pix_plugins"] > g g > path {
-            fill: #fff; }
-    .courseheader .dash-panel .linkscontainer ul.links .dash .dash-text {
-      line-height: 1.1; }
+    body:not(.editing) .courseheader .dash-panel .viewmorelink .viewless-text {
+      display: none; }
+  .courseheader .dash-panel.quicklinks-wrap {
+    background-color: #8e232d; }
+    .courseheader .dash-panel.quicklinks-wrap .dash-link {
+      background-color: #A22833; }
+      .courseheader .dash-panel.quicklinks-wrap .dash-link:hover, .courseheader .dash-panel.quicklinks-wrap .dash-link:focus {
+        background-color: #fff; }
+  .courseheader .dash-panel.activities-wrap {
+    background-color: #A22833; }
+    .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link {
+      background-color: #8e232d; }
+      .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:hover, .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:focus {
+        background-color: #fff; }
+        .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:hover .dash-icon svg > g[id^="pix_plugins"] path,
+        .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:hover .dash-icon svg > g[id^="pix_plugins"] > g g + path,
+        .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:hover .dash-icon svg > g[id^="pix_plugins"] > g g > path, .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:focus .dash-icon svg > g[id^="pix_plugins"] path,
+        .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:focus .dash-icon svg > g[id^="pix_plugins"] > g g + path,
+        .courseheader .dash-panel.activities-wrap .linkscontainer ul.links .dash .dash-link:focus .dash-icon svg > g[id^="pix_plugins"] > g g > path {
+          fill: #A22833; }
+  .courseheader .dash-panel h2 {
+    color: #fff; }
+  .courseheader .dash-panel .linkscontainer ul.links {
+    list-style: none;
+    padding: 0;
+    margin: -0.25rem; }
+    .courseheader .dash-panel .linkscontainer ul.links .dash {
+      padding: 0.25rem; }
+      .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link {
+        display: block;
+        min-height: 100px; }
+        .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link:hover a, .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link:focus a {
+          color: #A22833; }
+        .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link:hover .dash-move, .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link:focus .dash-move {
+          color: #A22833;
+          background-color: rgba(0, 0, 0, 0.1); }
+        .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link a.dash-edit {
+          position: absolute;
+          bottom: 0.5rem;
+          left: 0.5rem;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          display: flex; }
+        .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-move {
+          position: absolute;
+          top: 0.25rem;
+          right: 0.25rem;
+          color: #fff;
+          padding: 0.5rem;
+          margin: 0;
+          background-color: rgba(255, 255, 255, 0.1); }
+          .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-move .icon:first-of-type {
+            margin: 0; }
+        .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link a {
+          color: #fff; }
+        .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon {
+          width: 100%;
+          min-height: 3rem; }
+          .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img,
+          .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg {
+            width: 2rem;
+            height: auto; }
+            .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img > g[id^="pix_plugins"] path,
+            .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img > g[id^="pix_plugins"] > g g + path,
+            .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img > g[id^="pix_plugins"] > g g > path,
+            .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg > g[id^="pix_plugins"] path,
+            .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg > g[id^="pix_plugins"] > g g + path,
+            .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg > g[id^="pix_plugins"] > g g > path {
+              fill: #fff; }
+      .courseheader .dash-panel .linkscontainer ul.links .dash .dash-text {
+        line-height: 1.1; }
 
 .activity svg.activityicon > g[id^="pix_plugins"] path,
 .activity svg.activityicon > g[id^="pix_plugins"] > g g + path,
@@ -21768,6 +21800,13 @@ ol li:last-of-type {
     opacity: 1;
     visibility: visible;
     pointer-events: auto; }
+
+.popover .popover-title,
+.popover .popover-content {
+  color: #fff; }
+  .popover .popover-title *,
+  .popover .popover-content * {
+    color: #fff; }
 
 .userpicture {
   border-radius: 50%;
