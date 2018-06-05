@@ -45,6 +45,7 @@
             .viewmorelink {
                 display: none;
                 cursor: pointer;
+
                 &:hover,
                 &:focus {
                     .viewmore-inner {
@@ -57,6 +58,11 @@
                 .viewless-text {
                     display: none;
                 }
+            }
+        }
+        .viewmorelink {
+            body.editing & {
+                display: none;
             }
         }
         &.quicklinks-wrap {
@@ -184,57 +190,118 @@ svg.activityicon {
 }
 
 .section {
-    .activity {
-        padding: 0;
-        .editing & {
-            .editing_move {
-                top: 20px;
-                transform: translateY(-50%);
+    .content {
+        .course-summary {
+            &:empty {
+                display: none;
             }
         }
-        .activityinstance,
-        .activityinstance div {
-            a {
-                &:first-of-type {
-                    display: inline-flex;
-                    flex-wrap: nowrap;
-                    align-items: center;
-                    text-indent: 0;
-                    padding: 0;
-                    padding-right: $spacer;
-                    background-color: #fff;
-                    img,
-                    svg {
-                        &.activityicon {
-                            vertical-align: middle;
-                            width: 40px;
-                            height: 40px;
-                            min-width: 40px;
-                            padding: $spacer / 2;
-                            background-color: $brand-primary;
-                            margin-right: $spacer;
-                            >g[id^="pix_plugins"] {
-                                path,
-                                >g g+path,
-                                >g g>path {
-                                    fill: #fff;
+        .mod-indent-outer {
+            display: flex;
+            align-items: center;
+            >div:not(.mod-indent) {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                flex-basis: 0%;
+                flex-grow: 1;
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+        span.inplaceeditable {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            .quickeditlink .icon {
+                display: inline-block;
+                height: auto;
+                width: auto;
+                font-size: $font-size-base;
+                vertical-align: middle;
+            }
+        }
+        .activity {
+            padding: 0;
+            .actions {
+                position: relative;
+                right: auto;
+                top: auto;
+                margin-left: auto;
+                .filler {
+                    display: none;
+                }
+            }
+            .editing & {
+                .editing_move {
+                    top: 20px;
+                    transform: translateY(-50%);
+                }
+            }
+            .activityinstance,
+            .activityinstance div {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                flex-basis: 0%;
+                flex-grow: 1;
+                max-width: 100%;
+                width: 100%;
+                padding: 0 $spacer 0 0;
+                .editing & {
+                    padding: 0 $spacer 0 0;
+                }
+                a {
+                    &:first-of-type {
+                        display: inline-flex;
+                        flex-wrap: nowrap;
+                        align-items: center;
+                        text-indent: 0;
+                        padding: 0;
+                        padding-right: $spacer;
+                        background-color: #fff;
+                        img,
+                        svg {
+                            &.activityicon {
+                                vertical-align: middle;
+                                width: 40px;
+                                height: 40px;
+                                min-width: 40px;
+                                padding: $spacer / 2;
+                                background-color: $brand-primary;
+                                margin-right: $spacer;
+                                >g[id^="pix_plugins"] {
+                                    path,
+                                    >g g+path,
+                                    >g g>path {
+                                        fill: #fff;
+                                    }
                                 }
                             }
                         }
+                        .instancename {
+                            padding: $spacer / 2 0;
+                        }
                     }
-                    .instancename {
-                        padding: $spacer / 2 0;
+                }
+                .resourcelinkdetails,
+                .ouwikilmt {
+                    margin-left: auto;
+                }
+            }
+            .availabilityinfo,
+            .contentafterlink {
+                width: 100%;
+                margin-left: 0;
+            }
+            .contentafterlink {
+                p {
+                    margin: 0 0 $spacer / 2 0;
+                    &:last-of-type {
+                        margin-bottom: 0;
                     }
                 }
             }
-            span.inplaceeditable {
-                display: flex;
-                align-items: center;
-            }
-        }
-        .availabilityinfo,
-        .contentafterlink {
-            margin-left: 0;
         }
     }
 }
@@ -513,9 +580,13 @@ $culcourse-arrow-active-color: #fff;
                     margin: 0;
                     animation: .5s grow;
                     background-color: $culcourse-content-bg;
-                    .section {
+                    .section,
+                    .summary {
                         margin: 0;
                         padding: $spacer;
+                        &:empty {
+                            display: none;
+                        }
                     }
                 }
                 ul {
@@ -541,6 +612,16 @@ $culcourse-arrow-active-color: #fff;
             }
         }
     }
+}
+
+.cul-important {
+    @extend .tag;
+    @extend .tag-danger;
+}
+
+.cul-generic {
+    @extend .tag;
+    @extend .tag-info;
 }
 
 .fixed-anchor {

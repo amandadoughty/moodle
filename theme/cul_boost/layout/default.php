@@ -64,6 +64,9 @@ echo $OUTPUT->doctype() ?>
         <div id="page-content" class="row justify-content-center">
             <section id="main-region" class="<?php echo $regions['content']; ?>">
                 <?php
+                    if ($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse' && $PAGE->pagetype != 'notes-index') {
+                        echo $OUTPUT->page_heading();
+                    }
                     echo $OUTPUT->course_content_header();
                     echo $OUTPUT->main_content();
                     echo $OUTPUT->activity_navigation();

@@ -167,9 +167,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
         }
 
         $custommenu = new custom_menu($custommenuitems, current_language());
-        $content .= $this->render_custom_menu($custommenu);     
-
-        $content .= $OUTPUT->search_box();
+        $content .= $this->render_custom_menu($custommenu);
 
         return $content;
     }
@@ -397,7 +395,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
      * @param custom_menu $menu
      * @return string $content
      */
-    protected function render_custom_menu(custom_menu $menu, $classes = 'nav') {
+    protected function render_custom_menu(custom_menu $menu, $classes = 'nav nav d-flex flex-wrap align-items-stretch') {
         global $COURSE, $PAGE, $CFG, $USER;
 
         $content = '';
@@ -425,7 +423,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
         if ($menunode->has_children()) {
 
             if ($level == 1) {
-                $class = 'dropdown';
+                $class = 'dropdown d-flex flex-wrap align-items-center py-3';
             } else {
                 $class = 'dropdown-item dropdown-submenu';
             }
@@ -449,7 +447,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
             $content .= $menunode->get_text();
 
             $content .= '</a>';
-            $content .= '<ul class="dropdown-menu">';
+            $content .= '<ul class="dropdown-menu mt-0">';
 
             foreach ($menunode->get_children() as $menunode) {
                 $content .= $this->render_custom_menu_item($menunode, 0);
@@ -457,10 +455,15 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
 
             $content .= '</ul>';
         } else {
-            $content = html_writer::start_tag('li', array(
-                'id' => $id, 'class'=>'dropdown-item'
-                )
-            );
+            
+            $class = 'dropdown-item d-flex flex-wrap align-items-center';
+
+            if (!$menunode->has_children() && $level == 1) {
+                $class = 'dropdown-item d-flex flex-wrap align-items-center py-3';
+            }
+
+            $content = html_writer::start_tag('li', array('id' => $id, 'class'=>$class));
+
             // The node doesn't have children so produce a final menuitem.
             if ($menunode->get_url() !== null) {
                 $url = $menunode->get_url();

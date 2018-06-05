@@ -15,7 +15,7 @@ define(['jquery', 'core/log'], function($, log) {
                 if (scrollto != true) {
                     $('html, body').animate({
                         scrollTop: settingsblock.offset().top
-                    }, 300);
+                    }, 0);
                 }
             });
 
@@ -82,7 +82,7 @@ define(['jquery', 'core/log'], function($, log) {
                     closenav($(this));
                     blocktree.animate({
                         scrollTop: 0
-                    }, 200);
+                    }, 0);
 
                 });
 
@@ -92,7 +92,7 @@ define(['jquery', 'core/log'], function($, log) {
                     blocktree.css('width', width);
                     blocktree.animate({
                         scrollTop: 0
-                    }, 200);
+                    }, 0);
 
                 });
 

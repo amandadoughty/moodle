@@ -55,11 +55,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	public function global_search() {
 	    global $CFG;
 
-	    $output = html_writer::start_tag('div', array('class' => 'slidersearchform'));
+	    $output = html_writer::start_tag('div', array('class' => 'slidersearchform d-flex flex-wrap align-items-center'));
 	    $output .= html_writer::start_tag('form', array('action' => '' . $CFG->wwwroot . '/search/index.php', 'method' => 'get'));
 	    $output .= html_writer::empty_tag('input', array(
+	        'class' => 'w-100',
 	        'type' => 'text',
-	        'size' => '12',
 	        'name' => 'q',
 	        'alt' => get_string('searchfor','theme_cul_boost'),
 	        'placeholder' => get_string('searchfor','theme_cul_boost')
@@ -86,10 +86,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    $url->param('sesskey', sesskey());
 	    if ($this->page->user_is_editing()) {
 	        $url->param('edit', 'off');
-	        $editstring = get_string('turneditingoff');
+	        $editstring = get_string('turneditingon');
 	    } else {
 	        $url->param('edit', 'on');
-	        $editstring = get_string('turneditingon');
+	        $editstring = get_string('turneditingoff');
 	    }
 
 	    return $this->single_button($url, $editstring);
@@ -143,6 +143,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    return $this->render_from_template('core/navbar', $this->page->navbar);
 	}
 
+	public function page_heading($tag = 'h2') {
+	    global $COURSE;
+	    $heading = html_writer::tag($tag, $this->page->heading, array('class'=>'pageheading font-weight-light mb-4'));
+	    return $heading;
+	}
+
 	/**
 	 * Construct a user menu, returning HTML that can be echoed out by a
 	 * layout file.
@@ -167,7 +173,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    }
 
 	    // Add a class for when $withlinks is false.
-	    $usermenuclasses = 'usermenu';
+	    $usermenuclasses = 'usermenu d-flex flex-wrap align-items-center';
 	    if (!$withlinks) {
 	        $usermenuclasses .= ' withoutlinks';
 	    }
@@ -336,7 +342,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 	    return html_writer::div(
 	        $user.$content,
-	        $usermenuclasses.' py-2 dropdown ml-4'
+	        $usermenuclasses.' dropdown ml-4'
 	    );
 	}
 

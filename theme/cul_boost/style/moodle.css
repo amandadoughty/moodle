@@ -2601,7 +2601,7 @@ textarea {
   #rubric-rubric.gradingform_rubric .dropup > .addcriterion > .caret {
     border-top-color: #000 !important; }
   .tag, .statusok, .statuswarning, .statusserious,
-  .statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge {
+  .statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, .cul-important, .cul-generic {
     border: 1px solid #000; }
   .table, table.collection, table.flexible,
   .generaltable {
@@ -5903,7 +5903,7 @@ p.arrow_button input[type="button"],
   font-size: 0.875rem; }
 
 .tag, .statusok, .statuswarning, .statusserious,
-.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge {
+.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, .cul-important, .cul-generic {
   display: inline-block;
   padding: 0.25rem 0.4rem;
   font-size: 75%;
@@ -5914,20 +5914,20 @@ p.arrow_button input[type="button"],
   white-space: nowrap;
   vertical-align: baseline; }
   .tag:empty, .statusok:empty, .statuswarning:empty, .statusserious:empty,
-  .statuscritical:empty, .que .correctness:empty, .label:empty, .badge:empty {
+  .statuscritical:empty, .que .correctness:empty, .label:empty, .badge:empty, .cul-important:empty, .cul-generic:empty {
     display: none; }
 
 .btn .tag, #page-grade-grading-manage .actions .action .tag, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .tag, #rubric-rubric.gradingform_rubric .addcriterion .tag, .btn .statusok, #page-grade-grading-manage .actions .action .statusok, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statusok, #rubric-rubric.gradingform_rubric .addcriterion .statusok, .btn .statuswarning, #page-grade-grading-manage .actions .action .statuswarning, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statuswarning, #rubric-rubric.gradingform_rubric .addcriterion .statuswarning, .btn .statusserious, #page-grade-grading-manage .actions .action .statusserious, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statusserious, #rubric-rubric.gradingform_rubric .addcriterion .statusserious,
 .btn .statuscritical,
 #page-grade-grading-manage .actions .action .statuscritical,
 #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statuscritical,
-#rubric-rubric.gradingform_rubric .addcriterion .statuscritical, .btn .que .correctness, .que .btn .correctness, #page-grade-grading-manage .actions .action .que .correctness, .que #page-grade-grading-manage .actions .action .correctness, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .que .correctness, .que #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .correctness, #rubric-rubric.gradingform_rubric .addcriterion .que .correctness, .que #rubric-rubric.gradingform_rubric .addcriterion .correctness, .btn .label, #page-grade-grading-manage .actions .action .label, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .label, #rubric-rubric.gradingform_rubric .addcriterion .label, .btn .badge, #page-grade-grading-manage .actions .action .badge, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .badge, #rubric-rubric.gradingform_rubric .addcriterion .badge {
+#rubric-rubric.gradingform_rubric .addcriterion .statuscritical, .btn .que .correctness, .que .btn .correctness, #page-grade-grading-manage .actions .action .que .correctness, .que #page-grade-grading-manage .actions .action .correctness, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .que .correctness, .que #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .correctness, #rubric-rubric.gradingform_rubric .addcriterion .que .correctness, .que #rubric-rubric.gradingform_rubric .addcriterion .correctness, .btn .label, #page-grade-grading-manage .actions .action .label, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .label, #rubric-rubric.gradingform_rubric .addcriterion .label, .btn .badge, #page-grade-grading-manage .actions .action .badge, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .badge, #rubric-rubric.gradingform_rubric .addcriterion .badge, .btn .cul-important, #page-grade-grading-manage .actions .action .cul-important, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-important, #rubric-rubric.gradingform_rubric .addcriterion .cul-important, .btn .cul-generic, #page-grade-grading-manage .actions .action .cul-generic, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-generic, #rubric-rubric.gradingform_rubric .addcriterion .cul-generic {
   position: relative;
   top: -1px; }
 
 a.tag:focus, a.statusok:focus, a.statuswarning:focus, a.statusserious:focus,
-a.statuscritical:focus, .que a.correctness:focus, a.label:focus, a.badge:focus, a.tag:hover, a.statusok:hover, a.statuswarning:hover, a.statusserious:hover,
-a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover {
+a.statuscritical:focus, .que a.correctness:focus, a.label:focus, a.badge:focus, a.cul-important:focus, a.cul-generic:focus, a.tag:hover, a.statusok:hover, a.statuswarning:hover, a.statusserious:hover,
+a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover, a.cul-important:hover, a.cul-generic:hover {
   color: #fff;
   text-decoration: none;
   cursor: pointer; }
@@ -5957,9 +5957,9 @@ a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover {
   #page-admin-report-backups-index .backup-notyetrun[href]:hover {
     background-color: #006b62; }
 
-.tag-info, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release, .assignfeedback_editpdf_widget .label {
+.tag-info, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release, .assignfeedback_editpdf_widget .label, .cul-generic {
   background-color: #98989C; }
-  .tag-info[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:focus, .assignfeedback_editpdf_widget .label[href]:focus, .tag-info[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:hover, .assignfeedback_editpdf_widget .label[href]:hover {
+  .tag-info[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:focus, .assignfeedback_editpdf_widget .label[href]:focus, .cul-generic[href]:focus, .tag-info[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:hover, .assignfeedback_editpdf_widget .label[href]:hover, .cul-generic[href]:hover {
     background-color: #7e7e83; }
 
 .tag-warning, .statuswarning, #page-admin-report-backups-index .backup-warning, #page-admin-index .updateplugin .updatepluginconfirmexternal, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity100 .info.release,
@@ -5972,13 +5972,13 @@ a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover {
 
 .tag-danger, .statusserious,
 .statuscritical, #page-admin-report-backups-index .backup-error,
-#page-admin-report-backups-index .backup-unfinished, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity50 .info.release {
+#page-admin-report-backups-index .backup-unfinished, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity50 .info.release, .cul-important {
   background-color: #C30000; }
   .tag-danger[href]:focus, .statusserious[href]:focus,
   .statuscritical[href]:focus, #page-admin-report-backups-index .backup-error[href]:focus,
-  #page-admin-report-backups-index .backup-unfinished[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity50 .info.release[href]:focus, .tag-danger[href]:hover, .statusserious[href]:hover,
+  #page-admin-report-backups-index .backup-unfinished[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity50 .info.release[href]:focus, .cul-important[href]:focus, .tag-danger[href]:hover, .statusserious[href]:hover,
   .statuscritical[href]:hover, #page-admin-report-backups-index .backup-error[href]:hover,
-  #page-admin-report-backups-index .backup-unfinished[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity50 .info.release[href]:hover {
+  #page-admin-report-backups-index .backup-unfinished[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity50 .info.release[href]:hover, .cul-important[href]:hover {
     background-color: #900000; }
 
 .jumbotron {
@@ -19079,6 +19079,12 @@ a.text-danger:focus, a.notconnected:focus, .que a.validationerror:focus, a.text-
 a.text-light:focus, a.text-light:hover {
   color: #dcdbdb !important; }
 
+.text-medium {
+  color: #E3E3E3 !important; }
+
+a.text-medium:focus, a.text-medium:hover {
+  color: #cac9c9 !important; }
+
 .text-dark {
   color: #333333 !important; }
 
@@ -19138,6 +19144,12 @@ a.bg-danger:focus, a.bg-danger:hover {
 
 a.bg-light:focus, a.bg-light:hover {
   background-color: #dcdbdb !important; }
+
+.bg-medium {
+  background-color: #E3E3E3 !important; }
+
+a.bg-medium:focus, a.bg-medium:hover {
+  background-color: #cac9c9 !important; }
 
 .bg-dark {
   background-color: #333333 !important; }
@@ -20444,6 +20456,12 @@ a.text-danger:focus, a.notconnected:focus, .que a.validationerror:focus, a.text-
 a.text-light:focus, a.text-light:hover {
   color: #dcdbdb !important; }
 
+.text-medium {
+  color: #E3E3E3 !important; }
+
+a.text-medium:focus, a.text-medium:hover {
+  color: #cac9c9 !important; }
+
 .text-dark {
   color: #333333 !important; }
 
@@ -21144,6 +21162,8 @@ form {
       min-height: 100px; }
     body:not(.editing) .courseheader .dash-panel .viewmorelink .viewless-text {
       display: none; }
+  body.editing .courseheader .dash-panel .viewmorelink {
+    display: none; }
   .courseheader .dash-panel.quicklinks-wrap {
     background-color: #8e232d; }
     .courseheader .dash-panel.quicklinks-wrap .dash-link {
@@ -21223,77 +21243,163 @@ form {
 .dash.activitylink svg.icon > g[id^="pix_plugins"] > g g > path {
   fill: #A22833; }
 
-.section .activity {
+.section .content .course-summary:empty {
+  display: none; }
+
+.section .content .mod-indent-outer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .section .content .mod-indent-outer > div:not(.mod-indent) {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-flex-basis: 0%;
+        -ms-flex-preferred-size: 0%;
+            flex-basis: 0%;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    max-width: 100%;
+    width: 100%; }
+
+.section .content span.inplaceeditable {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .section .content span.inplaceeditable .quickeditlink .icon {
+    display: inline-block;
+    height: auto;
+    width: auto;
+    font-size: 1rem;
+    vertical-align: middle; }
+
+.section .content .activity {
   padding: 0; }
-  .editing .section .activity .editing_move {
+  .section .content .activity .actions {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin-left: auto; }
+    .section .content .activity .actions .filler {
+      display: none; }
+  .editing .section .content .activity .editing_move {
     top: 20px;
     -webkit-transform: translateY(-50%);
         -ms-transform: translateY(-50%);
          -o-transform: translateY(-50%);
             transform: translateY(-50%); }
-  .section .activity .activityinstance a:first-of-type,
-  .section .activity .activityinstance div a:first-of-type {
-    display: -webkit-inline-box;
-    display: -webkit-inline-flex;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    -webkit-flex-wrap: nowrap;
-        -ms-flex-wrap: nowrap;
-            flex-wrap: nowrap;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-    text-indent: 0;
-    padding: 0;
-    padding-right: 1rem;
-    background-color: #fff; }
-    .section .activity .activityinstance a:first-of-type img.activityicon, .section .activity .activityinstance a:first-of-type svg.activityicon,
-    .section .activity .activityinstance a:first-of-type svg.activityicon,
-    .section .activity .activityinstance div a:first-of-type img.activityicon,
-    .section .activity .activityinstance div a:first-of-type svg.activityicon,
-    .section .activity .activityinstance div a:first-of-type svg.activityicon {
-      vertical-align: middle;
-      width: 40px;
-      height: 40px;
-      min-width: 40px;
-      padding: 0.5rem;
-      background-color: #A22833;
-      margin-right: 1rem; }
-      .section .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] path, .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
-      .section .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g + path,
-      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
-      .section .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g > path,
-      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
-      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
-      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
-      .section .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
-      .section .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] path,
-      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
-      .section .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g + path,
-      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
-      .section .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g > path,
-      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
-      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
-      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
-      .section .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path {
-        fill: #fff; }
-    .section .activity .activityinstance a:first-of-type .instancename,
-    .section .activity .activityinstance div a:first-of-type .instancename {
-      padding: 0.5rem 0; }
-  .section .activity .activityinstance span.inplaceeditable,
-  .section .activity .activityinstance div span.inplaceeditable {
+  .section .content .activity .activityinstance,
+  .section .content .activity .activityinstance div {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
     -webkit-box-align: center;
     -webkit-align-items: center;
         -ms-flex-align: center;
-            align-items: center; }
-  .section .activity .availabilityinfo,
-  .section .activity .contentafterlink {
+            align-items: center;
+    -webkit-flex-basis: 0%;
+        -ms-flex-preferred-size: 0%;
+            flex-basis: 0%;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    max-width: 100%;
+    width: 100%;
+    padding: 0 1rem 0 0; }
+    .editing .section .content .activity .activityinstance, .editing
+    .section .content .activity .activityinstance div {
+      padding: 0 1rem 0 0; }
+    .section .content .activity .activityinstance a:first-of-type,
+    .section .content .activity .activityinstance div a:first-of-type {
+      display: -webkit-inline-box;
+      display: -webkit-inline-flex;
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      -webkit-flex-wrap: nowrap;
+          -ms-flex-wrap: nowrap;
+              flex-wrap: nowrap;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      text-indent: 0;
+      padding: 0;
+      padding-right: 1rem;
+      background-color: #fff; }
+      .section .content .activity .activityinstance a:first-of-type img.activityicon, .section .content .activity .activityinstance a:first-of-type svg.activityicon,
+      .section .content .activity .activityinstance a:first-of-type svg.activityicon,
+      .section .content .activity .activityinstance div a:first-of-type img.activityicon,
+      .section .content .activity .activityinstance div a:first-of-type svg.activityicon,
+      .section .content .activity .activityinstance div a:first-of-type svg.activityicon {
+        vertical-align: middle;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        padding: 0.5rem;
+        background-color: #A22833;
+        margin-right: 1rem; }
+        .section .content .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] path, .section .content .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
+        .section .content .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g + path,
+        .section .content .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
+        .section .content .activity .activityinstance a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g > path,
+        .section .content .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
+        .section .content .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
+        .section .content .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
+        .section .content .activity .activityinstance a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
+        .section .content .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] path,
+        .section .content .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
+        .section .content .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g + path,
+        .section .content .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
+        .section .content .activity .activityinstance div a:first-of-type img.activityicon > g[id^="pix_plugins"] > g g > path,
+        .section .content .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path,
+        .section .content .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] path,
+        .section .content .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g + path,
+        .section .content .activity .activityinstance div a:first-of-type svg.activityicon > g[id^="pix_plugins"] > g g > path {
+          fill: #fff; }
+      .section .content .activity .activityinstance a:first-of-type .instancename,
+      .section .content .activity .activityinstance div a:first-of-type .instancename {
+        padding: 0.5rem 0; }
+    .section .content .activity .activityinstance .resourcelinkdetails,
+    .section .content .activity .activityinstance .ouwikilmt,
+    .section .content .activity .activityinstance div .resourcelinkdetails,
+    .section .content .activity .activityinstance div .ouwikilmt {
+      margin-left: auto; }
+  .section .content .activity .availabilityinfo,
+  .section .content .activity .contentafterlink {
+    width: 100%;
     margin-left: 0; }
+  .section .content .activity .contentafterlink p {
+    margin: 0 0 0.5rem 0; }
+    .section .content .activity .contentafterlink p:last-of-type {
+      margin-bottom: 0; }
 
 @-webkit-keyframes grow {
   0% {
@@ -21558,9 +21664,13 @@ form {
              -o-animation: .5s grow;
                 animation: .5s grow;
         background-color: #F5F5F5; }
-        #main-region .course-content ul.culcourse > li.section .content .sectionbody .section {
+        #main-region .course-content ul.culcourse > li.section .content .sectionbody .section,
+        #main-region .course-content ul.culcourse > li.section .content .sectionbody .summary {
           margin: 0;
           padding: 1rem; }
+          #main-region .course-content ul.culcourse > li.section .content .sectionbody .section:empty,
+          #main-region .course-content ul.culcourse > li.section .content .sectionbody .summary:empty {
+            display: none; }
       #main-region .course-content ul.culcourse > li.section .content ul li.activity {
         margin-bottom: 0; }
         #main-region .course-content ul.culcourse > li.section .content ul li.activity:last-child {

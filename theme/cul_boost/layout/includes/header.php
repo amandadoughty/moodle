@@ -20,11 +20,11 @@ echo html_writer::start_tag('nav', ['id'=>'top', 'role'=>'header', 'class'=>'nav
 
             if (isloggedin()) {
                 echo html_writer::start_tag('div', ['class'=>'nav-outer-wrap ml-auto']);
-                    echo html_writer::start_tag('div', ['class'=>'nav-wrap d-flex flex-wrap align-items-center']);
+                    echo html_writer::start_tag('div', ['class'=>'nav-wrap d-flex flex-wrap align-items-stretch']);
                         
                         echo $cityrenderer->get_white_logo();
 
-                        echo html_writer::start_tag('div', ['class'=>'nav-inner d-flex flex-wrap align-items-center py-2 ml-auto']);
+                        echo html_writer::start_tag('div', ['class'=>'nav-inner d-flex flex-wrap align-items-stretch ml-auto']);
                             echo $citycore->custom_menu();
                             $search = $OUTPUT->global_search();
                             echo html_writer::tag('div', $search, ['class'=>'global_search d-flex flex-wrap justify-content-end p-0 ml-4']);
