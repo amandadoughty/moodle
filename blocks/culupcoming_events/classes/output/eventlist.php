@@ -203,6 +203,11 @@ class eventlist implements templatable, renderable {
             [$calendar->users, $calendar->groups, $calendar->courses, $calendar->categories]
         );
 
+        if ($calendar->course->id != SITEID) {
+            $courseparam = [];
+            $courseparam[1] = $calendar->course->id;
+        }
+
         $events = \core_calendar\local\api::get_events(
             $tstart,
             $tend,
@@ -334,7 +339,7 @@ class eventlist implements templatable, renderable {
                 $event->img = $this->get_user_img($event->userid);
                 break;
             case 'course':
-                $event->img = $this->get_course_img($event->courseid);
+                $event->img = $this->get_course_img($event->course->id);
                 break;
             case 'site':
             case 'category':
@@ -410,6 +415,8 @@ class eventlist implements templatable, renderable {
      */
     public function get_course_img ($courseid) {
         global $DB;
+
+        $courseimg = '';
 
         if ($course = $DB->get_record('course', ['id' => $courseid])) {
             $coursepic = new course_picture($course);
