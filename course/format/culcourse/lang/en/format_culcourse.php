@@ -224,6 +224,7 @@ $string['addsections'] = 'Add sections';
 $string['collapsed'] = 'collapsed';
 $string['culcourseclosed'] = 'Close all';
 $string['culcourseopened'] = 'Open all';
+$string['currentsection'] = 'Current section';
 $string['editsection'] = 'Edit section';
 $string['editsectionname'] = 'Edit section name';
 $string['expanded'] = 'expanded';

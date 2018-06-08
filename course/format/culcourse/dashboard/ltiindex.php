@@ -22,8 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once("../../../config.php");
-require_once($CFG->dirroot.'/course/format/culcourse/locallib.php');
+require_once("../../../../config.php");
+require_once($CFG->dirroot.'/course/format/culcourse/dashboard/locallib.php');
 require_once($CFG->dirroot.'/mod/lti/locallib.php');
 
 $id = required_param('id', PARAM_INT);   // Course id.
