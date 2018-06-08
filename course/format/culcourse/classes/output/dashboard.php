@@ -506,6 +506,7 @@ class dashboard implements templatable, renderable {
         $modfullnames = [];
         $archetypes = [];
         $activities = [];
+        $ltiactivities = [];
         $sortedactivities = [];
         $sequence = [];
         $deletefromsequence = false;
@@ -548,7 +549,8 @@ class dashboard implements templatable, renderable {
 
         foreach ($modfullnames as $modname => $modfullname) {
             if ($modname == 'lti') {
-                $activities = $this->exttools_modules_display($course, $modinfo);
+                $ltiactivities = $this->exttools_modules_display($course, $modinfo);
+                $activities = array_merge($activities, $ltiactivities);
                 continue;
             }
 
