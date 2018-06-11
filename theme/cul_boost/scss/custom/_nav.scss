@@ -308,16 +308,15 @@
 
 .right-navbar {
     position: relative;
-    z-index: 2;
+    z-index: 11;
     box-shadow: inset 0px 0px 0px 2px $gray-light;
-    transition: transform .2s ease;
+    transition: top .2s ease;
     &:not(.stick) {
         transform: translateY(0) !important;
     }
     &.stick {
         position: fixed;
         top: 0;
-        z-index: 2;
         &.fixed {
             top: 85px;
         }

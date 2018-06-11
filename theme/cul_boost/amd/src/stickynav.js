@@ -26,6 +26,8 @@ define(['jquery', 'core/log'], function($, log) {
                         if (navigation.hasClass('reveal')) {
                             div_top = $('#navbar-anchor').offset().top - navheight;
                             fixed = ' fixed';
+                        } else {
+                            navbar.removeClass('fixed');
                         }
                     }
 

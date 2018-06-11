@@ -13,4 +13,11 @@ form {
             }
         }
     }
+    .form-autocomplete-selection+input.form-control {
+        padding-right: $spacer * 2;
+        min-width: 250px;
+    }
+    .form-autocomplete-downarrow {
+        top: .1rem;
+    }
 }

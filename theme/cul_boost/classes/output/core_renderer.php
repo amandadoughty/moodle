@@ -19,6 +19,7 @@ namespace theme_cul_boost\output;
 defined('MOODLE_INTERNAL') || die;
 
 use coding_exception;
+use core_text;
 use html_writer;
 use tabobject;
 use tabtree;
@@ -103,13 +104,13 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    if ($label == get_string('blockseditoff')
 	            || $label == get_string('turneditingoff')
 	            || $label == get_string('updatemymoodleoff')) {
-	        $label = get_string('on', 'theme_cul_boost');
-	        $options['state'] = 'on';
+	        $label = get_string('off', 'theme_cul_boost');
+	        $options['state'] = 'off';
 	    } else if($label == get_string('blocksediton')
 	            || $label == get_string('turneditingon')
 	            || $label == get_string('updatemymoodleon')) {
-	        $label = get_string('off', 'theme_cul_boost');
-	        $options['state'] = 'off';
+	        $label = get_string('on', 'theme_cul_boost');
+	        $options['state'] = 'on';
 	    }
 
 	    $button = new single_button($url, $label, $method);
@@ -145,7 +146,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 	public function page_heading($tag = 'h2') {
 	    global $COURSE;
-	    $heading = html_writer::tag($tag, $this->page->heading, array('class'=>'pageheading font-weight-light mb-4'));
+	    $heading = html_writer::tag($tag, $this->page->heading, array('class'=>'pageheading pull-left font-weight-light mb-4'));
 	    return $heading;
 	}
 

@@ -133,7 +133,8 @@
                         }
                         .dash-icon {
                             width: 100%;
-                            min-height: $spacer * 3;
+                            min-height: $spacer * 2;
+                            font-size: $font-size-base * 1.75;
                             img,
                             svg {
                                 width: $font-size-base * 2;
@@ -188,6 +189,7 @@ svg.activityicon {
         }
         li.activity {
             padding: 0;
+            margin: $spacer / 2 0;
             >div {
                 padding-right: 0;
             }
@@ -476,12 +478,6 @@ $culcourse-arrow-active-color: #fff;
                                         color: #fff;
                                     }
                                 }
-                                .section-summary-progress {
-                                    color: #fff;
-                                    .activity-count {
-                                        color: #fff;
-                                    }
-                                }
                                 body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .section-summary-progress .activity-count,
                                 body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .section-summary-progress .activity-count {
                                     color: #fff;
@@ -520,13 +516,6 @@ $culcourse-arrow-active-color: #fff;
                                     color: $body-color;
                                 }
                             }
-                            .section-summary-progress {
-                                color: $body-color;
-                                font-size: $small-font-size;
-                                .activity-count {
-                                    color: $body-color;
-                                }
-                            }
                         }
                         .summary {
                             order: 1;
@@ -559,7 +548,11 @@ $culcourse-arrow-active-color: #fff;
                             margin: 0;
                             left: 0;
                             color: #fff;
+                            font-size: $small-font-size;
                             .activity-count {
+                                @extend .tag;
+                                @extend .tag-info;
+                                background-color: darken($brand-info, 10%);
                                 color: #fff;
                             }
                         }

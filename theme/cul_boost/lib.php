@@ -270,8 +270,7 @@ function theme_cul_boost_output_fragment_gradealert($args) {
 
 function theme_cul_boost_get_visible() {
     global $COURSE;
-
-    return 'visible' . $COURSE->visible;
+    return $COURSE->visible;
 }
 
 function theme_cul_boost_get_edituser($page) {

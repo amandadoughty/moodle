@@ -437,7 +437,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
             $class = 'dropdown-item d-flex flex-wrap align-items-center';
 
             if (!$menunode->has_children() && $level == 1) {
-                $class = 'dropdown-item d-flex flex-wrap align-items-center py-3';
+                $class = 'dropdown d-flex flex-wrap align-items-center py-3';
             }
 
             $content = html_writer::start_tag('li', array('id' => $id, 'class'=>$class));

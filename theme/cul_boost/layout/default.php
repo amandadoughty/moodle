@@ -47,6 +47,7 @@ echo $OUTPUT->doctype() ?>
 <div id="page" class="position-relative">
 
     <?php
+
         if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
             $left = html_writer::tag('i', '', ['class'=>'fa fa-angle-double-left p-3', 'data-toggle'=>'popover', 'data-content'=>get_string('showblocks', 'theme_cul_boost'), 'data-placement'=>'left', 'data-trigger'=>'hover']);
             $right = html_writer::tag('i', '', ['class'=>'fa fa-angle-double-right p-3', 'data-toggle'=>'popover', 'data-content'=>get_string('hideblocks', 'theme_cul_boost'), 'data-placement'=>'left', 'data-trigger'=>'hover']);
@@ -58,6 +59,14 @@ echo $OUTPUT->doctype() ?>
     ?>
 
     <div class="container-fluid">
+
+        <?php 
+
+            if ($PAGE->pagelayout == 'course' && $COURSE->visible == 0) {
+                echo html_writer::tag('h1', get_string('modulehidden', 'theme_cul_boost'), ['class'=>'module-hidden p-3 bg-light mb-4 text-center']);
+            }
+
+        ?>
 
         <?php require_once(dirname(__FILE__).'/includes/navbar.php'); ?>
 

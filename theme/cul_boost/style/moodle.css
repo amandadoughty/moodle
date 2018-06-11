@@ -2601,7 +2601,7 @@ textarea {
   #rubric-rubric.gradingform_rubric .dropup > .addcriterion > .caret {
     border-top-color: #000 !important; }
   .tag, .statusok, .statuswarning, .statusserious,
-  .statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, .cul-important, .cul-generic {
+  .statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .cul-generic {
     border: 1px solid #000; }
   .table, table.collection, table.flexible,
   .generaltable {
@@ -5903,7 +5903,7 @@ p.arrow_button input[type="button"],
   font-size: 0.875rem; }
 
 .tag, .statusok, .statuswarning, .statusserious,
-.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, .cul-important, .cul-generic {
+.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .cul-generic {
   display: inline-block;
   padding: 0.25rem 0.4rem;
   font-size: 75%;
@@ -5914,20 +5914,20 @@ p.arrow_button input[type="button"],
   white-space: nowrap;
   vertical-align: baseline; }
   .tag:empty, .statusok:empty, .statuswarning:empty, .statusserious:empty,
-  .statuscritical:empty, .que .correctness:empty, .label:empty, .badge:empty, .cul-important:empty, .cul-generic:empty {
+  .statuscritical:empty, .que .correctness:empty, .label:empty, .badge:empty, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count:empty, .cul-important:empty, .cul-generic:empty {
     display: none; }
 
 .btn .tag, #page-grade-grading-manage .actions .action .tag, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .tag, #rubric-rubric.gradingform_rubric .addcriterion .tag, .btn .statusok, #page-grade-grading-manage .actions .action .statusok, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statusok, #rubric-rubric.gradingform_rubric .addcriterion .statusok, .btn .statuswarning, #page-grade-grading-manage .actions .action .statuswarning, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statuswarning, #rubric-rubric.gradingform_rubric .addcriterion .statuswarning, .btn .statusserious, #page-grade-grading-manage .actions .action .statusserious, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statusserious, #rubric-rubric.gradingform_rubric .addcriterion .statusserious,
 .btn .statuscritical,
 #page-grade-grading-manage .actions .action .statuscritical,
 #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statuscritical,
-#rubric-rubric.gradingform_rubric .addcriterion .statuscritical, .btn .que .correctness, .que .btn .correctness, #page-grade-grading-manage .actions .action .que .correctness, .que #page-grade-grading-manage .actions .action .correctness, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .que .correctness, .que #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .correctness, #rubric-rubric.gradingform_rubric .addcriterion .que .correctness, .que #rubric-rubric.gradingform_rubric .addcriterion .correctness, .btn .label, #page-grade-grading-manage .actions .action .label, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .label, #rubric-rubric.gradingform_rubric .addcriterion .label, .btn .badge, #page-grade-grading-manage .actions .action .badge, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .badge, #rubric-rubric.gradingform_rubric .addcriterion .badge, .btn .cul-important, #page-grade-grading-manage .actions .action .cul-important, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-important, #rubric-rubric.gradingform_rubric .addcriterion .cul-important, .btn .cul-generic, #page-grade-grading-manage .actions .action .cul-generic, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-generic, #rubric-rubric.gradingform_rubric .addcriterion .cul-generic {
+#rubric-rubric.gradingform_rubric .addcriterion .statuscritical, .btn .que .correctness, .que .btn .correctness, #page-grade-grading-manage .actions .action .que .correctness, .que #page-grade-grading-manage .actions .action .correctness, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .que .correctness, .que #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .correctness, #rubric-rubric.gradingform_rubric .addcriterion .que .correctness, .que #rubric-rubric.gradingform_rubric .addcriterion .correctness, .btn .label, #page-grade-grading-manage .actions .action .label, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .label, #rubric-rubric.gradingform_rubric .addcriterion .label, .btn .badge, #page-grade-grading-manage .actions .action .badge, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .badge, #rubric-rubric.gradingform_rubric .addcriterion .badge, .btn #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .btn .activity-count, #page-grade-grading-manage .actions .action #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #page-grade-grading-manage .actions .action .activity-count, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .activity-count, #rubric-rubric.gradingform_rubric .addcriterion #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric .addcriterion .activity-count, .btn .cul-important, #page-grade-grading-manage .actions .action .cul-important, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-important, #rubric-rubric.gradingform_rubric .addcriterion .cul-important, .btn .cul-generic, #page-grade-grading-manage .actions .action .cul-generic, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-generic, #rubric-rubric.gradingform_rubric .addcriterion .cul-generic {
   position: relative;
   top: -1px; }
 
 a.tag:focus, a.statusok:focus, a.statuswarning:focus, a.statusserious:focus,
-a.statuscritical:focus, .que a.correctness:focus, a.label:focus, a.badge:focus, a.cul-important:focus, a.cul-generic:focus, a.tag:hover, a.statusok:hover, a.statuswarning:hover, a.statusserious:hover,
-a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover, a.cul-important:hover, a.cul-generic:hover {
+a.statuscritical:focus, .que a.correctness:focus, a.label:focus, a.badge:focus, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:focus, a.cul-important:focus, a.cul-generic:focus, a.tag:hover, a.statusok:hover, a.statuswarning:hover, a.statusserious:hover,
+a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:hover, a.cul-important:hover, a.cul-generic:hover {
   color: #fff;
   text-decoration: none;
   cursor: pointer; }
@@ -5957,9 +5957,9 @@ a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover, 
   #page-admin-report-backups-index .backup-notyetrun[href]:hover {
     background-color: #006b62; }
 
-.tag-info, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release, .assignfeedback_editpdf_widget .label, .cul-generic {
+.tag-info, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release, .assignfeedback_editpdf_widget .label, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-generic {
   background-color: #98989C; }
-  .tag-info[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:focus, .assignfeedback_editpdf_widget .label[href]:focus, .cul-generic[href]:focus, .tag-info[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:hover, .assignfeedback_editpdf_widget .label[href]:hover, .cul-generic[href]:hover {
+  .tag-info[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:focus, .assignfeedback_editpdf_widget .label[href]:focus, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:focus, .cul-generic[href]:focus, .tag-info[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:hover, .assignfeedback_editpdf_widget .label[href]:hover, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:hover, .cul-generic[href]:hover {
     background-color: #7e7e83; }
 
 .tag-warning, .statuswarning, #page-admin-report-backups-index .backup-warning, #page-admin-index .updateplugin .updatepluginconfirmexternal, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity100 .info.release,
@@ -19175,6 +19175,537 @@ a.bg-white:focus, a.bg-white:hover {
 a.bg-black:focus, a.bg-black:hover {
   background-color: black !important; }
 
+.fp-pathbar .fp-path-folder {
+  -webkit-background-size: auto 10px;
+          background-size: auto 10px;
+  background-position: 0 40%; }
+
+.fp-pathbar .fp-path-folder-name {
+  margin-left: 30px; }
+
+.path-backup .mform .root_setting .icon:first-of-type,
+.path-backup .mform .root_setting .form-buttons .icon:first-of-type,
+.path-backup .mform .root_setting .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .root_setting .buttons .icon:first-of-type,
+.path-backup .mform .root_setting #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .root_setting .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .root_setting form + div .icon:first-of-type,
+.path-backup .mform .root_setting div.backup-section + form .icon:first-of-type,
+.path-backup .mform .root_setting #fgroup_id_buttonar .icon:first-of-type, .path-backup .mform .root_setting .form-group .icon:first-of-type, .path-backup .mform .root_setting .form-buttons .icon:first-of-type, .path-backup .mform .root_setting .path-admin .buttons .icon:first-of-type, .path-admin .path-backup .mform .root_setting .buttons .icon:first-of-type, .path-backup .mform .root_setting #fitem_id_submitbutton .icon:first-of-type, .path-backup .mform .root_setting .fp-content-center form + div .icon:first-of-type, .fp-content-center .path-backup .mform .root_setting form + div .icon:first-of-type, .path-backup .mform .root_setting div.backup-section + form .icon:first-of-type, .path-backup .mform .root_setting #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .root_setting .form-buttons .icon:first-of-type,
+.path-backup .mform .root_setting .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .root_setting .buttons .icon:first-of-type,
+.path-backup .mform .root_setting #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .root_setting .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .root_setting form + div .icon:first-of-type,
+.path-backup .mform .root_setting div.backup-section + form .icon:first-of-type,
+.path-backup .mform .root_setting #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .grouped_settings .icon:first-of-type,
+.path-backup .mform .grouped_settings .form-buttons .icon:first-of-type,
+.path-backup .mform .grouped_settings .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .grouped_settings .buttons .icon:first-of-type,
+.path-backup .mform .grouped_settings #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .grouped_settings .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .grouped_settings form + div .icon:first-of-type,
+.path-backup .mform .grouped_settings div.backup-section + form .icon:first-of-type,
+.path-backup .mform .grouped_settings #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .grouped_settings .form-group .icon:first-of-type,
+.path-backup .mform .grouped_settings .form-buttons .icon:first-of-type,
+.path-backup .mform .grouped_settings .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .grouped_settings .buttons .icon:first-of-type,
+.path-backup .mform .grouped_settings #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .grouped_settings .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform .grouped_settings form + div .icon:first-of-type,
+.path-backup .mform .grouped_settings div.backup-section + form .icon:first-of-type,
+.path-backup .mform .grouped_settings #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .grouped_settings .form-buttons .icon:first-of-type,
+.path-backup .mform .grouped_settings .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .grouped_settings .buttons .icon:first-of-type,
+.path-backup .mform .grouped_settings #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .grouped_settings .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .grouped_settings form + div .icon:first-of-type,
+.path-backup .mform .grouped_settings div.backup-section + form .icon:first-of-type,
+.path-backup .mform .grouped_settings #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .form-group .icon:first-of-type,
+.path-backup .mform .form-buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .icon:first-of-type,
+.path-backup .mform div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .form-group .form-buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .form-buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .form-buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .form-buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .form-buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
+.path-backup .mform .form-group .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .path-admin .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .path-admin .buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .form-group .buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-backup .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .path-admin .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .path-backup .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .form-group .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .form-group form + div .icon:first-of-type,
+.path-backup .mform .form-buttons form + div .icon:first-of-type,
+.path-backup .mform .path-admin .buttons form + div .icon:first-of-type,
+.path-admin .path-backup .mform .buttons form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton form + div .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div form + div .icon:first-of-type,
+.path-backup .mform div.backup-section + form form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar form + div .icon:first-of-type,
+.path-backup .mform .form-group div.backup-section + form .icon:first-of-type,
+.path-backup .mform .form-buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform .path-admin .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .path-backup .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div div.backup-section + form .icon:first-of-type,
+.path-backup .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
+.path-backup .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .path-admin .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .path-backup .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .form-group .form-group .icon:first-of-type,
+.path-backup .mform .form-buttons .form-group .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .form-group .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .form-group .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .form-group .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .form-group .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .form-group .icon:first-of-type,
+.path-backup .mform div.backup-section + form .form-group .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .form-group .icon:first-of-type,
+.path-backup .mform .form-group .form-buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .form-buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .form-buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .form-buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .form-buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
+.path-backup .mform .form-group .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .form-group .buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .form-buttons .buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .fp-content-center form + div .buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .path-admin .buttons .icon:first-of-type,
+.path-admin .fp-content-center .path-backup .mform form + div .buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-backup .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .path-admin .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .path-backup .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .form-group .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform .form-group form + div .icon:first-of-type,
+.path-backup .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform .form-buttons form + div .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform .path-admin .buttons form + div .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .path-backup .mform .buttons form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform #fitem_id_submitbutton form + div .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div form + div .icon:first-of-type,
+.path-backup .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform div.backup-section + form form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform #fgroup_id_buttonar form + div .icon:first-of-type,
+.path-backup .mform .form-group div.backup-section + form .icon:first-of-type,
+.path-backup .mform .form-buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform .path-admin .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .path-backup .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div div.backup-section + form .icon:first-of-type,
+.path-backup .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
+.path-backup .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .path-admin .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .path-backup .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .form-group .form-buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .form-buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .form-buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .form-buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .form-buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
+.path-backup .mform .form-group .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .path-admin .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .path-admin .buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .form-group .buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-backup .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .path-admin .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .path-backup .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .form-group .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .form-group form + div .icon:first-of-type,
+.path-backup .mform .form-buttons form + div .icon:first-of-type,
+.path-backup .mform .path-admin .buttons form + div .icon:first-of-type,
+.path-admin .path-backup .mform .buttons form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton form + div .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div form + div .icon:first-of-type,
+.path-backup .mform div.backup-section + form form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar form + div .icon:first-of-type,
+.path-backup .mform .form-group div.backup-section + form .icon:first-of-type,
+.path-backup .mform .form-buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform .path-admin .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .path-backup .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div div.backup-section + form .icon:first-of-type,
+.path-backup .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
+.path-backup .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .path-admin .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .path-backup .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .root_setting .icon:first-of-type,
+.path-admin .mform .root_setting .form-buttons .icon:first-of-type,
+.path-admin .mform .root_setting .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .root_setting .buttons .icon:first-of-type,
+.path-admin .mform .root_setting #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .root_setting .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .root_setting form + div .icon:first-of-type,
+.path-admin .mform .root_setting div.backup-section + form .icon:first-of-type,
+.path-admin .mform .root_setting #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .root_setting .form-group .icon:first-of-type,
+.path-admin .mform .root_setting .form-buttons .icon:first-of-type,
+.path-admin .mform .root_setting .buttons .icon:first-of-type,
+.path-admin .mform .root_setting #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .root_setting .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform .root_setting form + div .icon:first-of-type,
+.path-admin .mform .root_setting div.backup-section + form .icon:first-of-type,
+.path-admin .mform .root_setting #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .root_setting .form-buttons .icon:first-of-type,
+.path-admin .mform .root_setting .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .root_setting .buttons .icon:first-of-type,
+.path-admin .mform .root_setting #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .root_setting .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .root_setting form + div .icon:first-of-type,
+.path-admin .mform .root_setting div.backup-section + form .icon:first-of-type,
+.path-admin .mform .root_setting #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .grouped_settings .icon:first-of-type,
+.path-admin .mform .grouped_settings .form-buttons .icon:first-of-type,
+.path-admin .mform .grouped_settings .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .grouped_settings .buttons .icon:first-of-type,
+.path-admin .mform .grouped_settings #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .grouped_settings .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .grouped_settings form + div .icon:first-of-type,
+.path-admin .mform .grouped_settings div.backup-section + form .icon:first-of-type,
+.path-admin .mform .grouped_settings #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .grouped_settings .form-group .icon:first-of-type,
+.path-admin .mform .grouped_settings .form-buttons .icon:first-of-type,
+.path-admin .mform .grouped_settings .buttons .icon:first-of-type,
+.path-admin .mform .grouped_settings #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .grouped_settings .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform .grouped_settings form + div .icon:first-of-type,
+.path-admin .mform .grouped_settings div.backup-section + form .icon:first-of-type,
+.path-admin .mform .grouped_settings #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .grouped_settings .form-buttons .icon:first-of-type,
+.path-admin .mform .grouped_settings .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .grouped_settings .buttons .icon:first-of-type,
+.path-admin .mform .grouped_settings #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .grouped_settings .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .grouped_settings form + div .icon:first-of-type,
+.path-admin .mform .grouped_settings div.backup-section + form .icon:first-of-type,
+.path-admin .mform .grouped_settings #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .form-group .icon:first-of-type,
+.path-admin .mform .form-buttons .icon:first-of-type,
+.path-admin .mform .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .icon:first-of-type,
+.path-admin .mform div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .form-group .form-buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .form-buttons .icon:first-of-type,
+.path-admin .mform .buttons .form-buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .form-buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
+.path-admin .mform .form-group .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .path-admin .buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .form-group .buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .buttons .icon:first-of-type,
+.path-admin .mform .buttons .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-admin .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .form-group .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .form-group form + div .icon:first-of-type,
+.path-admin .mform .form-buttons form + div .icon:first-of-type,
+.path-admin .mform .buttons form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton form + div .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div form + div .icon:first-of-type,
+.path-admin .mform div.backup-section + form form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar form + div .icon:first-of-type,
+.path-admin .mform .form-group div.backup-section + form .icon:first-of-type,
+.path-admin .mform .form-buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div div.backup-section + form .icon:first-of-type,
+.path-admin .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
+.path-admin .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .form-group .form-group .icon:first-of-type,
+.path-admin .mform .form-buttons .form-group .icon:first-of-type,
+.path-admin .mform .buttons .form-group .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .form-group .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .form-group .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .form-group .icon:first-of-type,
+.path-admin .mform div.backup-section + form .form-group .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .form-group .icon:first-of-type,
+.path-admin .mform .form-group .form-buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .form-buttons .icon:first-of-type,
+.path-admin .mform .buttons .form-buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .form-buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
+.path-admin .mform .form-group .buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .buttons .icon:first-of-type,
+.path-admin .mform .buttons .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-admin .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .form-group .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform .form-group form + div .icon:first-of-type,
+.path-admin .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform .form-buttons form + div .icon:first-of-type,
+.path-admin .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform .buttons form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform #fitem_id_submitbutton form + div .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div form + div .icon:first-of-type,
+.path-admin .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform div.backup-section + form form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform #fgroup_id_buttonar form + div .icon:first-of-type,
+.path-admin .mform .form-group div.backup-section + form .icon:first-of-type,
+.path-admin .mform .form-buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div div.backup-section + form .icon:first-of-type,
+.path-admin .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
+.path-admin .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .form-group .form-buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .form-buttons .icon:first-of-type,
+.path-admin .mform .buttons .form-buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .form-buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
+.path-admin .mform .form-group .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .path-admin .buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .form-group .buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .buttons .icon:first-of-type,
+.path-admin .mform .buttons .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-admin .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .form-group .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .form-group form + div .icon:first-of-type,
+.path-admin .mform .form-buttons form + div .icon:first-of-type,
+.path-admin .mform .buttons form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton form + div .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div form + div .icon:first-of-type,
+.path-admin .mform div.backup-section + form form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar form + div .icon:first-of-type,
+.path-admin .mform .form-group div.backup-section + form .icon:first-of-type,
+.path-admin .mform .form-buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div div.backup-section + form .icon:first-of-type,
+.path-admin .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
+.path-admin .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type {
+  margin-left: 0.25rem; }
+
 .block {
   margin-bottom: 3rem; }
   .block:last-of-type {
@@ -19332,6 +19863,11 @@ a.bg-black:focus, a.bg-black:hover {
                   display: block;
                   -o-object-fit: cover;
                      object-fit: cover; }
+                .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .avatar a .course-image {
+                  background-repeat: no-repeat;
+                  -webkit-background-size: cover;
+                          background-size: cover;
+                  background-position: 50% 50%; }
               .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .avatar .activityicon {
                 display: inline-block;
                 text-align: center;
@@ -19340,19 +19876,30 @@ a.bg-black:focus, a.bg-black:hover {
                 right: 100%;
                 width: 24px;
                 height: 24px;
-                background-color: #8e232d;
+                line-height: 24px;
+                background-color: #fff;
                 border-radius: 50%;
                 -webkit-transform: translate(50%, -50%);
                     -ms-transform: translate(50%, -50%);
                      -o-transform: translate(50%, -50%);
-                        transform: translate(50%, -50%); }
+                        transform: translate(50%, -50%);
+                color: #A22833; }
                 .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .avatar .activityicon i {
                   margin: 0;
                   line-height: 24px;
                   font-size: 0.75rem;
                   width: 100%;
-                  height: 100%;
-                  color: #fff; }
+                  height: 100%; }
+                .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .avatar .activityicon img {
+                  padding-right: 0;
+                  position: relative;
+                  top: auto;
+                  left: auto;
+                  right: auto;
+                  bottom: auto;
+                  max-width: 100% !important;
+                  width: 12px;
+                  height: 12px; }
             .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap {
               text-align: left;
               color: #fff; }
@@ -19360,12 +19907,16 @@ a.bg-black:focus, a.bg-black:hover {
                 font-size: 0.875rem;
                 width: 100%;
                 display: block; }
-              .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a {
-                color: #fff; }
-                .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a[data-type="event"] {
+              .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a,
+              .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .dimmed_text {
+                color: #fff !important; }
+                .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a[data-type="event"],
+                .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .dimmed_text[data-type="event"] {
                   font-weight: bold;
                   display: block; }
-                  .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a[data-type="event"]:hover, .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a[data-type="event"]:focus {
+                  .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a[data-type="event"]:hover, .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a[data-type="event"]:focus,
+                  .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .dimmed_text[data-type="event"]:hover,
+                  .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .dimmed_text[data-type="event"]:focus {
                     text-decoration: underline; }
               .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .meta .timeuntil {
                 width: auto;
@@ -20744,14 +21295,12 @@ a.dimmed_text:visited,
 
 .right-navbar {
   position: relative;
-  z-index: 2;
+  z-index: 11;
   -webkit-box-shadow: inset 0px 0px 0px 2px #98989C;
           box-shadow: inset 0px 0px 0px 2px #98989C;
-  -webkit-transition: -webkit-transform .2s ease;
-  transition: -webkit-transform .2s ease;
-  -o-transition: -o-transform .2s ease;
-  transition: transform .2s ease;
-  transition: transform .2s ease, -webkit-transform .2s ease, -o-transform .2s ease; }
+  -webkit-transition: top .2s ease;
+  -o-transition: top .2s ease;
+  transition: top .2s ease; }
   .right-navbar:not(.stick) {
     -webkit-transform: translateY(0) !important;
         -ms-transform: translateY(0) !important;
@@ -20759,8 +21308,7 @@ a.dimmed_text:visited,
             transform: translateY(0) !important; }
   .right-navbar.stick {
     position: fixed;
-    top: 0;
-    z-index: 2; }
+    top: 0; }
     .right-navbar.stick.fixed {
       top: 85px; }
   .right-navbar .breadcrumb-button:empty + .settings-block-wrap {
@@ -20838,6 +21386,12 @@ a.dimmed_text:visited,
       color: #d14552;
       border-bottom: 1px solid; }
 
+.btn > a, #page-grade-grading-manage .actions .action > a, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input > a, #rubric-rubric.gradingform_rubric .addcriterion > a {
+  color:   #fff; }
+
+.path-grade-report-grader .gradeparent {
+  overflow: auto; }
+
 form {
   margin-bottom: 0; }
   form .formsettingheading {
@@ -20847,6 +21401,11 @@ form {
     line-height: 1.3;
     font-size: 1.75rem;
     width: auto; }
+  form .form-autocomplete-selection + input.form-control {
+    padding-right: 2rem;
+    min-width: 250px; }
+  form .form-autocomplete-downarrow {
+    top: .1rem; }
 
 /* Slider */
 .slick-slider {
@@ -21212,7 +21771,8 @@ form {
             margin: 0; }
         .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon {
           width: 100%;
-          min-height: 3rem; }
+          min-height: 2rem;
+          font-size: 1.75rem; }
           .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img,
           .courseheader .dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg {
             width: 2rem;
@@ -21274,7 +21834,8 @@ form {
     vertical-align: middle; }
 
 .section .content li.activity {
-  padding: 0; }
+  padding: 0;
+  margin: 0.5rem 0; }
   .section .content li.activity > div {
     padding-right: 0; }
   .section .content li.activity .actions {
@@ -21574,10 +22135,6 @@ form {
                 color: #fff; }
               #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .section-summary-activities .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .section-summary-activities .activity-count {
                 color: #fff; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .section-summary-progress, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .section-summary-progress {
-                color: #fff; }
-                #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .section-summary-progress .activity-count {
-                  color: #fff; }
               #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .section-summary-progress .activity-count,
               #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .section-summary-progress .activity-count,
               #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .section-summary-progress .activity-count {
@@ -21607,11 +22164,6 @@ form {
                   text-overflow: ellipsis; }
             #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .section-summary-activities .activity-count {
               color: #3C3C3C; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .section-summary-progress {
-              color: #3C3C3C;
-              font-size: 0.8rem; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .section-summary-progress .activity-count {
-                color: #3C3C3C; }
           #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .summary {
             -webkit-box-ordinal-group: 2;
             -webkit-order: 1;
@@ -21640,8 +22192,10 @@ form {
             padding: 0;
             margin: 0;
             left: 0;
-            color: #fff; }
+            color: #fff;
+            font-size: 0.8rem; }
             #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count {
+              background-color: #7e7e83;
               color: #fff; }
           #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section_availability {
             margin: 0 0 0 auto;
@@ -21738,8 +22292,7 @@ form {
 .path-mod-assign #region-main,
 .path-mod-assign #page-content,
 .path-mod-assign #page {
-  min-height: 100vh;
-  height: 100vh; }
+  min-height: 100vh; }
 
 .path-mod-assign [data-region="user-info"] .img-rounded {
   width: 40px; }
@@ -21792,6 +22345,32 @@ form {
 .icon .icon {
   margin-top: -0.25rem; }
 
+.fa-stack {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
+  .fa-stack .fa-stack-1x,
+  .fa-stack .fa-stack-2x {
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+         -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    line-height: 1.1; }
+
 /* 
  * Global overrides to standard HTML elements
  * Needed to retain consistency across theme
@@ -21822,7 +22401,6 @@ body {
 
 #page {
   margin-top: 0;
-  min-height: 100vh;
   position: relative; }
 
 .container-fluid {

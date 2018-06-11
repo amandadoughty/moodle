@@ -31,7 +31,7 @@ require_once($CFG->dirroot . '/mod/assign/renderer.php');
  * @package theme_cul_boost
  */
 class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
-   
+
     /**
      * Render a course index summary
      *
