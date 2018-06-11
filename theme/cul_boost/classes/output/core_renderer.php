@@ -495,12 +495,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 		if ($favourites && in_array($COURSE->id, $favourites)) {
 		    $action = 'remove';
+		    $class = 'favourited';
+		    $id = 'theme-cul_boost-removefromfavourites';
 		    $actionstring = 'favouriteremove';
-		    $icon = html_writer::tag('i', '', ['class'=>'fa fa-star p-3', 'data-toggle'=>'popover', 'data-content'=>get_string($actionstring, 'theme_cul_boost'), 'data-placement'=>'left', 'data-trigger'=>'hover']);
 		} else {
 		    $action = 'add';
+		    $class = '';
+		    $id = 'theme-cul_boost-addtofavourites';
 		    $actionstring = 'favouriteadd';
-		    $icon = html_writer::tag('i', '', ['class'=>'fa fa-star-o p-3', 'data-toggle'=>'popover', 'data-content'=>get_string($actionstring, 'theme_cul_boost'), 'data-placement'=>'left', 'data-trigger'=>'hover']);
 		}
 
 		$favouriteurl = new moodle_url('/theme/cul_boost/favourite_post.php', array(
@@ -509,9 +511,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		    'sesskey' => sesskey()
 		));
 
-		$favouritetxt = html_writer::tag('div', $icon, ['class'=>'favourites-icon d-flex flex-wrap align-items-center justify-content-center']);
+		$favouritetxt = get_string($actionstring, 'theme_cul_boost');
 		
-		$content = html_writer::link($favouriteurl, $favouritetxt, ['class'=>'favourite-btn fixed-btn d-flex flex-wrap align-items-center justify-content-center bg-dark h4 m-0 text-white']);
+		$content = html_writer::link($favouriteurl, '', ['class'=>'text-white p-3 '.$class, 'data-toggle'=>'popover', 'data-content'=>$favouritetxt, 'data-placement'=>'left', 'data-trigger'=>'hover']);
+
+		$content = html_writer::tag('div', $content, ['id'=>$id, 'class'=>'favourite-btn fixed-btn d-flex flex-wrap align-items-center justify-content-center bg-dark h4 m-0 text-white']);
 
 		return $content;
 	} 

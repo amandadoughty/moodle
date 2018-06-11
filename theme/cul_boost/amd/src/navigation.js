@@ -12,6 +12,7 @@ define(['jquery', 'core/log'], function($, log) {
 
                 var anchor = $('#navigation-anchor');
                 var mainnav = $('.navbar');
+                var rightnav = $('.right-navbar').outerHeight();
                 var bottom = mainnav.outerHeight();
                 var position = $(window).scrollTop();
 
@@ -21,17 +22,17 @@ define(['jquery', 'core/log'], function($, log) {
                     var window_top = $(window).scrollTop();
                     var anchorpos = anchor.offset().top;
                     var mainnavpos = mainnav.offset().top + bottom;
-                    var reveal = mainnav.offset().top + bottom + 100;
+                    var reveal = mainnav.offset().top + bottom + rightnav;
                     var anchorheight = navigation.outerHeight();
 
                     if (window_top > position) {
                         var anchorpos = anchor.offset().top;
                         var mainnavpos = mainnav.offset().top + bottom;
-                        var reveal = mainnav.offset().top + bottom + 100;
+                        var reveal = mainnav.offset().top + bottom + rightnav;
                     } else {
                         var anchorpos = anchor.offset().top + anchor.outerHeight();
                         var mainnavpos = mainnav.offset().top + bottom;
-                        var reveal = mainnav.offset().top + bottom + 100;
+                        var reveal = mainnav.offset().top + bottom + rightnav;
                     }
 
                     position = window_top;
@@ -52,10 +53,8 @@ define(['jquery', 'core/log'], function($, log) {
 
                     if (window_top > reveal) {
                         navigation.addClass('reveal');
-                        $('.right-navbar').css('transform', 'translateY(' + anchorheight + 'px)');
                     } else {
                         navigation.removeClass('reveal');
-                        $('.right-navbar').css('transform', 'translateY(0)');
                     }
 
                 }

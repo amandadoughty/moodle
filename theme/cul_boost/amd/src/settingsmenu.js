@@ -15,7 +15,7 @@ define(['jquery', 'core/log'], function($, log) {
                 if (scrollto != true) {
                     $('html, body').animate({
                         scrollTop: settingsblock.offset().top
-                    }, 0);
+                    }, 500);
                 }
             });
 
@@ -44,6 +44,16 @@ define(['jquery', 'core/log'], function($, log) {
                 var width = blocktree.outerWidth();
                 var sibling = branch.siblings('ul');
 
+                // Increase all branch list height to the tallest
+                function maxheight(element) {
+                    var maxheight = 0;
+                    element.each(function() {
+                        maxheight = ($(this).outerHeight() > maxheight ? $(this).height() : maxheight);
+                    });
+                    element.height(maxheight);
+                    blocktree.height(maxheight);
+                }
+
                 // Events that create the horizontal navigation
                 // by targeting the aria attributes
                 function closenav(e) {
@@ -68,15 +78,6 @@ define(['jquery', 'core/log'], function($, log) {
                     }
                 }
 
-                // Increase all branch list height to the tallest
-                function maxheight(element) {
-                    var maxheight = 0;
-                    element.each(function() {
-                        maxheight = ($(this).height() > maxheight ? $(this).height() : maxheight);
-                    });
-                    element.height(maxheight);
-                }
-
                 // Click branch to open submenu and scroll to the top
                 branch.on('click', function() {
                     closenav($(this));
@@ -88,8 +89,6 @@ define(['jquery', 'core/log'], function($, log) {
 
                 // Click the settings button to reset navigation tree
                 $('a.trigger').on('click', function() {
-                    closenav(branch);
-                    blocktree.css('width', width);
                     blocktree.animate({
                         scrollTop: 0
                     }, 0);

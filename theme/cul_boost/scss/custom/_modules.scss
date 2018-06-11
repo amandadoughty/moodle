@@ -1,0 +1,34 @@
+.path-mod-assign {
+    div[role="main"],
+    #region-main,
+    #page-content,
+    #page {
+        min-height: 100vh;
+        height: 100vh;
+    }
+    [data-region="user-info"] {
+        .img-rounded {
+            width: 40px;
+        }
+    }
+    [data-region="grade-panel"] {
+        .mform {
+            .fitem {
+                &.has-popout {
+                    .col-md-3 {
+                        width: 100%;
+                        flex: 0 0 100%;
+                        max-width: 100%;
+                    }
+                    .felement {
+                        flex: 0 0 100%;
+                        max-width: 100%;
+                    }
+                }
+            }
+        }
+    }
+    [data-region="grade-actions"] {
+        padding: .4rem;
+    }
+}

@@ -1,5 +1,8 @@
 // Fixed missing icon for setttings menu
 [class^="icon fa fa-fw fa-fw navicon"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     &:before {
         content: "\f0c8";
         font-size: .6rem;

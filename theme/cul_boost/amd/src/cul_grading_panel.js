@@ -95,7 +95,6 @@ define(['jquery', 'core/yui', 'core/notification', 'core/templates', 'core/fragm
      * @method registerMoreEventListeners
      */
     GradingPanel.prototype.registerMoreEventListeners = function() {
-        window.console('ere');
         var docElement = $(document);
         docElement.on('finish-loading-user', this._gradeHiddenAlert.bind(this));
     };

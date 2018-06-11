@@ -2,6 +2,10 @@
 
 $cityrenderer = $PAGE->get_renderer('theme_cul_boost', 'city_menu');
 $citycore = $PAGE->get_renderer('theme_cul_boost', 'city_core');
+$visible = theme_cul_boost_get_visible();
+$edituser = theme_cul_boost_get_edituser($PAGE);
+theme_cul_boost_initialise_quizreview($PAGE);
+theme_cul_boost_initialise_favourites($PAGE);
 
 // Block region setup
 $hassidepost = $PAGE->blocks->region_has_content('side-post', $OUTPUT);

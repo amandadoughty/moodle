@@ -5,6 +5,6 @@
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="pix_plugins/mod/scorm/pix/popdown" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M9,-1.77635684e-15 L9,1.5 L15.45,1.5 L6.225,10.725 L7.275,11.775 L16.5,2.55 L16.5,8.925 L18,8.925 L18,-1.77635684e-15 L9,-1.77635684e-15 Z M13.5,16.5 L1.5,16.5 L1.5,4.5 L9,4.5 L10.5,3 L1.77635684e-15,3 L1.77635684e-15,18 L15,18 L15,7.5 L13.5,9 L13.5,16.5 Z" id="Shape" fill="#A22833" fill-rule="nonzero" transform="translate(9.000000, 9.000000) rotate(-180.000000) translate(-9.000000, -9.000000) "></path>
+        <path d="M9,0 L9,1.5 L15.45,1.5 L6.225,10.725 L7.275,11.775 L16.5,2.55 L16.5,8.925 L18,8.925 L18,0 L9,0 Z M13.5,16.5 L1.5,16.5 L1.5,4.5 L9,4.5 L10.5,3 L0,3 L0,18 L15,18 L15,7.5 L13.5,9 L13.5,16.5 Z" id="Shape" fill="#A22833" fill-rule="nonzero" transform="translate(9.000000, 9.000000) rotate(-180.000000) translate(-9.000000, -9.000000) "></path>
     </g>
 </svg>

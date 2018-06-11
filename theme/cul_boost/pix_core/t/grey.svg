@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
     <title>pix_core/t/grey</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="pix_core/t/grey" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="circle_background"></g>
-        <path d="M23.9643035,14.517847 C23.9643035,13.9559044 23.5083878,13.4999887 22.9464452,13.4999887 L10.0535726,13.4999887 C9.49163001,13.4999887 9.03571429,13.9559044 9.03571429,14.517847 L9.03571429,16.5535637 C9.03571429,17.1155064 9.49163001,17.5714221 10.0535726,17.5714221 L22.9464452,17.5714221 C23.5083878,17.5714221 23.9643035,17.1155064 23.9643035,16.5535637 L23.9643035,14.517847 Z" id="grey" fill="#A22833"></path>
+        <g id="circle_background" transform="translate(-6.000000, -6.000000)"></g>
+        <path d="M17.4642946,8.98214164 C17.4642946,8.42019901 17.0083789,7.96428329 16.4464363,7.96428329 L3.55356374,7.96428329 C2.99162111,7.96428329 2.53570539,8.42019901 2.53570539,8.98214164 L2.53570539,11.0178584 C2.53570539,11.579801 2.99162111,12.0357167 3.55356374,12.0357167 L16.4464363,12.0357167 C17.0083789,12.0357167 17.4642946,11.579801 17.4642946,11.0178584 L17.4642946,8.98214164 Z" id="grey" fill="#A22833"></path>
     </g>
 </svg>

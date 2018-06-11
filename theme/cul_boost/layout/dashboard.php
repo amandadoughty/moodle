@@ -60,7 +60,7 @@ echo $OUTPUT->doctype() ?>
     <div class="container-fluid">
         <div id="page-content" class="row justify-content-center">
             
-            <section id="main-region" class="<?php echo $regions['content']; ?>">
+            <section id="region-main" class="<?php echo $regions['content']; ?>">
                 <?php echo $OUTPUT->main_content(); ?>
             </section>
 

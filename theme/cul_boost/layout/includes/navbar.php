@@ -18,7 +18,7 @@ if (!isset($PAGE->layout_options['nonavbar']) || $PAGE->layout_options['nonavbar
     $settingsblock = html_writer::tag('div', $settingsblock, ['class'=>'settings-block-wrap']);
 
     if ($PAGE->user_is_editing() || $PAGE->blocks->region_has_content($navsettings, $OUTPUT)) {
-        $rightnavbar = html_writer::tag('div', $rightnavbar.$settingsblock, ['class'=>'right-navbar d-flex flex-wrap align-items-start bg-gray-500 p-3']);
+        $rightnavbar = html_writer::tag('div', $rightnavbar.$settingsblock, ['class'=>'right-navbar d-flex flex-wrap align-items-center bg-gray-500 p-3']);
         $rightnavbar = html_writer::tag('div', $rightnavbar, ['class'=>'right-navbar-wrap']);
     }
 

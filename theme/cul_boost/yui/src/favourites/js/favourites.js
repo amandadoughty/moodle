@@ -22,7 +22,7 @@ M.theme_cul_boost.favourites =  {
                             favourites.remove();
                         }
 
-                        Y.one('li#theme-cul_boost-mymoodle').insert(newnode, 'after');
+                        Y.one('.navbar .nav-wrap .nav:nth-of-type(2)').append(newnode);
                     }
                 }
             });

@@ -235,7 +235,7 @@ $headings-color:         $brand-primary;
 $lead-font-size:   1.25rem;
 $lead-font-weight: 300;
 
-$small-font-size: 80%;
+$small-font-size: .8rem;
 
 $text-muted: $gray-light;
 
@@ -477,7 +477,7 @@ $dropdown-min-width:             160px;
 $dropdown-padding-y:             5px;
 $dropdown-margin-top:            2px;
 $dropdown-bg:                    #fff;
-$dropdown-border-color:          rgba(0,0,0,.15);
+$dropdown-border-color:          $gray-lighter;
 $dropdown-border-width:          $border-width;
 $dropdown-divider-bg:            #e5e5e5;
 $dropdown-box-shadow:            0 6px 12px rgba(0,0,0,.175);

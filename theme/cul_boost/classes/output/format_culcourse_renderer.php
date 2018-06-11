@@ -123,7 +123,7 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
 	                    
 	                    $class = '';
 	                    if (!$this->page->user_is_editing() && !empty($course->summary)) {
-	                    	$class = 'col-md-4';
+	                    	$class = 'col-md-5';
 	                    }
 
 	                    $sectioncm = $this->courserenderer->course_section_cm_list($course, $thissection, 0);

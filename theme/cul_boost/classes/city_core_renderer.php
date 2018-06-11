@@ -326,28 +326,6 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                 }
             }
 
-            // Add Favourite url
-            $favourites = null;
-
-            if (!is_null($favourites = get_user_preferences('culcourse_listing_course_favourites'))) {
-                $favourites = unserialize($favourites);
-            }
-
-            if ($favourites && in_array($COURSE->id, $favourites)) {
-                $action = 'remove';
-                $actionstring = 'favouriteremove';
-            } else {
-                $action = 'add';
-                $actionstring = 'favouriteadd';
-            }
-
-            $favouriteurl = new moodle_url('/theme/cul_boost/favourite_post.php', array(
-                'action' => $action,
-                'cid' => $COURSE->id,
-                'sesskey' => sesskey()
-            ));
-            $favouritetxt = get_string($actionstring, 'theme_cul_boost');
-            $currentcoursenav->add($favouritetxt, $favouriteurl);
             $coursemenutree = $this->topmenu_tree($currentcoursenav, get_string('coursemenu', 'theme_cul_boost'));
             $coursemenu = new custom_menu($coursemenutree, current_language());
             return $coursemenu;
@@ -395,7 +373,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
      * @param custom_menu $menu
      * @return string $content
      */
-    protected function render_custom_menu(custom_menu $menu, $classes = 'nav nav d-flex flex-wrap align-items-stretch') {
+    protected function render_custom_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch') {
         global $COURSE, $PAGE, $CFG, $USER;
 
         $content = '';
@@ -547,16 +525,6 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
 
             return html_writer::tag('li', $link);
         }
-    }
-
-    public function content_zoom() {
-        $iconzoom = html_writer::tag('id', '', array('class' => 'icon-fullscreen'));
-        $zoomin = html_writer::span($iconzoom . ' ' . get_string('fullscreen', 'theme_cul_boost'), 'zoomin');
-        $zoomout = html_writer::span($iconzoom . ' ' . get_string('closefullscreen', 'theme_cul_boost'), 'zoomout');
-        $link = html_writer::link('',  $zoomin . $zoomout,
-            array('class' => 'moodlezoom'));
-        $content = html_writer::tag('div', $link, array('class' => 'zoombar'));
-        return $content;
     }
 
     /**

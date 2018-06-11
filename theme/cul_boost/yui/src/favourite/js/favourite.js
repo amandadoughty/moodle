@@ -39,9 +39,9 @@ M.theme_cul_boost.favourite =  {
                     data = Y.JSON.parse(e.responseText);
                     var link = this.editlink.one('a');
                     var newurl = url + '?' + querystring.replace(data.action, data.newaction);
+                    link.setAttribute('data-content', data.text);
+                    link.toggleClass('favourited');
                     link.set('href', newurl);
-                    link.set('innerHTML', data.text);
-                    link.set('title', data.text);
                 },
                 end: function() {
                     Y.fire('culcourse-listing:update-favourites');

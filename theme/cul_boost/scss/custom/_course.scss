@@ -45,7 +45,6 @@
             .viewmorelink {
                 display: none;
                 cursor: pointer;
-
                 &:hover,
                 &:focus {
                     .viewmore-inner {
@@ -68,10 +67,10 @@
         &.quicklinks-wrap {
             background-color: darken($brand-primary, 5%);
             .dash-link {
-                background-color: $brand-primary;
+                background-color: #fff;
                 &:hover,
                 &:focus {
-                    background-color: #fff;
+                    background-color: darken(#fff, 5%);
                 }
             }
         }
@@ -81,21 +80,10 @@
                 ul.links {
                     .dash {
                         .dash-link {
-                            background-color: darken($brand-primary, 5%);
+                            background-color: #fff;
                             &:hover,
                             &:focus {
-                                background-color: #fff;
-                                .dash-icon {
-                                    svg {
-                                        >g[id^="pix_plugins"] {
-                                            path,
-                                            >g g+path,
-                                            >g g>path {
-                                                fill: $brand-primary;
-                                            }
-                                        }
-                                    }
-                                }
+                                background-color: darken(#fff, 5%);
                             }
                         }
                     }
@@ -135,18 +123,13 @@
                             position: absolute;
                             top: $spacer / 4;
                             right: $spacer / 4;
-                            color: #fff;
                             padding: $spacer / 2;
                             margin: 0;
-                            background-color: rgba(#fff, 0.1);
                             .icon {
                                 &:first-of-type {
                                     margin: 0;
                                 }
                             }
-                        }
-                        a {
-                            color: #fff;
                         }
                         .dash-icon {
                             width: 100%;
@@ -155,13 +138,6 @@
                             svg {
                                 width: $font-size-base * 2;
                                 height: auto;
-                                >g[id^="pix_plugins"] {
-                                    path,
-                                    >g g+path,
-                                    >g g>path {
-                                        fill: #fff;
-                                    }
-                                }
                             }
                         }
                     }
@@ -170,17 +146,6 @@
                     }
                 }
             }
-        }
-    }
-}
-
-.activity svg.activityicon,
-.dash.activitylink svg.icon {
-    >g[id^="pix_plugins"] {
-        path,
-        >g g+path,
-        >g g>path {
-            fill: $brand-primary;
         }
     }
 }
@@ -221,13 +186,17 @@ svg.activityicon {
                 vertical-align: middle;
             }
         }
-        .activity {
+        li.activity {
             padding: 0;
+            >div {
+                padding-right: 0;
+            }
             .actions {
                 position: relative;
                 right: auto;
                 top: auto;
                 margin-left: auto;
+                padding-left: $spacer;
                 .filler {
                     display: none;
                 }
@@ -247,7 +216,7 @@ svg.activityicon {
                 flex-grow: 1;
                 max-width: 100%;
                 width: 100%;
-                padding: 0 $spacer 0 0;
+                padding: 0;
                 .editing & {
                     padding: 0 $spacer 0 0;
                 }
@@ -257,49 +226,45 @@ svg.activityicon {
                         flex-wrap: nowrap;
                         align-items: center;
                         text-indent: 0;
-                        padding: 0;
-                        padding-right: $spacer;
+                        padding: 0 0 0 $spacer / 2;
                         background-color: #fff;
+                        box-shadow: inset 0px 0px 0px 2px $brand-primary;
                         img,
                         svg {
                             &.activityicon {
+                                width: 20px;
+                                height: auto;
+                                position: relative;
                                 vertical-align: middle;
-                                width: 40px;
-                                height: 40px;
-                                min-width: 40px;
-                                padding: $spacer / 2;
-                                background-color: $brand-primary;
-                                margin-right: $spacer;
-                                >g[id^="pix_plugins"] {
-                                    path,
-                                    >g g+path,
-                                    >g g>path {
-                                        fill: #fff;
-                                    }
-                                }
+                                margin-right: $spacer / 2;
                             }
                         }
-                        .instancename {
-                            padding: $spacer / 2 0;
+                    }
+                    span.instancename {
+                        background-color: $brand-primary;
+                        padding: $spacer / 2 $spacer;
+                        color: #fff;
+                        * {
+                            color: #fff;
                         }
                     }
                 }
-                .resourcelinkdetails,
-                .ouwikilmt {
-                    margin-left: auto;
-                }
             }
-            .availabilityinfo,
-            .contentafterlink {
-                width: 100%;
-                margin-left: 0;
+            .resourcelinkdetails,
+            .ouwikilmt {
+                margin-left: auto;
             }
-            .contentafterlink {
-                p {
-                    margin: 0 0 $spacer / 2 0;
-                    &:last-of-type {
-                        margin-bottom: 0;
-                    }
+        }
+        .availabilityinfo,
+        .contentafterlink {
+            width: 100%;
+            margin-left: 0;
+        }
+        .contentafterlink {
+            p {
+                margin: 0 0 $spacer / 2 0;
+                &:last-of-type {
+                    margin-bottom: 0;
                 }
             }
         }
@@ -328,7 +293,7 @@ $culcourse-arrow-active-color: #fff;
     }
 }
 
-#main-region .course-content {
+#region-main .course-content {
     ul.culcourse {
         padding: 0;
         list-style: none;
@@ -505,19 +470,21 @@ $culcourse-arrow-active-color: #fff;
                                 }
                                 .summary {
                                     color: #fff;
-                                    .truncate {
-                                        height: auto;
-                                        >div>* {
-                                            white-space: nowrap;
-                                            overflow: hidden;
-                                            text-overflow: ellipsis;
-                                        }
-                                    }
                                 }
                                 .section-summary-activities {
                                     .activity-count {
                                         color: #fff;
                                     }
+                                }
+                                .section-summary-progress {
+                                    color: #fff;
+                                    .activity-count {
+                                        color: #fff;
+                                    }
+                                }
+                                body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .section-summary-progress .activity-count,
+                                body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .section-summary-progress .activity-count {
+                                    color: #fff;
                                 }
                             }
                             &:before {
@@ -539,8 +506,23 @@ $culcourse-arrow-active-color: #fff;
                             }
                             .summary {
                                 color: $body-color;
+                                .truncate {
+                                    height: auto;
+                                    >div>* {
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                    }
+                                }
                             }
                             .section-summary-activities {
+                                .activity-count {
+                                    color: $body-color;
+                                }
+                            }
+                            .section-summary-progress {
+                                color: $body-color;
+                                font-size: $small-font-size;
                                 .activity-count {
                                     color: $body-color;
                                 }
@@ -570,6 +552,17 @@ $culcourse-arrow-active-color: #fff;
                                 }
                             }
                         }
+                        .section-summary-progress {
+                            width: 100%;
+                            position: relative;
+                            padding: 0;
+                            margin: 0;
+                            left: 0;
+                            color: #fff;
+                            .activity-count {
+                                color: #fff;
+                            }
+                        }
                         .section_availability {
                             margin: 0 0 0 auto;
                             padding: 0;
@@ -591,14 +584,20 @@ $culcourse-arrow-active-color: #fff;
                 }
                 ul {
                     li.activity {
-                        margin-bottom: 0;
+                        margin: $spacer / 2 0;
                         &:last-child {
                             padding-bottom: 0;
                         }
                     }
                 }
                 span.instancename {
-                    font-size: 1rem;
+                    font-size: $font-size-base;
+                    background-color: $brand-primary;
+                    padding: $spacer / 2 $spacer;
+                    color: #fff;
+                    * {
+                        color: #fff;
+                    }
                 }
             }
             .add_section {
@@ -617,11 +616,13 @@ $culcourse-arrow-active-color: #fff;
 .cul-important {
     @extend .tag;
     @extend .tag-danger;
+    margin: 0 $spacer/4 $spacer/4 0;
 }
 
 .cul-generic {
     @extend .tag;
     @extend .tag-info;
+    margin: 0 $spacer/4 $spacer/4 0;
 }
 
 .fixed-anchor {
@@ -636,10 +637,6 @@ $culcourse-arrow-active-color: #fff;
     position: absolute;
     top: 85px;
     right: 0;
-    transition: transform .2s ease;
-    &:not(.stick) {
-        transform: translateY(0) !important;
-    }
     &.stick {
         position: fixed;
         z-index: 2;
@@ -649,6 +646,20 @@ $culcourse-arrow-active-color: #fff;
         height: 50px;
         &+.fixed-btn {
             border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    }
+    .favourite-btn {
+        a {
+            &:before {
+                @include fa-icon();
+                content: "\f006";
+            }
+            &.favourited {
+                &:before {
+                    content: "\f005";
+                    color: gold;
+                }
+            }
         }
     }
 }
@@ -673,9 +684,8 @@ $culcourse-arrow-active-color: #fff;
     #block-region-side-post {
         display: none;
     }
-    #main-region {
+    #region-main {
         flex: 0 0 100%;
         max-width: 100%;
-        transition: flex 0.2s ease, max-width 0.2s ease;
     }
 }

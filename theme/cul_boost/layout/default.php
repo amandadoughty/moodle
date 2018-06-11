@@ -62,7 +62,7 @@ echo $OUTPUT->doctype() ?>
         <?php require_once(dirname(__FILE__).'/includes/navbar.php'); ?>
 
         <div id="page-content" class="row justify-content-center">
-            <section id="main-region" class="<?php echo $regions['content']; ?>">
+            <section id="region-main" class="<?php echo $regions['content']; ?>">
                 <?php
                     if ($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse' && $PAGE->pagetype != 'notes-index') {
                         echo $OUTPUT->page_heading();

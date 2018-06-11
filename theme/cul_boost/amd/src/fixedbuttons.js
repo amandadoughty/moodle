@@ -47,16 +47,19 @@ define(['jquery', 'core/log'], function($, log) {
                 // Show/Hide Blocks
                 $('.pagelayout-course').toggleClass(window.localStorage.toggled);
 
-                // Toggle 
-                $('.toggleblocks-btn').on('click',function(){
+                $('.favourite-btn').on('click', function() {
+                    $("[data-toggle='popover']").popover('hide');
+                });
 
-                   if (window.localStorage.toggled != "hiddenblocks" ) {
-                      $('.pagelayout-course').toggleClass("hiddenblocks", true );
-                      window.localStorage.toggled = "hiddenblocks";
-                   } else {
-                      $('.pagelayout-course').toggleClass("hiddenblocks", false );
-                      window.localStorage.toggled = "";
-                   }
+                $('.toggleblocks-btn').on('click', function() {
+
+                    if (window.localStorage.toggled != "hiddenblocks") {
+                        $('.pagelayout-course').toggleClass("hiddenblocks", true);
+                        window.localStorage.toggled = "hiddenblocks";
+                    } else {
+                        $('.pagelayout-course').toggleClass("hiddenblocks", false);
+                        window.localStorage.toggled = "";
+                    }
 
                 });
 

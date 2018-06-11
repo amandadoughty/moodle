@@ -39,16 +39,16 @@
     data-setting="activitylinksequence"
     data-position="{{name}}"
 >
-    <div class="dash-link {{class}} w-100 d-flex flex-wrap align-items-center justify-content-center text-center">
+    <span class="dash-link {{class}} w-100 d-flex flex-wrap align-items-center justify-content-center text-center">
         {{> format_culcourse/movelink}}
         <div class="dash-link-inner p-2 d-flex flex-wrap flex-column">
             <a title="{{attrs.title}}" class="dash-icon {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center mb-1" href="{{url}}" target="{{attrs.target}}">
                 {{{icon}}}
             </a>
-            <a title="{{attrs.title}}" class="dash-text small {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center" href="{{url}}" target="{{attrs.target}}">
+            <a title="{{attrs.title}}" class="dash-text {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center" href="{{url}}" target="{{attrs.target}}">
                 {{text}}
             </a>
         </div>
         {{> format_culcourse/editlink}}
-    </div>
+    </span>
 </li>

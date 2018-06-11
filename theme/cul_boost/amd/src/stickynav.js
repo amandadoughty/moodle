@@ -17,26 +17,50 @@ define(['jquery', 'core/log'], function($, log) {
                     var anchorwidth = navbar.outerWidth();
                     var anchorheight = navbar.outerHeight();
                     var window_top = $(window).scrollTop();
+                    var navigation = $('.nav-wrap');
+                    var navheight = navigation.outerHeight();
                     var div_top = $('#navbar-anchor').offset().top;
+                    var fixed = '';
+                    
+                    function ifnavreveal() {
+                        if (navigation.hasClass('reveal')) {
+                            div_top = $('#navbar-anchor').offset().top - navheight;
+                            fixed = ' fixed';
+                        }
+                    }
+
+                    function settingsheight() {
+                        var settings = $('.block_tree.list');
+                        var maxheight = $(window).innerHeight() - (anchorheight + 20);
+
+                        if (navigation.hasClass('reveal')) {
+                            var maxheight = $(window).innerHeight() - (anchorheight + navheight + 20);
+                        }
+
+                        settings.css('max-height', maxheight);
+                    }
+
+                    ifnavreveal();
+                    settingsheight();
 
                     var scroll = $(window).scrollTop();
 
                     if (scroll > position) {
-                        var div_top = $('#navbar-anchor').offset().top;
+                        ifnavreveal();
                     } else {
-                        var div_top = $('#navbar-anchor').offset().top;
+                        ifnavreveal();
                     }
 
                     position = scroll;
 
                     if (window_top > div_top) {
-                        navbar.addClass('stick');
+                        navbar.addClass('stick' + fixed);
                         $('#navbar-anchor').css({
                             'height': anchorheight,
                             'width': anchorwidth
                         });
                     } else {
-                        navbar.removeClass('stick');
+                        navbar.removeClass('stick' + fixed);
                         $('#navbar-anchor').css('height', '0');
                     }
                 }
