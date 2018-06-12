@@ -35,20 +35,22 @@
 {{/ismovingactivitylink}}
 
 <li 
-    class="dash activitylink activitylinkdraggable flex-wrap align-items-stretch col-12 col-sm-6 col-md-4 col-lg-3"
+    class="dash activitylink activitylinkdraggable flex-wrap align-items-stretch col-xs-6 col-sm-4 col-xl-3"
     data-setting="activitylinksequence"
     data-position="{{name}}"
 >
-    <span class="dash-link {{class}} w-100 d-flex flex-wrap align-items-center justify-content-center text-center">
+    <span class="dash-link {{class}} w-100 h-100 d-flex flex-wrap align-items-stretch justify-content-stretch text-center">
         {{> format_culcourse/movelink}}
-        <div class="dash-link-inner w-100 p-2 d-flex flex-wrap flex-column">
-            <a title="{{attrs.title}}" class="dash-icon {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center mb-2" href="{{url}}" target="{{attrs.target}}">
-                {{{icon}}}
-            </a>
-            <a title="{{attrs.title}}" class="dash-text {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center" href="{{url}}" target="{{attrs.target}}">
-                {{text}}
-            </a>
-        </div>
+        <a class="w-100 h-100 d-flex flex-wrap align-items-center justify-content-center p-2" href="{{url}}" target="{{attrs.target}}" title="{{attrs.title}}">
+            <div class="dash-link-inner w-100 d-flex flex-wrap flex-column">
+                <div class="dash-icon {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center mb-2">
+                    {{{icon}}}
+                </div>
+                <span class="dash-text {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center">
+                    {{text}}
+                </span>
+            </div>
+        </a>
         {{> format_culcourse/editlink}}
     </span>
 </li>

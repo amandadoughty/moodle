@@ -33,6 +33,7 @@ function theme_cul_boost_page_init(moodle_page $page) {
     $page->requires->js_call_amd('theme_cul_boost/loader', 'init');
     $page->requires->js_call_amd('theme_cul_boost/slider', 'init');
     $page->requires->js_call_amd('theme_cul_boost/dropdowns', 'init');
+    $page->requires->js_call_amd('theme_cul_boost/drawermenu', 'init');
     $page->requires->js_call_amd('theme_cul_boost/navsearch', 'init');
     $page->requires->js_call_amd('theme_cul_boost/courselisting', 'init');
     $page->requires->js_call_amd('theme_cul_boost/dashpanel', 'init');
@@ -51,7 +52,7 @@ function theme_cul_boost_bootstrap_grid($hassidepost) {
 
     if ($hassidepost) {
         $regions = array('content' => 'col-xs-12 col-lg-10 col-xl-9 pb-2 mb-4');
-        $regions['post'] = 'col-xs-12 col-lg-10 col-xl-3 pb-2 mb-4';
+        $regions['post'] = 'd-flex flex-wrap flex-column col-xs-12 col-lg-10 col-xl-3 pb-2 mb-4';
     } else {
         $regions = array('content' => 'col-xs-12 pb-2 mb-4');
         $regions['post'] = 'empty';
@@ -281,18 +282,6 @@ function theme_cul_boost_get_edituser($page) {
     }
 
     return '';
-}
-
-/**
- * Loads the JavaScript for the select all/none quiz review list.
- *
- * @param moodle_page $page Pass in $PAGE.
- */
-function theme_cul_boost_initialise_quizreview(moodle_page $page) {
-    if ($page->bodyid == 'page-mod-quiz-mod') {
-        $page->requires->strings_for_js(array('select', 'all', 'none'), 'moodle');
-        $page->requires->yui_module('moodle-theme_cul-quizreview', 'M.theme_cul.quizreview.init', array());
-    }
 }
 
 /**

@@ -373,7 +373,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
      * @param custom_menu $menu
      * @return string $content
      */
-    protected function render_custom_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch') {
+    protected function render_custom_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch justify-content-center') {
         global $COURSE, $PAGE, $CFG, $USER;
 
         $content = '';
@@ -401,7 +401,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
         if ($menunode->has_children()) {
 
             if ($level == 1) {
-                $class = 'dropdown d-flex flex-wrap align-items-center py-3';
+                $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
             } else {
                 $class = 'dropdown-item dropdown-submenu';
             }
@@ -434,10 +434,10 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
             $content .= '</ul>';
         } else {
             
-            $class = 'dropdown-item d-flex flex-wrap align-items-center';
+            $class = 'dropdown-item d-flex flex-wrap align-items-center justify-content-center';
 
             if (!$menunode->has_children() && $level == 1) {
-                $class = 'dropdown d-flex flex-wrap align-items-center py-3';
+                $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
             }
 
             $content = html_writer::start_tag('li', array('id' => $id, 'class'=>$class));

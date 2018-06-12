@@ -137,7 +137,7 @@
                             font-size: $font-size-base * 1.75;
                             img,
                             svg {
-                                width: $font-size-base * 2;
+                                width: $font-size-base * 1.75;
                                 height: auto;
                             }
                         }
@@ -155,118 +155,126 @@ svg.activityicon {
     @extend img.activityicon;
 }
 
-.section {
-    .content {
-        .course-summary {
-            &:empty {
-                display: none;
-            }
-        }
-        .mod-indent-outer {
-            display: flex;
-            align-items: center;
-            >div:not(.mod-indent) {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                flex-basis: 0%;
-                flex-grow: 1;
-                max-width: 100%;
-                width: 100%;
-            }
-        }
-        span.inplaceeditable {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            .quickeditlink .icon {
-                display: inline-block;
-                height: auto;
-                width: auto;
-                font-size: $font-size-base;
-                vertical-align: middle;
-            }
-        }
-        li.activity {
-            padding: 0;
-            margin: $spacer / 2 0;
-            >div {
-                padding-right: 0;
-            }
-            .actions {
-                position: relative;
-                right: auto;
-                top: auto;
-                margin-left: auto;
-                padding-left: $spacer;
-                .filler {
+.course-content {
+    .section {
+        .content {
+            .course-summary {
+                &:empty {
                     display: none;
                 }
             }
-            .editing & {
-                .editing_move {
-                    top: 20px;
-                    transform: translateY(-50%);
+            .mod-indent-outer {
+                display: flex;
+                align-items: center;
+                >div:not(.mod-indent) {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    flex-basis: 0%;
+                    flex-grow: 1;
+                    max-width: 100%;
+                    width: 100%;
                 }
             }
-            .activityinstance,
-            .activityinstance div {
+            span.inplaceeditable {
                 display: flex;
                 flex-wrap: wrap;
                 align-items: center;
-                flex-basis: 0%;
-                flex-grow: 1;
-                max-width: 100%;
-                width: 100%;
-                padding: 0;
-                .editing & {
-                    padding: 0 $spacer 0 0;
+                .quickeditlink .icon {
+                    display: inline-block;
+                    height: auto;
+                    width: auto;
+                    font-size: $font-size-base;
+                    vertical-align: middle;
                 }
-                a {
-                    &:first-of-type {
+            }
+            li.activity {
+                padding: 0;
+                margin: $spacer / 2 0;
+                >div {
+                    padding-right: 0;
+                }
+                .actions {
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+                    right: auto;
+                    top: auto;
+                    margin-left: auto;
+                    padding-left: $spacer;
+                    .filler {
+                        display: none;
+                    }
+                    .autocompletion {
                         display: inline-flex;
-                        flex-wrap: nowrap;
                         align-items: center;
-                        text-indent: 0;
-                        padding: 0 0 0 $spacer / 2;
-                        background-color: #fff;
-                        box-shadow: inset 0px 0px 0px 2px $brand-primary;
-                        img,
-                        svg {
-                            &.activityicon {
-                                width: 20px;
-                                height: auto;
-                                position: relative;
-                                vertical-align: middle;
-                                margin-right: $spacer / 2;
+                    }
+                }
+                .editing & {
+                    .editing_move {
+                        top: 20px;
+                        transform: translateY(-50%);
+                    }
+                }
+                .activityinstance,
+                .activityinstance div {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    flex-basis: 0%;
+                    flex-grow: 1;
+                    max-width: 100%;
+                    width: 100%;
+                    padding: 0;
+                    .editing & {
+                        padding: 0 $spacer 0 0;
+                    }
+                    a {
+                        &:first-of-type {
+                            display: inline-flex;
+                            flex-wrap: nowrap;
+                            align-items: center;
+                            text-indent: 0;
+                            padding: 0 0 0 $spacer / 2;
+                            background-color: #fff;
+                            box-shadow: inset 0px 0px 0px 2px $brand-primary;
+                            img,
+                            svg {
+                                &.activityicon {
+                                    width: 20px;
+                                    height: auto;
+                                    position: relative;
+                                    vertical-align: middle;
+                                    margin-right: $spacer / 2;
+                                }
+                            }
+                        }
+                        span.instancename {
+                            background-color: $brand-primary;
+                            padding: $spacer / 2 $spacer;
+                            color: #fff;
+                            * {
+                                color: #fff;
                             }
                         }
                     }
-                    span.instancename {
-                        background-color: $brand-primary;
-                        padding: $spacer / 2 $spacer;
-                        color: #fff;
-                        * {
-                            color: #fff;
-                        }
-                    }
+                }
+                .resourcelinkdetails,
+                .ouwikilmt {
+                    margin-left: auto;
                 }
             }
-            .resourcelinkdetails,
-            .ouwikilmt {
-                margin-left: auto;
+            .availabilityinfo,
+            .contentafterlink {
+                width: 100%;
+                margin-left: 0;
             }
-        }
-        .availabilityinfo,
-        .contentafterlink {
-            width: 100%;
-            margin-left: 0;
-        }
-        .contentafterlink {
-            p {
-                margin: 0 0 $spacer / 2 0;
-                &:last-of-type {
-                    margin-bottom: 0;
+            .contentafterlink {
+                p {
+                    margin: 0 0 $spacer / 2 0;
+                    &:last-of-type {
+                        margin-bottom: 0;
+                    }
                 }
             }
         }
@@ -338,8 +346,9 @@ $culcourse-arrow-active-color: #fff;
                 margin: 0;
                 background-image: none;
                 width: auto;
-                display: inline-block;
-                padding: 14px 25px 14px 50px;
+                display: inline-flex;
+                align-items: center;
+                padding: $spacer $spacer * 1.5;
                 font-size: $font-size-h4;
                 color: $body-color;
                 &:hover,
@@ -347,23 +356,16 @@ $culcourse-arrow-active-color: #fff;
                     background-color: $culcourse-header-bg;
                 }
                 &:before {
-                    content: "";
-                    width: 24px;
-                    height: 24px;
-                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 15 15'%3E%3Cpath fill='#{$culcourse-arrow-color}' d='M11.05,7.25,4.45.55a.64.64,0,0,0-.6,0c-.2.1-.1.4,0,.6l6.4,6.4L3.85,14a.45.45,0,0,0,0,.5.37.37,0,0,0,.3.1.37.37,0,0,0,.3-.1l6.7-6.7a.35.35,0,0,0-.08-.49Z' /%3E%3C/svg%3E");
-                    background-repeat: no-repeat;
-                    background-position: 55% 50%;
-                    background-size: 60%;
-                    border-radius: 50%;
-                    position: absolute;
-                    left: 15px;
-                    top: 50%;
-                    transform: translateY(-50%) rotate(90deg);
+                    @include fa-icon();
+                    content: "\f105";
+                    font-size: $font-size-h3;
+                    margin-top: -$spacer / 4;
+                    margin-right: $spacer;
                 }
             }
             #toggles-all-closed {
                 &:before {
-                    transform: translateY(-50%) rotate(0deg);
+                    content: "\f107";
                 }
             }
         }
@@ -403,21 +405,37 @@ $culcourse-arrow-active-color: #fff;
                     &.toggle {
                         position: relative;
                         margin: 0;
-                        padding: .75rem .75rem .75rem 3.5rem;
+                        padding: $spacer * .75;
                         &:hover {
                             background-color: $culcourse-header-active-bg;
                         }
                         h3 {
+                            display: flex;
                             margin: 0;
                             background: none;
                             padding: 0;
                             font-size: $font-size-h4;
                             color: #fff;
+                            &:before {
+                                @include fa-icon();
+                                content: "\f105";
+                                font-size: $font-size-h3;
+                                margin-top: -1px;
+                                width: $spacer * 2;
+                                text-align: center;
+                                margin-right: $spacer / 4;
+                            }
+                            >span {
+                                display: flex;
+                                align-items: center;
+                            }
                             a {
                                 display: flex;
                                 align-items: center;
                                 color: #fff;
                                 span {
+                                    display: inline-flex;
+                                    align-items: center;
                                     color: #fff;
                                     .icon {
                                         color: #fff;
@@ -425,41 +443,16 @@ $culcourse-arrow-active-color: #fff;
                                 }
                             }
                         }
-                        &:before {
-                            content: "";
-                            position: absolute;
-                            left: 1.2rem;
-                            top: 50%;
-                            width: 26px;
-                            height: 26px;
-                            margin-top: -13px;
-                            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 15 15'%3E%3Cpath fill='#{$culcourse-arrow-active-color}' d='M11.05,7.25,4.45.55a.64.64,0,0,0-.6,0c-.2.1-.1.4,0,.6l6.4,6.4L3.85,14a.45.45,0,0,0,0,.5.37.37,0,0,0,.3.1.37.37,0,0,0,.3-.1l6.7-6.7a.35.35,0,0,0-.08-.49Z' /%3E%3C/svg%3E");
-                            background-repeat: no-repeat;
-                            background-position: 55% 50%;
-                            background-size: 60%;
-                            transform: rotate(90deg);
-                            transition: transform .3s linear;
-                            display: inline-block;
-                            font-family: 'Glyphicons';
-                            font-style: normal;
-                            font-weight: 400;
-                            line-height: 1;
-                            -webkit-font-smoothing: antialiased;
-                            -moz-osx-font-smoothing: grayscale;
-                            font-size: 25px;
-                            line-height: 25px;
-                            color: #fff;
-                        }
                         &.collapsed {
                             background-color: $culcourse-header-bg;
                             &:hover,
                             &:focus {
                                 background-color: $culcourse-header-hover-bg;
-                                &:before {
-                                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 15 15'%3E%3Cpath fill='#{$culcourse-arrow-active-color}' d='M11.05,7.25,4.45.55a.64.64,0,0,0-.6,0c-.2.1-.1.4,0,.6l6.4,6.4L3.85,14a.45.45,0,0,0,0,.5.37.37,0,0,0,.3.1.37.37,0,0,0,.3-.1l6.7-6.7a.35.35,0,0,0-.08-.49Z' /%3E%3C/svg%3E");
-                                }
                                 h3 {
                                     color: #fff;
+                                    &:before {
+                                        content: "\f105";
+                                    }
                                     a {
                                         color: #fff;
                                         span {
@@ -478,14 +471,6 @@ $culcourse-arrow-active-color: #fff;
                                         color: #fff;
                                     }
                                 }
-                                body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .section-summary-progress .activity-count,
-                                body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .section-summary-progress .activity-count {
-                                    color: #fff;
-                                }
-                            }
-                            &:before {
-                                transform: rotate(0deg);
-                                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 15 15'%3E%3Cpath fill='#{$culcourse-arrow-color}' d='M11.05,7.25,4.45.55a.64.64,0,0,0-.6,0c-.2.1-.1.4,0,.6l6.4,6.4L3.85,14a.45.45,0,0,0,0,.5.37.37,0,0,0,.3.1.37.37,0,0,0,.3-.1l6.7-6.7a.35.35,0,0,0-.08-.49Z' /%3E%3C/svg%3E");
                             }
                             h3 {
                                 font-size: $font-size-h4;
@@ -540,13 +525,18 @@ $culcourse-arrow-active-color: #fff;
                                     margin-left: $spacer / 2;
                                 }
                             }
+                            +.section-summary-progress {
+                                margin-left: $spacer /2;
+                            }
                         }
                         .section-summary-progress {
-                            width: 100%;
+                            display: inline-flex;
+                            align-content: center;
                             position: relative;
+                            left: auto;
+                            bottom: auto;
                             padding: 0;
-                            margin: 0;
-                            left: 0;
+                            margin: 0 0 0 auto;
                             color: #fff;
                             font-size: $small-font-size;
                             .activity-count {
@@ -626,10 +616,17 @@ $culcourse-arrow-active-color: #fff;
     height: 1px;
 }
 
+$right-container: $container-max-width + ($grid-gutter-width / 2) + 50px;
+
 .fixed-buttons {
     position: absolute;
-    top: 85px;
+    top: 50%;
+    transform: translateY(-50%);
     right: 0;
+    @media only screen and (min-width: $right-container) {
+        top: 85px;
+        transform: none;
+    }
     &.stick {
         position: fixed;
         z-index: 2;

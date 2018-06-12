@@ -513,6 +513,7 @@ $zindex-modal:             1050;
 
 
 // Navbar
+$navbar-height:                     85px;
 
 $navbar-border-radius:              $border-radius;
 $navbar-padding-x:                  $spacer;
@@ -529,6 +530,19 @@ $navbar-light-hover-color:          $brand-primary;
 $navbar-light-active-color:         darken($brand-primary, 10%);
 $navbar-light-disabled-color:       $text-muted;
 
+$navbar-toggle:                     25px;
+$navbar-toggle-bg:                  transparent;
+$navbar-toggle-focus-bg:            transparent;
+$navbar-toggle-icon-bar-color:      $brand-primary;
+
+$drawer-toggle-bg:                  transparent;
+$drawer-toggle-focus-bg:            transparent;
+$drawer-toggle-icon-bar-color:      #fff;
+
+$navbar-toggler-padding-y:          .25rem;
+$navbar-toggler-padding-x:          .75rem;
+$navbar-toggler-font-size:          $font-size-lg;
+$navbar-toggler-border-radius:      $btn-border-radius;
 
 // Navs
 

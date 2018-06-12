@@ -151,16 +151,12 @@ $slick-opacity-not-active: 0.25 !default;
     height: 40px;
     width: 40px;
     z-index: 2;
-    line-height: 0px;
-    font-size: 0px;
     padding: 0;
     background-color: #fff;
-    color: #fff;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 15 15'%3E%3Cpath fill='#{$brand-primary}' d='M11.05,7.25,4.45.55a.64.64,0,0,0-.6,0c-.2.1-.1.4,0,.6l6.4,6.4L3.85,14a.45.45,0,0,0,0,.5.37.37,0,0,0,.3.1.37.37,0,0,0,.3-.1l6.7-6.7a.35.35,0,0,0-.08-.49Z' /%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: 55% 50%;
-    background-size: 60%;
-    color: transparent;
+    background-image: none;
+    color: $brand-primary;
+    font-size: $font-size-base * 2;
+    justify-content: center;
     border: none;
     top: auto;
     transform: none;
@@ -177,11 +173,8 @@ $slick-opacity-not-active: 0.25 !default;
     &:active:focus,
     &.active {
         border: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 15 15'%3E%3Cpath fill='#fff' d='M11.05,7.25,4.45.55a.64.64,0,0,0-.6,0c-.2.1-.1.4,0,.6l6.4,6.4L3.85,14a.45.45,0,0,0,0,.5.37.37,0,0,0,.3.1.37.37,0,0,0,.3-.1l6.7-6.7a.35.35,0,0,0-.08-.49Z' /%3E%3C/svg%3E");
         background-color: $brand-primary;
-    }
-    &.slick-prev {
-        transform: rotate(180deg);
+        color: #fff;
     }
 }
 

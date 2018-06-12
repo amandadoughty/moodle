@@ -23,6 +23,9 @@ body {
     -webkit-font-smoothing: antialiased;
     letter-spacing: .1px;
     text-rendering: optimizeLegibility;
+    &.navopen {
+        overflow: hidden;
+    }
     &.pagelayout-embedded {
         padding-top: 0;
         height: 100%;
@@ -103,6 +106,13 @@ ol {
 
 a {
     @include transition(all 0.2s);
+}
+
+abbr {
+    &[title],
+    &[data-original-title] {
+        border-bottom: none;
+    }
 }
 
 .no-overflow {

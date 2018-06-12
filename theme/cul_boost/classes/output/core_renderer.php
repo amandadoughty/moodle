@@ -87,10 +87,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    $url->param('sesskey', sesskey());
 	    if ($this->page->user_is_editing()) {
 	        $url->param('edit', 'off');
-	        $editstring = get_string('turneditingon');
+	        $editstring = get_string('turneditingoff');
 	    } else {
 	        $url->param('edit', 'on');
-	        $editstring = get_string('turneditingoff');
+	        $editstring = get_string('turneditingon');
 	    }
 
 	    return $this->single_button($url, $editstring);
@@ -106,7 +106,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	            || $label == get_string('updatemymoodleoff')) {
 	        $label = get_string('off', 'theme_cul_boost');
 	        $options['state'] = 'off';
-	    } else if($label == get_string('blocksediton')
+	    } else if ($label == get_string('blocksediton')
 	            || $label == get_string('turneditingon')
 	            || $label == get_string('updatemymoodleon')) {
 	        $label = get_string('on', 'theme_cul_boost');
@@ -122,6 +122,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	            || $label == get_string('off', 'theme_cul_boost')) {
 	        return $this->render_edit_button($button);
 	    }
+
 	    if (!isset($button->large)) {
 	        $button->small = true;
 	    }
@@ -401,10 +402,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    require_once($CFG->dirroot.'/course/renderer.php');
 	    include_once($CFG->dirroot.'/lib/coursecatlib.php');
 
-	    if (!empty($USER->lastcourseaccess)) {
-	        $courses = $USER->lastcourseaccess;
+	    if (!empty($USER->currentcourseaccess)) {
+	    	$courses = $USER->currentcourseaccess;
+	    } else if (!empty($USER->lastcourseaccess)) {
+	    	$courses = $USER->lastcourseaccess;
 	    } else {
-	        return '';
+	    	return '';
 	    }
 
 	    $content = '';
@@ -479,6 +482,47 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    return $content;
 
 	}
+
+	/**
+     * Prints a nice side block with an optional header.
+     *
+     * @param block_contents $bc HTML for the content
+     * @param string $region the region the block is appearing in.
+     * @return string the HTML to be output.
+     */
+    public function block(block_contents $bc, $region) {
+        $bc = clone($bc); // Avoid messing up the object passed in.
+        if (empty($bc->blockinstanceid) || !strip_tags($bc->title)) {
+            $bc->collapsible = block_contents::NOT_HIDEABLE;
+        }
+
+        $id = !empty($bc->attributes['id']) ? $bc->attributes['id'] : uniqid('block-');
+        $context = new stdClass();
+        $context->skipid = $bc->skipid;
+        $context->blockinstanceid = $bc->blockinstanceid;
+        $context->dockable = $bc->dockable;
+        $context->id = $id;
+
+        if (strpos($bc->attributes['class'], 'invisible') !== false) {
+            $context->hidden = true;
+        }
+
+        $context->skiptitle = strip_tags($bc->title);
+        $context->showskiplink = !empty($context->skiptitle);
+        $context->arialabel = $bc->arialabel;
+        $context->ariarole = !empty($bc->attributes['role']) ? $bc->attributes['role'] : 'complementary';
+        $context->type = $bc->attributes['data-block'];
+        $context->title = $bc->title;
+        $context->content = $bc->content;
+        $context->annotation = $bc->annotation;
+        $context->footer = $bc->footer;
+        $context->hascontrols = !empty($bc->controls);
+        if ($context->hascontrols) {
+            $context->controls = $this->block_controls($bc->controls, $id);
+        }
+
+        return $this->render_from_template('core/block', $context);
+    }
 
 	// Straight copy from the City University module menu with some visual differences
 	public function favourite_course() {
