@@ -672,7 +672,7 @@ $right-container: $container-max-width + ($grid-gutter-width / 2) + 50px;
         }
     }
     #block-region-side-post {
-        display: none;
+        display: none !important;
     }
     #region-main {
         flex: 0 0 100%;

@@ -22496,7 +22496,7 @@ form {
   display: none; }
 
 .hiddenblocks #block-region-side-post {
-  display: none; }
+  display: none !important; }
 
 .hiddenblocks #region-main {
   -webkit-box-flex: 0;
