@@ -473,7 +473,7 @@ $form-icon-danger: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www
 //
 // Dropdown menu container and contents.
 
-$dropdown-min-width:             160px;
+$dropdown-min-width:             200px;
 $dropdown-padding-y:             5px;
 $dropdown-margin-top:            2px;
 $dropdown-bg:                    #fff;
@@ -693,7 +693,7 @@ $tag-danger-bg:             $brand-danger;
 
 $tag-color:                 #fff;
 $tag-link-hover-color:      #fff;
-$tag-font-size:             75%;
+$tag-font-size:             .875rem;
 $tag-font-weight:           bold;
 $tag-padding-x:             .4rem;
 $tag-padding-y:             .25rem;

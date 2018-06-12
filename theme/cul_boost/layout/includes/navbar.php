@@ -7,7 +7,9 @@ $settingsblock = '';
 
 if (!isset($PAGE->layout_options['nonavbar']) || $PAGE->layout_options['nonavbar'] == false) { 
 
-    $leftnavbar = html_writer::tag('nav', $OUTPUT->navbar(), ['class'=>'breadcrumb-nav d-flex flex-wrap align-items-center col p-0', 'role'=>'navigation', 'aria-label'=>'breadcrumb']);
+    if ($PAGE->pagelayout != 'mydashboard') {
+        $leftnavbar = html_writer::tag('nav', $OUTPUT->navbar(), ['class'=>'breadcrumb-nav d-flex flex-wrap align-items-center col p-0', 'role'=>'navigation', 'aria-label'=>'breadcrumb']);
+    }
 
     $rightnavbar = html_writer::tag('div', $this->page_heading_button(), ['class'=>'breadcrumb-button d-flex flex-wrap ml-auto mt-0']);
 
@@ -19,7 +21,7 @@ if (!isset($PAGE->layout_options['nonavbar']) || $PAGE->layout_options['nonavbar
 
     if ($PAGE->user_is_editing() || $PAGE->blocks->region_has_content($navsettings, $OUTPUT)) {
         $rightnavbar = html_writer::tag('div', $rightnavbar.$settingsblock, ['class'=>'right-navbar d-flex flex-wrap align-items-center bg-gray-500 p-3']);
-        $rightnavbar = html_writer::tag('div', $rightnavbar, ['class'=>'right-navbar-wrap']);
+        $rightnavbar = html_writer::tag('div', $rightnavbar, ['class'=>'right-navbar-wrap ml-auto']);
     }
 
     $overlay = html_writer::tag('div', '', ['class'=>'overlay']);

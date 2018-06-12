@@ -31,7 +31,7 @@ echo html_writer::start_tag('nav', ['id'=>'top', 'role'=>'header', 'class'=>'nav
                             echo html_writer::end_tag('div');
 
                             $search = $OUTPUT->global_search();
-                            $extras = html_writer::tag('div', $search, ['class'=>'global_search d-sm-flex flex-wrap justify-content-end p-0 ml-4']);
+                            $extras = html_writer::tag('div', $search, ['class'=>'global_search d-none d-sm-flex flex-wrap justify-content-end p-0 ml-4']);
                             $extras .= $OUTPUT->user_menu();
 
                             $toggle = html_writer::tag('span', '', array('class'=>'icon-bar'));

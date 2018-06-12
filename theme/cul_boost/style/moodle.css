@@ -4877,7 +4877,7 @@ p.arrow_button input[type="button"],
   z-index: 1000;
   display: none;
   float: left;
-  min-width: 160px;
+  min-width: 200px;
   padding: 5px 0;
   margin: 2px 0 0;
   font-size: 1rem;
@@ -5906,7 +5906,7 @@ p.arrow_button input[type="button"],
 .statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .cul-generic {
   display: inline-block;
   padding: 0.25rem 0.4rem;
-  font-size: 75%;
+  font-size: 0.875rem;
   font-weight: bold;
   line-height: 1;
   color: #fff;
@@ -20039,6 +20039,8 @@ a.bg-black:focus, a.bg-black:hover {
     width: 100%;
     margin: 0;
     height: 70px;
+    text-align: left;
+    background-color: #fff;
     padding: 1rem 4rem 1rem 1rem;
     font-size: 1.75rem;
     color: #A22833;
@@ -20050,7 +20052,7 @@ a.bg-black:focus, a.bg-black:hover {
   overflow: auto; }
   body:not(.editing) .findblocks-wrap {
     position: fixed;
-    z-index: 10;
+    z-index: 20;
     top: 0;
     left: 0;
     width: 100vw;
@@ -20144,8 +20146,11 @@ a.bg-black:focus, a.bg-black:hover {
           font-size: 2.25rem;
           text-transform: none;
           color: #fff;
-          font-weight: 300;
-          text-align: center; }
+          font-weight: normal;
+          -webkit-box-pack: center;
+          -webkit-justify-content: center;
+              -ms-flex-pack: center;
+                  justify-content: center; }
         .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac {
           position: relative; }
           .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac:before {
@@ -20237,6 +20242,8 @@ a.bg-black:focus, a.bg-black:hover {
                     opacity: 1; }
                     .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link.active:hover, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link.active:focus {
                       opacity: 1; }
+                  .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link h2 {
+                    font-weight: normal; }
                   .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link * {
                     color: #fff; }
             .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"] {
@@ -20366,7 +20373,8 @@ a.bg-black:focus, a.bg-black:hover {
                   padding-left: 1.75rem;
                   background-position: left center;
                   font-family: inherit;
-                  line-height: 1.1; }
+                  line-height: 1.1;
+                  background-image: url([[pix:theme|course-light]]); }
           .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .content.panel-body {
             padding: 0.75rem; }
             .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .content.panel-body * {
@@ -20491,6 +20499,11 @@ a.bg-black:focus, a.bg-black:hover {
                 display: none; }
               .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form select {
                 margin: 0 1rem 0 0; }
+                .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form select.custom-select {
+                  padding: 0.75rem 2rem 0.75rem 1rem;
+                  font-size: 1.125rem;
+                  color: #A22833;
+                  line-height: 1.5; }
           .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions {
             width: auto;
             padding: 0;
@@ -20516,7 +20529,10 @@ a.bg-black:focus, a.bg-black:hover {
               border-color: #ccc;
               margin: 0;
               background-position: 0.5rem 50%;
-              padding-left: 2rem; }
+              padding: 0.75rem 1rem 0.75rem 2rem;
+              font-size: 1.125rem;
+              color: #A22833;
+              line-height: 1.5; }
               .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:active:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:active.focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.active:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.active.focus {
                 outline: 5px auto -webkit-focus-ring-color;
                 outline-offset: -2px; }
@@ -21197,7 +21213,9 @@ a.dimmed_text:visited,
         -ms-transform: translateY(-100%);
          -o-transform: translateY(-100%);
             transform: translateY(-100%);
-    border: none; }
+    border: none;
+    -webkit-box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.3); }
     .navbar .nav-wrap.stick.stuck {
       -webkit-transition: -webkit-transform .2s ease;
       transition: -webkit-transform .2s ease;
@@ -21828,10 +21846,10 @@ form {
           font-weight: 500; }
         .slidercontainer .slider .slide .slide-caption h4 {
           font-size: 2.25rem;
-          font-weight: normal; }
+          font-weight: 300; }
         .slidercontainer .slider .slide .slide-caption h5 {
           font-size: 1.75rem;
-          font-weight: normal; }
+          font-weight: 300; }
   .slidercontainer .slide-controls {
     position: absolute;
     bottom: 3rem;
@@ -21848,8 +21866,8 @@ form {
     border-bottom: none; }
 
 .recentcourses-wrap .recentmodules-item .course-image {
-  width: 95px;
-  height: 95px;
+  width: 100px;
+  height: 100px;
   background-position: 50% 50%;
   background-repeat: no-repeat;
   -webkit-background-size: cover;
@@ -22089,8 +22107,8 @@ form {
       text-indent: 0;
       padding: 0 0 0 0.5rem;
       background-color: #fff;
-      -webkit-box-shadow: inset 0px 0px 0px 2px #A22833;
-              box-shadow: inset 0px 0px 0px 2px #A22833; }
+      -webkit-box-shadow: inset 0px 0px 0px 1px #A22833;
+              box-shadow: inset 0px 0px 0px 1px #A22833; }
       .course-content .section .content li.activity .activityinstance a:first-of-type img.activityicon, .course-content .section .content li.activity .activityinstance a:first-of-type svg.activityicon,
       .course-content .section .content li.activity .activityinstance a:first-of-type svg.activityicon,
       .course-content .section .content li.activity .activityinstance div a:first-of-type img.activityicon,
@@ -22197,7 +22215,8 @@ form {
     #region-main .course-content #toggle-all .content #toggles-all-opened:hover, #region-main .course-content #toggle-all .content #toggles-all-opened:focus,
     #region-main .course-content #toggle-all .content #toggles-all-closed:hover,
     #region-main .course-content #toggle-all .content #toggles-all-closed:focus {
-      background-color: #F5F5F5; }
+      background-color: #98989C;
+      color: #fff; }
     #region-main .course-content #toggle-all .content #toggles-all-opened:before,
     #region-main .course-content #toggle-all .content #toggles-all-closed:before {
       display: inline-block;
@@ -22313,9 +22332,9 @@ form {
                 #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a span .icon {
                   color: #fff; }
           #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed {
-            background-color: #F5F5F5; }
+            background-color: #98989C; }
             #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus {
-              background-color: #98989C; }
+              background-color: #717176; }
               #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 {
                 color: #fff; }
                 #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3:before, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3:before {
@@ -22332,23 +22351,24 @@ form {
                 color: #fff; }
             #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 {
               font-size: 1.375rem;
-              color: #3C3C3C; }
+              color: #fff; }
               #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a {
-                color: #3C3C3C; }
+                color: #fff; }
                 #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a span {
-                  color: #3C3C3C; }
+                  color: #fff; }
                   #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a span .icon {
-                    color: #3C3C3C; }
+                    color: #fff; }
             #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary {
-              color: #3C3C3C; }
+              color: #fff; }
               #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary .truncate {
+                font-size: 0.8rem;
                 height: auto; }
                 #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary .truncate > div > * {
                   white-space: nowrap;
                   overflow: hidden;
                   text-overflow: ellipsis; }
             #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .section-summary-activities .activity-count {
-              color: #3C3C3C; }
+              color: #fff; }
           #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .summary {
             -webkit-box-ordinal-group: 2;
             -webkit-order: 1;
@@ -22389,7 +22409,7 @@ form {
             color: #fff;
             font-size: 0.8rem; }
             #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count {
-              background-color: #7e7e83;
+              background-color: #58585c;
               color: #fff; }
           #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section_availability {
             margin: 0 0 0 auto;
@@ -22425,10 +22445,12 @@ form {
       padding: 25px; }
 
 .cul-important {
-  margin: 0 0.25rem 0.25rem 0; }
+  margin: 0 0.25rem 0.25rem 0;
+  font-size: 1.125rem; }
 
 .cul-generic {
-  margin: 0 0.25rem 0.25rem 0; }
+  margin: 0 0.25rem 0.25rem 0;
+  font-size: 1rem; }
 
 .fixed-anchor {
   position: absolute;
@@ -22439,19 +22461,9 @@ form {
 
 .fixed-buttons {
   position: absolute;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-       -o-transform: translateY(-50%);
-          transform: translateY(-50%);
-  right: 0; }
-  @media only screen and (min-width: 1325px) {
-    .fixed-buttons {
-      top: 85px;
-      -webkit-transform: none;
-          -ms-transform: none;
-           -o-transform: none;
-              transform: none; } }
+  top: 155px;
+  right: 0;
+  z-index: 1; }
   .fixed-buttons.stick {
     position: fixed;
     z-index: 2; }

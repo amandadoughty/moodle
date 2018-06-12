@@ -89,10 +89,19 @@ define(['jquery', 'core/log'], function($, log) {
 
                 // Click the settings button to reset navigation tree
                 $('a.trigger').on('click', function() {
+
+                    if ($(this).hasClass('open')) {
+                        $(this).removeClass('open');
+                        settingsblock.removeClass('show');
+                        $('.overlay').removeClass('show');
+                        $('body').removeClass('overflow-hidden');
+                    } else {
+                        $(this).addClass('open');
+                    }
+                    
                     blocktree.animate({
                         scrollTop: 0
                     }, 0);
-
                 });
 
                 // Call again just in case

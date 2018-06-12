@@ -142,8 +142,22 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	 * Uses bootstrap compatible html.
 	 */
 	public function navbar() {
-	    return $this->render_from_template('core/navbar', $this->page->navbar);
-	}
+        $breadcrumbs = array();
+        $items = $this->page->navbar->get_items();
+        foreach ($items as $item) {
+            $item->hideicon = true;
+            $breadcrumbs[] = $this->render($item);
+        }
+
+        $hometext = html_writer::tag('b', get_string('home'), array('class' => 'showoncollapse'));
+        $homelink = html_writer::link(new moodle_url('/'), '<i class="fa fa-home"></i>', ['class'=>'d-flex align-items-center']);
+        array_shift($breadcrumbs);
+        array_unshift($breadcrumbs, $homelink);
+
+        $listitems = '<li class="breadcrumb-item d-inline-flex flex-wrap align-items-center">' . join(' </li><li class="breadcrumb-item d-inline-flex flex-wrap align-items-center">', $breadcrumbs) . '</li>';
+        $title = '<span class="accesshide">' . get_string('pagepath') . '</span>';
+        return $title . '<ol class="breadcrumb d-flex flex-wrap align-items-center">'.$listitems.'</ul>';
+    }
 
 	public function page_heading($tag = 'h2') {
 	    global $COURSE;
@@ -303,6 +317,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	        'userbutton'
 	    );
 
+	    $usertextcontents = html_writer::tag('div', $usertextcontents, array('class'=>'py-2 px-3 h5 m-0 bg-medium username'));
+
 	    $content = '';
 	    foreach ($opts->navitems as $item) {
 	        switch ($item->itemtype) {
@@ -330,17 +346,15 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	                }
 	                $title = html_writer::tag('span', $item->title, array('class'=>'title'));
 
-	                $content .= html_writer::link($item->url, $icon.$title, array('class'=>'menu-link d-block dropdown-item'));
+	                $content .= html_writer::link($item->url, $icon.$title, array('class'=>'menu-link d-block dropdown-item px-2'));
 	                $content .= html_writer::end_tag('div');
 	                break;
 	        }
 	    }
 
-	    $usertextcontents = html_writer::tag('span', $usertextcontents, array('class'=>'pl-2 username small'));
-
 	    $user = html_writer::link('javascript://void(0)', $avatarcontents, array('data-toggle'=>"dropdown", 'class'=>'usermenu_header d-flex flex-wrap align-items-center dropdown-toggle text-default'));
 
-	    $content = html_writer::tag('div', $content, array('id'=>'usermenu_content', 'class'=>"usermenu_content m-0 dropdown-menu dropdown-menu-right"));
+	    $content = html_writer::tag('div', $usertextcontents.$content, array('id'=>'usermenu_content', 'class'=>"usermenu_content m-0 pt-0 dropdown-menu dropdown-menu-right"));
 
 	    return html_writer::div(
 	        $user.$content,
@@ -410,12 +424,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    	return '';
 	    }
 
+
+	    arsort($courses);
+
 	    $content = '';
 
 	    $i = 0;
 
 	    $content .= html_writer::start_tag('div', ['class'=>'featured-courses col-12 col-lg-7']);
 	    $content .= html_writer::start_tag('div', ['class'=>'row h-100']);
+
 	   	foreach ($courses as $course => $date) {
 
 	   		$i++;

@@ -335,6 +335,8 @@
         width: 100%;
         margin: 0;
         height: 70px;
+        text-align: left;
+        background-color: #fff;
         padding: $spacer ($spacer * 4) $spacer $spacer;
         font-size: $font-size-h3;
         color: $brand-primary;
@@ -348,7 +350,7 @@
     overflow: auto;
     body:not(.editing) & {
         position: fixed;
-        z-index: 10;
+        z-index: 20;
         top: 0;
         left: 0;
         width: 100vw;
@@ -438,8 +440,8 @@
                         font-size: $font-size-h2;
                         text-transform: none;
                         color: #fff;
-                        font-weight: $font-weight-light;
-                        text-align: center;
+                        font-weight: $font-weight-normal;
+                        justify-content: center;
                     }
                     #course_search_ac {
                         position: relative;
@@ -533,6 +535,9 @@
                                             opacity: 1;
                                         }
                                     }
+                                    h2 {
+                                        font-weight: $font-weight-normal;
+                                    }
                                     * {
                                         color: #fff;
                                     }
@@ -608,6 +613,7 @@
                                     background-position: left center;
                                     font-family: inherit;
                                     line-height: 1.1;
+                                    background-image: url([[pix:theme|course-light]]);
                                 }
                             }
                         }
@@ -706,6 +712,12 @@
                                 }
                                 select {
                                     margin: 0 $spacer 0 0;
+                                    &.custom-select {
+                                        padding: $spacer * .75 $spacer * 2 $spacer * .75 $spacer;
+                                        font-size: $font-size-h5;
+                                        color: $brand-primary;
+                                        line-height: 1.5;
+                                    }
                                 }
                             }
                         }
@@ -720,7 +732,11 @@
                                 $btn-secondary-border);
                                 margin: 0;
                                 background-position: ($spacer / 2) 50%;
-                                padding-left: $btn-padding-x * 2;
+                                padding: $spacer * .75 $spacer $spacer * .75 $spacer * 2;
+                                font-size: $font-size-h5;
+                                color: $brand-primary;
+                                line-height: 1.5;
+
                                 &:focus,
                                 &:active,
                                 &:focus:active {

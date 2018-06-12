@@ -24,9 +24,16 @@ define(['jquery', 'core/log'], function($, log) {
                 var findblocks = $('.findblocks-wrap');
                 var body = $('body');
 
-                $('.initialsearch').on('click', function() {
+                $('.initialsearch').on('click', function(e) {
                     findblocks.addClass('show');
                     body.addClass('overflow-hidden');
+                    $('.allcourses-link').trigger('click');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setTimeout(function() {
+                        $('input#ac-input').trigger('click');
+                        $('input#ac-input').focus();
+                    }, 100);
                 });
 
                 $('.close-icon').on('click', function() {

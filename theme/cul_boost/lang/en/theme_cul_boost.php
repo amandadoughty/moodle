@@ -85,7 +85,7 @@ $string['hideblocks'] = 'Hide Sidebar';
 $string['showblocks'] = 'Show Sidebar';
 $string['viewmore'] = 'View More';
 $string['viewless'] = 'View Less';
-$string['modulehidden'] = 'Module is hidden <i class="fa fa-eye-slash"></i>';
+$string['modulehidden'] = 'Module is hidden';
 
 /* 
  * theme_cul strings

@@ -237,7 +237,7 @@ svg.activityicon {
                             text-indent: 0;
                             padding: 0 0 0 $spacer / 2;
                             background-color: #fff;
-                            box-shadow: inset 0px 0px 0px 2px $brand-primary;
+                            box-shadow: inset 0px 0px 0px 1px $brand-primary;
                             img,
                             svg {
                                 &.activityicon {
@@ -281,13 +281,13 @@ svg.activityicon {
     }
 }
 
-$culcourse-header-bg: $gray-lightest;
-$culcourse-header-hover-bg: $gray-light;
+$culcourse-header-bg: $gray-light;
+$culcourse-header-hover-bg: darken($culcourse-header-bg, 15%);
 $culcourse-header-active-bg: $brand-primary;
-$culcourse-header-text-color: $body-color;
-$culcourse-header-editing-color: $body-color;
+$culcourse-header-text-color: #fff;
+$culcourse-header-editing-color: #fff;
 $culcourse-content-bg: $gray-lightest;
-$culcourse-arrow-color: $body-color;
+$culcourse-arrow-color: #fff;
 $culcourse-arrow-hover-color: #fff;
 $culcourse-arrow-active-color: #fff;
 
@@ -354,6 +354,7 @@ $culcourse-arrow-active-color: #fff;
                 &:hover,
                 &:focus {
                     background-color: $culcourse-header-bg;
+                    color: #fff;
                 }
                 &:before {
                     @include fa-icon();
@@ -486,8 +487,9 @@ $culcourse-arrow-active-color: #fff;
                                 }
                             }
                             .summary {
-                                color: $body-color;
+                                color: $culcourse-header-text-color;
                                 .truncate {
+                                    font-size: $small-font-size;
                                     height: auto;
                                     >div>* {
                                         white-space: nowrap;
@@ -498,7 +500,7 @@ $culcourse-arrow-active-color: #fff;
                             }
                             .section-summary-activities {
                                 .activity-count {
-                                    color: $body-color;
+                                    color: $culcourse-header-text-color;
                                 }
                             }
                         }
@@ -542,7 +544,7 @@ $culcourse-arrow-active-color: #fff;
                             .activity-count {
                                 @extend .tag;
                                 @extend .tag-info;
-                                background-color: darken($brand-info, 10%);
+                                background-color: darken($brand-info, 25%);
                                 color: #fff;
                             }
                         }
@@ -600,12 +602,14 @@ $culcourse-arrow-active-color: #fff;
     @extend .tag;
     @extend .tag-danger;
     margin: 0 $spacer/4 $spacer/4 0;
+    font-size: $font-size-h5;
 }
 
 .cul-generic {
     @extend .tag;
     @extend .tag-info;
     margin: 0 $spacer/4 $spacer/4 0;
+    font-size: $font-size-base;
 }
 
 .fixed-anchor {
@@ -620,13 +624,9 @@ $right-container: $container-max-width + ($grid-gutter-width / 2) + 50px;
 
 .fixed-buttons {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 155px;
     right: 0;
-    @media only screen and (min-width: $right-container) {
-        top: 85px;
-        transform: none;
-    }
+    z-index: 1;
     &.stick {
         position: fixed;
         z-index: 2;

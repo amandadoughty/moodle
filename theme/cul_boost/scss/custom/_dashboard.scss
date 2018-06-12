@@ -55,11 +55,11 @@
                 }
                 h4 {
                     font-size: $font-size-h2;
-                    font-weight: $font-weight-normal;
+                    font-weight: $font-weight-light;
                 }
                 h5 {
                     font-size: $font-size-h3;
-                    font-weight: $font-weight-normal;
+                    font-weight: $font-weight-light;
                 }
             }
         }
@@ -87,8 +87,8 @@
             }
         }
         .course-image {
-            width: 95px;
-            height: 95px;
+            width: 100px;
+            height: 100px;
             background-position: 50% 50%;
             background-repeat: no-repeat;
             background-size: cover;

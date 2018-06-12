@@ -47,14 +47,18 @@ echo $OUTPUT->doctype() ?>
 <div id="page" class="position-relative">
 
     <?php
-
         if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
-            $left = html_writer::tag('i', '', ['class'=>'fa fa-angle-double-left p-3', 'data-toggle'=>'popover', 'data-content'=>get_string('showblocks', 'theme_cul_boost'), 'data-placement'=>'left', 'data-trigger'=>'hover']);
-            $right = html_writer::tag('i', '', ['class'=>'fa fa-angle-double-right p-3', 'data-toggle'=>'popover', 'data-content'=>get_string('hideblocks', 'theme_cul_boost'), 'data-placement'=>'left', 'data-trigger'=>'hover']);
-            $blocks = html_writer::tag('div', $left.$right, ['class'=>'toggleblocks-btn fixed-btn d-flex flex-wrap align-items-center justify-content-center bg-dark h3 m-0 text-white']);
-            $fixed = $OUTPUT->favourite_course();
-            echo html_writer::tag('div', '', ['class'=>'fixed-anchor']);
-            echo html_writer::tag('div', $blocks.$fixed, ['class'=>'fixed-buttons']);
+
+                $blocks = '';
+                if ($PAGE->blocks->region_has_content('side-post', $OUTPUT)) {
+                    $left = html_writer::tag('i', '', ['class'=>'fa fa-angle-double-left p-3', 'data-toggle'=>'popover', 'data-content'=>get_string('showblocks', 'theme_cul_boost'), 'data-placement'=>'left', 'data-trigger'=>'hover']);
+                    $right = html_writer::tag('i', '', ['class'=>'fa fa-angle-double-right p-3', 'data-toggle'=>'popover', 'data-content'=>get_string('hideblocks', 'theme_cul_boost'), 'data-placement'=>'left', 'data-trigger'=>'hover']);
+                    $blocks = html_writer::tag('div', $left.$right, ['class'=>'toggleblocks-btn fixed-btn d-none d-xl-flex flex-wrap align-items-center justify-content-center bg-dark h3 m-0 text-white']);
+                }
+                
+                $fixed = $OUTPUT->favourite_course();
+                echo html_writer::tag('div', '', ['class'=>'fixed-anchor']);
+                echo html_writer::tag('div', $blocks.$fixed, ['class'=>'fixed-buttons']);
         }
     ?>
 
