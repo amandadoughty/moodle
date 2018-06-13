@@ -4877,7 +4877,7 @@ p.arrow_button input[type="button"],
   z-index: 1000;
   display: none;
   float: left;
-  min-width: 200px;
+  min-width: 245px;
   padding: 5px 0;
   margin: 2px 0 0;
   font-size: 1rem;
@@ -21267,7 +21267,7 @@ a.dimmed_text:visited,
   .navbar .nav-wrap .nav {
     margin: 0 0 0 1.5rem; }
     .navbar .nav-wrap .nav:empty {
-      display: none; }
+      display: none !important; }
     .navbar .nav-wrap .nav:first-of-type {
       margin-left: 0; }
     .navbar .nav-wrap .nav > li:hover, .navbar .nav-wrap .nav > li:focus {
@@ -21322,8 +21322,11 @@ a.dimmed_text:visited,
       margin: 0; }
 
 .dropdown-menu {
+  overflow-x: hidden;
   max-height: 400px;
   overflow: auto; }
+  .dropdown-menu a {
+    white-space: normal; }
 
 .dropdown-submenu.subopen {
   background-color: #F5F5F5; }
@@ -22643,6 +22646,9 @@ li.movehere {
 
 #page-mod-quiz-mod #id_reviewoptionshdr:not(.collapsed) .col-md-3 {
   margin-bottom: 0.5rem; }
+
+#page-mod-quiz-edit .statusdisplay {
+  margin-bottom: 2rem; }
 
 #page-mod-quiz-edit .mod_quiz-edit-top-controls {
   clear: both; }
