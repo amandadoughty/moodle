@@ -48,14 +48,15 @@ define(['jquery','core/notification', 'core/templates'], function($, notificatio
      * @param {string} name
      * @param {int} value
      */
-    var changeVisibility = function(link, courseid, name, value) {
+    var changeVisibility = function(link, courseid, name, action, showhide) {
         var params = {
             courseid: courseid,
             name: name,
-            value: value,
+            action: action,
+            showhide: showhide,
             sesskey: M.cfg.sesskey
         };
-        window.console.log('change');
+        window.console.log(adminurl);
         $.post(adminurl, params, function() {})
         .done(function(data) {
             try {
@@ -102,9 +103,10 @@ define(['jquery','core/notification', 'core/templates'], function($, notificatio
         var url = (link.attr('href'));
         var courseid = getUrlParameter(url, 'courseid');
         var name = getUrlParameter(url, 'name');
-        var value = getUrlParameter(url, 'value');
+        var action = getUrlParameter(url, 'action');
+        var showhide = getUrlParameter(url, 'showhide');
 
-        changeVisibility(link, courseid, name, value);
+        changeVisibility(link, courseid, name, action, showhide);
     };
 
     return /** @alias module:format_culcourse/quicklinks */ {

@@ -48,14 +48,11 @@ if (!$usercanedit) {
 
 if ($action == SHOWHIDE) {
     if ($name) {
-        format_culcourse_quicklink_visibility($courseid, $name, $showhide);
-        redirect(course_get_url($course));
+        echo format_culcourse_quicklink_visibility($courseid, $name, $showhide);
     } else {
         print_error('noname', 'format_culcourse');
     }
-}
-
-if ($action == MOVE) {
+} else if ($action == MOVE) {
     if (!empty($moveto) && !empty($copy) && !empty($name) && confirm_sesskey()) {
         $updated = format_culcourse_dashlink_move($courseid, $name, $copy, $moveto);
 

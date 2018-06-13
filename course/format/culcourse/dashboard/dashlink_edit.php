@@ -51,9 +51,7 @@ if ($action == SHOWHIDE) {
     } else {
         print_error('noname', 'format_culcourse');
     }
-}
-
-if ($action == MOVE) {
+} else if ($action == MOVE) {
     if (!empty($moveto) && !empty($name) && confirm_sesskey()) {
         if ($name == 'quicklinksequence') {
             $linkcopy = $USER->quicklinkcopy;

@@ -395,21 +395,39 @@ function format_culcourse_get_coursecode_data($coursecode) { //TODO: Candidate f
     return $codedata;
 }
 
-function format_culcourse_quicklink_visibility($courseid, $name, $value) { 
-    $format = course_get_format($courseid);
-    $options = $format->get_format_options();    
+function format_culcourse_quicklink_visibility($courseid, $name, $value) {
+    global $DB;
 
-    if ($options) {
-        $options[$name] = $value;
-        $options = (object)$options;
-        $format->update_course_format_options($options);
+    // Important: Cannot use $format->update_course_format_options($options)
+    // because activity links do not exist as default values and therefore never
+    // get updated.
+    $options = $DB->get_records('course_format_options', array('courseid' => $courseid, 'name' => $name));
+    
+    if($options) {
+        $option = array_pop($options);
+        $option->value = $value;
+        $DB->update_record('course_format_options', $option);
     } else {
-        $options = [];
-        $options[$name] = $value;
+        $option = new stdClass();
+        $option->courseid = $courseid;
+        $option->name = $name;
+        $option->value = $value;
+        $option->format = 'culcourse';
+        $DB->insert_record('course_format_options', $option);
     }
 
-    $options = (object)$options;
-    $format->update_course_format_options($options);
+    list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
+                $courseid, 
+                $name, 
+                $value
+                );
+
+    $data = new stdClass();
+    $data->editurl = $editurl;
+    $data->editicon = $editicon;
+    $data->editattrs = $editattrs;
+
+    return json_encode($data);
 }
 
 function format_culcourse_dashlink_move($courseid, $name, $link, $moveto = null) {

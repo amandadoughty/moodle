@@ -573,7 +573,7 @@ class dashboard implements templatable, renderable {
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                         $course->id, 
-                        'show' . $modname, 
+                        $modname, 
                         $this->culconfig['show' . $modname]
                         );
 
@@ -744,7 +744,7 @@ class dashboard implements templatable, renderable {
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                             $course->id, 
-                            'show' . $nametype, 
+                            $nametype, 
                             $this->culconfig['show' . $nametype]
                             );
 
