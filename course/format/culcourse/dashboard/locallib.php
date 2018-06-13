@@ -60,19 +60,25 @@ if (!defined('ACTIVITYLINK')) {
 function format_culcourse_get_reading_list_url_data($course) {
     global $CFG;
 
-    $site = trim(get_config('aspirelists', 'targetAspire')); // 1.x: $CFG->block_aspirelists_targetAspire;
+    // $site = trim(get_config('aspirelists', 'targetAspire')); // 1.x: $CFG->block_aspirelists_targetAspire;
+
+    $site = "http://readinglists.city.ac.uk";
+
+
     $codedata = format_culcourse_get_coursecode_data($course);
     #echo(html_writer::tag('pre', var_export($codedata, true))); //TJGDEBUG 09/08/2013 12:10:57
-    if (!file_exists($CFG->dirroot . '/blocks/aspirelists/block_aspirelists.php')) {
-        return false;
-    }
+    // if (!file_exists($CFG->dirroot . '/blocks/aspirelists/block_aspirelists.php')) {
+    //     return false;
+    // }
 
     if (!$codedata || empty($site)) {
         return array('status' => 'NODATA');
     }
 
-    $targetKG = get_config('aspirelists', 'targetKG'); // 1.x: $CFG->block_aspirelists_targetKG;
-    $targetKG = empty($targetKG) ? 'modules' : $targetKG;
+    // $targetKG = get_config('aspirelists', 'targetKG'); // 1.x: $CFG->block_aspirelists_targetKG;
+
+    $targetKG = 'modules';
+    // $targetKG = empty($targetKG) ? 'modules' : $targetKG;
 
     $code = (count($codedata['module_codes']) == 1)
           ? $codedata['module_code']
