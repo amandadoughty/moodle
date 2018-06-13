@@ -47,6 +47,10 @@ body {
     max-width: $container-max-width;
 }
 
+div[role="main"] {
+    clear: both;
+}
+
 h1,
 .h1 {
     font-weight: $font-weight-medium;

@@ -22825,6 +22825,9 @@ body {
 .container-fluid {
   max-width: 1260px; }
 
+div[role="main"] {
+  clear: both; }
+
 h1, .h1 {
   font-weight: 500; }
 
