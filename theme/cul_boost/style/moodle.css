@@ -19736,6 +19736,8 @@ a.bg-black:focus, a.bg-black:hover {
     padding-left: -8px; }
   .block.block_settings .block_tree .tree_item ul, .block.block_settings .block_tree .tree_item.branch {
     padding-left: 0; }
+  .jsenabled .block.block_culactivity_stream .pages {
+    display: none; }
   .block.block_culupcoming_events {
     background-color: #A22833;
     border: none; }
@@ -22634,6 +22636,9 @@ li.movehere {
 
 #page-mod-quiz-mod #id_reviewoptionshdr:not(.collapsed) .col-md-3 {
   margin-bottom: 0.5rem; }
+
+#page-mod-quiz-edit .mod_quiz-edit-top-controls {
+  clear: both; }
 
 .footer {
   color: #fff; }

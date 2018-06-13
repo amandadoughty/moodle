@@ -40,6 +40,13 @@
             }
         }
     }
+    &.block_culactivity_stream {
+        .pages {
+            .jsenabled & {
+                display: none;
+            }
+        }
+    }
     &.block_culupcoming_events {
         background-color: $brand-primary;
         border: none;
