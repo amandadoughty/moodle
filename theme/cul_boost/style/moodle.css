@@ -21234,6 +21234,7 @@ a.dimmed_text:visited,
       .navbar .nav-wrap.stick.stuck .homelink {
         display: block; }
         .navbar .nav-wrap.stick.stuck .homelink img {
+          width: 100%;
           max-width: 85px;
           max-height: 50px; }
       .navbar .nav-wrap.stick.stuck .nav > li > a {
@@ -22234,12 +22235,12 @@ form {
       text-rendering: auto;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      content: "\f105";
+      content: "\f107";
       font-size: 1.75rem;
       margin-top: -0.25rem;
       margin-right: 1rem; }
   #region-main .course-content #toggle-all .content #toggles-all-closed:before {
-    content: "\f107"; }
+    content: "\f105"; }
 
 #region-main .course-content #topcoll-display-instructions > .side {
   display: none; }
@@ -22303,7 +22304,7 @@ form {
               text-rendering: auto;
               -webkit-font-smoothing: antialiased;
               -moz-osx-font-smoothing: grayscale;
-              content: "\f105";
+              content: "\f107";
               font-size: 1.75rem;
               margin-top: -1px;
               width: 2rem;
@@ -22346,8 +22347,6 @@ form {
               background-color: #717176; }
               #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 {
                 color: #fff; }
-                #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3:before, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3:before {
-                  content: "\f105"; }
                 #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a {
                   color: #fff; }
                   #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a span, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a span {
@@ -22361,6 +22360,8 @@ form {
             #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 {
               font-size: 1.375rem;
               color: #fff; }
+              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3:before {
+                content: "\f105"; }
               #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a {
                 color: #fff; }
                 #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a span {
@@ -22455,11 +22456,17 @@ form {
 
 .cul-important {
   margin: 0 0.25rem 0.25rem 0;
-  font-size: 1.125rem; }
+  font-size: 1.125rem;
+  white-space: normal;
+  text-align: left;
+  line-height: 1.5; }
 
 .cul-generic {
   margin: 0 0.25rem 0.25rem 0;
-  font-size: 1rem; }
+  font-size: 1rem;
+  white-space: normal;
+  text-align: left;
+  line-height: 1.5; }
 
 .fixed-anchor {
   position: absolute;
@@ -22639,6 +22646,85 @@ li.movehere {
 
 #page-mod-quiz-edit .mod_quiz-edit-top-controls {
   clear: both; }
+
+.file-picker .ygtvtn,
+.file-picker .ygtvtm,
+.file-picker .ygtvtmh,
+.file-picker .ygtvtp,
+.file-picker .ygtvtph,
+.file-picker .ygtvln,
+.file-picker .ygtvlm,
+.file-picker .ygtvlmh,
+.file-picker .ygtvlp,
+.file-picker .ygtvlph,
+.filemanager .ygtvtn,
+.filemanager .ygtvtm,
+.filemanager .ygtvtmh,
+.filemanager .ygtvtp,
+.filemanager .ygtvtph,
+.filemanager .ygtvln,
+.filemanager .ygtvlm,
+.filemanager .ygtvlmh,
+.filemanager .ygtvlp,
+.filemanager .ygtvlph {
+  background-position-y: 35%; }
+
+.file-picker .ygtvblankdepthcell,
+.file-picker .ygtvblankdepthcell,
+.filemanager .ygtvblankdepthcell,
+.filemanager .ygtvblankdepthcell {
+  height: 18px; }
+
+.file-picker .ygtvtn,
+.file-picker .ygtvtn,
+.filemanager .ygtvtn,
+.filemanager .ygtvtn {
+  height: 30px;
+  background-position-y: 4px; }
+
+.file-picker .ygtvln,
+.file-picker .ygtvln,
+.file-picker a.ygtvspacer,
+.filemanager .ygtvln,
+.filemanager .ygtvln,
+.filemanager a.ygtvspacer {
+  height: 18px; }
+
+.file-picker .fp-filename,
+.filemanager .fp-filename {
+  padding-top: 2px;
+  line-height: 18px;
+  display: inline-block; }
+
+.file-picker .fp-filename-icon,
+.filemanager .fp-filename-icon {
+  margin-top: 0; }
+  .file-picker .fp-filename-icon > a,
+  .filemanager .fp-filename-icon > a {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center; }
+
+.file-picker .fp-icon,
+.filemanager .fp-icon {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 0px;
+  width: 20px;
+  line-height: 18px;
+  margin-right: 5px;
+  height: 20px; }
 
 .footer {
   color: #fff; }
