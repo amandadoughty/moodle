@@ -19,7 +19,7 @@ $blocks = '';
 if ($hasdashcl) {
     $close = html_writer::tag('div', '', ['class'=>'close-icon']);
     $blocks = $OUTPUT->synergyblocks($dashcl, 'findblocks w-100');
-    $blocks = html_writer::tag('div', $blocks.$close, ['class'=>'findblocks-wrap d-flex flex-wrap align-items-center jusitify-content-center p-4']);
+    $blocks = html_writer::tag('div', $blocks.$close, ['class'=>'findblocks-wrap d-flex flex-wrap align-items-start jusitify-content-center py-5 py-md-7 py-xl-9']);
 }
 
 echo html_writer::tag('div', $find.$blocks, ['class'=>'findmodule-wrap bg-light']);

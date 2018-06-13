@@ -573,6 +573,9 @@
                     margin-bottom: $spacer;
                     border-radius: $border-radius;
                     overflow: hidden;
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
                     >.panel-heading {
                         font-size: $font-size-base;
                         display: flex;
@@ -688,6 +691,10 @@
                     }
                 }
                 .course_category_tree {
+                    &.filter-on {
+                        border: none;
+                        padding: $spacer;
+                    }
                     #allcoursesheader {
                         display: flex;
                         flex-wrap: wrap;
@@ -695,9 +702,6 @@
                         min-height: 0;
                         margin-top: 0;
                         margin-bottom: $spacer;
-                        .divalert {
-                            display: none;
-                        }
                         .filter {
                             width: auto;
                             form {
@@ -754,8 +758,14 @@
                     }
                     .culcategory {
                         overflow: hidden;
-                        .subcategories {
-                            padding-left: $spacer * 2.5;
+                        &+.culcategory {
+                            margin-top: $spacer;
+                        }
+                        .content {
+                            margin-top: $spacer;
+                            .subcategories {
+                                padding-left: $spacer * 2.5;
+                            }
                         }
                         &.with_children {
                             &.collapsed {
@@ -816,7 +826,7 @@
                             display: flex;
                             flex-wrap: wrap;
                             align-items: stretch;
-                            margin: 0 0 $spacer 0;
+                            margin: 0;
                             border: none;
                             box-shadow: none;
                             background-color: rgba(#fff, .4);

@@ -1,5 +1,15 @@
-.path-grade-report-grader {
-    .gradeparent {
-    	overflow: auto;
-    }
+// Will be useful once core hack is applied to table cell floater JS
+// .path-grade-report-grader {
+//     .gradeparent {
+//         overflow: hidden;
+//         table#user-grades {
+//             display: block;
+//             overflow: auto;
+//             margin: 0;
+//         }
+//     }
+// }
+
+#page-grade-report-grader-index {
+	overflow-x: visible;
 }

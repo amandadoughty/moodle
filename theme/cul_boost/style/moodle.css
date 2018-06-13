@@ -20304,6 +20304,8 @@ a.bg-black:focus, a.bg-black:hover {
           margin-bottom: 1rem;
           border-radius: 0.25rem;
           overflow: hidden; }
+          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox:last-child {
+            margin-bottom: 0; }
           .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox > .panel-heading {
             font-size: 1rem;
             display: -webkit-box;
@@ -20462,6 +20464,9 @@ a.bg-black:focus, a.bg-black:hover {
               width: auto;
               opacity: 1;
               font-size: 1.375rem; }
+        .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree.filter-on {
+          border: none;
+          padding: 1rem; }
         .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader {
           display: -webkit-box;
           display: -webkit-flex;
@@ -20477,8 +20482,6 @@ a.bg-black:focus, a.bg-black:hover {
           min-height: 0;
           margin-top: 0;
           margin-bottom: 1rem; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .divalert {
-            display: none; }
           .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter {
             width: auto; }
             .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form {
@@ -20579,8 +20582,12 @@ a.bg-black:focus, a.bg-black:hover {
                 background-image: url([[pix:core|t/expanded]]); }
         .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory {
           overflow: hidden; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory .subcategories {
-            padding-left: 2.5rem; }
+          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory + .culcategory {
+            margin-top: 1rem; }
+          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory .content {
+            margin-top: 1rem; }
+            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory .content .subcategories {
+              padding-left: 2.5rem; }
           .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.with_children.collapsed > .info > .categoryname {
             background-image: none; }
             .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.with_children.collapsed > .info > .categoryname:before {
@@ -20662,7 +20669,7 @@ a.bg-black:focus, a.bg-black:hover {
             -webkit-align-items: stretch;
                 -ms-flex-align: stretch;
                     align-items: stretch;
-            margin: 0 0 1rem 0;
+            margin: 0;
             border: none;
             -webkit-box-shadow: none;
                     box-shadow: none;
@@ -21592,8 +21599,8 @@ a.dimmed_text:visited,
 .btn > a, #page-grade-grading-manage .actions .action > a, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input > a, #rubric-rubric.gradingform_rubric .addcriterion > a {
   color:   #fff; }
 
-.path-grade-report-grader .gradeparent {
-  overflow: auto; }
+#page-grade-report-grader-index {
+  overflow-x: visible; }
 
 form {
   margin-bottom: 0; }
@@ -22505,6 +22512,48 @@ form {
           flex: 0 0 100%;
   max-width: 100%; }
 
+.clipboard {
+  width: 100%;
+  background: gray;
+  color: #fff;
+  padding: 0.5rem 1rem; }
+  .clipboard a {
+    color: #fff;
+    font-weight: bold; }
+
+li.movehere {
+  padding: 0.25rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -webkit-box-pack: stretch;
+  -webkit-justify-content: stretch;
+      -ms-flex-pack: stretch;
+          justify-content: stretch;
+  width: 100%; }
+  @media (min-width: 544px) {
+    li.movehere {
+      width: 16%; } }
+  @media (min-width: 1200px) {
+    li.movehere {
+      width: 8%; } }
+  li.movehere > a {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #333333;
+    padding: 0 0.25rem; }
+    li.movehere > a:hover, li.movehere > a:focus {
+      border-color: #fff; }
+    li.movehere > a .icon {
+      margin: 0;
+      width: auto;
+      height: auto; }
+
 .path-mod-assign div[role="main"],
 .path-mod-assign #region-main,
 .path-mod-assign #page-content,
@@ -22807,6 +22856,9 @@ abbr[data-original-title] {
   .popover .popover-title *,
   .popover .popover-content * {
     color: #fff; }
+
+.yui3-panel {
+  z-index: 20; }
 
 .userpicture {
   border-radius: 50%;

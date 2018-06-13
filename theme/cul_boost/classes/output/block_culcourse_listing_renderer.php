@@ -124,9 +124,8 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
             $filters = array();
             $years = array();
             $periods = array();
-            $attributes = $chelper->get_and_erase_attributes('');
             $id = 'course_category_tree';
-            $attributes = array('id'=>$id, 'class'=>'course_category_tree tab-pane clearfix', 'role'=>'tabpanel');
+            $attributes = $chelper->get_and_erase_attributes('course_category_tree clearfix');
             // Get the category content. Calling this function also sets the list of filtered
             // years and periods.
             $categorycontent = $this->coursecat_subcategory_children($chelper, $coursecat, 0);
@@ -135,9 +134,9 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
                 return '';
             }
 
-            $content .= html_writer::start_tag('div', $attributes); // Start .course_category_tree div.
-            $content .= html_writer::start_tag('div', array(
-            'id' => 'allcoursesheader'));
+            $content .= html_writer::start_tag('div', ['id'=>$id, 'class'=>'tab-pane', 'role'=>'tabpanel']); // Start .course_category_tree div.
+            $content .= html_writer::start_tag('div', $attributes);
+            $content .= html_writer::start_tag('div', ['id' => 'allcoursesheader']);
 
             // If filter by year is enabled in the admin settings then build the array for the year
             // filter.
@@ -210,7 +209,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
             $heading = html_writer::link('#'.$id, $heading, ['class'=>'nav-link allcourses-link', 'data-toggle'=>'tab', 'role'=>'tab']);
             $content .= html_writer::tag('div', $heading, ['class'=>'nav-item']);
 
-            $content .= html_writer::tag('h2', $divalert, array('class' => 'divalert'));
+            $content .= html_writer::tag('div', $divalert, array('class' => 'divalert text-center text-white mb-3'));
             $hasexpandedcats = $chelper->get_has_expanded_categories();
 
             // If filter by year or filter by period are enabled in the admin settings
@@ -249,6 +248,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
 
             $content .= html_writer::end_tag('div'); // End #allcourses.
             $content .= html_writer::tag('div', $categorycontent);
+            $content .= html_writer::end_tag('div');
             $content .= html_writer::end_tag('div'); // End .course_category_tree.
         }
 

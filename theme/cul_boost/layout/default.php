@@ -66,6 +66,8 @@ echo $OUTPUT->doctype() ?>
 
         <?php 
 
+            echo $html->gradebookdisclaimer;
+
             if ($PAGE->pagelayout == 'course' && $COURSE->visible == 0) {
                 echo html_writer::tag('h1', get_string('modulehidden', 'theme_cul_boost'), ['class'=>'module-hidden p-3 bg-light mb-4 text-center']);
             }

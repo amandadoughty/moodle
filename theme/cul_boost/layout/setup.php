@@ -1,5 +1,6 @@
 <?php
 
+$html = theme_cul_boost_get_html_for_settings($OUTPUT, $PAGE);
 $cityrenderer = $PAGE->get_renderer('theme_cul_boost', 'city_menu');
 $citycore = $PAGE->get_renderer('theme_cul_boost', 'city_core');
 $visible = theme_cul_boost_get_visible();

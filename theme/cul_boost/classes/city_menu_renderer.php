@@ -91,10 +91,9 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
         $logo->gaschool = "UUCITY";
         $logo->title = "City Unversity London homepage";
         $logo->website = "city.ac.uk";
-        $logo->staffintranet = "https://intranet.city.ac.uk/staff/";
-        $logo->studentintranet = "http://www.city.ac.uk/current-students";
-        $logo->library = "http://www.city.ac.uk/library/";
-        $logo->portal = "http://portal.city.ac.uk";
+        $logo->studenthub = "https://studenthub.city.ac.uk/";
+        $logo->staffhub = "https://staffhub.city.ac.uk/";
+        $logo->library = "https://www.city.ac.uk/library";
 
         // City Uni Central Services.
         if ((trim($userschool) == 'UUCITY') && (substr(trim($userdept), 0, 1) == 'U')) {
@@ -112,8 +111,8 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
             $logo->title = "Cass Business School homepage";
             // CMDLTWO-362 Cass global nav.
             $logo->website = "cass.city.ac.uk";
-            $logo->staffintranet = "http://www.cass.city.ac.uk/intranet/staff";
-            $logo->studentintranet = "http://www.cass.city.ac.uk/intranet/student";
+            $logo->studenthub = "http://www.cass.city.ac.uk/intranet/staff";
+            $logo->staffhub = "http://www.cass.city.ac.uk/intranet/student";
             $logo->library = "http://www.cass.city.ac.uk/intranet/staff/services/learning-resource-centre";
         }
         // School of Arts and Social Sciences
@@ -144,14 +143,13 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
         $attributes = $hideoncollapse + array('target' => '_blank');
         // CMDLTWO-362 Cass global nav - get links passed to function from logo.php in renderers/city.php.
         $listitems = array (
-            html_writer::link('http://www.' . $logo->website . '/', $logo->website),
-            html_writer::link('http://email.city.ac.uk', 'Email', $attributes),
+            html_writer::link('https://www.' . $logo->website . '/', $logo->website),
+            html_writer::link('https://outlook.office.com/', 'Email', $attributes),
             html_writer::link(new moodle_url('/index.php'), 'Moodle',
                 array('class' => 'active', 'style' => 'pointer-events: none')), // CUL CMDLTWO-212.
             html_writer::link($logo->library, 'Library', $hideoncollapse),
-            html_writer::link($logo->portal, 'Student Portal', $hideoncollapse),
-            html_writer::link($logo->studentintranet, 'Current Students', $hideoncollapse),
-            html_writer::link($logo->staffintranet, 'Staff Intranet', $hideoncollapse),
+            html_writer::link($logo->studenthub, 'Student Hub', $hideoncollapse),
+            html_writer::link($logo->staffhub, 'Staff Hub', $hideoncollapse),
         );
         $content .= html_writer::alist( $listitems, array('id' => 'cross-domain-nav', 'class'=>'d-flex flex-wrap'), 'ul');
         

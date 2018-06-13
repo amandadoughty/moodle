@@ -620,7 +620,7 @@ $culcourse-arrow-active-color: #fff;
     height: 1px;
 }
 
-$right-container: $container-max-width + ($grid-gutter-width / 2) + 50px;
+$right-container: $container-max-width+($grid-gutter-width / 2)+50px;
 
 .fixed-buttons {
     position: absolute;
@@ -677,5 +677,47 @@ $right-container: $container-max-width + ($grid-gutter-width / 2) + 50px;
     #region-main {
         flex: 0 0 100%;
         max-width: 100%;
+    }
+}
+
+
+// No JS
+.clipboard {
+    width: 100%;
+    background: gray;
+    color: #fff;
+    padding: $spacer / 2 $spacer;
+    a {
+        color: #fff;
+        font-weight: $font-weight-bold;
+    }
+}
+
+li.movehere {
+    padding: $spacer / 4;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    width: 100%;
+    @include media-breakpoint-up(sm) {
+        width: 16%;
+    }
+    @include media-breakpoint-up(xl) {
+        width: 8%;
+    }
+    >a {
+        width: 100%;
+        height: 100%;
+        border: 1px dashed $gray-dark;
+        padding: 0 $spacer / 4;
+        &:hover,
+        &:focus {
+            border-color: #fff;
+        }
+        .icon {
+            margin: 0;
+            width: auto;
+            height: auto;
+        }
     }
 }

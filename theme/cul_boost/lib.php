@@ -187,13 +187,6 @@ function theme_cul_boost_get_html_for_settings(renderer_base $output, moodle_pag
         }
     }
 
-    $return->mainbuttons = '';
-    $return->loginout = '';
-    if ($page->bodyid != 'page-login-index') {
-        $return->mainbuttons = theme_cul_boost_mainbuttons();
-        // $return->loginout = theme_cul_login_logout();
-    }
-
     $return->gradebookdisclaimer = theme_cul_boost_gradebook_disclaimer($page);
 
     return $return;

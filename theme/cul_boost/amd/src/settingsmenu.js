@@ -7,16 +7,30 @@ define(['jquery', 'core/log'], function($, log) {
             var settingsblock = $('#block-region-nav-settings');
 
             $('a.trigger').on('click', function() {
-                settingsblock.addClass('show');
-                $('.overlay').addClass('show');
-                $('body').addClass('overflow-hidden');
 
+                if ($(this).hasClass('open')) {
+                    $(this).removeClass('open');
+                    settingsblock.removeClass('show');
+                    $('.overlay').removeClass('show');
+                    $('body').removeClass('overflow-hidden');
+                } else {
+                    $(this).addClass('open');
+                    settingsblock.addClass('show');
+                    $('.overlay').addClass('show');
+                    $('body').addClass('overflow-hidden');
+                }
+                
                 var scrollto = settingsblock.parents('.right-navbar').hasClass('stick');
                 if (scrollto != true) {
                     $('html, body').animate({
                         scrollTop: settingsblock.offset().top
                     }, 500);
                 }
+
+                // Click the settings button to reset navigation tree
+                blocktree.animate({
+                    scrollTop: 0
+                }, 0);
             });
 
             $('.overlay').on('click', function() {
@@ -85,23 +99,6 @@ define(['jquery', 'core/log'], function($, log) {
                         scrollTop: 0
                     }, 0);
 
-                });
-
-                // Click the settings button to reset navigation tree
-                $('a.trigger').on('click', function() {
-
-                    if ($(this).hasClass('open')) {
-                        $(this).removeClass('open');
-                        settingsblock.removeClass('show');
-                        $('.overlay').removeClass('show');
-                        $('body').removeClass('overflow-hidden');
-                    } else {
-                        $(this).addClass('open');
-                    }
-                    
-                    blocktree.animate({
-                        scrollTop: 0
-                    }, 0);
                 });
 
                 // Call again just in case
