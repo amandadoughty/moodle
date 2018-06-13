@@ -9,7 +9,18 @@
 //         }
 //     }
 // }
-
 #page-grade-report-grader-index {
-	overflow-x: visible;
+    overflow-x: visible;
+}
+
+.grade-navigation {
+    ul {
+        &:nth-child(2) {
+            li {
+                &:last-child {
+                    display: none;
+                }
+            }
+        }
+    }
 }

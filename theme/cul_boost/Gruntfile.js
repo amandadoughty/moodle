@@ -91,7 +91,7 @@
  *
  *
  * @package theme
- * @subpackage acca_educationhub
+ * @subpackage cul_boost
  * @author Andrew Davidson
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

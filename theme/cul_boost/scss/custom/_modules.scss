@@ -76,6 +76,42 @@
     }
 }
 
+.mod_quiz_preflight_popup fieldset {
+    margin: 0;
+}
+
+.moodle-dialogue-base {
+    .moodle-dialogue {
+        &.mod_quiz_preflight_popup {
+            .moodle-dialogue-bd {
+                #mod_quiz_preflight_form {
+                    legend {
+                        padding: $spacer $spacer 0 $spacer;
+                    }
+                    fieldset {
+                        .form-group {
+                            &.femptylabel {
+                                .col-md-3 {
+                                    display: none;
+                                }
+                                .col-md-9 {
+                                    padding: 0 $spacer / 2;
+                                    flex: 0 0 100%;
+                                    max-width: 100%;
+                                }
+                            }
+                        }
+                        .fitem {
+                            margin: 0;
+                            padding: $spacer / 2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .file-picker,
 .filemanager {
     .ygtvtn,
@@ -124,5 +160,15 @@
         line-height: 18px;
         margin-right: 5px;
         height: 20px;
+    }
+}
+
+.iconpicker {
+    .iconpicker-items {
+        .iconpicker-item {
+            * {
+                color: $brand-primary;
+            }
+        }
     }
 }

@@ -155,6 +155,13 @@ svg.activityicon {
     @extend img.activityicon;
 }
 
+.path-course-view .completionprogress {
+    position: absolute;
+    top: 0;
+    left: $spacer;
+    margin: 0;
+}
+
 .course-content {
     .section {
         .content {

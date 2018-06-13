@@ -6,48 +6,6 @@ define(['jquery', 'core/log'], function($, log) {
             // Open/Close Settings Menu
             var settingsblock = $('#block-region-nav-settings');
 
-            $('a.trigger').on('click', function() {
-
-                if ($(this).hasClass('open')) {
-                    $(this).removeClass('open');
-                    settingsblock.removeClass('show');
-                    $('.overlay').removeClass('show');
-                    $('body').removeClass('overflow-hidden');
-                } else {
-                    $(this).addClass('open');
-                    settingsblock.addClass('show');
-                    $('.overlay').addClass('show');
-                    $('body').addClass('overflow-hidden');
-                }
-                
-                var scrollto = settingsblock.parents('.right-navbar').hasClass('stick');
-                if (scrollto != true) {
-                    $('html, body').animate({
-                        scrollTop: settingsblock.offset().top
-                    }, 500);
-                }
-
-                // Click the settings button to reset navigation tree
-                blocktree.animate({
-                    scrollTop: 0
-                }, 0);
-            });
-
-            $('.overlay').on('click', function() {
-                settingsblock.removeClass('show');
-                $(this).removeClass('show');
-                $('body').removeClass('overflow-hidden');
-            });
-
-            // Close the settings menu with ESC key
-            $(document).keyup(function(e) {
-                if (e.keyCode == 27) {
-                    settingsblock.removeClass('show');
-                    $('.overlay').removeClass('show');
-                    $('body').removeClass('overflow-hidden');
-                }
-            });
-
             // Settings Menu Horizontal Feature
             // Init / re-init the menu
             $(document).ajaxComplete(function(event, xhr, settings) {
@@ -91,6 +49,41 @@ define(['jquery', 'core/log'], function($, log) {
                         blocktree.css('width', width);
                     }
                 }
+
+                $('a.trigger').on('click', function() {
+
+                    $(this).addClass('open');
+                    settingsblock.addClass('show');
+                    $('.overlay').addClass('show');
+                    $('body').addClass('overflow-hidden');
+
+                    var scrollto = settingsblock.parents('.right-navbar').hasClass('stick');
+                    if (scrollto != true) {
+                        $('html, body').animate({
+                            scrollTop: settingsblock.offset().top
+                        }, 500);
+                    }
+
+                    // Click the settings button to reset navigation tree
+                    blocktree.animate({
+                        scrollTop: 0
+                    }, 0);
+                });
+
+                $('.overlay').on('click', function() {
+                    settingsblock.removeClass('show');
+                    $(this).removeClass('show');
+                    $('body').removeClass('overflow-hidden');
+                });
+
+                // Close the settings menu with ESC key
+                $(document).keyup(function(e) {
+                    if (e.keyCode == 27) {
+                        settingsblock.removeClass('show');
+                        $('.overlay').removeClass('show');
+                        $('body').removeClass('overflow-hidden');
+                    }
+                });
 
                 // Click branch to open submenu and scroll to the top
                 branch.on('click', function() {
