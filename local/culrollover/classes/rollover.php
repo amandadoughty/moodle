@@ -423,7 +423,6 @@ class rollover {
             $filerecord = new \stdClass();
             $filerecord->component = $newcomponent;
             $filerecord->filearea = $newfilearea;
-            $filerecord->name = 'boo';
             $fs->create_file_from_storedfile($filerecord, $oldfile);
             $count += 1;
         }
