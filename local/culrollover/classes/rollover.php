@@ -154,7 +154,7 @@ class rollover {
         // Update the destination course record with all the changes.
         $this->update_course_settings();
 
-        // Remove assignments and forums with turnitin plagerism on.
+        // Remove assignments and forums with turnitin plagarism on.
         $this->debug("   attempting to remove assignments and forums with turnitin plagarism on now \n");
         $this->delete_turnitin_activities($modinfobeforerollover);
         $this->delete_forum_activities($modinfobeforerollover);
@@ -347,6 +347,14 @@ class rollover {
                 if (preg_match('/^turnitin.*_([0-9])*_included$/', $setting->get_name())) {
                     $setting->set_value(false);
                 }
+
+                if (preg_match('/^lti.*_([0-9])*_included$/', $setting->get_name())) {
+                    $setting->set_value(false);
+                }
+
+                if (preg_match('/^aspirelist.*_([0-9])*_included$/', $setting->get_name())) {
+                    $setting->set_value(false);
+                }
             }
         }
 
@@ -415,6 +423,7 @@ class rollover {
             $filerecord = new \stdClass();
             $filerecord->component = $newcomponent;
             $filerecord->filearea = $newfilearea;
+            $filerecord->name = 'boo';
             $fs->create_file_from_storedfile($filerecord, $oldfile);
             $count += 1;
         }
