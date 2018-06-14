@@ -22724,6 +22724,8 @@ li.movehere {
 .filemanager .ygtvlmh,
 .filemanager .ygtvlp,
 .filemanager .ygtvlph {
+  width: 25px;
+  background-position-x: 5px;
   background-position-y: 35%; }
 
 .file-picker .ygtvblankdepthcell,
@@ -22782,6 +22784,30 @@ li.movehere {
   line-height: 18px;
   margin-right: 5px;
   height: 20px; }
+
+.file-picker .ygtvdepth0.ygtv-collapsed .fp-icon, .file-picker .ygtvdepth0.ygtv-expanded .fp-icon,
+.filemanager .ygtvdepth0.ygtv-collapsed .fp-icon,
+.filemanager .ygtvdepth0.ygtv-expanded .fp-icon {
+  width: auto;
+  height: auto;
+  margin-right: 0; }
+  .file-picker .ygtvdepth0.ygtv-collapsed .fp-icon img, .file-picker .ygtvdepth0.ygtv-expanded .fp-icon img,
+  .filemanager .ygtvdepth0.ygtv-collapsed .fp-icon img,
+  .filemanager .ygtvdepth0.ygtv-expanded .fp-icon img {
+    width: 25px;
+    height: 25px;
+    max-width: 100%;
+    max-height: 100%; }
+
+.file-picker .ygtvdepth0.ygtv-collapsed .fp-filename, .file-picker .ygtvdepth0.ygtv-expanded .fp-filename,
+.filemanager .ygtvdepth0.ygtv-collapsed .fp-filename,
+.filemanager .ygtvdepth0.ygtv-expanded .fp-filename {
+  font-size: 1.125rem;
+  line-height: 25px; }
+
+.file-picker .ygtvblankdepthcell,
+.filemanager .ygtvblankdepthcell {
+  width: 25px; }
 
 .iconpicker .iconpicker-items .iconpicker-item * {
   color: #A22833; }

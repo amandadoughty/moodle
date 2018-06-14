@@ -124,6 +124,8 @@
     .ygtvlmh,
     .ygtvlp,
     .ygtvlph {
+        width: 25px;
+        background-position-x: 5px;
         background-position-y: 35%;
     }
     .ygtvblankdepthcell,
@@ -160,6 +162,29 @@
         line-height: 18px;
         margin-right: 5px;
         height: 20px;
+    }
+    .ygtvdepth0 {
+        &.ygtv-collapsed,
+        &.ygtv-expanded {
+            .fp-icon {
+                width: auto;
+                height: auto;
+                margin-right: 0;
+                img {
+                    width: 25px;
+                    height: 25px;
+                    max-width: 100%;
+                    max-height: 100%;
+                }
+            }
+            .fp-filename {
+                font-size: $font-size-h5;
+                line-height: 25px;
+            }
+        }
+    }
+    .ygtvblankdepthcell {
+        width: 25px;
     }
 }
 
