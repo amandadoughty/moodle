@@ -19,9 +19,11 @@ define(['jquery', 'core/log'], function($, log) {
                     var window_top = $(window).scrollTop();
                     var navigation = $('.nav-wrap');
                     var navheight = navigation.outerHeight();
+                    var footer = $('#settingsnav+.footer').outerHeight();
+
                     var div_top = $('#navbar-anchor').offset().top;
                     var fixed = '';
-                    
+
                     function ifnavreveal() {
                         if (navigation.hasClass('reveal')) {
                             div_top = $('#navbar-anchor').offset().top - navheight;
@@ -33,10 +35,10 @@ define(['jquery', 'core/log'], function($, log) {
 
                     function settingsheight() {
                         var settings = $('.block_tree.list');
-                        var maxheight = $(window).innerHeight() - (anchorheight + 20);
+                        var maxheight = $(window).innerHeight() - (anchorheight + 20) - footer;
 
                         if (navigation.hasClass('reveal')) {
-                            var maxheight = $(window).innerHeight() - (anchorheight + navheight + 20);
+                            var maxheight = $(window).innerHeight() - (anchorheight + navheight + 20) - footer;
                         }
 
                         settings.css('max-height', maxheight);

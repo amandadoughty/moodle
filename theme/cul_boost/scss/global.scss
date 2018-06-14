@@ -190,6 +190,10 @@ abbr {
     display: none;
 }
 
+.tag {
+    letter-spacing: ($spacer * .015625);
+}
+
 .overlay {
     position: fixed;
     z-index: 2;
@@ -202,6 +206,7 @@ abbr {
     visibility: hidden;
     transition: opacity .2s ease, visibility .2s ease;
     pointer-events: none;
+    cursor: url([[pix:theme|close]]), auto;
     &.show {
         opacity: 1;
         visibility: visible;

@@ -5,18 +5,19 @@ aside[id*="block-region-nav-settings"] {
     position: absolute;
     z-index: 2;
     top: 100%;
-    right: 0;
+    left: -200%;
     margin-bottom: $spacer;
     width: auto;
     min-width: calc(#{$branchwidth} + #{$spacer * 2});
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity .2s ease, visibility .2s ease;
     &.show {
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
+        left: auto;
+        right: 0;
     }
     .block_settings .block-controls {
         float: none!important;
@@ -66,7 +67,9 @@ aside[id*="block-region-nav-settings"] {
     }
 
     .block_settings .footer {
-        display: none;
+        .adminsearchform {
+            border-top: 1px solid $gray-lighter;
+        }
     }
 
     .block_settings .block_tree .tree_item.branch {

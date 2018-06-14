@@ -39,9 +39,9 @@
     data-setting="quicklinksequence"
     data-position="{{name}}"
 >
-    <div class="dash-link {{class}} w-100 h-100 d-flex flex-wrap align-items-center justify-content-center text-center">
+    <div class="dash-link {{class}} {{#attrs.class}}bg-white{{/attrs.class}} w-100 h-100 d-flex flex-wrap align-items-center justify-content-center text-center">
         {{> format_culcourse/movelink}}
-        <a class="w-100 h-100 d-flex flex-wrap align-items-center justify-content-center p-2" href="{{{url}}}" target="{{attrs.target}}" title="{{attrs.title}}">
+        <a class="w-100 h-100 d-flex flex-wrap align-items-center justify-content-center {{#attrs.class}}disabled{{/attrs.class}} p-2" href="{{{url}}}" target="{{attrs.target}}" title="{{attrs.title}}">
             <div class="dash-link-inner w-100 d-flex flex-wrap flex-column">
                 {{^attrs.class}}
                 <div class="dash-icon {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center mb-2">
@@ -49,11 +49,8 @@
                 </div>
                 {{/attrs.class}}
                 {{#attrs.class}}
-                <div class="dash-icon {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center">
-                    <span class="fa-stack">                
-                        <i class="fa {{icon}} text-muted"></i>
-                        <i class="fa fa-ban fa-stack-2x"></i>
-                    </span>
+                <div class="dash-icon {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center mb-2">           
+                    <i class="fa {{icon}} text-muted"></i>
                 </div>
                 {{/attrs.class}}
                 <div class="dash-text {{attrs.class}} {{#attrs.class}}text-muted{{/attrs.class}}">

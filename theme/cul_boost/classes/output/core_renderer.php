@@ -289,7 +289,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    if (!empty($opts->metadata['asotherrole'])) {
 	        $role = core_text::strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['rolename'])));
 	        $usertextcontents .= html_writer::span(
-	            $opts->metadata['rolename'],
+	            ' | '.$opts->metadata['rolename'],
 	            'meta role role-' . $role
 	        );
 	    }
