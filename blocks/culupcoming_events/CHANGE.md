@@ -1,5 +1,7 @@
 Version Information
 ===================
+Version 3.0.2 
+  1. Changed template to display description instead of just event name.
 Version 3.0.0 
   1. Refactored block to use new calendar api.
   2. Refactored block to use renderables and templates.
