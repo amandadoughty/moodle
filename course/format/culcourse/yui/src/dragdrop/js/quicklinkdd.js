@@ -14,32 +14,36 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
     goingLeft: null,
 
     initializer: function() {
+        
         // Set group for parent class.
         this.groups = [CSS.QUICKLINKDRAGGABLE];
         // Initialise quicklinks dragging.
         this.quicklinklistselector = '.' + CSS.QUICKLINK;
-        this.setup_for_quicklink(this.quicklinklistselector);
-        this.samenodeclass = CSS.QUICKLINK;
-        this.parentnodeclass = CSS.QUICKLINKCONTAINER;
+        
+        if(Y.Node.all(this.quicklinklistselector).size()) {
+            this.setup_for_quicklink(this.quicklinklistselector);
+            this.samenodeclass = CSS.QUICKLINK;
+            this.parentnodeclass = CSS.QUICKLINKCONTAINER;
 
-        // Make each li element in the lists of quicklinks draggable.
-        var del = new Y.DD.Delegate({
-            container: '.' + CSS.QUICKLINKCONTAINER,
-            nodes: '.' + CSS.QUICKLINKDRAGGABLE,
-            target: true,
-            handles: ['.' + CSS.MOVE],
-            dragConfig: {groups: this.groups}
-        });
-        del.dd.plug(Y.Plugin.DDProxy, {
-            // Don't move the node at the end of the drag.
-            moveOnEnd: false,
-            cloneNode: true
-        });
-        del.dd.plug(Y.Plugin.DDConstrained, {
-            // Keep it inside the ul.
-            constrain: '.' + CSS.QUICKLINKCONTAINER
-        });
-        del.dd.plug(Y.Plugin.DDWinScroll);
+            // Make each li element in the lists of quicklinks draggable.
+            var del = new Y.DD.Delegate({
+                container: '.' + CSS.QUICKLINKCONTAINER,
+                nodes: '.' + CSS.QUICKLINKDRAGGABLE,
+                target: true,
+                handles: ['.' + CSS.MOVE],
+                dragConfig: {groups: this.groups}
+            });
+            del.dd.plug(Y.Plugin.DDProxy, {
+                // Don't move the node at the end of the drag.
+                moveOnEnd: false,
+                cloneNode: true
+            });
+            del.dd.plug(Y.Plugin.DDConstrained, {
+                // Keep it inside the ul.
+                constrain: '.' + CSS.QUICKLINKCONTAINER
+            });
+            del.dd.plug(Y.Plugin.DDWinScroll);
+        }
     },
 
     /**

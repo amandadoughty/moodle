@@ -13,33 +13,36 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
 
     goingLeft: null,
 
-    initializer: function() {
+    initializer: function() {        
         // Set group for parent class.
         this.groups = [CSS.ACTIVITYLINKDRAGGABLE];
         // Initialise activitylinks dragging
         this.activitylinklistselector = '.' + CSS.ACTIVITYLINK;
-        this.setup_for_activitylink(this.activitylinklistselector);
-        this.samenodeclass = CSS.ACTIVITYLINK;
-        this.parentnodeclass = CSS.ACTIVITYLINKCONTAINER;
+        
+        if(Y.Node.all(this.activitylinklistselector).size()) {
+            this.setup_for_activitylink(this.activitylinklistselector);
+            this.samenodeclass = CSS.ACTIVITYLINK;
+            this.parentnodeclass = CSS.ACTIVITYLINKCONTAINER;
 
-        // Make each li element in the lists of activitylinks draggable.
-        var del = new Y.DD.Delegate({
-            container: '.' + CSS.ACTIVITYLINKCONTAINER,
-            nodes: '.' + CSS.ACTIVITYLINKDRAGGABLE,
-            target: true,
-            handles: ['.' + CSS.MOVE],
-            dragConfig: {groups: this.groups}
-        });
-        del.dd.plug(Y.Plugin.DDProxy, {
-            // Don't move the node at the end of the drag.
-            moveOnEnd: false,
-            cloneNode: true
-        });
-        del.dd.plug(Y.Plugin.DDConstrained, {
-            // Keep it inside the ul.
-            constrain: '.' + CSS.ACTIVITYLINKCONTAINER
-        });
-        del.dd.plug(Y.Plugin.DDWinScroll);
+            // Make each li element in the lists of activitylinks draggable.
+            var del = new Y.DD.Delegate({
+                container: '.' + CSS.ACTIVITYLINKCONTAINER,
+                nodes: '.' + CSS.ACTIVITYLINKDRAGGABLE,
+                target: true,
+                handles: ['.' + CSS.MOVE],
+                dragConfig: {groups: this.groups}
+            });
+            del.dd.plug(Y.Plugin.DDProxy, {
+                // Don't move the node at the end of the drag.
+                moveOnEnd: false,
+                cloneNode: true
+            });
+            del.dd.plug(Y.Plugin.DDConstrained, {
+                // Keep it inside the ul.
+                constrain: '.' + CSS.ACTIVITYLINKCONTAINER
+            });
+            del.dd.plug(Y.Plugin.DDWinScroll);
+        }
     },
 
     /**
