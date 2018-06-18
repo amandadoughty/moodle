@@ -103,3 +103,11 @@ $description = get_string('transfer_timeout_desc', 'format_culcourse');
 $default = 8;
 $type = PARAM_INT;
 $settings->add(new admin_setting_configtext($name, $title, $description, $default, $type));
+
+// Reading List API url.
+$name = 'format_culcourse/aspireAPI';
+$title = get_string('aspireAPI', 'format_culcourse');
+$description = get_string('aspireAPI_desc', 'format_culcourse');
+$default = 'http://readinglists.city.ac.uk';
+$type = PARAM_RAW;
+$settings->add(new admin_setting_configtext($name, $title, $description, $default, $type));

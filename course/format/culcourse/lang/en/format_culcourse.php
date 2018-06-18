@@ -145,6 +145,10 @@ $string['connect_timeout_desc'] = 'Enter the maximum time in seconds to wait for
 $string['transfer_timeout'] = 'Transfer timeout';
 $string['transfer_timeout_desc'] = 'Enter the maximum time in seconds to wait for data transfer from the Reading Lists server to complete, before displaying an error message (upper limit 16).';
 
+// Reading list API url.
+$string['aspireAPI'] = 'Reading list API url';
+$string['aspireAPI_desc'] = 'Enter the Reading list API url.';
+
 /***** LINKS ON COURSE PAGE *****/
 $string['activities'] = 'Activities';
 $string['quicklinks'] = 'Quick Links';

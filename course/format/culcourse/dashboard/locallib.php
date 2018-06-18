@@ -58,36 +58,51 @@ if (!defined('ACTIVITYLINK')) {
  * @return
  */
 function format_culcourse_get_reading_list_url_data($course) {
-    global $CFG;
+    global $CFG;        
 
-    // $site = trim(get_config('aspirelists', 'targetAspire')); // 1.x: $CFG->block_aspirelists_targetAspire;
+    if (!file_exists($CFG->dirroot . '/mod/aspirelists/settings.php')) {
+        return false;
+    }
 
-    $site = "http://readinglists.city.ac.uk";
+    $timePeriod = false;
+    $baseKGCode = false;
+    $aspireURL = get_config('format_culcourse', 'aspireAPI');
 
+    // https://support.talis.com/hc/en-us/articles/205860531
+    $pluginSettings = get_config('mod_aspirelists');
+    $baseKGCode = $course->{$pluginSettings->courseCodeField};
 
-    $codedata = format_culcourse_get_coursecode_data($course);
-    #echo(html_writer::tag('pre', var_export($codedata, true))); //TJGDEBUG 09/08/2013 12:10:57
-    // if (!file_exists($CFG->dirroot . '/blocks/aspirelists/block_aspirelists.php')) {
-    //     return false;
-    // }
+    if(isset($pluginSettings->moduleCodeRegex)) {
+        if(preg_match("/".$pluginSettings->moduleCodeRegex."/", $baseKGCode, $matches)) {
+            if(!empty($matches) && isset($matches[1])) {
+                $baseKGCode = $matches[1];
+                $baseKGCode = strtolower($baseKGCode);
+            }
+        }
+    }
 
-    if (!$codedata || empty($site)) {
+    if(isset($pluginSettings->timePeriodRegex) && isset($pluginSettings->timePeriodMapping)) {
+        $timePeriodMapping = json_decode($pluginSettings->timePeriodMapping, true);
+
+        if(preg_match("/".$pluginSettings->timePeriodRegex."/", $course->{$pluginSettings->courseCodeField}, $matches)) {
+            if(!empty($matches) && isset($matches[1]) && isset($timePeriodMapping[$matches[1]])) {
+                $timePeriod = $timePeriodMapping[$matches[1]];
+            }
+        }
+    }
+
+    if (!$baseKGCode || empty($pluginSettings->targetAspire)) {
         return array('status' => 'NODATA');
     }
 
-    // $targetKG = get_config('aspirelists', 'targetKG'); // 1.x: $CFG->block_aspirelists_targetKG;
+    $path = "{$aspireURL}/modules/{$baseKGCode}";
+    $format = ".json";
 
-    $targetKG = 'modules';
-    // $targetKG = empty($targetKG) ? 'modules' : $targetKG;
-
-    $code = (count($codedata['module_codes']) == 1)
-          ? $codedata['module_code']
-          : implode('-', $codedata['module_codes'])
-          ;
-    $code = strtolower($code);
-
-    $path = "{$site}/{$targetKG}/{$code}";
-    $url  = "{$path}/lists/{$codedata['year_description']}.json";
+    if ($timePeriod) {
+        $url = "{$path}/lists/{$timePeriod}{$format}";
+    } else {
+        $url = "{$path}{$format}";
+    }
 
     // Get the config timeout values.
     $connectiontimeout = trim(get_config('culcourse', 'connection_timeout'));
@@ -96,13 +111,7 @@ function format_culcourse_get_reading_list_url_data($course) {
     $data = format_culcourse_get_reading_list_data($path, $url, $connectiontimeout, $transfertimeout);
 
     if (OK == $data['status']) {
-
         $resourcelists = $data['data'][$path]['http://purl.org/vocab/resourcelist/schema#usesList'];
-
-        // If there's more than 1 module code (i.e. a supermodule), and more than 1 list item, use the parent node.
-        if ((count($codedata['module_codes']) > 1) && (count($resourcelists) > 1)) {
-            return array('status' => OK, 'listtype' => 'module', 'url' => $path);
-        }
 
         foreach ($resourcelists as $resourcelist) {
             if (!empty($data['data'][$resourcelist['value']])) {
@@ -112,9 +121,9 @@ function format_culcourse_get_reading_list_url_data($course) {
 
         return array('status' => OK, 'listtype' => 'module', 'url' => $path); // Should never get here, but just a fallback!
 
-    } else if (NODATA === $data['status']) {
+    } else if (NODATA === $data['status'] && $timePeriod) {
         // If no reading list is returned for specified year, try using just the module name.
-        $data = format_culcourse_get_reading_list_data($path, "{$path}.json", $connectiontimeout, $transfertimeout);
+        $data = format_culcourse_get_reading_list_data($path, "{$path}{$format}", $connectiontimeout, $transfertimeout);
         if (OK == $data['status']) {
             return array('status' => OK, 'listtype' => 'module', 'url' => $path);
         }
@@ -141,8 +150,6 @@ function format_culcourse_get_reading_list_url_data($course) {
  * @param integer $connectiontimeout
  * @param integer $transfertimeout
  * @return array
- * @todo This is a duplicate of block_aspirelists::get_reading_list_data(). Consider using that one (although maybe we
- *       don't want that dependancy. I'll think about it when my brain doesn't ache so much!
  */
 function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout = null, $transfertimeout = null) {
     $connectiontimeout = (empty($connectiontimeout)) ? 4 : $connectiontimeout;
@@ -203,8 +210,8 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
     }
 
     $responsedata = json_decode($response, true);
+    $resourcelists = [];
 
-    $resourcelists = array();
     if (!empty($responsedata[$path]['http://purl.org/vocab/resourcelist/schema#usesList'])) {
         $resourcelists = $responsedata[$path]['http://purl.org/vocab/resourcelist/schema#usesList'];
     }
