@@ -583,16 +583,15 @@
                                 float: none;
                                 .nav-link {
                                     background-color: transparent;
-                                    opacity: 0.3;
                                     &:hover,
                                     &:focus {
-                                        opacity: 0.6;
+                                        background-color: rgba(255, 255, 255, 0.05);
                                     }
                                     &.active {
-                                        opacity: 1;
+                                        background-color: $brand-primary;
                                         &:hover,
                                         &:focus {
-                                            opacity: 1;
+                                            background-color: $brand-primary;
                                         }
                                     }
                                     h2 {
@@ -773,7 +772,7 @@
                             width: auto;
                             margin: 0 auto $spacer auto;
                             @include media-breakpoint-up(sm) {
-                                margin: 0 0 $spacer 0;
+                                margin: 0 0 $spacer / 2 0;
                             }
                             form {
                                 display: block;
@@ -781,9 +780,15 @@
                                     display: flex;
                                     flex-wrap: wrap;
                                     align-items: center;
+                                    justify-content: center;
+                                    span.nowrap {
+                                        margin-bottom: $spacer / 2;
+                                    }
                                 }
                                 label {
-                                    display: none;
+                                    color: #fff;
+                                    margin: 0 $spacer / 2 0 0;
+                                    vertical-align: middle;
                                 }
                                 select {
                                     margin: 0 $spacer / 2 0 $spacer / 2;

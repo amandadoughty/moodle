@@ -17,24 +17,21 @@
 {{!
     @template theme_othm/slide
 }}
-<div class="slide d-flex flex-wrap align-items-center justify-content-center col pt-3 pt-sm-5 px-0 px-sm-5 px-md-0 text-left" style="background-image: url('{{image}}')" data-number="{{number}}">
-    
-    {{#hasurl}}
-    <a class="col align-items-center justify-content-stretch" href="{{url}}">
-    {{/hasurl}}
+<div class="slide d-flex flex-wrap align-items-center col pt-3 pt-sm-5 px-0 px-sm-5 px-md-0 text-left" style="background-image: url('{{image}}')" data-number="{{number}}">
 
-    <div class="container-fluid">
-        <div class="slide-caption bg-primary p-4 text-white" data-slide="{{number}}">
-            {{#hascaption}}
-                <div class="caption-wrap">
-                    {{{caption}}}
-                </div>
-            {{/hascaption}}
+    <div class="col-12 p-0">
+        <div class="container-fluid">
+            <div class="slide-caption bg-primary p-4 text-white" data-slide="{{number}}">
+                {{#hascaption}}
+                    <div class="caption-wrap">
+                        {{{caption}}}
+                    </div>
+                {{/hascaption}}
+                {{#hasurl}}
+                <a class="btn btn-secondary mt-4" href="{{url}}" {{#newtab}}target="_blank"{{/newtab}}>{{text}}</a>
+                {{/hasurl}}
+            </div>
         </div>
     </div>
-
-    {{#hasurl}}
-    </a>
-    {{/hasurl}}
 
 </div>

@@ -19,6 +19,13 @@ $main = new admin_settingpage('theme_cul_boost_dashboard',  get_string('dashboar
     $setting->set_updatedcallback('theme_reset_all_caches');
     $main->add($setting);
 
+    $name = 'theme_cul_boost/slideduration';
+    $title = get_string('slideduration', 'theme_cul_boost');
+    $description = get_string('slidedurationdesc', 'theme_cul_boost');
+    $default = '6';
+    $setting = new admin_setting_configtext($name, $title, $description, $default);
+    $main->add($setting);
+
     $main->add(new admin_setting_heading('theme_cul_boost_findamodule', get_string('findamodule', 'theme_cul_boost'),
             format_text(get_string('findamoduledesc' , 'theme_cul_boost'), FORMAT_MARKDOWN)));
 
@@ -69,11 +76,25 @@ $main = new admin_settingpage('theme_cul_boost_dashboard',  get_string('dashboar
         $setting->set_updatedcallback('theme_reset_all_caches');
         $main->add($setting);
 
-        // URL
+        $name = "theme_cul_boost/buttontext_$slidename";
+        $title = get_string('slidebuttontext', 'theme_cul_boost');
+        $description = get_string('slidebuttontextdesc', 'theme_cul_boost');
+        $setting = new admin_setting_configtext($name, $title, $description, '');
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $main->add($setting);
+
         $name = "theme_cul_boost/url_$slidename";
         $title = get_string('slideurl', 'theme_cul_boost');
         $description = get_string('slideurldesc', 'theme_cul_boost');
         $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_URL);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $main->add($setting);
+
+        $name = "theme_cul_boost/newtab_$slidename";
+        $title = get_string('slidenewtab', 'theme_cul_boost');
+        $description = get_string('slidenewtabdesc', 'theme_cul_boost');
+        $default = false;
+        $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
         $setting->set_updatedcallback('theme_reset_all_caches');
         $main->add($setting);
 

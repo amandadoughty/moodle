@@ -1,18 +1,25 @@
 /* jshint ignore:start */
 define(['jquery', 'theme_cul_boost/slick'], function($, slick) {
     return {
-        init: function() {
+        init: function(opts) {
             $('.slider').each(function() {
 
                 var slider = $(this);
+                var time = opts.duration * 1;
+                var bar,
+                    slider,
+                    isPause,
+                    isBtnPressed = false,
+                    tick,
+                    percentTime;
+
 
                 function dashslider() {
                     slider.slick({
                         dots: false,
                         arrows: true,
                         speed: 500,
-                        autoplay: true,
-                        autoplaySpeed: 5000,
+                        pauseOnDotsHover: true,
                         appendDots: $('.slidercontainer .slide-controls .container-fluid'),
                         appendArrows: $('.slidercontainer .slide-controls .container-fluid'),
                         slide: '.slide',
@@ -22,6 +29,62 @@ define(['jquery', 'theme_cul_boost/slick'], function($, slick) {
                 }
 
                 dashslider();
+
+                $('.pause-button').on('click', function() {
+                    isPause = true;
+                    isBtnPressed = true;
+                    $('.pause-button').css('display', 'none');
+                    $('.play-button').css('display', 'block');
+                });
+
+                $('.play-button').on('click', function() {
+                    isPause = false;
+                    isBtnPressed = false;
+                    $('.play-button').css('display', 'none');
+                    $('.pause-button').css('display', 'block');
+                });
+
+                bar = $('.slider-progress .progress');
+
+                slider.on({
+                    mouseenter: function() {
+                        isPause = true;
+                    },
+                    mouseleave: function() {
+                        if (isBtnPressed == false) {
+                            isPause = false;
+                        }
+                    }
+                });
+
+                function startProgressbar() {
+                    resetProgressbar();
+                    percentTime = 0;
+                    isPause = false;
+                    tick = setInterval(interval, 10);
+                }
+
+                function interval() {
+                    if (isPause === false) {
+                        percentTime += 1 / (time + 0.1);
+                        bar.css({
+                            width: percentTime + "%"
+                        });
+                        if (percentTime >= 100) {
+                            slider.slick('slickNext');
+                            startProgressbar();
+                        }
+                    }
+                }
+
+                function resetProgressbar() {
+                    bar.css({
+                        width: 0 + '%'
+                    });
+                    clearTimeout(tick);
+                }
+
+                startProgressbar();
 
             });
             $('#block-region-dash-full .block_culupcoming_events .culupcoming_events ul').each(function() {

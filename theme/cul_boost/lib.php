@@ -46,7 +46,13 @@ function theme_cul_boost_page_init(moodle_page $page) {
     }
 
     $page->requires->js_call_amd('theme_cul_boost/loader', 'init');
-    $page->requires->js_call_amd('theme_cul_boost/slider', 'init');
+    
+    $duration = (empty($page->theme->settings->slideduration)) ? 6 : $page->theme->settings->slideduration;
+    $opts = [
+        'duration' => $duration
+    ];
+    $page->requires->js_call_amd('theme_cul_boost/slider', 'init', [$opts]);
+
     $page->requires->js_call_amd('theme_cul_boost/dropdowns', 'init');
     $page->requires->js_call_amd('theme_cul_boost/drawermenu', 'init');
     $page->requires->js_call_amd('theme_cul_boost/navsearch', 'init');

@@ -54,11 +54,11 @@
                     font-weight: $font-weight-medium;
                 }
                 h4 {
-                    font-size: $font-size-h2;
+                    font-size: $font-size-h3;
                     font-weight: $font-weight-light;
                 }
                 h5 {
-                    font-size: $font-size-h3;
+                    font-size: $font-size-h4;
                     font-weight: $font-weight-light;
                 }
             }
@@ -69,6 +69,39 @@
         bottom: $spacer * 3;
         left: 0;
         width: 100%;
+    }
+    .pauseslider {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        z-index: 1;
+        cursor: pointer;
+        background-color: $brand-primary;
+        .pause-button,
+        .play-button {
+            width: auto;
+            color: #fff;
+            display: none;
+        }
+        .pause-button {
+            display: block;
+        }
+    }
+}
+
+// progress bar
+.slider-progress {
+    width: 100%;
+    height: 5px;
+    background-color: $gray-lightest;
+    .progress {
+        width: 0%;
+        height: 5px;
+        background: $brand-primary;
+        margin: 0;
     }
 }
 
