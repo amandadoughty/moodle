@@ -59,7 +59,9 @@ $events = $templatecontext['events'];
 $more = $templatecontext['pagination'];
 
 if ($events) {
-    $list .= $renderer->render_from_template('block_culupcoming_events/eventlist', ['events' => $events]);
+    foreach ($events as $event) {
+        $list .= $renderer->render_from_template('block_culupcoming_events/event',  $event);
+    }
 }
 
 if (!$more) {

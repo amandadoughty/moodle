@@ -146,7 +146,7 @@ class eventlist implements templatable, renderable {
      * @param int $limitnum maximum number of events
      * @return stdClass
      */
-    public function get_view(\calendar_information $calendar, $lastdate = 0, $lastid = 0, $limitnum = 5) {
+    public function get_view(\calendar_information $calendar, $lookahead, $lastdate = 0, $lastid = 0, $limitnum = 5) {
         global $PAGE, $CFG;
 
         $renderer = $PAGE->get_renderer('core_calendar');
@@ -158,19 +158,20 @@ class eventlist implements templatable, renderable {
         $date = new \DateTime('now', \core_date::get_user_timezone_object(99));
 
         // Number of days in the future that will be used to fetch events.
-        if (isset($CFG->calendar_lookahead)) {
-            $defaultlookahead = intval($CFG->calendar_lookahead);
-        } else {
-            $defaultlookahead = CALENDAR_DEFAULT_UPCOMING_LOOKAHEAD;
-        }
-        $lookahead = get_user_preferences('calendar_lookahead', $defaultlookahead);
+        // if (isset($CFG->calendar_lookahead)) {
+        //     $defaultlookahead = intval($CFG->calendar_lookahead);
+        // } else {
+        //     $defaultlookahead = CALENDAR_DEFAULT_UPCOMING_LOOKAHEAD;
+        // }
+        // $lookahead = get_user_preferences('calendar_lookahead', $defaultlookahead);
 
-        // Maximum number of events to be displayed on upcoming view.
-        $defaultmaxevents = CALENDAR_DEFAULT_UPCOMING_MAXEVENTS;
+        // // Maximum number of events to be displayed on upcoming view.
+        // $defaultmaxevents = CALENDAR_DEFAULT_UPCOMING_MAXEVENTS;
 
-        if (isset($CFG->calendar_maxevents)) {
-            $defaultmaxevents = intval($CFG->calendar_maxevents);
-        }
+        // if (isset($CFG->calendar_maxevents)) {
+        //     $defaultmaxevents = intval($CFG->calendar_maxevents);
+        // }
+
 
         $tstart = $type->convert_to_timestamp($calendardate['year'], $calendardate['mon'], $calendardate['mday'],
                 $calendardate['hours']);
@@ -309,7 +310,7 @@ class eventlist implements templatable, renderable {
 
         $categoryid = ($PAGE->context->contextlevel === CONTEXT_COURSECAT) ? $PAGE->category->id : null;
         $calendar = \calendar_information::create(time(), $courseid, $categoryid);
-        $events = $this->get_view($calendar, $lastdate, $lastid, $limitnum);
+        $events = $this->get_view($calendar, $lookahead, $lastdate, $lastid, $limitnum);
 
         return $events->events;
     }

@@ -201,7 +201,7 @@ M.block_culupcoming_events.scroll = {
                         this.timer.cancel();
                     } else {
                         if (data.output) {
-                            Y.one('.block_culupcoming_events .culupcoming_events ul').set('innerHTML', data.output);
+                            Y.one('.block_culupcoming_events .culupcoming_events ul').setHTML(data.output);
                         }
                     }
 
