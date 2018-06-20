@@ -589,9 +589,10 @@
                             flex-wrap: wrap;
                             align-items: center;
                             justify-content: center;
-                            margin-bottom: $spacer;
+                            margin-bottom: $spacer * 2;
                             .nav-item {
                                 float: none;
+                                margin: 0 $spacer / 2;
                                 .nav-link {
                                     background-color: transparent;
                                     &:hover,

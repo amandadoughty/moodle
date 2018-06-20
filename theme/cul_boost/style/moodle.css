@@ -20290,9 +20290,10 @@ a.bg-black:focus, a.bg-black:hover {
               -webkit-justify-content: center;
                   -ms-flex-pack: center;
                       justify-content: center;
-              margin-bottom: 1rem; }
+              margin-bottom: 2rem; }
               .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item {
-                float: none; }
+                float: none;
+                margin: 0 0.5rem; }
                 .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link {
                   background-color: transparent; }
                   .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link:hover, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link:focus {

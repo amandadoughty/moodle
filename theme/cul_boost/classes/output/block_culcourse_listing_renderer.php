@@ -58,7 +58,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
 	    // Header.
 	    $content .= html_writer::start_tag('div', array('id' => 'favouritesheader', 'class'=>'mb-3'));
 	    $heading = $this->output->heading(
-	        get_string('favourites', 'block_culcourse_listing'),
+	        get_string('myfavourites', 'theme_cul_boost'),
 	        2,
 	        'culcourse_listing m-0'
 	        );
@@ -199,7 +199,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
             // Get two alternative strings for the heading. One is the heading when no filters are applied and
             // the other is the heading used to declare the filter applied. These are shown/hidden when the
             // filter is on/off.
-            $header = get_string('allcourses', 'block_culcourse_listing');
+            $header = get_string('mymodules', 'theme_cul_boost');
             $and = get_string('and', 'block_culcourse_listing');
             $filterstring = join($and, $filters);
             $divalert = get_string('divalert', 'block_culcourse_listing', $filterstring);
