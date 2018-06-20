@@ -151,7 +151,12 @@ M.block_culupcoming_events.scroll = {
                         Y.log(data.error);
                         this.timer.cancel();
                     } else {
-                        Y.one('.block_culupcoming_events .culupcoming_events ul').append(data.output);
+                        if (data.output) {
+                            var eventlist = Y.one('.block_culupcoming_events .culupcoming_events ul');
+                            var firstli = eventlist.one('> li');
+                            var liwrapper = firstli.ancestor();
+                            liwrapper.append(data.output);
+                        }
                     }
                     // Renable the scroller if there are more events.
                     if (!data.end) {
@@ -203,7 +208,10 @@ M.block_culupcoming_events.scroll = {
                         this.timer.cancel();
                     } else {
                         if (data.output) {
-                            Y.one('.block_culupcoming_events .culupcoming_events ul').setHTML(data.output);
+                            var eventlist = Y.one('.block_culupcoming_events .culupcoming_events ul');
+                            var firstli = eventlist.one('> li');
+                            var liwrapper = firstli.ancestor();
+                            liwrapper.setHTML(data.output);
                         }
                     }
 
