@@ -209,7 +209,7 @@
                             align-items: center;
                             justify-content: center;
                             width: auto;
-                            max-width: 450px;
+                            max-width: 400px;
                             padding: 0 $spacer * 2;
                             line-height: inherit;
                             >ul {
@@ -284,6 +284,7 @@
                                 }
                             }
                             .event-info-wrap {
+                                max-width: calc(100% - 50px);
                                 text-align: left;
                                 color: #fff;
                                 .notificationtext {
@@ -297,6 +298,9 @@
                                     &[data-type="event"] {
                                         font-weight: $font-weight-bold;
                                         display: block;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
                                         &:hover,
                                         &:focus {
                                             text-decoration: underline;

@@ -19896,7 +19896,7 @@ a.bg-black:focus, a.bg-black:hover {
                 -ms-flex-pack: center;
                     justify-content: center;
             width: auto;
-            max-width: 450px;
+            max-width: 400px;
             padding: 0 2rem;
             line-height: inherit; }
             .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li > ul {
@@ -19968,6 +19968,7 @@ a.bg-black:focus, a.bg-black:hover {
                   width: 12px;
                   height: 12px; }
             .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap {
+              max-width: calc(100% - 50px);
               text-align: left;
               color: #fff; }
               .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .notificationtext {
@@ -19980,7 +19981,10 @@ a.bg-black:focus, a.bg-black:hover {
                 .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a[data-type="event"],
                 .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .dimmed_text[data-type="event"] {
                   font-weight: bold;
-                  display: block; }
+                  display: block;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis; }
                   .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a[data-type="event"]:hover, .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a[data-type="event"]:focus,
                   .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .dimmed_text[data-type="event"]:hover,
                   .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .dimmed_text[data-type="event"]:focus {
