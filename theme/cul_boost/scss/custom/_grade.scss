@@ -14,13 +14,7 @@
 }
 
 .grade-navigation {
-    ul {
-        &:nth-child(2) {
-            li {
-                &:last-child {
-                    display: none;
-                }
-            }
-        }
+    a[title="User report"] {
+        display: none;
     }
 }
