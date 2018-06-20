@@ -2601,7 +2601,7 @@ textarea {
   #rubric-rubric.gradingform_rubric .dropup > .addcriterion > .caret {
     border-top-color: #000 !important; }
   .tag, .statusok, .statuswarning, .statusserious,
-  .statuscritical, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .cul-generic {
+  .statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .cul-generic {
     border: 1px solid #000; }
   .table, table.collection, table.flexible,
   .generaltable {
@@ -5903,7 +5903,7 @@ p.arrow_button input[type="button"],
   font-size: 0.875rem; }
 
 .tag, .statusok, .statuswarning, .statusserious,
-.statuscritical, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .cul-generic {
+.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .cul-generic {
   display: inline-block;
   padding: 0.25rem 0.4rem;
   font-size: 0.875rem;
@@ -5914,20 +5914,20 @@ p.arrow_button input[type="button"],
   white-space: nowrap;
   vertical-align: baseline; }
   .tag:empty, .statusok:empty, .statuswarning:empty, .statusserious:empty,
-  .statuscritical:empty, .label:empty, .badge:empty, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count:empty, .cul-important:empty, .cul-generic:empty {
+  .statuscritical:empty, .que .correctness:empty, .label:empty, .badge:empty, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count:empty, .cul-important:empty, .cul-generic:empty {
     display: none; }
 
 .btn .tag, #page-grade-grading-manage .actions .action .tag, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .tag, #rubric-rubric.gradingform_rubric .addcriterion .tag, .btn .statusok, #page-grade-grading-manage .actions .action .statusok, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statusok, #rubric-rubric.gradingform_rubric .addcriterion .statusok, .btn .statuswarning, #page-grade-grading-manage .actions .action .statuswarning, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statuswarning, #rubric-rubric.gradingform_rubric .addcriterion .statuswarning, .btn .statusserious, #page-grade-grading-manage .actions .action .statusserious, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statusserious, #rubric-rubric.gradingform_rubric .addcriterion .statusserious,
 .btn .statuscritical,
 #page-grade-grading-manage .actions .action .statuscritical,
 #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statuscritical,
-#rubric-rubric.gradingform_rubric .addcriterion .statuscritical, .btn .label, #page-grade-grading-manage .actions .action .label, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .label, #rubric-rubric.gradingform_rubric .addcriterion .label, .btn .badge, #page-grade-grading-manage .actions .action .badge, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .badge, #rubric-rubric.gradingform_rubric .addcriterion .badge, .btn #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .btn .activity-count, #page-grade-grading-manage .actions .action #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #page-grade-grading-manage .actions .action .activity-count, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .activity-count, #rubric-rubric.gradingform_rubric .addcriterion #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric .addcriterion .activity-count, .btn .cul-important, #page-grade-grading-manage .actions .action .cul-important, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-important, #rubric-rubric.gradingform_rubric .addcriterion .cul-important, .btn .cul-generic, #page-grade-grading-manage .actions .action .cul-generic, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-generic, #rubric-rubric.gradingform_rubric .addcriterion .cul-generic {
+#rubric-rubric.gradingform_rubric .addcriterion .statuscritical, .btn .que .correctness, .que .btn .correctness, #page-grade-grading-manage .actions .action .que .correctness, .que #page-grade-grading-manage .actions .action .correctness, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .que .correctness, .que #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .correctness, #rubric-rubric.gradingform_rubric .addcriterion .que .correctness, .que #rubric-rubric.gradingform_rubric .addcriterion .correctness, .btn .label, #page-grade-grading-manage .actions .action .label, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .label, #rubric-rubric.gradingform_rubric .addcriterion .label, .btn .badge, #page-grade-grading-manage .actions .action .badge, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .badge, #rubric-rubric.gradingform_rubric .addcriterion .badge, .btn #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .btn .activity-count, #page-grade-grading-manage .actions .action #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #page-grade-grading-manage .actions .action .activity-count, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .activity-count, #rubric-rubric.gradingform_rubric .addcriterion #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric .addcriterion .activity-count, .btn .cul-important, #page-grade-grading-manage .actions .action .cul-important, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-important, #rubric-rubric.gradingform_rubric .addcriterion .cul-important, .btn .cul-generic, #page-grade-grading-manage .actions .action .cul-generic, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-generic, #rubric-rubric.gradingform_rubric .addcriterion .cul-generic {
   position: relative;
   top: -1px; }
 
 a.tag:focus, a.statusok:focus, a.statuswarning:focus, a.statusserious:focus,
-a.statuscritical:focus, a.label:focus, a.badge:focus, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:focus, a.cul-important:focus, a.cul-generic:focus, a.tag:hover, a.statusok:hover, a.statuswarning:hover, a.statusserious:hover,
-a.statuscritical:hover, a.label:hover, a.badge:hover, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:hover, a.cul-important:hover, a.cul-generic:hover {
+a.statuscritical:focus, .que a.correctness:focus, a.label:focus, a.badge:focus, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:focus, a.cul-important:focus, a.cul-generic:focus, a.tag:hover, a.statusok:hover, a.statuswarning:hover, a.statusserious:hover,
+a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:hover, a.cul-important:hover, a.cul-generic:hover {
   color: #fff;
   text-decoration: none;
   cursor: pointer; }
@@ -8777,6 +8777,13 @@ body#page-lib-editor-tinymce-plugins-moodlemedia-preview {
 /* Moodle Dialogue Settings (moodle-core-dialogue)  */
 .moodle-dialogue-base .moodle-dialogue-lightbox {
   background-color: #696969; }
+
+.pagelayout-popup .moodle-dialogue-base .moodle-dialogue-lightbox {
+  background-color: transparent; }
+
+.pagelayout-popup .moodle-dialogue-base .moodle-dialogue {
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); }
 
 .moodle-dialogue-base .hidden,
 .moodle-dialogue-base .moodle-dialogue-hidden {
@@ -13391,7 +13398,8 @@ a.ygtvspacer:hover {
       width: 12px;
       height: 12px; }
   #categoryquestions label {
-    margin: 0; }
+    margin: 0;
+    display: block; }
   #categoryquestions .header {
     text-align: left; }
 
@@ -13474,6 +13482,12 @@ body.path-question-type {
 .que .content {
   margin: 0 0 0 8.5em; }
 
+.que.multichoice .answer div.r0 .icon.fa-check,
+.que.multichoice .answer div.r1 .icon.fa-check,
+.que.multichoice .answer div.r0 .icon.fa-remove,
+.que.multichoice .answer div.r1 .icon.fa-remove {
+  text-indent: 0; }
+
 .formulation input[type="text"],
 .formulation select {
   width: auto;
@@ -13499,11 +13513,20 @@ body.path-question-type {
 
 .que .specificfeedback,
 .que .generalfeedback,
-.que .rightanswer,
+.que .numpartscorrect .que .rightanswer,
 .que .im-feedback,
 .que .feedback,
 .que p {
   margin: 0 0 0.5em; }
+
+.que .correctness.correct {
+  background-color: #3c763d; }
+
+.que .correctness.partiallycorrect {
+  background-color: #8a6d3b; }
+
+.que .correctness.notanswered, .que .correctness.incorrect {
+  background-color: #a94442; }
 
 .que .qtext {
   margin-bottom: 1.5em; }
@@ -14164,6 +14187,12 @@ div#dock {
 .path-mod-lesson .invisiblefieldset.fieldsetfix {
   display: block; }
 
+.path-mod-lesson .answeroption .checkbox label p {
+  display: inline; }
+
+#page-mod-lesson-view .branchbuttoncontainer .singlebutton button[type="submit"] {
+  white-space: normal; }
+
 .path-mod-wiki .wiki_headingtitle,
 .path-mod-wiki .midpad,
 .path-mod-wiki .wiki_headingtime {
@@ -14346,6 +14375,10 @@ div#dock {
 .path-mod-quiz #mod_quiz_navblock .qnbutton.answersaved .trafficlight,
 .path-mod-quiz #mod_quiz_navblock .qnbutton.requiresgrading .trafficlight {
   background-color: #98989C; }
+
+#page-mod-quiz-edit ul.slots li.section li.activity .instancemaxmarkcontainer form input {
+  height: 1.4em;
+  vertical-align: middle; }
 
 .path-mod-assign [data-region="grade-actions-panel"] [data-region="grade-actions"] .collapse-buttons {
   top: auto; }
@@ -15557,13 +15590,13 @@ div[data-flexitour="backdrop"] {
 
 div[data-flexitour="step-background-fader"],
 div[data-flexitour="step-background"] {
-  z-index: 1040 + 1; }
+  z-index: 1041; }
 
 span[data-flexitour="container"],
 div[data-flexitour="step-background-fader"],
 [data-flexitour="step-backdrop"] > td,
 [data-flexitour="step-backdrop"] {
-  z-index: 1040 + 2; }
+  z-index: 1042; }
 
 span[data-flexitour="container"] .modal-dialog {
   /**
@@ -19761,10 +19794,15 @@ a.bg-black:focus, a.bg-black:hover {
           aside:not(#block-region-dash-full) .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li {
             padding: 0.5rem 0;
             margin-bottom: 0;
-            max-width: 100%; }
+            max-width: 100%;
+            -webkit-box-pack: start !important;
+            -webkit-justify-content: flex-start !important;
+                -ms-flex-pack: start !important;
+                    justify-content: flex-start !important; }
             aside:not(#block-region-dash-full) .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li:hover, aside:not(#block-region-dash-full) .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li:focus {
               background-color: rgba(0, 0, 0, 0.1); }
             aside:not(#block-region-dash-full) .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event {
+              max-width: 100%;
               -webkit-box-align: start !important;
               -webkit-align-items: flex-start !important;
                   -ms-flex-align: start !important;
@@ -19847,22 +19885,13 @@ a.bg-black:focus, a.bg-black:hover {
             margin-bottom: 1rem; }
             .block.block_culupcoming_events .block-inner .content .culupcoming_events ul:not(.slick-slider) li:last-of-type {
               margin-bottom: 0; }
-          .block.block_culupcoming_events .block-inner .content .culupcoming_events ul.slick-slider .slick-slide > ul {
+          .block.block_culupcoming_events .block-inner .content .culupcoming_events ul.slick-slider li:not(.slick-slide) {
+            display: none !important; }
+          .block.block_culupcoming_events .block-inner .content .culupcoming_events ul.slick-slider li.slick-slide > ul {
             display: none; }
           .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-align: center;
-            -webkit-align-items: center;
-                -ms-flex-align: center;
-                    align-items: center;
-            -webkit-box-pack: center;
-            -webkit-justify-content: center;
-                -ms-flex-pack: center;
-                    justify-content: center;
-            width: auto;
+            display: block;
+            width: 100%;
             max-width: 400px;
             padding: 0 2rem;
             line-height: inherit; }
@@ -19941,7 +19970,10 @@ a.bg-black:focus, a.bg-black:hover {
               .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .notificationtext {
                 font-size: 0.875rem;
                 width: 100%;
-                display: block; }
+                display: block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis; }
               .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap a,
               .block.block_culupcoming_events .block-inner .content .culupcoming_events ul li .event-info-wrap .dimmed_text {
                 color: #fff !important; }
@@ -21770,7 +21802,7 @@ form {
     width: auto; }
   form .form-autocomplete-selection + input.form-control {
     padding-right: 2rem;
-    min-width: 250px; }
+    min-width: 260px; }
   form .form-autocomplete-downarrow {
     top: .1rem; }
 
@@ -21954,7 +21986,11 @@ form {
   .slidercontainer .slider {
     width: 100%;
     min-height: 430px;
+    height: auto;
     overflow: hidden; }
+    @media (min-width: 768px) {
+      .slidercontainer .slider {
+        height: 430px; } }
     .slidercontainer .slider .slick-list {
       height: auto; }
       .slidercontainer .slider .slick-list .slick-track {
@@ -22307,6 +22343,7 @@ form {
       .course-content .section .content li.activity .activityinstance div a:first-of-type img.activityicon,
       .course-content .section .content li.activity .activityinstance div a:first-of-type svg.activityicon,
       .course-content .section .content li.activity .activityinstance div a:first-of-type svg.activityicon {
+        min-width: 20px;
         width: 20px;
         height: auto;
         position: relative;
@@ -23428,6 +23465,9 @@ abbr[data-original-title] {
 .h-100 {
   height: 100% !important; }
 
+.float-none {
+  float: none !important; }
+
 .row-x {
   margin-left: -1rem;
   margin-right: -1rem; }
@@ -23446,7 +23486,7 @@ abbr[data-original-title] {
   display: none; }
 
 .tag, .statusok, .statuswarning, .statusserious,
-.statuscritical, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .cul-generic {
+.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .cul-generic {
   letter-spacing: 0.015625rem; }
 
 .overlay {

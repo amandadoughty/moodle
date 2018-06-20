@@ -244,6 +244,7 @@ svg.activityicon {
                             img,
                             svg {
                                 &.activityicon {
+                                    min-width: 20px;
                                     width: 20px;
                                     height: auto;
                                     position: relative;

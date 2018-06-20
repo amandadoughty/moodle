@@ -4,7 +4,11 @@
     .slider {
         width: 100%;
         min-height: 430px;
+        height: auto;
         overflow: hidden;
+        @include media-breakpoint-up(md) {
+            height: 430px;
+        }
         .slick-list {
             height: auto;
             .slick-track {

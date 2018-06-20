@@ -35,7 +35,7 @@
 <li id="{{id}}_{{timestart}}">
     <!-- <div class="clearfix notifictionitem"> -->
     <div{{!
-        }} class="event px-3 d-flex flex-wrap align-items-center clearfix"{{!
+        }} class="event pl-4 pr-3 d-flex flex-wrap align-items-center clearfix"{{!
         }} data-eventtype-{{calendareventtype}}="1"{{!
         }} data-region="event-item"{{!
     }}>
@@ -54,7 +54,7 @@
                     }} data-event-id="{{id}}"{{!
                     }} href="{{viewurl}}"{{!
                 }}>{{{name}}}</a>
-                {{{formattedtime}}}
+                <span class="event-time">{{{formattedtime}}}</span>
             </div>
             <div class="meta">
                 <span class="timeuntil">{{timeuntil}}</span>

@@ -104,11 +104,13 @@
                                 padding: $spacer / 2 0;
                                 margin-bottom: 0;
                                 max-width: 100%;
+                                justify-content: flex-start !important;
                                 &:hover,
                                 &:focus {
                                     background-color: rgba(#000, 0.1);
                                 }
                                 .event {
+                                    max-width: 100%;
                                     align-items: flex-start !important;
                                 }
                                 .avatar {
@@ -198,17 +200,20 @@
                             }
                         }
                         &.slick-slider {
-                            .slick-slide {
-                                >ul {
-                                    display: none;
+                            li {
+                                &:not(.slick-slide) {
+                                    display: none !important;
+                                }
+                                &.slick-slide {
+                                    >ul {
+                                        display: none;
+                                    }
                                 }
                             }
                         }
                         li {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            width: auto;
+                            display: block;
+                            width: 100%;
                             max-width: 400px;
                             padding: 0 $spacer * 2;
                             line-height: inherit;
@@ -291,6 +296,9 @@
                                     font-size: $font-size-sm;
                                     width: 100%;
                                     display: block;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
                                 }
                                 a,
                                 .dimmed_text {

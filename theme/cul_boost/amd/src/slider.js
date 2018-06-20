@@ -23,8 +23,8 @@ define(['jquery', 'theme_cul_boost/slick'], function($, slick) {
                         appendDots: $('.slidercontainer .slide-controls .container-fluid'),
                         appendArrows: $('.slidercontainer .slide-controls .container-fluid'),
                         slide: '.slide',
-                        prevArrow: '<button type="button" data-role="none" class="slick-prev btn btn-primary" name="Next" aria-label="Previous" tabindex="0" role="button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
-                        nextArrow: '<button type="button" data-role="none" class="slick-next btn btn-primary" name="Next" aria-label="Next" tabindex="0" role="button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
+                        prevArrow: '<button type="button" data-role="none" class="slick-prev d-inline-flex align-items-center justify-content-center btn btn-primary" name="Next" aria-label="Previous" tabindex="0" role="button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
+                        nextArrow: '<button type="button" data-role="none" class="slick-next d-inline-flex align-items-center justify-content-center btn btn-primary" name="Next" aria-label="Next" tabindex="0" role="button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
                     });
                 }
 
@@ -102,8 +102,8 @@ define(['jquery', 'theme_cul_boost/slick'], function($, slick) {
                             slidesToShow: 1,
                             centerMode: true,
                             variableWidth: true,
-                            prevArrow: '<button type="button" data-role="none" class="slick-prev btn btn-primary" name="Next" aria-label="Previous" tabindex="0" role="button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
-                            nextArrow: '<button type="button" data-role="none" class="slick-next btn btn-primary" name="Next" aria-label="Next" tabindex="0" role="button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
+                            prevArrow: '<button type="button" data-role="none" class="slick-prev d-inline-flex align-items-center justify-content-center btn btn-primary" name="Next" aria-label="Previous" tabindex="0" role="button"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
+                            nextArrow: '<button type="button" data-role="none" class="slick-next d-inline-flex align-items-center justify-content-center btn btn-primary" name="Next" aria-label="Next" tabindex="0" role="button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
                             appendArrows: $('#block-region-dash-full .block.block_culupcoming_events .culupcoming_events')
                         });
                     }
