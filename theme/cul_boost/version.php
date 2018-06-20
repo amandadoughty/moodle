@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = '2018061100';                                                                        
+$plugin->version = '2018062000';                                                                        
 $plugin->requires = '2017110800';                                                               
 $plugin->component = 'theme_cul_boost';   
 

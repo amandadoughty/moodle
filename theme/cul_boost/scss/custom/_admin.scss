@@ -43,6 +43,9 @@
     background-image: none;
 }
 
-.moodle-dialogue {
-    z-index: 999 !important;
+.moodle-dialogue-base {
+    .moodle-dialogue-lightbox,
+    .moodle-dialogue {
+        z-index: 999 !important;
+    }
 }
