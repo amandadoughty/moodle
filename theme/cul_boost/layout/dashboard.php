@@ -49,6 +49,11 @@ echo $OUTPUT->doctype() ?>
     }  
 
     require_once(dirname(__FILE__).'/includes/findamodule.php');
+
+    echo html_writer::start_tag('div', ['class'=>'dashboard-navbar-wrap pt-5 container-fluid']);
+        require_once(dirname(__FILE__).'/includes/navbar.php');
+    echo html_writer::end_tag('div');
+
     require_once(dirname(__FILE__).'/includes/recentcourses.php');
 
     if ($hasdashfull) {
@@ -65,9 +70,6 @@ echo $OUTPUT->doctype() ?>
             </section>
 
             <?php 
-                echo html_writer::start_tag('div', ['class'=>'dashboard-navbar-wrap col-12']);
-                    require_once(dirname(__FILE__).'/includes/navbar.php');
-                echo html_writer::end_tag('div');
 
                 echo html_writer::start_tag('div', ['class'=>'dashboard-blocks-wrap w-100']);
                     if ($hasdashleft) {

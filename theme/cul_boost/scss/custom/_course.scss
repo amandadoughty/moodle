@@ -139,6 +139,7 @@
                             svg {
                                 width: $font-size-base * 1.75;
                                 height: auto;
+                                margin: 0;
                             }
                         }
                     }
@@ -212,15 +213,10 @@ svg.activityicon {
                     .filler {
                         display: none;
                     }
+                    .cm-edit-action,
                     .autocompletion {
                         display: inline-flex;
                         align-items: center;
-                    }
-                }
-                .editing & {
-                    .editing_move {
-                        top: 20px;
-                        transform: translateY(-50%);
                     }
                 }
                 .activityinstance,
@@ -259,6 +255,18 @@ svg.activityicon {
                         span.instancename {
                             border-left: 1px solid $brand-primary;
                             padding: $spacer / 2 $spacer;
+                        }
+                        .aspirelists_inline_accordion {
+                            display: flex;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            justify-content: center;
+                            align-self: stretch;
+                            padding: $spacer / 4 $spacer / 2;
+                            background-color: $brand-primary;
+                            color: #fff;
+                            line-height: 1.1;
+                            cursor: pointer;
                         }
                     }
                 }
@@ -543,6 +551,11 @@ $culcourse-arrow-active-color: #fff;
                                 color: $culcourse-header-text-color;
                                 .truncate {
                                     height: auto;
+                                    &.truncated {
+                                        &:after {
+                                            display: none;
+                                        }
+                                    }
                                     >div>* {
                                         white-space: nowrap;
                                         overflow: hidden;

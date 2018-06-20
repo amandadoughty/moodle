@@ -50,6 +50,12 @@ define(['jquery', 'core/log'], function($, log) {
                     }
                 }
 
+                function fix_width() {
+                    var openbranch = $('.tree_item.branch[aria-expanded="true"]');
+                    var branches = openbranch.length * 2;
+                    blocktree.css('width', 'calc(' + width + 'px + ' + branches + 'rem');
+                }
+
                 $('a.trigger').on('click', function() {
 
                     $(this).addClass('open');
@@ -63,6 +69,8 @@ define(['jquery', 'core/log'], function($, log) {
                             scrollTop: settingsblock.offset().top
                         }, 500);
                     }
+
+                    fix_width();
 
                     // Click the settings button to reset navigation tree
                     blocktree.animate({

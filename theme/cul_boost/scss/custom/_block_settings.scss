@@ -23,13 +23,28 @@ aside[id*="block-region-nav-settings"] {
         float: none!important;
         text-align: right;
         position: absolute;
-        bottom: 0;
-        left: $spacer / 2;
-        transform: translateY(-50%);
-        z-index: 1;
+        top: 0;
+        right: 100%;
+        z-index: 0;
+        background-color: #fff;
+        border-right: 2px solid $gray-lighter;
         .moodle-core-dragdrop-draghandle {
             >.icon {
                 margin-left: 0;
+            }
+        }
+        .moodle-core-dragdrop-draghandle,
+        .dropdown {
+            display: block !important;
+            min-width: 30px;
+            padding: $spacer / 4;
+            text-align: center;
+            .dropdown-toggle::after {
+                margin-left: 0;
+            }
+            .dropdown-menu {
+                margin: 0 !important;
+                right: -2px;
             }
         }
     }
@@ -110,7 +125,7 @@ aside[id*="block-region-nav-settings"] {
 
     .block_navigation .block_tree p.hasicon .icon,
     .block_settings .block_tree p.hasicon .icon {
-        margin: (-$spacer / 4) ($spacer / 2) 0 0;
+        margin: 0 ($spacer / 2) 0 0;
         color: $brand-primary;
         min-width: 16px;
     }
@@ -140,8 +155,8 @@ aside[id*="block-region-nav-settings"] {
     .block.block_settings .block_tree .tree_item.branch:before {
         text-align: center;
         font-size: $font-size-lg;
-        margin-top: -$spacer / 4;
         margin-right: $spacer / 2;
+        line-height: $font-size-base;
         color: $brand-primary;
     }
 

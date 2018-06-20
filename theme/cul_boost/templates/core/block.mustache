@@ -35,16 +35,16 @@
     {{! Block contents }}
     <div class="card-block block-inner p-0">
 
+        {{#hascontrols}}
+            <div class="block-controls pull-xs-right header position-relative">
+                {{{controls}}}
+            </div>
+        {{/hascontrols}}
+
         {{! Block header }}
         {{#title}}
             <h3 id="instance-{{blockinstanceid}}-header" class="card-title block-title d-flex flex-wrap align-items-center">{{{title}}}</h3>
         {{/title}}
-
-        {{#hascontrols}}
-            <div class="block-controls pull-xs-right header">
-                {{{controls}}}
-            </div>
-        {{/hascontrols}}
 
         <div class="card-text content">
             {{{content}}}

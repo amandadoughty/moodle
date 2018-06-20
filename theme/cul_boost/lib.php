@@ -30,6 +30,21 @@ defined('MOODLE_INTERNAL') || die();
 function theme_cul_boost_page_init(moodle_page $page) {
     global $CFG, $DB, $OUTPUT, $USER;
 
+    $quizpageids = array(
+        'page-question-preview',
+        'page-mod-quiz-attempt'
+        );
+
+    $page->requires->jquery_plugin('ui');
+    $page->requires->jquery_plugin('ui-css');
+
+    if (in_array($page->bodyid, $quizpageids)) {
+        $page->requires->jquery_plugin('selectboxit', 'theme_cul_boost');
+        $page->requires->jquery_plugin('selectboxit-css', 'theme_cul_boost');
+        $page->requires->jquery_plugin('selectboxit-long', 'theme_cul_boost');
+        $page->requires->jquery_plugin('selectboxit-long-css', 'theme_cul_boost');
+    }
+
     $page->requires->js_call_amd('theme_cul_boost/loader', 'init');
     $page->requires->js_call_amd('theme_cul_boost/slider', 'init');
     $page->requires->js_call_amd('theme_cul_boost/dropdowns', 'init');
@@ -41,6 +56,7 @@ function theme_cul_boost_page_init(moodle_page $page) {
     $page->requires->js_call_amd('theme_cul_boost/navigation', 'init');
     $page->requires->js_call_amd('theme_cul_boost/stickynav', 'init');
     $page->requires->js_call_amd('theme_cul_boost/fixedbuttons', 'init');
+    $page->requires->js_call_amd('theme_cul_boost/selectmenu', 'init');
 
     return true;
 }

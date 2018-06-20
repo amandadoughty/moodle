@@ -20,6 +20,10 @@
             text-transform: none;
             margin: 0;
         }
+        .content {
+            word-break: break-word;
+            word-wrap: break-word;
+        }
     }
     &.block_adminblock {
         order: -1;
@@ -41,6 +45,25 @@
         }
     }
     &.block_culactivity_stream {
+        #block-region-dash-feed & {
+            .block-inner {
+                .block-title {
+                    color: $brand-primary;
+                    font-size: $font-size-h2;
+                    padding: 0;
+                    margin-bottom: $spacer * 2;
+                }
+            }
+        }
+        .culactivity_stream {
+            max-height: 375px;
+            ul {
+                padding: 0;
+                li {
+                    padding: $spacer / 2;
+                }
+            }
+        }
         .pages {
             .jsenabled & {
                 display: none;
@@ -91,6 +114,7 @@
                 position: absolute;
                 top: $spacer / 2;
                 right: $spacer / 2;
+                z-index: 1;
                 .editing_move,
                 .dropdown-toggle,
                 .moodle-core-dragdrop-draghandle {
@@ -151,22 +175,43 @@
                     ul {
                         position: relative;
                         display: flex;
-                        flex-wrap: nowrap;
+                        flex-wrap: wrap;
                         justify-content: center;
                         transition: opacity 0.2s ease;
+                        &:not(.slick-slider) {
+                            li {
+                                margin-bottom: $spacer;
+                                &:last-of-type {
+                                    margin-bottom: 0;
+                                }
+                            }
+                        }
+                        &.slick-slider {
+                            .slick-slide {
+                                >ul {
+                                    display: none;
+                                }
+                            }
+                        }
                         li {
-                            width: 100%;
-                            max-width: 400px;
-                            padding: 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: auto;
+                            max-width: 450px;
+                            padding: 0 $spacer * 2;
                             line-height: inherit;
+                            >ul {
+                                display: none;
+                            }
                             .avatar {
                                 position: relative;
                                 margin: 0;
                                 overflow: visible;
                                 float: none;
                                 display: block;
-                                width: 90px;
-                                height: 90px;
+                                width: 50px;
+                                height: 50px;
                                 a {
                                     width: auto;
                                     height: auto;
@@ -330,47 +375,54 @@
     &:before {
         @include fa-icon();
         content: "\f002";
-        font-size: $font-size-h2;
+        font-size: $font-size-h3;
         color: $brand-primary;
         position: absolute;
         top: 50%;
         right: $spacer * 1.25;
         transform: translateY(-50%);
         margin-top: -1px;
+        @include media-breakpoint-up(sm) {
+            font-size: $font-size-h2;
+        }
     }
     .initialsearch {
         width: 100%;
         margin: 0;
         height: 70px;
+        line-height: 70px;
         text-align: left;
         background-color: #fff;
-        padding: $spacer ($spacer * 4) $spacer $spacer;
-        font-size: $font-size-h3;
+        padding: 0 ($spacer * 4) 0 $spacer;
+        font-size: $font-size-h4;
         color: $brand-primary;
         border: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @include media-breakpoint-up(sm) {
+            font-size: $font-size-h3;
+        }
     }
 }
 
 .findblocks-wrap {
-    position: relative;
     background-color: rgba($gray-dark, .95);
     overflow: auto;
-    body:not(.editing) & {
-        position: fixed;
-        z-index: 20;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity .15s ease, visibility .15s ease;
-        pointer-events: none;
-        &.show {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .15s ease, visibility .15s ease;
+    pointer-events: none;
+    &.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
     }
     .close-icon {
         width: 30px;
@@ -516,6 +568,7 @@
             }
             &.block_culcourse_listing {
                 max-width: 930px;
+                margin-bottom: $spacer * 7;
                 >.block-inner {
                     padding: 0;
                     .content {
@@ -603,11 +656,13 @@
                             }
                         }
                         .coursename_wrapper {
-                            width: auto;
-                            max-width: 100%;
                             display: flex;
                             flex-wrap: wrap;
                             align-items: stretch;
+                            flex-basis: 0%;
+                            flex-grow: 1;
+                            max-width: 100%;
+                            width: 100%;
                             .coursename {
                                 max-width: 100%;
                                 float: none !important;
@@ -617,13 +672,19 @@
                                 display: flex;
                                 flex-wrap: wrap;
                                 align-items: center;
+                                flex-basis: 0%;
+                                flex-grow: 1;
+                                max-width: 100%;
+                                width: 100%;
                                 a {
                                     color: #fff;
                                     padding-left: $spacer * 1.75;
                                     background-position: left center;
                                     font-family: inherit;
-                                    line-height: 1.1;
+                                    line-height: $line-height-base;
                                     background-image: url([[pix:theme|course-light]]);
+                                    background-size: 16px 16px;
+                                    ;
                                 }
                             }
                         }
@@ -707,10 +768,13 @@
                         flex-wrap: wrap;
                         align-items: center;
                         min-height: 0;
-                        margin-top: 0;
-                        margin-bottom: $spacer;
+                        margin: 0;
                         .filter {
                             width: auto;
+                            margin: 0 auto $spacer auto;
+                            @include media-breakpoint-up(sm) {
+                                margin: 0 0 $spacer 0;
+                            }
                             form {
                                 display: block;
                                 >div {
@@ -722,7 +786,10 @@
                                     display: none;
                                 }
                                 select {
-                                    margin: 0 $spacer 0 0;
+                                    margin: 0 $spacer / 2 0 $spacer / 2;
+                                    @include media-breakpoint-up(sm) {
+                                        margin: 0 $spacer 0 0;
+                                    }
                                     &.custom-select {
                                         padding: $spacer * .75 $spacer * 2 $spacer * .75 $spacer;
                                         font-size: $font-size-h5;
@@ -733,9 +800,15 @@
                             }
                         }
                         .collapsible-actions {
-                            width: auto;
+                            width: 100%;
                             padding: 0;
-                            margin-left: auto;
+                            text-align: center;
+                            margin: 0 auto $spacer auto;
+                            @include media-breakpoint-up(sm) {
+                                width: auto;
+                                text-align: right;
+                                margin: 0 0 $spacer auto;
+                            }
                             .culcollapseexpand {
                                 @include make-btn;
                                 @include button-variant($btn-secondary-color,
@@ -747,11 +820,13 @@
                                 font-size: $font-size-h5;
                                 color: $brand-primary;
                                 line-height: 1.5;
-
                                 &:focus,
                                 &:active,
                                 &:focus:active {
                                     background-image: url([[pix:core|t/collapsed]]);
+                                }
+                                &.hide {
+                                    display: none;
                                 }
                                 &.culcollapse-all {
                                     &:focus,
@@ -774,7 +849,22 @@
                                 padding-left: $spacer * 2.5;
                             }
                         }
-                        &.with_children {
+                        &.dimmed_category {
+                            a {
+                                color: $brand-inverse !important;
+                            }
+                        }
+                        &:not(.with_children) {
+                            >.info {
+                                >.categoryname {
+                                    &:before {
+                                        opacity: 0.2;
+                                    }
+                                }
+                            }
+                        }
+                        &.with_children,
+                        &.manage {
                             &.collapsed {
                                 >.info {
                                     >.categoryname {
@@ -858,9 +948,42 @@
                 .content {
                     .courses {
                         padding-left: $spacer * 2.5;
+                        &+.subcategories {
+                            margin-top: $spacer;
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+// Quickmail block page
+#page-block-quickmail {
+    .form-control-static {
+        display: block;
+        width: auto;
+        .emailtable {
+            width: 100%;
+            .cell {
+                vertical-align: top;
+                padding: $spacer / 2;
+                input {
+                    display: block;
+                    width: 100%;
+                    max-width: 100%;
+                    margin-bottom: $spacer;
+                }
+                select {
+                    display: block;
+                    width: 100%;
+                    max-width: 100%;
+                    margin-bottom: $spacer;
+                }
+            }
+        }
+    }
+    .fitem.femptylabel .col-md-9 .form-control-static {
+        margin: -$spacer / 2;
     }
 }

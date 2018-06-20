@@ -16,6 +16,7 @@ $hasnavsettings = (empty($PAGE->layout_options['noblocks']));
 // Dashboard Blocks
 $hasdashcl = (empty($PAGE->layout_options['noblocks']));
 $hasdashfull = (empty($PAGE->layout_options['noblocks']));
+$hasdashfeed = (empty($PAGE->layout_options['noblocks']));
 $hasdashleft = (empty($PAGE->layout_options['noblocks']));
 $hasdashmiddle = (empty($PAGE->layout_options['noblocks']));
 $hasdashright = (empty($PAGE->layout_options['noblocks']));
@@ -23,6 +24,7 @@ $hasdashright = (empty($PAGE->layout_options['noblocks']));
 $navsettings = 'nav-settings';
 $dashcl = 'dash-cl';
 $dashf = 'dash-full';
+$dashfeed = 'dash-feed';
 $dashl = 'dash-left';
 $dashm = 'dash-middle';
 $dashr = 'dash-right';

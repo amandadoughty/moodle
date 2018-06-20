@@ -9,7 +9,7 @@ echo html_writer::start_tag('nav', ['id'=>'top', 'role'=>'header', 'class'=>'nav
     echo html_writer::end_tag('div');
 
     echo html_writer::start_tag('div', ['class'=>'main-navigation']);
-        echo html_writer::start_tag('div', ['class'=>'container-fluid d-lg-flex flex-wrap align-items-center position-relative pb-4 py-lg-4']);
+        echo html_writer::start_tag('div', ['class'=>'container-fluid d-lg-flex flex-wrap align-items-center position-relative pb-3 pb-sm-4 py-lg-4']);
 
             echo html_writer::start_tag('div', ['class'=>'right-float-menu d-table d-lg-flex flex-wrap mx-auto mb-3']);
                 echo $OUTPUT->help();

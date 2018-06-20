@@ -197,3 +197,62 @@
         }
     }
 }
+
+// Quiz MCQ choices
+#page-question-type-multichoice {
+    fieldset#id_answerhdr {
+        >.fcontainer {
+            >.form-group {
+                &:nth-of-type(3n+1),
+                &:nth-of-type(3n+2),
+                &:nth-of-type(3n+3) {
+                    padding: $spacer 0;
+                    margin: 0;
+                    background-color: $gray-lightest;
+                    border-left: 1px solid $gray-lighter;
+                    border-right: 1px solid $gray-lighter;
+                }
+                &:nth-of-type(3n+1) {
+                    border-top: 1px solid $gray-lighter;
+                }
+
+                &:nth-of-type(3n+3) {
+                    border-bottom: 1px solid $gray-lighter;
+                    margin-bottom: $spacer * 2;
+                }
+                &.femptylabel {
+                    border: none;
+                    background-color: transparent;
+                    padding: 0;
+                    margin-bottom: $spacer * 2;
+                }
+            }
+        }
+    }
+}
+
+// Forum
+.forumpost {
+    .row {
+        .topic,
+        .content-mask,
+        .options {
+            margin: 0;
+        }
+        &.maincontent {
+            >.no-overflow {
+                flex-basis: 0%;
+                flex-grow: 1;
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+    }
+    .content {
+        .posting {
+            &.fullpost {
+                overflow: visible;
+            }
+        }
+    }
+}

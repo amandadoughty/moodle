@@ -3,7 +3,7 @@
  * Needed to retain consistency across theme
 */
 
-@import url('https://fonts.googleapis.com/css?family=Mukta:300,400,500,600,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
 
 *:focus,
 a:focus {
@@ -160,6 +160,10 @@ abbr {
     word-break: break-word;
 }
 
+.w-auto {
+    width: auto !important;
+}
+
 .w-100 {
     width: 100% !important;
 }
@@ -196,21 +200,56 @@ abbr {
 
 .overlay {
     position: fixed;
-    z-index: 2;
+    z-index: 3;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba($gray-dark, .6);
+    background-color: rgba($gray-dark, .8);
     opacity: 0;
     visibility: hidden;
     transition: opacity .2s ease, visibility .2s ease;
     pointer-events: none;
-    cursor: url([[pix:theme|close]]), auto;
     &.show {
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
+    }
+    .close-icon {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        top: $spacer;
+        left: $spacer;
+        cursor: pointer;
+        .dashboard-navbar-wrap & {
+            top: calc(85px + #{$spacer});
+        }
+        &:hover,
+        &:focus {
+            &:before,
+            &:after {
+                background-color: #fff;
+            }
+        }
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            width: 3px;
+            height: 100%;
+            background-color: $gray-lightest;
+            top: 50%;
+            left: 50%;
+            border-radius: $border-radius;
+            overflow: hidden;
+        }
+        &:before {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+        &:after {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
     }
 }
 

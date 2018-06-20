@@ -79,7 +79,7 @@ $THEME->layouts = [
     // My dashboard page.
     'mydashboard' => array(
         'file' => 'dashboard.php',
-        'regions' => array('dash-cl', 'dash-full', 'dash-left', 'dash-middle', 'dash-right', 'nav-settings'),
+        'regions' => array('dash-cl', 'dash-full', 'dash-feed', 'dash-left', 'dash-middle', 'dash-right', 'nav-settings'),
         'defaultregion' => 'dash-left',
     ),
     // My public page.

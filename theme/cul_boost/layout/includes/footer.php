@@ -1,17 +1,17 @@
 <footer id="page-footer" class="footer mt-5 w-100 bg-primary text-white">
     <div class="container-fluid">
-        <div class="footerlinks d-flex flex-wrap py-5">
+        <div class="footerlinks d-flex flex-wrap text-center text-md-left py-5">
             <?php
 
             // Footnote
             if ($footnote) {
-                echo '<div class="footnote col-12 col-md-6 p-0">';
+                echo '<div class="footnote col-12 col-md-6 mb-4 mb-md-0 p-0">';
                     echo $footnote;
                 echo '</div>';
             }
 
             $imageurl = $OUTPUT->image_url('footerlogo', 'theme');
-            echo html_writer::empty_tag('img', ['class'=>'footerlogo ml-auto', 'src'=>$imageurl]);
+            echo html_writer::empty_tag('img', ['class'=>'footerlogo mx-auto mr-md-0 ml-md-auto', 'src'=>$imageurl]);
 
             ?>
         </div>

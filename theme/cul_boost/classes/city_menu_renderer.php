@@ -65,7 +65,7 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
         $userinfo = $this->user_info();
         $imageurl = $OUTPUT->image_url($userinfo->logoprefix . '-logo-white', 'theme');
         $image = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => 'sitelogo '.$userinfo->logoprefix.'logo'));
-        $link = html_writer::link(new moodle_url('/'), $image , array('class' => 'homelink py-3'));
+        $link = html_writer::link(new moodle_url('/'), $image , array('class' => 'homelink'));
         return $link;
     }
 
@@ -111,8 +111,8 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
             $logo->title = "Cass Business School homepage";
             // CMDLTWO-362 Cass global nav.
             $logo->website = "cass.city.ac.uk";
-            $logo->studenthub = "http://www.cass.city.ac.uk/intranet/staff";
-            $logo->staffhub = "http://www.cass.city.ac.uk/intranet/student";
+            $logo->studenthub = "http://www.cass.city.ac.uk/intranet/student";
+            $logo->staffhub = "http://www.cass.city.ac.uk/intranet/staff";
             $logo->library = "http://www.cass.city.ac.uk/intranet/staff/services/learning-resource-centre";
         }
         // School of Arts and Social Sciences

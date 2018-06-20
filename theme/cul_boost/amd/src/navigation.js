@@ -12,7 +12,14 @@ define(['jquery', 'core/log'], function($, log) {
 
                 var anchor = $('#navigation-anchor');
                 var mainnav = $('.navbar');
+                
                 var rightnav = $('.right-navbar').outerHeight();
+
+                if ($('.right-navbar').length == 0) {
+                    console.log('no right navbar');
+                    rightnav = 0;
+                }
+                
                 var bottom = mainnav.outerHeight();
                 var position = $(window).scrollTop();
 
@@ -70,7 +77,6 @@ define(['jquery', 'core/log'], function($, log) {
                 // Scroll to top of page
                 $('a[href="#top"]').click(function() {
                     $('html, body').animate({ scrollTop: 0 }, 'slow');
-                    console.log('done');
                     return false;
                 });
             }

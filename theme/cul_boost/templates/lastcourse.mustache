@@ -18,37 +18,20 @@
     @template theme_synergybase/coursebox
 }}
 
-{{#featured}}
-    <div class="recentmodules-item featured col-12 col-md-6 py-3">
-        <div class="recentmodules-item-inner m-0">
-            
-            <div class="course-image bg-primary p-2 text-right mb-2" {{#hasimage}}style="background-image: url('{{image}}')"{{/hasimage}}>
-                <a class="d-block w-100 h-100" href="{{url}}"><div class="badge badge-info"><i class="fa fa-calendar small mr-2"></i>{{lastaccess}}</div></a>
-            </div>
-
-            <div class="course-content d-flex flex-wrap flex-column">
-                <div class="course-cat small font-weight-bold text-primary mb-1">{{category}}</div>
-                <a href="{{url}}"><h4 class="course-name font-weight-medium mb-0">{{name}}</h4></a>
-                {{#summary}}
-                <div class="course-desc mt-2">{{{summary}}}</div>
-                {{/summary}}
-            </div>
-
+<div class="recentmodules-item featured col-12 col-md-6 py-3">
+    <div class="recentmodules-item-inner m-0">
+        
+        <div class="course-image bg-primary p-2 text-right mb-2" {{#hasimage}}style="background-image: url('{{image}}')"{{/hasimage}}>
+            <a class="d-block w-100 h-100" href="{{url}}"><div class="badge badge-info"><i class="fa fa-calendar small mr-2"></i>{{lastaccess}}</div></a>
         </div>
-    </div>
-{{/featured}}
 
-{{^featured}}
-<div class="recentmodules-item list d-flex flex-wrap align-items-center pb-3 mb-3">
-    
-    <div class="course-image bg-primary p-2 text-right mr-3" {{#hasimage}}style="background-image: url('{{image}}')"{{/hasimage}}>
-        <a class="d-block w-100 h-100" href="{{url}}"><div class="badge badge-info"><i class="fa fa-calendar small mr-2"></i>{{lastaccess}}</div></a>
-    </div>
+        <div class="course-content d-flex flex-wrap flex-column">
+            <div class="course-cat small font-weight-bold text-primary mb-1">{{category}}</div>
+            <a href="{{url}}"><h4 class="course-name font-weight-medium mb-0">{{name}}</h4></a>
+            {{#summary}}
+            <div class="course-desc mt-2">{{{summary}}}</div>
+            {{/summary}}
+        </div>
 
-    <div class="col">
-        <div class="course-cat small font-weight-bold text-primary mb-1">{{category}}</div>
-        <a href="{{url}}"><h4 class="course-name font-weight-medium mb-0">{{name}}</h4></a>
     </div>
-
 </div>
-{{/featured}}

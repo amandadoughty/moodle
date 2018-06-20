@@ -129,7 +129,11 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
 	                    $sectioncm = $this->courserenderer->course_section_cm_list($course, $thissection, 0);
 	                    echo html_writer::tag('div', $sectioncm, ['class'=>'col-12 '.$class.' p-3 bg-medium']);
 
-	                    echo html_writer::tag('div', format_text($course->summary), ['class'=>'course-summary col p-3 bg-light']);
+                        $title = get_section_name($course, $section);
+                        $sectionsummary = $this->output->heading($title, 3, 'section-title');
+                        $sectionsummary .= format_text($thissection->summary);
+
+	                    echo html_writer::tag('div', $sectionsummary, ['class'=>'course-summary col p-3 bg-light']);
 
                     echo html_writer::end_tag('div');
 

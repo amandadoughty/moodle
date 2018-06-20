@@ -156,7 +156,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         $listitems = '<li class="breadcrumb-item d-inline-flex flex-wrap align-items-center">' . join(' </li><li class="breadcrumb-item d-inline-flex flex-wrap align-items-center">', $breadcrumbs) . '</li>';
         $title = '<span class="accesshide">' . get_string('pagepath') . '</span>';
-        return $title . '<ol class="breadcrumb d-flex flex-wrap align-items-center">'.$listitems.'</ul>';
+        return $title . '<ol class="breadcrumb d-flex flex-wrap align-items-center justify-content-center justify-content-md-start">'.$listitems.'</ul>';
     }
 
 	public function page_heading($tag = 'h2') {
@@ -420,10 +420,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    	$courses = $USER->currentcourseaccess;
 	    } else if (!empty($USER->lastcourseaccess)) {
 	    	$courses = $USER->lastcourseaccess;
-	    } else {
-	    	return '';
 	    }
-
 
 	    arsort($courses);
 
@@ -431,14 +428,22 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 	    $i = 0;
 
-	    $content .= html_writer::start_tag('div', ['class'=>'featured-courses col-12 col-lg-7']);
-	    $content .= html_writer::start_tag('div', ['class'=>'row h-100']);
+	    $content .= html_writer::start_tag('div', ['class'=>'featured-courses col-12 col-lg-8']);
+
+	    $title = html_writer::tag('h2', get_string('recentmodules', 'theme_cul_boost'), ['class'=>'section-title col-12 col-sm p-0 mb-3 mb-sm-0']);
+	    $buttons = html_writer::tag('div', get_string('mymodules', 'theme_cul_boost'), ['class'=>'allmodules-btn btn btn-primary ml-sm-auto']);
+	    $buttons .= html_writer::tag('div', get_string('myfavourites', 'theme_cul_boost'), ['class'=>'favourites-btn btn btn-primary ml-2']);
+
+	    $content .= html_writer::tag('div', $title.$buttons, ['class'=>'recentmodules-header d-flex flex-wrap align-items-center col-12 p-0 mb-3']);
+
+	    $content .= html_writer::start_tag('div', ['class'=>'recentmodules-content h-100']);
+	    $content .= html_writer::start_tag('div', ['class'=>'row']);
 
 	   	foreach ($courses as $course => $date) {
 
 	   		$i++;
 
-	   		if ($i >= 6) {
+	   		if ($i >= 3) {
 	   			break;
 	   		}
 
@@ -449,7 +454,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		    $courseinfo = new stdClass();
 		    $courseinfo->name = $course->fullname;
 
-		    $category = coursecat::get($lastcourse->category);
+		    $category = $DB->get_record('course_categories', array('id'=>$lastcourse->category));
 		    $courseinfo->category = $category->name;
 		    
 		    $courselink = new moodle_url('/course/view.php', array('id'=>$course->id));
@@ -494,8 +499,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 		$content .= html_writer::end_tag('div');
 		$content .= html_writer::end_tag('div');
-
-		$content = html_writer::tag('div', $content, ['class'=>'row']);
+		$content .= html_writer::end_tag('div');
 
 	    return $content;
 

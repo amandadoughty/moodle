@@ -2,20 +2,18 @@
 
 $courses = enrol_get_my_courses();
 
-$content = '';
+$rc = '';
 if (!empty($OUTPUT->recent_courses($courses))) {
 
-	$title = html_writer::tag('h2', get_string('recentmodules', 'theme_cul_boost'), ['class'=>'section-title mb-0']);
-	$buttons = html_writer::tag('div', get_string('allmodules', 'theme_cul_boost'), ['class'=>'allmodules-btn btn btn-primary ml-auto']);
-	$buttons .= html_writer::tag('div', get_string('favourites', 'theme_cul_boost'), ['class'=>'favourites-btn btn btn-primary ml-2']);
+	$rc = $OUTPUT->recent_courses($courses);
 
-	$content = html_writer::tag('div', $title.$buttons, ['class'=>'recentmodules-header d-flex flex-wrap align-items-center mb-3']);
-	
-	$content = html_writer::tag('div', $content, ['class'=>'recentmodules-header']);
+	if ($hasdashfeed) {
+	    $rc .= $OUTPUT->synergyblocks($dashfeed, 'col-12 col-lg-4');
+	}
 
-	$content .= $OUTPUT->recent_courses($courses);
+	$rc = html_writer::tag('div', $rc, ['class'=>'row']);
 
-	$content = html_writer::tag('div', $content, ['class'=>'container-fluid']);
+	$content = html_writer::tag('div', $rc, ['class'=>'container-fluid']);
 	
 	echo html_writer::tag('div', $content, ['class'=>'recentcourses-wrap py-5']);
 }

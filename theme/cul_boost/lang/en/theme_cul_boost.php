@@ -52,6 +52,7 @@ $string['off'] = 'Turn editing off';
 $string['dashboard'] = 'Dashboard';
 $string['region-dash-cl'] = 'Dashboard (Course Listing)';
 $string['region-dash-full'] = 'Dashboard (Full Width)';
+$string['region-dash-feed'] = 'Dashboard (Activity Feed)';
 $string['region-dash-left'] = 'Dashboard (Left)';
 $string['region-dash-middle'] = 'Dashboard (Middle)';
 $string['region-dash-right'] = 'Dashboard (Right)';
@@ -74,10 +75,10 @@ $string['findtitle'] = 'Find a Module Title';
 $string['findtitledesc'] = 'Enter the title for the Find a Module Area';
 $string['findcontent'] = 'Find a Module Description';
 $string['findcontentdesc'] = 'Enter the text to appear in the description of the Find a Moudle section.';
-$string['coursesearch'] = 'Start here by typing a course...';
-$string['recentmodules'] = 'Recent Modules';
-$string['allmodules'] = 'All Modules';
-$string['favourites'] = 'Favourites';
+$string['coursesearch'] = 'Search for modules...';
+$string['recentmodules'] = 'Recently Accessed Modules';
+$string['mymodules'] = 'My Modules';
+$string['myfavourites'] = 'My Favourites';
 
 
 // Course
