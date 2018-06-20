@@ -151,7 +151,7 @@ M.block_culupcoming_events.scroll = {
                     } else {
                         if (data.output) {
                             var eventlist = Y.one('.block_culupcoming_events .culupcoming_events ul');
-                            var firstli = eventlist.one('> li');
+                            var firstli = eventlist.one('li');
                             var liwrapper = firstli.ancestor();
                             liwrapper.append(data.output);
                         }
@@ -207,9 +207,9 @@ M.block_culupcoming_events.scroll = {
                     } else {
                         if (data.output) {
                             var eventlist = Y.one('.block_culupcoming_events .culupcoming_events ul');
-                            var firstli = eventlist.one('> li');
+                            var firstli = eventlist.one('li');
                             var liwrapper = firstli.ancestor();
-                            liwrapper.setHTML(data.output);
+                            liwrapper.append(data.output);
                         }
                     }
 
