@@ -21489,7 +21489,7 @@ a.dimmed_text:visited,
 
 .dropdown-menu {
   overflow-x: hidden;
-  max-height: 400px;
+  max-height: 450px;
   overflow: auto; }
   .dropdown-menu a {
     white-space: normal; }
