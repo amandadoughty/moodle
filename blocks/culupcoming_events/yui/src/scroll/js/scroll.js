@@ -47,7 +47,6 @@ M.block_culupcoming_events.scroll = {
             var h2 = Y.one('#instance-' + id + '-header');
             h2.append(reloaddiv);
             reloaddiv.setStyle('display', 'inline-block');
-            // Y.one('.reload .block_culupcoming_events_reload').on('click', this.reloadblock, this);
             doc.delegate('click', this.reloadblock, '.block_culupcoming_events_reload', this);
         } catch (e) {
             Y.log('Problem adding reload button');
@@ -60,44 +59,9 @@ M.block_culupcoming_events.scroll = {
         this.limitnum = params.limitnum;
         this.page = params.page;
         // Refresh the feed every 5 mins.
-        // this.timer = Y.later(1000 * 60 * 5, this, this.reloadevents, [], true);
         this.timer = Y.later(1000 * 60 * 5, this, this.simulateclick, [], true);
 
-
-
-
-
         this.filltobelowblock();
-        // When the block is docked. the reload link is created on the fly as the block
-        // is shown. This means that the click event is not attached. Here we listen for
-        // published events about changes to the dock so that we can reattach the click
-        // event to the reload link.
-        // var dock = M.core.dock.get();
-        // dock.on(['dock:initialised', 'dock:itemadded'], function() {
-        //     Y.Array.each(dock.dockeditems, function(dockeditem) {
-        //         dockeditem.on('dockeditem:showcomplete', function() {
-        //             if (dockeditem.get('blockclass') === 'culupcoming_events') {
-        //                 try {
-        //                     this.reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
-        //                     if (!this.reloader) {
-        //                         var reloaddiv = Y.one('.block_culupcoming_events .reload').cloneNode(true);
-        //                         var h2 = Y.one('#instance-' + dockeditem.get('blockinstanceid') + '-header' );
-        //                         h2.append(reloaddiv);
-        //                         reloaddiv.setStyle('display', 'inline-block');
-        //                         this.reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
-        //                     }
-        //                     if (this.reloader) {
-        //                         this.reloader.on('click', this.reloadblock, this);
-        //                     }
-        //                 } catch (e) {
-        //                     Y.log('Problem adding reload button');
-        //                 }
-        //             }
-        //         },this);
-        //     },this);
-        // },this);
-
-        
 
         Y.publish('culcourse-upcomingevents:reloadevents', {
             broadcast:2
@@ -125,7 +89,7 @@ M.block_culupcoming_events.scroll = {
             }
             this.addevents(num, lastid, lastdate);
             // Start the automatic refresh again now we have the correct last item.
-            this.timer = Y.later(1000 * 60 * 5, this, this.reloadevents, [], true);
+            this.timer = Y.later(1000 * 60 * 5, this, this.simulateclick, [], true);
         }
     },
 
@@ -237,16 +201,9 @@ M.block_culupcoming_events.scroll = {
                     this.timer.cancel();
                 },
                 end: function() {
-                    // var data = Y.JSON.parse(e.responseText);
-                    // Y.log(e);
-                    // Y.log(id);
-                    // Y.log(data.output);
-
-                    // if (data.output) {
-                        Y.fire('culcourse-upcomingevents:reloadevents', {
-                            
-                        });
-                    // }
+                    Y.fire('culcourse-upcomingevents:reloadevents', {
+                        
+                    });
                 }
             }
         });
