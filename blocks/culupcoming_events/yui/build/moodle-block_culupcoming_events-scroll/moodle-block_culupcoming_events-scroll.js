@@ -41,6 +41,7 @@ M.block_culupcoming_events.scroll = {
         }
 
         try {
+            // var doc = Y.one(Y.config.doc);
             var reloaddiv = Y.one('.block_culupcoming_events .reload');
             var block = Y.one('.block_culupcoming_events');
             var id = block.get('id');
@@ -49,6 +50,7 @@ M.block_culupcoming_events.scroll = {
             h2.append(reloaddiv);
             reloaddiv.setStyle('display', 'inline-block');
             Y.one('.reload .block_culupcoming_events_reload').on('click', this.reloadblock, this);
+            // doc.delegate('click', this.reloadblock, '.block_culupcoming_events_reload', this);
         } catch (e) {
         }
 
@@ -59,7 +61,13 @@ M.block_culupcoming_events.scroll = {
         this.limitnum = params.limitnum;
         this.page = params.page;
         // Refresh the feed every 5 mins.
-        this.timer = Y.later(1000 * 60 * 5, this, this.reloadevents, [], true);
+        // this.timer = Y.later(1000 * 60 * 5, this, this.reloadevents, [], true);
+        this.timer = Y.later(1000 * 60 * 5, this, this.simulateclick, [], true);
+
+
+
+
+
         this.filltobelowblock();
         // When the block is docked. the reload link is created on the fly as the block
         // is shown. This means that the click event is not attached. Here we listen for
@@ -71,16 +79,16 @@ M.block_culupcoming_events.scroll = {
                 dockeditem.on('dockeditem:showcomplete', function() {
                     if (dockeditem.get('blockclass') === 'culupcoming_events') {
                         try {
-                            var reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
-                            if (!reloader) {
+                            this.reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
+                            if (!this.reloader) {
                                 var reloaddiv = Y.one('.block_culupcoming_events .reload').cloneNode(true);
                                 var h2 = Y.one('#instance-' + dockeditem.get('blockinstanceid') + '-header' );
                                 h2.append(reloaddiv);
                                 reloaddiv.setStyle('display', 'inline-block');
-                                reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
+                                this.reloader = Y.one('.dockeditempanel_hd .block_culupcoming_events_reload');
                             }
-                            if (reloader) {
-                                reloader.on('click', this.reloadblock, this);
+                            if (this.reloader) {
+                                this.reloader.on('click', this.reloadblock, this);
                             }
                         } catch (e) {
                         }
@@ -89,6 +97,11 @@ M.block_culupcoming_events.scroll = {
             },this);
         },this);
 
+        
+
+        Y.publish('culcourse-upcomingevents:reloadevents', {
+            broadcast:2
+        });
     },
 
     filltobelowblock: function() {
@@ -206,7 +219,12 @@ M.block_culupcoming_events.scroll = {
                             var eventlist = Y.one('.block_culupcoming_events .culupcoming_events ul');
                             var firstli = eventlist.one('li');
                             var liwrapper = firstli.ancestor();
-                            liwrapper.append(data.output);
+                            liwrapper.setHTML(data.output);
+
+                             // if($.slick) {
+                             //     //run plugin dependent code
+                             //     eventwrap.slick('refresh');
+                             // }
                         }
                     }
 
@@ -218,9 +236,21 @@ M.block_culupcoming_events.scroll = {
                     Y.one('.block_culupcoming_events_loading').setStyle('display', 'none');
                     Y.one('.block_culupcoming_events_reload').setStyle('display', 'inline-block');
                     this.timer.cancel();
+                },
+                end: function() {
+                    // var data = Y.JSON.parse(e.responseText);
+
+                    // if (data.output) {
+                        Y.fire('culcourse-upcomingevents:reloadevents', {
+                            
+                        });
+                    // }
                 }
             }
         });
+    },
+    simulateclick: function() {
+        Y.one('.reload .block_culupcoming_events_reload').simulate('click');
     }
 };
 
@@ -233,6 +263,7 @@ M.block_culupcoming_events.scroll = {
         "dom-core",
         "querystring",
         "event-custom",
-        "moodle-core-dock"
+        "moodle-core-dock",
+        "node-event-simulate"
     ]
 });
