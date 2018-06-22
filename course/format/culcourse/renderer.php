@@ -168,7 +168,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             'li', 
             [
                 'id' => 'section-'.$section->section,
-                'class' => 'section clearfix'.$sectionstyle, 
+                'class' => 'section main clearfix'.$sectionstyle, 
                 'role'=>'region',
                 'aria-label'=> get_section_name($course, $section)
             ]
@@ -263,10 +263,14 @@ class format_culcourse_renderer extends format_section_renderer_base {
 
      * @return string HTML to output.
      */
-    protected function injected_section_footer($course, $section) {
+    protected function injected_section_footer($course, $section, $context) {
         $o = html_writer::end_tag('div'); // .sectionbody.
         $o .= html_writer::end_tag('div'); // .content.
-        $o .= $this->change_number_sections($course, $section + 1);
+
+        if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
+            $o .= $this->change_number_sections($course, $section + 1);
+        }
+
         $o .= html_writer::end_tag('li');
 
         return $o;
@@ -556,8 +560,14 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     echo $this->section_header($thissection, $course, false, 0);
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                     echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
-                    echo $this->section_footer();
+
+                    if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
+                        echo $this->change_number_sections($course, $section + 1);
+                    }
+
+                    echo $this->section_footer($course, $section);
                 }
+
                 continue;
             }
 
@@ -596,12 +606,9 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 if ($thissection->uservisible) {
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                     echo $this->courserenderer->course_section_add_cm_control($course, $section, 0);
-                }
-        
-
-                if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
-                    echo $this->injected_section_footer($course, $section);
-                }
+                }        
+                
+                echo $this->injected_section_footer($course, $section, $context);
             }
         }
 
