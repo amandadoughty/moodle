@@ -138,7 +138,12 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                     echo html_writer::end_tag('div');
 
                     echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
-                    echo $this->section_footer();
+                    
+		    if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
+                        echo $this->change_number_sections($course, $section + 1);
+                    }
+
+                    echo $this->section_footer($course, $section);
                 }
                 continue;
             }
@@ -178,12 +183,9 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                 if ($thissection->uservisible) {
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                     echo $this->courserenderer->course_section_add_cm_control($course, $section, 0);
-                }
-        
-
-                if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
-                    echo $this->injected_section_footer($course, $section);
-                }
+                }        
+                
+                echo $this->injected_section_footer($course, $section, $context);
             }
         }
 
