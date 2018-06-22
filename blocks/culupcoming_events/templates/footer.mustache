@@ -50,13 +50,3 @@
 	{{/manageentries}}
 </div>
 {{/footer}}
-
-{{#js}}
-require(['core/yui', 'theme_cul_boost/slider'], function(Y, slider) {
-
-    Y.Global.on('culcourse-upcomingevents:reloadevents', function(){
-        // slider.slick('refresh');
-        Y.log('here');
-    });
-});
-{{/js}}
