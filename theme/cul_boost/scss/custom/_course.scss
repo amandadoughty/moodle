@@ -676,6 +676,16 @@ $culcourse-arrow-active-color: #fff;
     line-height: $line-height-base;
 }
 
+.editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2) {
+    @extend .cul-important;
+    display: block;
+    padding: 0.25rem 0.4rem;
+    font-weight: bold;    
+    a {
+        color: #fff;
+    }
+}
+
 .cul-generic {
     @extend .tag;
     @extend .tag-info;
@@ -684,6 +694,16 @@ $culcourse-arrow-active-color: #fff;
     white-space: normal;
     text-align: left;
     line-height: $line-height-base;
+}
+
+.editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
+    @extend .cul-generic;
+    display: block;
+    padding: 0.25rem 0.4rem;
+    font-weight: bold;
+    a {
+        color: #fff;
+    }
 }
 
 .fixed-anchor {
