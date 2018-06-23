@@ -253,27 +253,6 @@ class format_culcourse_renderer extends format_section_renderer_base {
         }
 
         return $o;
-    }  
-
-    /**
-     * Generate the display of the footer part of a section
-     *
-     * @param stdClass $course The course entry from DB
-     * @param stdClass $section The course_section entry from DB
-
-     * @return string HTML to output.
-     */
-    protected function injected_section_footer($course, $section, $context) {
-        $o = html_writer::end_tag('div'); // .sectionbody.
-        $o .= html_writer::end_tag('div'); // .content.
-
-        if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
-            $o .= $this->change_number_sections($course, $section + 1);
-        }
-
-        $o .= html_writer::end_tag('li');
-
-        return $o;
     }
 
     /**
@@ -560,11 +539,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     echo $this->section_header($thissection, $course, false, 0);
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                     echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
-
-                    if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
-                        echo $this->change_number_sections($course, $section + 1);
-                    }
-
+                    echo $this->change_number_sections($course, $section + 1);
                     echo $this->section_footer($course, $section);
                 }
 
@@ -606,9 +581,11 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 if ($thissection->uservisible) {
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                     echo $this->courserenderer->course_section_add_cm_control($course, $section, 0);
-                }        
-                
-                echo $this->injected_section_footer($course, $section, $context);
+                }
+
+                echo html_writer::end_tag('div'); // .sectionbody.
+                echo $this->change_number_sections($course, $section + 1);
+                echo $this->section_footer($course, $section);
             }
         }
 
@@ -642,7 +619,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $o = '';
         $coursecontext = context_course::instance($course->id);
 
-        if (!has_capability('moodle/course:update', $coursecontext)) {
+        if (!$this->page->user_is_editing() || !has_capability('moodle/course:update', $coursecontext)) {
             return '';
         }
 
