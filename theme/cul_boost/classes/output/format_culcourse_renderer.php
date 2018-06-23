@@ -121,29 +121,25 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                     
                     echo html_writer::start_tag('div', ['class'=>'topsection-wrap d-flex flex-wrap align-items-stretch']);
 	                   
-                        $title = get_section_name($course, $section);
-                        $sectionsummary = $this->output->heading($title, 3, 'section-title');
-                        $sectionsummary .= format_text($thissection->summary);
-                        
-	                    $class = '';
-	                    if (!$this->page->user_is_editing() && !empty($sectionsummary)) {
-	                    	$class = 'col-md-5';
-	                    }
+                    $title = get_section_name($course, $section);
+                    $sectionsummary = $this->output->heading($title, 3, 'section-title');
+                    $sectionsummary .= format_text($thissection->summary);                        
+                    $class = '';
 
-	                    $sectioncm = $this->courserenderer->course_section_cm_list($course, $thissection, 0);
-	                    echo html_writer::tag('div', $sectioncm, ['class'=>'col-12 '.$class.' p-3 bg-medium']);
+                    if (!$this->page->user_is_editing() && !empty($sectionsummary)) {
+                    	$class = 'col-md-5';
+                    }
 
-	                    echo html_writer::tag('div', $sectionsummary, ['class'=>'course-summary col p-3 bg-light']);
+                    $sectioncm = $this->courserenderer->course_section_cm_list($course, $thissection, 0);
+                    echo html_writer::tag('div', $sectioncm, ['class'=>'col-12 '.$class.' p-3 bg-medium']);
+
+                    echo html_writer::tag('div', $sectionsummary, ['class'=>'course-summary col p-3 bg-light']);
 
                     echo html_writer::end_tag('div');
 
-                    echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
-                    
-		    if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
-                        echo $this->change_number_sections($course, $section + 1);
-                    }
+                    echo $this->courserenderer->course_section_add_cm_control($course, 0, 0); 
 
-                    echo $this->section_footer($course, $section);
+                    echo $this->injected_section_footer($course, $section, $context);
                 }
                 continue;
             }
