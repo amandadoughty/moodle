@@ -1,5 +1,9 @@
 Version Information
 ===================
+Version 3.1.0
+  1. Refactored JS to fix bugs with scrolling and reloading.
+  2. Used delegation to assign click listener.
+  3. Changed timed reload to simulate click instead of just calling function reloadevents(Specific backwards compatoble change for our Org).
 Version 3.0.2 
   1. Changed template to display description instead of just event name.
 Version 3.0.0 

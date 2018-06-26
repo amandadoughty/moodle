@@ -24,9 +24,9 @@
  *
  */
 
-$string['pluginname'] = 'CUL Upcoming events';
-$string['blocktitlecourse'] = 'Module events';
-$string['blocktitlesite'] = 'CUL Upcoming events';
+$string['pluginname'] = 'CUL Upcoming Events';
+$string['blocktitlecourse'] = 'Module Events';
+$string['blocktitlesite'] = 'Upcoming Events';
 $string['anon'] = 'Picture of Anon';
 $string['courseevent'] = '{$a->name} in {$a->course} on ';
 $string['culupcoming_events:addinstance'] = 'Add a new CUL Upcoming Events block';
