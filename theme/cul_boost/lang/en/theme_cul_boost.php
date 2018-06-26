@@ -121,7 +121,7 @@ $string['closefullscreen'] = 'exit fullscreen';
 $string['mycourses'] = 'My Modules';
 $string['myprofile'] = 'My Profile';
 $string['morecourses'] = 'More Modules';
-$string['coursemenu'] = 'Module menu';
+$string['coursemenu'] = 'Module Menu';
 $string['settings'] = 'Settings';
 
 $string['favouriteadd'] = 'Add to Favourites';

@@ -24,10 +24,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = '2018062000';                                                                        
+$plugin->version = '2018062001';                                                                        
 $plugin->requires = '2017110800';                                                               
 $plugin->component = 'theme_cul_boost';   
 
 $plugin->dependencies = [     
-    'theme_boost' => '2017111300'                                                            
+    'theme_boost' => '2017111301'                                                            
 ];
