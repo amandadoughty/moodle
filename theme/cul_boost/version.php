@@ -29,5 +29,5 @@ $plugin->requires = '2017110800';
 $plugin->component = 'theme_cul_boost';   
 
 $plugin->dependencies = [     
-    'theme_boost' => '2017111301'                                                            
+    'theme_boost' => '2017111300'                                                            
 ];
