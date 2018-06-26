@@ -63,7 +63,7 @@ $string['sendmessage'] = 'Send a message';
 $string['timetable'] = 'Timetable';
 $string['title'] = 'Module Dashboard';
 $string['view-calendar'] = 'View calendar';
-$string['view-graderreport'] = 'View grader report';
+$string['view-graderreport'] = 'View Grader Report';
 $string['view-media'] = 'View media gallery';
 $string['view-participantlist'] = 'View module participant list';
 $string['view-photoboard'] = 'View photoboard';
@@ -116,10 +116,10 @@ $string['defaultshowtimetable'] = 'Show the timetable';
 $string['defaultshowtimetable_desc'] = 'States if the timetable will be shown.';
 
 // Show grader report.
-$string['setshowgraderreport'] = 'Show the grader report';
-$string['setshowgraderreport_help'] = 'States if the grader report will be shown.';
-$string['defaultshowgraderreport'] = 'Show the grader report';
-$string['defaultshowgraderreport_desc'] = 'States if the grader report will be shown.';
+$string['setshowgraderreport'] = 'Show the Grader Report';
+$string['setshowgraderreport_help'] = 'States if the Grader Report will be shown.';
+$string['defaultshowgraderreport'] = 'Show the Grader Report';
+$string['defaultshowgraderreport_desc'] = 'States if the Grader Report will be shown.';
 
 // Show calendar.
 $string['setshowcalendar'] = 'Show the calendar';
