@@ -105,8 +105,8 @@ $string['gradebookdisclaimer'] = 'In accordance with City University policy, any
 $string['gradebookdisclaimerdesc'] = 'Gradebook disclaimer';
 
 // assign_renderer
-$string['gradehidden'] = 'This grade and feedback (if present) is hidden in the Grader report and is not available to the student.';
-$string['gradenothidden'] = 'This grade and feedback (if present) is visible in the Grader report and is available to the student. 
+$string['gradehidden'] = 'This grade and feedback (if present) is hidden in the Grader Report and is not available to the student.';
+$string['gradenothidden'] = 'This grade and feedback (if present) is visible in the Grader Report and is available to the student. 
 <br/>If you have anonymous marking applied, you need to select Reveal student identities to release the grade to students.';
 $string['markingguide'] = 'Marking guide';
 $string['rubric'] = 'Rubric';
