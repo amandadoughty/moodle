@@ -267,7 +267,7 @@ class local_culrollover_renderer extends plugin_renderer_base {
             $url = new moodle_url('', array('delentry' => $d));
             $delete = html_writer::link(
                 $url,
-                '<i class="icon-large icon-remove"></i>',
+                '<i class="fa fa-close"></i>',
                 array(
                     'class' => 'DeleteRow',
                     'title' => 'Remove from Queue',
@@ -287,7 +287,7 @@ class local_culrollover_renderer extends plugin_renderer_base {
             $url = new moodle_url('', array('repentry' => $d));
             $repeat = html_writer::link(
                 $url,
-                '<i class="icon-large icon-repeat"></i>',
+                '<i class="fa fa-repeat"></i>',
                 array(
                     'class' => 'RepeatRow',
                     'title' => 'Reschedule rollover',
