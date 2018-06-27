@@ -1,7 +1,0 @@
-{
-    "moodle-atto_echo360attoplugin-button": {
-        "requires": [
-            "moodle-editor_atto-plugin"
-        ]
-    }
-}
