@@ -1,7 +1,7 @@
 About
 =====
 
-This is a peer grading based group assignment activity for Moodle 2.4, 2.5 & 2.6
+This is a peer grading based group assignment activity for Moodle 
 
 This module enables a group of students submit one file as their
 assignment. In addition to the file submission the students can rate 
@@ -18,6 +18,9 @@ Authors
  - This module was built to a specification from City University London 
  - by Learning Technology Services Ltd, Ireland.
 
+2017
+ - This module was revised by Naomi Wilce, City University London
+
 
 Features
 ========
@@ -25,12 +28,19 @@ Features
  - students can grade their group members effort on a group assignment
  - teachers can grade the group assignment submission
  - the final grade is calculated based on both grades
+ - each student gets an individual final grade
+
+
+ - teachers can choose between two calculations used to determine the final grade
+ - simple creates individual grades based on the students peer marks and the assignment grade
+ - outlier option has a more complicated formula which uses standard deviation to remove any
+ large inconsistencies between peer grades from the calculation
 
 
 Supported Versions
 ==================
 
- - The module has been tested with Moodle versions 2.4, 2.5 & 2.6 
+ - The module has been tested with Moodle versions 2.4, 2.5, 2.6, 3.2, 3.4 
 
 
 Installation instructions
