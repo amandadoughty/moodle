@@ -54,7 +54,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      */
     var handleOpenAll = function(e){
         e.preventDefault();
-        $('ul.culcourse').find('.collapse').collapse('show');
+        $('ul.culcourse').find(SELECTORS.SECTIONBODY).collapse('show');
     };
 
     /**
@@ -66,7 +66,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      */
     var handleCloseAll = function(e){
         e.preventDefault();
-        $('ul.culcourse').find('.collapse').collapse('hide');
+        $('ul.culcourse').find(SELECTORS.SECTIONBODY).collapse('hide');
     };
 
     /**
