@@ -131,7 +131,8 @@ body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.lin
   .path-format-culcourse-photos .userlist li .card-footer {
     float: right;
     width: 25%;
-    height: 100%; }
+    background: none;
+    border: none; }
   .path-format-culcourse-photos .userlist li .userpicture {
     border-radius: 0; }
 

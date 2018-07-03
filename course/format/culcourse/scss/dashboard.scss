@@ -190,43 +190,35 @@ body.format-culcourse.editing {
 
 /* css for photoboard */
 .path-format-culcourse-photos {
-
-.cul-modelist {
-    border-bottom: 1px solid #ddd;
-}
-
-.cul-modelist {
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: none;
-}
-
-.mode-item {
-    float: left;
-    margin-bottom: -1px;
-}
-
-.mode-link {
-    display: block;
-    padding: .5em 1em;
-    border: 1px solid transparent;
-    border-top-right-radius: .25rem;
-    border-top-left-radius: .25rem;
-}
-
-.mode-link.active, 
-.mode-item.open .mode-link, 
-.mode-link.active:focus, 
-.mode-item.open .mode-link:focus, 
-.mode-link.active:hover, 
-.mode-item.open .mode-link:hover {
-    color: #55595c;
-    background-color: #f4f4f4;
-    border-color: #ddd #ddd transparent;
-}
-
-
-
+    .cul-modelist {
+        border-bottom: 1px solid #ddd;
+    }
+    .cul-modelist {
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+    .mode-item {
+        float: left;
+        margin-bottom: -1px;
+    }
+    .mode-link {
+        display: block;
+        padding: .5em 1em;
+        border: 1px solid transparent;
+        border-top-right-radius: .25rem;
+        border-top-left-radius: .25rem;
+    }
+    .mode-link.active, 
+    .mode-item.open .mode-link, 
+    .mode-link.active:focus, 
+    .mode-item.open .mode-link:focus, 
+    .mode-link.active:hover, 
+    .mode-item.open .mode-link:hover {
+        color: #55595c;
+        background-color: #f4f4f4;
+        border-color: #ddd #ddd transparent;
+    }
     .userlist {
         li {
             display: inline-block;
@@ -245,7 +237,8 @@ body.format-culcourse.editing {
             .card-footer {
                 float: right;
                 width: 25%;
-                height: 100%;
+                background: none;
+                border: none;
             }
             .userpicture {
                 border-radius: 0;
