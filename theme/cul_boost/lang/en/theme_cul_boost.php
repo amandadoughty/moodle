@@ -152,3 +152,6 @@ $string['rollovertool'] = 'Rollover Tool';
 $string['rollovertoollink'] = '/local/culrollover/';
 $string['rolloverguidance'] = 'Rollover Guidance';
 $string['rolloverguidancelink'] = 'http://bit.ly/cityunirollovertool';
+
+$string['years'] = 'Years ordered in dropdown';
+$string['yearsdesc'] = 'Example: the number of years to show ordered in dropdown';
