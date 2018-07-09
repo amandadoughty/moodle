@@ -676,11 +676,11 @@ $culcourse-arrow-active-color: #fff;
     line-height: $line-height-base;
 }
 
-.editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2) {
+.editor_atto_menu .atto_styles_button .dropdown-menu>li:nth-child(2) {
     @extend .cul-important;
     display: block;
     padding: 0.25rem 0.4rem;
-    font-weight: bold;    
+    font-weight: bold;
     a {
         color: #fff;
     }
@@ -696,7 +696,7 @@ $culcourse-arrow-active-color: #fff;
     line-height: $line-height-base;
 }
 
-.editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
+.editor_atto_menu .atto_styles_button .dropdown-menu>li:nth-child(3) {
     @extend .cul-generic;
     display: block;
     padding: 0.25rem 0.4rem;
@@ -721,9 +721,18 @@ $right-container: $container-max-width+($grid-gutter-width / 2)+50px;
     top: 155px;
     right: 0;
     z-index: 1;
+    transition: transform .2s ease;
+    @include media-breakpoint-only(md) {
+        top: 100px;
+    }
     &.stick {
         position: fixed;
         z-index: 2;
+        @include media-breakpoint-down(md) {
+            &.push {
+                transform: translateY(55px);
+            }
+        }
     }
     .fixed-btn {
         width: 50px;

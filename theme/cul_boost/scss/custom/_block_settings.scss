@@ -16,8 +16,13 @@ aside[id*="block-region-nav-settings"] {
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
-        left: auto;
-        right: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        @include media-breakpoint-up(sm) {
+            right: 0;
+            left: auto;
+            transform: none;
+        }
     }
     .block_settings .block-controls {
         float: none!important;
@@ -198,11 +203,6 @@ aside[id*="block-region-nav-settings"] {
     }
 
     .block.block_settings .contains_branch {
-        >p {
-            >a {
-                pointer-events: none;
-            }
-        }
         p {
             +ul {
                 display: block;

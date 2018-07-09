@@ -541,7 +541,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
         $menu = new custom_menu('', current_language());
 
         if (count($favouritescourses)) {
-            $favouritestxt = get_string('favourites', 'theme_cul_boost');
+            $favouritestxt = get_string('myfavourites', 'theme_cul_boost');
             $favourites = $menu->add($favouritestxt, new moodle_url(''), $favouritestxt, 11);
 
             foreach ($favouritescourses as $favouritescourse) {

@@ -24,6 +24,15 @@ $temp = new admin_settingpage('theme_cul_boost_general',  get_string('generalset
     $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
+    // Years
+    $name = 'theme_cul_boost/years';
+    $title = get_string('years', 'theme_cul_boost');
+    $description = get_string('yearsdesc', 'theme_cul_boost');
+    $default = 3;
+    $setting = new admin_setting_configselect($name, $title, $description, $default, range(0,10));
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $temp->add($setting);
+
     // Footnote
     $name = 'theme_cul_boost/footnote';
     $title = get_string('footnote', 'theme_cul_boost');

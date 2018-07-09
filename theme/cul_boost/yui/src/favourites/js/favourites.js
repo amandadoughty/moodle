@@ -14,7 +14,7 @@ M.theme_cul_boost.favourites =  {
                 data: data,
                 on: {
                     success: function(id, e) {
-                        var favourites = Y.one('li#theme-cul_boost-favourites');
+                        var favourites = Y.one('li#theme-cul_boost-myfavourites');
                         var html = Y.JSON.parse(e.responseText);
                         var newnode = Y.Node.create(html);
 

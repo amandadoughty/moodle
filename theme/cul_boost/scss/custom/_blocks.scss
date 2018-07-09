@@ -58,6 +58,14 @@
                 }
             }
         }
+        .avatar {
+            width: auto;
+            margin-right: $spacer;
+        }
+        .notificationtext {
+            overflow: visible;
+            margin-bottom: $spacer;
+        }
         .culactivity_stream {
             ul {
                 padding: 0;
@@ -91,15 +99,13 @@
                 }
                 .content {
                     .culupcoming_events {
-                        display: flex;
-                        flex-wrap: wrap;
-                        justify-content: center;
+                        display: block;
+                        max-height: 400px;
+                        overflow: auto;
                         ul {
                             display: block;
                             width: 100%;
                             max-width: 300px;
-                            max-height: 400px;
-                            overflow: auto;
                             li {
                                 padding: $spacer / 2 0;
                                 margin-bottom: 0;

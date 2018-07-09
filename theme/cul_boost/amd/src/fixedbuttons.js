@@ -45,7 +45,7 @@ define(['jquery', 'core/log'], function($, log) {
 
 
                 // Show/Hide Blocks
-                $('.pagelayout-course').parent('html').toggleClass(window.localStorage.toggled);
+                $('.pagelayout-course').parent('html').toggleClass(window.localStorage.hideblocks);
 
                 $('.favourite-btn').on('click', function() {
                     $("[data-toggle='popover']").popover('hide');
@@ -53,12 +53,12 @@ define(['jquery', 'core/log'], function($, log) {
 
                 $('.toggleblocks-btn').on('click', function() {
 
-                    if (window.localStorage.toggled != "hiddenblocks") {
+                    if (window.localStorage.hideblocks != "hiddenblocks") {
                         $('.pagelayout-course').parent('html').toggleClass("hiddenblocks", true);
-                        window.localStorage.toggled = "hiddenblocks";
+                        window.localStorage.hideblocks = "hiddenblocks";
                     } else {
                         $('.pagelayout-course').parent('html').toggleClass("hiddenblocks", false);
-                        window.localStorage.toggled = "";
+                        window.localStorage.hideblocks = "";
                     }
 
                 });

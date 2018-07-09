@@ -31,6 +31,7 @@ define(['jquery', 'core/log'], function($, log) {
                     var mainnavpos = mainnav.offset().top + bottom;
                     var reveal = mainnav.offset().top + bottom + rightnav;
                     var anchorheight = navigation.outerHeight();
+                    var fixedbuttons = $('.fixed-buttons');
 
                     if (window_top > position) {
                         var anchorpos = anchor.offset().top;
@@ -60,8 +61,10 @@ define(['jquery', 'core/log'], function($, log) {
 
                     if (window_top > reveal) {
                         navigation.addClass('reveal');
+                        fixedbuttons.addClass('push');
                     } else {
                         navigation.removeClass('reveal');
+                        fixedbuttons.removeClass('push');
                     }
 
                 }

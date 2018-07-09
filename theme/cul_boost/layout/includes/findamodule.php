@@ -18,7 +18,7 @@ $find = html_writer::tag('div', $find.$search, ['class'=>'container-fluid text-c
 $blocks = '';
 if ($hasdashcl) {
     $close = html_writer::tag('div', '', ['class'=>'close-icon']);
-    $blocks = $OUTPUT->synergyblocks($dashcl, 'findblocks w-100');
+    $blocks = $OUTPUT->synergyblocks($dashcl, 'findblocks w-100 flex-column');
     $blocks = html_writer::tag('div', $blocks.$close, ['class'=>'findblocks-wrap d-flex flex-wrap align-items-start jusitify-content-center pt-5 pt-md-7 pt-xl-9 px-4']);
 }
 

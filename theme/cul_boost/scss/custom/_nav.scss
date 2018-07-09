@@ -636,6 +636,15 @@
                     }
                 }
             }
+            .help-menu-wrap {
+                ul.nav {
+                    >li.dropdown {
+                        >a {
+                            font-size: $font-size-h5;
+                        }
+                    }
+                }
+            }
         }
     }
 }
