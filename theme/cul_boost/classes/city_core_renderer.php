@@ -225,9 +225,8 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
         }
 
         $enrolledcourses = theme_cul_boost_utility::get_user_enrolled_courses($years);
-        $archivelink = $this->archive_link();
 
-        if ($enrolledcourses || $archivelink) {
+        if ($enrolledcourses) {
             $maxdropdowncourses = 15;
             $countcourses = 0;
             $mycoursestxt = get_string('mycourses', 'theme_cul_boost');
@@ -267,12 +266,6 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                     $countcourses++;
                 }
             }
-
-            $mycourses->add(get_string('archive', 'theme_cul_boost'),
-                        $archivelink['href'],
-                        $archivelink['tooltip']
-                        );
-
 
             return $mycoursesmenu;
         }
@@ -565,110 +558,6 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
         }
 
         return $content;
-    }
-
-    /**
-     *
-     *
-     *
-     * @return
-     */
-
-    function archive_link() {
-        global $CFG, $USER, $DB, $OUTPUT;
-
-        $link = array(
-            'islink' => false,
-            'href' => new moodle_url(''),
-            'tooltip' => ''
-            );
-
-        // shortcut -  only for logged in users!
-        if (!isloggedin() || isguestuser()) {
-            return $link;
-        }
-
-        if (\core\session\manager::is_loggedinas()) {
-            $link['tooltip'] = get_string('notpermittedtojumpas', 'mnet');
-            return $link;
-        }
-
-        // according to start_jump_session,
-        // remote users can't on-jump
-        // so don't show this block to them
-        if (is_mnet_remote_user($USER)) {
-            if (debugging() and !empty($CFG->debugdisplay)) {
-                $link['tooltip'] = get_string('error_localusersonly', 'block_mnet_hosts');
-            }
-
-            return $link;
-        }
-
-        if (!is_enabled_auth('mnet')) {
-            if (debugging() and !empty($CFG->debugdisplay)) {
-                $link['tooltip'] = get_string('error_authmnetneeded', 'block_mnet_hosts');
-            }
-
-            return $link;
-        }
-
-        if (!has_capability('moodle/site:mnetlogintoremote', context_system::instance(), NULL, false)) {
-            if (debugging() and !empty($CFG->debugdisplay)) {
-                $link['tooltip'] = get_string('error_roamcapabilityneeded', 'block_mnet_hosts');
-            }
-
-            return $link;
-        }
-
-        // TODO: Test this query - it's appropriate? It works?
-        // get the hosts and whether we are doing SSO with them
-        $sql = "
-             SELECT DISTINCT
-                 h.id,
-                 h.name,
-                 h.wwwroot,
-                 a.name as application,
-                 a.display_name
-             FROM
-                 {mnet_host} h,
-                 {mnet_application} a,
-                 {mnet_host2service} h2s_IDP,
-                 {mnet_service} s_IDP,
-                 {mnet_host2service} h2s_SP,
-                 {mnet_service} s_SP
-             WHERE
-                 h.id <> ? AND
-                 h.id <> ? AND
-                 h.id = h2s_IDP.hostid AND
-                 h.deleted = 0 AND
-                 h.applicationid = a.id AND
-                 h2s_IDP.serviceid = s_IDP.id AND
-                 s_IDP.name = 'sso_idp' AND
-                 h2s_IDP.publish = '1' AND
-                 h.id = h2s_SP.hostid AND
-                 h2s_SP.serviceid = s_SP.id AND
-                 s_SP.name = 'sso_idp' AND
-                 h2s_SP.publish = '1' AND
-                 h.wwwroot = 'http://moodle-archive.city.ac.uk'
-             ORDER BY
-                 a.display_name,
-                 h.name";
-
-        $hosts = $DB->get_records_sql($sql, array($CFG->mnet_localhost_id, $CFG->mnet_all_hosts_id));
-        $host = array_pop($hosts);
-
-        if ($host) {
-            if ($host->id == $USER->mnethostid) {
-                $link['href'] = new moodle_url("{$host->wwwroot}");
-            } else {
-                $link['href'] = new moodle_url("{$CFG->wwwroot}/auth/mnet/jump.php?hostid={$host->id}");
-            }
-
-            $link['islink'] = true;
-            $link['tooltip'] = get_string('archivedisplay', 'theme_cul_boost');
-        }
-
-        return $link;
     }
 
     /**

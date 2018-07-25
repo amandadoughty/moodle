@@ -113,8 +113,6 @@ $string['rubric'] = 'Rubric';
 $string['returntoassign'] = 'Return to assignment';
 
 $string['mycourses'] = 'My Courses';
-$string['archive'] = '2012-13 and earlier';
-$string['archivedisplay'] = '2012-13 and earlier (link to archived Moodle)';
 $string['settings'] = 'Settings';
 $string['fullscreen'] = 'enter fullscreen';
 $string['closefullscreen'] = 'exit fullscreen';
