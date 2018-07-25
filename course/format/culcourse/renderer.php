@@ -238,7 +238,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $o .= html_writer::start_tag(
                 'div',
                 [
-                    'class' => 'sectionbody togglesection',
+                    'class' => 'sectionbody togglesection collapse in',
                     'id' => 'togglesection-' . $section->id,
                     'data-preference-key' => $section->id,
                 ]
