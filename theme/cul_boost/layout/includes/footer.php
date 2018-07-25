@@ -38,3 +38,6 @@
     	</div>
     </div>
 </footer>
+<?php
+echo $cityrenderer->google_analytics();
+?>

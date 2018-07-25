@@ -70,6 +70,14 @@ $temp = new admin_settingpage('theme_cul_boost_general',  get_string('generalset
     $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
+    // Google Analytics
+    $name = 'theme_cul_boost/gakey';
+    $title = get_string('gakey', 'theme_cul_boost');
+    $description = get_string('gakeydesc', 'theme_cul_boost');
+    $default = '';
+    $setting = new admin_setting_configtext($name, $title, $description, $default);
+    $temp->add($setting);
+
 
 if (!$ADMIN->locate($temp->name)) {
     $ADMIN->add('theme_cul_boost', $temp);

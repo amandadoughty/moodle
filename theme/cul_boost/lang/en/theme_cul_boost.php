@@ -155,3 +155,6 @@ $string['rolloverguidancelink'] = 'http://bit.ly/cityunirollovertool';
 
 $string['years'] = 'Years ordered in dropdown';
 $string['yearsdesc'] = 'Example: the number of years to show ordered in dropdown';
+
+$string['gakey'] = 'Google analytics key';
+$string['gakeydesc'] = 'Please enter you Google Analytics key';
