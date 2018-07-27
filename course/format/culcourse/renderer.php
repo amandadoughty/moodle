@@ -563,6 +563,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 // 0-section is displayed a little different then the others
                 if ($thissection->summary or !empty($modinfo->sections[0]) or $this->page->user_is_editing()) {
                     echo $this->section_header($thissection, $course, false, 0);
+                    echo $this->section_summary_container($thissection);
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                     echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
                     echo $this->injected_section_footer($course, $section, $context);
@@ -708,7 +709,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $o = html_writer::start_tag('div', ['class' => 'summary' . $classextra]);
             $o .= $this->format_summary_text($section);
 
-            if ($this->culconfig['showsectionsummary'] == 2) {
+            if ($section->section > 0 && $this->culconfig['showsectionsummary'] == 2) {
                 $o .= $this->truncate_summary_text($section);
             }
 
