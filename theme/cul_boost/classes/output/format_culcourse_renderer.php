@@ -123,7 +123,7 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
 	                   
                     $title = get_section_name($course, $section);
                     $sectionsummary = $this->output->heading($title, 3, 'section-title');
-                    $sectionsummary .= $thissection->summary;                        
+                    $sectionsummary .= $this->section_summary_container($thissection);                        
                     $class = '';
 
                     $sectioncm = $this->courserenderer->course_section_cm_list($course, $thissection, 0);
