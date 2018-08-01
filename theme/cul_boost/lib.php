@@ -24,6 +24,23 @@
                                                              
 defined('MOODLE_INTERNAL') || die();
 
+function theme_cul_boost_process_css($css, $theme) {
+    global $CFG;
+    if(empty($CFG->themewww)){
+        $themewww = $CFG->wwwroot."/theme";
+    }
+    $tag = '[[fontsdir]]';
+    $css = str_replace($tag, $themewww.'/cul_boost/fonts/', $css);
+
+    $customcss = $theme->settings->customcss;
+    $css = $css . $customcss;
+
+    $tag = "fill='#";
+    $css = str_replace($tag, "fill='%23", $css);
+
+    return $css;
+}
+
 /**
  * Returns the required JS files, including core Boost JS
  */
@@ -37,13 +54,6 @@ function theme_cul_boost_page_init(moodle_page $page) {
 
     $page->requires->jquery_plugin('ui');
     $page->requires->jquery_plugin('ui-css');
-
-    if (in_array($page->bodyid, $quizpageids)) {
-        $page->requires->jquery_plugin('selectboxit', 'theme_cul_boost');
-        $page->requires->jquery_plugin('selectboxit-css', 'theme_cul_boost');
-        $page->requires->jquery_plugin('selectboxit-long', 'theme_cul_boost');
-        $page->requires->jquery_plugin('selectboxit-long-css', 'theme_cul_boost');
-    }
 
     $page->requires->js_call_amd('theme_cul_boost/loader', 'init');
     
@@ -62,7 +72,6 @@ function theme_cul_boost_page_init(moodle_page $page) {
     $page->requires->js_call_amd('theme_cul_boost/navigation', 'init');
     $page->requires->js_call_amd('theme_cul_boost/stickynav', 'init');
     $page->requires->js_call_amd('theme_cul_boost/fixedbuttons', 'init');
-    $page->requires->js_call_amd('theme_cul_boost/selectmenu', 'init');
 
     return true;
 }

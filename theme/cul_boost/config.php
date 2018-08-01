@@ -31,6 +31,7 @@ $THEME->editor_sheets = [];
 $THEME->parents = ['boost'];
 $THEME->enable_dock = false;
 $THEME->yuicssmodules = array();
+$THEME->csspostprocess = 'theme_cul_boost_process_css';
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
 $THEME->requiredblocks = 'settings';
 

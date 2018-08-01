@@ -204,6 +204,11 @@
             &:first-of-type {
                 margin-left: 0;
             }
+            .dropdown {
+                +.dropdown {
+                    margin-left: $spacer * 1.5;
+                }
+            }
             >li {
                 &:hover,
                 &:focus {

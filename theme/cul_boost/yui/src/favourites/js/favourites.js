@@ -22,7 +22,7 @@ M.theme_cul_boost.favourites =  {
                             favourites.remove();
                         }
 
-                        Y.one('.navbar .nav-wrap .nav:nth-of-type(2)').append(newnode);
+                        Y.one('.navbar .nav-wrap .nav:nth-of-type(2)').prepend(newnode);
                     }
                 }
             });

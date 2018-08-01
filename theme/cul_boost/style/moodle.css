@@ -11287,9 +11287,6 @@ span.editinstructions {
 .courses .coursebox.even {
   background-color: rgba(0, 0, 0, 0.05); }
 
-.courses .coursebox:hover {
-  background-color: rgba(0, 0, 0, 0.075); }
-
 .courses > .paging.paging-morelink {
   text-align: center;
   padding: 1rem; }
@@ -12447,7 +12444,7 @@ a.ygtvspacer:hover {
   .messaging-area-container .status .offline-text {
     color: #ff6961; }
   .messaging-area-container .status.online .online-text {
-    display: block; }
+    display: inherit; }
   .messaging-area-container .status.online .offline-text {
     display: none; }
   .messaging-area-container a,
@@ -14080,7 +14077,9 @@ select {
   padding-left: 0.5em;
   padding-right: 0.5em; }
 
-.path-mod-forum .forumheaderlist .discussion .author,
+.path-mod-forum .forumheaderlist .author .media-body {
+  width: auto; }
+
 .path-mod-forum .forumheaderlist .discussion .replies,
 .path-mod-forum .forumheaderlist .discussion .lastpost {
   white-space: normal; }
@@ -14092,8 +14091,6 @@ select {
 .path-mod-forum .forumheaderlist .discussion .topic,
 .path-mod-forum .forumheaderlist .discussion .discussionsubscription,
 .path-mod-forum .forumheaderlist .discussion .topic.starter,
-.path-mod-forum .forumheaderlist .discussion .picture,
-.path-mod-forum .forumheaderlist .discussion .author,
 .path-mod-forum .forumheaderlist .discussion .replies,
 .path-mod-forum .forumheaderlist .discussion .lastpost {
   vertical-align: top; }
@@ -15171,9 +15168,6 @@ body:not(.jsenabled) .langmenu:hover > .dropdown-menu,
   display: block;
   max-height: 150px;
   overflow-y: auto; }
-
-ol {
-  margin: 0 0 0.75 2.5em; }
 
 .navbar-static-top .dropdown .dropdown-menu {
   max-height: calc(100vh - 85px);
@@ -20804,6 +20798,9 @@ a.bg-black:focus, a.bg-black:hover {
           .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .content .courses + .subcategories {
             margin-top: 1rem; }
 
+#block-region-content {
+  padding: 0 15px; }
+
 #page-block-quickmail .form-control-static {
   display: block;
   width: auto; }
@@ -21437,6 +21434,8 @@ a.dimmed_text:visited,
       display: none !important; }
     .navbar .nav-wrap .nav:first-of-type {
       margin-left: 0; }
+    .navbar .nav-wrap .nav .dropdown + .dropdown {
+      margin-left: 1.5rem; }
     .navbar .nav-wrap .nav > li:hover, .navbar .nav-wrap .nav > li:focus {
       background-color: transparent; }
     .navbar .nav-wrap .nav > li.dropdown-item {
@@ -23036,6 +23035,10 @@ li.movehere {
 .path-mod-assign [data-region="user-info"] .img-rounded {
   width: 40px; }
 
+.path-mod-assign [data-region="grade-panel"] .mform #id_gradeheader {
+  display: block;
+  width: 100%; }
+
 .path-mod-assign [data-region="grade-panel"] .mform .fitem.has-popout .col-md-3 {
   width: 100%;
   -webkit-box-flex: 0;
@@ -23312,6 +23315,28 @@ li.movehere {
 .forumpost .content .posting.fullpost {
   overflow: visible; }
 
+#page-mod-assign-grader.pagelayout-embedded {
+  min-height: 100vh; }
+
+#page-mod-assign-grader section#main-region {
+  margin: 0 !important;
+  padding: 0 !important; }
+
+#page-mod-assign-grader [data-region="grade-actions-panel"] {
+  height: auto; }
+  #page-mod-assign-grader [data-region="grade-actions-panel"] [data-region="grade-actions"] .collapse-buttons {
+    line-height: 37px;
+    height: auto; }
+
+#page-mod-assign-grader [data-region="grading-navigation"] {
+  margin: 0; }
+
+.que.ddwtos .drop {
+  max-width: 100%; }
+
+.que.ddwtos .drag {
+  max-width: 100%; }
+
 #existing-records .dataTable {
   overflow: auto;
   display: block; }
@@ -23322,6 +23347,15 @@ li.movehere {
     color: #fff; }
   #page-footer .footer-bottom {
     background-color: rgba(0, 0, 0, 0.2); }
+  #page-footer .usertour {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding-bottom: 1rem;
+    text-align: center; }
+    #page-footer .usertour a {
+      max-width: 1260px;
+      padding: 0 15px;
+      display: block;
+      margin: 0 auto; }
 
 [class^="icon fa fa-fw fa-fw navicon"] {
   display: -webkit-inline-box;

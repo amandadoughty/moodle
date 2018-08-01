@@ -12,6 +12,10 @@
     }
     [data-region="grade-panel"] {
         .mform {
+            #id_gradeheader {
+                display: block;
+                width: 100%;
+            }
             .fitem {
                 &.has-popout {
                     .col-md-3 {
@@ -255,4 +259,34 @@
             }
         }
     }
+}
+
+// Few Boost tidy ups for the grade assignments page
+#page-mod-assign-grader {
+    &.pagelayout-embedded {
+        min-height: 100vh;
+    }
+    section#main-region {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    [data-region="grade-actions-panel"] {
+        height: auto;
+        [data-region="grade-actions"] .collapse-buttons {
+            line-height: 37px;
+            height: auto;
+        }
+    }
+    [data-region="grading-navigation"] {
+        margin: 0;
+    }
+}
+
+// Question type box overflows
+.que.ddwtos .drop {
+    max-width: 100%;
+}
+
+.que.ddwtos .drag {
+    max-width: 100%;
 }

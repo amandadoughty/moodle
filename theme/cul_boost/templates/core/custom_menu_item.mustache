@@ -17,6 +17,6 @@
 </div>
 {{/haschildren}}
 {{^haschildren}}
-<a class="nav-item nav-link" href="{{{url}}}" {{#title}}title="{{{title}}}"{{/title}}>{{{text}}}</a>
+<a class="nav-item nav-link" href="{{{url}}}" {{#tours}}data-action="tool_usertours/resetpagetour"{{/tours}} {{#title}}title="{{{title}}}"{{/title}}>{{{text}}}</a>
 {{/haschildren}}
 {{/divider}}
