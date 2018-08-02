@@ -48,7 +48,7 @@ define(['jquery', 'core/config', 'core/notification'], function($, config, Notif
          */
         init : function() {
             var ancestor = $(SELECTORS.BASECLASSSELECT).closest(SELECTORS.ANCESTOR);
-            var action = $(SELECTORS.FORM).attr('action');            
+            var action = $(SELECTORS.FORM).attr('action');
 
             $(SELECTORS.BASECLASSSELECT).on('change', function() {
                 var baseclass = $(SELECTORS.BASECLASSSELECT).val();

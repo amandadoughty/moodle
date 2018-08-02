@@ -38,7 +38,8 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         SECTIONHEAD: '.sectionhead',
         SECTIONBODY: '.sectionbody',
         TOGGLEHEAD: '#toggle-',
-        TOGGLEBODY: '#togglesection-'
+        TOGGLEBODY: '#togglesection-',
+        DDPROXY: '.yui3-dd-proxy'
         };
 
     var GETURL = config.wwwroot + '/course/format/culcourse/getuserpreference.php';
@@ -78,6 +79,10 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      */
     var handleOpen = function(e){
         window.console.log('open');
+        // e.preventDefault();
+        // $(SELECTORS.DDPROXY).empty();
+        // // e.target.find(SELECTORS.SECTIONBODY).collapse('show');
+        // $(e.target).find(SELECTORS.SECTIONBODY).trigger('click');
         var sectionid = $(e.currentTarget).data('preference-key');
 
         var data = {
@@ -109,6 +114,10 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      */
     var handleClose = function(e){
         window.console.log('close');
+        // e.preventDefault();
+        // $(SELECTORS.DDPROXY).empty();
+        // // e.target.find(SELECTORS.SECTIONBODY).collapse('show');
+        // $(e.target).find(SELECTORS.SECTIONBODY).trigger('click');
         var sectionid = $(e.currentTarget).data('preference-key');
 
         var data = {
@@ -134,6 +143,9 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
          * @param {int} courseid
          */
         init : function(courseid) {
+
+            $(SELECTORS.DDPROXY).find(SELECTORS.SECTIONBODY).removeAttr('id');
+window.console.log($(SELECTORS.DDPROXY).find(SELECTORS.SECTIONBODY));
             courseId = courseid;
             var body = $('body');
             body.delegate(SELECTORS.OPENALLLINK, 'click', handleOpenAll);
