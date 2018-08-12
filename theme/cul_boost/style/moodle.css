@@ -2601,7 +2601,7 @@ textarea {
   #rubric-rubric.gradingform_rubric .dropup > .addcriterion > .caret {
     border-top-color: #000 !important; }
   .tag, .statusok, .statuswarning, .statusserious,
-  .statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
+  .statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
     border: 1px solid #000; }
   .table, table.collection, table.flexible,
   .generaltable {
@@ -5903,7 +5903,7 @@ p.arrow_button input[type="button"],
   font-size: 0.875rem; }
 
 .tag, .statusok, .statuswarning, .statusserious,
-.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
+.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
   display: inline-block;
   padding: 0.25rem 0.4rem;
   font-size: 0.875rem;
@@ -5914,20 +5914,20 @@ p.arrow_button input[type="button"],
   white-space: nowrap;
   vertical-align: baseline; }
   .tag:empty, .statusok:empty, .statuswarning:empty, .statusserious:empty,
-  .statuscritical:empty, .que .correctness:empty, .label:empty, .badge:empty, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count:empty, .cul-important:empty, .editor_atto_menu .atto_styles_button .dropdown-menu > li:empty:nth-child(2), .cul-generic:empty, .editor_atto_menu .atto_styles_button .dropdown-menu > li:empty:nth-child(3) {
+  .statuscritical:empty, .que .correctness:empty, .label:empty, .badge:empty, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count:empty, .cul-important:empty, .editor_atto_menu .atto_styles_button .dropdown-menu > li:empty:nth-child(2), .cul-generic:empty, .editor_atto_menu .atto_styles_button .dropdown-menu > li:empty:nth-child(3) {
     display: none; }
 
 .btn .tag, #page-grade-grading-manage .actions .action .tag, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .tag, #rubric-rubric.gradingform_rubric .addcriterion .tag, .btn .statusok, #page-grade-grading-manage .actions .action .statusok, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statusok, #rubric-rubric.gradingform_rubric .addcriterion .statusok, .btn .statuswarning, #page-grade-grading-manage .actions .action .statuswarning, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statuswarning, #rubric-rubric.gradingform_rubric .addcriterion .statuswarning, .btn .statusserious, #page-grade-grading-manage .actions .action .statusserious, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statusserious, #rubric-rubric.gradingform_rubric .addcriterion .statusserious,
 .btn .statuscritical,
 #page-grade-grading-manage .actions .action .statuscritical,
 #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .statuscritical,
-#rubric-rubric.gradingform_rubric .addcriterion .statuscritical, .btn .que .correctness, .que .btn .correctness, #page-grade-grading-manage .actions .action .que .correctness, .que #page-grade-grading-manage .actions .action .correctness, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .que .correctness, .que #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .correctness, #rubric-rubric.gradingform_rubric .addcriterion .que .correctness, .que #rubric-rubric.gradingform_rubric .addcriterion .correctness, .btn .label, #page-grade-grading-manage .actions .action .label, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .label, #rubric-rubric.gradingform_rubric .addcriterion .label, .btn .badge, #page-grade-grading-manage .actions .action .badge, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .badge, #rubric-rubric.gradingform_rubric .addcriterion .badge, .btn #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .btn .activity-count, #page-grade-grading-manage .actions .action #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #page-grade-grading-manage .actions .action .activity-count, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .activity-count, #rubric-rubric.gradingform_rubric .addcriterion #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric .addcriterion .activity-count, .btn .cul-important, #page-grade-grading-manage .actions .action .cul-important, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-important, #rubric-rubric.gradingform_rubric .addcriterion .cul-important, .btn .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .editor_atto_menu .atto_styles_button .btn .dropdown-menu > li:nth-child(2), #page-grade-grading-manage .actions .action .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .editor_atto_menu .atto_styles_button #page-grade-grading-manage .actions .action .dropdown-menu > li:nth-child(2), #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .editor_atto_menu .atto_styles_button #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .dropdown-menu > li:nth-child(2), #rubric-rubric.gradingform_rubric .addcriterion .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .editor_atto_menu .atto_styles_button #rubric-rubric.gradingform_rubric .addcriterion .dropdown-menu > li:nth-child(2), .btn .cul-generic, #page-grade-grading-manage .actions .action .cul-generic, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-generic, #rubric-rubric.gradingform_rubric .addcriterion .cul-generic, .btn .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3), .editor_atto_menu .atto_styles_button .btn .dropdown-menu > li:nth-child(3), #page-grade-grading-manage .actions .action .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3), .editor_atto_menu .atto_styles_button #page-grade-grading-manage .actions .action .dropdown-menu > li:nth-child(3), #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3), .editor_atto_menu .atto_styles_button #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .dropdown-menu > li:nth-child(3), #rubric-rubric.gradingform_rubric .addcriterion .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3), .editor_atto_menu .atto_styles_button #rubric-rubric.gradingform_rubric .addcriterion .dropdown-menu > li:nth-child(3) {
+#rubric-rubric.gradingform_rubric .addcriterion .statuscritical, .btn .que .correctness, .que .btn .correctness, #page-grade-grading-manage .actions .action .que .correctness, .que #page-grade-grading-manage .actions .action .correctness, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .que .correctness, .que #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .correctness, #rubric-rubric.gradingform_rubric .addcriterion .que .correctness, .que #rubric-rubric.gradingform_rubric .addcriterion .correctness, .btn .label, #page-grade-grading-manage .actions .action .label, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .label, #rubric-rubric.gradingform_rubric .addcriterion .label, .btn .badge, #page-grade-grading-manage .actions .action .badge, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .badge, #rubric-rubric.gradingform_rubric .addcriterion .badge, .btn #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .btn .activity-count, #page-grade-grading-manage .actions .action #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #page-grade-grading-manage .actions .action .activity-count, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .activity-count, #rubric-rubric.gradingform_rubric .addcriterion #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress #rubric-rubric.gradingform_rubric .addcriterion .activity-count, .btn .cul-important, #page-grade-grading-manage .actions .action .cul-important, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-important, #rubric-rubric.gradingform_rubric .addcriterion .cul-important, .btn .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .editor_atto_menu .atto_styles_button .btn .dropdown-menu > li:nth-child(2), #page-grade-grading-manage .actions .action .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .editor_atto_menu .atto_styles_button #page-grade-grading-manage .actions .action .dropdown-menu > li:nth-child(2), #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .editor_atto_menu .atto_styles_button #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .dropdown-menu > li:nth-child(2), #rubric-rubric.gradingform_rubric .addcriterion .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .editor_atto_menu .atto_styles_button #rubric-rubric.gradingform_rubric .addcriterion .dropdown-menu > li:nth-child(2), .btn .cul-generic, #page-grade-grading-manage .actions .action .cul-generic, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .cul-generic, #rubric-rubric.gradingform_rubric .addcriterion .cul-generic, .btn .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3), .editor_atto_menu .atto_styles_button .btn .dropdown-menu > li:nth-child(3), #page-grade-grading-manage .actions .action .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3), .editor_atto_menu .atto_styles_button #page-grade-grading-manage .actions .action .dropdown-menu > li:nth-child(3), #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3), .editor_atto_menu .atto_styles_button #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input .dropdown-menu > li:nth-child(3), #rubric-rubric.gradingform_rubric .addcriterion .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3), .editor_atto_menu .atto_styles_button #rubric-rubric.gradingform_rubric .addcriterion .dropdown-menu > li:nth-child(3) {
   position: relative;
   top: -1px; }
 
 a.tag:focus, a.statusok:focus, a.statuswarning:focus, a.statusserious:focus,
-a.statuscritical:focus, .que a.correctness:focus, a.label:focus, a.badge:focus, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:focus, a.cul-important:focus, a.cul-generic:focus, a.tag:hover, a.statusok:hover, a.statuswarning:hover, a.statusserious:hover,
-a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:hover, a.cul-important:hover, a.cul-generic:hover {
+a.statuscritical:focus, .que a.correctness:focus, a.label:focus, a.badge:focus, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:focus, a.cul-important:focus, a.cul-generic:focus, a.tag:hover, a.statusok:hover, a.statuswarning:hover, a.statusserious:hover,
+a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress a.activity-count:hover, a.cul-important:hover, a.cul-generic:hover {
   color: #fff;
   text-decoration: none;
   cursor: pointer; }
@@ -5957,9 +5957,9 @@ a.statuscritical:hover, .que a.correctness:hover, a.label:hover, a.badge:hover, 
   #page-admin-report-backups-index .backup-notyetrun[href]:hover {
     background-color: #006b62; }
 
-.tag-info, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release, .assignfeedback_editpdf_widget .label, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
+.tag-info, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release, .assignfeedback_editpdf_widget .label, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
   background-color: #98989C; }
-  .tag-info[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:focus, .assignfeedback_editpdf_widget .label[href]:focus, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:focus, .cul-generic[href]:focus, .editor_atto_menu .atto_styles_button .dropdown-menu > li[href]:focus:nth-child(3), .tag-info[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:hover, .assignfeedback_editpdf_widget .label[href]:hover, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:hover, .cul-generic[href]:hover, .editor_atto_menu .atto_styles_button .dropdown-menu > li[href]:hover:nth-child(3) {
+  .tag-info[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:focus, .assignfeedback_editpdf_widget .label[href]:focus, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:focus, .cul-generic[href]:focus, .editor_atto_menu .atto_styles_button .dropdown-menu > li[href]:focus:nth-child(3), .tag-info[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:hover, .assignfeedback_editpdf_widget .label[href]:hover, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:hover, .cul-generic[href]:hover, .editor_atto_menu .atto_styles_button .dropdown-menu > li[href]:hover:nth-child(3) {
     background-color: #7e7e83; }
 
 .tag-warning, .statuswarning, #page-admin-report-backups-index .backup-warning, #page-admin-index .updateplugin .updatepluginconfirmexternal, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity100 .info.release,
@@ -20903,6 +20903,7 @@ aside[id*="block-region-nav-settings"] {
   aside[id*="block-region-nav-settings"] .block_settings .footer .adminsearchform {
     border-top: 1px solid #E3E3E3; }
   aside[id*="block-region-nav-settings"] .block_settings .block_tree .tree_item.branch {
+    position: relative;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -20915,9 +20916,11 @@ aside[id*="block-region-nav-settings"] {
         -ms-flex-align: center;
             align-items: center;
     margin: 0;
-    padding: 0.5rem; }
+    padding: 0.5rem 0.5rem 0.5rem 2rem; }
     aside[id*="block-region-nav-settings"] .block_settings .block_tree .tree_item.branch[aria-expanded="false"].loading {
       background-position: calc(100% - 0.5rem) 45%; }
+    aside[id*="block-region-nav-settings"] .block_settings .block_tree .tree_item.branch:hover:before {
+      background-color: rgba(0, 0, 0, 0.05); }
   aside[id*="block-region-nav-settings"] .block_settings .block_tree .root_node + ul {
     position: absolute;
     top: 100%;
@@ -20967,6 +20970,8 @@ aside[id*="block-region-nav-settings"] {
     width: 100%;
     line-height: 1.1;
     color: #3C3C3C; }
+  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree p > a:hover {
+    color: #A22833; }
   aside[id*="block-region-nav-settings"] .block_settings .block_tree .tree_item {
     display: -webkit-box;
     display: -webkit-flex;
@@ -20987,6 +20992,30 @@ aside[id*="block-region-nav-settings"] {
     margin-right: 0.5rem;
     line-height: 1rem;
     color: #A22833; }
+  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch:before {
+    position: absolute;
+    top: 50%;
+    left: 0.3rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    margin: 0;
+    -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+         -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+    border-radius: 50%; }
   aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch {
     display: -webkit-box;
     display: -webkit-flex;
@@ -21000,7 +21029,7 @@ aside[id*="block-region-nav-settings"] {
         -ms-flex-align: center;
             align-items: center;
     line-height: 1.1;
-    padding: 0.5rem; }
+    padding: 0.5rem 0.5rem 0.5rem 2rem; }
     aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded="true"] {
       background-color: #E3E3E3; }
       aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded="true"]:after {
@@ -21025,6 +21054,7 @@ aside[id*="block-region-nav-settings"] {
     opacity: 0;
     visibility: hidden;
     position: absolute;
+    z-index: 1;
     top: 0;
     left: 2rem;
     background-color: #fff;
@@ -22423,35 +22453,35 @@ form {
   100% {
     opacity: 1; } }
 
-#region-main .course-content ul.culcourse {
+#page-course-view-culcourse .course-content ul.culcourse {
   padding: 0;
   list-style: none; }
-  #region-main .course-content ul.culcourse #section-0 {
+  #page-course-view-culcourse .course-content ul.culcourse #section-0 {
     margin: 0;
     border: none;
     margin-bottom: 1rem; }
-    #region-main .course-content ul.culcourse #section-0 .content {
+    #page-course-view-culcourse .course-content ul.culcourse #section-0 .content {
       background-color: transparent;
       padding: 0;
       margin: 0; }
-      #region-main .course-content ul.culcourse #section-0 .content .img-text {
+      #page-course-view-culcourse .course-content ul.culcourse #section-0 .content .img-text {
         background-color: transparent;
         padding: 0;
         margin: 0; }
 
-#region-main .course-content #toggle-all .left.side,
-#region-main .course-content #toggle-all .right.side {
+#page-course-view-culcourse .course-content #toggle-all .left.side,
+#page-course-view-culcourse .course-content #toggle-all .right.side {
   display: none; }
 
-#region-main .course-content #toggle-all .content {
+#page-course-view-culcourse .course-content #toggle-all .content {
   margin: 0; }
-  #region-main .course-content #toggle-all .content h4 {
+  #page-course-view-culcourse .course-content #toggle-all .content h4 {
     border: 1px solid #f2f2f2;
     padding: 0;
     margin: 0;
     font-weight: normal; }
-  #region-main .course-content #toggle-all .content #toggles-all-opened,
-  #region-main .course-content #toggle-all .content #toggles-all-closed {
+  #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-opened,
+  #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-closed {
     position: relative;
     margin: 0;
     background-image: none;
@@ -22467,13 +22497,13 @@ form {
     padding: 1rem 1.5rem;
     font-size: 1.375rem;
     color: #3C3C3C; }
-    #region-main .course-content #toggle-all .content #toggles-all-opened:hover, #region-main .course-content #toggle-all .content #toggles-all-opened:focus,
-    #region-main .course-content #toggle-all .content #toggles-all-closed:hover,
-    #region-main .course-content #toggle-all .content #toggles-all-closed:focus {
+    #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-opened:hover, #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-opened:focus,
+    #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-closed:hover,
+    #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-closed:focus {
       background-color: #98989C;
       color: #fff; }
-    #region-main .course-content #toggle-all .content #toggles-all-opened:before,
-    #region-main .course-content #toggle-all .content #toggles-all-closed:before {
+    #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-opened:before,
+    #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-closed:before {
       display: inline-block;
       font: normal normal normal 14px/1 FontAwesome;
       font-size: inherit;
@@ -22484,61 +22514,61 @@ form {
       font-size: 1.75rem;
       margin-top: -0.25rem;
       margin-right: 1rem; }
-  #region-main .course-content #toggle-all .content #toggles-all-closed:before {
+  #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-closed:before {
     content: "\f105"; }
 
-#region-main .course-content #topcoll-display-instructions > .side {
+#page-course-view-culcourse .course-content #topcoll-display-instructions > .side {
   display: none; }
 
-#region-main .course-content #topcoll-display-instructions > .content {
+#page-course-view-culcourse .course-content #topcoll-display-instructions > .content {
   margin: 0; }
 
-#region-main .course-content #toggle-all,
-#region-main .course-content #topcoll-display-instructions {
+#page-course-view-culcourse .course-content #toggle-all,
+#page-course-view-culcourse .course-content #topcoll-display-instructions {
   margin: 0 0 1rem 0; }
 
-#region-main .course-content ul.culcourse {
+#page-course-view-culcourse .course-content ul.culcourse {
   padding-top: 1px;
   clear: both; }
-  #region-main .course-content ul.culcourse > li.section {
+  #page-course-view-culcourse .course-content ul.culcourse > li.section {
     border: none;
     margin-bottom: .75rem;
     position: relative; }
-    #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed {
+    #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed {
       background-color: #F5F5F5; }
-      #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus {
+      #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus {
         background-color: #dcdbdb; }
-        #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover h3, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus h3, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover h3, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus h3 {
+        #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover h3, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus h3, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover h3, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus h3 {
           color: #7e7e83; }
-          #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover h3 a, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus h3 a, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover h3 a, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus h3 a {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover h3 a, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus h3 a, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover h3 a, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus h3 a {
             color: #7e7e83; }
-            #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover h3 a span, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus h3 a span, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover h3 a span, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus h3 a span {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover h3 a span, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus h3 a span, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover h3 a span, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus h3 a span {
               color: #7e7e83; }
-              #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover h3 a span .icon, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus h3 a span .icon, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover h3 a span .icon, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus h3 a span .icon {
+              #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover h3 a span .icon, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus h3 a span .icon, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover h3 a span .icon, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus h3 a span .icon {
                 color: #7e7e83; }
-        #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover .summary, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus .summary, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover .summary, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus .summary {
+        #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover .summary, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus .summary, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover .summary, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus .summary {
           color: #7e7e83; }
-        #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover .section-summary-activities .activity-count, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus .section-summary-activities .activity-count, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover .section-summary-activities .activity-count, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus .section-summary-activities .activity-count {
+        #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:hover .section-summary-activities .activity-count, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle:focus .section-summary-activities .activity-count, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:hover .section-summary-activities .activity-count, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed:focus .section-summary-activities .activity-count {
           color: #7e7e83; }
-      #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle h3, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed h3 {
+      #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle h3, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed h3 {
         color: #98989C; }
-        #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle h3 a, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed h3 a {
+        #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle h3 a, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed h3 a {
           color: #98989C; }
-          #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle h3 a span, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed h3 a span {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle h3 a span, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed h3 a span {
             color: #98989C; }
-            #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle h3 a span .icon, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed h3 a span .icon {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle h3 a span .icon, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed h3 a span .icon {
               color: #98989C; }
-      #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle .summary, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed .summary {
+      #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle .summary, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed .summary {
         color: #98989C; }
-      #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle .section-summary-activities .activity-count, #region-main .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed .section-summary-activities .activity-count {
+      #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle .section-summary-activities .activity-count, #page-course-view-culcourse .course-content ul.culcourse > li.section.hidden .content .sectionhead.toggle.collapsed .section-summary-activities .activity-count {
         color: #98989C; }
-    #region-main .course-content ul.culcourse > li.section .content {
+    #page-course-view-culcourse .course-content ul.culcourse > li.section .content {
       background-color: #F5F5F5;
       padding: 0;
       -webkit-backface-visibility: hidden;
               backface-visibility: hidden;
       margin: 0; }
-      #region-main .course-content ul.culcourse > li.section .content .sectionhead {
+      #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead {
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
@@ -22554,13 +22584,13 @@ form {
         background-color: #A22833;
         background-image: none;
         min-height: auto; }
-        #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle {
+        #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle {
           position: relative;
           margin: 0;
           padding: 0.75rem; }
-          #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle:hover {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle:hover {
             background-color: #A22833; }
-          #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 {
             display: -webkit-box;
             display: -webkit-flex;
             display: -ms-flexbox;
@@ -22570,7 +22600,7 @@ form {
             padding: 0;
             font-size: 1.375rem;
             color: #fff; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle h3:before {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle h3:before {
               display: inline-block;
               font: normal normal normal 14px/1 FontAwesome;
               font-size: inherit;
@@ -22583,7 +22613,7 @@ form {
               width: 2rem;
               text-align: center;
               margin-right: 0.25rem; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 > span {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 > span {
               display: -webkit-box;
               display: -webkit-flex;
               display: -ms-flexbox;
@@ -22592,7 +22622,7 @@ form {
               -webkit-align-items: center;
                   -ms-flex-align: center;
                       align-items: center; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a {
               display: -webkit-box;
               display: -webkit-flex;
               display: -ms-flexbox;
@@ -22602,7 +22632,7 @@ form {
                   -ms-flex-align: center;
                       align-items: center;
               color: #fff; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a span {
+              #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a span {
                 display: -webkit-inline-box;
                 display: -webkit-inline-flex;
                 display: -ms-inline-flexbox;
@@ -22612,48 +22642,48 @@ form {
                     -ms-flex-align: center;
                         align-items: center;
                 color: #fff; }
-                #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a span .icon {
+                #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle h3 a span .icon {
                   color: #fff; }
-          #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed {
             background-color: #98989C; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus {
               background-color: #717176; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 {
+              #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 {
                 color: #fff; }
-                #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a {
+                #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a {
                   color: #fff; }
-                  #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a span, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a span {
+                  #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a span, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a span {
                     color: #fff; }
-                    #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a span .icon, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a span .icon {
+                    #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover h3 a span .icon, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus h3 a span .icon {
                       color: #fff; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .summary, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .summary {
+              #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .summary, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .summary {
                 color: #fff; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .section-summary-activities .activity-count, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .section-summary-activities .activity-count {
+              #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:hover .section-summary-activities .activity-count, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed:focus .section-summary-activities .activity-count {
                 color: #fff; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 {
               font-size: 1.375rem;
               color: #fff; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3:before {
+              #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3:before {
                 content: "\f105"; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a {
+              #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a {
                 color: #fff; }
-                #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a span {
+                #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a span {
                   color: #fff; }
-                  #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a span .icon {
+                  #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed h3 a span .icon {
                     color: #fff; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary {
               color: #fff; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary .truncate {
+              #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary .truncate {
                 height: auto; }
-                #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary .truncate.truncated:after {
+                #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary .truncate.truncated:after {
                   display: none; }
-                #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary .truncate > div > * {
+                #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .summary .truncate > div > * {
                   white-space: nowrap;
                   overflow: hidden;
                   text-overflow: ellipsis; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .section-summary-activities .activity-count {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle.collapsed .section-summary-activities .activity-count {
               color: #fff; }
-          #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .summary {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .summary {
             -webkit-box-ordinal-group: 2;
             -webkit-order: 1;
                 -ms-flex-order: 1;
@@ -22663,21 +22693,21 @@ form {
             margin: 0;
             color: #fff;
             margin-top: 0.5rem; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .summary .no-overflow {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .summary .no-overflow {
               margin: 0;
               min-height: 0; }
-          #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-activities {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-activities {
             position: relative;
             right: auto;
             bottom: auto;
             margin: 0 0 0 1rem; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-activities .activity-count {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-activities .activity-count {
               color: #fff; }
-              #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-activities .activity-count + .activity-count {
+              #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-activities .activity-count + .activity-count {
                 margin-left: 0.5rem; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-activities + .section-summary-progress {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-activities + .section-summary-progress {
               margin-left: 0.5rem; }
-          #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress {
             display: -webkit-inline-box;
             display: -webkit-inline-flex;
             display: -ms-inline-flexbox;
@@ -22692,42 +22722,42 @@ form {
             margin: 0 0 0 auto;
             color: #fff;
             font-size: 0.8rem; }
-            #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count {
+            #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count {
               background-color: #58585c;
               color: #fff; }
-          #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section_availability {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section_availability {
             margin: 0 0 0 auto;
             padding: 0; }
-      #region-main .course-content ul.culcourse > li.section .content .sectionbody {
+      #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionbody {
         margin: 0;
         -webkit-animation: .5s grow;
              -o-animation: .5s grow;
                 animation: .5s grow;
         background-color: #F5F5F5; }
-        #region-main .course-content ul.culcourse > li.section .content .sectionbody .section,
-        #region-main .course-content ul.culcourse > li.section .content .sectionbody .summary {
+        #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionbody .section,
+        #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionbody .summary {
           margin: 0;
           padding: 1rem; }
-          #region-main .course-content ul.culcourse > li.section .content .sectionbody .section:empty,
-          #region-main .course-content ul.culcourse > li.section .content .sectionbody .summary:empty {
+          #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionbody .section:empty,
+          #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionbody .summary:empty {
             display: none; }
-      #region-main .course-content ul.culcourse > li.section .content ul li.activity {
+      #page-course-view-culcourse .course-content ul.culcourse > li.section .content ul li.activity {
         margin: 0.5rem 0; }
-        #region-main .course-content ul.culcourse > li.section .content ul li.activity:last-child {
+        #page-course-view-culcourse .course-content ul.culcourse > li.section .content ul li.activity:last-child {
           padding-bottom: 0; }
-      #region-main .course-content ul.culcourse > li.section .content a.dimmed {
+      #page-course-view-culcourse .course-content ul.culcourse > li.section .content a.dimmed {
         -webkit-box-shadow: inset 0px 0px 0px 1px #E3E3E3;
                 box-shadow: inset 0px 0px 0px 1px #E3E3E3; }
-        #region-main .course-content ul.culcourse > li.section .content a.dimmed span.instancename {
+        #page-course-view-culcourse .course-content ul.culcourse > li.section .content a.dimmed span.instancename {
           border-left: 1px solid #E3E3E3; }
-      #region-main .course-content ul.culcourse > li.section .content span.instancename {
+      #page-course-view-culcourse .course-content ul.culcourse > li.section .content span.instancename {
         font-size: 1rem;
         padding: 0.5rem 0.75rem;
         border-left: 1px solid #A22833; }
-    #region-main .course-content ul.culcourse > li.section .add_section {
+    #page-course-view-culcourse .course-content ul.culcourse > li.section .add_section {
       margin-top: .5rem;
       margin-bottom: 1rem; }
-    #region-main .course-content ul.culcourse > li.section.orphaned .content {
+    #page-course-view-culcourse .course-content ul.culcourse > li.section.orphaned .content {
       padding: 25px; }
 
 .cul-important, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2) {
@@ -22867,17 +22897,17 @@ li.movehere {
       width: auto;
       height: auto; }
 
-#page-course-view-culcourse.editing #region-main .course-content .section .content .mod-indent-outer {
+#page-course-view-culcourse.editing .course-content .section .content .mod-indent-outer {
   padding-left: 0; }
-  #page-course-view-culcourse.editing #region-main .course-content .section .content .mod-indent-outer > div:not(.mod-indent) {
+  #page-course-view-culcourse.editing .course-content .section .content .mod-indent-outer > div:not(.mod-indent) {
     position: relative;
     margin: 2rem 0 0;
     padding: 0.5rem;
     background-color: rgba(0, 0, 0, 0.05); }
 
-#page-course-view-culcourse.editing #region-main .course-content .section .content li.activity {
+#page-course-view-culcourse.editing .course-content .section .content li.activity {
   position: relative; }
-  #page-course-view-culcourse.editing #region-main .course-content .section .content li.activity .editing_move {
+  #page-course-view-culcourse.editing .course-content .section .content li.activity .editing_move {
     top: 0;
     height: 2rem;
     display: -webkit-box;
@@ -22896,32 +22926,32 @@ li.movehere {
         -ms-flex-pack: center;
             justify-content: center;
     background-color: rgba(0, 0, 0, 0.1); }
-  #page-course-view-culcourse.editing #region-main .course-content .section .content li.activity .actions {
+  #page-course-view-culcourse.editing .course-content .section .content li.activity .actions {
     position: absolute;
     background-color: rgba(0, 0, 0, 0.1);
     height: 2rem;
     bottom: 100%;
     right: 0;
     padding: 0 0.5rem; }
-  #page-course-view-culcourse.editing #region-main .course-content .section .content li.activity .activityinstance {
+  #page-course-view-culcourse.editing .course-content .section .content li.activity .activityinstance {
     padding: 0; }
-    #page-course-view-culcourse.editing #region-main .course-content .section .content li.activity .activityinstance div {
+    #page-course-view-culcourse.editing .course-content .section .content li.activity .activityinstance div {
       padding: 0; }
-      #page-course-view-culcourse.editing #region-main .course-content .section .content li.activity .activityinstance div a:first-of-type {
+      #page-course-view-culcourse.editing .course-content .section .content li.activity .activityinstance div a:first-of-type {
         max-width: calc(100% - 30px); }
-    #page-course-view-culcourse.editing #region-main .course-content .section .content li.activity .activityinstance a:first-of-type {
+    #page-course-view-culcourse.editing .course-content .section .content li.activity .activityinstance a:first-of-type {
       max-width: calc(100% - 30px); }
-  #page-course-view-culcourse.editing #region-main .course-content .section .content li.activity .resourcelinkdetails {
+  #page-course-view-culcourse.editing .course-content .section .content li.activity .resourcelinkdetails {
     width: 100%;
     margin-top: .25rem; }
-  #page-course-view-culcourse.editing #region-main .course-content .section .content li.activity .ouwikilmt {
+  #page-course-view-culcourse.editing .course-content .section .content li.activity .ouwikilmt {
     width: 100%;
     margin-top: .25rem; }
 
-#page-course-view-culcourse.editing #region-main .course-content ul.culcourse li.section {
+#page-course-view-culcourse.editing .course-content ul.culcourse li.section {
   margin: 0 !important;
   padding-top: 2rem !important; }
-  #page-course-view-culcourse.editing #region-main .course-content ul.culcourse li.section .side.left {
+  #page-course-view-culcourse.editing .course-content ul.culcourse li.section .side.left {
     position: absolute;
     top: 0;
     left: 0;
@@ -22937,7 +22967,7 @@ li.movehere {
         -ms-flex-align: center;
             align-items: center;
     background-color: #E3E3E3; }
-  #page-course-view-culcourse.editing #region-main .course-content ul.culcourse li.section .side.right {
+  #page-course-view-culcourse.editing .course-content ul.culcourse li.section .side.right {
     position: absolute;
     top: 0;
     right: 0;
@@ -22953,7 +22983,7 @@ li.movehere {
             align-items: center;
     background-color: #E3E3E3;
     padding: 0 0.5rem; }
-    #page-course-view-culcourse.editing #region-main .course-content ul.culcourse li.section .side.right .section_action_menu {
+    #page-course-view-culcourse.editing .course-content ul.culcourse li.section .side.right .section_action_menu {
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;
@@ -22962,24 +22992,24 @@ li.movehere {
       -webkit-align-items: center;
           -ms-flex-align: center;
               align-items: center; }
-      #page-course-view-culcourse.editing #region-main .course-content ul.culcourse li.section .side.right .section_action_menu a {
+      #page-course-view-culcourse.editing .course-content ul.culcourse li.section .side.right .section_action_menu a {
         display: inline-block;
         width: auto;
         height: auto;
         padding: 0 0.25rem;
         margin: 0; }
-        #page-course-view-culcourse.editing #region-main .course-content ul.culcourse li.section .side.right .section_action_menu a > .icon {
+        #page-course-view-culcourse.editing .course-content ul.culcourse li.section .side.right .section_action_menu a > .icon {
           margin: 0; }
 
-#page-course-view-culcourse.editing #region-main .course-content ul.culcourse #toggle-all .content,
-#page-course-view-culcourse.editing #region-main .course-content ul.culcourse .content {
+#page-course-view-culcourse.editing .course-content ul.culcourse #toggle-all .content,
+#page-course-view-culcourse.editing .course-content ul.culcourse .content {
   margin: 0 !important; }
-  #page-course-view-culcourse.editing #region-main .course-content ul.culcourse #toggle-all .content ul li.activity,
-  #page-course-view-culcourse.editing #region-main .course-content ul.culcourse .content ul li.activity {
+  #page-course-view-culcourse.editing .course-content ul.culcourse #toggle-all .content ul li.activity,
+  #page-course-view-culcourse.editing .course-content ul.culcourse .content ul li.activity {
     margin: 0 0 1rem 0;
     padding-bottom: 0; }
-  #page-course-view-culcourse.editing #region-main .course-content ul.culcourse #toggle-all .content span.inplaceeditable,
-  #page-course-view-culcourse.editing #region-main .course-content ul.culcourse .content span.inplaceeditable {
+  #page-course-view-culcourse.editing .course-content ul.culcourse #toggle-all .content span.inplaceeditable,
+  #page-course-view-culcourse.editing .course-content ul.culcourse .content span.inplaceeditable {
     -webkit-flex-basis: 0;
         -ms-flex-preferred-size: 0;
             flex-basis: 0;
@@ -23556,8 +23586,11 @@ abbr[data-original-title] {
   display: none; }
 
 .tag, .statusok, .statuswarning, .statusserious,
-.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #region-main .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
+.statuscritical, .que .correctness, .assignfeedback_editpdf_widget .label, .label, .badge, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-important, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(2), .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
   letter-spacing: 0.015625rem; }
+
+.line-height-1 {
+  line-height: 100%; }
 
 .overlay {
   position: fixed;

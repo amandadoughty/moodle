@@ -202,6 +202,10 @@ abbr {
     letter-spacing: ($spacer * .015625);
 }
 
+.line-height-1 {
+    line-height: 100%;
+}
+
 .overlay {
     position: fixed;
     z-index: 3;

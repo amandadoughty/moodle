@@ -315,351 +315,353 @@ $culcourse-arrow-active-color: #fff;
     }
 }
 
-#region-main .course-content {
-    ul.culcourse {
-        padding: 0;
-        list-style: none;
-        #section-0 {
-            margin: 0;
-            border: none;
-            margin-bottom: $spacer;
-            .content {
-                background-color: transparent;
-                padding: 0;
+#page-course-view-culcourse {
+    .course-content {
+        ul.culcourse {
+            padding: 0;
+            list-style: none;
+            #section-0 {
                 margin: 0;
-                .img-text {
+                border: none;
+                margin-bottom: $spacer;
+                .content {
                     background-color: transparent;
                     padding: 0;
                     margin: 0;
-                }
-            }
-        }
-    }
-    #toggle-all {
-        .left.side,
-        .right.side {
-            display: none;
-        }
-        .content {
-            margin: 0;
-            h4 {
-                border: 1px solid darken($body-bg, 5%);
-                padding: 0;
-                margin: 0;
-                font-weight: normal;
-            }
-            #toggles-all-opened,
-            #toggles-all-closed {
-                position: relative;
-                margin: 0;
-                background-image: none;
-                width: auto;
-                display: inline-flex;
-                align-items: center;
-                padding: $spacer $spacer * 1.5;
-                font-size: $font-size-h4;
-                color: $body-color;
-                &:hover,
-                &:focus {
-                    background-color: $culcourse-header-bg;
-                    color: #fff;
-                }
-                &:before {
-                    @include fa-icon();
-                    content: "\f107";
-                    font-size: $font-size-h3;
-                    margin-top: -$spacer / 4;
-                    margin-right: $spacer;
-                }
-            }
-            #toggles-all-closed {
-                &:before {
-                    content: "\f105";
-                }
-            }
-        }
-    }
-    #topcoll-display-instructions {
-        >.side {
-            display: none;
-        }
-        >.content {
-            margin: 0;
-        }
-    }
-    #toggle-all,
-    #topcoll-display-instructions {
-        margin: 0 0 1rem 0;
-    }
-    ul.culcourse {
-        padding-top: 1px;
-        clear: both;
-        >li.section {
-            border: none;
-            margin-bottom: .75rem;
-            position: relative;
-            &.hidden {
-                .content {
-                    .sectionhead {
-                        &.toggle,
-                        &.toggle.collapsed {
-                            background-color: $gray-lightest;
-                            &:hover,
-                            &:focus {
-                                background-color: darken($gray-lightest, 10%);
-                                h3 {
-                                    color: darken($text-muted, 10%);
-                                    a {
-                                        color: darken($text-muted, 10%);
-                                        span {
-                                            color: darken($text-muted, 10%);
-                                            .icon {
-                                                color: darken($text-muted, 10%);
-                                            }
-                                        }
-                                    }
-                                }
-                                .summary {
-                                    color: darken($text-muted, 10%);
-                                }
-                                .section-summary-activities {
-                                    .activity-count {
-                                        color: darken($text-muted, 10%);
-                                    }
-                                }
-                            }
-                            h3 {
-                                color: $text-muted;
-                                a {
-                                    color: $text-muted;
-                                    span {
-                                        color: $text-muted;
-                                        .icon {
-                                            color: $text-muted;
-                                        }
-                                    }
-                                }
-                            }
-                            .summary {
-                                color: $text-muted;
-                            }
-                            .section-summary-activities {
-                                .activity-count {
-                                    color: $text-muted;
-                                }
-                            }
-                        }
+                    .img-text {
+                        background-color: transparent;
+                        padding: 0;
+                        margin: 0;
                     }
                 }
+            }
+        }
+        #toggle-all {
+            .left.side,
+            .right.side {
+                display: none;
             }
             .content {
-                background-color: $culcourse-content-bg;
-                padding: 0;
-                backface-visibility: hidden;
                 margin: 0;
-                .sectionhead {
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-items: center;
-                    border-radius: 0;
-                    background-color: $culcourse-header-active-bg;
+                h4 {
+                    border: 1px solid darken($body-bg, 5%);
+                    padding: 0;
+                    margin: 0;
+                    font-weight: normal;
+                }
+                #toggles-all-opened,
+                #toggles-all-closed {
+                    position: relative;
+                    margin: 0;
                     background-image: none;
-                    min-height: auto;
-                    &.toggle {
-                        position: relative;
-                        margin: 0;
-                        padding: $spacer * .75;
-                        &:hover {
-                            background-color: $culcourse-header-active-bg;
-                        }
-                        h3 {
-                            display: flex;
-                            margin: 0;
-                            background: none;
-                            padding: 0;
-                            font-size: $font-size-h4;
-                            color: #fff;
-                            &:before {
-                                @include fa-icon();
-                                content: "\f107";
-                                font-size: $font-size-h3;
-                                margin-top: -1px;
-                                width: $spacer * 2;
-                                text-align: center;
-                                margin-right: $spacer / 4;
-                            }
-                            >span {
-                                display: flex;
-                                align-items: center;
-                            }
-                            a {
-                                display: flex;
-                                align-items: center;
-                                color: #fff;
-                                span {
-                                    display: inline-flex;
-                                    align-items: center;
-                                    color: #fff;
-                                    .icon {
-                                        color: #fff;
+                    width: auto;
+                    display: inline-flex;
+                    align-items: center;
+                    padding: $spacer $spacer * 1.5;
+                    font-size: $font-size-h4;
+                    color: $body-color;
+                    &:hover,
+                    &:focus {
+                        background-color: $culcourse-header-bg;
+                        color: #fff;
+                    }
+                    &:before {
+                        @include fa-icon();
+                        content: "\f107";
+                        font-size: $font-size-h3;
+                        margin-top: -$spacer / 4;
+                        margin-right: $spacer;
+                    }
+                }
+                #toggles-all-closed {
+                    &:before {
+                        content: "\f105";
+                    }
+                }
+            }
+        }
+        #topcoll-display-instructions {
+            >.side {
+                display: none;
+            }
+            >.content {
+                margin: 0;
+            }
+        }
+        #toggle-all,
+        #topcoll-display-instructions {
+            margin: 0 0 1rem 0;
+        }
+        ul.culcourse {
+            padding-top: 1px;
+            clear: both;
+            >li.section {
+                border: none;
+                margin-bottom: .75rem;
+                position: relative;
+                &.hidden {
+                    .content {
+                        .sectionhead {
+                            &.toggle,
+                            &.toggle.collapsed {
+                                background-color: $gray-lightest;
+                                &:hover,
+                                &:focus {
+                                    background-color: darken($gray-lightest, 10%);
+                                    h3 {
+                                        color: darken($text-muted, 10%);
+                                        a {
+                                            color: darken($text-muted, 10%);
+                                            span {
+                                                color: darken($text-muted, 10%);
+                                                .icon {
+                                                    color: darken($text-muted, 10%);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .summary {
+                                        color: darken($text-muted, 10%);
+                                    }
+                                    .section-summary-activities {
+                                        .activity-count {
+                                            color: darken($text-muted, 10%);
+                                        }
                                     }
                                 }
-                            }
-                        }
-                        &.collapsed {
-                            background-color: $culcourse-header-bg;
-                            &:hover,
-                            &:focus {
-                                background-color: $culcourse-header-hover-bg;
                                 h3 {
-                                    color: #fff;
+                                    color: $text-muted;
                                     a {
-                                        color: #fff;
+                                        color: $text-muted;
                                         span {
-                                            color: #fff;
+                                            color: $text-muted;
                                             .icon {
-                                                color: #fff;
+                                                color: $text-muted;
                                             }
                                         }
                                     }
                                 }
                                 .summary {
-                                    color: #fff;
+                                    color: $text-muted;
                                 }
                                 .section-summary-activities {
                                     .activity-count {
-                                        color: #fff;
+                                        color: $text-muted;
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+                .content {
+                    background-color: $culcourse-content-bg;
+                    padding: 0;
+                    backface-visibility: hidden;
+                    margin: 0;
+                    .sectionhead {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        border-radius: 0;
+                        background-color: $culcourse-header-active-bg;
+                        background-image: none;
+                        min-height: auto;
+                        &.toggle {
+                            position: relative;
+                            margin: 0;
+                            padding: $spacer * .75;
+                            &:hover {
+                                background-color: $culcourse-header-active-bg;
+                            }
                             h3 {
+                                display: flex;
+                                margin: 0;
+                                background: none;
+                                padding: 0;
                                 font-size: $font-size-h4;
-                                color: $culcourse-header-text-color;
+                                color: #fff;
                                 &:before {
-                                    content: "\f105";
+                                    @include fa-icon();
+                                    content: "\f107";
+                                    font-size: $font-size-h3;
+                                    margin-top: -1px;
+                                    width: $spacer * 2;
+                                    text-align: center;
+                                    margin-right: $spacer / 4;
+                                }
+                                >span {
+                                    display: flex;
+                                    align-items: center;
                                 }
                                 a {
-                                    color: $culcourse-header-editing-color;
+                                    display: flex;
+                                    align-items: center;
+                                    color: #fff;
                                     span {
-                                        color: $culcourse-header-editing-color;
+                                        display: inline-flex;
+                                        align-items: center;
+                                        color: #fff;
                                         .icon {
-                                            color: $culcourse-header-editing-color;
+                                            color: #fff;
                                         }
+                                    }
+                                }
+                            }
+                            &.collapsed {
+                                background-color: $culcourse-header-bg;
+                                &:hover,
+                                &:focus {
+                                    background-color: $culcourse-header-hover-bg;
+                                    h3 {
+                                        color: #fff;
+                                        a {
+                                            color: #fff;
+                                            span {
+                                                color: #fff;
+                                                .icon {
+                                                    color: #fff;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .summary {
+                                        color: #fff;
+                                    }
+                                    .section-summary-activities {
+                                        .activity-count {
+                                            color: #fff;
+                                        }
+                                    }
+                                }
+                                h3 {
+                                    font-size: $font-size-h4;
+                                    color: $culcourse-header-text-color;
+                                    &:before {
+                                        content: "\f105";
+                                    }
+                                    a {
+                                        color: $culcourse-header-editing-color;
+                                        span {
+                                            color: $culcourse-header-editing-color;
+                                            .icon {
+                                                color: $culcourse-header-editing-color;
+                                            }
+                                        }
+                                    }
+                                }
+                                .summary {
+                                    color: $culcourse-header-text-color;
+                                    .truncate {
+                                        height: auto;
+                                        &.truncated {
+                                            &:after {
+                                                display: none;
+                                            }
+                                        }
+                                        >div>* {
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+                                    }
+                                }
+                                .section-summary-activities {
+                                    .activity-count {
+                                        color: $culcourse-header-text-color;
                                     }
                                 }
                             }
                             .summary {
-                                color: $culcourse-header-text-color;
-                                .truncate {
-                                    height: auto;
-                                    &.truncated {
-                                        &:after {
-                                            display: none;
-                                        }
-                                    }
-                                    >div>* {
-                                        white-space: nowrap;
-                                        overflow: hidden;
-                                        text-overflow: ellipsis;
-                                    }
+                                order: 1;
+                                width: 100%;
+                                padding: 0;
+                                margin: 0;
+                                color: #fff;
+                                margin-top: $spacer /2;
+                                .no-overflow {
+                                    margin: 0;
+                                    min-height: 0;
                                 }
                             }
                             .section-summary-activities {
+                                position: relative;
+                                right: auto;
+                                bottom: auto;
+                                margin: 0 0 0 $spacer;
                                 .activity-count {
-                                    color: $culcourse-header-text-color;
+                                    color: #fff;
+                                    &+.activity-count {
+                                        margin-left: $spacer / 2;
+                                    }
+                                }
+                                +.section-summary-progress {
+                                    margin-left: $spacer /2;
                                 }
                             }
-                        }
-                        .summary {
-                            order: 1;
-                            width: 100%;
-                            padding: 0;
-                            margin: 0;
-                            color: #fff;
-                            margin-top: $spacer /2;
-                            .no-overflow {
-                                margin: 0;
-                                min-height: 0;
-                            }
-                        }
-                        .section-summary-activities {
-                            position: relative;
-                            right: auto;
-                            bottom: auto;
-                            margin: 0 0 0 $spacer;
-                            .activity-count {
+                            .section-summary-progress {
+                                display: inline-flex;
+                                align-content: center;
+                                position: relative;
+                                left: auto;
+                                bottom: auto;
+                                padding: 0;
+                                margin: 0 0 0 auto;
                                 color: #fff;
-                                &+.activity-count {
-                                    margin-left: $spacer / 2;
+                                font-size: $small-font-size;
+                                .activity-count {
+                                    @extend .tag;
+                                    @extend .tag-info;
+                                    background-color: darken($brand-info, 25%);
+                                    color: #fff;
                                 }
                             }
-                            +.section-summary-progress {
-                                margin-left: $spacer /2;
+                            .section_availability {
+                                margin: 0 0 0 auto;
+                                padding: 0;
                             }
-                        }
-                        .section-summary-progress {
-                            display: inline-flex;
-                            align-content: center;
-                            position: relative;
-                            left: auto;
-                            bottom: auto;
-                            padding: 0;
-                            margin: 0 0 0 auto;
-                            color: #fff;
-                            font-size: $small-font-size;
-                            .activity-count {
-                                @extend .tag;
-                                @extend .tag-info;
-                                background-color: darken($brand-info, 25%);
-                                color: #fff;
-                            }
-                        }
-                        .section_availability {
-                            margin: 0 0 0 auto;
-                            padding: 0;
                         }
                     }
-                }
-                .sectionbody {
-                    margin: 0;
-                    animation: .5s grow;
-                    background-color: $culcourse-content-bg;
-                    .section,
-                    .summary {
+                    .sectionbody {
                         margin: 0;
-                        padding: $spacer;
-                        &:empty {
-                            display: none;
+                        animation: .5s grow;
+                        background-color: $culcourse-content-bg;
+                        .section,
+                        .summary {
+                            margin: 0;
+                            padding: $spacer;
+                            &:empty {
+                                display: none;
+                            }
                         }
                     }
-                }
-                ul {
-                    li.activity {
-                        margin: $spacer / 2 0;
-                        &:last-child {
-                            padding-bottom: 0;
+                    ul {
+                        li.activity {
+                            margin: $spacer / 2 0;
+                            &:last-child {
+                                padding-bottom: 0;
+                            }
                         }
                     }
-                }
-                a.dimmed {
-                    box-shadow: inset 0px 0px 0px 1px $gray-lighter;
+                    a.dimmed {
+                        box-shadow: inset 0px 0px 0px 1px $gray-lighter;
+                        span.instancename {
+                            border-left: 1px solid $gray-lighter;
+                        }
+                    }
                     span.instancename {
-                        border-left: 1px solid $gray-lighter;
+                        font-size: $font-size-base;
+                        padding: $spacer / 2 $spacer * .75;
+                        border-left: 1px solid $brand-primary;
                     }
                 }
-                span.instancename {
-                    font-size: $font-size-base;
-                    padding: $spacer / 2 $spacer * .75;
-                    border-left: 1px solid $brand-primary;
+                .add_section {
+                    margin-top: .5rem;
+                    margin-bottom: 1rem;
                 }
-            }
-            .add_section {
-                margin-top: .5rem;
-                margin-bottom: 1rem;
-            }
-            &.orphaned {
-                .content {
-                    padding: 25px;
+                &.orphaned {
+                    .content {
+                        padding: 25px;
+                    }
                 }
             }
         }

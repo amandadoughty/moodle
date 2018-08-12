@@ -93,13 +93,19 @@ aside[id*="block-region-nav-settings"] {
     }
 
     .block_settings .block_tree .tree_item.branch {
+        position: relative;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         margin: 0;
-        padding: $spacer / 2;
+        padding: $spacer / 2 $spacer / 2 $spacer / 2 $spacer * 2;
         &[aria-expanded="false"].loading {
             background-position: calc(100% - #{$spacer / 2}) 45%;
+        }
+        &:hover {
+            &:before {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
         }
     }
 
@@ -148,7 +154,11 @@ aside[id*="block-region-nav-settings"] {
         line-height: 1.1;
         color: $body-color;
     }
-
+    .block.block_settings .block_tree p>a {
+        &:hover {
+            color: $brand-primary;
+        }
+    }
     .block_settings .block_tree .tree_item {
         display: flex;
         flex-wrap: wrap;
@@ -164,13 +174,25 @@ aside[id*="block-region-nav-settings"] {
         line-height: $font-size-base;
         color: $brand-primary;
     }
-
+    .block.block_settings .block_tree .tree_item.branch:before {
+        position: absolute;
+        top: 50%;
+        left: $spacer * .3;
+        width: $spacer * 1.5;
+        height: $spacer * 1.5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        transform: translateY(-50%);
+        border-radius: 50%;
+    }
     .block.block_settings .block_tree .tree_item.root_node.branch {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         line-height: 1.1;
-        padding: $spacer / 2;
+        padding: $spacer / 2 $spacer / 2 $spacer / 2 $spacer * 2;
         &[aria-expanded="true"] {
             background-color: $gray-lighter;
             &:after {
@@ -209,6 +231,7 @@ aside[id*="block-region-nav-settings"] {
                 opacity: 0;
                 visibility: hidden;
                 position: absolute;
+                z-index: 1;
                 top: 0;
                 left: $spacer * 2;
                 background-color: #fff;

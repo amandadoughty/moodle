@@ -14,7 +14,7 @@ if (!isset($PAGE->layout_options['nonavbar']) || $PAGE->layout_options['nonavbar
     $rightnavbar = $this->page_heading_button();
 
     $icon = html_writer::tag('i', '', ['class'=>'fa fa-cog ml-2']);
-	$text = html_writer::tag('span', get_string('settings'), ['class'=>'trigger-text']);
+	$text = html_writer::tag('span', get_string('settings'), ['class'=>'trigger-text line-height-1']);
 	$settingsblock = html_writer::link('javascript:void(0)', $text.$icon, ['class'=>'trigger d-flex flex-wrap align-items-center h5 mb-0 text-white']);
     $settingsblock .= $OUTPUT->synergyblocks($navsettings, 'settings-block');
     $settingsblock = html_writer::tag('div', $settingsblock, ['class'=>'settings-block-wrap']);
