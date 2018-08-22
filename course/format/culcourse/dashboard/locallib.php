@@ -99,33 +99,26 @@ function format_culcourse_get_reading_list_url_data($course) {
     $format = ".json";
 
     if ($timePeriod) {
-        $url = "{$path}/lists/{$timePeriod}{$format}";
+        $curl = "{$path}/lists/{$timePeriod}{$format}";
+        $url = "{$path}/lists/{$timePeriod}";
     } else {
-        $url = "{$path}{$format}";
+        $curl = "{$path}{$format}";
+        $url = "{$path}";
     }
 
     // Get the config timeout values.
     $connectiontimeout = trim(get_config('culcourse', 'connection_timeout'));
     $transfertimeout   = trim(get_config('culcourse', 'transfer_timeout'));
 
-    $data = format_culcourse_get_reading_list_data($path, $url, $connectiontimeout, $transfertimeout);
+    $data = format_culcourse_get_reading_list_data($path, $curl, $connectiontimeout, $transfertimeout);
 
     if (OK == $data['status']) {
-        $resourcelists = $data['data'][$path]['http://purl.org/vocab/resourcelist/schema#usesList'];
+        $data['url'] = $url;
 
-        foreach ($resourcelists as $resourcelist) {
-            if (!empty($data['data'][$resourcelist['value']])) {
-                return array('status' => OK, 'listtype' => 'module-year', 'url' => $resourcelist['value']);
-            }
-        }
-
-        return array('status' => OK, 'listtype' => 'module', 'url' => $path); // Should never get here, but just a fallback!
-
-    } else if (NODATA === $data['status'] && $timePeriod) {
-        // If no reading list is returned for specified year, try using just the module name.
-        $data = format_culcourse_get_reading_list_data($path, "{$path}{$format}", $connectiontimeout, $transfertimeout);
-        if (OK == $data['status']) {
-            return array('status' => OK, 'listtype' => 'module', 'url' => $path);
+        if ($timePeriod) {
+            $data['listtype'] = 'module-year';
+        } else {
+            $data['listtype'] = 'module';
         }
     }
 
