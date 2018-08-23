@@ -182,9 +182,7 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                     echo $this->injected_section_footer($course, $section, $context);
                 }
             }
-        }
-
-        $this->change_number_sections($course);
+        }        
 
         if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
             // Print stealth sections if present.
@@ -203,6 +201,8 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
         } else {
             echo $this->end_section_list();
         }
+
+        $this->change_number_sections($course);
     }
 
 }
