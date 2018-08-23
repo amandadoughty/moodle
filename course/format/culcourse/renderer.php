@@ -614,9 +614,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     echo $this->injected_section_footer($course, $section, $context);
                 }
             }
-        }
-
-        $this->change_number_sections($course);
+        }        
 
         if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
             // Print stealth sections if present.
@@ -635,6 +633,8 @@ class format_culcourse_renderer extends format_section_renderer_base {
         } else {
             echo $this->end_section_list();
         }
+
+        $this->change_number_sections($course);
     }
 
     /**
