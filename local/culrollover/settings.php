@@ -81,6 +81,13 @@ if ($hassiteconfig) {
 		250
 		)
 	);
+	$settings->add(new admin_setting_configtext(
+		'rollover_chars',
+		get_string('rollover_chars', 'local_culrollover'),
+		get_string('rollover_chars_desc', 'local_culrollover'),
+		3
+		)
+	);
 	
 	$settings->add(new admin_setting_configcheckbox(
 		'backupdestination',

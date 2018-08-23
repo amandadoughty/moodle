@@ -1,7 +1,7 @@
 {
-  "name": "local_culrollover",
-  "version": "2.0.0",
-    "devDependencies" : {
+    "name": "local_culrollover",
+    "version": "2.0.0",
+    "devDependencies": {
         "grunt": "~0.4.5",
         "grunt-contrib-jshint": "~0.10.0",
         "grunt-contrib-nodeunit": "~0.4.1",
