@@ -144,8 +144,8 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
          */
         init : function(courseid) {
 
-            $(SELECTORS.DDPROXY).find(SELECTORS.SECTIONBODY).removeAttr('id');
-window.console.log($(SELECTORS.DDPROXY).find(SELECTORS.SECTIONBODY));
+//             $(SELECTORS.DDPROXY).find(SELECTORS.SECTIONBODY).removeAttr('id');
+// window.console.log($(SELECTORS.DDPROXY).find(SELECTORS.SECTIONBODY));
             courseId = courseid;
             var body = $('body');
             body.delegate(SELECTORS.OPENALLLINK, 'click', handleOpenAll);
