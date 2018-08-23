@@ -177,9 +177,14 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                     echo $this->courserenderer->course_section_add_cm_control($course, $section, 0);
                 }        
                 
-                echo $this->injected_section_footer($course, $section, $context);
+                // We don't insert a section at the end. We allow user to append multiple sections instead.
+                if ($numsections != $section) {
+                    echo $this->injected_section_footer($course, $section, $context);
+                }
             }
         }
+
+        $this->change_number_sections($course);
 
         if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
             // Print stealth sections if present.
