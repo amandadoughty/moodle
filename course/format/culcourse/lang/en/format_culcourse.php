@@ -234,6 +234,7 @@ $string['editsectionname'] = 'Edit section name';
 $string['expanded'] = 'expanded';
 $string['deletesection'] = 'Delete section';
 $string['hidefromothers'] = 'Hide section';
+$string['insertsection'] = 'Insert section';
 $string['newsectionname'] = 'New name for section {$a}';
 $string['sectionname'] = 'Section';
 $string['section0name'] = 'General';

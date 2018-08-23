@@ -273,7 +273,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $o .= html_writer::end_tag('div'); // .content.
 
         if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
-            $o .= $this->change_number_sections($course, $section + 1);
+            $o .= $this->insert_section($course, $section + 1);
         }
 
         $o .= html_writer::end_tag('li');
@@ -609,9 +609,14 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     echo $this->courserenderer->course_section_add_cm_control($course, $section, 0);
                 }
 
-                echo $this->injected_section_footer($course, $section, $context);
+                // We don't insert a section at the end. We allow user to append multiple sections instead.
+                if ($numsections != $section) {
+                    echo $this->injected_section_footer($course, $section, $context);
+                }
             }
         }
+
+        $this->change_number_sections($course);
 
         if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
             // Print stealth sections if present.
@@ -633,13 +638,13 @@ class format_culcourse_renderer extends format_section_renderer_base {
     }
 
     /**
-     * Returns controls in the bottom of the page to increase/decrease number of sections
+     * Returns button to insert section.
      *
      * @param stdClass $course
      * @param int|null $sectionreturn
      * @return string
      */
-    protected function change_number_sections($course, $section = 0) {
+    protected function insert_section($course, $section = 0) {
         $o = '';
         $coursecontext = context_course::instance($course->id);
 
@@ -651,10 +656,10 @@ class format_culcourse_renderer extends format_section_renderer_base {
 
             $o .= html_writer::start_tag('div', ['class' => 'add_section mdl-align']);
 
-            if (get_string_manager()->string_exists('addsections', 'format_'.$course->format)) {
-                $straddsections = get_string('addsections', 'format_'.$course->format);
+            if (get_string_manager()->string_exists('insertsection', 'format_'.$course->format)) {
+                $strinsertsection = get_string('insertsection', 'format_'.$course->format);
             } else {
-                $straddsections = get_string('addsections');
+                $strinsertsection = get_string('insertsection');
             }
 
             $url = new moodle_url(
@@ -666,7 +671,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 ]
             );
 
-            $addsectionbutton = new single_button($url, $straddsections, 'get');
+            $addsectionbutton = new single_button($url, $strinsertsection, 'get');
             $addsectionbutton->class = 'sectionbutton btn-city';
             $o .= $this->output->render($addsectionbutton);
             $o .= html_writer::end_tag('div');
@@ -674,6 +679,41 @@ class format_culcourse_renderer extends format_section_renderer_base {
 
         return $o;
     } 
+
+    /**
+     * Returns controls in the bottom of the page to increase/decrease number of sections
+     *
+     * @param stdClass $course
+     * @param int|null $sectionreturn
+     * @return string
+     */
+    protected function change_number_sections($course, $sectionreturn = null) {
+        $coursecontext = context_course::instance($course->id);
+        if (!has_capability('moodle/course:update', $coursecontext)) {
+            return '';
+        }
+
+        // Current course format does not have 'numsections' option but it has multiple sections suppport.
+        // Display the "Add section" link that will insert a section in the end.
+        // Note to course format developers: inserting sections in the other positions should check both
+        // capabilities 'moodle/course:update' and 'moodle/course:movesections'.
+
+        echo html_writer::start_tag('div', ['id' => 'changenumsections', 'class' => 'add_section mdl-align']);
+        if (get_string_manager()->string_exists('addsections', 'format_'.$course->format)) {
+            $straddsections = get_string('addsections', 'format_'.$course->format);
+        } else {
+            $straddsections = get_string('addsections');
+        }
+        $url = new moodle_url('/course/changenumsections.php',
+            ['courseid' => $course->id, 'insertsection' => 0, 'sesskey' => sesskey()]);
+        if ($sectionreturn !== null) {
+            $url->param('sectionreturn', $sectionreturn);
+        }
+        // $icon = $this->output->pix_icon('t/add', $straddsections);
+        echo html_writer::link($url, $straddsections,
+            array('class' => 'btn btn-secondary add-sections', 'data-add-sections' => $straddsections));
+        echo html_writer::end_tag('div');
+    }     
 
    /**
      * generate truncated html for a section summary text
