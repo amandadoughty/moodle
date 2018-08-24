@@ -112,6 +112,14 @@ function format_culcourse_get_reading_list_url_data($course) {
 
     $data = format_culcourse_get_reading_list_data($path, $curl, $connectiontimeout, $transfertimeout);
 
+    // If we have a year but it returned no results then check for lists for 
+    // any year.
+    if ($timePeriod && (NODATA == $data['status'])) {
+        $curl = "{$path}{$format}";
+        $url = "{$path}";
+        $data = format_culcourse_get_reading_list_data($path, $curl, $connectiontimeout, $transfertimeout);
+    }
+
     if (OK == $data['status']) {
         $data['url'] = $url;
 
@@ -119,7 +127,7 @@ function format_culcourse_get_reading_list_url_data($course) {
             $data['listtype'] = 'module-year';
         } else {
             $data['listtype'] = 'module';
-        }
+        }    
     }
 
     return $data;
