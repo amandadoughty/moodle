@@ -67,6 +67,12 @@ $string['setshowreadinglists_help'] = 'States if the reading lists will be shown
 $string['defaultshowreadinglists'] = 'Show the reading lists';
 $string['defaultshowreadinglists_desc'] = 'States if the reading lists will be shown.';
 
+// Show libguides.
+$string['setshowlibguides'] = 'Show the libguides';
+$string['setshowlibguides_help'] = 'States if the libguides will be shown.';
+$string['defaultshowlibguides'] = 'Show the libguides';
+$string['defaultshowlibguides_desc'] = 'States if the libguides will be shown.';
+
 // Show timetable.
 $string['setshowtimetable'] = 'Show the timetable';
 $string['setshowtimetable_help'] = 'States if the timetable will be shown.';
@@ -145,9 +151,14 @@ $string['connect_timeout_desc'] = 'Enter the maximum time in seconds to wait for
 $string['transfer_timeout'] = 'Transfer timeout';
 $string['transfer_timeout_desc'] = 'Enter the maximum time in seconds to wait for data transfer from the Reading Lists server to complete, before displaying an error message (upper limit 16).';
 
+// Libguide API url.
+$string['libAppsAPI'] = 'Library Guides API url';
+$string['libAppsAPI_desc'] = 'Enter the Library Guides API url.';
+
 // Reading list API url.
 $string['aspireAPI'] = 'Reading list API url';
 $string['aspireAPI_desc'] = 'Enter the Reading list API url.';
+
 
 /***** LINKS ON COURSE PAGE *****/
 $string['activities'] = 'Activities';
@@ -181,6 +192,14 @@ $string['no-readinglist'] = 'There are no reading lists matching this module';
 $string['not-installed-readinglist'] = 'Reading List (not installed)';
 $string['view-readinglist-module'] = 'View reading list(s) for this module';
 $string['view-readinglist-module-year'] = 'View reading list for this module and year';
+
+// Libguides
+$string['libguides'] = 'Libguides';
+$string['error-libguide'] = 'Sorry - an error occurred while fetching the libguides data';
+$string['no-libguide'] = 'There are no libguides matching this module';
+$string['not-installed-libguide'] = 'Libguide (not installed)';
+$string['view-libguide-module'] = 'View libguides(s) for this module';
+$string['view-libguide-module-year'] = 'View libguide for this module and year';
 
 // Students
 $string['no-view-student-photoboard'] = 'There are no {$a} enrolled on this module';

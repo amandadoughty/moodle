@@ -65,8 +65,11 @@ $settings->add(new admin_setting_configtextarea($name, $title, $description, $de
 
 /* Quicklinks.
 */
+
+// add libguides to this and then lang strings
 $elements = [
     'readinglists', 
+    'libguides',
     'timetable', 
     'graderreport', 
     'calendar', 
@@ -109,5 +112,13 @@ $name = 'format_culcourse/aspireAPI';
 $title = get_string('aspireAPI', 'format_culcourse');
 $description = get_string('aspireAPI_desc', 'format_culcourse');
 $default = 'http://readinglists.city.ac.uk';
+$type = PARAM_RAW;
+$settings->add(new admin_setting_configtext($name, $title, $description, $default, $type));
+
+// Libguides url.
+$name = 'format_culcourse/libAppsAPI';
+$title = get_string('libAppsAPI', 'format_culcourse');
+$description = get_string('libAppsAPI_desc', 'format_culcourse');
+$default = 'https://libguides.city.ac.uk/home';
 $type = PARAM_RAW;
 $settings->add(new admin_setting_configtext($name, $title, $description, $default, $type));

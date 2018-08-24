@@ -32,7 +32,8 @@ class format_culcourse_dashboard {
         global $COURSE;
 
         $this->elements = [
-            'readinglists', 
+            'readinglists',
+            'libguides', 
             'timetable', 
             'graderreport', 
             'calendar', 

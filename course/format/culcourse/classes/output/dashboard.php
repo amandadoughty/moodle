@@ -299,6 +299,49 @@ class dashboard implements templatable, renderable {
             $linkitems[$name] = array_merge($data, $extradata);
         }
 
+        // Lib Guides
+        if ($this->culconfig['showlibguides'] == 2 || $this->userisediting) {
+            $name = 'libguides';
+            $icon = 'fa-bookmark';
+            $data = [];
+            $extradata =[];
+            $attrs  = [];
+            $liattrs = [];
+            $data = $this->get_quicklink($name, $course);
+            $urldata = format_culcourse_get_libguide_url_data($course);
+
+            if (!$urldata) {
+                // Not installed or not configured                
+                $attrs['title'] = get_string('not-installed-libguide', 'format_culcourse');
+                $attrs['class'] = 'nolink';
+                $url = 'javascript:void(0);';
+                $liattrs['class'] = 'wide';
+            } else {
+                if (OK == $urldata['status']) {
+                    $url = $urldata['url'];
+                        $attrs['title'] = get_string('view-libguide-module', 'format_culcourse');
+                        $attrs['target'] = '_blank';
+                } else if (NODATA == $urldata['status']) {
+                    $attrs['title'] = get_string('no-libguide', 'format_culcourse');
+                    $attrs['class'] = 'nolink';
+                    $url = 'javascript:void(0);';
+                } else if (ERROR == $urldata['status']) {
+                    $attrs['title'] = get_string('error-libguide', 'format_culcourse');
+                    $attrs['class'] = 'nolink';
+                    $url = 'javascript:void(0);';
+                }
+            }          
+
+            $extradata = [
+                'url' => $url,
+                'icon' => $icon,
+                'attrs' => $attrs,
+                'liattrs' => $liattrs,
+            ];
+
+            $linkitems[$name] = array_merge($data, $extradata);
+        }
+
         // Timetable link
         if ($this->culconfig['showtimetable'] == 2 || $this->userisediting) {
             $name = 'timetable';
