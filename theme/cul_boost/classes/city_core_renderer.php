@@ -206,7 +206,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                     }
                 }
 
-                $favouritename = theme_cul_boost_utility::shorten_string($favouritescourse->displayname);
+                $favouritename = $favouritescourse->displayname;
                 $favourites->add($favouritename,
                     new moodle_url('/course/view.php', array('id' => $favouritescourse->id)),
                     $favouritescourse->displayname);
@@ -246,7 +246,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                         $yearmenu = $mycourses->add($year);
                     }
                     foreach ($enrolledcourse as $mycourse) {
-                        $coursename = theme_cul_boost_utility::shorten_string($mycourse->displayname);
+                        $coursename = $mycourse->displayname;
                         $yearmenu->add($coursename,
                             new moodle_url('/course/view.php', array('id' => $mycourse->id)),
                             $mycourse->displayname);
@@ -255,7 +255,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                 }
 
                 foreach ($enrolledcourses['other'] as $othercourse) {
-                    $coursename = theme_cul_boost_utility::shorten_string($othercourse->displayname);
+                    $coursename = $othercourse->displayname;
 
                     if ( $countcourses < $maxdropdowncourses ) {
                         $mycourses->add($coursename,
@@ -546,7 +546,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                     }
                 }
 
-                $favouritename = theme_cul_boost_utility::shorten_string($favouritescourse->displayname);
+                $favouritename = $favouritescourse->displayname;
                 $favourites->add($favouritename,
                     new moodle_url('/course/view.php', array('id' => $favouritescourse->id)),
                     $favouritescourse->displayname);
@@ -860,7 +860,7 @@ class theme_cul_boost_utility {
      * @param string $ellipsis The string to append to the shortened string to indicate continuation.
      * @return string
      */
-    public static function shorten_string($string, $maxlen = 22, $ellipsis = '..') {
+    public static function shorten_string($string, $maxlen = 22, $ellipsis = '...') {
         $boundary = $maxlen - strlen($ellipsis);
 
         if ((strlen($string) > $maxlen)) {
