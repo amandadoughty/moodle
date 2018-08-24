@@ -254,11 +254,6 @@ function format_culcourse_get_libguide_url_data($course) {
     // $connectiontimeout = trim(get_config('culcourse', 'connection_timeout'));
     // $transfertimeout   = trim(get_config('culcourse', 'transfer_timeout'));
 
-    // $data = format_culcourse_get_reading_list_data($course);
-
-
-
-
 
     // $connectiontimeout = (empty($connectiontimeout)) ? 4 : $connectiontimeout;
     // $transfertimeout   = (empty($transfertimeout))   ? 8 : $transfertimeout;
@@ -291,15 +286,14 @@ function format_culcourse_get_libguide_url_data($course) {
     $query = http_build_query($params);
 
     $urldebug = empty($urldebug) ? '' : $urldebug;
-    // $url = "https://lgapi-eu.libapps.com/1.1/guides/?site_id=426&key=e4706d90b346c209c37b32a6a94781d7&metadata=LAM876";
-    $url = "https://lgapi-eu.libapps.com/1.1/guides/?$query";
+    $url = "http://lgapi-eu.libapps.com/1.1/guides/?$query";
+    $url_clean = str_replace("&amp;", "&", $url);
 
     $ch = curl_init();
 
     $options = array(
-        CURLOPT_URL => "http://lgapi-eu.libapps.com/1.1/guides/?$query",
-        // CURLOPT_URL => "https://lgapi-eu.libapps.com/1.1/guides/?site_id=426&key=e4706d90b346c209c37b32a6a94781d7&metadata=LAM876",
-        // CURLOPT_URL => empty($urldebug) ? $url : $urldebug,
+
+        CURLOPT_URL => empty($urldebug) ? $url_clean : $urldebug,
         CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
         CURLOPT_FAILONERROR    => true,
         CURLOPT_HEADER         => false,
@@ -312,115 +306,28 @@ function format_culcourse_get_libguide_url_data($course) {
 
     curl_setopt_array($ch, $options);
 
-
     $data = curl_exec($ch);
 
-    // if(!curl_exec($ch)){
-    //     die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
-    // }
+    if(!curl_exec($ch)){
+        die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
+    }
 
-    // $responsedata = json_decode($data, true);
-    // curl_close($ch);
+    $responsedata = json_decode($data, true);
+    curl_close($ch);
 
+    if ($responsedata){
+        $lgdata['status'] = OK;
+        $lgdata['url'] = $responsedata[0]["friendly_url"];
+    } else {
+        $lgdata['status'] = NODATA;
+        $lgdata['url'] = "https://libguides.city.ac.uk/home";
+    }
 
-    var_dump($params);
-    var_dump($options);
+    // $lgdata['status'] = OK;
+    // $lgdata['url'] = $returnurl;
 
-    // $returnurl = $responsedata[0]["friendly_url"];
-
-
-            $lgdata['status'] = OK;
-            // $lgdata['data'] = $responsedata;
-            // $lgdata['url'] = $responsedata[0]["friendly_url"];
-
-            $lgdata['url'] = 'https://libguides.city.ac.uk/journalism';
-            return $lgdata;
-
-
+    return $lgdata;             
 }
-
-
-// /**
-//  * format_culcourse_get_libguide_data()
-//  *
-//  * Request the JSON data from Talis Aspire using cURL.
-//  * If the year filter is included in the url, then the response includes:-
-//  *     1. An object representing each list for the module for that year (if any exist)
-//  *     2. An object representing the module
-//  * If the year filter is not included in the url, then the response includes:-
-//  *     1. An object representing every list for the module
-//  *     2. An object representing the module
-//  *     3. An object representing the subject
-//  *
-//  * @param string $path
-//  * @param string $url
-//  * @param integer $connectiontimeout
-//  * @param integer $transfertimeout
-//  * @return array
-//  */
-// function format_culcourse_get_libguide_data($path, $url, $connectiontimeout = null, $transfertimeout = null) {
-
-    
-//     $connectiontimeout = (empty($connectiontimeout)) ? 4 : $connectiontimeout;
-//     $transfertimeout   = (empty($transfertimeout))   ? 8 : $transfertimeout;
-
-//     // Check validity of $connectiontimeout, and limit maximum value.
-//     if (!preg_match('/\A\d+\z/', $connectiontimeout) || ($connectiontimeout > 6)) {
-//         $connectiontimeout = 6;
-//     }
-
-//     // Check validity of $transfertimeout, and limit maximum value.
-//     if (!preg_match('/\A\d+\z/', $transfertimeout) || ($transfertimeout > 16)) {
-//         $transfertimeout = 16;
-//     }
-
-//     $lgdata = array('status' => null, 'data' => null);
-
-//     $codedata = format_culcourse_get_coursecode_data($COURSE->shortname);
-//     $module = $codedata['module_code'];
-
-//     $siteid = '426';
-//     $key = 'e4706d90b346c209c37b32a6a94781d7';
-//     $metadata = $module;
-
-//     $params = array(
-//             'site_id' => $siteid,
-//             'key' => $key,
-//             'metadata' => $metadata
-//     );
-
-//     $query = http_build_query($params);
-
-//     $ch = curl_init();
-
-//     curl_setopt_array($ch, array(
-//             CURLOPT_URL => "http://lgapi-eu.libapps.com/1.1/guides/?$query",
-//             CURLOPT_TIMEOUT => 10,
-//             CURLOPT_CONNECTTIMEOUT => 5,
-//             CURLOPT_RETURNTRANSFER => true
-//     ));
-
-//     $data = curl_exec($ch);
-
-//     if(!curl_exec($ch)){
-//         die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
-//     }
-
-//     $responsedata = json_decode($data, true);
-//     curl_close($ch);
-
-//     // var_dump($response);
-
-//     $returnurl = $responsedata[0]["friendly_url"];
-
-
-//             $rldata['status'] = OK;
-//             $rldata['data']   = $responsedata;
-//             $rldata['url']   = $responsedata[0]["friendly_url"];
-//             return $rldata;
-
-// }
-
 
 
 /**

@@ -310,27 +310,18 @@ class dashboard implements templatable, renderable {
             $data = $this->get_quicklink($name, $course);
             $urldata = format_culcourse_get_libguide_url_data($course);
 
-            if (!$urldata) {
-                // Not installed or not configured                
-                $attrs['title'] = get_string('not-installed-libguide', 'format_culcourse');
-                $attrs['class'] = 'nolink';
-                $url = 'javascript:void(0);';
-                $liattrs['class'] = 'wide';
-            } else {
                 if (OK == $urldata['status']) {
                     $url = $urldata['url'];
                         $attrs['title'] = get_string('view-libguide-module', 'format_culcourse');
                         $attrs['target'] = '_blank';
                 } else if (NODATA == $urldata['status']) {
-                    $attrs['title'] = get_string('no-libguide', 'format_culcourse');
-                    $attrs['class'] = 'nolink';
-                    $url = 'javascript:void(0);';
+                    $attrs['title'] = get_string('default-libguide', 'format_culcourse');
+                    $url = $urldata['url'];
                 } else if (ERROR == $urldata['status']) {
                     $attrs['title'] = get_string('error-libguide', 'format_culcourse');
                     $attrs['class'] = 'nolink';
                     $url = 'javascript:void(0);';
-                }
-            }          
+                }          
 
             $extradata = [
                 'url' => $url,

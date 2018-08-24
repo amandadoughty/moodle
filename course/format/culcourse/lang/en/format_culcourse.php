@@ -68,10 +68,10 @@ $string['defaultshowreadinglists'] = 'Show the reading lists';
 $string['defaultshowreadinglists_desc'] = 'States if the reading lists will be shown.';
 
 // Show libguides.
-$string['setshowlibguides'] = 'Show the libguides';
-$string['setshowlibguides_help'] = 'States if the libguides will be shown.';
-$string['defaultshowlibguides'] = 'Show the libguides';
-$string['defaultshowlibguides_desc'] = 'States if the libguides will be shown.';
+$string['setshowlibguides'] = 'Show the library guides';
+$string['setshowlibguides_help'] = 'States if the library guides will be shown.';
+$string['defaultshowlibguides'] = 'Show the library guides';
+$string['defaultshowlibguides_desc'] = 'States if the library guides will be shown.';
 
 // Show timetable.
 $string['setshowtimetable'] = 'Show the timetable';
@@ -194,12 +194,12 @@ $string['view-readinglist-module'] = 'View reading list(s) for this module';
 $string['view-readinglist-module-year'] = 'View reading list for this module and year';
 
 // Libguides
-$string['libguides'] = 'Libguides';
-$string['error-libguide'] = 'Sorry - an error occurred while fetching the libguides data';
-$string['no-libguide'] = 'There are no libguides matching this module';
-$string['not-installed-libguide'] = 'Libguide (not installed)';
-$string['view-libguide-module'] = 'View libguides(s) for this module';
-$string['view-libguide-module-year'] = 'View libguide for this module and year';
+$string['libguides'] = 'Library Guides';
+$string['error-libguide'] = 'Sorry - an error occurred while fetching the library guides data';
+$string['no-libguide'] = 'There are no library guides matching this module';
+$string['default-libguide'] = 'View library guides page';
+$string['not-installed-libguide'] = 'Library guides (not installed)';
+$string['view-libguide-module'] = 'View library guides(s) for this module';
 
 // Students
 $string['no-view-student-photoboard'] = 'There are no {$a} enrolled on this module';
