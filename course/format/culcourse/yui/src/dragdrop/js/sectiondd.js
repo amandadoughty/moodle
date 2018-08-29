@@ -5,109 +5,136 @@
  * @constructor
  * @extends M.core.dragdrop
  */
+
+ var CSS = {
+    ACTIONAREA: '.actions',
+    ACTIVITY: 'activity',
+    ACTIVITYINSTANCE: 'activityinstance',
+    CONTENT: 'content',
+    COURSECONTENT: 'course-content',
+    EDITINGMOVE: 'editing_move',
+    ICONCLASS: 'iconsmall',
+    JUMPMENU: 'jumpmenu',
+    LEFT: 'left',
+    LIGHTBOX: 'lightbox',
+    MOVEDOWN: 'movedown',
+    MOVEUP: 'moveup',
+    PAGECONTENT: 'page-content',
+    RIGHT: 'right',
+    SECTION: 'section',
+    SECTIONADDMENUS: 'section_add_menus',
+    SECTIONHANDLE: 'section-handle',
+    SUMMARY: 'summary',
+    SECTIONDRAGGABLE: 'sectiondraggable'
+};
+
 var DRAGSECTION = function() {
     DRAGSECTION.superclass.constructor.apply(this, arguments);
 };
-Y.extend(DRAGSECTION, M.course.dragdrop, {
+Y.extend(DRAGSECTION, M.core.dragdrop, {
     // sectionlistselector: null,
 
-    // initializer: function() {
-    //     // Set group for parent class
-    //     this.groups = [CSS.SECTIONDRAGGABLE];
-    //     this.samenodeclass = M.course.format.get_sectionwrapperclass();
-    //     this.parentnodeclass = M.course.format.get_containerclass();
+    initializer: function() {
+        // Set group for parent class
+        this.groups = [CSS.SECTIONDRAGGABLE];
+        this.samenodeclass = M.course.format.get_sectionwrapperclass();
+        this.parentnodeclass = M.course.format.get_containerclass();
 
-    //     // Check if we are in single section mode
-    //     if (Y.Node.one('.' + CSS.JUMPMENU)) {
-    //         return false;
-    //     }
-    //     // Initialise sections dragging
-    //     this.sectionlistselector = M.course.format.get_section_wrapper(Y);
-    //     if (this.sectionlistselector) {
-    //         this.sectionlistselector = '.' + CSS.COURSECONTENT + ' ' + this.sectionlistselector;
+        // // Check if we are in single section mode
+        if (Y.Node.one('.' + CSS.JUMPMENU)) {
+            return false;
+        }
+        // Initialise sections dragging
+        this.sectionlistselector = M.course.format.get_section_wrapper(Y);
+        if (this.sectionlistselector) {
+            this.sectionlistselector = '.' + CSS.COURSECONTENT + ' ' + this.sectionlistselector;
 
-    //         this.setup_for_section(this.sectionlistselector);
+            this.setup_for_section(this.sectionlistselector);
 
-    //         // Make each li element in the lists of sections draggable
-    //         var del = new Y.DD.Delegate({
-    //             container: '.' + CSS.COURSECONTENT,
-    //             nodes: '.' + CSS.SECTIONDRAGGABLE,
-    //             target: true,
-    //             handles: ['.' + CSS.LEFT],
-    //             dragConfig: {groups: this.groups}
-    //         });
-    //         del.dd.plug(Y.Plugin.DDProxy, {
-    //             // Don't move the node at the end of the drag
-    //             moveOnEnd: false
-    //         });
-    //         del.dd.plug(Y.Plugin.DDConstrained, {
-    //             // Keep it inside the .course-content
-    //             constrain: '#' + CSS.PAGECONTENT,
-    //             stickY: true
-    //         });
-    //         del.dd.plug(Y.Plugin.DDWinScroll);
-    //     }
-    // },
+        //     // Make each li element in the lists of sections draggable
+            // var del = new Y.DD.Delegate({
+            //     container: '.' + CSS.COURSECONTENT,
+            //     nodes: '.' + CSS.SECTIONDRAGGABLE,
+            //     target: true,
+            //     handles: ['.' + CSS.LEFT],
+            //     dragConfig: {groups: this.groups}
+            // });
+            // del.dd.plug(Y.Plugin.DDProxy, {
+            //     // Don't move the node at the end of the drag
+            //     moveOnEnd: false
+            // });
+            // del.dd.plug(Y.Plugin.DDConstrained, {
+            //     // Keep it inside the .course-content
+            //     constrain: '#' + CSS.PAGECONTENT,
+            //     stickY: true
+            // });
+            // del.dd.plug(Y.Plugin.DDWinScroll);
+        }
+
+        // Y.all('.' + CSS.SECTIONDRAGGABLE).each(function(node) {
+        //     node.setAttribute('class', 'blah');
+        // });
+    },
 
      /**
      * Apply dragdrop features to the specified selector or node that refers to section(s)
      *
      * @method setup_for_section
      * @param {String} baseselector The CSS selector or node to limit scope to
-    //  */
-    // setup_for_section: function(baseselector) {
-    //     Y.Node.all(baseselector).each(function(sectionnode) {
-    //         // Determine the section ID
-    //         var sectionid = Y.Moodle.core_course.util.section.getId(sectionnode);
+     */
+    setup_for_section: function(baseselector) {
+        Y.Node.all(baseselector).each(function(sectionnode) {
+            // Determine the section ID
+            var sectionid = Y.Moodle.core_course.util.section.getId(sectionnode);
 
-    //         // We skip the top section as it is not draggable
-    //         if (sectionid > 0) {
-    //             // Remove move icons
-    //             var movedown = sectionnode.one('.' + CSS.RIGHT + ' a.' + CSS.MOVEDOWN);
-    //             var moveup = sectionnode.one('.' + CSS.RIGHT + ' a.' + CSS.MOVEUP);
+            // We skip the top section as it is not draggable
+            if (sectionid > 0) {
+                // Remove move icons
+                var movedown = sectionnode.one('.' + CSS.RIGHT + ' a.' + CSS.MOVEDOWN);
+                var moveup = sectionnode.one('.' + CSS.RIGHT + ' a.' + CSS.MOVEUP);
 
-    //             // Add dragger icon
-    //             var title = M.util.get_string('movesection', 'moodle', sectionid);
-    //             var cssleft = sectionnode.one('.' + CSS.LEFT);
+                // Add dragger icon
+                // var title = M.util.get_string('movesection', 'moodle', sectionid);
+                var cssleft = sectionnode.one('.' + CSS.LEFT);
 
-    //             if ((movedown || moveup) && cssleft) {
-    //                 cssleft.setStyle('cursor', 'move');
-    //                 cssleft.appendChild(this.get_drag_handle(title, CSS.SECTIONHANDLE, 'icon', true));
+                if ((movedown || moveup) && cssleft) {
+                    // cssleft.setStyle('cursor', 'move');
+                    // cssleft.appendChild(this.get_drag_handle(title, CSS.SECTIONHANDLE, 'icon', true));
 
-    //                 if (moveup) {
-    //                     if (moveup.previous('br')) {
-    //                         moveup.previous('br').remove();
-    //                     } else if (moveup.next('br')) {
-    //                         moveup.next('br').remove();
-    //                     }
+                    // if (moveup) {
+                    //     if (moveup.previous('br')) {
+                    //         moveup.previous('br').remove();
+                    //     } else if (moveup.next('br')) {
+                    //         moveup.next('br').remove();
+                    //     }
 
-    //                     if (moveup.ancestor('.section_action_menu') && moveup.ancestor().get('nodeName').toLowerCase() == 'li') {
-    //                         moveup.ancestor().remove();
-    //                     } else {
-    //                         moveup.remove();
-    //                     }
-    //                 }
-    //                 if (movedown) {
-    //                     if (movedown.previous('br')) {
-    //                         movedown.previous('br').remove();
-    //                     } else if (movedown.next('br')) {
-    //                         movedown.next('br').remove();
-    //                     }
+                    //     if (moveup.ancestor('.section_action_menu') && moveup.ancestor().get('nodeName').toLowerCase() == 'li') {
+                    //         moveup.ancestor().remove();
+                    //     } else {
+                    //         moveup.remove();
+                    //     }
+                    // }
+                    // if (movedown) {
+                    //     if (movedown.previous('br')) {
+                    //         movedown.previous('br').remove();
+                    //     } else if (movedown.next('br')) {
+                    //         movedown.next('br').remove();
+                    //     }
 
-    //                     var movedownParentType = movedown.ancestor().get('nodeName').toLowerCase();
-    //                     if (movedown.ancestor('.section_action_menu') && movedownParentType == 'li') {
-    //                         movedown.ancestor().remove();
-    //                     } else {
-    //                         movedown.remove();
-    //                     }
-    //                 }
+                    //     var movedownParentType = movedown.ancestor().get('nodeName').toLowerCase();
+                    //     if (movedown.ancestor('.section_action_menu') && movedownParentType == 'li') {
+                    //         movedown.ancestor().remove();
+                    //     } else {
+                    //         movedown.remove();
+                    //     }
+                    // }
 
-    //                 // This section can be moved - add the class to indicate this to Y.DD.
-    //                 sectionnode.addClass(CSS.SECTIONDRAGGABLE);
-    //             }
-    //         }
-    //     }, this);
-    // },
+                    // This section can be moved - add the class to indicate this to Y.DD.
+                    sectionnode.addClass(CSS.SECTIONDRAGGABLE);
+                }
+            }
+        }, this);
+    },
 
     // /*
     //  * Drag-dropping related functions
@@ -131,6 +158,7 @@ Y.extend(DRAGSECTION, M.course.dragdrop, {
 
     drag_end: function(e) {
         Y.log('boo');
+        
     }
 
     // get_section_index: function(node) {

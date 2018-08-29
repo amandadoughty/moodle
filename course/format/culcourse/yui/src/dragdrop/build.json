@@ -5,7 +5,8 @@
             "jsfiles": [
             	"selectors.js",
                 "quicklinkdd.js",
-                "activitylinkdd.js"
+                "activitylinkdd.js",
+                "sectiondd.js"
             ]
         }
     }
