@@ -151,9 +151,10 @@ class course_renderer extends \core_course_renderer {
                 // Do nothing here
             } else {
                 $modclasses [] = $mod->modname;
-                $modclasses [] = "modtype_$mod->modname";
-                $modclasses [] = $mod->extraclasses;
             }
+
+            $modclasses [] = "modtype_$mod->modname";
+            $modclasses [] = $mod->extraclasses;
 
             $attr['data-type'] = $cassmodtype;
             $attr['class'] = implode(' ', $modclasses);
