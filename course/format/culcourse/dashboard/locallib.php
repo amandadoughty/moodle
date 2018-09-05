@@ -241,7 +241,8 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
 function format_culcourse_get_libguide_url_data($course) {
     global $CFG;        
 
-    $libAppsURL = get_config('format_culcourse', 'libAppsAPI');
+    $libAppsDefaultURL = get_config('format_culcourse', 'libAppsDefaultURL');
+    $libAppsAPI = get_config('format_culcourse', 'libAppsAPI');
 
 
     // $path = "{$libAppsURL}/guides/{$lgCode}";
@@ -273,8 +274,8 @@ function format_culcourse_get_libguide_url_data($course) {
     $codedata = format_culcourse_get_coursecode_data($course->shortname);
     $module = $codedata['module_code'];
 
-    $siteid = '426';
-    $key = 'e4706d90b346c209c37b32a6a94781d7';
+    $siteid = get_config('format_culcourse', 'libAppsSiteId');
+    $key = get_config('format_culcourse', 'libAppsKey');
     $metadata = $module;
 
     $params = array(
@@ -286,7 +287,8 @@ function format_culcourse_get_libguide_url_data($course) {
     $query = http_build_query($params);
 
     $urldebug = empty($urldebug) ? '' : $urldebug;
-    $url = "http://lgapi-eu.libapps.com/1.1/guides/?$query";
+    // $url = "http://lgapi-eu.libapps.com/1.1/guides/?$query";
+    $url = "{$libAppsAPI}?$query";    
     $url_clean = str_replace("&amp;", "&", $url);
 
     $ch = curl_init();
@@ -308,6 +310,8 @@ function format_culcourse_get_libguide_url_data($course) {
 
     $data = curl_exec($ch);
 
+    var_dump($url_clean);
+
     if(!curl_exec($ch)){
         die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
     }
@@ -320,7 +324,7 @@ function format_culcourse_get_libguide_url_data($course) {
         $lgdata['url'] = $responsedata[0]["friendly_url"];
     } else {
         $lgdata['status'] = NODATA;
-        $lgdata['url'] = "https://libguides.city.ac.uk/home";
+        $lgdata['url'] = $libAppsDefaultURL;
     }
 
     // $lgdata['status'] = OK;

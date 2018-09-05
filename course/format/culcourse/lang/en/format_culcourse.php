@@ -155,6 +155,18 @@ $string['transfer_timeout_desc'] = 'Enter the maximum time in seconds to wait fo
 $string['libAppsAPI'] = 'Library Guides API url';
 $string['libAppsAPI_desc'] = 'Enter the Library Guides API url.';
 
+// Libguide default url.
+$string['libAppsDefaultURL'] = 'Library Guides default url';
+$string['libAppsDefaultURL_desc'] = 'Enter the Library Guides default url.';
+
+// Libguide API site ID.
+$string['libAppsSiteId'] = 'Library Guides API site ID';
+$string['libAppsSiteId_desc'] = 'Enter the Library Guides API site ID.';
+
+// Libguide API key.
+$string['libAppsKey'] = 'Library Guides API key';
+$string['libAppsKey_desc'] = 'Enter the Library Guides API key.';
+
 // Reading list API url.
 $string['aspireAPI'] = 'Reading list API url';
 $string['aspireAPI_desc'] = 'Enter the Reading list API url.';

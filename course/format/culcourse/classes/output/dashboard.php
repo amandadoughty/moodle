@@ -316,6 +316,7 @@ class dashboard implements templatable, renderable {
                         $attrs['target'] = '_blank';
                 } else if (NODATA == $urldata['status']) {
                     $attrs['title'] = get_string('default-libguide', 'format_culcourse');
+                    $attrs['target'] = '_blank';
                     $url = $urldata['url'];
                 } else if (ERROR == $urldata['status']) {
                     $attrs['title'] = get_string('error-libguide', 'format_culcourse');
