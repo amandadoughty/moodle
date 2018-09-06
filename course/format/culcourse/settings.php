@@ -119,7 +119,7 @@ $settings->add(new admin_setting_configtext($name, $title, $description, $defaul
 $name = 'format_culcourse/libAppsAPI';
 $title = get_string('libAppsAPI', 'format_culcourse');
 $description = get_string('libAppsAPI_desc', 'format_culcourse');
-$default = 'https://lgapi-eu.libapps.com/1.1/guides/';
+$default = 'http://lgapi-eu.libapps.com/1.1/guides/';
 $type = PARAM_RAW;
 $settings->add(new admin_setting_configtext($name, $title, $description, $default, $type));
 
@@ -127,7 +127,7 @@ $settings->add(new admin_setting_configtext($name, $title, $description, $defaul
 $name = 'format_culcourse/libAppsDefaultURL';
 $title = get_string('libAppsDefaultURL', 'format_culcourse');
 $description = get_string('libAppsDefaultURL_desc', 'format_culcourse');
-$default = 'https://libguides.city.ac.uk/home';
+$default = 'http://libguides.city.ac.uk/home';
 $type = PARAM_RAW;
 $settings->add(new admin_setting_configtext($name, $title, $description, $default, $type));
 

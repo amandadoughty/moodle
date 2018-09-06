@@ -238,36 +238,30 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
  * @param mixed $course
  * @return
  */
-function format_culcourse_get_libguide_url_data($course) {
-    global $CFG;        
+function format_culcourse_get_libguide_url_data($course, $connectiontimeout = null, $transfertimeout = null) {
+    global $CFG;   
+
+    // $query_build = "";     
 
     $libAppsDefaultURL = get_config('format_culcourse', 'libAppsDefaultURL');
     $libAppsAPI = get_config('format_culcourse', 'libAppsAPI');
 
-
-    // $path = "{$libAppsURL}/guides/{$lgCode}";
-    // $format = ".json";
-
-    // $curl = "{$path}/lists/{$timePeriod}{$format}";
-    // $url = "{$path}/lists/{$timePeriod}";
-
     // // Get the config timeout values.
-    // $connectiontimeout = trim(get_config('culcourse', 'connection_timeout'));
-    // $transfertimeout   = trim(get_config('culcourse', 'transfer_timeout'));
+    $connectiontimeout = trim(get_config('culcourse', 'connection_timeout'));
+    $transfertimeout   = trim(get_config('culcourse', 'transfer_timeout'));
 
+    $connectiontimeout = (empty($connectiontimeout)) ? 5 : $connectiontimeout;
+    $transfertimeout   = (empty($transfertimeout))   ? 10 : $transfertimeout;
 
-    // $connectiontimeout = (empty($connectiontimeout)) ? 4 : $connectiontimeout;
-    // $transfertimeout   = (empty($transfertimeout))   ? 8 : $transfertimeout;
+    // Check validity of $connectiontimeout, and limit maximum value.
+    if (!preg_match('/\A\d+\z/', $connectiontimeout) || ($connectiontimeout > 6)) {
+        $connectiontimeout = 6;
+    }
 
-    // // Check validity of $connectiontimeout, and limit maximum value.
-    // if (!preg_match('/\A\d+\z/', $connectiontimeout) || ($connectiontimeout > 6)) {
-    //     $connectiontimeout = 6;
-    // }
-
-    // // Check validity of $transfertimeout, and limit maximum value.
-    // if (!preg_match('/\A\d+\z/', $transfertimeout) || ($transfertimeout > 16)) {
-    //     $transfertimeout = 16;
-    // }
+    // Check validity of $transfertimeout, and limit maximum value.
+    if (!preg_match('/\A\d+\z/', $transfertimeout) || ($transfertimeout > 16)) {
+        $transfertimeout = 16;
+    }
 
     $lgdata = array('status' => null, 'url' => null);
 
@@ -285,9 +279,8 @@ function format_culcourse_get_libguide_url_data($course) {
     );
 
     $query = http_build_query($params);
-
     $urldebug = empty($urldebug) ? '' : $urldebug;
-    // $url = "http://lgapi-eu.libapps.com/1.1/guides/?$query";
+    // $query = urldecode($query_build);
     $url = "{$libAppsAPI}?$query";    
     $url_clean = str_replace("&amp;", "&", $url);
 
@@ -299,9 +292,9 @@ function format_culcourse_get_libguide_url_data($course) {
         CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
         CURLOPT_FAILONERROR    => true,
         CURLOPT_HEADER         => false,
-        CURLOPT_TIMEOUT => 10,
-        CURLOPT_CONNECTTIMEOUT => 5,
         CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_CONNECTTIMEOUT => $connectiontimeout,
+        CURLOPT_TIMEOUT        => $transfertimeout,
         CURLOPT_RETURNTRANSFER => true
 
     );
@@ -310,7 +303,8 @@ function format_culcourse_get_libguide_url_data($course) {
 
     $data = curl_exec($ch);
 
-    var_dump($url_clean);
+    var_dump($query);
+    var_dump($url);
 
     if(!curl_exec($ch)){
         die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
@@ -326,9 +320,6 @@ function format_culcourse_get_libguide_url_data($course) {
         $lgdata['status'] = NODATA;
         $lgdata['url'] = $libAppsDefaultURL;
     }
-
-    // $lgdata['status'] = OK;
-    // $lgdata['url'] = $returnurl;
 
     return $lgdata;             
 }
