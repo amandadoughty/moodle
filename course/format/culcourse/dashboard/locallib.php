@@ -239,9 +239,7 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
  * @return
  */
 function format_culcourse_get_libguide_url_data($course, $connectiontimeout = null, $transfertimeout = null) {
-    global $CFG;   
-
-    // $query_build = "";     
+    global $CFG;
 
     $libAppsDefaultURL = get_config('format_culcourse', 'libAppsDefaultURL');
     $libAppsAPI = get_config('format_culcourse', 'libAppsAPI');
@@ -251,7 +249,7 @@ function format_culcourse_get_libguide_url_data($course, $connectiontimeout = nu
     $transfertimeout   = trim(get_config('culcourse', 'transfer_timeout'));
 
     $connectiontimeout = (empty($connectiontimeout)) ? 5 : $connectiontimeout;
-    $transfertimeout   = (empty($transfertimeout))   ? 10 : $transfertimeout;
+    $transfertimeout   = (empty($transfertimeout)) ? 10 : $transfertimeout;
 
     // Check validity of $connectiontimeout, and limit maximum value.
     if (!preg_match('/\A\d+\z/', $connectiontimeout) || ($connectiontimeout > 6)) {
@@ -278,17 +276,15 @@ function format_culcourse_get_libguide_url_data($course, $connectiontimeout = nu
             'metadata' => $metadata
     );
 
-    $query = http_build_query($params);
+    $query = http_build_query($params, '', '&');
     $urldebug = empty($urldebug) ? '' : $urldebug;
-    // $query = urldecode($query_build);
     $url = "{$libAppsAPI}?$query";    
-    $url_clean = str_replace("&amp;", "&", $url);
 
     $ch = curl_init();
 
     $options = array(
 
-        CURLOPT_URL => empty($urldebug) ? $url_clean : $urldebug,
+        CURLOPT_URL => empty($urldebug) ? $url : $urldebug,
         CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
         CURLOPT_FAILONERROR    => true,
         CURLOPT_HEADER         => false,
@@ -303,17 +299,14 @@ function format_culcourse_get_libguide_url_data($course, $connectiontimeout = nu
 
     $data = curl_exec($ch);
 
-    var_dump($query);
-    var_dump($url);
-
-    if(!curl_exec($ch)){
+    if(!curl_exec($ch)) {
         die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
     }
 
     $responsedata = json_decode($data, true);
     curl_close($ch);
 
-    if ($responsedata){
+    if ($responsedata) {
         $lgdata['status'] = OK;
         $lgdata['url'] = $responsedata[0]["friendly_url"];
     } else {
@@ -321,7 +314,7 @@ function format_culcourse_get_libguide_url_data($course, $connectiontimeout = nu
         $lgdata['url'] = $libAppsDefaultURL;
     }
 
-    return $lgdata;             
+    return $lgdata;
 }
 
 

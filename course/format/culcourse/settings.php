@@ -33,7 +33,7 @@ $default = 1;
 $choices = [
     1 => new lang_string('pluginname', 'format_topics'),
     2 => new lang_string('pluginname', 'format_weeks')
-        
+
         // 1 => new lang_string('setlayoutstructuretopic', 'format_culcourse'), // Topic.
         // 2 => new lang_string('setlayoutstructureweek', 'format_culcourse'), // Week.
         // 3 => new lang_string('setlayoutstructurelatweekfirst', 'format_culcourse'), // Latest Week First.
@@ -70,9 +70,9 @@ $settings->add(new admin_setting_configtextarea($name, $title, $description, $de
 $elements = [
     'readinglists', 
     'libguides',
-    'timetable', 
-    'graderreport', 
-    'calendar', 
+    'timetable',
+    'graderreport',
+    'calendar',
     'students',
     'lecturers',
     'courseofficers',

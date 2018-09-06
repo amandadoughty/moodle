@@ -254,7 +254,7 @@ class dashboard implements templatable, renderable {
             $name = 'readinglists';
             $icon = 'fa-bookmark';
             $data = [];
-            $extradata =[];
+            $extradata = [];
             $attrs  = [];
             $liattrs = [];
             $data = $this->get_quicklink($name, $course);
@@ -304,25 +304,25 @@ class dashboard implements templatable, renderable {
             $name = 'libguides';
             $icon = 'fa-bookmark';
             $data = [];
-            $extradata =[];
+            $extradata = [];
             $attrs  = [];
             $liattrs = [];
             $data = $this->get_quicklink($name, $course);
             $urldata = format_culcourse_get_libguide_url_data($course);
 
-                if (OK == $urldata['status']) {
-                    $url = $urldata['url'];
-                        $attrs['title'] = get_string('view-libguide-module', 'format_culcourse');
-                        $attrs['target'] = '_blank';
-                } else if (NODATA == $urldata['status']) {
-                    $attrs['title'] = get_string('default-libguide', 'format_culcourse');
+            if (OK == $urldata['status']) {
+                $url = $urldata['url'];
+                    $attrs['title'] = get_string('view-libguide-module', 'format_culcourse');
                     $attrs['target'] = '_blank';
-                    $url = $urldata['url'];
-                } else if (ERROR == $urldata['status']) {
-                    $attrs['title'] = get_string('error-libguide', 'format_culcourse');
-                    $attrs['class'] = 'nolink';
-                    $url = 'javascript:void(0);';
-                }          
+            } else if (NODATA == $urldata['status']) {
+                $attrs['title'] = get_string('default-libguide', 'format_culcourse');
+                $attrs['target'] = '_blank';
+                $url = $urldata['url'];
+            } else if (ERROR == $urldata['status']) {
+                $attrs['title'] = get_string('error-libguide', 'format_culcourse');
+                $attrs['class'] = 'nolink';
+                $url = 'javascript:void(0);';
+            }
 
             $extradata = [
                 'url' => $url,
