@@ -108,7 +108,7 @@ function format_culcourse_get_reading_list_url_data($course) {
 
     // Get the config timeout values.
     $connectiontimeout = trim(get_config('culcourse', 'connection_timeout'));
-    $transfertimeout   = trim(get_config('culcourse', 'transfer_timeout'));
+    $transfertimeout = trim(get_config('culcourse', 'transfer_timeout'));
 
     $data = format_culcourse_get_reading_list_data($path, $curl, $connectiontimeout, $transfertimeout);
 
@@ -154,7 +154,7 @@ function format_culcourse_get_reading_list_url_data($course) {
  */
 function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout = null, $transfertimeout = null) {
     $connectiontimeout = (empty($connectiontimeout)) ? 4 : $connectiontimeout;
-    $transfertimeout   = (empty($transfertimeout))   ? 8 : $transfertimeout;
+    $transfertimeout = (empty($transfertimeout))   ? 8 : $transfertimeout;
 
     // Check validity of $connectiontimeout, and limit maximum value.
     if (!preg_match('/\A\d+\z/', $connectiontimeout) || ($connectiontimeout > 6)) {
@@ -166,14 +166,13 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
         $transfertimeout = 16;
     }
 
-    $rldata = array('status' => null, 'data' => null);
-
+    $rldata = ['status' => null, 'data' => null];
     #$urldebug = 'http://www.muon.org.uk/tsonus/moodle/ba-simple-proxy.php?url=' . $url . '&mode=native&delay=8'; //TJGDEBUG 08/08/2013 10:35:06
     $urldebug = empty($urldebug) ? '' : $urldebug;
     #echo(html_writer::tag('pre', "DASHBOARD:-\n$path\n$url\n$urldebug")); //TJGDEBUG 09/08/2013 12:10:57
-
     $ch = curl_init();
-    $options = array(
+
+    $options = [
         CURLOPT_URL            => empty($urldebug) ? $url : $urldebug,
         CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
         CURLOPT_FAILONERROR    => true,
@@ -182,19 +181,19 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
         CURLOPT_CONNECTTIMEOUT => $connectiontimeout,
         CURLOPT_TIMEOUT        => $transfertimeout,
         CURLOPT_FOLLOWLOCATION => true
-    );
-    curl_setopt_array($ch, $options);
+    ];
 
+    curl_setopt_array($ch, $options);
     $response = curl_exec($ch);
     $curlinfo = curl_getinfo($ch);
     $rldata['info'] = $curlinfo;
-
     $curlerrno = curl_errno($ch);
+
     if ($curlerrno) {
         curl_close($ch);
         $rldata['curl_errno'] = $curlerrno;
 
-        if ((22 == $curlerrno) && ($curlinfo['http_code'] < 500)) { // 22 => CURLE_HTTP_RETURNED_ERROR
+        if ((22 == $curlerrno) && ($curlinfo['http_code'] < 500)) {
             $rldata['status'] = NODATA;
         } else {
             $rldata['status'] = ERROR;
@@ -221,7 +220,7 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
         // If there's at least one list then return the response data.
         if (!empty($responsedata[$resourcelist['value']])) {
             $rldata['status'] = OK;
-            $rldata['data']   = $responsedata;
+            $rldata['data'] = $responsedata;
             return $rldata;
         }
     }
@@ -229,8 +228,6 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
     $rldata['status'] = NODATA;
     return $rldata;
 }
-
-
 
 /**
  * format_culcourse_get_libguide_url_data()
@@ -243,13 +240,11 @@ function format_culcourse_get_libguide_url_data($course, $connectiontimeout = nu
 
     $libAppsDefaultURL = get_config('format_culcourse', 'libAppsDefaultURL');
     $libAppsAPI = get_config('format_culcourse', 'libAppsAPI');
-
-    // // Get the config timeout values.
+    // Get the config timeout values.
     $connectiontimeout = trim(get_config('culcourse', 'connection_timeout'));
-    $transfertimeout   = trim(get_config('culcourse', 'transfer_timeout'));
-
+    $transfertimeout = trim(get_config('culcourse', 'transfer_timeout'));
     $connectiontimeout = (empty($connectiontimeout)) ? 5 : $connectiontimeout;
-    $transfertimeout   = (empty($transfertimeout)) ? 10 : $transfertimeout;
+    $transfertimeout = (empty($transfertimeout)) ? 10 : $transfertimeout;
 
     // Check validity of $connectiontimeout, and limit maximum value.
     if (!preg_match('/\A\d+\z/', $connectiontimeout) || ($connectiontimeout > 6)) {
@@ -261,29 +256,25 @@ function format_culcourse_get_libguide_url_data($course, $connectiontimeout = nu
         $transfertimeout = 16;
     }
 
-    $lgdata = array('status' => null, 'url' => null);
-
+    $lgdata = ['status' => null, 'url' => null];
     $codedata = format_culcourse_get_coursecode_data($course->shortname);
     $module = $codedata['module_code'];
-
     $siteid = get_config('format_culcourse', 'libAppsSiteId');
     $key = get_config('format_culcourse', 'libAppsKey');
     $metadata = $module;
 
-    $params = array(
-            'site_id' => $siteid,
-            'key' => $key,
-            'metadata' => $metadata
-    );
+    $params = [
+        'site_id' => $siteid,
+        'key' => $key,
+        'metadata' => $metadata
+    ];
 
     $query = http_build_query($params, '', '&');
     $urldebug = empty($urldebug) ? '' : $urldebug;
-    $url = "{$libAppsAPI}?$query";    
-
+    $url = "{$libAppsAPI}?$query";
     $ch = curl_init();
 
-    $options = array(
-
+    $options = [
         CURLOPT_URL => empty($urldebug) ? $url : $urldebug,
         CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
         CURLOPT_FAILONERROR    => true,
@@ -293,18 +284,28 @@ function format_culcourse_get_libguide_url_data($course, $connectiontimeout = nu
         CURLOPT_TIMEOUT        => $transfertimeout,
         CURLOPT_RETURNTRANSFER => true
 
-    );
+    ];
 
     curl_setopt_array($ch, $options);
-
     $data = curl_exec($ch);
+    $curlinfo = curl_getinfo($ch);
+    $curlerrno = curl_errno($ch);
 
-    if(!curl_exec($ch)) {
-        die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
+    if ($curlerrno) {
+        curl_close($ch);
+        $lgdata['curl_errno'] = $curlerrno;
+
+        if ((22 == $curlerrno) && ($curlinfo['http_code'] < 500)) {
+            $lgdata['status'] = NODATA;
+        } else {
+            $lgdata['status'] = ERROR;
+        }
+
+        return $lgdata;
     }
 
-    $responsedata = json_decode($data, true);
     curl_close($ch);
+    $responsedata = json_decode($data, true);    
 
     if ($responsedata) {
         $lgdata['status'] = OK;
@@ -316,7 +317,6 @@ function format_culcourse_get_libguide_url_data($course, $connectiontimeout = nu
 
     return $lgdata;
 }
-
 
 /**
  * format_culcourse_get_timetable_url()

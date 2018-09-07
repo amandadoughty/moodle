@@ -65,8 +65,6 @@ $settings->add(new admin_setting_configtextarea($name, $title, $description, $de
 
 /* Quicklinks.
 */
-
-// add libguides to this and then lang strings
 $elements = [
     'readinglists', 
     'libguides',
