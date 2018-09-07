@@ -68,8 +68,3 @@ $PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcou
                 'ajaxurl' => $ajaxurl,
                 'config' => 0,
             ]], null, true);
-
-$PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_sectiondd',
-            [[
-               
-            ]], null, true);

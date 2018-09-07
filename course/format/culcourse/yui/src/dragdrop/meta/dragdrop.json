@@ -7,11 +7,10 @@
             "dom",
             "dd",
             "dd-scroll",
-            "moodle-core-dragdrop",            
+            "moodle-core-dragdrop",
             "moodle-core-notification",
             "moodle-course-coursebase",
-            "moodle-course-util",
-            "moodle-course-dragdrop"
+            "moodle-course-util"
         ]
     }
 }
