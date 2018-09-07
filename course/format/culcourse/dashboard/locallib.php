@@ -257,8 +257,10 @@ function format_culcourse_get_libguide_url_data($course, $connectiontimeout = nu
     }
 
     $lgdata = ['status' => null, 'url' => null];
+
     $codedata = format_culcourse_get_coursecode_data($course->shortname);
     $module = $codedata['module_code'];
+    
     $siteid = get_config('format_culcourse', 'libAppsSiteId');
     $key = get_config('format_culcourse', 'libAppsKey');
     $metadata = $module;
