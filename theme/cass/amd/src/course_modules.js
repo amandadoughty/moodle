@@ -119,7 +119,7 @@ define(
          * Page mod toggle content.
          */
         var listenPageModuleReadMore = function() {
-            var pageToggleSelector = ".modtype_page .instancename,.pagemod-readmore,.pagemod-content .cass-action-icon";
+            var pageToggleSelector = ".pagemod-readmore,.pagemod-content .cass-action-icon";
             $(document).on("click", pageToggleSelector, function(e) {
                 var pageMod = $(this).closest('.modtype_page');
                 util.scrollToElement(pageMod);
