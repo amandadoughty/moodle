@@ -21,3 +21,22 @@ form {
         top: .1rem;
     }
 }
+
+// Hide the course theme setting - enabled for cass.
+#id_appearancehdr div:first-child div:first-child {
+    display: none;
+    visible: hidden;
+}
+// Hide the user theme setting - enabled for cass.
+#id_moodle div:nth-child(13) {
+    display: none;
+    visible: hidden;
+}
+// Expan rhs of role assignment table.
+table.roleassigntable {
+    table-layout: fixed;
+}
+
+table.roleassigntable td#buttonscell {
+    width: 200px;
+}

@@ -290,3 +290,8 @@
 .que.ddwtos .drag {
     max-width: 100%;
 }
+
+// Styling does not suit having the title displayed twice.
+#page-admin-tool-recyclebin-index .pageheading {
+    display: none;
+}
