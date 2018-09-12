@@ -21830,6 +21830,9 @@ table.roleassigntable {
 table.roleassigntable td#buttonscell {
   width: 200px; }
 
+.contacts-area.searchfilter .contacts {
+  clear: both; }
+
 /* Slider */
 .slick-slider {
   position: relative;
@@ -22834,7 +22837,14 @@ table.roleassigntable td#buttonscell {
   display: none; }
 
 .hiddenblocks #block-region-side-post {
-  display: none !important; }
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 100%;
+      -ms-flex: 0 0 100%;
+          flex: 0 0 100%;
+  max-width: 100%; }
+  @media (min-width: 1200px) {
+    .hiddenblocks #block-region-side-post {
+      display: none !important; } }
 
 .hiddenblocks #region-main {
   -webkit-box-flex: 0;
@@ -22842,6 +22852,15 @@ table.roleassigntable td#buttonscell {
       -ms-flex: 0 0 100%;
           flex: 0 0 100%;
   max-width: 100%; }
+
+@media (max-width: 1199px) {
+  #region-main,
+  #block-region-side-post {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 100%;
+        -ms-flex: 0 0 100%;
+            flex: 0 0 100%;
+    max-width: 100%; } }
 
 .clipboard {
   width: 100%;

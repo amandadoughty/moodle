@@ -32,11 +32,16 @@ form {
     display: none;
     visible: hidden;
 }
-// Expan rhs of role assignment table.
+// Expand rhs of role assignment table.
 table.roleassigntable {
     table-layout: fixed;
 }
 
 table.roleassigntable td#buttonscell {
     width: 200px;
+}
+
+// INC0262081 - Course contacts floating behind form area.
+.contacts-area.searchfilter .contacts {
+    clear: both;
 }
