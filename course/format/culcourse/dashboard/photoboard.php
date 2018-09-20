@@ -43,8 +43,8 @@ $contextid    = optional_param('contextid', 0, PARAM_INT); // One of this or.
 $courseid     = optional_param('id', 0, PARAM_INT); // This are required.
 $roleid       = optional_param('roleid', 0, PARAM_INT);
 $groupparam   = optional_param('group', 0, PARAM_INT);
-$sifirst = optional_param('sifirst', 'all', PARAM_NOTAGS);
-$silast  = optional_param('silast', 'all', PARAM_NOTAGS);
+$sifirst      = optional_param('sifirst', 'all', PARAM_NOTAGS);
+$silast       = optional_param('silast', 'all', PARAM_NOTAGS);
 
 
 if ($contextid) {
@@ -67,10 +67,6 @@ require_login($course);
 // Get the currently applied filters.
 $filtersapplied = optional_param_array('unified-filters', [], PARAM_NOTAGS);
 $filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
-
-
-
-
 
 if (has_capability('format/culcourse:viewallphotoboard', $context)) {
     // Should use this variable so that we don't break stuff every time a variable 
@@ -266,6 +262,7 @@ if (has_capability('format/culcourse:viewallphotoboard', $context)) {
     // Filter with just groups for students.
     $manager = new course_enrolment_manager($PAGE, $course);
     $filteroptions = [];
+
     // Filter options for groups, if available.
     if (has_capability('moodle/site:accessallgroups', $context) || $course->groupmode != SEPARATEGROUPS) {
         // List all groups if the user can access all groups, or we are in visible group mode or no groups mode.
@@ -274,8 +271,10 @@ if (has_capability('format/culcourse:viewallphotoboard', $context)) {
         // Otherwise, just list the groups the user belongs to.
         $groups = groups_get_all_groups($course->id, $USER->id);
     }
+
     $criteria = get_string('group');
     $groupoptions = [];
+
     foreach ($groups as $id => $group) {
         $optionlabel = get_string('filteroption', 'moodle', (object)['criteria' => $criteria, 'value' => $group->name]);
         $optionvalue = USER_FILTER_GROUP . ":$id";
@@ -283,13 +282,9 @@ if (has_capability('format/culcourse:viewallphotoboard', $context)) {
     }
 
     $filteroptions += $groupoptions;
-
-    if ($groups) {
-        $indexpage = new \core_user\output\unified_filter($filteroptions, $filtersapplied);
-        $templatecontext = $indexpage->export_for_template($OUTPUT);
-
-        $unifiedfilter = $OUTPUT->render_from_template('core_user/unified_filter', $templatecontext);
-    }
+    $indexpage = new \core_user\output\unified_filter($filteroptions, $filtersapplied);
+    $templatecontext = $indexpage->export_for_template($OUTPUT);
+    $unifiedfilter = $OUTPUT->render_from_template('core_user/unified_filter', $templatecontext);  
 }
 
 // User search.
@@ -319,12 +314,12 @@ $where_params = array();
 
 if ($sifirst !== 'all') {
     $where[] = $DB->sql_like('u.firstname', ':sifirst', false);
-    $where_params['sifirst'] = $sifirst.'%';
+    $where_params['sifirst'] = $sifirst . '%';
 }
 
 if ($silast !== 'all') {
     $where[] = $DB->sql_like('u.lastname', ':silast', false);
-    $where_params['silast'] = $silast.'%';
+    $where_params['silast'] = $silast . '%';
 }
 
 $where = join(' AND ', $where);

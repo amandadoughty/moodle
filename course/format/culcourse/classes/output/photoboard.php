@@ -123,6 +123,7 @@ class photoboard implements templatable, renderable {
         $course = $this->course;
         $finalusers = [];
         $draftusers = [];
+        $users = [];
         $usersprinted = [];
         $userids = [];
         $context = \context_course::instance($course->id);
@@ -226,9 +227,9 @@ class photoboard implements templatable, renderable {
                         WHERE uid.userid = :userid';
 
                 if ($result = $DB->get_records_sql($sql, array('userid' => $user->id))){                        
-                    $xuser->stafftelephone = $result['stafftelephone']->data;
-                    $xuser->staffofficehrs = $result['staffofficehrs']->data;
-                    $xuser->stafflocation = $result['stafflocation']->data;
+                    $xuser->stafftelephone = isset($result['stafftelephone']->data) ? $result['stafftelephone']->data : '';
+                    $xuser->staffofficehrs = isset($result['staffofficehrs']) ? $result['staffofficehrs']->data : '';
+                    $xuser->stafflocation = isset($result['stafflocation']->data) ? $result['stafflocation']->data : '';
                 } else {
                     $xuser->stafftelephone = '';
                     $xuser->staffofficehrs = '';

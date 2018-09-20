@@ -56,7 +56,6 @@ define(['jquery','core/notification', 'core/templates'], function($, notificatio
             showhide: showhide,
             sesskey: M.cfg.sesskey
         };
-        window.console.log(adminurl);
         $.post(adminurl, params, function() {})
         .done(function(data) {
             try {

@@ -63,16 +63,23 @@ class format_culcourse_renderer extends format_section_renderer_base {
      * Generate the starting container html for a list of sections
      * @return string HTML to output.
      */
-    protected function start_section_list() {
+    protected function build_dashboard() {
         global $COURSE;
 
         $o = '';
         $dashboard = new dashboard($COURSE, $this->culconfig);
         $templatecontext = $dashboard->export_for_template($this);
         $o .= $this->render_from_template('format_culcourse/dashboard', $templatecontext);
-        $o .=  html_writer::start_tag('ul', ['class' => 'culcourse']);
 
         return $o;
+    }
+
+    /**
+     * Generate the starting container html for a list of sections
+     * @return string HTML to output.
+     */
+    protected function start_section_list() {
+        return html_writer::start_tag('ul', ['class' => 'culcourse']);
     }
 
     /**
@@ -149,7 +156,6 @@ class format_culcourse_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function section_header($section, $course, $onsectionpage, $sectionreturn=null) {
-
         $o = '';
         $currenttext = '';
         $sectionstyle = '';
@@ -212,28 +218,39 @@ class format_culcourse_renderer extends format_section_renderer_base {
         if ($section->section != 0) {
             // user_preference_allow_ajax_update('format_culcourse_expanded' . $section->id, PARAM_INT);
             // $userpref = 'format_culcourse_expanded' . $section->id;
+            $attributes = [
+                'class' => 'sectionhead toggle',
+                'id' => 'toggle-' . $section->id,
+                'data-toggle' => 'collapse',
+                'data-target' => '.course-content #togglesection-' . $section->id,
+                'role' => 'button', 
+                'aria-pressed' => $ariapressed
+            ];
+
+            if ($onsectionpage) {
+                $attributes['class'] = 'toggle';
+                $attributes['data-toggle'] = '';
+                $attributes['data-target'] = '';
+            }
 
             $o .= html_writer::start_tag(
                 'div',
-                [
-                    'class' => 'sectionhead toggle',
-                    'id' => 'toggle-' . $section->id,
-                    'data-toggle' => 'collapse',
-                    'data-target' => '.course-content #togglesection-' . $section->id,
-                    'role' => 'button', 
-                    'aria-pressed' => $ariapressed
-                ]
+                $attributes
             );
 
             $sectionname = html_writer::tag('span', $this->section_title($section, $course));
             $o .= $this->output->heading($sectionname, 3, 'sectionname' . $classes);
             $o .= $this->section_availability($section);
 
+            
             if ($this->culconfig['showsectionsummary'] == 2) {
-                $o .= $this->section_summary_container($section);
+                $o .= $this->section_summary_container($section, $onsectionpage);
             }
 
-            $o .= $this->section_activity_summary($section, $course, null);
+            if(!$onsectionpage) {
+                $o .= $this->section_activity_summary($section, $course, null);
+            }
+
             $o .= html_writer::end_tag('div'); // .sectionhead.
             $o .= html_writer::start_tag(
                 'div',
@@ -245,7 +262,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             );
 
             if ($this->culconfig['showsectionsummary'] == 1) {
-                $o .= $this->section_summary_container($section);
+                $o .= $this->section_summary_container($section, $onsectionpage);
             }
 
         }  else {
@@ -415,7 +432,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             ]
         );
         $o .= html_writer::tag('div', '', ['class' => 'left side']);
-        $o .= html_writer::tag('span', ['class' => 'hidden sectionname']);
+        $o .= html_writer::tag('span', '', ['class' => 'hidden sectionname']);
         $o .= html_writer::tag('div', '', ['class' => 'right side']);
         $o .= html_writer::start_tag('div', ['class' => 'content']);
 
@@ -553,7 +570,9 @@ class format_culcourse_renderer extends format_section_renderer_base {
         echo $this->output->heading($this->page_title(), 2, 'accesshide');
         // Copy activity clipboard..
         echo $this->course_activity_clipboard($course, 0);
-        // Now the list of sections..
+        // Now the dashboard.
+        echo $this->build_dashboard();
+        // Now the list of sections.
         echo $this->start_section_list();
 
         $numsections = course_get_format($course)->get_last_section_number();       
@@ -561,7 +580,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
             if ($section == 0) {
                 // 0-section is displayed a little different then the others
-                if ($thissection->summary or !empty($modinfo->sections[0]) or $this->page->user_is_editing()) {
+                if ($thissection->summary || !empty($modinfo->sections[0]) || $this->page->user_is_editing()) {
                     echo $this->section_header($thissection, $course, false, 0);
                     echo $this->section_summary_container($thissection);
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
@@ -572,7 +591,9 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 continue;
             }
 
-            if ($numsections > 1 && $section == 1) {
+            if (($this->page->user_is_editing() || $course->coursedisplay == COURSE_DISPLAY_SINGLEPAGE) 
+                && $numsections > 1 && $section == 1)
+            {                
                 // Collapse/Expand all.
                 echo $this->toggle_all();
             }
@@ -629,12 +650,11 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 echo $this->stealth_section_footer();
             }
 
-            echo $this->end_section_list();                        
+            echo $this->end_section_list();
+            $this->change_number_sections($course);                      
         } else {
             echo $this->end_section_list();
-        }
-
-        $this->change_number_sections($course);
+        }        
     }
 
     /**
@@ -741,15 +761,15 @@ class format_culcourse_renderer extends format_section_renderer_base {
         return $summarytext;
     }
 
-    protected function section_summary_container($section) {
+    protected function section_summary_container($section, $onsectionpage = false) {
         $summarytext = $this->format_summary_text($section);
 
         if ($summarytext) {
             $classextra = ($this->culconfig['showsectionsummary'] == 1) ? '' : ' summaryalwaysshown';
             $o = html_writer::start_tag('div', ['class' => 'summary' . $classextra]);
-            $o .= $this->format_summary_text($section);
+            $o .= $summarytext;
 
-            if ($section->section > 0 && $this->culconfig['showsectionsummary'] == 2) {
+            if (!$onsectionpage && $section->section > 0 && $this->culconfig['showsectionsummary'] == 2) {
                 $o .= $this->truncate_summary_text($section);
             }
 
