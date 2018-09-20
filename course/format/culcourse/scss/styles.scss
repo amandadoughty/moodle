@@ -243,6 +243,9 @@ body.format-culcourse {
                 }
             }        
         }
+        li:last-child .add_section {
+            display: none;
+        }
     }
     .insertsection {
         text-align: center;

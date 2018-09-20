@@ -222,7 +222,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 'class' => 'sectionhead toggle',
                 'id' => 'toggle-' . $section->id,
                 'data-toggle' => 'collapse',
-                'data-target' => '.course-content #togglesection-' . $section->id,
+                'data-target' => '#togglesection-' . $section->id,
                 'role' => 'button', 
                 'aria-pressed' => $ariapressed
             ];
@@ -631,9 +631,9 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 }
 
                 // We don't insert a section at the end. We allow user to append multiple sections instead.
-                if ($numsections != $section) {
+                // if ($numsections != $section) {
                     echo $this->injected_section_footer($course, $section, $context);
-                }
+                // }
             }
         }        
 

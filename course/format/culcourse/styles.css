@@ -361,6 +361,8 @@ body.format-culcourse .course-content ul.culcourse li#toggle-all {
       body.format-culcourse .course-content ul.culcourse li.section .side a:first-of-type > .icon,
       body.format-culcourse .course-content ul.culcourse li#toggle-all .side a:first-of-type > .icon {
         margin-left: 0; }
+body.format-culcourse .course-content ul.culcourse li:last-child .add_section {
+  display: none; }
 body.format-culcourse .insertsection {
   text-align: center; }
   body.format-culcourse .insertsection .sectionbutton {

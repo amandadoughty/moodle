@@ -78,11 +78,6 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      * @param {event} e
      */
     var handleOpen = function(e){
-        window.console.log('open');
-        // e.preventDefault();
-        // $(SELECTORS.DDPROXY).empty();
-        // // e.target.find(SELECTORS.SECTIONBODY).collapse('show');
-        // $(e.target).find(SELECTORS.SECTIONBODY).trigger('click');
         var sectionid = $(e.currentTarget).data('preference-key');
 
         var data = {
@@ -113,11 +108,6 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      * @param {event} e
      */
     var handleClose = function(e){
-        window.console.log('close');
-        // e.preventDefault();
-        // $(SELECTORS.DDPROXY).empty();
-        // // e.target.find(SELECTORS.SECTIONBODY).collapse('show');
-        // $(e.target).find(SELECTORS.SECTIONBODY).trigger('click');
         var sectionid = $(e.currentTarget).data('preference-key');
 
         var data = {
@@ -143,9 +133,6 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
          * @param {int} courseid
          */
         init : function(courseid) {
-
-//             $(SELECTORS.DDPROXY).find(SELECTORS.SECTIONBODY).removeAttr('id');
-// window.console.log($(SELECTORS.DDPROXY).find(SELECTORS.SECTIONBODY));
             courseId = courseid;
             var body = $('body');
             body.delegate(SELECTORS.OPENALLLINK, 'click', handleOpenAll);
@@ -153,9 +140,6 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
 
             body.delegate(SELECTORS.SECTIONBODY, 'hide.bs.collapse', handleClose);
             body.delegate(SELECTORS.SECTIONBODY, 'show.bs.collapse', handleOpen);
-            // Add the classes for expanding all of the sections. This is the
-            // default.
-            // $(SELECTORS.SECTIONBODY).addClass('collapse in');
 
             // Get the userprefs. They are too large to pass to the function.
             var params = {
