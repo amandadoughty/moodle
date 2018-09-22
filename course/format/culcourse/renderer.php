@@ -222,7 +222,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 'class' => 'sectionhead toggle',
                 'id' => 'toggle-' . $section->id,
                 'data-toggle' => 'collapse',
-                'data-target' => '#togglesection-' . $section->id,
+                'data-target' => '.course-content #togglesection-' . $section->id,
                 'role' => 'button', 
                 'aria-pressed' => $ariapressed
             ];

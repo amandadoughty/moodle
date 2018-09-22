@@ -37,10 +37,17 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         CLOSEALLLINK: 'a#toggles-all-closed',
         SECTIONHEAD: '.sectionhead',
         SECTIONBODY: '.sectionbody',
-        TOGGLEHEAD: '#toggle-',
+        TOGGLEHEAD: '.course-content #toggle-',
         TOGGLEBODY: '#togglesection-',
         DDPROXY: '.yui3-dd-proxy'
         };
+    // From Bootstrap collapse.js.    
+    var ClassName = {
+        IN: 'in',
+        COLLAPSE: 'collapse',
+        COLLAPSING: 'collapsing',
+        COLLAPSED: 'collapsed'
+    };
 
     var GETURL = config.wwwroot + '/course/format/culcourse/getuserpreference.php';
     var SETURL = config.wwwroot + '/course/format/culcourse/setuserpreference.php';
@@ -98,6 +105,9 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             //     Notification.exception(request);
             //     console.log(error);
             // });
+
+        $(SELECTORS.TOGGLEHEAD + sectionid).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
+        window.console.log($(SELECTORS.TOGGLEHEAD + sectionid));
     };
 
     /**
@@ -124,6 +134,8 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         };
 
         $.ajax(SETURL, settings);
+
+        $(SELECTORS.TOGGLEHEAD + sectionid).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
     };
 
     return /** @alias module:format_culcourse/sectiontoggle */ {
