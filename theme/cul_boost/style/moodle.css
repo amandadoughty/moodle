@@ -21820,8 +21820,12 @@ form {
   display: none;
   visible: hidden; }
 
-#id_moodle div:nth-child(13) {
+select#id_theme {
   display: none;
+  visible: hidden; }
+
+label[for=id_theme] {
+  display: none !important;
   visible: hidden; }
 
 table.roleassigntable {
@@ -22101,7 +22105,6 @@ table.roleassigntable td#buttonscell {
       display: block; }
 
 .slider-progress {
-  display: none;
   width: 100%;
   height: 5px;
   background-color: #F5F5F5; }

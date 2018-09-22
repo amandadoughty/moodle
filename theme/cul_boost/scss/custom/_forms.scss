@@ -28,8 +28,13 @@ form {
     visible: hidden;
 }
 // Hide the user theme setting - enabled for cass.
-#id_moodle div:nth-child(13) {
+select#id_theme {
     display: none;
+    visible: hidden;
+}
+
+label[for=id_theme] {
+    display: none!important;
     visible: hidden;
 }
 // Expand rhs of role assignment table.
