@@ -107,7 +107,6 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             // });
 
         $(SELECTORS.TOGGLEHEAD + sectionid).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
-        window.console.log($(SELECTORS.TOGGLEHEAD + sectionid));
     };
 
     /**
