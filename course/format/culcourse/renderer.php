@@ -252,13 +252,20 @@ class format_culcourse_renderer extends format_section_renderer_base {
             }
 
             $o .= html_writer::end_tag('div'); // .sectionhead.
+
+            $attributes = [
+                'class' => 'sectionbody togglesection collapse in',
+                'id' => 'togglesection-' . $section->id,
+                'data-preference-key' => $section->id
+            ];
+
+            if ($onsectionpage) {
+                $attributes['class'] = 'sectionbody';
+            }
+
             $o .= html_writer::start_tag(
                 'div',
-                [
-                    'class' => 'sectionbody togglesection collapse in',
-                    'id' => 'togglesection-' . $section->id,
-                    'data-preference-key' => $section->id,
-                ]
+                $attributes
             );
 
             if ($this->culconfig['showsectionsummary'] == 1) {
@@ -651,7 +658,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             }
 
             echo $this->end_section_list();
-            $this->change_number_sections($course);                      
+            $this->change_number_sections($course, 0);                      
         } else {
             echo $this->end_section_list();
         }        
