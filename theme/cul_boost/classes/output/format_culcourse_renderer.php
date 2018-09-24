@@ -140,7 +140,9 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                 continue;
             }
 
-            if ($numsections > 1 && $section == 1) {
+            if (($this->page->user_is_editing() || $course->coursedisplay == COURSE_DISPLAY_SINGLEPAGE) 
+                && $numsections > 1 && $section == 1)
+            {                
                 // Collapse/Expand all.
                 echo $this->toggle_all();
             }
@@ -178,9 +180,9 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                 }        
                 
                 // We don't insert a section at the end. We allow user to append multiple sections instead.
-                if ($numsections != $section) {
+                // if ($numsections != $section) {
                     echo $this->injected_section_footer($course, $section, $context);
-                }
+                // }
             }
         }        
 
@@ -197,12 +199,11 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                 echo $this->stealth_section_footer();
             }
 
-            echo $this->end_section_list();                        
+            echo $this->end_section_list();
+	    $this->change_number_sections($course);                      
         } else {
             echo $this->end_section_list();
-        }
-
-        $this->change_number_sections($course);
+        }        
     }
 
 }
