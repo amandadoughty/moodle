@@ -693,7 +693,8 @@ class format_culcourse_renderer extends format_section_renderer_base {
                 '/course/changenumsections.php',
                 [
                     'courseid' => $course->id, 
-                    'insertsection' => $section, 
+                    'insertsection' => $section,
+                    'sectionreturn' => 0,
                     'sesskey' => sesskey()
                 ]
             );
