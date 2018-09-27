@@ -200,7 +200,7 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
             }
 
             echo $this->end_section_list();
-	    $this->change_number_sections($course);                      
+	    $this->change_number_sections($course, 0);                      
         } else {
             echo $this->end_section_list();
         }        
