@@ -339,11 +339,12 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     $highlightoff = get_string('highlightoff');
                     $controls['highlight'] = [
                         'url' => $url, 
-                        'icon' => 'i/marked',
+                        'icon' => 'highlighton',
+                        'component' => 'format_culcourse',
                         'name' => $highlightoff,
                         'pixattr' => ['class' => '', 'alt' => $markedthistopic],
                         'attr' => [
-                            'class' => 'icon ', 
+                            'class' => 'icon fas', 
                             'title' => $markedthistopic,
                             'data-action' => 'removemarker'
                         ]
@@ -354,7 +355,8 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     $highlight = get_string('highlight');
                     $controls['highlight'] = [
                         'url' => $url, 
-                        'icon' => 'i/marker',
+                        'icon' => 'highlightoff',
+                        'component' => 'format_culcourse',
                         'name' => $highlight,
                         'pixattr' => ['class' => '', 'alt' => $markthistopic],
                         'attr' => [
@@ -390,12 +392,13 @@ class format_culcourse_renderer extends format_section_renderer_base {
         foreach ($merged as $key => $item) {
             $url = empty($item['url']) ? '' : $item['url'];
             $icon = empty($item['icon']) ? '' : $item['icon'];
+            $component = empty($item['component']) ? 'moodle' : $item['component'];
             $name = empty($item['name']) ? '' : $item['name'];
             $attr = empty($item['attr']) ? '' : $item['attr'];
             $class = empty($item['pixattr']['class']) ? '' : $item['pixattr']['class'];
             $alt = empty($item['pixattr']['alt']) ? '' : $item['pixattr']['alt'];
             $url = new moodle_url($url);
-            $icon = $this->output->pix_icon($icon, $alt, 'moodle', $item['attr']);
+            $icon = $this->output->pix_icon($icon, $alt, $component, $item['attr']);
 
             $culcontrols[] = html_writer::link(
                     $url,
