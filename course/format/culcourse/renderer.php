@@ -339,8 +339,8 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     $highlightoff = get_string('highlightoff');
                     $controls['highlight'] = [
                         'url' => $url, 
-                        'icon' => 'highlight',
-                        'component' => 'format_culcourse',
+                        'icon' => 'i/marked',
+                        'component' => 'moodle',
                         'name' => $highlightoff,
                         'pixattr' => ['class' => '', 'alt' => $markedthistopic],
                         'attr' => [
@@ -355,8 +355,8 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     $highlight = get_string('highlight');
                     $controls['highlight'] = [
                         'url' => $url, 
-                        'icon' => 'highlightoff',
-                        'component' => 'format_culcourse',
+                        'icon' => 'i/marker',
+                        'component' => 'moodle',
                         'name' => $highlight,
                         'pixattr' => ['class' => '', 'alt' => $markthistopic],
                         'attr' => [
