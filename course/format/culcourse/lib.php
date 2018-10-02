@@ -559,8 +559,6 @@ function format_culcourse_inplace_editable($itemtype, $itemid, $newvalue) {
  */
 function format_culcourse_get_fontawesome_icon_map() {
     return [
-        'core:i/marker' => 'fa-lightbulb-o',
-        'core:i/marked' => 'fa-lightbulb-o',
         'format_culcourse:highlightoff' => 'fa-lightbulb-o',
         'format_culcourse:highlighton' => 'fa-lightbulb-o',
     ];

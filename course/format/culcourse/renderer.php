@@ -339,12 +339,12 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     $highlightoff = get_string('highlightoff');
                     $controls['highlight'] = [
                         'url' => $url, 
-                        'icon' => 'highlighton',
+                        'icon' => 'highlight',
                         'component' => 'format_culcourse',
                         'name' => $highlightoff,
                         'pixattr' => ['class' => '', 'alt' => $markedthistopic],
                         'attr' => [
-                            'class' => 'icon highlighton', 
+                            'class' => 'icon ', 
                             'title' => $markedthistopic,
                             'data-action' => 'removemarker'
                         ]
