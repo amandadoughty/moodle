@@ -143,3 +143,5 @@ $THEME->layouts = [
         'defaultregion' => 'side-post'
     )
 ];
+
+$THEME->iconsystem = '\\theme_cul_boost\\output\\icon_system_fontawesome';
