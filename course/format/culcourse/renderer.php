@@ -344,7 +344,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                         'name' => $highlightoff,
                         'pixattr' => ['class' => '', 'alt' => $markedthistopic],
                         'attr' => [
-                            'class' => 'icon fas', 
+                            'class' => 'icon highlighton', 
                             'title' => $markedthistopic,
                             'data-action' => 'removemarker'
                         ]
