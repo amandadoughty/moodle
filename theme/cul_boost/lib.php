@@ -45,7 +45,7 @@ function theme_cul_boost_process_css($css, $theme) {
  * Returns the required JS files, including core Boost JS
  */
 function theme_cul_boost_page_init(moodle_page $page) {
-    global $CFG, $DB, $OUTPUT, $USER;
+    global $CFG, $DB, $OUTPUT, $USER, $COURSE;
 
     $quizpageids = array(
         'page-question-preview',
@@ -72,6 +72,7 @@ function theme_cul_boost_page_init(moodle_page $page) {
     $page->requires->js_call_amd('theme_cul_boost/navigation', 'init');
     $page->requires->js_call_amd('theme_cul_boost/stickynav', 'init');
     $page->requires->js_call_amd('theme_cul_boost/fixedbuttons', 'init');
+    $page->requires->js_call_amd('theme_cul_boost/showcourse', 'init', ['courseid' => $COURSE->id]);
 
     return true;
 }
@@ -360,4 +361,21 @@ function theme_cul_boost_edit_favourites($action, $cid) {
  */
 function theme_cul_boost_update_favourites($favourites) {
     set_user_preference('culcourse_listing_course_favourites', serialize($favourites));
+}
+
+/**
+ * Makes hidden course visible.
+ *
+ * @param int $cid course id 
+ */
+function theme_cul_boost_show_course($cid) {
+    global $DB;
+
+    $coursecontext = context_course::instance($cid);
+
+    if (has_capability('moodle/course:update', $coursecontext)) { 
+        return $DB->set_field('course', 'visible', 1, ['id' => $cid]);
+    }
+
+    return false;
 }

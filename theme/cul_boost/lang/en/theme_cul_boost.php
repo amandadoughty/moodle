@@ -95,6 +95,7 @@ $string['showblocks'] = 'Show Sidebar';
 $string['viewmore'] = 'View More';
 $string['viewless'] = 'View Less';
 $string['modulehidden'] = 'Module is hidden';
+$string['showcourse'] = 'Show Module';
 
 /* 
  * theme_cul strings

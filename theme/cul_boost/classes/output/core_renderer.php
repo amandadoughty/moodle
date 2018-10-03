@@ -726,7 +726,38 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		$content = html_writer::tag('div', $content, ['id'=>$id, 'class'=>'favourite-btn fixed-btn d-flex flex-wrap align-items-center justify-content-center bg-dark h4 m-0 text-white']);
 
 		return $content;
-	} 
+	}
+
+	/**
+     * Returns a link to make a hidden course visible.
+     *
+     * @return string the HTML to be output.
+     */
+	public function show_course() {
+
+		global $COURSE;
+
+		$content = '';
+		$coursecontext = context_course::instance($COURSE->id);
+
+		if (!has_capability('moodle/course:update', $coursecontext)) {
+            return $content;
+        }        
+
+        $showcourseurl = new moodle_url(
+        	'/theme/cul_boost/unhide_post.php', 
+        	[
+			    'cid' => $COURSE->id,
+			    'sesskey' => sesskey()
+			]
+		);
+
+		$showcoursetxt = get_string('showcourse', 'theme_cul_boost');		
+		$link = html_writer::link($showcourseurl, $showcoursetxt, ['title' => $showcoursetxt]);
+		$content = html_writer::tag('span', $link, ['class' => 'showcourse btn btn-secondary ml-4']);
+
+		return $content;
+    }
 
     /**
      * Internal implementation of user image rendering.
