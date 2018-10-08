@@ -258,7 +258,7 @@ class rollover {
                 $USER->id
                 );
 
-            // Set the default filename - does not work.
+            // Set the filename - does not work.
             $format = $bc->get_format();
             $type = $bc->get_type();
             $id = $bc->get_id();
@@ -268,10 +268,11 @@ class rollover {
             $bc->get_plan()->get_setting('filename')->set_value(\backup_plan_dbops::get_default_backup_filename($format, $type,
                     $id, $users, $anonymised));
 
+            $name = $this->record->id . '-' . $bc->get_plan()->get_setting('filename')->get_value();
             $bc->execute_plan();
-
             $results = $bc->get_results();
             $file = $results['backup_destination'];
+            $file->rename($file->get_filepath(), $name);
 
             $bc->destroy();
         }
@@ -286,8 +287,8 @@ class rollover {
             $USER->id
             );
 
-        foreach ($backupsettings as $name => $value) {
-            $bc->get_plan()->get_setting($name)->set_value($value);
+        foreach ($backupsettings as $key => $value) {
+            $bc->get_plan()->get_setting($key)->set_value($value);
         }
 
         $backupid = $bc->get_backupid();
@@ -311,7 +312,7 @@ class rollover {
             $newcomponent = 'tmp_backup';
             $oldfilearea = 'course';
             $newfilearea = 'tmp_filearea';
-            $this->move_area_files_to_new_filearea($this->dstcontext->id, $oldcomponent, $newcomponent, $oldfilearea, $newfilearea);
+            $this->move_area_files_to_new_filearea($this->dstcontext->id, $oldcomponent, $newcomponent, $oldfilearea, $newfilearea, $name);
 
             $options = array();
             $options['keep_groups_and_groupings'] = 1; // In destination course we want to keep them.
@@ -320,7 +321,7 @@ class rollover {
             $backupsettings['overwrite_conf'] = 1;
 
             // Restore the backup files to their orignal location.
-            $this->move_area_files_to_new_filearea($this->dstcontext->id, $newcomponent, $oldcomponent, $newfilearea, $oldfilearea);            
+            $this->move_area_files_to_new_filearea($this->dstcontext->id, $newcomponent, $oldcomponent, $newfilearea, $oldfilearea, $name);            
         }
 
         if($mode == TARGET_COURSE_MERGE) {
@@ -334,8 +335,8 @@ class rollover {
                 );
         }
 
-        foreach ($backupsettings as $name => $value) {
-            $rc->get_plan()->get_setting($name)->set_value($value);
+        foreach ($backupsettings as $key => $value) {
+            $rc->get_plan()->get_setting($key)->set_value($value);
         }
 
         foreach ($rc->get_plan()->get_tasks() as $taskindex => $task) {
@@ -413,22 +414,28 @@ class rollover {
      * @param int $itemid file item ID
      * @return int the number of files moved, for information.
      */
-    public function move_area_files_to_new_filearea($contextid, $oldcomponent, $newcomponent, $oldfilearea, $newfilearea) {
+    public function move_area_files_to_new_filearea($contextid, $oldcomponent, $newcomponent, $oldfilearea, $newfilearea, $name) {
         $count = 0;
+        $failedfiles = [];
         $fs = get_file_storage();
-
         $oldfiles = $fs->get_area_files($contextid, $oldcomponent, $oldfilearea);
 
         foreach ($oldfiles as $oldfile) {
+            $oldname = $oldfile->get_filename();          
             $filerecord = new \stdClass();
             $filerecord->component = $newcomponent;
             $filerecord->filearea = $newfilearea;
-            $fs->create_file_from_storedfile($filerecord, $oldfile);
-            $count += 1;
+
+            try {
+                $newfile = $fs->create_file_from_storedfile($filerecord, $oldfile);
+                $oldfile->delete();
+            } catch (\Exception $e) {
+                $failedfiles[] = $filerecord->filename;
+            }
         }
 
-        if ($count) {
-            $fs->delete_area_files($contextid, $oldcomponent, $oldfilearea);
+        if ($failedfiles) {
+            mtrace('Unable to copy file/s: ' . join(', ', $failedfiles));
         }
     }
 
