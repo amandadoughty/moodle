@@ -32,7 +32,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification', 'core/str'], 
       * @access private
       */
     var SELECTORS = {
-        SHOWCOURSE: '.btn.showcourse a',
+        SHOWCOURSE: '.showcourse .btn',
         H1MODULEHIDDEN: '.module-hidden',
         };
 

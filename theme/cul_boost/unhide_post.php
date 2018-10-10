@@ -51,7 +51,7 @@ echo $OUTPUT->box_start('generalbox', 'notice');
 
 echo html_writer::tag('p', get_string('confirmshowcourse', 'theme_cul_boost'));
 echo $OUTPUT->single_button($actionurl, get_string('showcourse', 'theme_cul_boost'), 'post');
-echo $OUTPUT->single_button($returnurl, get_string('cancel'), 'post');
+echo $OUTPUT->single_button($returnurl, get_string('cancel'), 'get');
 
 echo $OUTPUT->box_end();
 echo $OUTPUT->footer();

@@ -735,7 +735,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      */
 	public function show_course() {
 
-		global $COURSE;
+		global $COURSE, $OUTPUT;
 
 		$content = '';
 		$coursecontext = context_course::instance($COURSE->id);
@@ -753,10 +753,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		);
 
 		$showcoursetxt = get_string('showcourse', 'theme_cul_boost');		
-		$link = html_writer::link($showcourseurl, $showcoursetxt, ['title' => $showcoursetxt]);
-		$content = html_writer::tag('span', $link, ['class' => 'showcourse btn btn-secondary ml-4']);
 
-		return $content;
+		return $OUTPUT->single_button($showcourseurl, $showcoursetxt, 'post', ['class' => 'showcourse d-inline-block ml-4']);
     }
 
     /**
