@@ -780,7 +780,9 @@ class theme_cul_boost_utility {
         }
 
         // Filter-out non-integers. There won't be any, but I'm defensive where SQL injection's concerned!
-        $courseids = array_filter($courseids, create_function('$a', 'return preg_match("/\A\d+\z/", $a);'));
+        $courseids = array_filter($courseids, function($a) {
+           return preg_match("/\A\d+\z/", $a);
+        });
 
         if (empty($courseids)) {
             return array();

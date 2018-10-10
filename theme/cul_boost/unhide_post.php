@@ -24,10 +24,34 @@
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
-require_sesskey();
-require_login();
-
 $cid = required_param('cid', PARAM_INT);
-// Make the course visible.
-theme_cul_boost_show_course($cid);
-redirect(new moodle_url('/course/view.php', array('id' => $cid)));
+$confirm = optional_param('confirm', 0, PARAM_BOOL);
+
+$returnurl = new moodle_url('/course/view.php', ['id' => $cid]);
+
+// If we have got here as a confirmed aciton, do it.
+if ($confirm && isloggedin() && confirm_sesskey()) {
+    require_capability('moodle/site:config', context_system::instance());
+
+    // Make the course visible.
+	theme_cul_boost_show_course($cid);
+    redirect($returnurl, get_string('courseshown', 'theme_cul_boost'));
+}
+
+// Otherwise, show a button to actually purge the caches.
+$params = ['cid' => $cid, 'sesskey' => sesskey(), 'confirm' => 1];
+$actionurl = new moodle_url('/theme/cul_boost/unhide_post.php', $params);
+
+$PAGE->set_context(context_course::instance($cid));
+$PAGE->set_url($actionurl);
+
+echo $OUTPUT->header();
+echo $OUTPUT->heading(get_string('showcourse', 'theme_cul_boost'));
+echo $OUTPUT->box_start('generalbox', 'notice');
+
+echo html_writer::tag('p', get_string('confirmshowcourse', 'theme_cul_boost'));
+echo $OUTPUT->single_button($actionurl, get_string('showcourse', 'theme_cul_boost'), 'post');
+echo $OUTPUT->single_button($returnurl, get_string('cancel'), 'post');
+
+echo $OUTPUT->box_end();
+echo $OUTPUT->footer();

@@ -94,8 +94,10 @@ $string['hideblocks'] = 'Hide Sidebar';
 $string['showblocks'] = 'Show Sidebar';
 $string['viewmore'] = 'View More';
 $string['viewless'] = 'View Less';
-$string['modulehidden'] = 'Module is hidden';
+$string['coursehidden'] = 'Module is hidden';
 $string['showcourse'] = 'Show Module';
+$string['confirmshowcourse'] = 'Are you sure you want to make this module visible to students?';
+$string['courseshown'] = 'Module is now visible to students';
 
 /* 
  * theme_cul strings

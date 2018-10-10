@@ -70,7 +70,7 @@ echo $OUTPUT->doctype() ?>
 
             if ($PAGE->pagelayout == 'course' && $COURSE->visible == 0) {
                 $showcoursebtn = $OUTPUT->show_course();
-                echo html_writer::tag('h1', get_string('modulehidden', 'theme_cul_boost') . $showcoursebtn, ['class'=>'module-hidden p-3 bg-light mb-4 text-center']);
+                echo html_writer::tag('h1', get_string('coursehidden', 'theme_cul_boost') . $showcoursebtn, ['class'=>'module-hidden p-3 bg-light mb-4 text-center']);
                 
             }
 

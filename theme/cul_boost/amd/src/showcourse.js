@@ -25,7 +25,7 @@
 /**
  * @module theme_cul_boost/showcourse
  */
-define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, Ajax, config, Notification) {
+define(['jquery', 'core/ajax', 'core/config', 'core/notification', 'core/str'], function($, ajax, config, notification, str) {
 
      /**
       * Used CSS selectors
@@ -46,9 +46,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      * @method handleClose
      * @param {event} e
      */
-    var handleShow = function(e) {
-        e.preventDefault();
-
+    var handleShow = function() {
         var data = {
             cid: courseId,
             sesskey: config.sesskey,
@@ -67,6 +65,23 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         });
     };
 
+    /**
+     * Displays the show confirmation to make course visible.
+     *
+     * @param {String} message confirmation message
+     * @param {function} onconfirm function to execute on confirm
+     */
+    var confirmHandleShow = function(message, onconfirm) {
+        str.get_strings([
+            {key: 'confirm'},
+            {key: 'yes'},
+            {key: 'no'}
+        ]).done(function(s) {
+                notification.confirm(s[0], message, s[1], s[2], onconfirm);
+            }
+        );
+    };
+
     return /** @alias theme_cul_boost/showcourse */ {
         /**
          * Initialize showcoursemanager
@@ -76,7 +91,19 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         init : function(courseid) {
             courseId = courseid;
             var body = $('body');
-            body.delegate(SELECTORS.SHOWCOURSE, 'click', handleShow);  
+
+            body.delegate(SELECTORS.SHOWCOURSE, 'click keypress', function(e) {
+                e.preventDefault();
+ 
+                str.get_strings([
+                    {key: 'confirmshowcourse', component: 'theme_cul_boost'}
+                ]).done(function(s) {
+                        confirmHandleShow(s[0], function() {
+                            handleShow();
+                        });
+                    }
+                );
+            });            
         }
     };
 });
