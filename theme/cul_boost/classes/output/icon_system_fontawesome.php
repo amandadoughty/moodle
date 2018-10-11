@@ -27,8 +27,8 @@ class icon_system_fontawesome extends \core\output\icon_system_fontawesome {
 
 	public function get_core_icon_map() {
 		$map = parent::get_core_icon_map();
-		$map['core:i/marker'] = 'fa-toggle-off';
-		$map['core:i/marked'] = 'fa-toggle-on';
+		$map['core:i/marker'] = 'fa-bookmark-o';
+		$map['core:i/marked'] = 'fa-bookmark';
 
 		return $map;
 	}

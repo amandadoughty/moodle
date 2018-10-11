@@ -39,7 +39,8 @@ $THEME->layouts = [
     // Most backwards compatible layout without the blocks - this is the layout used by default.
     'base' => array(
         'file' => 'default.php',
-        'regions' => array(),
+        'regions' => array('nav-settings'),
+        'defaultregion' => 'nav-settings',
     ),
     // Standard layout with blocks, this is recommended for most pages with general information.
     'standard' => array(
