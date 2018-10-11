@@ -28,10 +28,11 @@ $cid = required_param('cid', PARAM_INT);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
 
 $returnurl = new moodle_url('/course/view.php', ['id' => $cid]);
+$coursecontext = context_course::instance($cid);
 
-// If we have got here as a confirmed aciton, do it.
+// If we have got here as a confirmed action, do it.
 if ($confirm && isloggedin() && confirm_sesskey()) {
-    require_capability('moodle/site:config', context_system::instance());
+    require_capability('moodle/course:update', $coursecontext);
 
     // Make the course visible.
 	theme_cul_boost_show_course($cid);
@@ -42,7 +43,7 @@ if ($confirm && isloggedin() && confirm_sesskey()) {
 $params = ['cid' => $cid, 'sesskey' => sesskey(), 'confirm' => 1];
 $actionurl = new moodle_url('/theme/cul_boost/unhide_post.php', $params);
 
-$PAGE->set_context(context_course::instance($cid));
+$PAGE->set_context($coursecontext);
 $PAGE->set_url($actionurl);
 
 echo $OUTPUT->header();
