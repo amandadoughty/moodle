@@ -311,6 +311,9 @@
     overflow-x: hidden;
     max-height: 450px;
     overflow: auto;
+    .dropdown-menu {
+        max-height: 100%;
+    }
     a {
         white-space: normal;
     }
