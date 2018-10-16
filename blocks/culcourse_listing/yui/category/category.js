@@ -20,7 +20,7 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
         CONTENTNODE: '.content',
         CATEGORYCHILDLINK: '.culcategory .info .categoryname a',
         CATEGORYLISTENLINK: '.culcategory .info .categoryname',
-        CATEGORYSPINNERLOCATION: '.categoryname',
+        CATEGORYSPINNERLOCATION: '.categoryname',        
         CATEGORYWITHCOLLAPSEDLOADEDCHILDREN: '.culcategory.with_children.loaded.collapsed',
         CATEGORYWITHMAXIMISEDLOADEDCHILDREN: '.culcategory.with_children.loaded:not(.collapsed)',
         COLLAPSEEXPAND: '.culcollapseexpand',
@@ -28,7 +28,8 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
         COURSEBOXLISTENLINK: '.culcoursebox .moreinfo',
         COURSEBOXSPINNERLOCATION: '.coursename a',
         COURSECATEGORYTREE: '.course_category_tree',
-        PARENTWITHCHILDREN: '.culcategory'
+        PARENTWITHCHILDREN: '.culcategory',
+        SPINNER: '.progress-icon'
     },
     TYPE_CATEGORY = 0,
     TYPE_COURSE = 1,
@@ -90,6 +91,7 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
             parentnode: courseboxnode,
             childnode: courseboxnode.one(SELECTORS.CONTENTNODE),
             spinnerhandle: SELECTORS.COURSEBOXSPINNERLOCATION,
+            spinner: SELECTORS.SPINNER,
             data: {
                 sesskey : M.cfg.sesskey,
                 courseid: courseboxnode.getData('courseid'),
@@ -136,8 +138,9 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
             parentnode: categorynode,
             childnode: categorynode.one(SELECTORS.CONTENTNODE),
             spinnerhandle: SELECTORS.CATEGORYSPINNERLOCATION,
+            spinner: SELECTORS.SPINNER,
             data: {
-                sesskey : M.cfg.sesskey,
+                sesskey: M.cfg.sesskey,
                 categoryid: categoryid,
                 depth: depth,
                 showcourses: categorynode.getData('showcourses'),
@@ -154,43 +157,58 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
      * @param {Object} config
      */
     _toggle_generic_expansion: function(config) {
-        if (config.spinnerhandle) {
-          // Add a spinner to give some feedback to the user.
-          spinner = M.util.add_spinner(Y, config.parentnode.one(config.spinnerhandle)).show();
-        }
+        var self = this;
+        // Using amd instead of Y.Promise just because there is no point
+        // learning new YUI techniques. And the YUI in this plugin may be
+        // replaced entirely with amd in future.
+        require(['jquery', 'core/str', 'core/templates', 'core/notification'], function($, Str, Templates, Notification) {
+            Str.get_string('loading', 'core')
+                .then(function(string) {
+                    return Templates.renderPix('i/progressbar', 'core', string);
+                })
+                .then(function(html) {
+                    var node = config.parentnode.one(config.spinnerhandle);
+                    var spinnernode = $(html).addClass('progress-icon');
+                    node.append(spinnernode);
+                    return spinnernode;
+                })
+                .then(function(spinnernode) {
+                    years = {};
+                    periods = {};
+                    yearselect = $('#culcourse_listing_filter_year');
+                    periodselect = $('#culcourse_listing_filter_period');
 
-        years = {};
-        periods = {};
-        yearselect = Y.one('#culcourse_listing_filter_year');
-        periodselect = Y.one('#culcourse_listing_filter_period');
+                    if (yearselect) {
+                        $.each(yearselect.attr('options'), function(key, value) {
+                            years[value] = key;
+                        });
+                        config.data.years = JSON.stringify(years);
+                    }
 
-        if (yearselect) {
-            yearselect.get('options').each(function() {
-                years[this.get('value')] = this.get('text');
-            });
-            config.data.years = Y.JSON.stringify(years);
-        }
+                    if (periodselect) {
+                        $.each(periodselect.attr('options'), function(key, value) {
+                            periods[value] = key;
+                        });
+                        config.data.periods = JSON.stringify(periods);
+                    }
 
-        if (periodselect) {
-            periodselect.get('options').each(function() {
-                periods[this.get('value')] = this.get('text');
-            });
-            config.data.periods = Y.JSON.stringify(periods);
-        }
+                    var args = {
+                            parentnode: config.parentnode,
+                            childnode: config.childnode,
+                            spinnernode: spinnernode
+                        };
 
-        // Fetch the data.
-        Y.io(URL, {
-            method: 'POST',
-            context: this,
-            on: {
-                complete: this.process_results
-            },
-            data: config.data,
-            "arguments": {
-                parentnode: config.parentnode,
-                childnode: config.childnode,
-                spinner: spinner
-            }
+                    $.ajax({
+                        url: URL,
+                        method: 'POST',
+                        data: config.data,
+                        context: self,
+                        success: function(response) {
+                            self.process_results(response, args);
+                        }
+                    })
+ 
+                }).fail(Notification.exception);
         });
     },
 
@@ -352,15 +370,13 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
      *
      * @method process_results
      * @private
-     * @param {String} tid The Transaction ID
-     * @param {Object} response The Reponse returned by Y.IO
-     * @param {Object} ioargs The additional arguments provided by Y.IO
+     * @param {Object} data The Response returned by $.ajax
+     * @param {Object} args The additional arguments provided by $.ajax
      */
-    process_results: function(tid, response, args) {
-        var newnode,
-            data;
+    process_results: function(data, args) {
+        var newnode;
+
         try {
-            data = Y.JSON.parse(response.responseText);
             if (data.error) {
                 return new M.core.ajaxException(data);
             }
@@ -389,8 +405,8 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
         }
 
         // Remove the spinner now that we've started to show the content.
-        if (args.spinner) {
-            args.spinner.hide().destroy();
+        if (args.spinnernode) {
+            args.spinnernode.hide();
         }
     },
 
@@ -426,6 +442,41 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
         return childnode;
     },
 
+    /**
+     * Add our spinner to the Node.
+     *
+     * @method add_spinner
+     * @private
+     * @param {Node} childnode
+     */
+    add_spinner: function(node) {
+        require(['core/str', 'core/templates', 'core/notification'], function(Str, Templates, Notification) {
+            Str.get_string('loading', 'core')
+                .then(function(string) {
+                    return Templates.renderPix('i/progressbar', 'core', string);
+                })
+                .then(function(html) {
+                    var html = Y.Node.create(html).addClass('progress-icon').getDOMNode().outerHTML;
+                    var spinner = Y.Node.create(html);
+                    node.append(spinner);
+                    return spinner;
+                }).fail(Notification.exception);
+        });
+    },
+
+    /**
+     * Remove our spinner from the Node.
+     *
+     * @method remove_spinner
+     * @private
+     * @param {Node} childnode
+     */
+    remove_spinner: function(node) {
+
+
+
+
+    },
 }, {
         ATTRS : {
             config : {
@@ -440,5 +491,5 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
     }
 
 }, '@VERSION@', {
-    requires:['base', 'node', 'event-key', 'io-base', 'json-parse', 'json-stringify', 'moodle-core-notification', 'anim-node-plugin']
+    requires:['base', 'node', 'event-key', 'io-base', 'json-parse', 'json-stringify', 'moodle-core-notification', 'anim-node-plugin', 'promise']
 });

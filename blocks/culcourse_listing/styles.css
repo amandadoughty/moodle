@@ -416,6 +416,14 @@
     margin: 0;
 }
 
+.block_culcourse_listing [class^="fa-spinner"],
+.block_culcourse_listing [class*=" fa-spinner"] {
+    height: auto;
+    line-height: normal;
+    color: #fff;
+    opacity: 1;
+}
+
 /*.block_culcourse_listing .icon-white {
   background-image: url("glyphfas-white.png");
 }*/
