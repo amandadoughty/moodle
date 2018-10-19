@@ -365,8 +365,8 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
     },
 
     /**
-     * Process the data returned by Y.io.
-     * This includes appending it to the relevant part of the DOM, and applying our animatio
+     * Process the data returned by $.ajax.
+     * This includes appending it to the relevant part of the DOM, and applying our animation.
      *
      * @method process_results
      * @private
@@ -440,42 +440,6 @@ YUI.add('moodle-block_culcourse_listing-category', function(Y) {
         });
 
         return childnode;
-    },
-
-    /**
-     * Add our spinner to the Node.
-     *
-     * @method add_spinner
-     * @private
-     * @param {Node} childnode
-     */
-    add_spinner: function(node) {
-        require(['core/str', 'core/templates', 'core/notification'], function(Str, Templates, Notification) {
-            Str.get_string('loading', 'core')
-                .then(function(string) {
-                    return Templates.renderPix('i/progressbar', 'core', string);
-                })
-                .then(function(html) {
-                    var html = Y.Node.create(html).addClass('progress-icon').getDOMNode().outerHTML;
-                    var spinner = Y.Node.create(html);
-                    node.append(spinner);
-                    return spinner;
-                }).fail(Notification.exception);
-        });
-    },
-
-    /**
-     * Remove our spinner from the Node.
-     *
-     * @method remove_spinner
-     * @private
-     * @param {Node} childnode
-     */
-    remove_spinner: function(node) {
-
-
-
-
     },
 }, {
         ATTRS : {
