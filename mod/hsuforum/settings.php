@@ -19,7 +19,7 @@
  * @package   mod_hsuforum
  * @copyright  2009 Petr Skoda (http://skodak.org)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright Copyright (c) 2012 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2012 Blackboard Inc. (http://www.blackboard.com)
  * @author Mark Nielsen
  */
 
@@ -70,6 +70,11 @@ if ($ADMIN->fulltree) {
     );
     $settings->add(new admin_setting_configselect('hsuforum/maxattachments', get_string('maxattachments', 'hsuforum'),
                        get_string('configmaxattachments', 'hsuforum'), 9, $options));
+
+    // Default Subscription mode setting.
+    $options = hsuforum_get_subscriptionmode_options();
+    $settings->add(new admin_setting_configselect('hsuforum_subscription', get_string('subscriptionmode', 'hsuforum'),
+        get_string('configsubscriptiontype', 'hsuforum'), HSUFORUM_CHOOSESUBSCRIBE, $options));
 
     // Default number of days that a post is considered old
     $settings->add(new admin_setting_configtext('hsuforum/oldpostdays', get_string('oldpostdays', 'hsuforum'),

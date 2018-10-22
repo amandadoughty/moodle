@@ -18,7 +18,7 @@
  * Post services
  *
  * @package   mod_hsuforum
- * @copyright Copyright (c) 2013 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2013 Blackboard Inc. (http://www.blackboard.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,7 +39,7 @@ require_once(dirname(dirname(__DIR__)).'/lib.php');
 
 /**
  * @package   mod_hsuforum
- * @copyright Copyright (c) 2013 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2013 Blackboard Inc. (http://www.blackboard.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class post_service {
@@ -230,6 +230,7 @@ class post_service {
         $post->itemid        = 0; // For text editor stuffs.
         $post->groupid       = ($discussion->groupid == -1) ? 0 : $discussion->groupid;
         $post->flags         = null;
+        $post->deleted       = 0;
 
         $strre = get_string('re', 'hsuforum');
         if (!(\core_text::substr($post->subject, 0, \core_text::strlen($strre)) == $strre)) {

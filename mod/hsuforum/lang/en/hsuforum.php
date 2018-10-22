@@ -20,7 +20,7 @@
  * @package   mod_hsuforum
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright Copyright (c) 2012 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2012 Blackboard Inc. (http://www.blackboard.com)
  * @author    Mark Nielsen
  */
 
@@ -100,15 +100,15 @@ $string['configoldpostdays'] = 'Number of days old at which any post is consider
 $string['configreplytouser'] = 'When a forum post is mailed out, should it contain the user\'s email address so that recipients can reply personally rather than via the forum? Even if set to \'Yes\' users can choose in their profile to keep their email address secret.';
 $string['configrsstypedefault'] = 'If RSS feeds are enabled, sets the default activity type.';
 $string['configrssarticlesdefault'] = 'If RSS feeds are enabled, sets the default number of articles (either discussions or posts).';
+$string['configsubscriptiontype'] = 'Default setting for subscription mode.';
 $string['configshortpost'] = 'Any post under this length (in characters not including HTML) is considered short (see below).';
-$string['configtrackingtype'] = 'Default setting for read tracking.';
 $string['configusermarksread'] = 'If \'yes\', the user must manually mark a post as read. If \'no\', when the post is viewed it is marked as read.';
 $string['confirmsubscribe'] = 'Do you really want to subscribe to forum \'{$a}\'?';
 $string['confirmunsubscribe'] = 'Do you really want to unsubscribe from forum \'{$a}\'?';
 $string['couldnotadd'] = 'Could not add your post due to an unknown error';
 $string['couldnotdeletereplies'] = 'Sorry, that cannot be deleted as people have already responded to it';
 $string['couldnotupdate'] = 'Could not update your post due to an unknown error';
-$string['crontask'] = 'Moodlerooms Forum mailings and maintenance jobs';
+$string['crontask'] = 'Open Forum mailings and maintenance jobs';
 $string['delete'] = 'Delete';
 $string['deleteddiscussion'] = 'The discussion topic has been deleted';
 $string['deletedpost'] = 'The post has been deleted';
@@ -210,7 +210,7 @@ $string['hsuforum:editanypost'] = 'Edit any post';
 $string['hsuforum:exportdiscussion'] = 'Export whole discussion';
 $string['hsuforum:exportownpost'] = 'Export own post';
 $string['hsuforum:exportpost'] = 'Export post';
-$string['hsuforum:managesubscriptions'] = 'Manage subscriptions';
+$string['hsuforum:managesubscriptions'] = 'Manage subscribers';
 $string['hsuforum:movediscussions'] = 'Move discussions';
 $string['hsuforum:pindiscussions'] = 'Pin discussions';
 $string['hsuforum:postwithoutthrottling'] = 'Exempt from post threshold';
@@ -248,6 +248,10 @@ $string['hsuforum:allowprivate'] = 'Allow user to respond privately';
 $string['generalforum'] = 'Standard forum for general use';
 $string['generalforums'] = 'General forums';
 $string['hiddenforumpost'] = 'Hidden forum post';
+$string['indicator:cognitivedepth'] = 'Forum cognitive';
+$string['indicator:cognitivedepth_help'] = 'This indicator is based on the cognitive depth reached by the student in a Forum activity.';
+$string['indicator:socialbreadth'] = 'Forum social';
+$string['indicator:socialbreadth_help'] = 'This indicator is based on the social breadth reached by the student in a Forum activity.';
 $string['inforum'] = 'in {$a}';
 $string['introblog'] = 'The posts in this forum were copied here automatically from blogs of users in this course because those blog entries are no longer available';
 $string['intronews'] = 'General news and announcements';
@@ -270,7 +274,7 @@ $string['longpost'] = 'Long post';
 $string['mailnow'] = 'Email notifications without editing time delay';
 $string['manydiscussions'] = 'Discussions per page';
 $string['managesubscriptionsoff'] = 'Finish managing subscriptions';
-$string['managesubscriptionson'] = 'Manage subscriptions';
+$string['managesubscriptionson'] = 'Manage subscribers';
 $string['markalldread'] = 'Mark all posts in this discussion read.';
 $string['markallread'] = 'Mark all posts in this forum read.';
 $string['markasreadonnotification'] = 'When sending forum post notifications';
@@ -293,15 +297,15 @@ $string['messageinboundfilesizeexceeded'] = 'Unable to post your reply, since th
 $string['messageinboundforumhidden'] = 'Unable to post your reply, since the forum is currently unavailable.';
 $string['messageinboundnopostforum'] = 'Unable to post your reply, since you do not have permission to post in the {$a->forum->name} forum.';
 $string['messageinboundthresholdhit'] = 'Unable to post your reply.  You have exceeded the posting threshold set for this forum';
-$string['messageprovider:digests'] = 'Subscribed Moodlerooms forum digests';
-$string['messageprovider:posts'] = 'Subscribed Moodlerooms forum posts';
+$string['messageprovider:digests'] = 'Subscribed Open Forum digests';
+$string['messageprovider:posts'] = 'Subscribed Open Forum posts';
 $string['missingsearchterms'] = 'The following search terms occur only in the HTML markup of this message:';
 $string['modeflatnewestfirst'] = 'Display replies flat, with newest first';
 $string['modeflatoldestfirst'] = 'Display replies flat, with oldest first';
 $string['modenested'] = 'Display replies in nested form';
 $string['modethreaded'] = 'Display replies in threaded form';
-$string['modulename'] = 'Moodlerooms Forum';
-$string['modulename_help'] = 'The Moodlerooms Forum activity module enables participants to have asynchronous discussions,
+$string['modulename'] = 'Open Forum';
+$string['modulename_help'] = 'The Open Forum activity module enables participants to have asynchronous discussions,
 i.e., discussions that take place over an extended period of time.
 
 There are several forum types to choose from, such as a standard forum where anyone can start a new discussion at any time; a forum where each student can post exactly one discussion; or a question and answer forum where students must first post before being able to view other students\' posts. A teacher can allow files to be attached to forum posts. Attached images are displayed in the forum post.
@@ -321,15 +325,15 @@ Forums have many uses, such as:
 * A one-on-one support area for private student-teacher communications (using a forum with separate groups and with one student per group)
 * For extension activities, for example ‘brain teasers’ for students to ponder and suggest solutions';
 $string['modulename_link'] = 'mod/hsuforum/view';
-$string['modulenameplural'] = 'Moodlerooms Forums';
+$string['modulenameplural'] = 'Open Forums';
 $string['more'] = 'more';
 $string['movedmarker'] = '(Moved)';
 $string['movethisdiscussionto'] = 'Move this discussion to ...';
 $string['mustprovidediscussionorpost'] = 'You must provide either a discussion id or post id to export';
-$string['myprofileownpost'] = 'My Moodlerooms Forum posts';
-$string['myprofileowndis'] = 'My Moodlerooms Forum discussions';
-$string['myprofileotherpost'] = 'Moodlerooms Forum posts';
-$string['myprofileotherdis'] = 'Moodlerooms Forum discussions';
+$string['myprofileownpost'] = 'My Open Forum posts';
+$string['myprofileowndis'] = 'My Open Forum discussions';
+$string['myprofileotherpost'] = 'Open Forum posts';
+$string['myprofileotherdis'] = 'Open Forum discussions';
 $string['namenews'] = 'Announcements';
 $string['namenews_help'] = 'The course announcements forum is a special forum for announcements and is automatically created when a course is created. A course can have only one announcements forum. Only teachers and administrators can post announcements. The "Latest announcements" block will display recent announcements.';
 $string['namesocial'] = 'Social forum';
@@ -378,7 +382,7 @@ $string['page-mod-hsuforum-discuss'] = 'Forum module discussion thread page';
 $string['parent'] = 'Show parent';
 $string['parentofthispost'] = 'Parent of this post';
 $string['pluginadministration'] = 'Forum administration';
-$string['pluginname'] = 'Moodlerooms Forum';
+$string['pluginname'] = 'Open Forum';
 $string['postadded'] = '<p>Your post was successfully added.</p> <p>You have {$a} to edit it if you want to make any changes.</p>';
 $string['postaddedsuccess'] = 'Your post was successfully added.';
 $string['postaddedtimeleft'] = 'You have {$a} to edit it if you want to make any changes.';
@@ -404,6 +408,73 @@ $string['posttomygroups_help'] = 'Posts a copy of this message to all groups you
 $string['postupdated'] = 'Your post was updated';
 $string['potentialsubscribers'] = 'Potential subscribers';
 $string['previousdiscussion'] = 'Older discussion';
+
+$string['privacy:digesttypepreference'] = 'You have chosen to receive the following forum digest type: "{$a->type}".';
+$string['privacy:discussionsubscriptionpreference'] = 'You have chosen the following discussion subscription preference for this forum: "{$a->preference}"';
+
+$string['privacy:metadata:hsuforum_digests'] = 'Information about the digest preferences for each Open Forum.';
+$string['privacy:metadata:hsuforum_digests:hsuforum'] = 'The Open Forum subscribed to.';
+$string['privacy:metadata:hsuforum_digests:maildigest'] = 'The digest preference.';
+$string['privacy:metadata:hsuforum_digests:userid'] = 'The ID of the user with the digest preference.';
+
+$string['privacy:metadata:hsuforum_discussions:name'] = 'The name of the discussion, as chosen by the author.';
+$string['privacy:metadata:hsuforum_discussions:userid'] = 'The ID of the user who created the discussion';
+$string['privacy:metadata:hsuforum_discussions:assessed'] = 'Rating type for the discussion';
+$string['privacy:metadata:hsuforum_discussions:timemodified'] = 'The time that the discussion was last modified.';
+$string['privacy:metadata:hsuforum_discussions:usermodified'] = 'The ID of the user who last modified the discussion in some way.';
+$string['privacy:metadata:hsuforum_discussions'] = 'Information about the individual forum discussions that a user has created.';
+
+$string['privacy:metadata:hsuforum_queue:userid'] = 'The ID of the user who is going to be notified.';
+$string['privacy:metadata:hsuforum_queue:discussionid'] = 'The ID of the discussion.';
+$string['privacy:metadata:hsuforum_queue:postid'] = 'The ID of the post.';
+$string['privacy:metadata:hsuforum_queue:timemodified'] = 'The modified time of the original post.';
+$string['privacy:metadata:hsuforum_queue'] = 'Information to keeping track of posts that will be mailed.';
+
+
+$string['privacy:metadata:hsuforum_posts:discussion'] = 'The discussion that the post is in.';
+$string['privacy:metadata:hsuforum_posts:parent'] = 'The parent post that was replied to.';
+$string['privacy:metadata:hsuforum_posts:created'] = 'The time that the post was created.';
+$string['privacy:metadata:hsuforum_posts:modified'] = 'The time that the post was last modified.';
+$string['privacy:metadata:hsuforum_posts:subject'] = 'The subject of the Open Forum post.';
+$string['privacy:metadata:hsuforum_posts:message'] = 'The message of the Open Forum post.';
+$string['privacy:metadata:hsuforum_posts:userid'] = 'The ID of the user who authored the Open Forum post.';
+$string['privacy:metadata:hsuforum_posts'] = 'Information about the digest preferences for each Open Forum.';
+
+$string['privacy:metadata:hsuforum_subscriptions_disc:discussion'] = 'The ID of the discussion that was subscribed to.';
+$string['privacy:metadata:hsuforum_subscriptions_disc:userid'] = 'The ID of the user with the discussion subscription.';
+$string['privacy:metadata:hsuforum_subscriptions_disc'] = 'Information about the subscriptions to individual Open Forum discussions.';
+
+$string['privacy:metadata:hsuforum_read:userid'] = 'The ID of the user that this record relates to.';
+$string['privacy:metadata:hsuforum_read:discussionid'] = 'The discussion that the post is in.';
+$string['privacy:metadata:hsuforum_read:postid'] = 'The post that was read.';
+$string['privacy:metadata:hsuforum_read:firstread'] = 'The first time that the post was read.';
+$string['privacy:metadata:hsuforum_read:lastread'] = 'The most recent time that the post was read.';
+$string['privacy:metadata:hsuforum_read'] = 'Information about which posts have been read by the user.';
+
+$string['privacy:metadata:hsuforum_subscriptions:userid'] = 'The ID of the user that this Open Forum subscription relates to.';
+$string['privacy:metadata:hsuforum_subscriptions:forum'] = 'The forum that was subscribed to.';
+$string['privacy:metadata:hsuforum_subscriptions'] = 'Information about which Open Forums the user has subscribed to.';
+
+$string['privacy:metadata:hsuforum_track_prefs:userid'] = 'The ID of the user that this Open Forum tracking preference relates to.';
+$string['privacy:metadata:hsuforum_track_prefs:forumid'] = 'The Open Forum that has read tracking enabled.';
+$string['privacy:metadata:hsuforum_track_prefs'] = 'Information about which forums the user has chosen to track post reads for.';
+
+$string['privacy:metadata:core_tag'] = 'The Open Forum makes use of the tag subsystem to support tagging of posts.';
+$string['privacy:metadata:core_rating'] = 'The Open Forum makes use of the rating subsystem to support the rating of posts.';
+
+
+$string['privacy:metadata:preference:autosubscribe'] = 'Whether to subscribe to discussions when replying to posts within them.';
+$string['privacy:metadata:preference:maildigest'] = 'The site-wide mail digest preference.';
+$string['privacy:metadata:preference:markasreadonnotification'] = 'Whether to mark forum posts as read when receiving them as messages.';
+$string['privacy:metadata:preference:trackforums'] = 'Whether to enable read tracking.';
+
+$string['privacy:subscribedtoforum'] = 'You are subscribed to this forum.';
+$string['privacy:readtrackingdisabled'] = 'You have chosen to not track which posts that you have read within this forum.';
+$string['privacy:postwasread'] = 'This post was first read on {$a->firstread} and most recently read on {$a->lastread}';
+
+$string['privacy:request:delete:post:message'] = 'The content of this post has been deleted at the request of its author.';
+$string['privacy:request:delete:post:subject'] = 'Delete at the request of the author';
+$string['privacy:request:delete:discussion:name'] = 'Delete at the request of the author';
 $string['processingdigest'] = 'Processing email digest for user {$a}';
 $string['processingpost'] = 'Processing post {$a}';
 $string['prune'] = 'Split';
@@ -421,8 +492,8 @@ $string['reply'] = 'Reply';
 $string['replyforum'] = 'Reply to forum';
 $string['replytopostbyemail'] = 'You can reply to this via email.';
 $string['replytouser'] = 'Use email address in reply';
-$string['reply_handler'] = 'Reply to Moodlerooms forum posts via email';
-$string['reply_handler_name'] = 'Reply to Moodlerooms forum posts';
+$string['reply_handler'] = 'Reply to Open Forum posts via email';
+$string['reply_handler_name'] = 'Reply to Open Forum posts';
 $string['resetforums'] = 'Delete posts from';
 $string['resetforumsall'] = 'Delete all posts';
 $string['resetdigests'] = 'Delete all per-user forum digest preferences';
@@ -436,8 +507,8 @@ $string['rsstype'] = 'RSS feed for this activity';
 $string['rsstype_help'] = 'To enable the RSS feed for this activity, select either discussions or posts to be included in the feed.';
 $string['rsstypedefault'] = 'RSS feed type';
 $string['search'] = 'Search';
-$string['search:post'] = 'Moodlerooms Forum - posts';
-$string['search:activity'] = 'Moodlerooms Forum - activity information';
+$string['search:post'] = 'Open Forum - posts';
+$string['search:activity'] = 'Open Forum - activity information';
 $string['searchdatefrom'] = 'Posts must be newer than this';
 $string['searchdateto'] = 'Posts must be older than this';
 $string['searchforumintro'] = 'Please enter search terms into one or more of the following fields:';
@@ -495,7 +566,6 @@ $string['subscriptiondisabled'] = 'Subscription disabled';
 $string['subscriptions'] = 'Subscriptions';
 $string['tagarea_hsuforum_posts'] = 'Forum posts';
 $string['tagsdeleted'] = 'Forum tags have been deleted';
-$string['tagtitle'] = 'See the "{$a}" tag';
 $string['thisforumisthrottled'] = 'This forum has a limit to the number of forum postings you can make in a given time period - this is currently set to {$a->blockafter} posting(s) in {$a->blockperiod}';
 $string['timedhidden'] = 'Timed status: Hidden from students';
 $string['timedposts'] = 'Timed posts';
@@ -503,16 +573,6 @@ $string['timedvisible'] = 'Timed status: Visible to all users';
 $string['timestartenderror'] = 'Display end date cannot be earlier than the start date';
 $string['trackforum'] = 'Track unread posts';
 $string['trackreadposts_header'] = 'Forum tracking';
-$string['tracking'] = 'Track';
-$string['trackingoff'] = 'Off';
-$string['trackingon'] = 'Forced';
-$string['trackingoptional'] = 'Optional';
-$string['trackingtype'] = 'Read tracking for this forum?';
-$string['trackingtype_help'] = 'Read tracking enables participants to easily check which posts they have not yet seen by highlighting any new posts.
-
-If set to optional, participants can choose whether to turn tracking on or off via a link in the administration block. (Users must also enable forum tracking in their forum preferences.)
-
-If \'Allow forced read tracking\' is enabled in the site administration, then a further option is available - forced. This means that tracking is always on, regardless of users\' forum preferences.';
 $string['unread'] = 'New';
 $string['unreadposts'] = 'Unread posts';
 $string['unreadpostsnumber'] = '{$a} unread posts';
@@ -682,9 +742,6 @@ $string['manageforumsubscriptions'] = 'Manage forum subscriptions';
 $string['nonanonymous'] = 'Non anonymously';
 $string['hiderecentposts'] = 'Hide recent Posts';
 $string['confighiderecentposts'] = 'Set to yes to stop the display of recent forum posts on the course page.';
-
-// Deprecated since Moodle 3.0.
-$string['subscribersto'] = 'Subscribers to "{$a->name}"';
 
 // Deprecated since Moodle 3.1.
 $string['postmailinfo'] = 'This is a copy of a message posted on the {$a} website.

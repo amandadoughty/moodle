@@ -26,7 +26,7 @@ require_once($CFG->libdir . '/portfolio/caller.php');
  * @package   mod_hsuforum
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright Copyright (c) 2012 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2012 Blackboard Inc. (http://www.blackboard.com)
  * @author Mark Nielsen
  */
 class hsuforum_portfolio_caller extends portfolio_module_caller_base {
@@ -97,6 +97,12 @@ class hsuforum_portfolio_caller extends portfolio_module_caller_base {
         $fs = get_file_storage();
         if ($this->post) {
             if ($this->attachment) {
+                // Make sure the requested file belongs to this post.
+                $file = $fs->get_file_by_id($this->attachment);
+                if ($file->get_contextid() != $this->modcontext->id
+                    || $file->get_itemid() != $this->post->id) {
+                    throw new portfolio_caller_exception('filenotfound');
+                }
                 $this->set_file_and_format_data($this->attachment);
             } else {
                 $attach = $fs->get_area_files($this->modcontext->id, 'mod_hsuforum', 'attachment', $this->post->id, 'timemodified', false);

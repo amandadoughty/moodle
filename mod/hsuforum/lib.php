@@ -18,7 +18,7 @@
  * @package   mod_hsuforum
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright Copyright (c) 2012 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2012 Blackboard Inc. (http://www.blackboard.com)
  * @author Mark Nielsen
  */
 
@@ -1484,6 +1484,7 @@ function hsuforum_print_overview($courses,&$htmlarray) {
                 .'FROM {hsuforum_discussions} d '
                 .'JOIN {hsuforum_posts} p ON p.discussion = d.id '
                 ."WHERE ($coursessql) "
+                .'AND p.deleted <> 1 '
                 .'AND p.userid != ? '
                 .'AND (d.timestart <= ? AND (d.timeend = 0 OR d.timeend > ?)) '
                 .'GROUP BY d.id, d.forum, d.course, d.groupid '
@@ -1509,7 +1510,7 @@ function hsuforum_print_overview($courses,&$htmlarray) {
         $sql = 'SELECT d.forum,d.course,COUNT(p.id) AS count '.
             ' FROM {hsuforum_posts} p '.
             ' JOIN {hsuforum_discussions} d ON p.discussion = d.id '.
-            ' LEFT JOIN {hsuforum_read} r ON r.postid = p.id AND r.userid = ? WHERE (';
+            ' LEFT JOIN {hsuforum_read} r ON r.postid = p.id AND r.userid = ? WHERE p.deleted <> 1 AND (';
         $params = array($USER->id);
 
         foreach ($trackingforums as $track) {
@@ -1608,6 +1609,49 @@ function hsuforum_print_recent_activity($course, $viewfullnames, $timestart) {
 }
 
 /**
+ * Retrieve recent activity posted in a forum from a date.
+ *
+ * @global object $USER
+ * @global object $DB
+ * @param object $course
+ * @return array $posts
+ */
+
+function hsuforum_recent_activity_query($course, $timestart, $forumid = null, $orderasc = true) {
+    global $USER, $DB;
+
+    $limitfrom = 0;
+    $limitnum = 0;
+    $andforumid = '';
+    if ($forumid !== null) {
+        $andforumid = 'AND d.forum = ?';
+        $limitnum = 6;
+    }
+    $orderquery = $orderasc ? 'ASC' : 'DESC';
+    $allnamefields = user_picture::fields('u', null, 'duserid');
+    $sql = "SELECT p.*, f.anonymous as forumanonymous, f.type AS forumtype,
+                   d.forum, d.groupid, d.timestart, d.timeend, $allnamefields
+              FROM {hsuforum_posts} p
+              JOIN {hsuforum_discussions} d ON d.id = p.discussion
+              JOIN {hsuforum} f             ON f.id = d.forum
+              JOIN {user} u                 ON u.id = p.userid
+             WHERE p.created > ?
+                   AND f.course = ?
+                   AND p.deleted <> 1
+                   AND (p.privatereply = 0 OR p.privatereply = ? OR p.userid = ?)
+                   $andforumid
+          ORDER BY p.created $orderquery
+    ";
+
+    $params = array($timestart, $course->id, $USER->id, $USER->id, $forumid);
+    if (!$posts = $DB->get_records_sql($sql, $params, $limitfrom, $limitnum)) {
+        return '';
+    }
+
+    return $posts;
+}
+
+/**
  * Given a course and a date, prints a summary of all the new
  * messages posted in the course since that date as HTML media objects
  *
@@ -1622,33 +1666,10 @@ function hsuforum_print_recent_activity($course, $viewfullnames, $timestart) {
  * @param int $timestart
  * @return string recent activity
  */
-function hsuforum_recent_activity($course, $viewfullnames, $timestart, $forumid = null) {
+function hsuforum_recent_activity($course, $viewfullnames, $timestart, $forumid = null, $orderasc = true) {
     global $CFG, $USER, $DB, $OUTPUT;
 
-    $limitfrom = 0;
-    $limitnum = 0;
-    $andforumid = '';
-    if ($forumid !== null) {
-        $andforumid = 'AND d.forum = ?';
-        $limitnum = 6;
-    }
-    $allnamefields = user_picture::fields('u', null, 'duserid');
-    $sql = "SELECT p.*, f.anonymous as forumanonymous, f.type AS forumtype,
-                   d.forum, d.groupid, d.timestart, d.timeend, $allnamefields
-              FROM {hsuforum_posts} p
-              JOIN {hsuforum_discussions} d ON d.id = p.discussion
-              JOIN {hsuforum} f             ON f.id = d.forum
-              JOIN {user} u                 ON u.id = p.userid
-             WHERE p.created > ?
-                   AND f.course = ?
-                   AND (p.privatereply = 0 OR p.privatereply = ? OR p.userid = ?)
-                   $andforumid
-          ORDER BY p.created DESC
-    ";
-    $params = array($timestart, $course->id, $USER->id, $USER->id, $forumid);
-    if (!$posts = $DB->get_records_sql($sql, $params, $limitfrom, $limitnum)) {
-         return '';
-    }
+    $posts = hsuforum_recent_activity_query($course, $timestart, $forumid, $orderasc);
 
     $modinfo = get_fast_modinfo($course);
     $config = get_config('hsuforum');
@@ -1656,50 +1677,53 @@ function hsuforum_recent_activity($course, $viewfullnames, $timestart, $forumid 
     $groupmodes = array();
     $cms    = array();
     $out = '';
-    foreach ($posts as $post) {
-        if (!isset($modinfo->instances['hsuforum'][$post->forum])) {
-            // not visible
-            continue;
-        }
-        $cm = $modinfo->instances['hsuforum'][$post->forum];
-        if (!$cm->uservisible) {
-            continue;
-        }
-        $context = context_module::instance($cm->id);
-
-        if (!has_capability('mod/hsuforum:viewdiscussion', $context)) {
-            continue;
-        }
-
-        if (!empty($config->enabletimedposts) and $USER->id != $post->duserid
-          and (($post->timestart > 0 and $post->timestart > time()) or ($post->timeend > 0 and $post->timeend < time()))) {
-            if (!has_capability('mod/hsuforum:viewhiddentimedposts', $context)) {
+    if (is_array($posts)) {
+        foreach ($posts as $post) {
+            if (!isset($modinfo->instances['hsuforum'][$post->forum])) {
+                // not visible
                 continue;
             }
-        }
+            $cm = $modinfo->instances['hsuforum'][$post->forum];
+            if (!$cm->uservisible) {
+                continue;
+            }
+            $context = context_module::instance($cm->id);
 
-        // Check that the user can see the discussion.
-        if (hsuforum_is_user_group_discussion($cm, $post->groupid)) {
-            $postuser = hsuforum_extract_postuser($post, hsuforum_get_cm_forum($cm), context_module::instance($cm->id));
-
-            $userpicture = new user_picture($postuser);
-            $userpicture->link = false;
-            $userpicture->alttext = false;
-            $userpicture->size = 100;
-            $picture = $OUTPUT->render($userpicture);
-
-            $url = $CFG->wwwroot.'/mod/hsuforum/discuss.php?d='.$post->discussion;
-            if (!empty($post->parent)) {
-                $url .= '#p'.$post->id;
+            if (!has_capability('mod/hsuforum:viewdiscussion', $context)) {
+                continue;
             }
 
-            $postusername = fullname($postuser, $viewfullnames);
-            $postsubject = break_up_long_words(format_string($post->subject, true));
-            $posttime = hsuforum_relative_time($post->modified);
-            $out .= hsuforum_media_object($url, $picture, $postusername, $posttime, $postsubject);
+            if (!empty($config->enabletimedposts) and $USER->id != $post->duserid
+                and (($post->timestart > 0 and $post->timestart > time()) or ($post->timeend > 0 and $post->timeend < time()))
+            ) {
+                if (!has_capability('mod/hsuforum:viewhiddentimedposts', $context)) {
+                    continue;
+                }
+            }
+
+            // Check that the user can see the discussion.
+            if (hsuforum_is_user_group_discussion($cm, $post->groupid)) {
+                $postuser = hsuforum_extract_postuser($post, hsuforum_get_cm_forum($cm), context_module::instance($cm->id));
+
+                $userpicture = new user_picture($postuser);
+                $userpicture->link = false;
+                $userpicture->alttext = false;
+                $userpicture->size = 100;
+                $picture = $OUTPUT->render($userpicture);
+
+                $url = $CFG->wwwroot . '/mod/hsuforum/discuss.php?d=' . $post->discussion;
+                if (!empty($post->parent)) {
+                    $url .= '#p' . $post->id;
+                }
+
+                $postusername = fullname($postuser, $viewfullnames);
+                $postsubject = break_up_long_words(format_string($post->subject, true));
+                $posttime = hsuforum_relative_time($post->modified);
+                $out .= hsuforum_media_object($url, $picture, $postusername, $posttime, $postsubject);
+
+            }
 
         }
-
     }
 
     if($out) {
@@ -2186,7 +2210,7 @@ function hsuforum_search_posts($searchterms, $courseid=0, $limitfrom=0, $limitnu
         return false;
     }
 
-    $now = round(time(), -2); // db friendly
+    $now = floor(time() / 60) * 60; // DB Cache Friendly.
 
     $fullaccess = array();
     $where = array();
@@ -2315,8 +2339,7 @@ function hsuforum_search_posts($searchterms, $courseid=0, $limitfrom=0, $limitnu
                          $allnames,
                          u.email,
                          u.picture,
-                         u.imagealt,
-                         u.email
+                         u.imagealt
                     FROM $fromsql
                    WHERE $selectsql
                 ORDER BY p.modified DESC";
@@ -2722,7 +2745,7 @@ function hsuforum_count_discussions($forum, $cm, $course) {
 
     static $cache = array();
 
-    $now = round(time(), -2); // db cache friendliness
+    $now = floor(time() / 60) * 60; // DB Cache Friendly.
     $config = get_config('hsuforum');
 
     $params = array($course->id);
@@ -2824,7 +2847,7 @@ function hsuforum_get_discussions($cm, $forumsort="", $forumselect=true, $unused
     $config = get_config('hsuforum');
     $timelimit = '';
 
-    $now = round(time(), -2);
+    $now = floor(time() / 60) * 60;
     $cutoffdate = $now - ($config->oldpostdays*24*60*60);
     $params = array($cm->instance, $USER->id, $USER->id, $cm->instance);
 
@@ -3042,7 +3065,7 @@ function hsuforum_get_discussion_neighbours($cm, $discussion, $forum) {
     }
 
     $neighbours = array('prev' => false, 'next' => false);
-    $now = round(time(), -2);
+    $now = floor(time() / 60) * 60;
     $params = array();
 
     $modcontext = context_module::instance($cm->id);
@@ -3215,7 +3238,7 @@ function hsuforum_get_discussions_unread($cm) {
 
     $config = get_config('hsuforum');
 
-    $now = round(time(), -2);
+    $now = floor(time() / 60) * 60;
     $cutoffdate = $now - ($config->oldpostdays*24*60*60);
 
     $params = array();
@@ -3287,7 +3310,7 @@ function hsuforum_get_discussions_count($cm) {
     global $CFG, $DB, $USER;
 
     $config = get_config('hsuforum');
-    $now = round(time(), -2);
+    $now = floor(time() / 60) * 60;
     $params = array($cm->instance);
     $groupmode    = groups_get_activity_groupmode($cm);
     $currentgroup = groups_get_activity_group($cm);
@@ -3626,10 +3649,11 @@ function hsuforum_rating_validate($params) {
         }
         if (!empty($discussion->unread) && $discussion->unread !== '-') {
             $replystring .= ' <span class="sep">/</span> <span class="unread">';
+            $unreadlink = new moodle_url($discussionlink, null, 'unread');
             if ($discussion->unread == 1) {
-                $replystring .= get_string('unreadpostsone', 'hsuforum');
+                $replystring .= html_writer::link($unreadlink, get_string('unreadpostsone', 'hsuforum'));
             } else {
-                $replystring .= get_string('unreadpostsnumber', 'hsuforum', $discussion->unread);
+                $replystring .= html_writer::link($unreadlink, get_string('unreadpostsnumber', 'hsuforum', $discussion->unread));
             }
             $replystring .= '</span>';
         }
@@ -4593,6 +4617,7 @@ function hsuforum_delete_post($post, $children, $course, $cm, $forum, $skipcompl
                 'forumtype' => $forum->type,
             )
         );
+        $post->deleted = 1;
         if ($post->userid !== $USER->id) {
             $params['relateduserid'] = $post->userid;
         }
@@ -5350,13 +5375,11 @@ function hsuforum_user_can_see_discussion($forum, $discussion, $context, $user=N
  * @param object $post
  * @param object $user
  * @param object $cm
+ * @params bool $checkdeleted Whether to check the deleted flag on the post.
  * @return bool
  */
-function hsuforum_user_can_see_post($forum, $discussion, $post, $user=NULL, $cm=NULL) {
+function hsuforum_user_can_see_post($forum, $discussion, $post, $user=NULL, $cm=NULL, $checkdeleted = true) {
     global $CFG, $USER, $DB;
-
-    // Context used throughout function.
-    $modcontext = context_module::instance($cm->id);
 
     // retrieve objects (yuk)
     if (is_numeric($forum)) {
@@ -5383,12 +5406,19 @@ function hsuforum_user_can_see_post($forum, $discussion, $post, $user=NULL, $cm=
         $post->id = $post->parent;
     }
 
+    if ($checkdeleted && !empty($post->deleted)) {
+        return false;
+    }
+
     if (!$cm) {
         debugging('missing cm', DEBUG_DEVELOPER);
         if (!$cm = get_coursemodule_from_instance('hsuforum', $forum->id, $forum->course)) {
             print_error('invalidcoursemodule');
         }
     }
+
+    // Context used throughout function.
+    $modcontext = context_module::instance($cm->id);
 
     if (empty($user) || empty($user->id)) {
         $user = $USER;
@@ -5635,7 +5665,7 @@ function hsuforum_print_latest_discussions($course, $forum, $maxdiscussions=-1, 
         $discussions = $rm->get_ratings($ratingoptions);
     }
 
-    $canviewparticipants = has_capability('moodle/course:viewparticipants',$context);
+    $canviewparticipants = course_can_view_participants($context);
     $canviewhiddentimedposts = has_capability('mod/hsuforum:viewhiddentimedposts', $context);
 
     $strdatestring = get_string('strftimerecentfull');
@@ -6315,7 +6345,7 @@ function hsuforum_tp_is_post_old($post, $time=null) {
 function hsuforum_tp_get_course_unread_posts($userid, $courseid) {
     global $CFG, $DB;
 
-    $now = round(time(), -2); // DB cache friendliness.
+    $now = floor(time() / 60) * 60; // DB cache friendliness.
     $config = get_config('hsuforum');
     $cutoffdate = $now - ($config->oldpostdays * 24 * 60 * 60);
     $params = array($userid, $userid, $courseid, $cutoffdate, $userid, $userid);
@@ -6406,7 +6436,7 @@ function hsuforum_count_forum_unread_posts($cm, $course, $resetreadcache = false
 
     list ($groups_sql, $groups_params) = $DB->get_in_or_equal($mygroups);
 
-    $now = round(time(), -2); // DB cache friendliness.
+    $now = floor(time() / 60) * 60; // DB Cache Friendly.
     $cutoffdate = $now - ($config->oldpostdays * 24 * 60 * 60);
     $params = array($USER->id, $forumid, $cutoffdate, $USER->id, $USER->id);
 
@@ -6552,6 +6582,21 @@ function hsuforum_discussion_update_last_post($discussionid) {
  */
 function hsuforum_get_view_actions() {
     return array('view discussion', 'search', 'forum', 'forums', 'subscribers', 'view forum');
+}
+
+/**
+ * List the options for forum subscription modes.
+ * This is used by the settings page and by the mod_form page.
+ *
+ * @return array
+ */
+function hsuforum_get_subscriptionmode_options() {
+    $options = array();
+    $options[HSUFORUM_CHOOSESUBSCRIBE] = get_string('subscriptionoptional', 'hsuforum');
+    $options[HSUFORUM_FORCESUBSCRIBE] = get_string('subscriptionforced', 'hsuforum');
+    $options[HSUFORUM_INITIALSUBSCRIBE] = get_string('subscriptionauto', 'hsuforum');
+    $options[HSUFORUM_DISALLOWSUBSCRIBE] = get_string('subscriptiondisabled', 'hsuforum');
+    return $options;
 }
 
 /**
@@ -6749,13 +6794,17 @@ function hsuforum_reset_userdata($data) {
 
     $forumssql = $forums = $rm = null;
 
-    if( $removeposts || !empty($data->reset_hsuforum_ratings) ) {
-        $forumssql      = "$allforumssql $typesql";
-        $forums = $forums = $DB->get_records_sql($forumssql, $params);
+    // Check if we need to get additional data.
+    if ($removeposts || !empty($data->reset_forum_ratings) || !empty($data->reset_forum_tags)) {
+        // Set this up if we have to remove ratings.
         $rm = new rating_manager();
         $ratingdeloptions = new stdClass;
         $ratingdeloptions->component = 'mod_hsuforum';
         $ratingdeloptions->ratingarea = 'post';
+
+        // Get the forums for actions that require it.
+        $forumssql = "$allforumssql $typesql";
+        $forums = $DB->get_records_sql($forumssql, $params);
     }
 
     if ($removeposts) {
@@ -6776,6 +6825,8 @@ function hsuforum_reset_userdata($data) {
                 //remove ratings
                 $ratingdeloptions->contextid = $context->id;
                 $rm->delete_ratings($ratingdeloptions);
+
+                core_tag_tag::delete_instances('mod_hsuforum', null, $context->id);
             }
         }
 
@@ -6830,6 +6881,22 @@ function hsuforum_reset_userdata($data) {
         }
     }
 
+    // Remove all the tags.
+    if (!empty($data->reset_forum_tags)) {
+        if ($forums) {
+            foreach ($forums as $forumid => $unused) {
+                if (!$cm = get_coursemodule_from_instance('hsuforum', $forumid)) {
+                    continue;
+                }
+
+                $context = context_module::instance($cm->id);
+                core_tag_tag::delete_instances('mod_hsuforum', null, $context->id);
+            }
+        }
+
+        $status[] = array('component' => $componentstr, 'item' => get_string('tagsdeleted', 'hsuforum'), 'error' => false);
+    }
+
     // remove all digest settings unconditionally - even for users still enrolled in course.
     if (!empty($data->reset_forum_digests)) {
         $DB->delete_records_select('hsuforum_digests', "forum IN ($allforumssql)", $params);
@@ -6850,6 +6917,8 @@ function hsuforum_reset_userdata($data) {
 
     /// updating dates - shift may be negative too
     if ($data->timeshift) {
+        // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
+        // See MDL-9367.
         shift_course_mod_dates('hsuforum', array('assesstimestart', 'assesstimefinish'), $data->timeshift, $data->courseid);
         $status[] = array('component'=>$componentstr, 'item'=>get_string('datechanged'), 'error'=>false);
     }
@@ -6883,6 +6952,10 @@ function hsuforum_reset_course_form_definition(&$mform) {
 
     $mform->addElement('checkbox', 'reset_hsuforum_ratings', get_string('deleteallratings'));
     $mform->disabledIf('reset_hsuforum_ratings', 'reset_hsuforum_all', 'checked');
+
+    $mform->addElement('checkbox', 'reset_hsuforum_tags', get_string('removeallforumtags', 'hsuforum'));
+    $mform->disabledIf('reset_hsuforum_tags', 'reset_hsuforum_all', 'checked');
+
 }
 
 /**
@@ -7341,7 +7414,7 @@ function hsuforum_cm_info_view(cm_info $cm) {
     $out = '';
 
     if (empty($config->hiderecentposts) && $forum->showrecent) {
-        $out .= hsuforum_recent_activity($cm->get_course(), true, 0, $forum->id);
+        $out .= hsuforum_recent_activity($cm->get_course(), true, 0, $forum->id, false);
     }
 
     if ($unread = hsuforum_count_forum_unread_posts($cm, $cm->get_course())) {
@@ -7625,7 +7698,7 @@ function hsuforum_get_posts_by_user($user, array $courses, $musthaveaccess = fal
     // Will record forums where the user can freely access everything
     $forumsearchfullaccess = array();
     // DB caching friendly
-    $now = round(time(), -2);
+    $now = floor(time() / 60) * 60;
     // For each course to search we want to find the forums the user has posted in
     // and providing the current user can access the forum create a search condition
     // for the forum to get the requested users posts.

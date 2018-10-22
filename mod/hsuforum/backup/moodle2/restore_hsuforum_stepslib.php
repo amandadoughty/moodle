@@ -20,7 +20,7 @@
  * @subpackage backup-moodle2
  * @copyright  2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright Copyright (c) 2012 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2012 Blackboard Inc. (http://www.blackboard.com)
  * @author Mark Nielsen
  */
 
@@ -70,6 +70,8 @@ class restore_hsuforum_activity_structure_step extends restore_activity_structur
             $data->showbookmark = 1;
         }
 
+        // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
+        // See MDL-9367.
         $data->assesstimestart = $this->apply_date_offset($data->assesstimestart);
         $data->assesstimefinish = $this->apply_date_offset($data->assesstimefinish);
         if ($data->scale < 0) { // scale found, get mapping
@@ -93,7 +95,6 @@ class restore_hsuforum_activity_structure_step extends restore_activity_structur
         $data->course = $this->get_courseid();
 
         $data->forum = $this->get_new_parentid('hsuforum');
-        $data->timemodified = $this->apply_date_offset($data->timemodified);
         $data->timestart = $this->apply_date_offset($data->timestart);
         $data->timeend = $this->apply_date_offset($data->timeend);
         $data->userid = $this->get_mappingid('user', $data->userid);
@@ -124,10 +125,8 @@ class restore_hsuforum_activity_structure_step extends restore_activity_structur
 
         $data = (object)$data;
         $oldid = $data->id;
-
+        $olduserid = $data->userid;
         $data->discussion = $this->get_new_parentid('hsuforum_discussion');
-        $data->created = $this->apply_date_offset($data->created);
-        $data->modified = $this->apply_date_offset($data->modified);
         $data->userid = $this->get_mappingid('user', $data->userid);
         // If post has parent, map it (it has been already restored)
         if (!empty($data->parent)) {
@@ -141,6 +140,7 @@ class restore_hsuforum_activity_structure_step extends restore_activity_structur
         if (empty($data->parent)) {
             $DB->set_field('hsuforum_discussions', 'firstpost', $newitemid, array('id' => $data->discussion));
         }
+        $this->set_mapping(restore_gradingform_plugin::itemid_mapping('posts'), $olduserid, $data->userid);
     }
 
     protected function process_hsuforum_tag($data) {
@@ -173,8 +173,6 @@ class restore_hsuforum_activity_structure_step extends restore_activity_structur
         }
         $data->rating = $data->value;
         $data->userid = $this->get_mappingid('user', $data->userid);
-        $data->timecreated = $this->apply_date_offset($data->timecreated);
-        $data->timemodified = $this->apply_date_offset($data->timemodified);
 
         // We need to check that component and ratingarea are both set here.
         if (empty($data->component)) {
@@ -196,8 +194,14 @@ class restore_hsuforum_activity_structure_step extends restore_activity_structur
         $data->forum = $this->get_new_parentid('hsuforum');
         $data->userid = $this->get_mappingid('user', $data->userid);
 
-        $newitemid = $DB->insert_record('hsuforum_subscriptions', $data);
-        $this->set_mapping('hsuforum_subscription', $oldid, $newitemid, true);
+        // Create only a new subscription if it does not already exist (see MDL-59854).
+        if ($subscription = $DB->get_record('hsuforum_subscriptions',
+                array('forum' => $data->forum, 'userid' => $data->userid))) {
+            $this->set_mapping('hsuforum_subscription', $oldid, $subscription->id, true);
+        } else {
+            $newitemid = $DB->insert_record('hsuforum_subscriptions', $data);
+            $this->set_mapping('hsuforum_subscription', $oldid, $newitemid, true);
+        }
 
     }
 
@@ -256,29 +260,7 @@ class restore_hsuforum_activity_structure_step extends restore_activity_structur
         // information as base for the initial post.
         $forumid = $this->task->get_activityid();
         $forumrec = $DB->get_record('hsuforum', array('id' => $forumid));
-
-        // Adjust any possible special grading.
-        $oldhsuforumid = $this->get_old_parentid('hsuforum');
-        $sql1 = 'SELECT cm.id
-                   FROM {course_modules} cm
-                   JOIN {modules} m ON m.id = cm.module
-                  WHERE m.name = "hsuforum" 
-                        AND cm.instance = ?';
-        $cmid = $DB->get_field_sql($sql1, array($oldhsuforumid));
-        $ctx = context_module::instance($cmid);
-        $sql2 = 'SELECT gi.id, gi.itemid 
-                   FROM {grading_instances} gi 
-                   JOIN {grading_definitions} gd ON gi.definitionid = gd.id
-                   JOIN {grading_areas} ga ON ga.id = gd.areaid
-                  WHERE ga.contextid = ?';
-        $instances = $DB->get_records_sql($sql2, array($ctx->id));
-        foreach ($instances as $instance) {
-            $mapping = $this->get_mapping('grading_instance', $instance->id);
-            if ($mapping) {
-                $DB->set_field('grading_instances', 'itemid', $instance->itemid, array('id' => $mapping->newitemid));
-            }
-        }
-
+        
         if ($forumrec->type == 'single' && !$DB->record_exists('hsuforum_discussions', array('forum' => $forumid))) {
             // Create single discussion/lead post from forum data
             $sd = new stdClass();

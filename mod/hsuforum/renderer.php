@@ -21,7 +21,7 @@
  * @package   mod_hsuforum
  * @copyright 2009 Sam Hemelryk
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright Copyright (c) 2012 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2012 Blackboard Inc. (http://www.blackboard.com)
  * @author Mark Nielsen
  */
 
@@ -39,7 +39,7 @@ require_once($CFG->dirroot.'/lib/formslib.php');
  * @package   mod_hsuforum
  * @copyright 2009 Sam Hemelryk
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright Copyright (c) 2012 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2012 Blackboard Inc. (http://www.blackboard.com)
  * @author Mark Nielsen
  **/
 class mod_hsuforum_renderer extends plugin_renderer_base {
@@ -1184,7 +1184,7 @@ HTML;
      * @author Mark Nielsen
      */
     public function post_message($post, $cm, $search = '') {
-        global $OUTPUT;
+        global $OUTPUT, $CFG;
 
         $options = new stdClass;
         $options->para    = false;
@@ -1195,6 +1195,15 @@ HTML;
 
         $message = file_rewrite_pluginfile_urls($post->message, 'pluginfile.php', context_module::instance($cm->id)->id, 'mod_hsuforum', 'post', $post->id);
 
+        if (!empty($CFG->enableplagiarism)) {
+            require_once($CFG->libdir.'/plagiarismlib.php');
+            $message .= plagiarism_get_links(array('userid' => $post->userid,
+                'content' => $message,
+                'cmid' => $cm->id,
+                'course' => $cm->course,
+                'hsuforum' => $cm->instance));
+        }
+        
         $postcontent = format_text($message, $post->messageformat, $options, $cm->course);
 
         if (!empty($search)) {
