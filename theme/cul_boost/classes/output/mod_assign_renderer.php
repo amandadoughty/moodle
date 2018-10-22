@@ -49,43 +49,22 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
         $strsubmission = get_string('submissionstatus', 'assign');
         $strgrade = get_string('grade');
         $strfeedback = get_string('feedback');
+        $strsubmitted = get_string('numberofsubmittedassignments', 'assign');
 
         $table = new html_table();
-
-        if ($indexsummary->usesections) {
-            $table->head  = array ($strsectionname, $strplural, $strduedate, $strsubmission, $strgrade, $strfeedback);
-            $table->align = array ('left', 'left', 'center', 'right', 'right', 'left');
-        } else {
-            $table->head  = array ($strplural, $strduedate, $strsubmission, $strgrade, $strfeedback);
-            $table->align = array ('left', 'left', 'center', 'right', 'left');
-        }
-
-        $table->data = array();
+        $table->data = [];
         $currentsection = '';
 
-        foreach ($indexsummary->assignments as $info) {
+        foreach ($indexsummary->assignments as $info) {            
+            $context = context_module::instance($info['cmid']);
+            $course = get_course($COURSE->id);
             $modinfo = get_fast_modinfo($COURSE);
             $cm = $modinfo->get_cm($info['cmid']);
-            $context = context_module::instance($info['cmid']);
-            $course = get_course($COURSE->id);                    
             $assign = new assign($context, $cm, $COURSE);
-            $submission = null;
-            $params = array('assignment'=>$assign->get_instance()->id, 'userid'=>$USER->id);
-
-            if ($assign->get_instance()->teamsubmission) {
-                $submission = $assign->get_group_submission($USER->id, 0, true, -1);
-            } else {
-                $submission = $assign->get_user_submission($USER->id, true, -1);
-            }
-
-            // This is always set to the user submission status.
-            $info['submissioninfo'] = get_string('submissionstatus_' . $submission->status, 'assign');
-
-            $params = array('id' => $info['cmid']);
+            $params = ['id' => $info['cmid']];
             $link = html_writer::link(new moodle_url('/mod/assign/view.php', $params),
                                       $info['cmname']);
             $due = $info['timedue'] ? userdate($info['timedue']) : '-';
-            $feedback = $this->getAssignFeedback($cm, $assign, $context);
             $printsection = '';
 
             if ($indexsummary->usesections) {
@@ -100,10 +79,33 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
                 }
             }
 
-            if ($indexsummary->usesections) {
-                $row = array($printsection, $link, $due, $info['submissioninfo'], $info['gradeinfo'], $feedback);
+            if (has_capability('mod/assign:grade', $context)) {
+                $table->head = [$strplural, $strduedate, $strsubmitted];
+                $table->align = ['left', 'left', 'right'];
+                // $submitted = $info['submissionssubmittedcount'];
+                $submitted = $assign->count_submissions_with_status(ASSIGN_SUBMISSION_STATUS_SUBMITTED);
+                $row = [$link, $due, $submitted];
             } else {
-                $row = array($link, $due, $info['submissioninfo'], $info['gradeinfo'], $feedback);
+                $table->head = [$strplural, $strduedate, $strsubmission, $strgrade, $strfeedback];
+                $table->align = ['left', 'left', 'center', 'right', 'left'];                
+                $submission = null;
+                $params = array('assignment'=>$assign->get_instance()->id, 'userid'=>$USER->id);
+
+                if ($assign->get_instance()->teamsubmission) {
+                    $submission = $assign->get_group_submission($USER->id, 0, true, -1);
+                } else {
+                    $submission = $assign->get_user_submission($USER->id, true, -1);
+                }
+                // This is always set to the user submission status.
+                $info['submissioninfo'] = get_string('submissionstatus_' . $submission->status, 'assign');
+                $feedback = $this->getAssignFeedback($cm, $assign, $context);
+                $row = [$link, $due, $info['submissioninfo'], $info['gradeinfo'], $feedback];
+            }
+
+            if ($indexsummary->usesections) {
+                array_unshift($table->head, $strsectionname);
+                array_unshift($table->align, 'left');
+                array_unshift($row, $printsection);
             }
 
             $table->data[] = $row;
