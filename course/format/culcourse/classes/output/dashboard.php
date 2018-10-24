@@ -51,14 +51,19 @@ class dashboard implements templatable, renderable {
     public $culconfigchanged = false;    
 
     /**
-     * @var $course - The plugin settings.
+     * @var $userisediting
      */
     public $userisediting = null;
 
     /**
-     * @var $course - The plugin settings.
+     * @var $adminurl
      */
     public $adminurl = null;
+
+    /**
+     * @var $externalurls
+     */
+    public $externalurls = null;    
 
     /**
      * Constructor method, calls the parent constructor
@@ -78,6 +83,7 @@ class dashboard implements templatable, renderable {
 
         $this->course = $course;
         $this->culconfig = $culconfig;
+        $this->externalurls = format_culcourse_get_external_urls_data($course);
     }
 
     public function export_for_template(renderer_base $output) {        
@@ -258,7 +264,7 @@ class dashboard implements templatable, renderable {
             $attrs  = [];
             $liattrs = [];
             $data = $this->get_quicklink($name, $course);
-            $urldata = format_culcourse_get_reading_list_url_data($course);
+            $urldata = $this->externalurls['readinglists'];
 
             if (!$urldata) {
                 // Not installed or not configured                
@@ -308,7 +314,7 @@ class dashboard implements templatable, renderable {
             $attrs  = [];
             $liattrs = [];
             $data = $this->get_quicklink($name, $course);
-            $urldata = format_culcourse_get_libguide_url_data($course);
+            $urldata = $this->externalurls['libguides'];
 
             if (OK == $urldata['status']) {
                 $url = $urldata['url'];
@@ -343,25 +349,24 @@ class dashboard implements templatable, renderable {
             $attrs  = [];
             $liattrs = [];
             $data = $this->get_quicklink($name, $course);
+            $urldata = $this->externalurls['timetable'];
 
-            $ttdata = format_culcourse_get_timetable_url($course);
-
-            if (!$ttdata) {
+            if (!$urldata) {
                 // Not installed or not configured.
                 $attrs['title'] = get_string('not-installed-timetable', 'format_culcourse');
                 $attrs['class'] = 'nolink';
                 $url = 'javascript:void(0);';
             } else {
-                if (OK == $ttdata['status']) {
+                if (OK == $urldata['status']) {
                     $attrs['title']  = get_string('view-timetable', 'format_culcourse');
                     $attrs['target'] = '_blank';
-                    $url = $ttdata['url'];
-                } else if (NODATA == $ttdata['status']) {
+                    $url = $urldata['url'];
+                } else if (NODATA == $urldata['status']) {
                     $attrs['title']  = get_string('no-timetable', 'format_culcourse');
                     $attrs['class'] = 'nolink';
                     $attrs['target'] = '_blank';
-                    $url = $ttdata['url'];
-                } else if (ERROR == $ttdata['status']) {
+                    $url = $urldata['url'];
+                } else if (ERROR == $urldata['status']) {
                     $attrs['title'] = get_string('error-timetable', 'format_culcourse');
                     $attrs['class'] = 'nolink';
                     $url = 'javascript:void(0);';

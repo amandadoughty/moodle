@@ -52,6 +52,50 @@ if (!defined('ACTIVITYLINK')) {
 }
 
 /**
+ * format_culcourse_get_external_urls_data()
+ *
+ * @param mixed $course
+ * @return
+ */
+function format_culcourse_get_external_urls_data($course) {
+    global $DB;
+
+    $record = $DB->get_record('format_culcourse_ext_urls', ['courseid' => $course->id]);
+    $today = strtotime('today midnight');
+    $update = true;
+
+    if ($record) {
+        if ($record->timemodified > $today) {
+            $update = false;
+            return json_decode($record->data, true);
+        }
+    }
+
+    // Get the data.
+    $dataobj = new stdClass();
+    $dataobj->courseid = $course->id;
+    $dataobj->timemodified = time();
+
+    $data = [];
+    $data['readinglists'] = format_culcourse_get_reading_list_url_data($course);
+    $data['libguides'] = format_culcourse_get_libguide_url_data($course);
+    $data['timetable'] = format_culcourse_get_timetable_url($course);
+
+    $dataobj->data = json_encode($data);
+
+    if ($record) {
+        $dataobj->id = $record->id;
+        // Update.
+        $DB->update_record('format_culcourse_ext_urls', $dataobj);
+    } else {
+        // Insert.
+        $DB->insert_record('format_culcourse_ext_urls', $dataobj);
+    }
+
+    return $data;
+}
+
+/**
  * format_culcourse_get_reading_list_url_data()
  *
  * @param mixed $course
@@ -234,7 +278,7 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
  * @param mixed $course
  * @return
  */
-function format_culcourse_get_libguide_url_data($course, $connectiontimeout = null, $transfertimeout = null) {
+function format_culcourse_get_libguide_url_data($course) {
     global $CFG;
 
     $libAppsDefaultURL = get_config('format_culcourse', 'libAppsDefaultURL');
@@ -330,13 +374,14 @@ function format_culcourse_get_timetable_url($course) {
     $codedata = format_culcourse_get_coursecode_data($COURSE->shortname);
     $module = $codedata['module_code'];
     $year = $codedata['year_description'];
-    $ttdata['url'] = new moodle_url('/local/cultimetable_api/timetable.php',
-        array(
+    $tturl = new moodle_url('/local/cultimetable_api/timetable.php',
+        [
             'cid' => $COURSE->id,
             'mcode' => $module,
             'yr' => $year
-        )
+        ]
     );
+    $ttdata['url'] = $tturl->out();
 
     try {
         require_once($CFG->dirroot . '/local/cultimetable_api/classes/timetable_class.php');
