@@ -260,10 +260,8 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
     }
 
     foreach ($resourcelists as $resourcelist) {
-        // If there's at least one list then return the response data.
         if (!empty($responsedata[$resourcelist['value']])) {
             $rldata['status'] = OK;
-            $rldata['data'] = $responsedata;
             return $rldata;
         }
     }
