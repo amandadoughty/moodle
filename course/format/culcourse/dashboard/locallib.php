@@ -66,8 +66,15 @@ function format_culcourse_get_external_urls_data($course) {
 
     if ($record) {
         if ($record->timemodified > $today) {
-            $update = false;
-            return json_decode($record->data, true);
+            // If the last save came back with an error then call the api's again.
+            // Check timetable firstas that is most flaky.
+            $data = json_decode($record->data, true);
+            if (($data['timetable']['status'] != ERROR) && 
+                ($data['readinglists']['status'] != ERROR) && 
+                ($data['libguides']['status'] != ERROR)) {
+                $update = false;
+                return $data;
+            }
         }
     }
 
@@ -136,7 +143,7 @@ function format_culcourse_get_reading_list_url_data($course) {
     }
 
     if (!$baseKGCode || empty($pluginSettings->targetAspire)) {
-        return array('status' => 'NODATA');
+        return ['status' => 'NODATA'];
     }
 
     $path = "{$aspireURL}/modules/{$baseKGCode}";
@@ -209,10 +216,8 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
         $transfertimeout = 16;
     }
 
-    $rldata = ['status' => null, 'data' => null];
-    #$urldebug = 'http://www.muon.org.uk/tsonus/moodle/ba-simple-proxy.php?url=' . $url . '&mode=native&delay=8'; //TJGDEBUG 08/08/2013 10:35:06
+    $rldata = ['status' => null];
     $urldebug = empty($urldebug) ? '' : $urldebug;
-    #echo(html_writer::tag('pre', "DASHBOARD:-\n$path\n$url\n$urldebug")); //TJGDEBUG 09/08/2013 12:10:57
     $ch = curl_init();
 
     $options = [
@@ -229,7 +234,6 @@ function format_culcourse_get_reading_list_data($path, $url, $connectiontimeout 
     curl_setopt_array($ch, $options);
     $response = curl_exec($ch);
     $curlinfo = curl_getinfo($ch);
-    $rldata['info'] = $curlinfo;
     $curlerrno = curl_errno($ch);
 
     if ($curlerrno) {
@@ -334,7 +338,6 @@ function format_culcourse_get_libguide_url_data($course) {
 
     if ($curlerrno) {
         curl_close($ch);
-        $lgdata['curl_errno'] = $curlerrno;
 
         if ((22 == $curlerrno) && ($curlinfo['http_code'] < 500)) {
             $lgdata['status'] = NODATA;
@@ -368,7 +371,7 @@ function format_culcourse_get_libguide_url_data($course) {
 function format_culcourse_get_timetable_url($course) {
     global $COURSE, $CFG;
 
-    $ttdata = array('url' => null, 'status' => 1, 'httpcode' => null, 'error' => null);
+    $ttdata = ['url' => null, 'status' => OK];
     $codedata = format_culcourse_get_coursecode_data($COURSE->shortname);
     $module = $codedata['module_code'];
     $year = $codedata['year_description'];
@@ -387,20 +390,15 @@ function format_culcourse_get_timetable_url($course) {
         $timetable = new local_cultimetable_api\timetable();
         $result = $timetable->display_module_timetable($module, $defaultweeks, $defaultformat, $COURSE->id);
 
-        $ttdata['error'] = $result['error'];
-        $ttdata['httpcode'] = $result['http'];
-
-        if($ttdata['httpcode'] == 500) { // No matching timetable page results in a 500 error!
-            $ttdata['status'] = 0;
-        } else if ($ttdata['httpcode'] <> 200) {
-            $ttdata['status'] = -1;
+        if ($result['http'] == 500) { // No matching timetable page results in a 500 error!
+            $ttdata['status'] = NODATA;
+        } else if ($result['http'] <> 200) {
+            $ttdata['status'] = ERROR;
         } else {
-            $ttdata['status'] = 1;
+            $ttdata['status'] = OK;
         }
     } catch (Exception $e) {
-        $ttdata['error'] = $e->getCode();
-        $ttdata['httpcode'] = 520;
-        $ttdata['status'] = -1;
+        $ttdata['status'] = ERROR;
     }
 
     return $ttdata;
@@ -419,7 +417,10 @@ function format_culcourse_get_photoboard_url($course, $roleid) {
     $cname = explode(" ",$COURSE->fullname);
     $cid = $cname[0];
     $coursecontext = context_course::instance($COURSE->id);
-    $url = new moodle_url('/course/format/culcourse/dashboard/photoboard.php', array('contextid' => $coursecontext->id, 'roleid' => $roleid));
+    $url = new moodle_url(
+        '/course/format/culcourse/dashboard/photoboard.php',
+        ['contextid' => $coursecontext->id, 'roleid' => $roleid]
+    );
 
     return $url;
 }
@@ -452,7 +453,7 @@ function format_culcourse_get_photoboard_url($course, $roleid) {
  */
 function format_culcourse_get_coursecode_data($coursecode) { //TODO: Candidate for a static utility method.
 
-    $codedata = array();
+    $codedata = [];
 
     if (is_object($coursecode) && property_exists($coursecode, 'shortname')) {
         $codedata['full_code'] = trim(strtoupper($coursecode->shortname));
@@ -466,10 +467,10 @@ function format_culcourse_get_coursecode_data($coursecode) { //TODO: Candidate f
         return false;
     }
 
-    $codedatakeys = array('code_type',
+    $codedatakeys = ['code_type',
                           'module_codes_string', 'module_codes', 'module_code', 'module_type',
                           'period', 'period_num', 'occurrence_code',
-                          'year_description', 'year_start', 'year_end');
+                          'year_description', 'year_start', 'year_end'];
 
     // Initialise $codedata elements to null.
     foreach($codedatakeys as $key) {
@@ -538,7 +539,7 @@ function format_culcourse_quicklink_visibility($courseid, $name, $value) {
     // Important: Cannot use $format->update_course_format_options($options)
     // because activity links do not exist as default values and therefore never
     // get updated.
-    $options = $DB->get_records('course_format_options', array('courseid' => $courseid, 'name' => $name));
+    $options = $DB->get_records('course_format_options', ['courseid' => $courseid, 'name' => $name]);
     
     if($options) {
         $option = array_pop($options);
