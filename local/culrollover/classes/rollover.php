@@ -175,7 +175,6 @@ class rollover {
         );
 
         $event = \local_culrollover\event\rollover_completed::create($params);
-        $this->record->id = $this->record->id;
         $event->add_record_snapshot('cul_rollover', $this->record);
         $event->trigger();
 
