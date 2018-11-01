@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2016080504;
+$plugin->version  = 2016080505;
 $plugin->release   = '2.2.3';
 $plugin->requires = 2015111000;
 $plugin->component = 'local_culrollover';

@@ -42,7 +42,7 @@ function xmldb_local_culrollover_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2016063001, 'local', 'culrollover');
     }
 
-    if ($oldversion < 2016080504) {
+    if ($oldversion < 2016080505) {
         // Define table cul_rollover_config.
         $table = new xmldb_table('cul_rollover_config');
 
@@ -51,16 +51,17 @@ function xmldb_local_culrollover_upgrade($oldversion) {
         $table->add_field('name', XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL, null, null);
         $table->add_field('value', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '18', null, XMLDB_NOTNULL, null, null);
 
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $table->add_index('idx_courseid', XMLDB_INDEX_UNIQUE, ['courseid']);
+        $table->add_index('idx_courseid', XMLDB_INDEX_UNIQUE, ['courseid', 'name']);
 
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
 
         // CUL Rollover savepoint reached.
-        upgrade_plugin_savepoint(true, 2016080504, 'local', 'culrollover');
+        upgrade_plugin_savepoint(true, 2016080505, 'local', 'culrollover');
     } 
 
     return true;
