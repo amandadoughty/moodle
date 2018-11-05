@@ -28,50 +28,18 @@ defined('MOODLE_INTERNAL') || die();
  * Event observer for local_culrollover.
  */
 class local_culrollover_observer {
-
-    /**
-     * Triggered via assessable_uploaded event.
-     *
-     * @param \assignsubmission_file\event\assessable_uploaded $event
-     */
-    public static function assessable_uploaded(\assignsubmission_file\event\assessable_uploaded $event) {
-        global $CFG;
-
-        $fs = get_file_storage();
-        $contenthashes = [];
-
-        foreach ($event->other['pathnamehashes'] as $pathnamehash) {
-            $file = $fs->get_file_by_hash($pathnamehash);
-            $contenthashes[] = $file->get_contenthash();
-        }
-
-        $info = get_string('uploaded', 'local_culobserver', count($event->other['pathnamehashes']));
-        $info .= "\n\n";
-        $info .= join("; \n\n", $contenthashes);
-        $info = nl2br($info);
-
-        $params = array(
-            'context' => $event->get_context(),
-            'objectid' => $event->objectid,
-            'other' => array('contenthashes' => $info)
-        );
-
-        $event = local_culobserver\event\assessable_uploaded::create($params);
-        $event->trigger();
-    }
-
-
     /**
      * Triggered via course changing events.
      *
-     * @param event_interface $event
+     * @param \core\event\base $event
      */
-    public static function course_edited(event_interface $event) {
+    public static function course_edited(\core\event\base $event) {
         global $DB;
 
+        $eventdata = $event->get_data();
         // If there is no courseid then the value of $event->data['courseid'] is 0.
-        $courseid = $event->data['courseid'];
-        $userid = $event->data['userid'];
+        $courseid = $eventdata['courseid'];
+        $userid = $eventdata['userid'];
         $configname = 'rolloverlocked';
         $table = 'cul_rollover_config';
         $record = $DB->get_record($table, ['courseid' => $courseid, 'name' => $configname]);
@@ -84,7 +52,7 @@ class local_culrollover_observer {
         $data->userid = $userid;
         
         if (!$record) {
-            $DB->insert_record($table, $data);        
+            $DB->insert_record($table, $data);    
         } else if ($record->value != 1) {
             $DB->update_record($table, $data);
         }
@@ -99,7 +67,4 @@ class local_culrollover_observer {
         $event = local_culrollover\event\course_locked::create($params);
         $event->trigger();
     }
-
-
-
 }
