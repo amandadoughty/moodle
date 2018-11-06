@@ -15,7 +15,7 @@
         .block-title {
             color: $body-color;
             font-size: $font-size-h4;
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-normal;
             line-height: $headings-line-height;
             text-transform: none;
             margin: 0;
@@ -48,7 +48,6 @@
         #block-region-dash-feed & {
             .block-inner {
                 .block-title {
-                    color: $brand-primary;
                     font-size: $font-size-h2;
                     padding: 0;
                     margin-bottom: $spacer * 2;

@@ -1,6 +1,7 @@
 {
   "name": "theme-cul_boost-tasks",
   "version": "1.2.0",
+  "private": true,
   "description": "Grunt tasks for CUL Boost theme.",
   "main": "Gruntfile.js",
   "author": {
@@ -8,32 +9,26 @@
     "url": "http://www.synergy-learning.com"
   },
   "scripts": {
-    "postcss": "postcss --config postcss.js --replace style/*.css"
-  },
-  "dependencies": {
-    "autoprefixer": "^6.0.3",
-    "grunt": "*",
-    "grunt-autoprefixer": "*",
-    "grunt-contrib-copy": "*",
-    "grunt-contrib-cssmin": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-css-flip": "*",
-    "grunt-css-wrap": "*",
-    "grunt-csscomb": "*",
-    "grunt-exec": "*",
-    "grunt-sass": "~2.0",
-    "grunt-svgmin": "*",
-    "grunt-text-replace": "*",
-    "npm": "^6.4.1",
-    "postcss-cli": "^2.5.2",
-    "postcss-flexbugs-fixes": "^2.0.0",
-    "time-grunt": "^1.4.0"
+    "postcss": "postcss --replace style/*.css"
   },
   "license": "GPL-3.0+",
   "devDependencies": {
-    "grunt-css-wrap": "^0.1.3",
-    "grunt-sass": "^1.0.0"
+    "autoprefixer": "^8.6.0",
+    "eslint-plugin-promise": "^3.8.0",
+    "grunt": "^1.0.2",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-eslint": "^20.1.0",
+    "grunt-exec": "^3.0.0",
+    "grunt-load-gruntfile": "0.0.2",
+    "grunt-sass": "^2.1.0",
+    "grunt-stylelint": "^0.10.0",
+    "jit-grunt": "^0.10.0",
+    "postcss-cli": "^5.0.0",
+    "postcss-flexbugs-fixes": "^3.3.1",
+    "stylelint": "^9.2.1",
+    "stylelint-csstree-validator": "^1.3.0",
+    "time-grunt": "^1.4.0"
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Gruntfile for compiling theme_acca_educationhub .less files.
+ * Gruntfile for compiling theme_cul_boost .scss files.
  *
  * This file configures tasks to be run by Grunt
  * http://gruntjs.com/ for the current theme.
@@ -29,8 +29,8 @@
  * The nice user interface intended for everyday use. Provide a
  * high level of automation and convenience for specific use-cases.
  *
- * grunt watch   Watch the less directory (and all subdirectories)
- *               for changes to *.less files then on detection
+ * grunt watch   Watch the scss directory (and all subdirectories)
+ *               for changes to *.scss files then on detection
  *               run 'grunt compile'
  *
  *               Options:
@@ -39,9 +39,10 @@
  *                                 path to your Moodle root directory
  *                                 when your theme is not in the
  *                                 standard location.
- * grunt compile Run the .less files through the compiler, create the
- *               RTL version of the output, then run decache so that
- *               the results can be seen on the next page load.
+ *
+ * grunt compile Run the .scss files through the compiler then run
+ *               decache so that the results can be seen on the next
+ *               page load.
  *
  *               Options:
  *
@@ -60,11 +61,7 @@
  * Lower level tasks encapsulating a specific piece of functionality
  * but usually only useful when called in combination with another.
  *
- * grunt less         Compile all less files.
- *
- * grunt less:moodle  Compile Moodle less files only.
- *
- * grunt less:editor  Compile editor less files only.
+ * grunt sass         Compile all scss files.
  *
  * grunt decache      Clears the Moodle theme cache.
  *
@@ -76,28 +73,15 @@
  *                                      not in the standard location.
  *
  *
- * grunt replace             Run all text replace tasks.
- *
- * grunt replace:rtl_images  Add _rtl to the filenames of certain images
- *                           that require flipping for use with RTL
- *                           languages.
- *
- * grunt replace:font_fix    Correct the format for the Moodle font
- *                           loader to pick up any extra fonts font.
- *
- *
- * grunt cssflip    Create moodle-rtl.css by flipping the direction styles
- *                  in moodle.css.
- *
- *
  * @package theme
  * @subpackage cul_boost
- * @author Andrew Davidson
+ * @author Stephen Sharpe
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 module.exports = function(grunt) {
 var DEBUG = !!grunt.option('dbug');
+    require('jit-grunt')(grunt);
     require('time-grunt')(grunt);
 
     // Import modules.
@@ -117,99 +101,41 @@ var DEBUG = !!grunt.option('dbug');
         moodleroot = path.resolve(dirrootopt);
     }
     var PWD = process.cwd(); // jshint ignore:line
+    var moodleroot = path.dirname(path.dirname(PWD));
+    var moodlename = path.basename(moodleroot);
+    var projectype = path.basename(path.dirname(moodleroot));
+    var vagrantmoodleroot = path.join('/var/www/html/', projectype, moodlename);
 
     grunt.initConfig({
         sass: {
-            // Compile moodle styles.
             moodle: {
                 options: {
-                    compress: true,
-                    sourceMap: false,
+                    sourceMap: false
                 },
                 files: [{
                     src: 'scss/moodle.scss',
                     dest: 'style/moodle.css'
                 }]
-            },
-            // Compile editor styles.
-            editor: {
-                options: {
-                    compress: true,
-                    sourcemap: false,
-                },
-                files: [{
-                    src: 'scss/editor.scss',
-                    dest: 'style/editor.css'
-                }]
             }
-        },
-        autoprefixer: {
-          options: {
-            browsers: [
-              'Android 2.3',
-              'Android >= 4',
-              'Chrome >= 20',
-              'Firefox >= 24', // Firefox 24 is the latest ESR
-              'Explorer >= 9',
-              'iOS >= 8',
-              'Opera >= 12',
-              'Safari >= 6'
-            ]
-          },
-          core: {
-            options: {
-              map: false
-            },
-            src: ['style/moodle.css', 'style/moodle-rtl.css', 'style/editor.css'],
-          },
         },
         watch: {
-            files: ["scss/**/*.scss", "amd/src/**/*.js"],
-            tasks: ["compile", "amd"],
-            options: {
-                spawn: false,
-                livereload: true
-            }
-        },
-        replace: {
-            rtl_images: {
-                src: 'style/moodle-rtl.css',
-                    overwrite: true,
-                    replacements: [{
-                        from: '[[pix:theme|fp/path_folder]]',
-                        to: '[[pix:theme|fp/path_folder_rtl]]'
-                    }, {
-                        from: '[[pix:t/collapsed]]',
-                        to: '[[pix:t/collapsed_rtl]]'
-                    }, {
-                        from: '[[pix:t/collapsed_empty]]',
-                        to: '[[pix:t/collapsed_empty_rtl]]'
-                    }, {
-                        from: '[[pix:y/tn]]',
-                        to: '[[pix:y/tn_rtl]]'
-                    }, {
-                        from: '[[pix:y/tp]]',
-                        to: '[[pix:y/tp_rtl]]'
-                    }, {
-                        from: '[[pix:y/ln]]',
-                        to: '[[pix:y/ln_rtl]]'
-                    }, {
-                        from: '[[pix:y/lp]]',
-                        to: '[[pix:y/lp_rtl]]'
-                    }]
+            sass: {
+                files: ["scss/**/*.scss"],
+                tasks: ["compile"]
             },
-            font_fix: {
-                src: 'style/moodle.css',
-                    overwrite: true,
-                    replacements: [{
-                        from: '../fonts/',
-                        to: '[[fontsdir]]',
-                    }]
+            js: {
+                files: ["amd/src/**/*.js"],
+                tasks: ["amd"]
             }
         },
-        jshint: {
-            options: {jshintrc: moodleroot + '/.jshintrc'},
-            files: ['**/amd/src/*.js']
+        eslint: {
+            amd: {src: ["amd/src/**/*.js"]},
+        },
+        stylelint: {
+            scss: {
+                options: {syntax: 'scss'},
+                src: ['*/**/*.scss']
+            }
         },
         uglify: {
             dynamic_mappings: {
@@ -232,28 +158,14 @@ var DEBUG = !!grunt.option('dbug');
             postcss: {
                 command: 'npm run postcss'
             },
-            deletesourcemap: {
-                command: 'rm -rf style/*.map'
-            },
-            decache: 'vagrant ssh -c "cd /var/www/html/development/cityuniversitylondon/ && sudo -u www-data /usr/bin/php admin/cli/purge_caches.php"'
+            decache: 'vagrant ssh -c "cd ' + vagrantmoodleroot + ' \
+                && sudo -u www-data \
+                    /usr/bin/php admin/cli/build_theme_css.php \
+                    --themes=cul_boost \
+                    --direction=ltr \
+                "'
         }
     });
-
-    // Load contrib tasks.
-    grunt.loadNpmTasks("grunt-autoprefixer");
-    grunt.loadNpmTasks("grunt-sass");
-    grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.loadNpmTasks("grunt-exec");
-    grunt.loadNpmTasks("grunt-text-replace");
-    grunt.loadNpmTasks("grunt-css-flip");
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-csscomb');
-    grunt.loadNpmTasks('grunt-css-wrap');
-
-    // Load core tasks.
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     // Register tasks.
     grunt.registerTask("default", ["watch"]);
@@ -261,9 +173,8 @@ var DEBUG = !!grunt.option('dbug');
 
     grunt.registerTask("compile", [
         "sass",
-        "replace:font_fix",
         "exec:postcss",
-        "exec:deletesourcemap",
         "decache"]);
+
     grunt.registerTask("amd", ["uglify", "decache"]);
 };

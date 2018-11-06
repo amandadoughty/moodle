@@ -9,6 +9,7 @@
         background-position: 50% 50%;
         background-repeat: no-repeat;
         background-size: cover;
+        max-height: calc(100% - 50px);
     }
     .dash-panel {
         body:not(.editing) & {
@@ -161,10 +162,24 @@ svg.activityicon {
     top: 0;
     left: $spacer;
     margin: 0;
+    display: none;
 }
 
 .course-content {
     .section {
+        &.current {
+            box-shadow: 0px 0px 0px 4px darken($brand-primary, 5%);
+            &:before {
+                display: none;
+            }
+        }
+        .side {
+            .section-handle {
+                > .icon {
+                    margin-left: $spacer / 2;
+                }
+            }
+        }
         .content {
             .course-summary {
                 &:empty {

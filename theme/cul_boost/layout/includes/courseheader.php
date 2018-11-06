@@ -39,6 +39,10 @@ if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
 	    $sectioninfo = html_writer::tag('div', $renderer->dashboard_section(), ['class'=>'container-fluid d-flex flex-wrap align-items-stretch position-relative']);
 	}
 
+	if ($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse' && $PAGE->pagetype != 'notes-index') {
+	    echo html_writer::tag('div', $OUTPUT->page_heading(), ['class'=>'page-header container-fluid']);
+	}
+
 	if ($sectioninfo) {
 	    echo html_writer::tag('div', $bg.$sectioninfo, ['class'=>'courseheader position-relative pt-5 mb-4']);
 	}

@@ -70,7 +70,7 @@ echo $OUTPUT->doctype() ?>
 
             if ($PAGE->pagelayout == 'course' && $COURSE->visible == 0) {
                 $showcoursebtn = $OUTPUT->show_course();
-                echo html_writer::tag('h1', get_string('coursehidden', 'theme_cul_boost') . $showcoursebtn, ['class'=>'module-hidden p-3 bg-light mb-4 text-center']);
+                echo html_writer::tag('h2', get_string('coursehidden', 'theme_cul_boost') . $showcoursebtn, ['class'=>'module-hidden p-3 bg-light mb-4 text-center']);
                 
             }
 
@@ -81,9 +81,6 @@ echo $OUTPUT->doctype() ?>
         <div id="page-content" class="row justify-content-center">
             <section id="region-main" class="<?php echo $regions['content']; ?>">
                 <?php
-                    if ($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse' && $PAGE->pagetype != 'notes-index') {
-                        echo $OUTPUT->page_heading();
-                    }
                     echo $OUTPUT->course_content_header();
                     echo $OUTPUT->main_content();
                     echo $OUTPUT->activity_navigation();

@@ -72,6 +72,7 @@ function theme_cul_boost_page_init(moodle_page $page) {
     $page->requires->js_call_amd('theme_cul_boost/navigation', 'init');
     $page->requires->js_call_amd('theme_cul_boost/stickynav', 'init');
     $page->requires->js_call_amd('theme_cul_boost/fixedbuttons', 'init');
+    $page->requires->js_call_amd('theme_cul_boost/modalposition', 'init');
     $page->requires->js_call_amd('theme_cul_boost/showcourse', 'init', ['courseid' => $COURSE->id]);
 
     return true;
