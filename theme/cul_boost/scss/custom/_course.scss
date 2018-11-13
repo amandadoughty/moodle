@@ -168,14 +168,14 @@ svg.activityicon {
 .course-content {
     .section {
         &.current {
-            box-shadow: 0px 0px 0px 4px darken($brand-primary, 5%);
+            box-shadow: 0px 0px 0px 2px #fff, 0px 0px 0px 6px darken($brand-primary, 5%);
             &:before {
                 display: none;
             }
         }
         .side {
             .section-handle {
-                > .icon {
+                >.icon {
                     margin-left: $spacer / 2;
                 }
             }
@@ -795,7 +795,7 @@ $right-container: $container-max-width+($grid-gutter-width / 2)+50px;
         // The docking button is hidden below media size xl
         // so the blocks should be visible.
         flex: 0 0 100%;
-        max-width: 100%;      
+        max-width: 100%;
         @include media-breakpoint-up(xl) {
             display: none !important;
         }
@@ -808,7 +808,7 @@ $right-container: $container-max-width+($grid-gutter-width / 2)+50px;
 
 // For consistency with styles above when blocks are docked.
 #region-main,
-#block-region-side-post {          
+#block-region-side-post {
     @include media-breakpoint-down(lg) {
         flex: 0 0 100%;
         max-width: 100%;

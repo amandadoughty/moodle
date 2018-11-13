@@ -53,7 +53,7 @@
         }
         ul.culcourse {
             li.section {
-                margin: 0 !important;
+                margin: 0 0 $spacer 0 !important;
                 padding-top: $spacer * 2 !important;
                 .side {
                     &.left {

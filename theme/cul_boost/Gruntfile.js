@@ -1,10 +1,6 @@
 /**
- * Gruntfile for compiling theme_cul_boost .scss files.
- *
- * This file configures tasks to be run by Grunt
- * http://gruntjs.com/ for the current theme.
- *
- *
+ * Gruntfile for compiling theme_cul_boost .sass files.
+
  * Requirements:
  * -------------
  * nodejs, npm, grunt-cli.
@@ -29,8 +25,8 @@
  * The nice user interface intended for everyday use. Provide a
  * high level of automation and convenience for specific use-cases.
  *
- * grunt watch   Watch the scss directory (and all subdirectories)
- *               for changes to *.scss files then on detection
+ * grunt watch   Watch the less directory (and all subdirectories)
+ *               for changes to *.less files then on detection
  *               run 'grunt compile'
  *
  *               Options:
@@ -39,10 +35,9 @@
  *                                 path to your Moodle root directory
  *                                 when your theme is not in the
  *                                 standard location.
- *
- * grunt compile Run the .scss files through the compiler then run
- *               decache so that the results can be seen on the next
- *               page load.
+ * grunt compile Run the .less files through the compiler, create the
+ *               RTL version of the output, then run decache so that
+ *               the results can be seen on the next page load.
  *
  *               Options:
  *
@@ -54,25 +49,6 @@
  * grunt amd     Create the Asynchronous Module Definition JavaScript files.  See: MDL-49046.
  *               Done here as core Gruntfile.js currently *nix only.
  *
- *
- *
- * Plumbing tasks & targets:
- * -------------------------
- * Lower level tasks encapsulating a specific piece of functionality
- * but usually only useful when called in combination with another.
- *
- * grunt sass         Compile all scss files.
- *
- * grunt decache      Clears the Moodle theme cache.
- *
- *                    Options:
- *
- *                    --dirroot=<path>  Optional. Explicitly define
- *                                      the path to your Moodle root
- *                                      directory when your theme is
- *                                      not in the standard location.
- *
- *
  * @package theme
  * @subpackage cul_boost
  * @author Stephen Sharpe
@@ -81,7 +57,6 @@
 
 module.exports = function(grunt) {
 var DEBUG = !!grunt.option('dbug');
-    require('jit-grunt')(grunt);
     require('time-grunt')(grunt);
 
     // Import modules.
@@ -108,34 +83,56 @@ var DEBUG = !!grunt.option('dbug');
 
     grunt.initConfig({
         sass: {
+            // Compile moodle styles.
             moodle: {
                 options: {
-                    sourceMap: false
+                    compress: true,
+                    sourceMap: false,
                 },
                 files: [{
                     src: 'scss/moodle.scss',
                     dest: 'style/moodle.css'
                 }]
+            },
+            // Compile editor styles.
+            editor: {
+                options: {
+                    compress: true,
+                    sourcemap: false,
+                },
+                files: [{
+                    src: 'scss/editor.scss',
+                    dest: 'style/editor.css'
+                }]
             }
         },
         watch: {
-            sass: {
+            options: {
+                spawn: false,
+                livereload: true
+            },
+            scss: {
                 files: ["scss/**/*.scss"],
                 tasks: ["compile"]
             },
-            js: {
+            amd: {
                 files: ["amd/src/**/*.js"],
                 tasks: ["amd"]
+            },
+        },
+        replace: {
+            font_fix: {
+                src: 'style/moodle.css',
+                    overwrite: true,
+                    replacements: [{
+                        from: '../fonts/',
+                        to: '[[fontsdir]]',
+                    }]
             }
         },
-        eslint: {
-            amd: {src: ["amd/src/**/*.js"]},
-        },
-        stylelint: {
-            scss: {
-                options: {syntax: 'scss'},
-                src: ['*/**/*.scss']
-            }
+        jshint: {
+            options: {jshintrc: moodleroot + '/.jshintrc'},
+            files: ['**/amd/src/*.js']
         },
         uglify: {
             dynamic_mappings: {
@@ -158,14 +155,22 @@ var DEBUG = !!grunt.option('dbug');
             postcss: {
                 command: 'npm run postcss'
             },
-            decache: 'vagrant ssh -c "cd ' + vagrantmoodleroot + ' \
-                && sudo -u www-data \
-                    /usr/bin/php admin/cli/build_theme_css.php \
-                    --themes=cul_boost \
-                    --direction=ltr \
-                "'
+            deletesourcemap: {
+                command: 'rm -rf style/*.map'
+            },
+            decache: 'vagrant ssh -c "cd ' + vagrantmoodleroot + ' && sudo -u www-data /usr/bin/php admin/cli/purge_caches.php"'
         }
     });
+
+    // Load contrib tasks.
+    grunt.loadNpmTasks("grunt-sass");
+    grunt.loadNpmTasks("grunt-contrib-watch");
+    grunt.loadNpmTasks("grunt-exec");
+    grunt.loadNpmTasks("grunt-text-replace");
+
+    // Load core tasks.
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     // Register tasks.
     grunt.registerTask("default", ["watch"]);
@@ -173,8 +178,9 @@ var DEBUG = !!grunt.option('dbug');
 
     grunt.registerTask("compile", [
         "sass",
+        "replace:font_fix",
         "exec:postcss",
+        "exec:deletesourcemap",
         "decache"]);
-
     grunt.registerTask("amd", ["uglify", "decache"]);
 };
