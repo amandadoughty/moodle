@@ -159,9 +159,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $title . '<ol class="breadcrumb d-flex flex-wrap align-items-center justify-content-center justify-content-md-start">'.$listitems.'</ul>';
     }
 
-	public function page_heading($tag = 'h2') {
+	public function page_heading($tag = 'h1') {
 	    global $COURSE;
-	    $heading = html_writer::tag($tag, $this->page->heading, array('class'=>'pageheading font-weight-light mb-4'));
+	    $heading = html_writer::tag($tag, $this->page->heading, array('class'=>'pageheading font-weight-normal mb-4'));
 	    return $heading;
 	}
 

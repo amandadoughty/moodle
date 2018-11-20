@@ -1,5 +1,9 @@
 <?php
 
+if (($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse') && $PAGE->pagetype != 'notes-index') {
+    echo html_writer::tag('div', $OUTPUT->page_heading(), ['class'=>'page-header container-fluid']);
+}
+
 if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
 
 	$sectioninfo = '';
@@ -37,10 +41,6 @@ if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
 	}
 	if (isset($renderer) && $course->format == 'culcourse' && !empty($renderer->dashboard_section())) {
 	    $sectioninfo = html_writer::tag('div', $renderer->dashboard_section(), ['class'=>'container-fluid d-flex flex-wrap align-items-stretch position-relative']);
-	}
-
-	if ($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse' && $PAGE->pagetype != 'notes-index') {
-	    echo html_writer::tag('div', $OUTPUT->page_heading(), ['class'=>'page-header container-fluid']);
 	}
 
 	if ($sectioninfo) {

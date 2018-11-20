@@ -3,7 +3,7 @@
 $find = '';
     
 if ($findtitle) {
-    $find .= html_writer::tag('h2', $findtitle, ['class'=>'findmodule-title text-primary']);
+    $find .= html_writer::tag('h2', $findtitle, ['class'=>'findmodule-title']);
 }
 
 if ($findcontent) {
