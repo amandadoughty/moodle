@@ -3,7 +3,7 @@ define(['jquery', 'core/log'], function($, log) {
     return {
         init: function() {
 
-            $('.modal').each(function() {
+            $('.bootstrapelements .modal').each(function() {
                 $(this).appendTo('body');
             });
 
