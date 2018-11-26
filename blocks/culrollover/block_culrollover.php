@@ -43,54 +43,28 @@ class block_culrollover extends block_base {
         }
 
         $this->content = new stdClass();
-        $this->content->items = array();
-        $this->content->icons = array();
+        $this->content->items = [];
+        $this->content->icons = [];
         $this->content->footer = '';
 
-        // user/index.php expect course context, so get one if page has module context.
-        $currentcontext = $this->page->context->get_course_context(false);
-
-        if (! empty($this->config->text)) {
-            $this->content->text = $this->config->text;
-        }
-
-        $this->content = '';
-        if (empty($currentcontext)) {
-            return $this->content;
-        }
-        if ($this->page->course->id == SITEID) {
-            $this->content->text .= "site context";
-        }
-
-        if (! empty($this->config->text)) {
-            $this->content->text .= $this->config->text;
-        }
+        $this->content->text = 'boo';
 
         return $this->content;
     }
 
     // my moodle can only have SITEID and it's redundant here, so take it away
     public function applicable_formats() {
-        return array('all' => false,
-                     'site' => true,
-                     'site-index' => true,
-                     'course-view' => true, 
-                     'course-view-social' => false,
-                     'mod' => true, 
-                     'mod-quiz' => false);
+        return [
+                    'all' => false,
+                    'course-view' => true
+                ];
     }
 
     public function instance_allow_multiple() {
-          return true;
+          return false;
     }
 
-    function has_config() {return true;}
-
-    public function cron() {
-            mtrace( "Hey, my cron script is running" );
-             
-                 // do something
-                  
-                      return true;
+    public function has_config() {
+        return false;
     }
 }

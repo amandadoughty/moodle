@@ -24,10 +24,10 @@
  */
 
 $string['blockstring'] = 'Block string';
+$string['culrollover:addinstance'] = 'Add a culrollover block';
+$string['culrollover:myaddinstance'] = 'Add a culrollover block to my moodle';
 $string['descconfig'] = 'Description of the config section';
 $string['descfoo'] = 'Config description';
 $string['headerconfig'] = 'Config section header';
 $string['labelfoo'] = 'Config label';
-$string['culrollover:addinstance'] = 'Add a culrollover block';
-$string['culrollover:myaddinstance'] = 'Add a culrollover block to my moodle';
 $string['pluginname'] = 'culrollover';
