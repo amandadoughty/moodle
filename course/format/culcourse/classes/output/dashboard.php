@@ -542,7 +542,6 @@ class dashboard implements templatable, renderable {
         require_once($CFG->dirroot . '/course/lib.php');
 
         $modinfo = get_fast_modinfo($course);
-
         $modfullnames = [];
         $archetypes = [];
         $activities = [];
@@ -582,7 +581,7 @@ class dashboard implements templatable, renderable {
         }
 
         if (!count($modfullnames)) {
-            return '';
+            return $sortedactivities;
         }
 
         \core_collator::asort($modfullnames); // sort by setting if it exists
@@ -714,6 +713,7 @@ class dashboard implements templatable, renderable {
         $content = '';
         $modfullnames = [];
         $cms = $modinfo->get_instances_of('lti');
+        $activities = [];
 
         foreach($cms as $cm) {
             // Exclude activities which are not visible or have no link (=label)
