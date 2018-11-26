@@ -589,6 +589,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	   		}
 
 		    $lastcourse = $DB->get_record('course', array('id'=>$course));
+
+		    if (!$lastcourse) {
+		    	continue;
+		    }
 		    
 		    $course = new course_in_list($lastcourse);
 
