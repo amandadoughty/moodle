@@ -31,7 +31,7 @@ class block_culrollover extends block_base {
     }
 
     function get_content() {
-        global $CFG, $DB, $COURSE, $OUTPUT;
+        global $CFG, $OUTPUT;
 
         if ($this->content !== null) {
             return $this->content;
@@ -47,21 +47,12 @@ class block_culrollover extends block_base {
         $this->content->icons = [];
         $this->content->footer = '';
 
-        $courseid = $COURSE->id;
-        $configname = 'rolloverlocked';
-        $table = 'cul_rollover_config';
-        $record = $DB->get_record($table, ['courseid' => $courseid, 'name' => $configname]);
-
-        if (!$record) {
-            $this->content = '';
-            return $this->content;
-        }
-
         $this->content->text = 'boo';
 
         return $this->content;
     }
 
+    // my moodle can only have SITEID and it's redundant here, so take it away
     public function applicable_formats() {
         return [
                     'all' => false,
