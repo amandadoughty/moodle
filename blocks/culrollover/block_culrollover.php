@@ -64,9 +64,9 @@ class block_culrollover extends block_base {
 
     public function applicable_formats() {
         return [
-                    'all' => false,
-                    'course-view' => true
-                ];
+            'all' => false,
+            'course-view' => true
+        ];
     }
 
     public function instance_allow_multiple() {
