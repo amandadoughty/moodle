@@ -23,8 +23,8 @@ use core_text;
 use html_writer;
 use tabobject;
 use tabtree;
-use coursecat;
-use course_in_list;
+use core_course_category;
+use core_course_list_element;
 use completion_info;
 use custom_menu_item;
 use custom_menu;
@@ -555,7 +555,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    global $CFG, $DB, $USER;
 
 	    require_once($CFG->dirroot.'/course/renderer.php');
-	    include_once($CFG->dirroot.'/lib/coursecatlib.php');
 
 	    if (!empty($USER->currentcourseaccess)) {
 	    	$courses = $USER->currentcourseaccess;
@@ -594,7 +593,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		    	continue;
 		    }
 		    
-		    $course = new course_in_list($lastcourse);
+		    $course = new core_course_list_element($lastcourse);
 
 		    $courseinfo = new stdClass();
 		    $courseinfo->name = $course->fullname;

@@ -102,7 +102,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
      * Returns HTML to display a tree of subcategories and courses in the given category
      *
      * @param block_culcourse_listing_helper $chelper various display options
-     * @param coursecat $coursecat top category (this category's name and description will NOT be added to the tree)
+     * @param core_course_category $coursecat top category (this category's name and description will NOT be added to the tree)
      * @return string
      */
     protected function coursecat_tree(block_culcourse_listing_helper $chelper, $coursecat) {
