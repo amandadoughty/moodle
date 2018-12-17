@@ -7,12 +7,8 @@ if (($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse') && $PAGE-
 if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
 
 	$sectioninfo = '';
-
-	require_once($CFG->libdir.'/coursecatlib.php');
-
 	$extraclass = 'courseheader w-100 py-4 px-3 mb-3';
-
-	$course = new course_in_list($COURSE);
+	$course = new core_course_list_element($COURSE);
 
 	$image = '';
 	$url = '';

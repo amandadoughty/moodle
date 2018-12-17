@@ -195,8 +195,7 @@ function theme_cul_boost_get_html_for_settings(renderer_base $output, moodle_pag
 
     $return->courseimage = '';
     if ($COURSE->id > 1) {
-        require_once($CFG->libdir. '/coursecatlib.php');
-        $course = new course_in_list($COURSE);
+        $course = new core_course_list_element($COURSE);
         // Get course overview files.
         $contentimages = $contentfiles = '';
         foreach ($course->get_course_overviewfiles() as $file) {
