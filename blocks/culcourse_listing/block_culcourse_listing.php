@@ -22,7 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once($CFG->libdir . '/coursecatlib.php');
 require_once($CFG->dirroot.'/blocks/culcourse_listing/locallib.php');
 require_once($CFG->dirroot.'/blocks/culcourse_listing/renderer.php');
 
@@ -94,7 +93,7 @@ class block_culcourse_listing extends block_base {
         $renderer->set_config($config);
         $renderer->set_preferences($preferences);
 
-        if (empty($enrolledcourses) && !coursecat::has_capability_on_any('moodle/course:view')) {
+        if (empty($enrolledcourses) && !core_course_category::has_capability_on_any('moodle/course:view')) {
             $this->content->text .= get_string('nocourses', 'my');
         } else {
             // Render the favourites area.

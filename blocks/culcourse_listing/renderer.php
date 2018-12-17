@@ -43,16 +43,15 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      */
     public function culcourse_listing(block_culcourse_listing_helper $chelper) {
         global $CFG;
-        require_once($CFG->libdir. '/coursecatlib.php');
 
-        return $this->coursecat_tree($chelper, coursecat::get(0));
+        return $this->coursecat_tree($chelper, core_course_category::get(0));
     }
 
     /**
      * Returns HTML to display a tree of subcategories and courses in the given category
      *
      * @param block_culcourse_listing_helper $chelper various display options
-     * @param coursecat $coursecat top category (this category's name and description will NOT be added to the tree)
+     * @param core_course_category $coursecat top category (this category's name and description will NOT be added to the tree)
      * @return string
      */
     protected function coursecat_tree(block_culcourse_listing_helper $chelper, $coursecat) {
@@ -67,7 +66,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             (
                 $coursecat->id == 0 ||
                 array_key_exists($coursecat->id, $chelper->get_my_categories()) ||
-                coursecat::has_capability_on_any('moodle/course:view')
+                core_course_category::has_capability_on_any('moodle/course:view')
             )
         ) {
             $all = get_string('all', 'block_culcourse_listing');
@@ -205,7 +204,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * This method is re-used by AJAX to expand content of not loaded category
      *
      * @param block_culcourse_listing_helper $chelper various display options
-     * @param coursecat $coursecat
+     * @param core_course_category $coursecat
      * @param int $depth depth of the category in the current tree
      * @return string
      */
@@ -266,7 +265,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * This is an internal function, to display a particular category and all its contents.
      *
      * @param block_culcourse_listing_helper $chelper various display options
-     * @param coursecat $coursecat
+     * @param core_course_category $coursecat
      * @param int $depth depth of this category in the current tree
      * @return string
      */
@@ -443,7 +442,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      *
      *
      * @param block_culcourse_listing_helper $chelper various display options
-     * @param course_in_list|stdClass $course
+     * @param core_course_list_element|stdClass $course
      * @param string $additionalclasses additional classes to add to the main <div> tag (usually
      *    depend on the course position in list - first/last/even/odd)
      * @param string $move html for the move icons (only used for favourites)
@@ -454,11 +453,10 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
 
         // Check if course exists.
         if ($course instanceof stdClass) {
-            require_once($CFG->libdir. '/coursecatlib.php');
-            $course = new course_in_list($course);
+            $course = new core_course_list_element($course);
         }
 
-        if (!$course instanceof course_in_list) {
+        if (!$course instanceof core_course_list_element) {
             return '';
         }
 
@@ -574,7 +572,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * This method is called from coursecat_course() and may be re-used in AJAX
      *
      * @param block_culcourse_listing_helper $chelper various display options
-     * @param stdClass|course_in_list $course
+     * @param stdClass|core_course_list_element $course
      * @return string
      */
     protected function coursecat_course_summary(block_culcourse_listing_helper $chelper, $course) {
@@ -585,8 +583,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         }
 
         if ($course instanceof stdClass) {
-            require_once($CFG->libdir. '/coursecatlib.php');
-            $course = new course_in_list($course);
+            $course = new core_course_list_element($course);
         }
 
         $content = '';
@@ -825,7 +822,6 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      */
     public function coursecat_ajax($chelper) {
         global $DB, $CFG;
-        require_once($CFG->libdir. '/coursecatlib.php');
 
         $type = required_param('type', PARAM_INT);
         // The json endcoded stringified select options from filter form.
@@ -1103,7 +1099,7 @@ class block_culcourse_listing_helper {
     /**
      * Returns the array of categories containing courses the user is enrolled in.
      *
-     * @return array of coursecat categories with category id as key.
+     * @return array of core_course_category categories with category id as key.
      */
     public function get_my_categories() {
         return $this->mycategories;
@@ -1133,7 +1129,7 @@ class block_culcourse_listing_helper {
      * Sets the array of states for category filtering.
      *
      * @param array $filteredcategoryids
-     * @return array of course_in_list favourites with course id as key.
+     * @return array of core_course_list_element favourites with course id as key.
      */
     public function set_filtered_category_ids($filteredcategoryids) {
         $this->filteredcategoryids = $filteredcategoryids;
@@ -1231,7 +1227,7 @@ class block_culcourse_listing_helper {
     /**
      * Returns given course's summary with proper embedded files urls and formatted
      *
-     * @param course_in_list $course
+     * @param core_course_list_element $course
      * @param array|stdClass $options additional formatting options
      * @return string
      */
@@ -1255,7 +1251,7 @@ class block_culcourse_listing_helper {
      * Returns course name as it is configured to appear in courses lists formatted to
      * course context
      *
-     * @param course_in_list $course
+     * @param core_course_list_element $course
      * @param array|stdClass $options additional formatting options
      * @return string
      */

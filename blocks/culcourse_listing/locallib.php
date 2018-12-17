@@ -79,10 +79,10 @@ function block_culcourse_listing_update_filter_pref($filter) {
 /*** FAVOURITE FUNCTIONS ***/
 
 /**
- * Gets the users favourites as an array of course_in_list objects.
+ * Gets the users favourites as an array of core_course_list_element objects.
  *
  * @param array $preferences
- * @return array $favourites of course_in_list objects with course id as key,
+ * @return array $favourites of core_course_list_element objects with course id as key,
  * or empty array if none.
  */
 function block_culcourse_listing_get_favourite_courses($preferences) {
@@ -104,9 +104,8 @@ function block_culcourse_listing_get_favourite_courses($preferences) {
         foreach ($usersortorder as $key => $favourite) {
             // Check that the favourite course still exists.
             if (array_key_exists($favourite, $courses)) {
-                // Get array of course_in_list objects in usersortorder.
-                require_once($CFG->libdir. '/coursecatlib.php');
-                $course = new course_in_list($courses[$favourite]);
+                // Get array of core_course_list_element objects in usersortorder.
+                $course = new core_course_list_element($courses[$favourite]);
 
                 if ($course->is_uservisible()) {
                     $favourites[$favourite] = $course;
@@ -171,8 +170,8 @@ function block_culcourse_listing_edit_favourites($action, $cid) {
 /**
  * Binary safe case-insensitive string comparison.
  *
- * @param array a first favourite course_in_list object
- * @param string b second favourite course_in_list object
+ * @param array a first favourite core_course_list_element object
+ * @param string b second favourite core_course_list_element object
  * @return Returns < 0 if a->displayname is less than b->displayname;
  * > 0 if a->displayname is greater than b->displayname, and 0 if they are equal.
  */
@@ -193,7 +192,7 @@ function block_culcourse_listing_strcasecmp($a, $b) {
  * The new sort order is updated in the user preference setting.
  *
  * @param array $favourites of course ids
- * @return array $favourites of course_in_list objects
+ * @return array $favourites of core_course_list_element objects
  */
 function block_culcourse_listing_reorder_favourites($favourites) {
     global $CFG, $DB, $USER;
@@ -211,9 +210,8 @@ function block_culcourse_listing_reorder_favourites($favourites) {
     $favourites = $DB->get_records_list('course', 'id', array_keys($favourites));
 
     foreach ($favourites as $favourite) {
-        // Get array of course_in_list objects in usersortorder.
-        require_once($CFG->libdir. '/coursecatlib.php');
-        $favourites[$favourite->id] = new course_in_list($favourite);
+        // Get array of core_course_list_element objects in usersortorder.
+        $favourites[$favourite->id] = new core_course_list_element($favourite);
     }
 
     // Sort in aphabetical order.
@@ -229,7 +227,7 @@ function block_culcourse_listing_reorder_favourites($favourites) {
 /**
  * Updates the year and period arrays based on regex matching of a course field/attribute
  *
- * @param course_in_list $course
+ * @param core_course_list_element $course
  * @param array $config
  * @param array $years passed by reference
  * @param array $periods passed by reference
@@ -258,7 +256,7 @@ function block_culcourse_listing_get_filter_list_regex($course, $config, &$years
  * Updates the year and period arrays on comparing the course start date with ranges in
  * block_culcourse_listing_prds
  *
- * @param course_in_list $course
+ * @param core_course_list_element $course
  * @param array $config
  * @param array $years
  * @param array $periods
@@ -485,7 +483,7 @@ function block_culcourse_listing_set_date_filtered_course($course, $config, $yea
 /**
  * Returns the course year and period based on regex matching of a course field/attribute
  *
- * @param course_in_list $course
+ * @param core_course_list_element $course
  * @param array $config
  * @param array $daterangeperiods not used
  * @return array of year and period values for $course 
@@ -514,7 +512,7 @@ function block_culcourse_listing_get_filter_meta_regex($course, $config, $datera
  * Returns the course year and period based on comparing the course start date with ranges in
  * culcourse_listing_periods
  *
- * @param course_in_list $course
+ * @param core_course_list_element $course
  * @param array $config
  * @param array $daterangeperiods block_culcourse_listing_prds records.
  * @return array of year and period values for $course
@@ -581,8 +579,8 @@ function block_culcourse_listing_get_categories($courses, $filteredcourseids) {
 
     $filteredparentids = array_unique($filteredparentids);
     // Many courses will share the same parent. So get the unique parent ids and then
-    // convert them into an array of coursecat objects.
-    $parents = coursecat::get_many(array_unique($parents));
+    // convert them into an array of core_course_category objects.
+    $parents = core_course_category::get_many(array_unique($parents));
 
     foreach ($parents as $parent) {
         $ascendants = array();
@@ -598,8 +596,8 @@ function block_culcourse_listing_get_categories($courses, $filteredcourseids) {
             }
         }
 
-        // Get an array of coursecat objects for every ascendant of every $parent.
-        $ascendants = coursecat::get_many($parent->get_parents());
+        // Get an array of core_course_category objects for every ascendant of every $parent.
+        $ascendants = core_course_category::get_many($parent->get_parents());
 
         foreach ($ascendants as $ascendant) {
             // If the ascendant category does not contain a course with a filter flag value of 1 then test
