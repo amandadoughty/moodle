@@ -290,90 +290,48 @@ class provider implements
     /**
      * Delete all user data for the specified user, in the specified contexts.
      *
-     * @param   approved_contextlist    $contextlist    The approved contexts and user information to delete information for.
+     * Removing assessments of submissions is not trivial. Removing one user's data can easily affect
+     * other users' grades and feedback. So we replace the non-essential contents with a "deleted" message,
+     * but keep the actual info in place. The argument is that one's right for privacy should not overweight others'
+     * right for accessing their own personal data and be evaluated on their basis.     
+     *
+     * @param approved_contextlist $contextlist The approved contexts and user information to delete information for.
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
+
+        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
         $user = $contextlist->get_user();
-        $userid = $user->id;
-        foreach ($contextlist as $context) {
-            // Get the course module.
-            $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
-            $peerassessment = $DB->get_record('peerassessment', ['id' => $cm->instance]);
 
-            $DB->delete_records('peerassessment_track_prefs', [
-                'peerassessmentid' => $peerassessment->id,
-                'userid' => $userid,
-            ]);
-            $DB->delete_records('peerassessment_subscriptions', [
-                'peerassessment' => $peerassessment->id,
-                'userid' => $userid,
-            ]);
-            $DB->delete_records('peerassessment_read', [
-                'peerassessmentid' => $peerassessment->id,
-                'userid' => $userid,
-            ]);
+        // Replace personal data in feedback from peers - feedback is seen as belonging to the recipient.
+        $sql = "SELECT wa.id AS assessmentid
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id AND m.name = :module
+                  JOIN {context} ctx ON cm.id = ctx.instanceid AND ctx.contextlevel = :contextlevel
+                  JOIN {peerassessment} p ON cm.instance = p.id
+                  JOIN {peerassessment_peers} pp ON pp.peerassessment = p.id AND ps.gradefor = :userid
+                 WHERE ctx.id {$contextsql}";
 
-            $DB->delete_records('peerassessment_digests', [
-                'peerassessment' => $peerassessment->id,
-                'userid' => $userid,
-            ]);
+        $params = $contextparams + [
+            'module' => 'peerassessment',
+            'contextlevel' => CONTEXT_MODULE,
+            'gradefor' => $user->id,
+        ];
 
-            // Delete all discussion items.
-            $DB->delete_records_select(
-                'peerassessment_queue',
-                "userid = :userid AND discussionid IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessment)",
-                [
-                    'userid' => $userid,
-                    'peerassessment' => $peerassessment->id,
-                ]
-            );
+        $assessmentids = $DB->get_fieldset_sql($sql, $params);
 
-            $DB->delete_records('peerassessment_discussion_subs', [
-                'peerassessment' => $peerassessment->id,
-                'userid' => $userid,
-            ]);
+        if ($assessmentids) {
+            list($assessmentidsql, $assessmentidparams) = $DB->get_in_or_equal($assessmentids, SQL_PARAMS_NAMED);
 
-            // Do not delete discussion or peerassessment posts.
-            // Instead update them to reflect that the content has been deleted.
-            $postsql = "userid = :userid AND discussion IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessment)";
-            $postidsql = "SELECT fp.id FROM {peerassessment_posts} fp WHERE {$postsql}";
-            $postparams = [
-                'peerassessment' => $peerassessment->id,
-                'userid' => $userid,
-            ];
-
-            // Update the subject.
-            $DB->set_field_select('peerassessment_posts', 'subject', '', $postsql, $postparams);
-
-            // Update the message and its format.
-            $DB->set_field_select('peerassessment_posts', 'message', '', $postsql, $postparams);
-            $DB->set_field_select('peerassessment_posts', 'messageformat', FORMAT_PLAIN, $postsql, $postparams);
-
-            // Mark the post as deleted.
-            $DB->set_field_select('peerassessment_posts', 'deleted', 1, $postsql, $postparams);
-
-            // Note: Do _not_ delete ratings of other users. Only delete ratings on the users own posts.
-            // Ratings are aggregate fields and deleting the rating of this post will have an effect on the rating
-            // of any post.
-            \core_rating\privacy\provider::delete_ratings_select($context, 'mod_peerassessment', 'post',
-                    "IN ($postidsql)", $postparams);
-
-            // Delete all Tags.
-            \core_tag\privacy\provider::delete_item_tags_select($context, 'mod_peerassessment', 'peerassessment_posts',
-                    "IN ($postidsql)", $postparams);
-
-            // Delete all files from the posts.
-            $fs = get_file_storage();
-            $fs->delete_area_files_select($context->id, 'mod_peerassessment', 'post', "IN ($postidsql)", $postparams);
-            $fs->delete_area_files_select($context->id, 'mod_peerassessment', 'attachment', "IN ($postidsql)", $postparams);
-        }
+            $DB->set_field_select('peerassessment_peers', 'feedback', get_string('privacy:request:delete:content',
+                'mod_peerassessment'), "id $assessmentidsql", $assessmentidparams);
+        }        
     }
 
     /**
      * Delete multiple users within a single context.
      *
-     * @param   approved_userlist       $userlist The approved context and user information to delete information for.
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
         global $DB;
