@@ -29,7 +29,7 @@ use \core_privacy\local\request\approved_contextlist;
 use \core_privacy\local\request\approved_userlist;
 use \core_privacy\local\request\deletion_criteria;
 use \core_privacy\local\request\writer;
-use \core_privacy\local\request\helper as request_helper;
+use \core_privacy\local\request\helper;
 use \core_privacy\local\metadata\collection;
 use \core_privacy\local\request\transform;
 
@@ -44,12 +44,13 @@ defined('MOODLE_INTERNAL') || die();
 class provider implements
     // This plugin has data.
     \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider,
 
     // This plugin is capable of determining which users have data within it.
-    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\core_userlist_provider
 {
 
-    use subcontext_info;
+    // use subcontext_info;
 
     /**
      * Returns meta data about this system.
@@ -117,13 +118,13 @@ class provider implements
                   JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modname
                   JOIN {peerassessment} p ON p.id = cm.instance
-             LEFT JOIN {peerassessment_submissions} ps ON ps.assignment = p.id
-             LEFT JOIN {peerassessment_peers} pp ON ps.peerasessment = p.id
+             LEFT JOIN {peerassessment_submission} ps ON ps.assignment = p.id
+             LEFT JOIN {peerassessment_peers} pp ON pp.peerassessment = p.id
                  WHERE (
                     ps.userid = :userid OR
                     ps.gradedby = :ps_gradedby OR
                     pp.gradedby = :pp_gradedby OR
-                    pp.gradefor = :gradefor OR
+                    pp.gradefor = :gradefor
                 )
         ";
         $params = [
@@ -201,6 +202,8 @@ class provider implements
      * @param approved_contextlist $contextlist The approved contexts to export information for.
      */
     public static function export_user_data(approved_contextlist $contextlist) {
+        global $DB;
+
         foreach ($contextlist->get_contexts() as $context) {
             // Check that the context is a module context.
             if ($context->contextlevel != CONTEXT_MODULE) {
@@ -212,8 +215,8 @@ class provider implements
             helper::export_context_files($context, $user);
 
             writer::with_context($context)->export_data([], $peerassessmentdata);
-            // list($context, $course, $cm) = get_context_info_array($context->id);
-            $peerassessment = $DB->get_record('peerassessment', ['id' => $context->instanceid], '*', MUST_EXIST);
+            list($context, $course, $cm) = get_context_info_array($context->id);
+            $peerassessment = $DB->get_record('peerassessment', ['id' => $cm->instance], '*', MUST_EXIST);
 
             // I need to find out if I'm a student or a teacher.
             if ($userids = self::get_graded_users($user->id, $peerassessment)) {
@@ -236,55 +239,55 @@ class provider implements
      * @param   context                 $context   The specific context to delete data for.
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
-        global $DB;
+        // global $DB;
 
-        // Check that this is a context_module.
-        if (!$context instanceof \context_module) {
-            return;
-        }
+        // // Check that this is a context_module.
+        // if (!$context instanceof \context_module) {
+        //     return;
+        // }
 
-        // Get the course module.
-        if (!$cm = get_coursemodule_from_id('peerassessment', $context->instanceid)) {
-            return;
-        }
+        // // Get the course module.
+        // if (!$cm = get_coursemodule_from_id('peerassessment', $context->instanceid)) {
+        //     return;
+        // }
 
-        $peerassessmentid = $cm->instance;
+        // $peerassessmentid = $cm->instance;
 
-        $DB->delete_records('peerassessment_track_prefs', ['peerassessmentid' => $peerassessmentid]);
-        $DB->delete_records('peerassessment_subscriptions', ['peerassessment' => $peerassessmentid]);
-        $DB->delete_records('peerassessment_read', ['peerassessmentid' => $peerassessmentid]);
-        $DB->delete_records('peerassessment_digests', ['peerassessment' => $peerassessmentid]);
+        // $DB->delete_records('peerassessment_track_prefs', ['peerassessmentid' => $peerassessmentid]);
+        // $DB->delete_records('peerassessment_subscriptions', ['peerassessment' => $peerassessmentid]);
+        // $DB->delete_records('peerassessment_read', ['peerassessmentid' => $peerassessmentid]);
+        // $DB->delete_records('peerassessment_digests', ['peerassessment' => $peerassessmentid]);
 
-        // Delete all discussion items.
-        $DB->delete_records_select(
-            'peerassessment_queue',
-            "discussionid IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessment)",
-            [
-                'peerassessment' => $peerassessmentid,
-            ]
-        );
+        // // Delete all discussion items.
+        // $DB->delete_records_select(
+        //     'peerassessment_queue',
+        //     "discussionid IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessment)",
+        //     [
+        //         'peerassessment' => $peerassessmentid,
+        //     ]
+        // );
 
-        $DB->delete_records_select(
-            'peerassessment_posts',
-            "discussion IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessment)",
-            [
-                'peerassessment' => $peerassessmentid,
-            ]
-        );
+        // $DB->delete_records_select(
+        //     'peerassessment_posts',
+        //     "discussion IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessment)",
+        //     [
+        //         'peerassessment' => $peerassessmentid,
+        //     ]
+        // );
 
-        $DB->delete_records('peerassessment_discussion_subs', ['peerassessment' => $peerassessmentid]);
-        $DB->delete_records('peerassessment_discussions', ['peerassessment' => $peerassessmentid]);
+        // $DB->delete_records('peerassessment_discussion_subs', ['peerassessment' => $peerassessmentid]);
+        // $DB->delete_records('peerassessment_discussions', ['peerassessment' => $peerassessmentid]);
 
-        // Delete all files from the posts.
-        $fs = get_file_storage();
-        $fs->delete_area_files($context->id, 'mod_peerassessment', 'post');
-        $fs->delete_area_files($context->id, 'mod_peerassessment', 'attachment');
+        // // Delete all files from the posts.
+        // $fs = get_file_storage();
+        // $fs->delete_area_files($context->id, 'mod_peerassessment', 'post');
+        // $fs->delete_area_files($context->id, 'mod_peerassessment', 'attachment');
 
-        // Delete all ratings in the context.
-        \core_rating\privacy\provider::delete_ratings($context, 'mod_peerassessment', 'post');
+        // // Delete all ratings in the context.
+        // \core_rating\privacy\provider::delete_ratings($context, 'mod_peerassessment', 'post');
 
-        // Delete all Tags.
-        \core_tag\privacy\provider::delete_item_tags($context, 'mod_peerassessment', 'peerassessment_posts');
+        // // Delete all Tags.
+        // \core_tag\privacy\provider::delete_item_tags($context, 'mod_peerassessment', 'peerassessment_posts');
     }
 
     /**
@@ -298,34 +301,34 @@ class provider implements
      * @param approved_contextlist $contextlist The approved contexts and user information to delete information for.
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
-        global $DB;
+        // global $DB;
 
-        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
-        $user = $contextlist->get_user();
+        // list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        // $user = $contextlist->get_user();
 
-        // Replace personal data in feedback from peers - feedback is seen as belonging to the recipient.
-        $sql = "SELECT wa.id AS assessmentid
-                  FROM {course_modules} cm
-                  JOIN {modules} m ON cm.module = m.id AND m.name = :module
-                  JOIN {context} ctx ON cm.id = ctx.instanceid AND ctx.contextlevel = :contextlevel
-                  JOIN {peerassessment} p ON cm.instance = p.id
-                  JOIN {peerassessment_peers} pp ON pp.peerassessment = p.id AND ps.gradefor = :userid
-                 WHERE ctx.id {$contextsql}";
+        // // Replace personal data in feedback from peers - feedback is seen as belonging to the recipient.
+        // $sql = "SELECT wa.id AS assessmentid
+        //           FROM {course_modules} cm
+        //           JOIN {modules} m ON cm.module = m.id AND m.name = :module
+        //           JOIN {context} ctx ON cm.id = ctx.instanceid AND ctx.contextlevel = :contextlevel
+        //           JOIN {peerassessment} p ON cm.instance = p.id
+        //           JOIN {peerassessment_peers} pp ON pp.peerassessment = p.id AND ps.gradefor = :userid
+        //          WHERE ctx.id {$contextsql}";
 
-        $params = $contextparams + [
-            'module' => 'peerassessment',
-            'contextlevel' => CONTEXT_MODULE,
-            'gradefor' => $user->id,
-        ];
+        // $params = $contextparams + [
+        //     'module' => 'peerassessment',
+        //     'contextlevel' => CONTEXT_MODULE,
+        //     'gradefor' => $user->id,
+        // ];
 
-        $assessmentids = $DB->get_fieldset_sql($sql, $params);
+        // $assessmentids = $DB->get_fieldset_sql($sql, $params);
 
-        if ($assessmentids) {
-            list($assessmentidsql, $assessmentidparams) = $DB->get_in_or_equal($assessmentids, SQL_PARAMS_NAMED);
+        // if ($assessmentids) {
+        //     list($assessmentidsql, $assessmentidparams) = $DB->get_in_or_equal($assessmentids, SQL_PARAMS_NAMED);
 
-            $DB->set_field_select('peerassessment_peers', 'feedback', get_string('privacy:request:delete:content',
-                'mod_peerassessment'), "id $assessmentidsql", $assessmentidparams);
-        }        
+        //     $DB->set_field_select('peerassessment_peers', 'feedback', get_string('privacy:request:delete:content',
+        //         'mod_peerassessment'), "id $assessmentidsql", $assessmentidparams);
+        // }        
     }
 
     /**
@@ -334,52 +337,52 @@ class provider implements
      * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
-        global $DB;
+        // global $DB;
 
-        $context = $userlist->get_context();
-        $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
-        $peerassessment = $DB->get_record('peerassessment', ['id' => $cm->instance]);
+        // $context = $userlist->get_context();
+        // $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
+        // $peerassessment = $DB->get_record('peerassessment', ['id' => $cm->instance]);
 
-        list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
-        $params = array_merge(['peerassessmentid' => $peerassessment->id], $userinparams);
+        // list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+        // $params = array_merge(['peerassessmentid' => $peerassessment->id], $userinparams);
 
-        $DB->delete_records_select('peerassessment_track_prefs', "peerassessmentid = :peerassessmentid AND userid {$userinsql}", $params);
-        $DB->delete_records_select('peerassessment_subscriptions', "peerassessment = :peerassessmentid AND userid {$userinsql}", $params);
-        $DB->delete_records_select('peerassessment_read', "peerassessmentid = :peerassessmentid AND userid {$userinsql}", $params);
-        $DB->delete_records_select(
-            'peerassessment_queue',
-            "userid {$userinsql} AND discussionid IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessmentid)",
-            $params
-        );
-        $DB->delete_records_select('peerassessment_discussion_subs', "peerassessment = :peerassessmentid AND userid {$userinsql}", $params);
+        // $DB->delete_records_select('peerassessment_track_prefs', "peerassessmentid = :peerassessmentid AND userid {$userinsql}", $params);
+        // $DB->delete_records_select('peerassessment_subscriptions', "peerassessment = :peerassessmentid AND userid {$userinsql}", $params);
+        // $DB->delete_records_select('peerassessment_read', "peerassessmentid = :peerassessmentid AND userid {$userinsql}", $params);
+        // $DB->delete_records_select(
+        //     'peerassessment_queue',
+        //     "userid {$userinsql} AND discussionid IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessmentid)",
+        //     $params
+        // );
+        // $DB->delete_records_select('peerassessment_discussion_subs', "peerassessment = :peerassessmentid AND userid {$userinsql}", $params);
 
-        // Do not delete discussion or peerassessment posts.
-        // Instead update them to reflect that the content has been deleted.
-        $postsql = "userid {$userinsql} AND discussion IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessmentid)";
-        $postidsql = "SELECT fp.id FROM {peerassessment_posts} fp WHERE {$postsql}";
+        // // Do not delete discussion or peerassessment posts.
+        // // Instead update them to reflect that the content has been deleted.
+        // $postsql = "userid {$userinsql} AND discussion IN (SELECT id FROM {peerassessment_discussions} WHERE peerassessment = :peerassessmentid)";
+        // $postidsql = "SELECT fp.id FROM {peerassessment_posts} fp WHERE {$postsql}";
 
-        // Update the subject.
-        $DB->set_field_select('peerassessment_posts', 'subject', '', $postsql, $params);
+        // // Update the subject.
+        // $DB->set_field_select('peerassessment_posts', 'subject', '', $postsql, $params);
 
-        // Update the subject and its format.
-        $DB->set_field_select('peerassessment_posts', 'message', '', $postsql, $params);
-        $DB->set_field_select('peerassessment_posts', 'messageformat', FORMAT_PLAIN, $postsql, $params);
+        // // Update the subject and its format.
+        // $DB->set_field_select('peerassessment_posts', 'message', '', $postsql, $params);
+        // $DB->set_field_select('peerassessment_posts', 'messageformat', FORMAT_PLAIN, $postsql, $params);
 
-        // Mark the post as deleted.
-        $DB->set_field_select('peerassessment_posts', 'deleted', 1, $postsql, $params);
+        // // Mark the post as deleted.
+        // $DB->set_field_select('peerassessment_posts', 'deleted', 1, $postsql, $params);
 
-        // Note: Do _not_ delete ratings of other users. Only delete ratings on the users own posts.
-        // Ratings are aggregate fields and deleting the rating of this post will have an effect on the rating
-        // of any post.
-        \core_rating\privacy\provider::delete_ratings_select($context, 'mod_peerassessment', 'post', "IN ($postidsql)", $params);
+        // // Note: Do _not_ delete ratings of other users. Only delete ratings on the users own posts.
+        // // Ratings are aggregate fields and deleting the rating of this post will have an effect on the rating
+        // // of any post.
+        // \core_rating\privacy\provider::delete_ratings_select($context, 'mod_peerassessment', 'post', "IN ($postidsql)", $params);
 
-        // Delete all Tags.
-        \core_tag\privacy\provider::delete_item_tags_select($context, 'mod_peerassessment', 'peerassessment_posts', "IN ($postidsql)", $params);
+        // // Delete all Tags.
+        // \core_tag\privacy\provider::delete_item_tags_select($context, 'mod_peerassessment', 'peerassessment_posts', "IN ($postidsql)", $params);
 
-        // Delete all files from the posts.
-        $fs = get_file_storage();
-        $fs->delete_area_files_select($context->id, 'mod_peerassessment', 'post', "IN ($postidsql)", $params);
-        $fs->delete_area_files_select($context->id, 'mod_peerassessment', 'attachment', "IN ($postidsql)", $params);
+        // // Delete all files from the posts.
+        // $fs = get_file_storage();
+        // $fs->delete_area_files_select($context->id, 'mod_peerassessment', 'post', "IN ($postidsql)", $params);
+        // $fs->delete_area_files_select($context->id, 'mod_peerassessment', 'attachment', "IN ($postidsql)", $params);
     }
 
 
@@ -390,14 +393,15 @@ class provider implements
      * @param  peerassessment $peerassessment The peerassessment object.
      * @return array If successful an array of objects with userids that this user graded, otherwise false.
      */
-    protected static function get_graded_users(int $userid, \peerassessment $peerassessment) {
+    protected static function get_graded_users(int $userid, \stdClass $peerassessment) {
         $params = ['grader' => $userid, 'peerassessmentid' => $peerassessment->id];
 
         $sql = "SELECT DISTINCT userid AS id
                   FROM {peerassessment_submission}
-                 WHERE grader = :grader AND peerassessment = :peerassessmentid";
+                 WHERE gradedby = :grader AND assignment = :peerassessmentid";
 
-        $useridlist = new useridlist($userid, $peerassessment->id);
+        // @TODO 
+        $useridlist = new \mod_assign\privacy\useridlist($userid, $peerassessment->id);
         $useridlist->add_from_sql($sql, $params);
         $userids = $useridlist->get_userids();
 
@@ -418,7 +422,7 @@ class provider implements
         global $DB;
 
         // Note: peerassessment_submission.attemptnumber is never used.
-        $submission = $DB->get_records('peerassessment_submission', ['assignment' => $peerassessment->id, 'userid' => $user->id]);
+        $submissions = $DB->get_records('peerassessment_submission', ['assignment' => $peerassessment->id, 'userid' => $user->id]);
         $peergrades = $DB->get_records('peerassessment_peers', ['peerassessment' => $peerassessment->id, 'gradefor' => $user->id]);
         $graded = $DB->get_records('peerassessment_peers', ['peerassessment' => $peerassessment->id, 'gradedby' => $user->id]); 
         $teacher = ($exportforteacher) ? $user : null;
@@ -426,7 +430,7 @@ class provider implements
 
         foreach ($submissions as $submission) {
             $submissionpath = array_merge($path,
-                    [get_string('privacy:submissionpath', 'mod_peerassessment', $submission->id]);
+                    [get_string('privacy:submissionpath', 'mod_peerassessment', $submission->id)]);
 
             if (!isset($teacher)) {
                 self::export_submission_data($submission, $context, $submissionpath);
