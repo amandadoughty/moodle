@@ -89,8 +89,7 @@ class provider implements
                 'id' => 'privacy:metadata:peerassessment_peers:userid',
                 'peerassessment' => 'privacy:metadata:peerassessment_peers:peerassessment',
                 'groupid' => 'privacy:metadata:peerassessment_peers:groupid',
-                'grade' => 'privacy:metadata:peerassessment_peers:grade',
-                'groupid' => 'privacy:metadata:peerassessment_peers:groupid',            
+                'grade' => 'privacy:metadata:peerassessment_peers:grade',         
                 'gradedby' => 'privacy:metadata:peerassessment_peers:gradedby',
                 'gradefor' => 'privacy:metadata:peerassessment_peers:gradefor',
                 'feedback' => 'privacy:metadata:peerassessment_peers:feedback',
@@ -209,11 +208,12 @@ class provider implements
             if ($context->contextlevel != CONTEXT_MODULE) {
                 continue;
             }
-
+print_r($context);
             $user = $contextlist->get_user();
+echo $user->id;            
             $peerassessmentdata = helper::get_context_data($context, $user);
             helper::export_context_files($context, $user);
-
+print_r($peerassessmentdata);
             writer::with_context($context)->export_data([], $peerassessmentdata);
             list($context, $course, $cm) = get_context_info_array($context->id);
             $peerassessment = $DB->get_record('peerassessment', ['id' => $cm->instance], '*', MUST_EXIST);
@@ -422,21 +422,20 @@ class provider implements
         global $DB;
 
         // Note: peerassessment_submission.attemptnumber is never used.
-        $submissions = $DB->get_records('peerassessment_submission', ['assignment' => $peerassessment->id, 'userid' => $user->id]);
+        $submissions = $DB->get_records('peerassessment_submission', ['assignment' => $peerassessment->id]);
         $peergrades = $DB->get_records('peerassessment_peers', ['peerassessment' => $peerassessment->id, 'gradefor' => $user->id]);
         $graded = $DB->get_records('peerassessment_peers', ['peerassessment' => $peerassessment->id, 'gradedby' => $user->id]); 
         $teacher = ($exportforteacher) ? $user : null;
-
 
         foreach ($submissions as $submission) {
             $submissionpath = array_merge($path,
                     [get_string('privacy:submissionpath', 'mod_peerassessment', $submission->id)]);
 
-            if (!isset($teacher)) {
+            // if (!isset($teacher)) {
                 self::export_submission_data($submission, $context, $submissionpath);
-            }
+            // }
 
-            if ($grade) {
+            if ($submission->grade) {
                 self::export_grade_data($submission, $context, $submissionpath);
             }
 
@@ -460,7 +459,7 @@ class provider implements
     protected static function export_grade_data(\stdClass $grade, \context $context, array $currentpath) {
         $gradedata = (object)[
             'timegraded' => transform::datetime($grade->timecreated),
-            'gradedby' => transform::user($grade->grader),
+            'gradedby' => transform::user($grade->gradedby),
             'grade' => $grade->grade,
             'groupaverage' => $grade->groupaverage,
             'individualaverage' => $grade->individualaverage,
@@ -486,7 +485,7 @@ class provider implements
             'feedback' => $grade->feedback
         ];
         writer::with_context($context)
-                ->export_data(array_merge($currentpath, [get_string('privacy:gradepath', 'mod_peerassessment')]), $gradedata);
+                ->export_data(array_merge($currentpath, [get_string('privacy:peergradepath', 'mod_peerassessment')]), $gradedata);
     }
 
     /**
@@ -504,7 +503,7 @@ class provider implements
             'feedback' => $grade->feedback
         ];
         writer::with_context($context)
-                ->export_data(array_merge($currentpath, [get_string('privacy:gradepath', 'mod_peerassessment')]), $gradedata);
+                ->export_data(array_merge($currentpath, [get_string('privacy:gradedpath', 'mod_peerassessment')]), $gradedata);
     }    
 
     /**
@@ -518,11 +517,15 @@ class provider implements
         $submissiondata = (object)[
             'timecreated' => transform::datetime($submission->timecreated),
             'timemodified' => transform::datetime($submission->timemodified),
-            'status' => get_string('submissionstatus_' . $submission->status, 'mod_peerassessment'),
+            'status' => get_string('privacy:submissionstatus_' . $submission->status, 'mod_peerassessment'),
             'groupid' => $submission->groupid
         ];
+        // print_r($currentpath);
+        // echo $context->id;
+        // print_r($submissiondata);
+        // print_r(array_merge($currentpath, [get_string('privacy:submissionpath', 'mod_peerassessment', $submission->id)]));
         writer::with_context($context)
-                ->export_data(array_merge($currentpath, [get_string('privacy:submissionpath', 'mod_peerassessment')]), $submissiondata);
+                ->export_data(array_merge($currentpath, [get_string('privacy:submissionpath', 'mod_peerassessment', $submission->id)]), $submissiondata);
     }
 }
 
