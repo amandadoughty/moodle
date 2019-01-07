@@ -208,12 +208,13 @@ class provider implements
             if ($context->contextlevel != CONTEXT_MODULE) {
                 continue;
             }
-print_r($context);
+// print_r($context);
             $user = $contextlist->get_user();
-echo $user->id;            
+// echo $user->id;            
             $peerassessmentdata = helper::get_context_data($context, $user);
             helper::export_context_files($context, $user);
-print_r($peerassessmentdata);
+// print_r($context);            
+// print_r($peerassessmentdata);
             writer::with_context($context)->export_data([], $peerassessmentdata);
             list($context, $course, $cm) = get_context_info_array($context->id);
             $peerassessment = $DB->get_record('peerassessment', ['id' => $cm->instance], '*', MUST_EXIST);
