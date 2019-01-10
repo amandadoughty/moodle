@@ -104,7 +104,7 @@ class course_picture implements templatable, renderable {
             $this->course = $DB->get_record('course', ['id' => $course->id], self::fields(), MUST_EXIST);
         }
 
-        $this->course = new core_course_list_element($course);
+        $this->course = new \core_course_list_element($course);
     }
 
     /**
