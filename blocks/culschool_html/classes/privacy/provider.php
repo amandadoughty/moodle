@@ -26,7 +26,9 @@ namespace block_culschool_html\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
+use \core_privacy\local\request\userlist;
 use \core_privacy\local\request\approved_contextlist;
+use \core_privacy\local\request\approved_userlist;
 use \core_privacy\local\request\writer;
 use \core_privacy\local\request\helper;
 use \core_privacy\local\request\deletion_criteria;
@@ -42,10 +44,11 @@ class provider implements
         // The block_culschool_html block stores user provided data.
         \core_privacy\local\metadata\provider,
 
+        // This plugin is capable of determining which users have data within it.
+        \core_privacy\local\request\core_userlist_provider,        
+
         // The block_culschool_html block provides data directly to core.
         \core_privacy\local\request\plugin\provider {
-
-    use \core_privacy\local\legacy_polyfill;
 
     /**
      * Returns information about how block_culschool_html stores its data.
@@ -53,7 +56,7 @@ class provider implements
      * @param collection $collection The initialised collection to add items to.
      * @return collection A listing of user data stored through this system.
      */
-    public static function _get_metadata($collection) {
+    public static function get_metadata(collection $collection) : collection {
         $collection->link_subsystem('block', 'privacy:metadata:block');
 
         return $collection;
@@ -65,7 +68,7 @@ class provider implements
      * @param int $userid The user to search.
      * @return contextlist $contextlist The contextlist containing the list of contexts used in this plugin.
      */
-    public static function _get_contexts_for_userid($userid) {
+    public static function get_contexts_for_userid(int $userid) : \core_privacy\local\request\contextlist {
         // This block doesn't know who information is stored against unless it
         // is at the user context.
         $contextlist = new \core_privacy\local\request\contextlist();
@@ -90,11 +93,37 @@ class provider implements
     }
 
     /**
+     * Get the list of users who have data within a context.
+     *
+     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
+     */
+    public static function get_users_in_context(userlist $userlist) {
+        $context = $userlist->get_context();
+
+        if (!is_a($context, \context_block::class)) {
+            return;
+        }
+
+        $params = [
+            'contextid'    => $context->id,
+            'contextuser' => CONTEXT_USER,
+        ];
+
+        $sql = "SELECT bpc.instanceid AS userid
+                  FROM {context} c
+                  JOIN {block_instances} bi ON bi.id = c.instanceid AND bi.blockname = 'culschool_html'
+                  JOIN {context} bpc ON bpc.id = bi.parentcontextid AND bpc.contextlevel = :contextuser
+                 WHERE c.id = :contextid";
+
+        $userlist->add_from_sql('userid', $sql, $params);
+    }    
+
+    /**
      * Export all user data for the specified user, in the specified contexts.
      *
      * @param approved_contextlist $contextlist The approved contexts to export information for.
      */
-    public static function _export_user_data($contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
 
         $user = $contextlist->get_user();
@@ -154,7 +183,7 @@ class provider implements
      *
      * @param context $context The specific context to delete data for.
      */
-    public static function _delete_data_for_all_users_in_context($context) {
+    public static function delete_data_for_all_users_in_context(\context $context) {
 
         if (!$context instanceof \context_block) {
             return;
@@ -171,7 +200,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist The approved contexts and user information to delete information for.
      */
-    public static function _delete_data_for_user($contextlist) {
+    public static function delete_data_for_users(approved_userlist $userlist) {
         // The only way to delete data for the culschool_html block is to delete the block instance itself.
         foreach ($contextlist as $context) {
 
@@ -185,12 +214,30 @@ class provider implements
     }
 
     /**
+     * Delete all user data for the specified user, in the specified contexts.
+     *
+     * @param approved_contextlist $contextlist The approved contexts and user information to delete information for.
+     */
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
+        // The only way to delete data for the culschool_html block is to delete the block instance itself.
+        foreach ($contextlist as $context) {
+
+            if (!$context instanceof \context_block) {
+                continue;
+            }
+            if ($blockinstance = static::get_instance_from_context($context)) {
+                blocks_delete_instance($blockinstance);
+            }
+        }
+    }    
+
+    /**
      * Get the block instance record for the specified context.
      *
      * @param \context_block $context The context to fetch
      * @return \stdClass
      */
-    protected static function _get_instance_from_context($context) {
+    protected static function get_instance_from_context(\context_block $context) {
         global $DB;
 
         return $DB->get_record('block_instances', ['id' => $context->instanceid, 'blockname' => 'culschool_html']);
