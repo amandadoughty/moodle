@@ -39,9 +39,8 @@ defined('MOODLE_INTERNAL') || die();
  */
 class provider implements 
     \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\plugin\provider {
-
-    use \core_privacy\local\legacy_polyfill;
+    \core_privacy\local\request\plugin\provider,
+    \core_privacy\local\request\core_userlist_provider {
 
     /**
      * Return the fields which contain personal data.
@@ -49,7 +48,7 @@ class provider implements
      * @param collection $items a reference to the collection to use to store the metadata.
      * @return collection the updated collection of metadata items.
      */
-    public static function _get_metadata($items) {
+    public static function get_metadata(collection $collection) : collection ;
         $items->add_database_table(
             'message_culactivity_stream',
             [
@@ -76,7 +75,7 @@ class provider implements
      * @param int $userid the userid.
      * @return contextlist the list of contexts containing user info for the user.
      */
-    public static function _get_contexts_for_userid($userid) {
+    public static function get_contexts_for_userid(int $userid) : contextlist
         // Messages are in the system context.
         $contextlist = new contextlist();
         $contextlist->add_system_context();
@@ -85,11 +84,20 @@ class provider implements
     }
 
     /**
+     * Get the list of users who have data within a context.
+     *
+     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
+     */
+    public static function get_users_in_context(userlist $userlist) {
+
+    }
+
+    /**
      * Export personal data for the given approved_contextlist. User and context information is contained within the contextlist.
      *
      * @param approved_contextlist $contextlist a list of contexts approved for export.
      */
-    public static function _export_user_data($contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist)
         if (empty($contextlist->count())) {
             return;
         }
@@ -114,7 +122,7 @@ class provider implements
      *
      * @param \context $context the context to delete in.
      */
-    public static function _delete_data_for_all_users_in_context($context) {
+    public static function delete_data_for_all_users_in_context(\context $context)
         global $DB;
 
         if (!$context instanceof \context_system) {
@@ -129,7 +137,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist a list of contexts approved for deletion.
      */
-    public static function _delete_data_for_user($contextlist) {
+    public static function delete_data_for_user(approved_contextlist $contextlist)
         global $DB;
 
         if (empty($contextlist->count())) {
@@ -148,6 +156,15 @@ class provider implements
         $userid = $contextlist->get_user()->id;
 
         $DB->delete_records_select('message_culactivity_stream', 'userid = ? OR userfromid = ?', [$userid, $userid]);
+    }
+
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist) {
+        
     }
 
     /**
