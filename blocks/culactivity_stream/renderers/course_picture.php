@@ -86,14 +86,6 @@ class block_culactivity_stream_renderers_course_picture_renderer extends plugin_
             $alt = '';
         }
 
-        if (empty($coursepicture->size)) {
-            $size = 35;
-        } else if ($coursepicture->size === true or $coursepicture->size == 1) {
-            $size = 100;
-        } else {
-            $size = $coursepicture->size;
-        }
-
         $class = $coursepicture->class;
         $src = $coursepicture->get_url($this->page, $this);
         $attributes = array('src' => $src, 'alt' => $alt, 'title' => $alt, 'class' => $class);
@@ -145,13 +137,6 @@ class course_picture implements renderable {
      * @var bool Add course link to image
      */
     public $link = true;
-
-    /**
-     * @var int Size in pixels. Special values are (true/1 = 100px) and
-     * (false/0 = 35px)
-     * for backward compatibility.
-     */
-    public $size = 35;
 
     /**
      * @var bool Add non-blank alt-text to the image.
@@ -219,20 +204,6 @@ class course_picture implements renderable {
             $renderer = $page->get_renderer('core');
         }
 
-        // Sort out the size. Size is only required for the gravatar
-        // implementation presently.
-        if (empty($this->size)) {
-            $size = 35;
-        } else if ($this->size === true or $this->size == 1) {
-            $size = 100;
-        } else if ($this->size > 100) {
-            $size = (int)$this->size;
-        } else if ($this->size >= 50) {
-            $size = (int)$this->size;
-        } else {
-            $size = (int)$this->size;
-        }
-
         $defaulturl = $renderer->image_url('u/f2'); // Default image.
 
         if ((!empty($CFG->forcelogin) and !isloggedin()) ||
@@ -264,41 +235,8 @@ class course_picture implements renderable {
                 }
             }
 
-        } else if ($CFG->enablegravatar) {
-            // Normalise the size variable to acceptable bounds.
-            if ($size < 1 || $size > 512) {
-                $size = 35;
-            }
-            // Hash a fake course email address.
-            $gravataremail = "avatar{$this->course->id}@somewhere.com";
-            $md5 = md5(strtolower(trim($gravataremail)));
-            // Build a gravatar URL with what we know.
-
-            // Find the best default image URL we can (MDL-35669).
-            if (empty($CFG->block_culactivity_stream_gravatar)) {
-                $absoluteimagepath = $page->theme->resolve_image_location('u/f2', 'core');
-                if (strpos($absoluteimagepath, $CFG->dirroot) === 0) {
-                    $defaulturl = $CFG->wwwroot . substr($absoluteimagepath, strlen($CFG->dirroot));
-                } else {
-                    $defaulturl = $CFG->wwwroot . '/pix/u/f2.png';
-                }
-            } else {
-                $gravatardefault = $CFG->block_culactivity_stream_gravatar;
-                // If the currently requested page is https then we'll return an
-                // https gravatar page.
-                if (strpos($CFG->httpswwwroot, 'https:') === 0) {
-                    $gravatardefault = str_replace($CFG->wwwroot, $CFG->httpswwwroot, $gravatardefault); // Replace by secure url.
-                    return new moodle_url(
-                        "https://secure.gravatar.com/avatar/{$md5}",
-                        array('s' => $size, 'd' => $gravatardefault)
-                        );
-                } else {
-                    return new moodle_url(
-                        "http://www.gravatar.com/avatar/{$md5}",
-                        array('s' => $size, 'd' => $gravatardefault)
-                        );
-                }
-            }
+        } else {
+            \core_course\external\course_summary_exporter::get_course_pattern($this->course);
         }
 
         return $defaulturl;

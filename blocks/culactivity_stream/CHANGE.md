@@ -1,3 +1,9 @@
+### Date: 		2019-Jan-16
+### Version:	v2016110404
+### Release:    3.1.0
+
+- Removed gravatar code and used core_course\external\course_summary_exporter::get_course_pattern.
+
 ### Date: 		2018-May-15
 ### Version:	v2016110403
 ### Release:    3.0.3

@@ -88,7 +88,7 @@ function block_culactivity_stream_get_notifications($courseid=SITEID, $lastid=0,
         }
 
         // If we have the course id then get the course image or a default
-        // gravatar.
+        // pattern.
         if (isset($notification->courseid) && $notification->courseid != 0 && $notification->courseid != SITEID) {
             $notification->img = block_culactivity_stream_get_course_img($notification->courseid);
         } else { // Else get the user image.
