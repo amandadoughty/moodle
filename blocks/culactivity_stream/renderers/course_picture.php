@@ -236,7 +236,7 @@ class course_picture implements renderable {
             }
 
         } else {
-            \core_course\external\course_summary_exporter::get_course_pattern($this->course);
+            return \core_course\external\course_summary_exporter::get_course_pattern($this->course);
         }
 
         return $defaulturl;
