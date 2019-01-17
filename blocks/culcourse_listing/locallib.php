@@ -137,10 +137,16 @@ function block_culcourse_listing_get_favourite_courses($preferences) {
  *
  * @param string $action add or delete
  * @param int $cid course id
+ * @param int $userid user id
  * @return array $favourites a sorted array of course id's
  */
-function block_culcourse_listing_edit_favourites($action, $cid) {
+function block_culcourse_listing_edit_favourites($action, $cid, $userid = 0) {
+    global $USER;
+
     $favourites = array();
+    $coursecontext = \context_course::instance($cid);
+    $usercontext = \context_user::instance($USER->id);
+    $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
 
     if (!is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
         $favourites = unserialize($myfavourites);
@@ -148,15 +154,26 @@ function block_culcourse_listing_edit_favourites($action, $cid) {
 
     switch ($action) {
         case 'add':
+            // Original block user preference setting.
             if (!in_array($cid, $favourites)) {
                 $favourites[] = $cid;
             }
+
+            // New favourite api.
+            $ufservice->create_favourite('core_course', 'courses', $cid, $coursecontext);
+
             break;
         case 'remove':
+            // Original block user preference setting.
             $key = array_search($cid, $favourites);
+
             if ($key !== false) {
                 unset($favourites[$key]);
             }
+
+            // New favourite api.
+            $ufservice->delete_favourite('core_course', 'courses', $cid, $coursecontext);
+
             break;
         default:
             break;
