@@ -126,6 +126,9 @@ class block_culcourse_listing extends block_base {
                 'moodle-block_culcourse_listing-favourite_list',
                 'M.blocks_culcourse_listing.init_favourite_list'
             );
+
+            // $this->page->requires->js('/blocks/culcourse_listing/yui/test/test.js', true);
+            $this->page->requires->js_call_amd('block_culcourse_listing/event_translate', 'init');
         }
 
         return $this->content;
