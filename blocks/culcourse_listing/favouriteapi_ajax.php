@@ -22,15 +22,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+define('AJAX_SCRIPT', true);
+
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
 require_sesskey();
 require_login();
 
-$action = required_param('action', PARAM_RAW);
-$cid = required_param('cid', PARAM_INT);
-// Edit the favourites.
-block_culcourse_listing_edit_favourites($action, $cid);
-block_culcourse_listing_edit_favourites_api($action, $cid);
-redirect(new moodle_url('/my/index.php'));
+// Update the favourites.
+block_culcourse_listing_update_from_favourites_api();
+echo true;

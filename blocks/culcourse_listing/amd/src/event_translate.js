@@ -1,7 +1,9 @@
 
 
-define(['jquery', 'core/str', 'core/yui', 'core/pubsub', 'core_course/events'],
-    function($,  str, Y, PubSub, CourseEvents) {
+define(['jquery', 'core/config', 'core/str', 'core/notification', 'core/yui', 
+    'core/pubsub', 'core_course/events', 'block_myoverview/main'],
+    function($, Config, str, Notification, Y, PubSub, CourseEvents, Main) {
+        var url = M.cfg.wwwroot + '/blocks/culcourse_listing/favouriteapi_ajax.php'
         /**
          * 
          *
@@ -9,9 +11,15 @@ define(['jquery', 'core/str', 'core/yui', 'core/pubsub', 'core_course/events'],
          */
         var publishEvent = function() {
             var data = {publishedHere: true};
+            //  core_course_set_favourite_courses
             PubSub.publish(CourseEvents.favourited, data);
         };
 
+        /**
+         * 
+         *
+         *
+         */
         var updateFavourites = function(data) {
             // Avoid circular reference!
             if (typeof data !== 'undefined' && data.publishedHere) {
@@ -19,14 +27,28 @@ define(['jquery', 'core/str', 'core/yui', 'core/pubsub', 'core_course/events'],
                 return;
             }
 
-            // Get the favourites.
-            // Get user preference.
-            // Check what has changed.          
-            // Update user preference.
-            // Fire YUI event.
-            Y.use('moodle-block_culcourse_listing-course', function() {
-                
-            });
+            // var settings = {
+            //     data: {sesskey: Config.sesskey}
+            // };
+
+            var data = {
+                sesskey: Config.sesskey
+            };
+            var settings = {
+                type: 'POST',
+                dataType: 'json',
+                data: data
+            };
+
+            $.ajax(
+                url,
+                settings
+                ).done(function(data) {
+                    // Fire YUI event.
+                    Y.use('moodle-block_culcourse_listing-course', function() {
+                        Y.fire('culcourse-listing:update-favourites');
+                    });
+                });                            
         };
 
         var init = function() {
@@ -42,13 +64,10 @@ define(['jquery', 'core/str', 'core/yui', 'core/pubsub', 'core_course/events'],
             });
 
             PubSub.subscribe(CourseEvents.favourited, updateFavourites);
-            PubSub.subscribe(CourseEvents.unfavourited, updateFavourites);
+            PubSub.subscribe(CourseEvents.unfavorited, updateFavourites);
         }
 
         return {
             init: init
         };
-
-
-
     });
