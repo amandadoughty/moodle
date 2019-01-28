@@ -46,6 +46,8 @@ define(['jquery', 'core/config', 'core/str', 'core/notification', 'core/yui',
                 ).done(function(data) {
                     // Fire YUI event.
                     Y.use('moodle-block_culcourse_listing-course', function() {
+                        // SIMULATE CLICK?????
+
                         Y.fire('culcourse-listing:update-favourites');
                     });
                 });                            
