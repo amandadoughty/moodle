@@ -43,28 +43,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
     var BLOCKCONFIG = null;
 
-    return {
-        /**
-         * Set up the category expander.
-         *
-         * No arguments are required.
-         *
-         * @method init
-         */
-        initializer: function(params) {
-            this.BLOCKCONFIG = params.config;
-            var doc = Y.one(Y.config.doc);
-            doc.delegate('click', function(e) {e.preventDefault();}, SELECTORS.CATEGORYCHILDLINK, this);
-            doc.delegate('click', this.toggle_category_expansion, SELECTORS.CATEGORYLISTENLINK, this);
-            doc.delegate('click', this.toggle_coursebox_expansion, SELECTORS.COURSEBOXLISTENLINK, this);
-            doc.delegate('click', this.collapse_expand_all, SELECTORS.COLLAPSEEXPAND, this);
 
-            // Only set up they keyboard listeners when tab is first pressed - it
-            // may never happen and modifying the DOM on a large number of nodes
-            // can be very expensive.
-            doc.once('key', this.setup_keyboard_listeners, 'tab', this);
-        }
-    };
 
     /**
      * Set up keyboard expansion for course content.
@@ -75,12 +54,12 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
      * @method setup_keyboard_listeners
      */
     var setup_keyboard_listeners = function() {
-        Y.one(Y.config.doc).delegate('key', this.toggle_category_expansion, 'enter', SELECTORS.CATEGORYLISTENLINK, this);
-        Y.one(Y.config.doc).delegate('key', this.toggle_coursebox_expansion, 'enter', SELECTORS.COURSEBOXLISTENLINK, this);
-        Y.one(Y.config.doc).delegate('key', this.collapse_expand_all, 'enter', SELECTORS.COLLAPSEEXPAND, this);
+        Y.one(Y.config.doc).delegate('key', toggle_category_expansion, 'enter', SELECTORS.CATEGORYLISTENLINK, this);
+        Y.one(Y.config.doc).delegate('key', toggle_coursebox_expansion, 'enter', SELECTORS.COURSEBOXLISTENLINK, this);
+        Y.one(Y.config.doc).delegate('key', collapse_expand_all, 'enter', SELECTORS.COLLAPSEEXPAND, this);
     };
 
-    toggle_coursebox_expansion: function(e) {
+    var toggle_coursebox_expansion = function(e) {
         var courseboxnode;
 
         // Grab the parent category container - this is where the new content will be added.
@@ -89,11 +68,11 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
         if (courseboxnode.hasClass(CSS.LOADED)) {
             // We've already loaded this content so we just need to toggle the view of it.
-            this.run_expansion(courseboxnode);
+            run_expansion(courseboxnode);
             return;
         }
 
-        this._toggle_generic_expansion({
+        _toggle_generic_expansion({
             parentnode: courseboxnode,
             childnode: courseboxnode.one(SELECTORS.CONTENTNODE),
             spinnerhandle: SELECTORS.COURSEBOXSPINNERLOCATION,
@@ -128,7 +107,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
         if (categorynode.hasClass(CSS.LOADED)) {
             // We've already loaded this content so we just need to toggle the view of it.
-            this.run_expansion(categorynode);
+            run_expansion(categorynode);
             return;
         }
 
@@ -140,7 +119,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             return;
         }
 
-        this._toggle_generic_expansion({
+        _toggle_generic_expansion({
             parentnode: categorynode,
             childnode: categorynode.one(SELECTORS.CONTENTNODE),
             spinnerhandle: SELECTORS.CATEGORYSPINNERLOCATION,
@@ -231,7 +210,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             ancestor = categorynode.ancestor(SELECTORS.COURSECATEGORYTREE);
 
         // Add our animation to the categorychildren.
-        this.add_animation(categorychildren);
+        add_animation(categorychildren);
 
         // If we already have the class, remove it before showing otherwise we perform the
         // animation whilst the node is hidden.
@@ -282,11 +261,11 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
         var collapseall = ancestor.one(SELECTORS.COLLAPSEEXPAND);
         if (collapseall.hasClass(CSS.COLLAPSEALL)) {
-            this.collapse_all(ancestor);
+            collapse_all(ancestor);
         } else {
-            this.expand_all(ancestor);
+            expand_all(ancestor);
         }
-        this.update_collapsible_actions(ancestor);
+        update_collapsible_actions(ancestor);
     };
 
     var expand_all = function(ancestor) {
@@ -305,7 +284,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
         // Run the final expansion with animation on the visible items.
         Y.all(finalexpansions).each(function(c) {
-            this.run_expansion(c);
+            run_expansion(c);
         }, this);
 
     };
@@ -319,7 +298,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 finalcollapses.push(c);
             } else {
                 // Collapse the visible items first
-                this.run_expansion(c);
+                run_expansion(c);
             }
         }, this);
 
@@ -402,7 +381,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             .removeClass(CSS.NOTLOADED);
 
         // Toggle the open/close status of the node now that it's content has been loaded.
-        this.run_expansion(args.parentnode);
+        run_expansion(args.parentnode);
 
         // Update the filters.
         if (data.filterform) {
@@ -447,6 +426,29 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
         return childnode;
     };
+
+    return {
+        /**
+         * Set up the category expander.
+         *
+         * No arguments are required.
+         *
+         * @method init
+         */
+        initializer: function(params) {
+            this.BLOCKCONFIG = params.config;
+            var doc = Y.one(Y.config.doc);
+            doc.delegate('click', function(e) {e.preventDefault();}, SELECTORS.CATEGORYCHILDLINK, this);
+            doc.delegate('click', toggle_category_expansion, SELECTORS.CATEGORYLISTENLINK, this);
+            doc.delegate('click', toggle_coursebox_expansion, SELECTORS.COURSEBOXLISTENLINK, this);
+            doc.delegate('click', collapse_expand_all, SELECTORS.COLLAPSEEXPAND, this);
+
+            // Only set up they keyboard listeners when tab is first pressed - it
+            // may never happen and modifying the DOM on a large number of nodes
+            // can be very expensive.
+            doc.once('key', setup_keyboard_listeners, 'tab', this);
+        }
+    };    
 // }, {
 //         ATTRS : {
 //             config : {

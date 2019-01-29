@@ -1,6 +1,6 @@
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
-        'core/modal_factory', 'core/modal_events', 'core/key_codes'],
-    function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes) {
+        'core/modal_factory', 'core/modal_events', 'core/key_codes', 'block_culcourse_listing/course'],
+    function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes, Course) {
 
 // YUI.add('moodle-block_culcourse_listing-course_list', function(Y) {
 
@@ -27,16 +27,10 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
 // Y.extend(CLIST, Y.Base, {
 
-    return {
-        initializer: function(params) {
-            this.setupcourses();
-            var doc = Y.one(Y.config.doc);
-            doc.delegate('change', this.filtercourses, SELECTORS.FILTERLIST, this, params.config);
-        }
-    };
+
 
     var setupcourses = function() {
-        M.blocks_culcourse_listing.init_course();
+        Course.initializer();
     };
 
     var filtercourses = function(e, config) {
@@ -126,6 +120,14 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         };
 
         categorylist.each(filtercategory);
+    };
+
+    return {
+        initializer: function(config) {
+            setupcourses();
+            var doc = Y.one(Y.config.doc);
+            doc.delegate('change', filtercourses, SELECTORS.FILTERLIST, this, config);
+        }
     };
 
 // }, {

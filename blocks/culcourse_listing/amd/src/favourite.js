@@ -25,11 +25,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
 // Y.extend(FAVOURITE, Y.Base, {
 
-    return {
-        initializer: function(params) {
-            this.adddragdrop(params);
-        }
-    };
+
 
     var addmoveicon = function(params) {
         // Replace the non-JS links.
@@ -51,93 +47,94 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
     };
 
     var adddragdrop = function(params) {
-        this.addmoveicon(params);
-        // Static Vars.
-        var goingUp = false, lastY = 0;
-        var savemove = this.savemove;
+        Y.use('base', 'dd-constrain', 'dd-proxy', 'dd-drop', 'dd-delegate', 'dd-plugin', function() {
+            addmoveicon(params);
+            // Static Vars.
+            var goingUp = false, lastY = 0;
+            // var savemove = savemove;
 
-        var d = new Y.DD.Drag({
-                node: params.node,
-                target: true
-            }).plug(Y.Plugin.DDProxy, {
-                moveOnEnd: false,
-                cloneNode: true
-            }).plug(Y.Plugin.DDConstrained, {
-                constrain2node: SELECTORS.FAVOURITELIST
+            var d = new Y.DD.Drag({
+                    node: params.node,
+                    target: true
+                }).plug(Y.Plugin.DDProxy, {
+                    moveOnEnd: false,
+                    cloneNode: true
+                }).plug(Y.Plugin.DDConstrained, {
+                    constrain2node: SELECTORS.FAVOURITELIST
+                });
+                d.addHandle(SELECTORS.FAVOURITEMOVE);
+
+            Y.DD.DDM.on('drag:start', function(e) {
+                // Get our drag object.
+                var drag = e.target;
+                // Set some styles here.
+                drag.get('node').setStyle('opacity', '.25');
+                drag.get('dragNode').addClass(CSS.BLOCK);
+                drag.get('dragNode').set('innerHTML', drag.get('node').get('innerHTML'));
+                drag.get('dragNode').setStyles({
+                    opacity: '.5',
+                    borderColor: drag.get('node').getStyle('borderColor'),
+                    backgroundColor: drag.get('node').getStyle('backgroundColor')
+                });
             });
-            d.addHandle(SELECTORS.FAVOURITEMOVE);
 
-        Y.DD.DDM.on('drag:start', function(e) {
-            // Get our drag object.
-            var drag = e.target;
-            // Set some styles here.
-            drag.get('node').setStyle('opacity', '.25');
-            drag.get('dragNode').addClass(CSS.BLOCK);
-            drag.get('dragNode').set('innerHTML', drag.get('node').get('innerHTML'));
-            drag.get('dragNode').setStyles({
-                opacity: '.5',
-                borderColor: drag.get('node').getStyle('borderColor'),
-                backgroundColor: drag.get('node').getStyle('backgroundColor')
+            Y.DD.DDM.on('drag:end', function(e) {
+                var drag = e.target;
+                // Put our styles back.
+                drag.get('node').setStyles({
+                    visibility: '',
+                    opacity: '1'
+                });
+                savemove();
             });
-        });
 
-        Y.DD.DDM.on('drag:end', function(e) {
-            var drag = e.target;
-            // Put our styles back.
-            drag.get('node').setStyles({
-                visibility: '',
-                opacity: '1'
-            });
-            savemove();
-        });
+            Y.DD.DDM.on('drag:drag', function(e) {
+                // Get the last y point.
+                var y = e.target.lastXY[1];
 
-        Y.DD.DDM.on('drag:drag', function(e) {
-            // Get the last y point.
-            var y = e.target.lastXY[1];
-
-            // Is it greater than the lastY var?
-            if (y < lastY) {
-                // We are going up.
-                goingUp = true;
-            } else {
-                // We are going down.
-                goingUp = false;
-            }
-
-            // Cache for next check.
-            lastY = y;
-        });
-
-        Y.DD.DDM.on('drop:over', function(e) {
-            // Get a reference to our drag and drop nodes.
-            var drag = e.drag.get('node'),
-                drop = e.drop.get('node');
-
-            // Are we dropping on a li node?
-            if (drop.hasClass(CSS.COURSEBOX)) {
-                // Are we not going up?
-                if (!goingUp) {
-                    drop = drop.get('nextSibling');
+                // Is it greater than the lastY var?
+                if (y < lastY) {
+                    // We are going up.
+                    goingUp = true;
+                } else {
+                    // We are going down.
+                    goingUp = false;
                 }
-                // Add the node to this list.
-                e.drop.get('node').get('parentNode').insertBefore(drag, drop);
-                // Resize this nodes shim, so we can drop on it later.
-                e.drop.sizeShim();
-            }
-        });
 
-        Y.DD.DDM.on('drag:drophit', function(e) {
-            var drop = e.drop.get('node'),
-                drag = e.drag.get('node');
+                // Cache for next check.
+                lastY = y;
+            });
 
-            // if we are not on an li, we must have been dropped on a ul.
-            if (!drop.hasClass(CSS.COURSEBOX)) {
-                if (!drop.contains(drag)) {
-                    drop.appendChild(drag);
+            Y.DD.DDM.on('drop:over', function(e) {
+                // Get a reference to our drag and drop nodes.
+                var drag = e.drag.get('node'),
+                    drop = e.drop.get('node');
+
+                // Are we dropping on a li node?
+                if (drop.hasClass(CSS.COURSEBOX)) {
+                    // Are we not going up?
+                    if (!goingUp) {
+                        drop = drop.get('nextSibling');
+                    }
+                    // Add the node to this list.
+                    e.drop.get('node').get('parentNode').insertBefore(drag, drop);
+                    // Resize this nodes shim, so we can drop on it later.
+                    e.drop.sizeShim();
                 }
-            }
-        });
+            });
 
+            Y.DD.DDM.on('drag:drophit', function(e) {
+                var drop = e.drop.get('node'),
+                    drag = e.drag.get('node');
+
+                // if we are not on an li, we must have been dropped on a ul.
+                if (!drop.hasClass(CSS.COURSEBOX)) {
+                    if (!drop.contains(drag)) {
+                        drop.appendChild(drag);
+                    }
+                }
+            });
+        });
     };
 
     var savemove = function() {
@@ -161,7 +158,13 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 }
             }
         });
-    }
+    };
+
+    return {
+        initializer: function(params) {
+            adddragdrop(params);
+        }
+    };    
 
   //   }, {
   //       NAME : FAVOURITENAME,

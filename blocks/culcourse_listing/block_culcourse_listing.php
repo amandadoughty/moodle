@@ -116,19 +116,30 @@ class block_culcourse_listing extends block_base {
             $this->page->requires->string_for_js('all', 'block_culcourse_listing');
 
             // YUI modules.
-            $this->page->requires->yui_module(
-                'moodle-block_culcourse_listing-course_list',
-                'M.blocks_culcourse_listing.init_course_list',
-                array(array('config' => $config))
-            );
+            // $this->page->requires->yui_module(
+            //     'moodle-block_culcourse_listing-course_list',
+            //     'M.blocks_culcourse_listing.init_course_list',
+            //     array(array('config' => $config))
+            // );
 
-            $this->page->requires->yui_module(
-                'moodle-block_culcourse_listing-favourite_list',
-                'M.blocks_culcourse_listing.init_favourite_list'
-            );
+            // $this->page->requires->yui_module(
+            //     'moodle-block_culcourse_listing-favourite_list',
+            //     'M.blocks_culcourse_listing.init_favourite_list'
+            // );
 
             // $this->page->requires->js('/blocks/culcourse_listing/yui/test/test.js', true);
-            $this->page->requires->js_call_amd('block_culcourse_listing/event_translate', 'init');
+
+            $params = [
+                'filterbyyear' => $config->filterbyyear,
+                'filterbyperiod' => $config->filterbyperiod,
+                'filtertype' => $config->filtertype
+            ];
+
+            $this->page->requires->js_call_amd('block_culcourse_listing/course_list', 'initializer', ['config' => $config]);
+
+            $this->page->requires->js_call_amd('block_culcourse_listing/favourite_list', 'initializer');
+
+            // $this->page->requires->js_call_amd('block_culcourse_listing/event_translate', 'init');
         }
 
         return $this->content;

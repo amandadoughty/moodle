@@ -1,6 +1,6 @@
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
-        'core/modal_factory', 'core/modal_events', 'core/key_codes'],
-    function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes) {
+        'core/modal_factory', 'core/modal_events', 'core/key_codes', 'block_culcourse_listing/favourite'],
+    function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes, Favourite) {
 
 // YUI.add('moodle-block_culcourse_listing-favourite_list', function(Y) {
 
@@ -33,34 +33,21 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
     // Y.extend(FLIST, Y.Base, {
 
-    return {
-        initializer: function(params) {
-            this.setupfavourites();
-            // Moodle has no way of adding class to single_button object.
-            Y.one(SELECTORS.FAVOURITEREORDERINPUT).addClass(CSS.BUTTONALERT);
-            Y.one(SELECTORS.FAVOURITECLEARINPUT).addClass(CSS.BUTTONALERT);
-            Y.one(SELECTORS.FAVOURITEREORDERBUTTON).on('click', this.reorder, this);
-            Y.one(SELECTORS.FAVOURITECLEARBUTTON).on('click', this.clear, this);
 
-            Y.publish('culcourse-listing:update-favourites', {
-                broadcast:2
-            })
-        }
-    };
 
     var setupfavourites = function() {
         var courselist = Y.all(SELECTORS.FAVOURITECOURSEBOX);
 
         courselist.each(function(node){
             var config = {node: node};
-            M.blocks_culcourse_listing.init_favourite(config);
+            Favourite.initializer(config);
         });
     };
 
     var reorder = function(e) {
         e.preventDefault();
 
-        var setupfavourites = this.setupfavourites;
+        // var setupfavourites = setupfavourites;
         var params = {
             sesskey : M.cfg.sesskey
         };
@@ -166,7 +153,22 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         }
 
         M.util.show_confirm_dialog(e, args);
-    }
+    };
+
+    return {
+        initializer: function(params) {
+            setupfavourites();
+            // Moodle has no way of adding class to single_button object.
+            Y.one(SELECTORS.FAVOURITEREORDERINPUT).addClass(CSS.BUTTONALERT);
+            Y.one(SELECTORS.FAVOURITECLEARINPUT).addClass(CSS.BUTTONALERT);
+            Y.one(SELECTORS.FAVOURITEREORDERBUTTON).on('click', reorder, this);
+            Y.one(SELECTORS.FAVOURITECLEARBUTTON).on('click', clear, this);
+
+            Y.publish('culcourse-listing:update-favourites', {
+                broadcast:2
+            })
+        }
+    };    
 
 //     }, {
 //         NAME : FLISTNAME
