@@ -1,6 +1,6 @@
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
-        'core/modal_factory', 'core/modal_events', 'core/key_codes', 'block_culcourse_listing/favourite'],
-    function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes, Favourite) {
+        'core/key_codes', 'core/pubsub', 'core_course/events', 'block_culcourse_listing/favourite','block_myoverview/view'],
+    function($, ajax, templates, notification, str, url, Y, KeyCodes, PubSub, CourseEvents, Favourite, MyOverview) {
 
 // YUI.add('moodle-block_culcourse_listing-course', function(Y) {
 
@@ -24,6 +24,9 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             FAVOURITECLEARBUTTON: '.block_culcourse_listing #clearfavourites',
             FAVOURITEREORDERBUTTON: '.block_culcourse_listing #reorderfavourites',
             FAVOURITEALERT: '.block_culcourse_listing .favourite_list span',
+            // From block_myoverview
+            ACTION_ADD_FAVOURITE: '[data-action="add-favourite"]',
+            ACTION_REMOVE_FAVOURITE: '[data-action="remove-favourite"]',
         };
     var URL = M.cfg.wwwroot + '/blocks/culcourse_listing/favourite_ajax.php';
 
@@ -57,92 +60,110 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 data: querystring,
                 context: this,
                 on: {
-                    success: function(id, e) {
-                        if (params.action == 'add') {
-                            var courseboxnode = target.ancestor(SELECTORS.COURSEBOXLISTCOURSEBOX, true);
-                            // Change the link, title and icon to reflect that the course can now be
-                            // removed from favourites.
-                            var newurl = url + '?' + querystring.replace('add', 'remove');
-                            var title = M.util.get_string('favouriteremove', 'block_culcourse_listing');
-                            courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
-                            courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEADD);
-                            courseboxnode.one(SELECTORS.FAVOURITEICON).addClass(CSS.FAVOURITEREMOVE);
-                            courseboxnode.one(SELECTORS.FAVOURITELINK).set('title', title);
-                            // Create the new favourite node.
-                            var newfavourite = courseboxnode.cloneNode(true);
-                            newfavourite.setStyle('opacity', 0);
-                            // Append the new node to the end of the favourites list.
-                            Y.one(SELECTORS.FAVOURITELIST).append(newfavourite);
-
-                            // Add all the listeners to the new node.
-                            var config = {node: newfavourite};
-                            Favourite.initializer(config);
-
-                            newfavourite.transition ({
-                                duration: 2.0,
-                                easing: 'ease-in',
-                                opacity: 1.0
-                            })
-
-                            // There must be at least one favourite now, so show the favourite buttons
-                            // if they are hidden and hide the 'no favourites' message,
-                            if (!Y.all(SELECTORS.FAVOURITECOURSEBOX).isEmpty()) {
-                                Y.one(SELECTORS.FAVOURITECLEARBUTTON).removeClass(CSS.HIDE);
-                                Y.one(SELECTORS.FAVOURITECLEARBUTTON).show();
-                                Y.one(SELECTORS.FAVOURITEREORDERBUTTON).removeClass(CSS.HIDE);
-                                Y.one(SELECTORS.FAVOURITEREORDERBUTTON).show();
-                                Y.one(SELECTORS.FAVOURITEALERT).setHTML('');
-                            }
-
-                        } else {
-                            var courseboxnode = Y.one(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
-                            var favouritenode = Y.one(SELECTORS.FAVOURITELIST + ' [data-courseid="' + params.cid + '"]');
-
-                            // remove from the favourite area
-                            favouritenode.transition ({
-                                duration: 1.0,
-                                easing: 'ease-in',
-                                opacity: 0
-                            }, function() {
-                                this.remove();
-
-                                if (Y.all(SELECTORS.FAVOURITECOURSEBOX).isEmpty()) {
-                                    var alert = M.util.get_string('nofavourites', 'block_culcourse_listing');
-                                    Y.one(SELECTORS.FAVOURITECLEARBUTTON).hide();
-                                    Y.one(SELECTORS.FAVOURITEREORDERBUTTON).hide();
-                                    Y.one(SELECTORS.FAVOURITEALERT).setHTML('<span>' + alert + '</span>');
-                                }
-
-                            });
-
-                            // change the link
-                            var newurl = url + '?' + querystring.replace('remove','add');
-                            var title = M.util.get_string('favouriteadd', 'block_culcourse_listing');
-
-                            // The coursebox may not have been rendered yet.
-                            if (courseboxnode) {
-                                courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
-                                courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEREMOVE);
-                                courseboxnode.one(SELECTORS.FAVOURITEICON).addClass(CSS.FAVOURITEADD);
-                                courseboxnode.set('title', title);
-                            }
-                        }
-                    },
+                    success: editfavouritesuccess(e, params, querystring),
                     end: function(id, e) {
                         editrunning = false;
                         Y.fire('culcourse-listing:update-favourites');
 
                         if (params.action == 'add') {
-                            // Y.log('here');
-                            // Y.fire('core_course:favourited');
+                            PubSub.publish(CourseEvents.favourited);
+                            // Simulate click MyOverview.SELECTORS.ACTION_ADD_FAVOURITE.
+                            $('[data-course-id = "' + params.cid + '"]' + SELECTORS.ACTION_ADD_FAVOURITE).trigger('click');
                         } else {
-                            // Y.fire('core_course:unfavourited');
+                            PubSub.publish(CourseEvents.unfavorited);
+                            // Simulate click MyOverview.SELECTORS.ACTION_REMOVE_FAVOURITE.
+                            $('[data-course-id = "' + params.cid + '"]' + SELECTORS.ACTION_REMOVE_FAVOURITE).trigger('click');
                         }
                     }
                 }
             });
         });
     };
+
+    var editfavouritesuccess = function (e, params, querystring) {
+         if (params.action == 'add') {
+            str.get_string('favouriteremove', 'block_culcourse_listing').then(function(langString) {
+                var courseboxnode = e.target.ancestor(SELECTORS.COURSEBOXLISTCOURSEBOX, true);                
+                // Change the link, title and icon to reflect that the course can now be
+                // removed from favourites.
+                var newurl = url + '?' + querystring.replace('add', 'remove');
+                courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
+                courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEADD);
+                courseboxnode.one(SELECTORS.FAVOURITEICON).addClass(CSS.FAVOURITEREMOVE);
+                courseboxnode.one(SELECTORS.FAVOURITELINK).set('title', langString);
+                return courseboxnode;
+            }).done(function(courseboxnode) {
+                // Create the new favourite node.
+                var newfavourite = courseboxnode.cloneNode(true);
+                newfavourite.setStyle('opacity', 0);
+                // Append the new node to the end of the favourites list.
+                Y.one(SELECTORS.FAVOURITELIST).append(newfavourite);
+
+                // Add all the listeners to the new node.
+                var config = {node: newfavourite};
+                Favourite.initializer(config);
+
+                newfavourite.transition ({
+                    duration: 2.0,
+                    easing: 'ease-in',
+                    opacity: 1.0
+                })
+
+                // There must be at least one favourite now, so show the favourite buttons
+                // if they are hidden and hide the 'no favourites' message,
+                if (!Y.all(SELECTORS.FAVOURITECOURSEBOX).isEmpty()) {
+                    Y.one(SELECTORS.FAVOURITECLEARBUTTON).removeClass(CSS.HIDE);
+                    Y.one(SELECTORS.FAVOURITECLEARBUTTON).show();
+                    Y.one(SELECTORS.FAVOURITEREORDERBUTTON).removeClass(CSS.HIDE);
+                    Y.one(SELECTORS.FAVOURITEREORDERBUTTON).show();
+                    Y.one(SELECTORS.FAVOURITEALERT).setHTML('');
+                }
+
+                return;
+            }).catch(Notification.exception);
+
+        } else {
+            var keys = [
+                {
+                    key: 'nofavourites',
+                    component: 'block_culcourse_listing'
+                },
+                {
+                    key: 'favouriteadd',
+                    component: 'block_culcourse_listing'
+                },
+            ];
+
+            str.get_strings(keys).then(function(langStrings) {
+                var courseboxnode = Y.one(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
+                var favouritenode = Y.one(SELECTORS.FAVOURITELIST + ' [data-courseid="' + params.cid + '"]');
+
+                // remove from the favourite area
+                favouritenode.transition ({
+                    duration: 1.0,
+                    easing: 'ease-in',
+                    opacity: 0
+                }, function() {
+                    this.remove();
+                });
+
+                if (Y.all(SELECTORS.FAVOURITECOURSEBOX).isEmpty()) { 
+                    Y.one(SELECTORS.FAVOURITECLEARBUTTON).hide();
+                    Y.one(SELECTORS.FAVOURITEREORDERBUTTON).hide();
+                    Y.one(SELECTORS.FAVOURITEALERT).setHTML('<span>' + langString[0] + '</span>');
+                }
+                // change the link
+                var newurl = url + '?' + querystring.replace('remove','add');
+                courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
+                courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEREMOVE);
+                courseboxnode.one(SELECTORS.FAVOURITEICON).addClass(CSS.FAVOURITEADD);
+                courseboxnode.set('title', langString[1]);
+
+                return;
+            }).catch(Notification.exception);            
+        }
+
+    }
 
     return {
         initializer: function() {

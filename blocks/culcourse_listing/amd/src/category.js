@@ -1,6 +1,5 @@
-define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
-        'core/modal_factory', 'core/modal_events', 'core/key_codes'],
-    function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes) {
+define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/yui', 'core/notification', 'core/key_codes'],
+    function($, ajax, templates, str, url, Y, Notification, KeyCodes) {
 
 // YUI.add('moodle-block_culcourse_listing-category', function(Y) {
 
@@ -146,7 +145,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         // Using amd instead of Y.Promise just because there is no point
         // learning new YUI techniques. And the YUI in this plugin may be
         // replaced entirely with amd in future.
-        require(['jquery', 'core/str', 'core/templates', 'core/notification'], function($, Str, Templates, Notification) {
+        // require(['jquery', 'core/str', 'core/templates', 'core/notification'], function($, Str, Templates, Notification) {
             Str.get_string('loading', 'core')
                 .then(function(string) {
                     return Templates.renderPix('i/progressbar', 'core', string);
@@ -194,7 +193,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                     })
  
                 }).fail(Notification.exception);
-        });
+        // });
     };
 
     /**
