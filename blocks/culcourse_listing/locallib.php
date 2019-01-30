@@ -221,6 +221,7 @@ function block_culcourse_listing_update_from_favourites_api() {
 
     $existing = [];
     $add = [];
+    $remove = [];
     $usercontext = \context_user::instance($USER->id);
 
     // Get the user favourites service, scoped to a single user (their favourites only).
@@ -249,12 +250,21 @@ function block_culcourse_listing_update_from_favourites_api() {
         }
     }
 
+    $remove = array_diff($favourites, $existing);
     // Remove favourites that are not in api.
     $favourites = array_intersect($favourites, $existing);
     // Add new favourites from api.
     $favourites = array_merge($favourites, $add);
     // Update the user preference.
-    block_culcourse_listing_update_favourites_pref($favourites);
+    // block_culcourse_listing_update_favourites_pref($favourites);
+
+    if (!empty($remove)) {
+        return ['action' => 'remove', 'cid' => array_shift($remove)]; // Return all in case there has been an error?
+    } else if (!empty($add)) {
+        return ['action' => 'add', 'cid' => array_shift($add)];
+    } else {
+        return ['action' => null, 'cid' => null];
+    }
 }
 
 /**

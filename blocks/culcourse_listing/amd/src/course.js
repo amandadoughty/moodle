@@ -29,6 +29,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             ACTION_REMOVE_FAVOURITE: '[data-action="remove-favourite"]',
         };
     var URL = M.cfg.wwwroot + '/blocks/culcourse_listing/favourite_ajax.php';
+    var APIURL = M.cfg.wwwroot + '/blocks/culcourse_listing/favouriteapi_ajax.php';
 
     // Y.extend(COURSE, Y.Base, {
 
@@ -66,11 +67,11 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                         Y.fire('culcourse-listing:update-favourites');
 
                         if (params.action == 'add') {
-                            PubSub.publish(CourseEvents.favourited);
+                            // PubSub.publish(CourseEvents.favourited);
                             // Simulate click MyOverview.SELECTORS.ACTION_ADD_FAVOURITE.
                             $('[data-course-id = "' + params.cid + '"]' + SELECTORS.ACTION_ADD_FAVOURITE).trigger('click');
                         } else {
-                            PubSub.publish(CourseEvents.unfavorited);
+                            // PubSub.publish(CourseEvents.unfavorited);
                             // Simulate click MyOverview.SELECTORS.ACTION_REMOVE_FAVOURITE.
                             $('[data-course-id = "' + params.cid + '"]' + SELECTORS.ACTION_REMOVE_FAVOURITE).trigger('click');
                         }
@@ -91,6 +92,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEADD);
                 courseboxnode.one(SELECTORS.FAVOURITEICON).addClass(CSS.FAVOURITEREMOVE);
                 courseboxnode.one(SELECTORS.FAVOURITELINK).set('title', langString);
+
                 return courseboxnode;
             }).done(function(courseboxnode) {
                 // Create the new favourite node.
@@ -99,7 +101,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 // Append the new node to the end of the favourites list.
                 Y.one(SELECTORS.FAVOURITELIST).append(newfavourite);
 
-                // Add all the listeners to the new node.
+                // Add all the listeners to the new node. - delegate should remove need for this?
                 var config = {node: newfavourite};
                 Favourite.initializer(config);
 
@@ -163,6 +165,41 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             }).catch(Notification.exception);            
         }
 
+    };
+
+    var updateFavouriteViaApi = function() {
+        // Find out what changed via the api.
+        $.ajax({
+            url: APIURL,
+            method: 'POST',
+            data: {sesskey: M.cfg.sesskey},
+            context: self,
+            success: function(response) {
+                // If courseboxnode exists then editfavourites();
+                // else we just need to create or remove a favourite node.
+
+                // Remove is simple. Add should use template method.
+
+
+
+
+
+
+                // var data = JSON.parse(response);
+                // Y.log(response.cid);
+                 // Y.log(data);
+                // Simulate click.
+                // Y.log(SELECTORS.FAVOURITELINK + '_' + response.cid + ' i');
+                // $(SELECTORS.FAVOURITELINK + '_' + response.cid + ' i').trigger('click'); // Allow for multiple sid's?
+                // Y.one(SELECTORS.FAVOURITELINK + '_' + response.cid + ' i').simulate('click');
+            },
+            error: function(response) {
+                // var data = JSON.parse(response);
+                 // Y.log(data);
+            }
+        }).fail(Notification.exception);
+
+        
     }
 
     return {
@@ -176,6 +213,9 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             Y.publish('culcourse-listing:update-favourites', {
                 broadcast:2
             })
+
+            PubSub.subscribe(CourseEvents.favourited, function() {updateFavouriteViaApi();});
+            PubSub.subscribe(CourseEvents.unfavorited, function() {updateFavouriteViaApi();});
         }
     };    
 

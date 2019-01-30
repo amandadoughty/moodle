@@ -31,5 +31,5 @@ require_sesskey();
 require_login();
 
 // Update the favourites.
-block_culcourse_listing_update_from_favourites_api();
-echo true;
+$response = block_culcourse_listing_update_from_favourites_api();
+echo json_encode($response);
