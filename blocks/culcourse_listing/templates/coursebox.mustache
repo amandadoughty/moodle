@@ -1,0 +1,42 @@
+<!--
+    cid
+    coursename
+    infolinkid
+    infoimgid
+    title
+    action
+    sesskey
+    gold
+    userid
+    teachername
+    ismoreinfo
+-->
+
+<div class="culcoursebox clearfix panel panel-default collapsed yui3-dd-drop yui3-dd-draggable" data-courseid="{{cid}}" data-type="1" data-year="{{year}}" data-period="{{period}}" id="{{id}}">
+    <div class=" info panel-heading">
+        <div class="coursename_wrapper">
+            <div class="move">
+                <!-- strings-->
+                <img src="http://moodle2xgit.localhost/theme/image.php?theme=boost&component=core&rev=-1&image=i/move_2d" alt="Move" title="Move" class="cursor">
+            </div>
+            <div class="coursename">
+                <a title="{{coursename}}" href="http://moodle2xgit.localhost/course/view.php?id={{cid}}">{{coursename}}</a>
+            </div>
+        </div>
+        <div class="moreinfo">
+            <!-- if content exists -->
+            {{# ismoreinfo }}
+                {{< block_culcourse_listing/moreinfo }}
+            {{/ ismoreinfo }}
+        </div>
+        <a class=" favouritelink favouritelink_{{cid}}" title="{{title}}" href="http://moodle2xgit.localhost/blocks/culcourse_listing/favourite_post.php?action={{action}}&cid={{cid}}&sesskey={{sesskey}}">
+            <i class="{{gold}} fa fa-star"></i>
+        </a>
+    </div>
+    <div class="content panel-body">
+        <!-- if content exists -->
+        {{# ismoreinfo }}
+            {{< block_culcourse_listing/info }}
+        {{/ ismoreinfo }}
+    </div>
+</div>

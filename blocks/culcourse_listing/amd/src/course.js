@@ -96,7 +96,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 return courseboxnode;
             }).done(function(courseboxnode) {
                 // Create the new favourite node.
-                var newfavourite = courseboxnode.cloneNode(true);
+                var newfavourite = courseboxnode.cloneNode(true); // Maybe change his to use a template instead of cloning
                 newfavourite.setStyle('opacity', 0);
                 // Append the new node to the end of the favourites list.
                 Y.one(SELECTORS.FAVOURITELIST).append(newfavourite);
