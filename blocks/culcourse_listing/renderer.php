@@ -564,6 +564,37 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         $content .= html_writer::end_tag('div'); // End .panel.
 
         return $content;
+
+
+
+        // Use renderable @TODO
+        $renderable = new \block_myprofile\output\myprofile($this->config);
+        $renderer = $this->page->get_renderer('block_myprofile');
+
+
+        $content = $renderer->render($renderable);
+
+
+        return $content;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     /**
