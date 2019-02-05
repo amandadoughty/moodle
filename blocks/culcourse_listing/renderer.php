@@ -448,7 +448,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * @param string $move html for the move icons (only used for favourites)
      * @return string
      */
-    protected function coursecat_course(block_culcourse_listing_helper $chelper, $course, $additionalclasses = '', $move = '', $isfav = false) {
+    protected function coursecat_course(block_culcourse_listing_helper $chelper, $course, $additionalclasses = '', $isfav = false) {
         global $CFG;
 
         // Check if course exists.
@@ -760,7 +760,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
     }
 
     /**
-     * Drag and drop html for favourite courses
+     * Drag and drop html for favourite courses @TODO template
      *
      * @param block_culcourse_listing_helper $chelper various display options
      * @param array $courses list of favourite courses in sorted order
@@ -816,7 +816,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             }
 
             // Add the course html.
-            $content .= $this->coursecat_course($chelper, $course, '', $caption, true);
+            $content .= $this->coursecat_course($chelper, $course, '', true);
             $courseordernumber++;
         }
 
