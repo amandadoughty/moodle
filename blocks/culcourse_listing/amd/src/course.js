@@ -61,7 +61,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 data: querystring,
                 context: this,
                 on: {
-                    success: editfavouritesuccess(e, params, querystring),
+                    success: editfavouritesuccess(e, params, querystring), // @TODO pass in node?
                     end: function(id, e) {
                         editrunning = false;
                         Y.fire('culcourse-listing:update-favourites');
@@ -87,11 +87,13 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 var courseboxnode = e.target.ancestor(SELECTORS.COURSEBOXLISTCOURSEBOX, true);                
                 // Change the link, title and icon to reflect that the course can now be
                 // removed from favourites.
-                var newurl = url + '?' + querystring.replace('add', 'remove');
-                courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
-                courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEADD);
-                courseboxnode.one(SELECTORS.FAVOURITEICON).addClass(CSS.FAVOURITEREMOVE);
-                courseboxnode.one(SELECTORS.FAVOURITELINK).set('title', langString);
+                if (courseboxnode) {
+                    var newurl = url + '?' + querystring.replace('add', 'remove');
+                    courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
+                    courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEADD);
+                    courseboxnode.one(SELECTORS.FAVOURITEICON).addClass(CSS.FAVOURITEREMOVE);
+                    courseboxnode.one(SELECTORS.FAVOURITELINK).set('title', langString);
+                }
 
                 return courseboxnode;
             }).done(function(courseboxnode) {

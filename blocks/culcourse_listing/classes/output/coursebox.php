@@ -39,17 +39,52 @@ use templatable;
 class coursebox implements renderable, templatable {
 
     /**
-     * @var object An object containing the configuration information for the current instance of this block.
+     * @var object An object 
+     */
+    protected $chelper;
+
+    /**
+     * @var object An object 
      */
     protected $config;
 
     /**
+     * @var object An object 
+     */
+    protected $preferences;
+
+    /**
+     * @var object An object 
+     */
+    protected $course;
+
+    /**
+     * @var object An object 
+     */
+    protected $additionalclasses;
+
+    /**
+     * @var object An object 
+     */
+    protected $isfav;
+
+    /**
      * Constructor.
      *
-     * @param object $config An object containing the configuration information for the current instance of this block.
+     * @param block_culcourse_listing_helper $chelper various display options
+     * @param core_course_list_element $course
+     * @param string $additionalclasses additional classes to add to the main <div> tag (usually
+     *    depend on the course position in list - first/last/even/odd)
+     * @param string $move html for the move icons (only used for favourites) 
+     * @param bool $isfav true if course has been fvourited/starred
      */
-    public function __construct($config) {
+    public function __construct(\block_culcourse_listing_helper $chelper, $config, $preferences, $course, $additionalclasses = '', $isfav = false) {
+        $this->chelper = $chelper;
         $this->config = $config;
+        $this->preferences = $preferences;
+        $this->course = $course;
+        $this->additionalclasses = $additionalclasses;
+        $this->isfav = $isfav;
     }
 
     /**
@@ -59,12 +94,149 @@ class coursebox implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-        global $USER, $OUTPUT;
+        global $CFG, $USER, $OUTPUT;
+
+        require_once($CFG->dirroot.'/blocks/culcourse_listing/locallib.php');
 
         $data = new \stdClass();
+        $data->cid = $this->course->id;
+        $data->coursename = $this->chelper->get_course_formatted_name($this->course, $this->config);                
+        $data->type = \core_course_renderer::COURSECAT_TYPE_COURSE;        
+        $data->isfav = $this->isfav;
 
-        
+        $favourites = $this->chelper->get_favourites();
+
+        if ($favourites && array_key_exists($this->course->id, $favourites)) {
+            $data->action = 'remove';
+            $data->favclass = 'gold fa fa-star';
+        } else {
+            $data->action = 'add';
+            $data->favclass = 'fa fa-star-o';
+        }
+
+        $data->sesskey = sesskey();
+        $data->ismoreinfo = false;
+        $data->cannenrol = false;
+
+         // The function to be used for testing if the course is filtered or not.
+        $filterfunction = 'block_culcourse_listing_set_' . $this->config->filtertype . '_filtered_course';
+        $year = block_culcourse_listing_get_filtered_year($this->config, $this->preferences);
+        $period = block_culcourse_listing_get_filtered_period($this->config, $this->preferences);
+
+        if (!$this->isfav) {
+            $filtered = $filterfunction($course, $this->config, $year, $period, $this->chelper->get_daterange_periods());
+            // Hide the courses that don't match the filter settings.
+            if (!$filtered) {
+                $additionalclasses .= ' hide';
+            }
+        }
+
+        $data->additionalclasses = $this->additionalclasses;
+
+        $filterfield = $this->config->filterfield;
+        // The function to be used for getting the year and period for this course.
+        $filtermetafunction = 'block_culcourse_listing_get_filter_meta_' . $this->config->filtertype;
+
+        $filter = $filtermetafunction(
+            $this->course,
+            $this->config,
+            $this->chelper->get_daterange_periods()
+            );
+
+        $data->year = $filter['year'];
+        $data->period = $filter['period'];
+
+        $classes = $this->course->visible ? '' : 'dimmed';
+        $classes .= is_enrolled(\context_course::instance($this->course->id)) ? ' enrolled' : '';
+        $data->classes = $classes;
+
+        // Add the info icon link if  the course has summary text, course contacts
+        // or summary files.
+        if ($this->course->has_summary() || $this->course->has_course_contacts() || $this->course->has_course_overviewfiles()) {
+            // // Make sure JS file to expand course content is included.
+            // $output->coursecat_include_js(); // @TODO
+            $data->ismoreinfo = true;
+        }
+
+        // Add enrolmenticons.
+        if ($data->enrolmenticons = enrol_get_course_info_icons($this->course)) {
+            $data->cannenrol = true;
+        }
+
+        // Add course summary text, contacts and files.
+        $data->info = $output->coursecat_course_summary($this->chelper, $this->course);        
 
         return $data;
     }
+
+
+    // /**
+    //  * Returns HTML to display course content (summary, course contacts and optionally category name)
+    //  *
+    //  * This method is called from coursecat_course() and may be re-used in AJAX
+    //  *
+    //  * @param block_culcourse_listing_helper $chelper various display options
+    //  * @param stdClass|core_course_list_element $course
+    //  * @return string
+    //  */
+    // protected function coursecat_course_summary(\block_culcourse_listing_helper $chelper, $course) {
+    //     global $CFG;
+
+    //     if ($chelper->get_show_courses() < \core_course_renderer::COURSECAT_SHOW_COURSES_EXPANDED) {
+    //         return '';
+    //     }
+
+    //     if ($course instanceof stdClass) {
+    //         $course = new \core_course_list_element($course);
+    //     }
+
+    //     $content = '';
+
+    //     // Add course summary text.
+    //     if ($course->has_summary()) {
+    //         $content .= html_writer::start_tag('div', array('class' => 'summary'));
+    //         $content .= $chelper->get_course_formatted_summary($course,
+    //                 array('overflowdiv' => true, 'noclean' => true, 'para' => false));
+    //         $content .= html_writer::end_tag('div'); // End .summary.
+    //     }
+
+    //     // Add course summary files.
+    //     $contentimages = $contentfiles = '';
+
+    //     foreach ($course->get_course_overviewfiles() as $file) {
+    //         $isimage = $file->is_valid_image();
+    //         $url = file_encode_url("$CFG->wwwroot/pluginfile.php",
+    //                 '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+    //                 $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
+    //         if ($isimage) {
+    //             $contentimages .= html_writer::tag('div',
+    //                     html_writer::empty_tag('img', array('src' => $url)),
+    //                     array('class' => 'courseimage'));
+    //         } else {
+    //             $image = $this->output->pix_icon(file_file_icon($file, 24), $file->get_filename(), 'moodle');
+    //             $filename = html_writer::tag('span', $image, array('class' => 'fp-icon')).
+    //                     html_writer::tag('span', $file->get_filename(), array('class' => 'fp-filename'));
+    //             $contentfiles .= html_writer::tag('span',
+    //                     html_writer::link($url, $filename),
+    //                     array('class' => 'coursefile fp-filename-icon'));
+    //         }
+    //     }
+
+    //     $content .= $contentimages. $contentfiles;
+
+    //     // Add course contacts.
+    //     if ($course->has_course_contacts()) {
+    //         $content .= html_writer::start_tag('ul', array('class' => 'teachers'));
+    //         foreach ($course->get_course_contacts() as $userid => $coursecontact) {
+    //             $name = $coursecontact['rolename'].': '.
+    //                     html_writer::link(new moodle_url('/user/view.php',
+    //                             array('id' => $userid, 'course' => SITEID)),
+    //                         $coursecontact['username']);
+    //             $content .= html_writer::tag('li', $name);
+    //         }
+    //         $content .= html_writer::end_tag('ul'); // End .teachers.
+    //     }
+
+    //     return $content;
+    // }
 }

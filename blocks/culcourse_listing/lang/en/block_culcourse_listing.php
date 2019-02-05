@@ -53,6 +53,7 @@ $string['editperiod'] = 'Add/Edit Terms';
 $string['editperiods'] = 'Manage terms';
 $string['expandall'] = 'Expand All Course Lists';
 $string['divalert'] = 'Selected Modules: {$a} only';
+$string['favouriteaction'] = 'favourite{a}';
 $string['favouriteadd'] = 'Add to favourites';
 $string['favouriteremove'] = 'Remove from favourites';
 $string['favourites'] = 'Favourites';

@@ -460,141 +460,122 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             return '';
         }
 
-        // The function to be used for testing if the course is filtered or not.
-        $filterfunction = 'block_culcourse_listing_set_' . $this->config->filtertype . '_filtered_course';
-        $year = block_culcourse_listing_get_filtered_year($this->config, $this->preferences);
-        $period = block_culcourse_listing_get_filtered_period($this->config, $this->preferences);
+        // // The function to be used for testing if the course is filtered or not.
+        // $filterfunction = 'block_culcourse_listing_set_' . $this->config->filtertype . '_filtered_course';
+        // $year = block_culcourse_listing_get_filtered_year($this->config, $this->preferences);
+        // $period = block_culcourse_listing_get_filtered_period($this->config, $this->preferences);
 
-        if (!$isfav) {
-            $filtered = $filterfunction($course, $this->config, $year, $period, $chelper->get_daterange_periods());
-            // Hide the courses that don't match the filter settings.
-            if (!$filtered) {
-                $additionalclasses .= ' hide';
-            }
-        }
+        // if (!$isfav) {
+        //     $filtered = $filterfunction($course, $this->config, $year, $period, $chelper->get_daterange_periods());
+        //     // Hide the courses that don't match the filter settings.
+        //     if (!$filtered) {
+        //         $additionalclasses .= ' hide';
+        //     }
+        // }
 
-        $filterfield = $this->config->filterfield;
-        // The function to be used for getting the year and period for this course.
-        $filtermetafunction = 'block_culcourse_listing_get_filter_meta_' . $this->config->filtertype;
+        // $filterfield = $this->config->filterfield;
+        // // The function to be used for getting the year and period for this course.
+        // $filtermetafunction = 'block_culcourse_listing_get_filter_meta_' . $this->config->filtertype;
 
-        $filter = $filtermetafunction(
-            $course,
-            $this->config,
-            $chelper->get_daterange_periods()
-            );
+        // $filter = $filtermetafunction(
+        //     $course,
+        //     $this->config,
+        //     $chelper->get_daterange_periods()
+        //     );
 
-        $content = '';
-        $classes = trim('culcoursebox clearfix panel panel-default '. $additionalclasses);
-        $classes .= ' collapsed';
-        $content .= html_writer::start_tag('div', array(
-            'class' => $classes,
-            'data-courseid' => $course->id,
-            'data-type' => core_course_renderer::COURSECAT_TYPE_COURSE,
-            'data-year' => $filter['year'],
-            'data-period' => $filter['period']
-        ));
+        // $content = '';
+        // $classes = trim('culcoursebox clearfix panel panel-default '. $additionalclasses);
+        // $classes .= ' collapsed';
+        // $content .= html_writer::start_tag('div', array(
+        //     'class' => $classes,
+        //     'data-courseid' => $course->id,
+        //     'data-type' => core_course_renderer::COURSECAT_TYPE_COURSE,
+        //     'data-year' => $filter['year'],
+        //     'data-period' => $filter['period']
+        // ));
 
-        $classes = $course->visible ? '' : 'dimmed';
-        $classes .= is_enrolled(context_course::instance($course->id)) ? ' enrolled' : '';
-        $classes .= ' info panel-heading';
-        $content .= html_writer::start_tag('div', array('class' => $classes));
-        $content .= html_writer::start_tag('div', array('class' => 'coursename_wrapper'));
+        // $classes = $course->visible ? '' : 'dimmed';
+        // $classes .= is_enrolled(context_course::instance($course->id)) ? ' enrolled' : '';
+        // $classes .= ' info panel-heading';
+        // $content .= html_writer::start_tag('div', array('class' => $classes));
+        // $content .= html_writer::start_tag('div', array('class' => 'coursename_wrapper'));
 
-        // Add move icons if renderering a course in the favourites list.
-        $content .= $move;
+        // // Add move icons if renderering a course in the favourites list.
+        // $content .= $move;
 
-        // Add course name.
-        $coursename = $chelper->get_course_formatted_name($course, $this->config);
-        $coursenamelink = html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
-                                            $coursename, array('title' => $course->shortname));
-        $content .= html_writer::tag('div', $coursenamelink, array('class' => 'coursename'));
-        $content .= html_writer::end_tag('div');
-        $content .= html_writer::start_tag('div', array('class' => 'moreinfo'));
+        // // Add course name.
+        // $coursename = $chelper->get_course_formatted_name($course, $this->config);
+        // $coursenamelink = html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
+        //                                     $coursename, array('title' => $course->shortname));
+        // $content .= html_writer::tag('div', $coursenamelink, array('class' => 'coursename'));
+        // $content .= html_writer::end_tag('div');
+        // $content .= html_writer::start_tag('div', array('class' => 'moreinfo'));
 
-        // Add the info icon link if  the course has summary text, course contacts
-        // or summary files.
-        if ($course->has_summary() || $course->has_course_contacts() || $course->has_course_overviewfiles()) {
-            $url = new moodle_url('/course/info.php', array('id' => $course->id));
-            $image = html_writer::empty_tag('img', array('src' => $this->output->image_url('i/info'),
-                'alt' => get_string('summary')));
-            $content .= html_writer::link($url, $image, array('title' => get_string('summary')));
-            // Make sure JS file to expand course content is included.
-            $this->coursecat_include_js();
-        }
+        // // Add the info icon link if  the course has summary text, course contacts
+        // // or summary files.
+        // if ($course->has_summary() || $course->has_course_contacts() || $course->has_course_overviewfiles()) {
+        //     $url = new moodle_url('/course/info.php', array('id' => $course->id));
+        //     $image = html_writer::empty_tag('img', array('src' => $this->output->image_url('i/info'),
+        //         'alt' => get_string('summary')));
+        //     $content .= html_writer::link($url, $image, array('title' => get_string('summary')));
+        //     // Make sure JS file to expand course content is included.
+        //     $this->coursecat_include_js();
+        // }
 
-        $content .= html_writer::end_tag('div');
+        // $content .= html_writer::end_tag('div');
 
-        // Add favourite link.
-        $favourites = $chelper->get_favourites();
+        // // Add favourite link.
+        // $favourites = $chelper->get_favourites();
 
-        if ($favourites && array_key_exists($course->id, $favourites)) {
-            $action = 'remove';
-            $favclass = 'gold fa fa-star';
-        } else {
-            $action = 'add';
-            $favclass = 'fa fa-star-o';
-        }
+        // if ($favourites && array_key_exists($course->id, $favourites)) {
+        //     $action = 'remove';
+        //     $favclass = 'gold fa fa-star';
+        // } else {
+        //     $action = 'add';
+        //     $favclass = 'fa fa-star-o';
+        // }
 
-        $favouriteurl = new moodle_url($CFG->wwwroot. '/blocks/culcourse_listing/favourite_post.php',
-                array('action' => $action, 'cid' => $course->id, 'sesskey' => sesskey()));
-        $favouriteicon = html_writer::tag('i', '', array('class' => $favclass));
-        $content .= html_writer::link(
-            $favouriteurl,
-            $favouriteicon, array(
-                'class' => ' favouritelink favouritelink_' . $course->id,
-                'title' => get_string("favourite$action", 'block_culcourse_listing')
-                )
-            );
+        // $favouriteurl = new moodle_url($CFG->wwwroot. '/blocks/culcourse_listing/favourite_post.php',
+        //         array('action' => $action, 'cid' => $course->id, 'sesskey' => sesskey()));
+        // $favouriteicon = html_writer::tag('i', '', array('class' => $favclass));
+        // $content .= html_writer::link(
+        //     $favouriteurl,
+        //     $favouriteicon, array(
+        //         'class' => ' favouritelink favouritelink_' . $course->id,
+        //         'title' => get_string("favourite$action", 'block_culcourse_listing')
+        //         )
+        //     );
 
-        // Add enrolmenticons.
-        if ($icons = enrol_get_course_info_icons($course)) {
-            $content .= html_writer::start_tag('div', array('class' => 'enrolmenticons'));
-            foreach ($icons as $pixicon) {
-                $content .= $this->render($pixicon);
-            }
-            $content .= html_writer::end_tag('div');
-        }
+        // // Add enrolmenticons.
+        // if ($icons = enrol_get_course_info_icons($course)) {
+        //     $content .= html_writer::start_tag('div', array('class' => 'enrolmenticons'));
+        //     foreach ($icons as $pixicon) {
+        //         $content .= $this->render($pixicon);
+        //     }
+        //     $content .= html_writer::end_tag('div');
+        // }
 
-        $content .= html_writer::end_tag('div'); // End .panel-heading.
-        $content .= html_writer::start_tag('div', array('class' => 'content panel-body'));
+        // $content .= html_writer::end_tag('div'); // End .panel-heading.
+        // $content .= html_writer::start_tag('div', array('class' => 'content panel-body'));
 
-        // Add course summary text, contacts and files.
-        $content .= $this->coursecat_course_summary($chelper, $course);
-        $content .= html_writer::end_tag('div'); // End .panel-body.
-        $content .= html_writer::end_tag('div'); // End .panel.
+        // // Add course summary text, contacts and files.
+        // $content .= $this->coursecat_course_summary($chelper, $course);
+        // $content .= html_writer::end_tag('div'); // End .panel-body.
+        // $content .= html_writer::end_tag('div'); // End .panel.
 
-        return $content;
+        // return $content;
 
 
 
         // Use renderable @TODO
-        $renderable = new \block_myprofile\output\myprofile($this->config);
-        $renderer = $this->page->get_renderer('block_myprofile');
+        // $renderable = new \block_myprofile\output\coursebox($this->config);
+        // $renderer = $this->page->get_renderer('block_myprofile');
+        // $content = $renderer->render($renderable);
 
-
-        $content = $renderer->render($renderable);
-
+        $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $this->config, $this->preferences, $course, $additionalclasses, $isfav);
+        $content = $this->render_from_template('block_culcourse_listing/coursebox', $coursebox->export_for_template($this));
 
         return $content;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     /**
@@ -606,7 +587,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * @param stdClass|core_course_list_element $course
      * @return string
      */
-    protected function coursecat_course_summary(block_culcourse_listing_helper $chelper, $course) {
+    public function coursecat_course_summary(block_culcourse_listing_helper $chelper, $course) {
         global $CFG;
 
         if ($chelper->get_show_courses() < core_course_renderer::COURSECAT_SHOW_COURSES_EXPANDED) {
@@ -937,6 +918,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             $chelper->set_show_courses(core_course_renderer::COURSECAT_SHOW_COURSES_EXPANDED);
             $chelper->set_favourites($favourites);
 
+            // $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $this->config, $this->preferences, $course, $additionalclasses, $isfav);
             $content = $this->coursecat_course_summary($chelper, $course);
 
             // Return HTML for the course summary.
