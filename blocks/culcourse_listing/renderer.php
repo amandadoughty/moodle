@@ -445,10 +445,11 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * @param core_course_list_element|stdClass $course
      * @param string $additionalclasses additional classes to add to the main <div> tag (usually
      *    depend on the course position in list - first/last/even/odd)
-     * @param string $move html for the move icons (only used for favourites)
+     * @param array $move for the move icons (only used for favourites)
+     * @param bool $isfav 
      * @return string
      */
-    protected function coursecat_course(block_culcourse_listing_helper $chelper, $course, $additionalclasses = '', $isfav = false) {
+    protected function coursecat_course(block_culcourse_listing_helper $chelper, $course, $additionalclasses = '', $move = [], $isfav = false) {
         global $CFG;
 
         // Check if course exists.
@@ -572,7 +573,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         // $renderer = $this->page->get_renderer('block_myprofile');
         // $content = $renderer->render($renderable);
 
-        $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $this->config, $this->preferences, $course, $additionalclasses, $isfav);
+        $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $this->config, $this->preferences, $course, $additionalclasses, $move, $isfav);
         $content = $this->render_from_template('block_culcourse_listing/coursebox', $coursebox->export_for_template($this));
 
         return $content;
@@ -771,52 +772,76 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         $content = '';
         $courseordernumber = 0;
         $maxcourses = count($courses);
+        $move = [];
+        // $move['spacer'] = $this->output->pix_icon('spacer', '', 'moodle', ['class' => 'moveupspacer']);
+        $move['spacer'] = $this->output->image_url('spacer', 'moodle')->out();
+        // $move['moveupimg'] = $this->output->pix_icon('t/up', $strup, 'moodle', ['class' => 'up']);
+        $move['moveupimg'] = $this->output->image_url('t/up', 'moodle')->out();
+        // $move['movedownimg'] = $this->output->pix_icon('t/down', $strup, 'moodle', ['class' => 'down']);
+        $move['movedownimg'] = $this->output->image_url('t/down', 'moodle')->out();
         // Intialize string/icon etc.
-        $url = null;
-        $moveicon = null;
-        $moveup[] = null;
-        $movedown[] = null;
-        $url = new moodle_url('/blocks/culcourse_listing/move_post.php', array('sesskey' => sesskey()));
-        $moveup['str'] = get_string('moveup');
-        $moveup['icon'] = $this->image_url('t/up');
-        $movedown['str'] = get_string('movedown');
-        $movedown['icon'] = $this->image_url('t/down');
+        // $url = null;
+        // $moveicon = null;
+        // $moveup[] = null;
+        // $movedown[] = null;
+        // $url = new moodle_url('/blocks/culcourse_listing/move_post.php', array('sesskey' => sesskey()));
+        // $moveup['str'] = get_string('moveup');
+        // $moveup['icon'] = $this->image_url('t/up');
+        // $movedown['str'] = get_string('movedown');
+        // $movedown['icon'] = $this->image_url('t/down');
+
+        
 
         foreach ($courses as $course) {
             $caption = '';
 
-            if (!is_null($url)) {
-                // Add course id to move link.
-                $url->param('source', $course->id);
-                $caption .= html_writer::start_tag('div', array('class' => 'moveicons'));
-                // Add an arrow to move course up.
-                if ($courseordernumber > 0) {
-                    $url->param('move', -1);
-                    $caption .= html_writer::link($url,
-                    html_writer::empty_tag('img', array('src' => $moveup['icon'],
-                        'class' => 'up', 'alt' => $moveup['str'])),
-                        array('title' => $moveup['str'], 'class' => 'moveup'));
-                } else {
-                    // Add a spacer to keep keep down arrow icons at right position.
-                    $caption .= html_writer::empty_tag('img', array('src' => $this->image_url('spacer'),
-                        'class' => 'movedownspacer'));
-                }
-                // Add an arrow to move course down.
-                if ($courseordernumber <= $maxcourses - 2) {
-                    $url->param('move', 1);
-                    $caption .= html_writer::link($url, html_writer::empty_tag('img',
-                        array('src' => $movedown['icon'], 'class' => 'down', 'alt' => $movedown['str'])),
-                        array('title' => $movedown['str'], 'class' => 'movedown'));
-                } else {
-                    // Add a spacer to keep keep up arrow icons at right position.
-                    $caption .= html_writer::empty_tag('img', array('src' => $this->image_url('spacer'),
-                        'class' => 'moveupspacer'));
-                }
-                $caption .= html_writer::end_tag('div');
+            // if (!is_null($url)) {
+            //     // Add course id to move link.
+            //     $url->param('source', $course->id);
+            //     $caption .= html_writer::start_tag('div', array('class' => 'moveicons'));
+            //     // Add an arrow to move course up.
+            //     if ($courseordernumber > 0) {
+            //         $url->param('move', -1);
+            //         $caption .= html_writer::link($url,
+            //         html_writer::empty_tag('img', array('src' => $moveup['icon'],
+            //             'class' => 'up', 'alt' => $moveup['str'])),
+            //             array('title' => $moveup['str'], 'class' => 'moveup'));
+            //     } else {
+            //         // Add a spacer to keep keep down arrow icons at right position.
+            //         $caption .= html_writer::empty_tag('img', array('src' => $this->image_url('spacer'),
+            //             'class' => 'movedownspacer'));
+            //     }
+            //     // Add an arrow to move course down.
+            //     if ($courseordernumber <= $maxcourses - 2) {
+            //         $url->param('move', 1);
+            //         $caption .= html_writer::link($url, html_writer::empty_tag('img',
+            //             array('src' => $movedown['icon'], 'class' => 'down', 'alt' => $movedown['str'])),
+            //             array('title' => $movedown['str'], 'class' => 'movedown'));
+            //     } else {
+            //         // Add a spacer to keep keep up arrow icons at right position.
+            //         $caption .= html_writer::empty_tag('img', array('src' => $this->image_url('spacer'),
+            //             'class' => 'moveupspacer'));
+            //     }
+            //     $caption .= html_writer::end_tag('div');
+            // }
+
+
+            if ($courseordernumber > 0) {
+                $move['moveup'] = true;                
+            } else {
+                $move['moveup'] = false;                
+            }
+            // Add an arrow to move course down.
+            if ($courseordernumber <= $maxcourses - 2) {
+                $move['movedown'] = true;                
+            } else {
+                // Add a spacer to keep keep up arrow icons at right position.
+                $move['movedown'] = false;
             }
 
+
             // Add the course html.
-            $content .= $this->coursecat_course($chelper, $course, '', true);
+            $content .= $this->coursecat_course($chelper, $course, '', $move, true);
             $courseordernumber++;
         }
 

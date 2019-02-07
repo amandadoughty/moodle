@@ -377,13 +377,13 @@
 }
 
 .block_culcourse_listing .movedownspacer {
-    float: left;
-    width: 14px;
+    /*float: left;*/
+    width: 12px;
 }
 
 .block_culcourse_listing .moveupspacer {
-    float: right;
-    width: 14px;
+    /*float: right;*/
+    width: 17px;
 }
 
 .block_culcourse_listing div.flush {

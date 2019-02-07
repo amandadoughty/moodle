@@ -66,6 +66,11 @@ class coursebox implements renderable, templatable {
     /**
      * @var object An object 
      */
+    protected $move;
+
+    /**
+     * @var object An object 
+     */
     protected $isfav;
 
     /**
@@ -78,12 +83,13 @@ class coursebox implements renderable, templatable {
      * @param string $move html for the move icons (only used for favourites) 
      * @param bool $isfav true if course has been fvourited/starred
      */
-    public function __construct(\block_culcourse_listing_helper $chelper, $config, $preferences, $course, $additionalclasses = '', $isfav = false) {
+    public function __construct(\block_culcourse_listing_helper $chelper, $config, $preferences, $course, $additionalclasses = '', $move, $isfav = false) {
         $this->chelper = $chelper;
         $this->config = $config;
         $this->preferences = $preferences;
         $this->course = $course;
         $this->additionalclasses = $additionalclasses;
+        $this->move = $move;
         $this->isfav = $isfav;
     }
 
@@ -102,6 +108,7 @@ class coursebox implements renderable, templatable {
         $data->cid = $this->course->id;
         $data->coursename = $this->chelper->get_course_formatted_name($this->course, $this->config);                
         $data->type = \core_course_renderer::COURSECAT_TYPE_COURSE;        
+        $data->move = $this->move;
         $data->isfav = $this->isfav;
 
         $favourites = $this->chelper->get_favourites();

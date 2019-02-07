@@ -1,0 +1,18 @@
+<div class="moveicons">
+    {{# move.moveup }}
+    <a title="Move up" class="moveup" href="/blocks/culcourse_listing/move_post.php?sesskey={{sesskey}}&source={{cid}}&move=-1">
+        <img src="{{{move.moveupimg}}}" class="up" alt="Move up">
+    </a>
+    {{/ move.moveup }}
+    {{^ move.moveup }}
+    <img src="{{{move.spacer}}}" class="moveupspacer">
+    {{/ move.moveup }}
+    {{# move.movedown }}
+    <a title="Move down" class="movedown" href="/blocks/culcourse_listing/move_post.php?sesskey={{seskey}}&source={{cid}}&move=1">
+        <img src="{{{move.movedownimg}}}" class="down" alt="Move down">
+    </a>
+    {{/ move.movedown }}
+    {{^ move.movedown }}
+    <img src="{{{move.spacer}}}" class="movedownspacer">
+    {{/ move.movedown }}
+</div>
