@@ -261,7 +261,7 @@ function block_culcourse_listing_update_from_favourites_api() {
     if (!empty($remove)) {
         return ['action' => 'remove', 'cid' => array_shift($remove)]; // Return all in case there has been an error?
     } else if (!empty($add)) {
-        return ['action' => 'add', 'cid' => array_shift($add)];
+        return ['action' => 'add', 'cid' => array_shift($add)]; //@TODO return node
     } else {
         return ['action' => null, 'cid' => null];
     }

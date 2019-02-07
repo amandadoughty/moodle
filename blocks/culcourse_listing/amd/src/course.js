@@ -98,7 +98,15 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 return courseboxnode;
             }).done(function(courseboxnode) {
                 // Create the new favourite node.
-                var newfavourite = courseboxnode.cloneNode(true); // Maybe change his to use a template instead of cloning
+                if (courseboxnode) {
+                    var newfavourite = courseboxnode.cloneNode(true); // Maybe change his to use a template instead of cloning
+                } else {
+                    // template
+                }
+
+
+
+
                 newfavourite.setStyle('opacity', 0);
                 // Append the new node to the end of the favourites list.
                 Y.one(SELECTORS.FAVOURITELIST).append(newfavourite);
@@ -156,12 +164,15 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                     Y.one(SELECTORS.FAVOURITEREORDERBUTTON).hide();
                     Y.one(SELECTORS.FAVOURITEALERT).setHTML('<span>' + langString[0] + '</span>');
                 }
-                // change the link
-                var newurl = url + '?' + querystring.replace('remove','add');
-                courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
-                courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEREMOVE);
-                courseboxnode.one(SELECTORS.FAVOURITEICON).addClass(CSS.FAVOURITEADD);
-                courseboxnode.set('title', langString[1]);
+
+                if (courseboxnode) {
+                    // change the link
+                    var newurl = url + '?' + querystring.replace('remove','add');
+                    courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
+                    courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEREMOVE);
+                    courseboxnode.one(SELECTORS.FAVOURITEICON).addClass(CSS.FAVOURITEADD);
+                    courseboxnode.set('title', langString[1]);
+                }
 
                 return;
             }).catch(Notification.exception);            

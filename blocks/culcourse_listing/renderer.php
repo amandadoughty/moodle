@@ -461,118 +461,6 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             return '';
         }
 
-        // // The function to be used for testing if the course is filtered or not.
-        // $filterfunction = 'block_culcourse_listing_set_' . $this->config->filtertype . '_filtered_course';
-        // $year = block_culcourse_listing_get_filtered_year($this->config, $this->preferences);
-        // $period = block_culcourse_listing_get_filtered_period($this->config, $this->preferences);
-
-        // if (!$isfav) {
-        //     $filtered = $filterfunction($course, $this->config, $year, $period, $chelper->get_daterange_periods());
-        //     // Hide the courses that don't match the filter settings.
-        //     if (!$filtered) {
-        //         $additionalclasses .= ' hide';
-        //     }
-        // }
-
-        // $filterfield = $this->config->filterfield;
-        // // The function to be used for getting the year and period for this course.
-        // $filtermetafunction = 'block_culcourse_listing_get_filter_meta_' . $this->config->filtertype;
-
-        // $filter = $filtermetafunction(
-        //     $course,
-        //     $this->config,
-        //     $chelper->get_daterange_periods()
-        //     );
-
-        // $content = '';
-        // $classes = trim('culcoursebox clearfix panel panel-default '. $additionalclasses);
-        // $classes .= ' collapsed';
-        // $content .= html_writer::start_tag('div', array(
-        //     'class' => $classes,
-        //     'data-courseid' => $course->id,
-        //     'data-type' => core_course_renderer::COURSECAT_TYPE_COURSE,
-        //     'data-year' => $filter['year'],
-        //     'data-period' => $filter['period']
-        // ));
-
-        // $classes = $course->visible ? '' : 'dimmed';
-        // $classes .= is_enrolled(context_course::instance($course->id)) ? ' enrolled' : '';
-        // $classes .= ' info panel-heading';
-        // $content .= html_writer::start_tag('div', array('class' => $classes));
-        // $content .= html_writer::start_tag('div', array('class' => 'coursename_wrapper'));
-
-        // // Add move icons if renderering a course in the favourites list.
-        // $content .= $move;
-
-        // // Add course name.
-        // $coursename = $chelper->get_course_formatted_name($course, $this->config);
-        // $coursenamelink = html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
-        //                                     $coursename, array('title' => $course->shortname));
-        // $content .= html_writer::tag('div', $coursenamelink, array('class' => 'coursename'));
-        // $content .= html_writer::end_tag('div');
-        // $content .= html_writer::start_tag('div', array('class' => 'moreinfo'));
-
-        // // Add the info icon link if  the course has summary text, course contacts
-        // // or summary files.
-        // if ($course->has_summary() || $course->has_course_contacts() || $course->has_course_overviewfiles()) {
-        //     $url = new moodle_url('/course/info.php', array('id' => $course->id));
-        //     $image = html_writer::empty_tag('img', array('src' => $this->output->image_url('i/info'),
-        //         'alt' => get_string('summary')));
-        //     $content .= html_writer::link($url, $image, array('title' => get_string('summary')));
-        //     // Make sure JS file to expand course content is included.
-        //     $this->coursecat_include_js();
-        // }
-
-        // $content .= html_writer::end_tag('div');
-
-        // // Add favourite link.
-        // $favourites = $chelper->get_favourites();
-
-        // if ($favourites && array_key_exists($course->id, $favourites)) {
-        //     $action = 'remove';
-        //     $favclass = 'gold fa fa-star';
-        // } else {
-        //     $action = 'add';
-        //     $favclass = 'fa fa-star-o';
-        // }
-
-        // $favouriteurl = new moodle_url($CFG->wwwroot. '/blocks/culcourse_listing/favourite_post.php',
-        //         array('action' => $action, 'cid' => $course->id, 'sesskey' => sesskey()));
-        // $favouriteicon = html_writer::tag('i', '', array('class' => $favclass));
-        // $content .= html_writer::link(
-        //     $favouriteurl,
-        //     $favouriteicon, array(
-        //         'class' => ' favouritelink favouritelink_' . $course->id,
-        //         'title' => get_string("favourite$action", 'block_culcourse_listing')
-        //         )
-        //     );
-
-        // // Add enrolmenticons.
-        // if ($icons = enrol_get_course_info_icons($course)) {
-        //     $content .= html_writer::start_tag('div', array('class' => 'enrolmenticons'));
-        //     foreach ($icons as $pixicon) {
-        //         $content .= $this->render($pixicon);
-        //     }
-        //     $content .= html_writer::end_tag('div');
-        // }
-
-        // $content .= html_writer::end_tag('div'); // End .panel-heading.
-        // $content .= html_writer::start_tag('div', array('class' => 'content panel-body'));
-
-        // // Add course summary text, contacts and files.
-        // $content .= $this->coursecat_course_summary($chelper, $course);
-        // $content .= html_writer::end_tag('div'); // End .panel-body.
-        // $content .= html_writer::end_tag('div'); // End .panel.
-
-        // return $content;
-
-
-
-        // Use renderable @TODO
-        // $renderable = new \block_myprofile\output\coursebox($this->config);
-        // $renderer = $this->page->get_renderer('block_myprofile');
-        // $content = $renderer->render($renderable);
-
         $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $this->config, $this->preferences, $course, $additionalclasses, $move, $isfav);
         $content = $this->render_from_template('block_culcourse_listing/coursebox', $coursebox->export_for_template($this));
 
@@ -753,7 +641,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
 
         // Add courses with drag and drop hml prepended.
         if ($courses) {
-            $content .= $this->drag_drop($chelper, $courses, $prefix);
+            $content .= $this->drag_drop($chelper, $courses);
         }
 
         $content .= html_writer::end_tag('div');
@@ -768,64 +656,16 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * @param string $prefix identifies the list
      * @return string $content
      */
-    public function drag_drop(block_culcourse_listing_helper $chelper, $courses, $prefix='course_') {
+    public function drag_drop(block_culcourse_listing_helper $chelper, $courses) {
         $content = '';
         $courseordernumber = 0;
         $maxcourses = count($courses);
         $move = [];
-        // $move['spacer'] = $this->output->pix_icon('spacer', '', 'moodle', ['class' => 'moveupspacer']);
         $move['spacer'] = $this->output->image_url('spacer', 'moodle')->out();
-        // $move['moveupimg'] = $this->output->pix_icon('t/up', $strup, 'moodle', ['class' => 'up']);
         $move['moveupimg'] = $this->output->image_url('t/up', 'moodle')->out();
-        // $move['movedownimg'] = $this->output->pix_icon('t/down', $strup, 'moodle', ['class' => 'down']);
-        $move['movedownimg'] = $this->output->image_url('t/down', 'moodle')->out();
-        // Intialize string/icon etc.
-        // $url = null;
-        // $moveicon = null;
-        // $moveup[] = null;
-        // $movedown[] = null;
-        // $url = new moodle_url('/blocks/culcourse_listing/move_post.php', array('sesskey' => sesskey()));
-        // $moveup['str'] = get_string('moveup');
-        // $moveup['icon'] = $this->image_url('t/up');
-        // $movedown['str'] = get_string('movedown');
-        // $movedown['icon'] = $this->image_url('t/down');
-
-        
+        $move['movedownimg'] = $this->output->image_url('t/down', 'moodle')->out();      
 
         foreach ($courses as $course) {
-            $caption = '';
-
-            // if (!is_null($url)) {
-            //     // Add course id to move link.
-            //     $url->param('source', $course->id);
-            //     $caption .= html_writer::start_tag('div', array('class' => 'moveicons'));
-            //     // Add an arrow to move course up.
-            //     if ($courseordernumber > 0) {
-            //         $url->param('move', -1);
-            //         $caption .= html_writer::link($url,
-            //         html_writer::empty_tag('img', array('src' => $moveup['icon'],
-            //             'class' => 'up', 'alt' => $moveup['str'])),
-            //             array('title' => $moveup['str'], 'class' => 'moveup'));
-            //     } else {
-            //         // Add a spacer to keep keep down arrow icons at right position.
-            //         $caption .= html_writer::empty_tag('img', array('src' => $this->image_url('spacer'),
-            //             'class' => 'movedownspacer'));
-            //     }
-            //     // Add an arrow to move course down.
-            //     if ($courseordernumber <= $maxcourses - 2) {
-            //         $url->param('move', 1);
-            //         $caption .= html_writer::link($url, html_writer::empty_tag('img',
-            //             array('src' => $movedown['icon'], 'class' => 'down', 'alt' => $movedown['str'])),
-            //             array('title' => $movedown['str'], 'class' => 'movedown'));
-            //     } else {
-            //         // Add a spacer to keep keep up arrow icons at right position.
-            //         $caption .= html_writer::empty_tag('img', array('src' => $this->image_url('spacer'),
-            //             'class' => 'moveupspacer'));
-            //     }
-            //     $caption .= html_writer::end_tag('div');
-            // }
-
-
             if ($courseordernumber > 0) {
                 $move['moveup'] = true;                
             } else {
@@ -838,7 +678,6 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 // Add a spacer to keep keep up arrow icons at right position.
                 $move['movedown'] = false;
             }
-
 
             // Add the course html.
             $content .= $this->coursecat_course($chelper, $course, '', $move, true);
