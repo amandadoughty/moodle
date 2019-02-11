@@ -177,73 +177,73 @@ class coursebox implements renderable, templatable {
     }
 
 
-    // /**
-    //  * Returns HTML to display course content (summary, course contacts and optionally category name)
-    //  *
-    //  * This method is called from coursecat_course() and may be re-used in AJAX
-    //  *
-    //  * @param block_culcourse_listing_helper $chelper various display options
-    //  * @param stdClass|core_course_list_element $course
-    //  * @return string
-    //  */
-    // protected function coursecat_course_summary(\block_culcourse_listing_helper $chelper, $course) {
-    //     global $CFG;
+    /**
+     * Returns HTML to display course content (summary, course contacts and optionally category name)
+     *
+     * This method is called from coursecat_course() and may be re-used in AJAX
+     *
+     * @param block_culcourse_listing_helper $chelper various display options
+     * @param stdClass|core_course_list_element $course
+     * @return string
+     */
+    public static function coursecat_course_summary(\block_culcourse_listing_helper $chelper, $course) {
+        global $CFG;
 
-    //     if ($chelper->get_show_courses() < \core_course_renderer::COURSECAT_SHOW_COURSES_EXPANDED) {
-    //         return '';
-    //     }
+        if ($chelper->get_show_courses() < \core_course_renderer::COURSECAT_SHOW_COURSES_EXPANDED) {
+            return '';
+        }
 
-    //     if ($course instanceof stdClass) {
-    //         $course = new \core_course_list_element($course);
-    //     }
+        if ($course instanceof stdClass) {
+            $course = new \core_course_list_element($course);
+        }
 
-    //     $content = '';
+        $content = '';
 
-    //     // Add course summary text.
-    //     if ($course->has_summary()) {
-    //         $content .= html_writer::start_tag('div', array('class' => 'summary'));
-    //         $content .= $chelper->get_course_formatted_summary($course,
-    //                 array('overflowdiv' => true, 'noclean' => true, 'para' => false));
-    //         $content .= html_writer::end_tag('div'); // End .summary.
-    //     }
+        // Add course summary text.
+        if ($course->has_summary()) {
+            $content .= html_writer::start_tag('div', array('class' => 'summary'));
+            $content .= $chelper->get_course_formatted_summary($course,
+                    array('overflowdiv' => true, 'noclean' => true, 'para' => false));
+            $content .= html_writer::end_tag('div'); // End .summary.
+        }
 
-    //     // Add course summary files.
-    //     $contentimages = $contentfiles = '';
+        // Add course summary files.
+        $contentimages = $contentfiles = '';
 
-    //     foreach ($course->get_course_overviewfiles() as $file) {
-    //         $isimage = $file->is_valid_image();
-    //         $url = file_encode_url("$CFG->wwwroot/pluginfile.php",
-    //                 '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
-    //                 $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
-    //         if ($isimage) {
-    //             $contentimages .= html_writer::tag('div',
-    //                     html_writer::empty_tag('img', array('src' => $url)),
-    //                     array('class' => 'courseimage'));
-    //         } else {
-    //             $image = $this->output->pix_icon(file_file_icon($file, 24), $file->get_filename(), 'moodle');
-    //             $filename = html_writer::tag('span', $image, array('class' => 'fp-icon')).
-    //                     html_writer::tag('span', $file->get_filename(), array('class' => 'fp-filename'));
-    //             $contentfiles .= html_writer::tag('span',
-    //                     html_writer::link($url, $filename),
-    //                     array('class' => 'coursefile fp-filename-icon'));
-    //         }
-    //     }
+        foreach ($course->get_course_overviewfiles() as $file) {
+            $isimage = $file->is_valid_image();
+            $url = file_encode_url("$CFG->wwwroot/pluginfile.php",
+                    '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+                    $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
+            if ($isimage) {
+                $contentimages .= html_writer::tag('div',
+                        html_writer::empty_tag('img', array('src' => $url)),
+                        array('class' => 'courseimage'));
+            } else {
+                $image = $this->output->pix_icon(file_file_icon($file, 24), $file->get_filename(), 'moodle');
+                $filename = html_writer::tag('span', $image, array('class' => 'fp-icon')).
+                        html_writer::tag('span', $file->get_filename(), array('class' => 'fp-filename'));
+                $contentfiles .= html_writer::tag('span',
+                        html_writer::link($url, $filename),
+                        array('class' => 'coursefile fp-filename-icon'));
+            }
+        }
 
-    //     $content .= $contentimages. $contentfiles;
+        $content .= $contentimages. $contentfiles;
 
-    //     // Add course contacts.
-    //     if ($course->has_course_contacts()) {
-    //         $content .= html_writer::start_tag('ul', array('class' => 'teachers'));
-    //         foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-    //             $name = $coursecontact['rolename'].': '.
-    //                     html_writer::link(new moodle_url('/user/view.php',
-    //                             array('id' => $userid, 'course' => SITEID)),
-    //                         $coursecontact['username']);
-    //             $content .= html_writer::tag('li', $name);
-    //         }
-    //         $content .= html_writer::end_tag('ul'); // End .teachers.
-    //     }
+        // Add course contacts.
+        if ($course->has_course_contacts()) {
+            $content .= html_writer::start_tag('ul', array('class' => 'teachers'));
+            foreach ($course->get_course_contacts() as $userid => $coursecontact) {
+                $name = $coursecontact['rolename'].': '.
+                        html_writer::link(new moodle_url('/user/view.php',
+                                array('id' => $userid, 'course' => SITEID)),
+                            $coursecontact['username']);
+                $content .= html_writer::tag('li', $name);
+            }
+            $content .= html_writer::end_tag('ul'); // End .teachers.
+        }
 
-    //     return $content;
-    // }
+        return $info;
+    }
 }

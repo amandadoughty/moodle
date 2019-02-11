@@ -1,9 +1,22 @@
-        <ul class="teachers">
-            <!-- Loop and string -->
-            {{# isteachers }}
-            	<li>lecturer: <a href="http://moodle2xgit.localhost/user/view.php?id={{userid}}&course={{cid}}">{{teachername}}</a></li>
-        	{{/ isteachers }}
-        </ul>
-
-
-        {{{info}}}
+	    <!-- if summary exists -->
+	    {{# summary }}            
+	        <div class="summary">
+	            <div class="no-overflow">{{{summary}}}</div>
+	        </div>
+	    {{/ summary }}
+	    <!-- if images exists -->
+	    {{# courseimgs }} 
+	        <div class="courseimage">
+	            <img src={{{courseimg}}}">
+	        </div>
+	    {{/ courseimgs }}
+	    <!-- if teachers exists -->
+	    {{# isteachers }} 
+	        <ul class="teachers">
+	            <!-- loop -->
+	            {{# teachers }}
+	            <li>{# str }}teacher, core{{/ str }}<a href="/user/view.php?id={{userid}}&course={{cid}}">{{name}}</a>
+	            </li>
+	            {{/ teachers }}
+	        </ul>
+	    {{/ isteachers }}
