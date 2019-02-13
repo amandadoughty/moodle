@@ -63,7 +63,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
 	        'culcourse_listing m-0'
 	        );
 	    $heading = html_writer::link('#'.$id, $heading, ['class'=>'nav-link favourites-link active', 'data-toggle'=>'tab', 'role'=>'tab', 'aria-expanded'=>'true']);
-	    $content .= html_writer::tag('div', $heading, ['class'=>'nav-item']);
+	    $content .= html_writer::tag('li', $heading, ['class'=>'nav-item']);
 
 	    $content .= html_writer::start_tag('div', array('id' => 'favouritesbuttons'));
 
@@ -207,7 +207,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
             
             $heading = html_writer::tag('h2', $header, array('class' => 'allcourses m-0'));
             $heading = html_writer::link('#'.$id, $heading, ['class'=>'nav-link allcourses-link', 'data-toggle'=>'tab', 'role'=>'tab']);
-            $content .= html_writer::tag('div', $heading, ['class'=>'nav-item']);
+            $content .= html_writer::tag('li', $heading, ['class'=>'nav-item']);
 
             $content .= html_writer::tag('div', $divalert, array('class' => 'divalert text-center text-white mb-3'));
             $hasexpandedcats = $chelper->get_has_expanded_categories();

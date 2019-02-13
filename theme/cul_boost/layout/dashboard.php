@@ -44,21 +44,21 @@ echo $OUTPUT->doctype() ?>
 <?php require_once(dirname(__FILE__).'/includes/header.php'); ?>
 
 <?php 
-    if($PAGE->theme->settings->usefrontpageslider == 1) {
-        require_once(dirname(__FILE__).'/includes/imageslider.php');
-    }  
+    // if($PAGE->theme->settings->usefrontpageslider == 1) {
+    //     require_once(dirname(__FILE__).'/includes/imageslider.php');
+    // }  
 
-    require_once(dirname(__FILE__).'/includes/findamodule.php');
+    // require_once(dirname(__FILE__).'/includes/findamodule.php');
 
-    echo html_writer::start_tag('div', ['class'=>'dashboard-navbar-wrap pt-5 container-fluid']);
+    echo html_writer::start_tag('div', ['class'=>'dashboard-navbar-wrap container-fluid']);
         require_once(dirname(__FILE__).'/includes/navbar.php');
     echo html_writer::end_tag('div');
 
-    require_once(dirname(__FILE__).'/includes/recentcourses.php');
+    // require_once(dirname(__FILE__).'/includes/recentcourses.php');
 
-    if ($hasdashfull) {
-        echo $OUTPUT->synergyblocks($dashf, 'w-100 d-flex flex-wrap align-items-stretch mb-5');
-    }
+    // if ($hasdashfull) {
+    //     echo $OUTPUT->synergyblocks($dashf, 'w-100 d-flex flex-wrap align-items-stretch mb-5');
+    // }
 ?>
 
 <div id="page">
@@ -73,13 +73,16 @@ echo $OUTPUT->doctype() ?>
 
                 echo html_writer::start_tag('div', ['class'=>'dashboard-blocks-wrap w-100']);
                     if ($hasdashleft) {
-                        echo $OUTPUT->synergyblocks($dashl, 'col-12 col-md-6 col-xl-4 d-flex flex-wrap align-items-stretch mb-4');
+                        echo $OUTPUT->synergyblocks($dashl, 'col-12 col-md-8 d-flex flex-wrap align-items-stretch mb-4');
                     }
-                    if ($hasdashmiddle) {
-                        echo $OUTPUT->synergyblocks($dashm, 'col-12 col-md-6 col-xl-4 d-flex flex-wrap align-items-stretch mb-4');
-                    }
+                    // if ($hasdashmiddle) {
+                    //     echo $OUTPUT->synergyblocks($dashm, 'col-12 col-md-6 col-xl-4 d-flex flex-wrap align-items-stretch mb-4');
+                    // }
+                    // if ($hasdashcontent) {
+                    //     echo $OUTPUT->synergyblocks($dashc, 'col-12 col-md-8 d-flex flex-wrap align-items-stretch mb-8');
+                    // }
                     if ($hasdashright) {
-                        echo $OUTPUT->synergyblocks($dashr, 'col-12 col-md-6 col-xl-4 d-flex flex-wrap align-items-stretch mb-4');
+                        echo $OUTPUT->synergyblocks($dashr, 'col-12 col-md-4 d-flex flex-wrap align-items-stretch mb-4');
                     }
                 echo html_writer::end_tag('div');
             ?>
