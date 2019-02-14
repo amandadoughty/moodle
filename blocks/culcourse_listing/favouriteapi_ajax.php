@@ -31,5 +31,26 @@ require_sesskey();
 require_login();
 
 // Update the favourites.
-$response = block_culcourse_listing_update_from_favourites_api();
-echo json_encode($response);
+$result = block_culcourse_listing_update_from_favourites_api();
+
+if ($result['action'] == 'add') {
+	$chelper =
+	$config = 
+	$preferences = 
+	$course = 
+	$renderer = 
+	$move = [];
+	$move['spacer'] = $this->output->image_url('spacer', 'moodle')->out();
+	$move['moveupimg'] = $this->output->image_url('t/up', 'moodle')->out();
+	$move['moveup'] = true;
+	$move['movedown'] = false;
+	$coursebox = new block_culcourse_listing\output\coursebox($chelper, $config, $preferences, $course, '', $move, true);
+	$data = $coursebox->export_for_template($renderer);
+
+	$result['data'] = $data;
+}
+
+echo json_encode($result);
+
+
+

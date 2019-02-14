@@ -35,8 +35,6 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
     var editrunning = false;
 
-
-
     var editfavourite = function (e) {
         e.preventDefault();
 
@@ -49,8 +47,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         var link = e.target.get('parentNode');
         var href = link.get('href').split('?');
         var url = href[0];
-        var querystring = href[1];
-        
+        var querystring = href[1];        
 
         Y.use('base', 'anim', 'tabview', 'transition', 'querystring-parse', 'event-custom', function() {
             // returns an object with params as attributes

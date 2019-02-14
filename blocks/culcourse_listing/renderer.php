@@ -461,7 +461,8 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             return '';
         }
 
-        $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $this->config, $this->preferences, $course, $additionalclasses, $move, $isfav);
+        // $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $this->config, $this->preferences, $course, $additionalclasses, $move, $isfav);
+        $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $course, $additionalclasses, $move, $isfav);
         $content = $this->render_from_template('block_culcourse_listing/coursebox', $coursebox->export_for_template($this));
 
         return $content;
@@ -802,6 +803,15 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
     public function set_config($config) {
         $this->config = $config;
     }
+
+    /**
+     * Sets the block admin settings.
+     *
+     * @param array $preferences
+     */
+    public function get_config() {
+        return $this->config;
+    }    
 
     /**
      * Sets the user preferences for the state of the filters.

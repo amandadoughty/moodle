@@ -43,15 +43,15 @@ class coursebox implements renderable, templatable {
      */
     protected $chelper;
 
-    /**
-     * @var object An object 
-     */
-    protected $config;
+    // /**
+    //  * @var object An object 
+    //  */
+    // protected $config;
 
-    /**
-     * @var object An object 
-     */
-    protected $preferences;
+    // /**
+    //  * @var object An object 
+    //  */
+    // protected $preferences;
 
     /**
      * @var object An object 
@@ -76,17 +76,16 @@ class coursebox implements renderable, templatable {
     /**
      * Constructor.
      *
-     * @param block_culcourse_listing_helper $chelper various display options
      * @param core_course_list_element $course
      * @param string $additionalclasses additional classes to add to the main <div> tag (usually
      *    depend on the course position in list - first/last/even/odd)
      * @param string $move html for the move icons (only used for favourites) 
      * @param bool $isfav true if course has been fvourited/starred
      */
-    public function __construct(\block_culcourse_listing_helper $chelper, $config, $preferences, $course, $additionalclasses = '', $move, $isfav = false) {
+    public function __construct($chelper, $course, $additionalclasses = '', $move, $isfav = false) {
         $this->chelper = $chelper;
-        $this->config = $config;
-        $this->preferences = $preferences;
+        // $config = $config;
+        // $preferences = $preferences;
         $this->course = $course;
         $this->additionalclasses = $additionalclasses;
         $this->move = $move;
@@ -104,13 +103,17 @@ class coursebox implements renderable, templatable {
 
         require_once($CFG->dirroot.'/blocks/culcourse_listing/locallib.php');
 
+        $config = $output->get_config();
+        $preferences = $output->get_preferences();
+
         $data = new \stdClass();
         $data->cid = $this->course->id;
-        $data->coursename = $this->chelper->get_course_formatted_name($this->course, $this->config);                
+        $data->coursename = $this->chelper->get_course_formatted_name($this->course, $config);                
         $data->type = \core_course_renderer::COURSECAT_TYPE_COURSE;        
         $data->move = $this->move;
         $data->isfav = $this->isfav;
 
+        
         $favourites = $this->chelper->get_favourites();
 
         if ($favourites && array_key_exists($this->course->id, $favourites)) {
@@ -126,12 +129,12 @@ class coursebox implements renderable, templatable {
         $data->cannenrol = false;
 
          // The function to be used for testing if the course is filtered or not.
-        $filterfunction = 'block_culcourse_listing_set_' . $this->config->filtertype . '_filtered_course';
-        $year = block_culcourse_listing_get_filtered_year($this->config, $this->preferences);
-        $period = block_culcourse_listing_get_filtered_period($this->config, $this->preferences);
+        $filterfunction = 'block_culcourse_listing_set_' . $config->filtertype . '_filtered_course';
+        $year = block_culcourse_listing_get_filtered_year($config, $preferences);
+        $period = block_culcourse_listing_get_filtered_period($config, $preferences);
 
         if (!$this->isfav) {
-            $filtered = $filterfunction($course, $this->config, $year, $period, $this->chelper->get_daterange_periods());
+            $filtered = $filterfunction($course, $config, $year, $period, $this->chelper->get_daterange_periods());
             // Hide the courses that don't match the filter settings.
             if (!$filtered) {
                 $additionalclasses .= ' hide';
@@ -140,13 +143,13 @@ class coursebox implements renderable, templatable {
 
         $data->additionalclasses = $this->additionalclasses;
 
-        $filterfield = $this->config->filterfield;
+        $filterfield = $config->filterfield;
         // The function to be used for getting the year and period for this course.
-        $filtermetafunction = 'block_culcourse_listing_get_filter_meta_' . $this->config->filtertype;
+        $filtermetafunction = 'block_culcourse_listing_get_filter_meta_' . $config->filtertype;
 
         $filter = $filtermetafunction(
             $this->course,
-            $this->config,
+            $config,
             $this->chelper->get_daterange_periods()
             );
 
@@ -197,53 +200,44 @@ class coursebox implements renderable, templatable {
             $course = new \core_course_list_element($course);
         }
 
-        $content = '';
+        $data = new \stdClass();
+
+        $data->summary = false;
+        $data->contentimages = [];
+        $data->contentfiles = [];
+        $data->iscontacts = false;
+        $data->contacts = [];
 
         // Add course summary text.
         if ($course->has_summary()) {
-            $content .= html_writer::start_tag('div', array('class' => 'summary'));
-            $content .= $chelper->get_course_formatted_summary($course,
+            $data->summary = $chelper->get_course_formatted_summary($course,
                     array('overflowdiv' => true, 'noclean' => true, 'para' => false));
-            $content .= html_writer::end_tag('div'); // End .summary.
         }
 
         // Add course summary files.
-        $contentimages = $contentfiles = '';
-
         foreach ($course->get_course_overviewfiles() as $file) {
             $isimage = $file->is_valid_image();
             $url = file_encode_url("$CFG->wwwroot/pluginfile.php",
                     '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
                     $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
             if ($isimage) {
-                $contentimages .= html_writer::tag('div',
-                        html_writer::empty_tag('img', array('src' => $url)),
-                        array('class' => 'courseimage'));
+                $data->contentimages[] = ['url' => $url];
             } else {
                 $image = $this->output->pix_icon(file_file_icon($file, 24), $file->get_filename(), 'moodle');
                 $filename = html_writer::tag('span', $image, array('class' => 'fp-icon')).
                         html_writer::tag('span', $file->get_filename(), array('class' => 'fp-filename'));
-                $contentfiles .= html_writer::tag('span',
-                        html_writer::link($url, $filename),
-                        array('class' => 'coursefile fp-filename-icon'));
+                $data->contentfiles[] = ['image' => $image, 'url' => $url, 'filename' => $filename];
             }
         }
-
-        $content .= $contentimages. $contentfiles;
 
         // Add course contacts.
         if ($course->has_course_contacts()) {
-            $content .= html_writer::start_tag('ul', array('class' => 'teachers'));
+            $data->iscontacts = true;
             foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-                $name = $coursecontact['rolename'].': '.
-                        html_writer::link(new moodle_url('/user/view.php',
-                                array('id' => $userid, 'course' => SITEID)),
-                            $coursecontact['username']);
-                $content .= html_writer::tag('li', $name);
+                $data->contacts[] = ['role' => $coursecontact['rolename'], 'userid' => $userid, 'username' => $coursecontact['username'], 'cid' => SITEID];
             }
-            $content .= html_writer::end_tag('ul'); // End .teachers.
         }
 
-        return $info;
+        return $data;
     }
 }

@@ -1,22 +1,37 @@
-	    <!-- if summary exists -->
-	    {{# summary }}            
-	        <div class="summary">
-	            <div class="no-overflow">{{{summary}}}</div>
-	        </div>
-	    {{/ summary }}
-	    <!-- if images exists -->
-	    {{# courseimgs }} 
-	        <div class="courseimage">
-	            <img src={{{courseimg}}}">
-	        </div>
-	    {{/ courseimgs }}
-	    <!-- if teachers exists -->
-	    {{# isteachers }} 
-	        <ul class="teachers">
-	            <!-- loop -->
-	            {{# teachers }}
-	            <li>{# str }}teacher, core{{/ str }}<a href="/user/view.php?id={{userid}}&course={{cid}}">{{name}}</a>
-	            </li>
-	            {{/ teachers }}
-	        </ul>
-	    {{/ isteachers }}
+        <!-- if summary exists -->
+        {{# summary }}            
+            <div class="summary">
+                <div class="no-overflow">{{{summary}}}</div>
+            </div>
+        {{/ summary }}
+        <!-- if images exists -->
+        {{# courseimgs }} 
+            <div class="courseimage">
+                <img src={{{courseimg}}}" class='courseimg'>
+            </div>
+        {{/ courseimgs }}
+        <!-- if files exists -->
+        {{# coursefiles }} 
+            <div class="coursefiles">                
+                <span>
+                    <a href="{{{url}}}" class="coursefile fp-filename-icon">
+                        <span class="fp-icon">
+                            {{# pix }} {{icon}} {{filename}} moodle {{/ pix}}
+                        </span>
+                        <span class="fp-filename">
+                            {{filename}}
+                        </span>
+                    </a>
+                </span>           
+            </div>
+        {{/ courseimgs }}
+        <!-- if teachers exists -->
+        {{# iscontacts }} 
+            <ul class="teachers">
+                <!-- loop -->
+                {{# contacts }}
+                <li>{{role}}<a href="/user/view.php?id={{userid}}&course={{cid}}">{{username}}</a>
+                </li>
+                {{/ contacts }}
+            </ul>
+        {{/ iscontacts }}
