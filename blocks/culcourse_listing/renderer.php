@@ -412,17 +412,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 // $years and $periods are passed by reference.
                 $filterlistfunction($course, $this->config, $years, $periods, $chelper->get_daterange_periods());
                 $coursecount ++;
-                $classes = ($coursecount % 2) ? 'odd' : 'even';
-
-                if ($coursecount == 1) {
-                    $classes .= ' first';
-                }
-
-                if ($coursecount >= count($courses)) {
-                    $classes .= ' last';
-                }
-
-                $content .= $this->coursecat_course($chelper, $course, $classes);
+                $content .= $this->coursecat_course($course);
             }
         }
 
@@ -449,7 +439,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * @param bool $isfav 
      * @return string
      */
-    protected function coursecat_course(block_culcourse_listing_helper $chelper, $course, $additionalclasses = '', $move = [], $isfav = false) {
+    protected function coursecat_course($course, $isfav = false) {
         global $CFG;
 
         // Check if course exists.
@@ -462,7 +452,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         }
 
         // $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $this->config, $this->preferences, $course, $additionalclasses, $move, $isfav);
-        $coursebox = new \block_culcourse_listing\output\coursebox($chelper, $course, $additionalclasses, $move, $isfav);
+        $coursebox = new \block_culcourse_listing\output\coursebox($course, $isfav);
         $content = $this->render_from_template('block_culcourse_listing/coursebox', $coursebox->export_for_template($this));
 
         return $content;
@@ -681,7 +671,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             }
 
             // Add the course html.
-            $content .= $this->coursecat_course($chelper, $course, '', $move, true);
+            $content .= $this->coursecat_course($course, true);
             $courseordernumber++;
         }
 

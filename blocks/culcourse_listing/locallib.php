@@ -588,7 +588,7 @@ function block_culcourse_listing_set_date_filtered_course($course, $config, $yea
  * @param array $daterangeperiods not used
  * @return array of year and period values for $course 
  */
-function block_culcourse_listing_get_filter_meta_regex($course, $config, $daterangeperiods) {
+function block_culcourse_listing_get_filter_meta_regex($course, $config, $daterangeperiods = null) {
     $courseyear = '';
     $courseperiod = '';
     $filterfield = $config->filterfield;

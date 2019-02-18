@@ -41,54 +41,33 @@ class coursebox implements renderable, templatable {
     /**
      * @var object An object 
      */
-    protected $chelper;
-
-    // /**
-    //  * @var object An object 
-    //  */
-    // protected $config;
-
-    // /**
-    //  * @var object An object 
-    //  */
-    // protected $preferences;
-
-    /**
-     * @var object An object 
-     */
     protected $course;
 
     /**
-     * @var object An object 
-     */
-    protected $additionalclasses;
-
-    /**
-     * @var object An object 
-     */
-    protected $move;
-
-    /**
-     * @var object An object 
+     * @var bool 
      */
     protected $isfav;
 
     /**
      * Constructor.
      *
-     * @param core_course_list_element $course
+     * @param id/core_course_list_element $course
      * @param string $additionalclasses additional classes to add to the main <div> tag (usually
      *    depend on the course position in list - first/last/even/odd)
      * @param string $move html for the move icons (only used for favourites) 
      * @param bool $isfav true if course has been fvourited/starred
      */
-    public function __construct($chelper, $course, $additionalclasses = '', $move, $isfav = false) {
-        $this->chelper = $chelper;
+    public function __construct($course, $isfav = false) {
+        // $this->chelper = $chelper;
         // $config = $config;
         // $preferences = $preferences;
+        
+
+        if ($course instanceof stdClass) {
+            $course = new \core_course_list_element($course);
+        }
+
         $this->course = $course;
-        $this->additionalclasses = $additionalclasses;
-        $this->move = $move;
         $this->isfav = $isfav;
     }
 
@@ -99,31 +78,56 @@ class coursebox implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-        global $CFG, $USER, $OUTPUT;
+        global $CFG, $USER;
 
         require_once($CFG->dirroot.'/blocks/culcourse_listing/locallib.php');
 
-        $config = $output->get_config();
-        $preferences = $output->get_preferences();
+        $config = get_config('block_culcourse_listing');
+        $preferences = block_culcourse_listing_get_preferences();
+        $favourites = block_culcourse_listing_get_favourite_courses($preferences);
+        $chelper = new \block_culcourse_listing_helper();        
+
+        if ($config->filtertype == 'date') {
+            global $DB;
+
+            $daterangeperiods = $DB->get_records('block_culcourse_listing_prds');
+        } else {
+            $daterangeperiods = null;
+        }                
 
         $data = new \stdClass();
         $data->cid = $this->course->id;
-        $data->coursename = $this->chelper->get_course_formatted_name($this->course, $config);                
-        $data->type = \core_course_renderer::COURSECAT_TYPE_COURSE;        
-        $data->move = $this->move;
-        $data->isfav = $this->isfav;
-
+        $data->coursename = $chelper->get_course_formatted_name($this->course, $config); // @TODO static?                
+        $data->type = \core_course_renderer::COURSECAT_TYPE_COURSE;       
         
-        $favourites = $this->chelper->get_favourites();
+        $data->isfav = $this->isfav;
+        $move = [];
 
         if ($favourites && array_key_exists($this->course->id, $favourites)) {
             $data->action = 'remove';
             $data->favclass = 'gold fa fa-star';
+
+            if ($data->isfav) {
+                $move['spacer'] = $output->image_url('spacer', 'moodle')->out();
+                $move['moveupimg'] = $output->image_url('t/up', 'moodle')->out();
+                $move['movedownimg'] = $output->image_url('t/down', 'moodle')->out();
+                $move['moveup'] = true;
+                $move['movedown'] = true;
+
+                if (array_shift($favourites) == $this->course->id) {
+                    $move['moveup'] = false;
+                }
+
+                if (array_pop($favourites) == $this->course->id) {
+                    $move['movedown'] = false;
+                }
+            }
         } else {
             $data->action = 'add';
             $data->favclass = 'fa fa-star-o';
         }
 
+        $data->move = $move;
         $data->sesskey = sesskey();
         $data->ismoreinfo = false;
         $data->cannenrol = false;
@@ -134,14 +138,12 @@ class coursebox implements renderable, templatable {
         $period = block_culcourse_listing_get_filtered_period($config, $preferences);
 
         if (!$this->isfav) {
-            $filtered = $filterfunction($course, $config, $year, $period, $this->chelper->get_daterange_periods());
+            $filtered = $filterfunction($course, $config, $year, $period, $daterangeperiods);
             // Hide the courses that don't match the filter settings.
             if (!$filtered) {
-                $additionalclasses .= ' hide';
+                $data->additionalclasses = ' hide';
             }
         }
-
-        $data->additionalclasses = $this->additionalclasses;
 
         $filterfield = $config->filterfield;
         // The function to be used for getting the year and period for this course.
@@ -150,7 +152,7 @@ class coursebox implements renderable, templatable {
         $filter = $filtermetafunction(
             $this->course,
             $config,
-            $this->chelper->get_daterange_periods()
+            $daterangeperiods
             );
 
         $data->year = $filter['year'];
@@ -174,7 +176,7 @@ class coursebox implements renderable, templatable {
         }
 
         // Add course summary text, contacts and files.
-        $data->info = $output->coursecat_course_summary($this->chelper, $this->course);        
+        $data->info = $output->coursecat_course_summary($chelper, $this->course);        
 
         return $data;
     }

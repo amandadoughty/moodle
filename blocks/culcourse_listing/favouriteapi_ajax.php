@@ -32,22 +32,26 @@ require_login();
 
 // Update the favourites.
 $result = block_culcourse_listing_update_from_favourites_api();
+$result['data'] = false;
 
-if ($result['action'] == 'add') {
-	$chelper =
-	$config = 
-	$preferences = 
-	$course = 
-	$renderer = 
-	$move = [];
-	$move['spacer'] = $this->output->image_url('spacer', 'moodle')->out();
-	$move['moveupimg'] = $this->output->image_url('t/up', 'moodle')->out();
-	$move['moveup'] = true;
-	$move['movedown'] = false;
-	$coursebox = new block_culcourse_listing\output\coursebox($chelper, $config, $preferences, $course, '', $move, true);
-	$data = $coursebox->export_for_template($renderer);
+if (($result['action'] == 'add') && $result['cid']) {
+    $chelper = new block_culcourse_listing_helper();
+    $config = get_config('block_culcourse_listing'); 
+    $preferences = block_culcourse_listing_get_preferences();
+    $course = $DB->get_record('course', array('id' => $result['cid']), '*', MUST_EXIST);
+    $course = new core_course_list_element($course);
+    $renderer = $PAGE->get_renderer('block_culcourse_listing');
+    $renderer->set_preferences($preferences);
+    $renderer->set_config($config); 
+    $move = [];
+    $move['spacer'] = $this->output->image_url('spacer', 'moodle')->out();
+    $move['moveupimg'] = $this->output->image_url('t/up', 'moodle')->out();
+    $move['moveup'] = true;
+    $move['movedown'] = false;
+    $coursebox = new block_culcourse_listing\output\coursebox($chelper, $config, $preferences, $course, '', $move, true);
+    $data = $coursebox->export_for_template($renderer);
 
-	$result['data'] = $data;
+    $result['data'] = $data;
 }
 
 echo json_encode($result);

@@ -34,4 +34,4 @@ $action = required_param('action', PARAM_RAW);
 $cid = required_param('cid', PARAM_INT);
 // Edit the favourites.
 block_culcourse_listing_edit_favourites($action, $cid);
-// block_culcourse_listing_edit_favourites_api($action, $cid); click simulation does this
+block_culcourse_listing_edit_favourites_api($action, $cid);

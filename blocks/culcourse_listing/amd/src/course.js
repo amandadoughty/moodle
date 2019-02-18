@@ -1,6 +1,8 @@
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
-        'core/key_codes', 'core/pubsub', 'core_course/events', 'block_culcourse_listing/favourite','block_myoverview/view'],
-    function($, ajax, templates, notification, str, url, Y, KeyCodes, PubSub, CourseEvents, Favourite, MyOverview) {
+        'core/key_codes', 'core/pubsub', 'core_course/events', 'block_culcourse_listing/favourite', 
+        'block_myoverview/main', 'block_starredcourses/main'],
+    function($, ajax, templates, notification, str, url, Y, KeyCodes, PubSub, CourseEvents, Favourite, 
+        MyOverview, StarredCourses) {
 
 // YUI.add('moodle-block_culcourse_listing-course', function(Y) {
 
@@ -66,12 +68,23 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                         if (params.action == 'add') {
                             // PubSub.publish(CourseEvents.favourited);
                             // Simulate click MyOverview.SELECTORS.ACTION_ADD_FAVOURITE.
-                            $('[data-course-id = "' + params.cid + '"]' + SELECTORS.ACTION_ADD_FAVOURITE).trigger('click');
+                            // @TODO does not work if the course is not in the overview block - ie not enrolled. 
+                            // $('[data-course-id = "' + params.cid + '"]' + SELECTORS.ACTION_ADD_FAVOURITE).trigger('click');
                         } else {
                             // PubSub.publish(CourseEvents.unfavorited);
                             // Simulate click MyOverview.SELECTORS.ACTION_REMOVE_FAVOURITE.
-                            $('[data-course-id = "' + params.cid + '"]' + SELECTORS.ACTION_REMOVE_FAVOURITE).trigger('click');
+                            // $('[data-course-id = "' + params.cid + '"]' + SELECTORS.ACTION_REMOVE_FAVOURITE).trigger('click');
                         }
+
+                        var roots = $('.block_myoverview .block-myoverview');
+                        $.each(roots, function(id, node) {
+                            MyOverview.init(node);
+                        });
+
+                        var roots = $('.block_starredcourses .block-starredcourses');
+                        $.each(roots, function(id, node) {
+                            StarredCourses.init(node);
+                        });
                     }
                 }
             });
@@ -95,15 +108,11 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 return courseboxnode;
             }).done(function(courseboxnode) {
                 // Create the new favourite node.
-                if (courseboxnode) {
-                    var newfavourite = courseboxnode.cloneNode(true); // Maybe change his to use a template instead of cloning
-                } else {
-                    // template
+                if (!courseboxnode) {
+                    // Error - ?
                 }
 
-
-
-
+                var newfavourite = courseboxnode.cloneNode(true);
                 newfavourite.setStyle('opacity', 0);
                 // Append the new node to the end of the favourites list.
                 Y.one(SELECTORS.FAVOURITELIST).append(newfavourite);
@@ -210,7 +219,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         }).fail(Notification.exception);
 
         
-    }
+    };
 
     return {
         initializer: function() {
