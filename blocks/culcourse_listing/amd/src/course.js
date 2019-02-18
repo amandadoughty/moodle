@@ -92,12 +92,18 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
     };
 
     var editfavouritesuccess = function (e, params, querystring) {
-         if (params.action == 'add') {
+        var newcourseboxnode = //@TODO get from template
+
+        if (params.action == 'add') {
             str.get_string('favouriteremove', 'block_culcourse_listing').then(function(langString) {
                 var courseboxnode = e.target.ancestor(SELECTORS.COURSEBOXLISTCOURSEBOX, true);                
                 // Change the link, title and icon to reflect that the course can now be
                 // removed from favourites.
+
+                
+
                 if (courseboxnode) {
+                    // @TODO replace with new node
                     var newurl = url + '?' + querystring.replace('add', 'remove');
                     courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
                     courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEADD);
@@ -105,14 +111,16 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                     courseboxnode.one(SELECTORS.FAVOURITELINK).set('title', langString);
                 }
 
-                return courseboxnode;
-            }).done(function(courseboxnode) {
-                // Create the new favourite node.
-                if (!courseboxnode) {
-                    // Error - ?
-                }
+                return newcourseboxnode;
 
-                var newfavourite = courseboxnode.cloneNode(true);
+            }).done(function(courseboxnode) {
+                // // Create the new favourite node.
+                // if (!courseboxnode) {
+                //     // Error - ? @TODO
+                //     courseboxnode = 
+                // }
+
+                var newfavourite = newcourseboxnode.cloneNode(true);
                 newfavourite.setStyle('opacity', 0);
                 // Append the new node to the end of the favourites list.
                 Y.one(SELECTORS.FAVOURITELIST).append(newfavourite);
@@ -173,6 +181,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
                 if (courseboxnode) {
                     // change the link
+                    // @TODO replace with new node
                     var newurl = url + '?' + querystring.replace('remove','add');
                     courseboxnode.one(SELECTORS.FAVOURITELINK).set('href', newurl);
                     courseboxnode.one(SELECTORS.FAVOURITEICON).removeClass(CSS.FAVOURITEREMOVE);
