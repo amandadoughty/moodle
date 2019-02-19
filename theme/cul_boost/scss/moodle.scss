@@ -9,15 +9,9 @@
 @import "variables";
 
 // Boost Styles
-@import "boost";
-
-// Some really useful bootstrap 4 Alpha 6 implementations
-@import "bootstrap/breakpoints";
-@import "bootstrap/display";
-@import "bootstrap/flex";
-@import "bootstrap/spacing";
-@import "bootstrap/text";
-@import "bootstrap/background";
+@import "../../boost/scss/bootstrap";
+@import "../../boost/scss/fontawesome";
+@import "../../boost/scss/moodle";
 
 // Custom Overrides
 @import "mixins";

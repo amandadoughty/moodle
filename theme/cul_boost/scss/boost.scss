@@ -3,7 +3,6 @@ $breadcrumb-divider: "▶" !default;
 $breadcrumb-divider-rtl: "◀" !default;
 
 // Import font awesome.
-@import "../../boost/scss/fontawesome/moodle-path";
 @import "../../boost/scss/fontawesome/font-awesome";
 
 // Import the bootstrap variables.
@@ -22,11 +21,13 @@ $breadcrumb-divider-rtl: "◀" !default;
 @import "../../boost/scss/moodle/calendar";
 @import "../../boost/scss/moodle/course";
 @import "../../boost/scss/moodle/drawer";
+@import "../../boost/scss/moodle/dashboard";
 @import "../../boost/scss/moodle/filemanager";
 @import "../../boost/scss/moodle/message";
 @import "../../boost/scss/moodle/question";
 @import "../../boost/scss/moodle/user";
 @import "../../boost/scss/moodle/search";
+@import "../../boost/scss/moodle/forms";
 @import "../../boost/scss/moodle/login";
 @import "../../boost/scss/moodle/modules";
 @import "../../boost/scss/moodle/chat";
@@ -42,10 +43,6 @@ $breadcrumb-divider-rtl: "◀" !default;
 @import "../../boost/scss/moodle/sticky-footer";
 @import "../../boost/scss/moodle/popover-region";
 @import "../../boost/scss/moodle/tool_usertours";
-@import "../../boost/scss/moodle/responsive-tabs";
 @import "../../boost/scss/moodle/bs2-compat";
 @import "../../boost/scss/moodle/print";
 @import "../../boost/scss/moodle/modal";
-
-// Overriding Boost because of compiling issues
-@import "boost/forms";
