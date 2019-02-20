@@ -39,10 +39,10 @@ block_culcourse_listing_edit_favourites($action, $cid);
 block_culcourse_listing_edit_favourites_api($action, $cid);
 
 $chelper = new block_culcourse_listing_helper();
-    $course = $DB->get_record('course', array('id' => $cid), '*', MUST_EXIST);
-    $course = new core_course_list_element($course);
-    $renderer = $PAGE->get_renderer('block_culcourse_listing');
-    $coursebox = new block_culcourse_listing\output\coursebox($course, false);
-    $data = $coursebox->export_for_template($renderer);
+$course = $DB->get_record('course', array('id' => $cid), '*', MUST_EXIST);
+$course = new core_course_list_element($course);
+$renderer = $PAGE->get_renderer('block_culcourse_listing');
+$coursebox = new block_culcourse_listing\output\coursebox($course, false);
+$data = $coursebox->export_for_template($renderer);
 
-    echo json_encode($data);
+echo json_encode($data);

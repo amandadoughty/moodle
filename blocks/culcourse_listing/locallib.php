@@ -263,7 +263,7 @@ function block_culcourse_listing_update_from_favourites_api() {
     } else if (!empty($add)) {
         return ['action' => 'add', 'cid' => array_shift($add)]; //@TODO return node
     } else {
-        return ['action' => null, 'cid' => null];
+        return ['action' => 'error', 'cid' => null];
     }
 }
 
