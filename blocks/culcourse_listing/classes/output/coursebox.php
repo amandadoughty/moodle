@@ -173,6 +173,8 @@ class coursebox implements renderable, templatable {
         // Add enrolmenticons.
         if ($data->enrolmenticons = enrol_get_course_info_icons($this->course)) {
             $data->cannenrol = true;
+            print_r($data->enrolmenticons);
+            $data->enrolmenticons = (array)$data->enrolmenticons;
         }
 
         // Add course summary text, contacts and files.
