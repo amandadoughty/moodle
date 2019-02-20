@@ -171,10 +171,19 @@ class coursebox implements renderable, templatable {
         }
 
         // Add enrolmenticons.
-        if ($data->enrolmenticons = enrol_get_course_info_icons($this->course)) {
+        if ($enrolmenticons = enrol_get_course_info_icons($this->course)) {
             $data->cannenrol = true;
             print_r($data->enrolmenticons);
-            $data->enrolmenticons = (array)$data->enrolmenticons;
+
+            foreach ($enrolmenticons as $enrolmenticon) {
+                // {{# pix }} does not like attribute pix.
+                $icon = new \stdClass(0);
+                $icon->icon = $enrolmenticon->pix;
+                $icon->component = $enrolmenticon->component;
+                $icon->attributes = $enrolmenticon->attributes;
+                $data->enrolmenticons[] = $icon;
+            }
+
         }
 
         // Add course summary text, contacts and files.
