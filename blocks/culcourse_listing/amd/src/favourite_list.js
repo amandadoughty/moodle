@@ -1,13 +1,29 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * A javascript module to ...
+ *
+ * @package    block_culcourse_listing
+ * @copyright  2019 Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
         'core/modal_factory', 'core/modal_events', 'core/key_codes', 'block_culcourse_listing/favourite'],
     function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes, Favourite) {
-
-// YUI.add('moodle-block_culcourse_listing-favourite_list', function(Y) {
-
-//     var FLISTNAME = 'blocks_culcourse_listing_favourite_list';
-//     var FLIST = function() {
-//         FLIST.superclass.constructor.apply(this, arguments);
-//     };
 
     var CSS = {
             BUTTONALERT: 'btn-danger',
@@ -31,10 +47,6 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
     var URLREORDER = M.cfg.wwwroot + '/blocks/culcourse_listing/reorderfavourites_ajax.php';
     var URLCLEAR = M.cfg.wwwroot + '/blocks/culcourse_listing/clearfavourites_ajax.php';
 
-    // Y.extend(FLIST, Y.Base, {
-
-
-
     var setupfavourites = function() {
         var courselist = Y.all(SELECTORS.FAVOURITECOURSEBOX);
 
@@ -47,7 +59,6 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
     var reorder = function(e) {
         e.preventDefault();
 
-        // var setupfavourites = setupfavourites;
         var params = {
             sesskey : M.cfg.sesskey
         };
@@ -169,16 +180,4 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             })
         }
     };    
-
-//     }, {
-//         NAME : FLISTNAME
-//      });
-
-//     M.blocks_culcourse_listing = M.blocks_culcourse_listing || {};
-//     M.blocks_culcourse_listing.init_favourite_list = function(params) {
-//         return new FLIST(params);
-//     }
-
-// }, '@VERSION@', {
-//     requires:['base', 'moodle-block_culcourse_listing-favourite']
 });

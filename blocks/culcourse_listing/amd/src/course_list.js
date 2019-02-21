@@ -1,13 +1,29 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * A javascript module to ...
+ *
+ * @package    block_culcourse_listing
+ * @copyright  2019 Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
         'core/modal_factory', 'core/modal_events', 'core/key_codes', 'block_culcourse_listing/course'],
     function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes, Course) {
-
-// YUI.add('moodle-block_culcourse_listing-course_list', function(Y) {
-
-//     var CLISTNAME = 'blocks_culcourse_listing_course_list';
-//     var CLIST = function() {
-//         CLIST.superclass.constructor.apply(this, arguments);
-//     };
 
     var CSS = {
             HIDE: 'hide',
@@ -24,10 +40,6 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         FILTERLIST: '#culcourse_listing_filter .select',
         FILTERALERT: '.block_culcourse_listing .course_category_tree .divalert',
     };
-
-// Y.extend(CLIST, Y.Base, {
-
-
 
     var setupcourses = function() {
         Course.initializer();
@@ -129,22 +141,4 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             doc.delegate('change', filtercourses, SELECTORS.FILTERLIST, this, config);
         }
     };
-
-// }, {
-//     NAME : CLISTNAME,
-//     ATTRS : {
-//         config : {
-//             value : null
-//         }
-//     }
-//     });
-
-//     M.blocks_culcourse_listing = M.blocks_culcourse_listing || {};
-//     M.blocks_culcourse_listing.init_course_list = function(params) {
-//         return new CLIST(params);
-//     }
-
-// }, '@VERSION@', {
-//     requires:['base', 'moodle-block_culcourse_listing-course',
-//                 'moodle-block_culcourse_listing-category']
 });

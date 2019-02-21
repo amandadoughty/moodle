@@ -1,13 +1,29 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * A javascript module to ...
+ *
+ * @package    block_culcourse_listing
+ * @copyright  2019 Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
         'core/modal_factory', 'core/modal_events', 'core/key_codes'],
     function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes) {
-
-// YUI.add('moodle-block_culcourse_listing-favourite', function(Y) {
-
-//     var FAVOURITENAME = 'blocks_culcourse_listing_favourite';
-//     var FAVOURITE = function() {
-//         FAVOURITE.superclass.constructor.apply(this, arguments);
-//     };
 
     var CSS = {
             BLOCK: 'block_culcourse_listing',
@@ -22,10 +38,6 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         COURSEBOXLINK: '.info',
     };
     var URL = M.cfg.wwwroot + '/blocks/culcourse_listing/move_ajax.php';
-
-// Y.extend(FAVOURITE, Y.Base, {
-
-
 
     var addmoveicon = function(params) {
         // Replace the non-JS links.
@@ -51,8 +63,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             addmoveicon(params);
             // Static Vars.
             var goingUp = false, lastY = 0;
-            // var savemove = savemove;
-
+ 
             var d = new Y.DD.Drag({
                     node: params.node,
                     target: true
@@ -164,20 +175,5 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         initializer: function(params) {
             adddragdrop(params);
         }
-    };    
-
-  //   }, {
-  //       NAME : FAVOURITENAME,
-  //       ATTRS : {
-  //           node : {
-  //               value : null
-  //           }
-  //       }
-  //   });
-  //   M.blocks_culcourse_listing = M.blocks_culcourse_listing || {};
-  //   M.blocks_culcourse_listing.init_favourite = function(params) {
-  //       return new FAVOURITE(params);
-  //   };
-  // }, '@VERSION@', {
-  //     requires:['base', 'dd-constrain', 'dd-proxy', 'dd-drop', 'dd-delegate', 'dd-plugin']
+    };
 });

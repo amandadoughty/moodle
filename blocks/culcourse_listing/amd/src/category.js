@@ -1,12 +1,28 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * A javascript module to ...
+ *
+ * @package    block_culcourse_listing
+ * @copyright  2019 Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/yui', 'core/notification', 'core/key_codes'],
     function($, ajax, templates, str, url, Y, Notification, KeyCodes) {
-
-// YUI.add('moodle-block_culcourse_listing-category', function(Y) {
-
-//     var CATNAME = 'blocks_culcourse_listing_category';
-//     var CAT = function() {
-//         CAT.superclass.constructor.apply(this, arguments);
-//     };
 
     var CSS = {
         CONTENTNODE: 'content',
@@ -37,12 +53,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
     var TYPE_CATEGORY = 0;
     var TYPE_COURSE = 1;
     var URL = M.cfg.wwwroot + '/blocks/culcourse_listing/category_ajax.php';
-
-    // Y.extend(CAT, Y.Base, {
-
     var BLOCKCONFIG = null;
-
-
 
     /**
      * Set up keyboard expansion for course content.
@@ -145,55 +156,53 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
         // Using amd instead of Y.Promise just because there is no point
         // learning new YUI techniques. And the YUI in this plugin may be
         // replaced entirely with amd in future.
-        // require(['jquery', 'core/str', 'core/templates', 'core/notification'], function($, Str, Templates, Notification) {
-            Str.get_string('loading', 'core')
-                .then(function(string) {
-                    return Templates.renderPix('i/progressbar', 'core', string);
-                })
-                .then(function(html) {
-                    var node = config.parentnode.one(config.spinnerhandle);
-                    var spinnernode = $(html).addClass('progress-icon');
-                    node.append(spinnernode);
-                    return spinnernode;
-                })
-                .then(function(spinnernode) {
-                    years = {};
-                    periods = {};
-                    yearselect = $('#culcourse_listing_filter_year');
-                    periodselect = $('#culcourse_listing_filter_period');
+        Str.get_string('loading', 'core')
+            .then(function(string) {
+                return Templates.renderPix('i/progressbar', 'core', string);
+            })
+            .then(function(html) {
+                var node = config.parentnode.one(config.spinnerhandle);
+                var spinnernode = $(html).addClass('progress-icon');
+                node.append(spinnernode);
+                return spinnernode;
+            })
+            .then(function(spinnernode) {
+                years = {};
+                periods = {};
+                yearselect = $('#culcourse_listing_filter_year');
+                periodselect = $('#culcourse_listing_filter_period');
 
-                    if (yearselect) {
-                        $.each(yearselect.attr('options'), function(key, value) {
-                            years[value] = key;
-                        });
-                        config.data.years = JSON.stringify(years);
+                if (yearselect) {
+                    $.each(yearselect.attr('options'), function(key, value) {
+                        years[value] = key;
+                    });
+                    config.data.years = JSON.stringify(years);
+                }
+
+                if (periodselect) {
+                    $.each(periodselect.attr('options'), function(key, value) {
+                        periods[value] = key;
+                    });
+                    config.data.periods = JSON.stringify(periods);
+                }
+
+                var args = {
+                        parentnode: config.parentnode,
+                        childnode: config.childnode,
+                        spinnernode: spinnernode
+                    };
+
+                $.ajax({
+                    url: URL,
+                    method: 'POST',
+                    data: config.data,
+                    context: self,
+                    success: function(response) {
+                        self.process_results(response, args);
                     }
+                })
 
-                    if (periodselect) {
-                        $.each(periodselect.attr('options'), function(key, value) {
-                            periods[value] = key;
-                        });
-                        config.data.periods = JSON.stringify(periods);
-                    }
-
-                    var args = {
-                            parentnode: config.parentnode,
-                            childnode: config.childnode,
-                            spinnernode: spinnernode
-                        };
-
-                    $.ajax({
-                        url: URL,
-                        method: 'POST',
-                        data: config.data,
-                        context: self,
-                        success: function(response) {
-                            self.process_results(response, args);
-                        }
-                    })
- 
-                }).fail(Notification.exception);
-        // });
+            }).fail(Notification.exception);
     };
 
     /**
@@ -448,19 +457,4 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
             doc.once('key', setup_keyboard_listeners, 'tab', this);
         }
     };    
-// }, {
-//         ATTRS : {
-//             config : {
-//                 value : null
-//             }
-//         }
-//     });
-
-//     M.blocks_culcourse_listing = M.blocks_culcourse_listing || {};
-//     M.blocks_culcourse_listing.init_category = function(params) {
-//         return new CAT(params);
-//     }
-
-// }, '@VERSION@', {
-//     requires:['base', 'node', 'event-key', 'io-base', 'json-parse', 'json-stringify', 'moodle-core-notification', 'anim-node-plugin', 'promise']
 });
