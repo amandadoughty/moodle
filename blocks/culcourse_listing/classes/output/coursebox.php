@@ -106,6 +106,7 @@ class coursebox implements renderable, templatable {
         if ($favourites && array_key_exists($this->course->id, $favourites)) {
             $data->action = 'remove';
             $data->favclass = 'gold fa fa-star';
+            $data->favtitle = get_string('favouriteremove', 'block_culcourse_listing');
 
             if ($data->isfav) {
                 $move['spacer'] = $output->image_url('spacer', 'moodle')->out();
@@ -114,17 +115,18 @@ class coursebox implements renderable, templatable {
                 $move['moveup'] = true;
                 $move['movedown'] = true;
 
-                if (array_shift($favourites) == $this->course->id) {
+                if (array_shift($favourites)->id == $this->course->id) {
                     $move['moveup'] = false;
                 }
 
-                if (array_pop($favourites) == $this->course->id) {
+                if (array_pop($favourites)->id == $this->course->id) {
                     $move['movedown'] = false;
                 }
             }
         } else {
             $data->action = 'add';
             $data->favclass = 'fa fa-star-o';
+            $data->favtitle = get_string('favouriteadd', 'block_culcourse_listing');
         }
 
         $data->move = $move;
@@ -173,7 +175,6 @@ class coursebox implements renderable, templatable {
         // Add enrolmenticons.
         if ($enrolmenticons = enrol_get_course_info_icons($this->course)) {
             $data->cannenrol = true;
-            print_r($data->enrolmenticons);
 
             foreach ($enrolmenticons as $enrolmenticon) {
                 // {{# pix }} does not like attribute pix.
@@ -187,7 +188,7 @@ class coursebox implements renderable, templatable {
         }
 
         // Add course summary text, contacts and files.
-        $data->info = $output->coursecat_course_summary($chelper, $this->course);        
+        $data->info = self::coursecat_course_summary($chelper, $this->course);        
 
         return $data;
     }
@@ -209,7 +210,7 @@ class coursebox implements renderable, templatable {
             return '';
         }
 
-        if ($course instanceof stdClass) {
+        if ($course instanceof \stdClass) {
             $course = new \core_course_list_element($course);
         }
 

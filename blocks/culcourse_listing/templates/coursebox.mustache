@@ -7,7 +7,7 @@
                 {{> block_culcourse_listing/move }}
             {{/ move }}
             <div class="coursename">
-                <a title="{{coursename}}" href="http://moodle2xgit.localhost/course/view.php?id={{cid}}">{{coursename}}</a>
+                <a title="{{coursename}}" href="/course/view.php?id={{cid}}">{{coursename}}</a>
             </div>
         </div>
         <div class="moreinfo">
@@ -16,22 +16,21 @@
                 {{> block_culcourse_listing/moreinfo }}
             {{/ ismoreinfo }}
         </div>
-        <a class=" favouritelink favouritelink_{{cid}}" title="{{# str }} favouriteaction, block_culcourse_listing, {{action}} {{/ str }}" href="http://moodle2xgit.localhost/blocks/culcourse_listing/favourite_post.php?action={{action}}&cid={{cid}}&sesskey={{sesskey}}">
+        <a class=" favouritelink favouritelink_{{cid}}" title="{{favtitle}}" href="/blocks/culcourse_listing/favourite_post.php?action={{action}}&cid={{cid}}&sesskey={{sesskey}}">
             <i class="{{favclass}}"></i>
         </a>
 
         <div class="enrolmenticons">
             {{# enrolmenticons }}
                 {{# pix }} {{icon}}, {{component}}, {{attributes.alt}} {{/ pix }}
-            {{/ enrolmenticons }}
-            
+            {{/ enrolmenticons }}            
         </div>
         
     </div>
     <div class="content panel-body">
         <!-- if content exists -->
         {{# ismoreinfo }}
-            {{{info}}}
+            {{> block_culcourse_listing/info }}
         {{/ ismoreinfo }}
     </div>
 </div>

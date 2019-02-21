@@ -1,18 +1,18 @@
 <div class="moveicons">
     {{# move.moveup }}
     <a title="Move up" class="moveup" href="/blocks/culcourse_listing/move_post.php?sesskey={{sesskey}}&source={{cid}}&move=-1">
-        <img src="{{{move.moveupimg}}}" class="up" alt="Move up">
+        {{# pix }} t/up, moodle {{/ pix }}
     </a>
     {{/ move.moveup }}
     {{^ move.moveup }}
-    <img src="{{{move.spacer}}}" class="moveupspacer">
+    {{# pix }} spacer, moodle {{/ pix }}
     {{/ move.moveup }}
     {{# move.movedown }}
     <a title="Move down" class="movedown" href="/blocks/culcourse_listing/move_post.php?sesskey={{seskey}}&source={{cid}}&move=1">
-        <img src="{{{move.movedownimg}}}" class="down" alt="Move down">
+        {{# pix }} t/down, moodle {{/ pix }}
     </a>
     {{/ move.movedown }}
     {{^ move.movedown }}
-    <img src="{{{move.spacer}}}" class="movedownspacer">
+    {{# pix }} spacer, moodle {{/ pix }}
     {{/ move.movedown }}
 </div>
