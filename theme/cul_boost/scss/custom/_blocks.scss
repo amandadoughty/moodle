@@ -14,7 +14,7 @@
     .block-inner {
         .block-title {
             color: $body-color;
-            font-size: $font-size-h4;
+            font-size: $h4-font-size;
             font-weight: $font-weight-normal;
             line-height: $headings-line-height;
             text-transform: none;
@@ -48,7 +48,7 @@
         #block-region-dash-feed & {
             .block-inner {
                 .block-title {
-                    font-size: $font-size-h2;
+                    font-size: $h2-font-size;
                     padding: 0;
                     margin-bottom: $spacer * 2;
                     .reload {
@@ -84,14 +84,14 @@
         }
     }
     &.block_culupcoming_events {
-        background-color: $brand-primary;
+        background-color: $primary;
         border: none;
         .block-inner {
             padding: 0;
             aside:not(#block-region-dash-full) & {
                 .block-title {
                     padding: $spacer;
-                    font-size: $font-size-h4;
+                    font-size: $h4-font-size;
                     justify-content: flex-start;
                     margin: 0;
                     background-color: rgba(#000, 0.2);
@@ -144,7 +144,7 @@
             }
             .block-title {
                 color: #fff;
-                font-size: $font-size-h2;
+                font-size: $h2-font-size;
                 font-weight: $font-weight-light;
                 line-height: $headings-line-height;
                 text-transform: none;
@@ -271,7 +271,7 @@
                                     background-color: #fff;
                                     border-radius: 50%;
                                     transform: translate(50%, -50%);
-                                    color: $brand-primary;
+                                    color: $primary;
                                     i {
                                         margin: 0;
                                         line-height: 24px;
@@ -338,11 +338,11 @@
                     left: 50%;
                     margin-top: -20px;
                     transform: translateX(-50%);
-                    background-color: darken($brand-primary, 5%);
+                    background-color: darken($primary, 5%);
                     color: #fff;
                     &:hover,
                     &:focus {
-                        background-color: darken($brand-primary, 2.5%);
+                        background-color: darken($primary, 2.5%);
                     }
                     &.slick-prev {
                         margin-left: -60px;
@@ -384,7 +384,7 @@
                         height: 100%;
                         .icon {
                             margin: 0;
-                            font-size: $font-size-h4;
+                            font-size: $h4-font-size;
                             width: auto;
                             height: auto;
                             color: $gray-500;
@@ -403,15 +403,15 @@
     &:before {
         @include fa-icon();
         content: "\f002";
-        font-size: $font-size-h3;
-        color: $brand-primary;
+        font-size: $h3-font-size;
+        color: $primary;
         position: absolute;
         top: 50%;
         right: $spacer * 1.25;
         transform: translateY(-50%);
         margin-top: -1px;
         @include media-breakpoint-up(sm) {
-            font-size: $font-size-h2;
+            font-size: $h2-font-size;
         }
     }
     .initialsearch {
@@ -422,14 +422,14 @@
         text-align: left;
         background-color: #fff;
         padding: 0 ($spacer * 4) 0 $spacer;
-        font-size: $font-size-h4;
-        color: $brand-primary;
+        font-size: $h4-font-size;
+        color: $primary;
         border: none;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         @include media-breakpoint-up(sm) {
-            font-size: $font-size-h3;
+            font-size: $h3-font-size;
         }
     }
 }
@@ -524,7 +524,7 @@
                 .block-inner {
                     padding: 0;
                     h3.card-title {
-                        font-size: $font-size-h2;
+                        font-size: $h2-font-size;
                         text-transform: none;
                         color: #fff;
                         font-weight: $font-weight-normal;
@@ -535,8 +535,8 @@
                         &:before {
                             @include fa-icon();
                             content: "\f002";
-                            font-size: $font-size-h2;
-                            color: $brand-primary;
+                            font-size: $h2-font-size;
+                            color: $primary;
                             position: absolute;
                             top: 50%;
                             right: $spacer * 1.25;
@@ -554,8 +554,8 @@
                             margin: 0;
                             height: 70px;
                             padding: $spacer ($spacer * 4) $spacer $spacer;
-                            font-size: $font-size-h3;
-                            color: $brand-primary;
+                            font-size: $h3-font-size;
+                            color: $primary;
                             border: none;
                         }
                         .yui3-aclist {
@@ -570,7 +570,7 @@
                                 background-color: $gray-500;
                             }
                             .yui3-aclist-content {
-                                background-color: $brand-primary;
+                                background-color: $primary;
                                 box-shadow: none;
                                 .yui3-aclist-item {
                                     padding: $spacer / 2;
@@ -617,10 +617,10 @@
                                         background-color: rgba(255, 255, 255, 0.05);
                                     }
                                     &.active {
-                                        background-color: $brand-primary;
+                                        background-color: $primary;
                                         &:hover,
                                         &:focus {
-                                            background-color: $brand-primary;
+                                            background-color: $primary;
                                         }
                                     }
                                     h2 {
@@ -633,9 +633,7 @@
                             }
                         }
                         button[type="submit"] {
-                            @include button-variant($btn-secondary-color,
-                            $btn-secondary-bg,
-                            $btn-secondary-border);
+                            @include button-variant($secondary, $secondary);
                         }
                     }
                 }
@@ -753,7 +751,7 @@
                             color: $gray-lightest;
                             width: auto;
                             opacity: 1;
-                            font-size: $font-size-h4;
+                            font-size: $h4-font-size;
                         }
                     }
                     .enrolmenticons {
@@ -782,7 +780,7 @@
                             color: $gray-lightest;
                             width: auto;
                             opacity: 1;
-                            font-size: $font-size-h4;
+                            font-size: $h4-font-size;
                         }
                     }
                 }
@@ -826,8 +824,8 @@
                                     }
                                     &.custom-select {
                                         padding: $spacer * .75 $spacer * 2 $spacer * .75 $spacer;
-                                        font-size: $font-size-h5;
-                                        color: $brand-primary;
+                                        font-size: $h5-font-size;
+                                        color: $primary;
                                         line-height: 1.5;
                                     }
                                 }
@@ -845,14 +843,12 @@
                             }
                             .culcollapseexpand {
                                 @include make-btn;
-                                @include button-variant($btn-secondary-color,
-                                $btn-secondary-bg,
-                                $btn-secondary-border);
+                                @include button-variant($secondary, $secondary);
                                 margin: 0;
                                 background-position: ($spacer / 2) 50%;
                                 padding: $spacer * .75 $spacer $spacer * .75 $spacer * 2;
-                                font-size: $font-size-h5;
-                                color: $brand-primary;
+                                font-size: $h5-font-size;
+                                color: $primary;
                                 line-height: 1.5;
                                 &:focus,
                                 &:active,
@@ -885,7 +881,7 @@
                         }
                         &.dimmed_category {
                             a {
-                                color: $brand-inverse !important;
+                                color: $inverse !important;
                             }
                         }
                         &:not(.with_children) {
@@ -923,7 +919,7 @@
                                     margin: 0;
                                     padding: ($spacer * .75) ($spacer * .75) ($spacer * .75) ($spacer * 3.25);
                                     background-image: none;
-                                    font-size: $font-size-h5;
+                                    font-size: $h5-font-size;
                                     line-height: 1;
                                     &:before {
                                         @include fa-icon();
@@ -938,8 +934,8 @@
                                         flex-wrap: wrap;
                                         align-items: center;
                                         justify-content: center;
-                                        font-size: $font-size-h3;
-                                        color: $brand-primary;
+                                        font-size: $h3-font-size;
+                                        color: $primary;
                                     }
                                     img.spinner {
                                         display: none !important;

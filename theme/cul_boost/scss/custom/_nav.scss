@@ -2,6 +2,7 @@
     padding: 0;
     max-height: 100%;
     border-radius: 0;
+    box-shadow: none;
     .topmenu {
         background-color: $gray-lightest;
         ul#cross-domain-nav {
@@ -17,7 +18,7 @@
                         background-color: #fff;
                     }
                     &.active {
-                        background-color: $brand-primary;
+                        background-color: $primary;
                         color: #fff;
                     }
                 }
@@ -27,7 +28,7 @@
     .right-float-menu {
         border-bottom-left-radius: $border-radius;
         border-bottom-right-radius: $border-radius;
-        background-color: $brand-primary;
+        background-color: $primary;
         @include media-breakpoint-up(lg) {
             position: absolute;
             top: 0;
@@ -71,6 +72,7 @@
                 width: auto;
                 height: auto;
                 margin-top: -$spacer / 4;
+                vertical-align: middle;
             }
             &[title*="tour"]:after {
                 @include fa-icon();
@@ -129,7 +131,7 @@
             height: $navbar-sm-height;
             z-index: 12;
             padding: 0 $spacer;
-            background-color: $brand-primary;
+            background-color: $primary;
             transform: translateY(-100%);
             border: none;
             box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.3);
@@ -222,7 +224,7 @@
                 }
                 >a {
                     color: $navbar-light-color;
-                    font-size: $font-size-h5;
+                    font-size: $h5-font-size;
                     margin: 0;
                     padding: 0;
                     &:hover,
@@ -276,7 +278,7 @@
                 color: $body-color;
                 &:hover,
                 &:focus {
-                    color: $brand-primary;
+                    color: $primary;
                 }
             }
         }
@@ -307,15 +309,38 @@
     }
 }
 
-.dropdown-menu {
-    overflow-x: hidden;
-    max-height: 450px;
-    overflow: auto;
-    .dropdown-menu {
-        max-height: 100%;
+.dropdown {
+    .dropdown-toggle {
+        &:after {
+            vertical-align: middle;
+        }
     }
-    a {
-        white-space: normal;
+    .dropdown-menu {
+        overflow-x: hidden;
+        max-height: 450px;
+        overflow: auto;
+        .dropdown-item {
+            border-bottom: 1px solid $gray-200;
+            &:last-child {
+                border-bottom: 0;
+            }
+            &:active,
+            &.active {
+                >a {
+                    color: $dropdown-link-active-color;
+                }
+            }
+            a {
+                transition: none;
+            }
+        }
+        .dropdown-menu {
+            max-height: 100%;
+            border-bottom: 1px solid $gray-200;
+        }
+        a {
+            white-space: normal;
+        }
     }
 }
 
@@ -334,6 +359,9 @@
             border: none;
             background-color: $gray-lightest;
             .dropdown-item {
+                &:last-child {
+                    border-bottom: 1px solid $gray-200;
+                }
                 &:hover,
                 &:focus {
                     background-color: darken($gray-lightest, 5%);
@@ -406,7 +434,7 @@
             background-color: transparent;
             color: #fff;
             border: none;
-            font-size: $font-size-h5;
+            font-size: $h5-font-size;
             &:hover,
             &:focus {
                 background-color: transparent;
@@ -418,7 +446,7 @@
     }
     .forumsearch {
         input#search {
-            border-color: $brand-inverse;
+            border-color: $inverse;
         }
         &+.settings-block-wrap {
             margin-left: $spacer;
@@ -434,6 +462,11 @@
             }
         }
     }
+}
+
+a.menu-link .icon {
+    vertical-align: middle;
+    margin-top: -4px;
 }
 
 .slidersearchform {
@@ -453,7 +486,7 @@
         right: 1px;
         top: 1px;
         text-align: center;
-        font-size: $font-size-h5;
+        font-size: $h5-font-size;
         &:hover,
         &:focus,
         &:hover:focus,
@@ -461,7 +494,7 @@
         &.active,
         &:active:focus {
             background-color: $gray-lightest;
-            color: $brand-primary;
+            color: $primary;
         }
     }
     input[type="text"] {
@@ -474,7 +507,7 @@
         margin-bottom: 0;
         &:focus {
             &+button {
-                color: $brand-primary;
+                color: $primary;
             }
         }
     }
@@ -597,7 +630,7 @@
                 >li.dropdown {
                     width: 100%;
                     >a {
-                        font-size: $font-size-h4;
+                        font-size: $h4-font-size;
                     }
                 }
                 .dropdown-menu {
@@ -648,7 +681,7 @@
                 ul.nav {
                     >li.dropdown {
                         >a {
-                            font-size: $font-size-h5;
+                            font-size: $h5-font-size;
                         }
                     }
                 }

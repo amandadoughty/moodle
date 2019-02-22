@@ -54,15 +54,15 @@
                     }
                 }
                 h3 {
-                    font-size: $font-size-h1;
+                    font-size: $h1-font-size;
                     font-weight: $font-weight-medium;
                 }
                 h4 {
-                    font-size: $font-size-h3;
+                    font-size: $h3-font-size;
                     font-weight: $font-weight-light;
                 }
                 h5 {
-                    font-size: $font-size-h4;
+                    font-size: $h4-font-size;
                     font-weight: $font-weight-light;
                 }
             }
@@ -83,7 +83,7 @@
         font-size: 20px;
         z-index: 1;
         cursor: pointer;
-        background-color: $brand-primary;
+        background-color: $primary;
         .pause-button,
         .play-button {
             width: auto;
@@ -104,7 +104,7 @@
     .progress {
         width: 0%;
         height: 5px;
-        background: $brand-primary;
+        background: $primary;
         margin: 0;
     }
 }
@@ -131,7 +131,7 @@
             background-size: cover;
             .badge {
                 background-color: $gray-lightest;
-                color: $brand-primary;
+                color: $primary;
                 border-radius: 0;
             }
         }

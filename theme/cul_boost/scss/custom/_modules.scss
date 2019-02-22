@@ -182,7 +182,7 @@
                 }
             }
             .fp-filename {
-                font-size: $font-size-h5;
+                font-size: $h5-font-size;
                 line-height: 25px;
             }
         }
@@ -196,7 +196,7 @@
     .iconpicker-items {
         .iconpicker-item {
             * {
-                color: $brand-primary;
+                color: $primary;
             }
         }
     }

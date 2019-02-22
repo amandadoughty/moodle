@@ -156,7 +156,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         $listitems = '<li class="breadcrumb-item d-inline-flex flex-wrap align-items-center">' . join(' </li><li class="breadcrumb-item d-inline-flex flex-wrap align-items-center">', $breadcrumbs) . '</li>';
         $title = '<span class="accesshide">' . get_string('pagepath') . '</span>';
-        return $title . '<ol class="breadcrumb d-flex flex-wrap align-items-center justify-content-center justify-content-md-start">'.$listitems.'</ul>';
+        return $title . '<ol class="breadcrumb d-flex flex-wrap align-items-center justify-content-center justify-content-md-start bg-transparent px-0 py-2 mb-0">'.$listitems.'</ul>';
     }
 
 	public function page_heading($tag = 'h1') {
@@ -346,7 +346,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	                }
 	                $title = html_writer::tag('span', $item->title, array('class'=>'title'));
 
-	                $content .= html_writer::link($item->url, $icon.$title, array('class'=>'menu-link d-block dropdown-item px-2'));
+	                $content .= html_writer::link($item->url, $icon.$title, array('class'=>'menu-link d-block dropdown-item px-3'));
 	                $content .= html_writer::end_tag('div');
 	                break;
 	        }
@@ -724,7 +724,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 		$favouritetxt = get_string($actionstring, 'theme_cul_boost');
 		
-		$content = html_writer::link($favouriteurl, '', ['class'=>'text-white p-3 '.$class, 'data-toggle'=>'popover', 'data-content'=>$favouritetxt, 'data-placement'=>'left', 'data-trigger'=>'hover']);
+		$content = html_writer::link($favouriteurl, '', ['class'=>'text-white '.$class, 'data-toggle'=>'popover', 'data-content'=>$favouritetxt, 'data-placement'=>'left', 'data-trigger'=>'hover']);
 
 		$content = html_writer::tag('div', $content, ['id'=>$id, 'class'=>'favourite-btn fixed-btn d-flex flex-wrap align-items-center justify-content-center bg-dark h4 m-0 text-white']);
 

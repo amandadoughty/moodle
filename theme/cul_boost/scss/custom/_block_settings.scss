@@ -27,7 +27,7 @@ aside[id*="block-region-nav-settings"] {
     .block_settings .block-controls {
         float: none!important;
         text-align: right;
-        position: absolute;
+        position: absolute !important;
         top: 0;
         right: 100%;
         z-index: 0;
@@ -137,7 +137,7 @@ aside[id*="block-region-nav-settings"] {
     .block_navigation .block_tree p.hasicon .icon,
     .block_settings .block_tree p.hasicon .icon {
         margin: 0 ($spacer / 2) 0 0;
-        color: $brand-primary;
+        color: $primary;
         min-width: 16px;
     }
 
@@ -156,7 +156,7 @@ aside[id*="block-region-nav-settings"] {
     }
     .block.block_settings .block_tree p>a {
         &:hover {
-            color: $brand-primary;
+            color: $primary;
         }
     }
     .block_settings .block_tree .tree_item {
@@ -172,7 +172,7 @@ aside[id*="block-region-nav-settings"] {
         font-size: $font-size-lg;
         margin-right: $spacer / 2;
         line-height: $font-size-base;
-        color: $brand-primary;
+        color: $primary;
     }
     .block.block_settings .block_tree .tree_item.branch:before {
         position: absolute;

@@ -154,7 +154,7 @@ $slick-opacity-not-active: 0.25 !default;
     padding: 0;
     background-color: #fff;
     background-image: none;
-    color: $brand-primary;
+    color: $primary;
     font-size: $font-size-base * 2;
     justify-content: center;
     border: none;
@@ -173,7 +173,7 @@ $slick-opacity-not-active: 0.25 !default;
     &:active:focus,
     &.active {
         border: none;
-        background-color: $brand-primary;
+        background-color: $primary;
         color: #fff;
     }
 }

@@ -66,7 +66,7 @@
             }
         }
         &.quicklinks-wrap {
-            background-color: darken($brand-primary, 5%);
+            background-color: darken($primary, 5%);
             .dash-link {
                 background-color: #fff;
                 &:hover,
@@ -76,7 +76,7 @@
             }
         }
         &.activities-wrap {
-            background-color: $brand-primary;
+            background-color: $primary;
             .linkscontainer {
                 ul.links {
                     .dash {
@@ -107,10 +107,10 @@
                         &:hover,
                         &:focus {
                             a {
-                                color: $brand-primary;
+                                color: $primary;
                             }
                             .dash-move {
-                                color: $brand-primary;
+                                color: $primary;
                                 background-color: rgba(#000, 0.1);
                             }
                         }
@@ -168,7 +168,7 @@ svg.activityicon {
 .course-content {
     .section {
         &.current {
-            box-shadow: 0px 0px 0px 2px #fff, 0px 0px 0px 6px darken($brand-primary, 5%);
+            box-shadow: 0px 0px 0px 2px #fff, 0px 0px 0px 6px darken($primary, 5%);
             &:before {
                 display: none;
             }
@@ -255,7 +255,7 @@ svg.activityicon {
                             text-indent: 0;
                             padding: 0 0 0 $spacer / 2;
                             background-color: #fff;
-                            box-shadow: inset 0px 0px 0px 1px $brand-primary;
+                            box-shadow: inset 0px 0px 0px 1px $primary;
                             img,
                             svg {
                                 &.activityicon {
@@ -269,7 +269,7 @@ svg.activityicon {
                             }
                         }
                         span.instancename {
-                            border-left: 1px solid $brand-primary;
+                            border-left: 1px solid $primary;
                             padding: $spacer / 2 $spacer;
                         }
                         .aspirelists_inline_accordion {
@@ -279,7 +279,7 @@ svg.activityicon {
                             justify-content: center;
                             align-self: stretch;
                             padding: $spacer / 4 $spacer / 2;
-                            background-color: $brand-primary;
+                            background-color: $primary;
                             color: #fff;
                             line-height: 1.1;
                             cursor: pointer;
@@ -310,7 +310,7 @@ svg.activityicon {
 
 $culcourse-header-bg: $gray-light;
 $culcourse-header-hover-bg: darken($culcourse-header-bg, 15%);
-$culcourse-header-active-bg: $brand-primary;
+$culcourse-header-active-bg: $primary;
 $culcourse-header-text-color: #fff;
 $culcourse-header-editing-color: #fff;
 $culcourse-content-bg: $gray-lightest;
@@ -373,7 +373,7 @@ $culcourse-arrow-active-color: #fff;
                     display: inline-flex;
                     align-items: center;
                     padding: $spacer $spacer * 1.5;
-                    font-size: $font-size-h4;
+                    font-size: $h4-font-size;
                     color: $body-color;
                     &:hover,
                     &:focus {
@@ -383,7 +383,7 @@ $culcourse-arrow-active-color: #fff;
                     &:before {
                         @include fa-icon();
                         content: "\f107";
-                        font-size: $font-size-h3;
+                        font-size: $h3-font-size;
                         margin-top: -$spacer / 4;
                         margin-right: $spacer;
                     }
@@ -493,12 +493,12 @@ $culcourse-arrow-active-color: #fff;
                                 margin: 0;
                                 background: none;
                                 padding: 0;
-                                font-size: $font-size-h4;
+                                font-size: $h4-font-size;
                                 color: #fff;
                                 &:before {
                                     @include fa-icon();
                                     content: "\f107";
-                                    font-size: $font-size-h3;
+                                    font-size: $h3-font-size;
                                     margin-top: -1px;
                                     width: $spacer * 2;
                                     text-align: center;
@@ -549,7 +549,7 @@ $culcourse-arrow-active-color: #fff;
                                     }
                                 }
                                 h3 {
-                                    font-size: $font-size-h4;
+                                    font-size: $h4-font-size;
                                     color: $culcourse-header-text-color;
                                     &:before {
                                         content: "\f105";
@@ -666,7 +666,7 @@ $culcourse-arrow-active-color: #fff;
                     span.instancename {
                         font-size: $font-size-base;
                         padding: $spacer / 2 $spacer * .75;
-                        border-left: 1px solid $brand-primary;
+                        border-left: 1px solid $primary;
                     }
                 }
                 .add_section {
@@ -687,7 +687,7 @@ $culcourse-arrow-active-color: #fff;
     @extend .tag;
     @extend .tag-danger;
     margin: 0 $spacer/4 $spacer/4 0;
-    font-size: $font-size-h5;
+    font-size: $h5-font-size;
     white-space: normal;
     text-align: left;
     line-height: $line-height-base;

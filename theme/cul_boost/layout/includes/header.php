@@ -1,6 +1,6 @@
 <?php
 
-echo html_writer::start_tag('nav', ['id'=>'top', 'role'=>'header', 'class'=>'navbar navbar-default']);
+echo html_writer::start_tag('nav', ['id'=>'top', 'role'=>'header', 'class'=>'navbar navbar-default d-block']);
 
     echo html_writer::start_tag('div', ['class'=>'topmenu d-none d-md-block']);
         echo html_writer::start_tag('div', ['class'=>'container-fluid']);

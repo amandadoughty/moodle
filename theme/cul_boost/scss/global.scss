@@ -11,6 +11,7 @@ a:focus {
 }
 
 html {
+    font-size: 15px;
     height: auto;
     min-height: 100%;
     &.htmllayout-embedded {
@@ -43,8 +44,17 @@ body {
     position: relative;
 }
 
+#page-my-index {
+    background-color: $body-bg;
+}
+
 .container-fluid {
     max-width: $container-max-width;
+}
+
+#region-main {
+    padding-left: $grid-gutter-width / 2;
+    padding-right: $grid-gutter-width / 2;
 }
 
 div[role="main"] {
@@ -203,7 +213,14 @@ abbr {
 }
 
 .line-height-1 {
-    line-height: 100%;
+    line-height: 100% !important;
+}
+
+// Add back in bootstrap 4 dropdown menu right
+// alignment for all areas that may use it
+.dropdown-menu-right {
+  right: 0;
+  left: auto; // Reset the default from `.dropdown-menu`
 }
 
 .overlay {
