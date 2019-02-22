@@ -1,7 +1,0 @@
-{
-  "moodle-theme_cul_boost-favourites": {
-    "requires": [
-        "node"
-    ]
-  }
-}

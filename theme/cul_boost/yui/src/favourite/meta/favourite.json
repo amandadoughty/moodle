@@ -1,9 +1,0 @@
-{
-  "moodle-theme_cul_boost-favourite": {
-    "requires": [
-        "node",
-        "querystring-parse",
-        "json-parse"
-    ]
-  }
-}

@@ -33,4 +33,5 @@ $cid = required_param('cid', PARAM_INT);
 $favourites = theme_cul_boost_edit_favourites($action, $cid);
 // Update the user preference
 theme_cul_boost_update_favourites($favourites);
+theme_cul_boost_edit_favourites_api($action, $cid);
 redirect(new moodle_url('/course/view.php', array('id' => $cid)));

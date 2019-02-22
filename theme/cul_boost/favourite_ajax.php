@@ -38,6 +38,7 @@ $cid = required_param('cid', PARAM_INT);
 $favourites = theme_cul_boost_edit_favourites($action, $cid);
 // Update the user preference
 theme_cul_boost_update_favourites($favourites);
+theme_cul_boost_edit_favourites_api($action, $cid);
 // Retrieve the favourites from preferences again in case the update did not work, we want  
 // to ensure the link reflects the current status of favourites.
 $favourites = array();

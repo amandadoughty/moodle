@@ -316,8 +316,8 @@ function theme_cul_boost_get_edituser($page) {
  * @param moodle_page $page Pass in $PAGE.
  */
 function theme_cul_boost_initialise_favourites(moodle_page $page) {
-    $page->requires->yui_module('moodle-theme_cul_boost-favourites', 'M.theme_cul_boost.favourites.init', array());
-    $page->requires->yui_module('moodle-theme_cul_boost-favourite', 'M.theme_cul_boost.favourite.init', array());
+    $page->requires->js_call_amd('theme_cul_boost/favourites', 'init');
+    $page->requires->js_call_amd('theme_cul_boost/favourite', 'init');
 }
 
 /**
@@ -352,6 +352,37 @@ function theme_cul_boost_edit_favourites($action, $cid) {
     }
 
     return $favourites;
+}
+
+/**
+ * Edits the favourites api.
+ *
+ * @param string $action add or delete
+ * @param int $cid course id
+ * @param int $userid user id
+ * @return array $favourites a sorted array of course id's
+ */
+function theme_cul_boost_edit_favourites_api($action, $cid, $userid = 0) {
+    global $USER;
+
+    $coursecontext = \context_course::instance($cid);
+    $usercontext = \context_user::instance($USER->id);
+    $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+
+    switch ($action) {
+        case 'add':
+            // New favourite api.
+            $ufservice->create_favourite('core_course', 'courses', $cid, $coursecontext);
+
+            break;
+        case 'remove':
+            // New favourite api.
+            $ufservice->delete_favourite('core_course', 'courses', $cid, $coursecontext);
+
+            break;
+        default:
+            break;
+    }
 }
 
 /**
