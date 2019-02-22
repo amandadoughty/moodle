@@ -204,8 +204,6 @@ function block_culcourse_listing_edit_favourites_api($action, $cid, $userid = 0)
         default:
             break;
     }
-
-    return $favourites;
 }
 
 /**
