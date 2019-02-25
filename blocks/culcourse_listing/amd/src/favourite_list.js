@@ -58,6 +58,29 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         });
     };
 
+    var build_querystring = function (obj) {
+        if (typeof obj !== 'object') {
+            return null;
+        }
+
+        var list = [];
+
+        for(var k in obj) {
+            k = encodeURIComponent(k);
+            var value = obj[k];
+
+            if(obj[k] instanceof Array) {
+                for(var i in value) {
+                    list.push(k + '[]=' + encodeURIComponent(value[i]));
+                }
+            } else {
+                list.push(k + '=' + encodeURIComponent(value));
+            }
+        }
+
+        return list.join('&');
+    };
+
     var reorder = function(e) {
         e.preventDefault();
 
@@ -67,12 +90,12 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         var args = {};
         args.message = M.util.get_string('reorderfavouritescheck', 'block_culcourse_listing');
 
-        args.callback = function(e){
+        args.callback = function() {
             Y.one(SELECTORS.FAVOURITELIST).transition ({
                  duration: 2.0,
                  easing: 'ease-in',
                  opacity: 0
-            })
+            });
 
             Y.io(URLREORDER, {
                 data: build_querystring(params),
@@ -85,12 +108,12 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                              duration: 2.0,
                              easing: 'ease-in',
                              opacity: 1
-                        })
+                        });
                     },
-                    failure: function(id, e) {
+                    failure: function() {
                         // Not currently used.
                     },
-                    end: function(id, e) {
+                    end: function() {
                         var favids = [];
                         Y.all(SELECTORS.FAVOURITECOURSEBOX).each(function(node) {
                             favids.push(node.getData('courseid'));
@@ -101,30 +124,33 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                     }
                 }
             });
-        }
+        };
 
         M.util.show_confirm_dialog(e, args);
     };
 
     var clear = function(e) {
         e.preventDefault();
+
         var params = {
             sesskey : M.cfg.sesskey
         };
+
         var args = {};
         args.message = M.util.get_string('clearfavouritescheck', 'block_culcourse_listing');
         args.scope = this;
 
-        args.callback = function(e){
+        args.callback = function(){
             Y.io(URLCLEAR, {
                 context: this,
                 data: build_querystring(params),
                 on: {
-                    success: function(id) {
+                    success: function() {
                         // Remove all courses from the favourite area.
                         Y.all(SELECTORS.FAVOURITECOURSEBOX).remove();
                         // Change the category course styles and links.
                         var favouriteiconlist = Y.all(SELECTORS.FAVOURITEICON);
+
                         favouriteiconlist.each(function(node) {
                             // Change the link, title and icon to reflect that the course can now be
                             // removed from favourites.
@@ -139,11 +165,13 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                             node.removeClass(CSS.FAVOURITEREMOVE);
                             node.addClass(CSS.FAVOURITEADD);
                         });
+
                         Y.all(SELECTORS.COURSEBOXSPINNERLOCATION).transition ({
                              duration: 2.0,
                              easing: 'ease-in',
                              opacity: 1.0
-                        })
+                        });
+
                         $(SELECTORS.FAVOURITECLEARBUTTON).hide();
                         $(SELECTORS.FAVOURITEREORDERBUTTON).hide();
                         $(SELECTORS.FAVOURITELIST).html(
@@ -152,10 +180,10 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                             '</span>'
                             );
                     },
-                    failure: function(id, e) {
+                    failure: function() {
                         // Not currently used.
                     },
-                    end: function(id, e) {
+                    end: function() {
                         var favids = [];
                         Y.fire('culcourse-listing:update-favourites', {
                             favourites: favids
@@ -173,13 +201,13 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                     }
                 }
             });
-        }
+        };
 
         M.util.show_confirm_dialog(e, args);
     };
 
     return {
-        initializer: function(params) {
+        initializer: function() {
             setupfavourites();
             // Moodle has no way of adding class to single_button object.
             Y.one(SELECTORS.FAVOURITEREORDERINPUT).addClass(CSS.BUTTONALERT);
@@ -189,7 +217,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
             Y.publish('culcourse-listing:update-favourites', {
                 broadcast:2
-            })
+            });
         }
-    };    
+    };
 });

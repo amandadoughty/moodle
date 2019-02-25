@@ -20,18 +20,13 @@
  * @copyright  2019 Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/yui',
-        'core/pubsub', 'core_course/events', 'block_culcourse_listing/favourite', 
+        'core/pubsub', 'core_course/events', 'block_culcourse_listing/favourite',
         'block_myoverview/main', 'block_starredcourses/main'],
-    function($, Ajax, Templates, Notification, Str, Y, PubSub, CourseEvents, Favourite, 
+    function($, Ajax, Templates, Notification, Str, Y, PubSub, CourseEvents, Favourite,
         MyOverview, StarredCourses) {
 
-    var CSS = {
-            HIDE: 'hide',
-            FAVOURITEADD: 'fa fa-star-o',
-            FAVOURITEREMOVE: 'gold fa fa-star',
-        };
     var SELECTORS = {
             COURSEBOXLIST: '.block_culcourse_listing .course_category_tree',
             COURSEBOXLISTCOURSEBOX: '.course_category_tree .culcoursebox',
@@ -55,13 +50,11 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         }
 
         editrunning = true;
-        var target = e.target;
         var link = e.target.get('parentNode');
         var href = link.get('href').split('?');
-        var url = href[0];
-        var querystring = href[1];        
+        var querystring = href[1];
 
-        Y.use('base', 'anim', 'tabview', 'transition', 'querystring-parse', 'event-custom', function() {
+        Y.use('querystring-parse', 'event-custom', function() {
             // returns an object with params as attributes
             var params = Y.QueryString.parse(querystring);
 
@@ -73,10 +66,10 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 success: function(response) {
                     editfavouritesuccess(response, params);
                 },
-                error: function(response) {
+                error: function() {
 
                 },
-                complete: function(response) {
+                complete: function() {
                     editrunning = false;
                     Y.fire('culcourse-listing:update-favourites');
 
@@ -96,12 +89,12 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
     var editfavouritesuccess = function (response, params) {
         Templates.render('block_culcourse_listing/coursebox', response)
-            .then(function(html, js) {
+            .then(function(html) {
                 var newcourseboxnode = $(html);
                 var newfavouritenode = $(html);
 
                 if (params.action == 'add') {
-                        var courseboxnode = $(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');                        
+                        var courseboxnode = $(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
 
                         if (courseboxnode) {
                             courseboxnode.replaceWith(newcourseboxnode);
@@ -118,16 +111,15 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
                         // There must be at least one favourite now, so show the favourite buttons
                         // if they are hidden and hide the 'no favourites' message.
-                        if ($(SELECTORS.FAVOURITECOURSEBOX).length > 0) { 
-                            $(SELECTORS.FAVOURITECLEARBUTTON).show().css('display', 'inline-block');;
-                            $(SELECTORS.FAVOURITEREORDERBUTTON).show().css('display', 'inline-block');;
+                        if ($(SELECTORS.FAVOURITECOURSEBOX).length > 0) {
+                            $(SELECTORS.FAVOURITECLEARBUTTON).show().css('display', 'inline-block');
+                            $(SELECTORS.FAVOURITEREORDERBUTTON).show().css('display', 'inline-block');
                             $(SELECTORS.FAVOURITEALERT).text('');
                         }
 
                         newfavouritenode.animate({
                             opacity: 1
-                        }, 1000, function() {  
-                            
+                        }, 1000, function() {
                         });
 
                         return;
@@ -142,7 +134,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                         }, 1000, function() {
                             this.remove();
 
-                            if ($(SELECTORS.FAVOURITECOURSEBOX).length == 0) { 
+                            if ($(SELECTORS.FAVOURITECOURSEBOX).length == 0) {
                                 $(SELECTORS.FAVOURITECLEARBUTTON).hide();
                                 $(SELECTORS.FAVOURITEREORDERBUTTON).hide();
                                 $(SELECTORS.FAVOURITEALERT).html('<span>' + langstring + '</span>');
@@ -154,7 +146,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                         }
 
                         return;
-                    }).catch(Notification.exception);            
+                    }).catch(Notification.exception);
                 }
             })
             .fail(Notification.exception);
@@ -182,8 +174,6 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 });
             }
         }).fail(Notification.exception);
-
-        
     };
 
     return {
@@ -193,10 +183,10 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
             Y.publish('culcourse-listing:update-favourites', {
                 broadcast:2
-            })
+            });
 
             PubSub.subscribe(CourseEvents.favourited, function() {updateFavouriteViaApi();});
             PubSub.subscribe(CourseEvents.unfavorited, function() {updateFavouriteViaApi();});
         }
-    };    
+    };
 });

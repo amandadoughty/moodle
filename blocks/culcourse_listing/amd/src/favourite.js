@@ -21,9 +21,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
-        'core/modal_factory', 'core/modal_events', 'core/key_codes'],
-    function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes) {
+define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui'],
+    function($, ajax, templates, notification, str, url, Y) {
 
     var CSS = {
             BLOCK: 'block_culcourse_listing',
@@ -38,6 +37,29 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         COURSEBOXLINK: '.info',
     };
     var URL = M.cfg.wwwroot + '/blocks/culcourse_listing/move_ajax.php';
+
+    var build_querystring = function (obj) {
+        if (typeof obj !== 'object') {
+            return null;
+        }
+
+        var list = [];
+
+        for(var k in obj) {
+            k = encodeURIComponent(k);
+            var value = obj[k];
+
+            if(obj[k] instanceof Array) {
+                for(var i in value) {
+                    list.push(k + '[]=' + encodeURIComponent(value[i]));
+                }
+            } else {
+                list.push(k + '=' + encodeURIComponent(value));
+            }
+        }
+
+        return list.join('&');
+    };
 
     var addmoveicon = function(params) {
         // Replace the non-JS links.
@@ -63,7 +85,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             addmoveicon(params);
             // Static Vars.
             var goingUp = false, lastY = 0;
- 
+
             var d = new Y.DD.Drag({
                     node: params.node,
                     target: true
@@ -161,7 +183,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             data: build_querystring(params),
             context: this,
             on: {
-                end: function(id, e) {
+                end: function() {
                     var favids = sortorder;
                     Y.fire('culcourse-listing:update-favourites', {
                         favourites: favids

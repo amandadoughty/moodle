@@ -21,8 +21,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/yui', 'core/notification', 'core/key_codes'],
-    function($, ajax, templates, str, url, Y, Notification, KeyCodes) {
+define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/yui', 'core/notification'],
+    function($, ajax, Templates, Str, url, Y, Notification) {
 
     var CSS = {
         CONTENTNODE: 'content',
@@ -39,7 +39,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
         CONTENTNODE: '.content',
         CATEGORYCHILDLINK: '.culcategory .info .categoryname a',
         CATEGORYLISTENLINK: '.culcategory .info .categoryname',
-        CATEGORYSPINNERLOCATION: '.categoryname',        
+        CATEGORYSPINNERLOCATION: '.categoryname',
         CATEGORYWITHCOLLAPSEDLOADEDCHILDREN: '.culcategory.with_children.loaded.collapsed',
         CATEGORYWITHMAXIMISEDLOADEDCHILDREN: '.culcategory.with_children.loaded:not(.collapsed)',
         COLLAPSEEXPAND: '.culcollapseexpand',
@@ -53,7 +53,6 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
     var TYPE_CATEGORY = 0;
     var TYPE_COURSE = 1;
     var URL = M.cfg.wwwroot + '/blocks/culcourse_listing/category_ajax.php';
-    var BLOCKCONFIG = null;
 
     /**
      * Set up keyboard expansion for course content.
@@ -99,8 +98,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
 
         var categorynode,
             categoryid,
-            depth,
-            categorylink;
+            depth;
 
         if (e.target.test('a') || e.target.test('img')) {
             // Return early if either an anchor or an image were clicked.
@@ -167,10 +165,10 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
                 return spinnernode;
             })
             .then(function(spinnernode) {
-                years = {};
-                periods = {};
-                yearselect = $('#culcourse_listing_filter_year');
-                periodselect = $('#culcourse_listing_filter_period');
+                var years = {};
+                var periods = {};
+                var yearselect = $('#culcourse_listing_filter_year');
+                var periodselect = $('#culcourse_listing_filter_period');
 
                 if (yearselect) {
                     $.each(yearselect.attr('options'), function(key, value) {
@@ -198,9 +196,9 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
                     data: config.data,
                     context: self,
                     success: function(response) {
-                        self.process_results(response, args);
+                        process_results(response, args);
                     }
-                })
+                });
 
             }).fail(Notification.exception);
     };
@@ -223,7 +221,8 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
         // If we already have the class, remove it before showing otherwise we perform the
         // animation whilst the node is hidden.
         if (categorynode.hasClass(CSS.SECTIONCOLLAPSED)) {
-            // To avoid a jump effect, we need to set the height of the children to 0 here before removing the SECTIONCOLLAPSED class.
+            // To avoid a jump effect, we need to set the height of the children to 0 here before removing
+            // the SECTIONCOLLAPSED class.
             categorychildren.setStyle('height', '0');
             categorynode.removeClass(CSS.SECTIONCOLLAPSED);
             categorynode.setAttribute('aria-expanded', 'true');
@@ -393,7 +392,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
 
         // Update the filters.
         if (data.filterform) {
-            filterform = Y.one('.filter');
+            var filterform = Y.one('.filter');
             filterform.setHTML(data.filterform);
         }
 
@@ -456,5 +455,5 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
             // can be very expensive.
             doc.once('key', setup_keyboard_listeners, 'tab', this);
         }
-    };    
+    };
 });

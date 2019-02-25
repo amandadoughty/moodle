@@ -46,7 +46,7 @@
 
 }}
 
-<div class="culcoursebox clearfix panel panel-default collapsed yui3-dd-drop yui3-dd-draggable" data-courseid="{{cid}}" data-type="1" data-year="{{year}}" data-period="{{period}}" id="{{id}}">
+<div class="culcoursebox clearfix panel panel-default collapsed" data-courseid="{{cid}}" data-type="1" data-year="{{year}}" data-period="{{period}}" id="{{id}}">
     <div class=" info panel-heading">
         <div class="coursename_wrapper">
             {{# move }}
@@ -56,22 +56,22 @@
                 <a title="{{coursename}}" href="/course/view.php?id={{cid}}">{{coursename}}</a>
             </div>
         </div>
+        <div>
+            <a class=" favouritelink favouritelink_{{cid}}" title="{{favtitle}}" href="/blocks/culcourse_listing/favourite_post.php?action={{action}}&cid={{cid}}&sesskey={{sesskey}}">
+                <i class="{{favclass}}"></i>
+            </a>
+        </div>
         <div class="moreinfo">
             <!-- if content exists -->
             {{# ismoreinfo }}
                 {{> block_culcourse_listing/moreinfo }}
             {{/ ismoreinfo }}
         </div>
-        <a class=" favouritelink favouritelink_{{cid}}" title="{{favtitle}}" href="/blocks/culcourse_listing/favourite_post.php?action={{action}}&cid={{cid}}&sesskey={{sesskey}}">
-            <i class="{{favclass}}"></i>
-        </a>
-
         <div class="enrolmenticons">
             {{# enrolmenticons }}
                 {{# pix }} {{icon}}, {{component}}, {{attributes.alt}} {{/ pix }}
             {{/ enrolmenticons }}            
-        </div>
-        
+        </div>        
     </div>
     <div class="content panel-body">
         <!-- if content exists -->
