@@ -31,5 +31,6 @@ require_sesskey();
 require_login();
 
 // Clear the favourites.
-$favourites = array();
+$favourites = [];
 block_culcourse_listing_update_favourites_pref($favourites);
+block_culcourse_listing_clear_favourites_api();

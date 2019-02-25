@@ -37,6 +37,7 @@ $string['allcourses'] = 'Modules';
 $string['and'] = ' and ';
 $string['clearfavourites'] = 'Clear favourites';
 $string['clearfavouritescheck'] = 'Are you sure you want to clear your favourites?';
+$string['clearfavouritesfail'] = 'There was an error clearing your favourites?';
 $string['collapseall'] = 'Collapse All Course Lists';
 $string['courseoverview'] = 'CUL Course Listing';
 $string['culcourse_listing:addinstance'] = 'Add a CUL Course Listing block';

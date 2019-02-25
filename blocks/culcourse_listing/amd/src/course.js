@@ -119,8 +119,8 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                         // There must be at least one favourite now, so show the favourite buttons
                         // if they are hidden and hide the 'no favourites' message.
                         if ($(SELECTORS.FAVOURITECOURSEBOX).length > 0) { 
-                            $(SELECTORS.FAVOURITECLEARBUTTON).show();
-                            $(SELECTORS.FAVOURITEREORDERBUTTON).show();
+                            $(SELECTORS.FAVOURITECLEARBUTTON).show().css('display', 'inline-block');;
+                            $(SELECTORS.FAVOURITEREORDERBUTTON).show().css('display', 'inline-block');;
                             $(SELECTORS.FAVOURITEALERT).text('');
                         }
 

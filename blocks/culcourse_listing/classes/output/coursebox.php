@@ -115,11 +115,14 @@ class coursebox implements renderable, templatable {
                 $move['moveup'] = true;
                 $move['movedown'] = true;
 
-                if (array_shift($favourites)->id == $this->course->id) {
+                $first = current($favourites); // array_key_first php 7.3.
+                $last = end($favourites); // array_key_last php 7.3.
+
+                if ($first->id == $this->course->id) {
                     $move['moveup'] = false;
                 }
 
-                if (array_pop($favourites)->id == $this->course->id) {
+                if ($last->id == $this->course->id) {
                     $move['movedown'] = false;
                 }
             }

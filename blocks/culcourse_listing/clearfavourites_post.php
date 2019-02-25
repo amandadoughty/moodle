@@ -48,6 +48,7 @@ if (!$remove) {
     exit;
 }
 // The user has clicked the confirmation link, so clear the favourites and redirect back.
-$favourites = array();
+$favourites = [];
 block_culcourse_listing_update_favourites_pref($favourites);
+block_culcourse_listing_clear_favourites_api();
 redirect(new moodle_url('/my/index.php'));

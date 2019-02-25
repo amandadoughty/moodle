@@ -22,8 +22,10 @@
  */
 
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 'core/url', 'core/yui',
-        'core/modal_factory', 'core/modal_events', 'core/key_codes', 'block_culcourse_listing/favourite'],
-    function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes, Favourite) {
+        'core/modal_factory', 'core/modal_events', 'core/key_codes', 'block_culcourse_listing/favourite',
+        'block_myoverview/main', 'block_starredcourses/main'],
+    function($, ajax, templates, notification, str, url, Y, ModalFactory, ModalEvents, KeyCodes, Favourite,
+        MyOverview, StarredCourses) {
 
     var CSS = {
             BUTTONALERT: 'btn-danger',
@@ -142,9 +144,9 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                              easing: 'ease-in',
                              opacity: 1.0
                         })
-                        Y.one(SELECTORS.FAVOURITECLEARBUTTON).hide();
-                        Y.one(SELECTORS.FAVOURITEREORDERBUTTON).hide();
-                        Y.one(SELECTORS.FAVOURITELIST).setHTML(
+                        $(SELECTORS.FAVOURITECLEARBUTTON).hide();
+                        $(SELECTORS.FAVOURITEREORDERBUTTON).hide();
+                        $(SELECTORS.FAVOURITELIST).html(
                             '<span>' +
                             M.util.get_string('nofavourites', 'block_culcourse_listing') +
                             '</span>'
@@ -157,6 +159,16 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                         var favids = [];
                         Y.fire('culcourse-listing:update-favourites', {
                             favourites: favids
+                        });
+
+                        var roots = $('.block_myoverview .block-myoverview');
+                        $.each(roots, function(id, node) {
+                            MyOverview.init(node);
+                        });
+
+                        var roots = $('.block_starredcourses .block-starredcourses');
+                        $.each(roots, function(id, node) {
+                            StarredCourses.init(node);
                         });
                     }
                 }

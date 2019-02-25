@@ -207,7 +207,7 @@ function block_culcourse_listing_edit_favourites_api($action, $cid, $userid = 0)
 }
 
 /**
- * Edits the favourites api.
+ * Updates from the favourites api.
  *
  * @param string $action add or delete
  * @param int $cid course id
@@ -262,6 +262,35 @@ function block_culcourse_listing_update_from_favourites_api() {
         return ['action' => 'add', 'cid' => array_shift($add)]; //@TODO return node
     } else {
         return ['action' => 'error', 'cid' => null];
+    }
+}
+
+/**
+ * Clears the courses from the favourites api.
+ *
+ * @param string $action add or delete
+ * @param int $cid course id
+ * @param int $userid user id
+ * @return array $favourites a sorted array of course id's
+ */
+function block_culcourse_listing_clear_favourites_api() {
+    global $USER;
+
+    $usercontext = \context_user::instance($USER->id);
+
+    // Get the user favourites service, scoped to a single user (their favourites only).
+    $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+
+    // Get the favourites, by type, for the user.
+    $apifavourites = $userservice->find_favourites_by_type('core_course', 'courses');
+
+    foreach ($apifavourites as $apifavourite) {
+        try {
+            $userservice->delete_favourite('core_course', 'courses', $apifavourite->itemid,
+                    \context_course::instance($apifavourite->itemid));
+        } catch (Exception $e) {
+            print_error('clearfavouritesfail', 'block_culcourse_listing');
+        }
     }
 }
 
