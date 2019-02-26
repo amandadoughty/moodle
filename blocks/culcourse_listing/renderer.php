@@ -154,6 +154,8 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             // $divalert .= '<i class="fa fa-hand-o-right"></i>';
             $content .= html_writer::tag('h2', $header, array('class' => 'allcourses'));
             $content .= html_writer::tag('h2', $divalert, array('class' => 'divalert'));
+            $content .= html_writer::start_tag('div', array(
+            'id' => 'allcoursesactions'));
             $hasexpandedcats = $chelper->get_has_expanded_categories();
 
             // If filter by year or filter by period are enabled in the admin settings
@@ -190,6 +192,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 $this->page->requires->strings_for_js(array('collapseall', 'expandall'), 'moodle');
             }
 
+            $content .= html_writer::end_tag('div'); // End #allcoursesactions.
             $content .= html_writer::end_tag('div'); // End #allcourses.
             $content .= html_writer::tag('div', $categorycontent);
             $content .= html_writer::end_tag('div'); // End .course_category_tree.
@@ -355,7 +358,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             // Add category editing link for those with capability.
             if ($view) {
                 $editcategoryurl = new moodle_url(' /course/index.php', array('categoryid' => $coursecat->id, 'categoryedit' => 1));
-                $icon = html_writer::tag('i', '', array('class' => 'red fa fa-pencil'));
+                $icon = html_writer::tag('i', '', array('class' => 'fa fa-pencil'));
                 $title = get_string('editcategory', 'block_culcourse_listing');
                 $content .= html_writer::link($editcategoryurl, $icon, array('class' => 'overviewlink', 'title' => $title));
             }

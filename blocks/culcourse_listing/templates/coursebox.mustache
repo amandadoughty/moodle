@@ -56,10 +56,10 @@
                 <a title="{{coursename}}" href="/course/view.php?id={{cid}}">{{coursename}}</a>
             </div>
         </div>
-        <div>
-            <a class=" favouritelink favouritelink_{{cid}}" title="{{favtitle}}" href="/blocks/culcourse_listing/favourite_post.php?action={{action}}&cid={{cid}}&sesskey={{sesskey}}">
-                <i class="{{favclass}}"></i>
-            </a>
+        <div class="enrolmenticons">
+            {{# enrolmenticons }}
+                {{# pix }} {{icon}}, {{component}}, {{attributes.alt}} {{/ pix }}
+            {{/ enrolmenticons }}            
         </div>
         <div class="moreinfo">
             <!-- if content exists -->
@@ -67,10 +67,10 @@
                 {{> block_culcourse_listing/moreinfo }}
             {{/ ismoreinfo }}
         </div>
-        <div class="enrolmenticons">
-            {{# enrolmenticons }}
-                {{# pix }} {{icon}}, {{component}}, {{attributes.alt}} {{/ pix }}
-            {{/ enrolmenticons }}            
+        <div class="favouritelink">
+            <a class="favouritelink favouritelink_{{cid}}" title="{{favtitle}}" href="/blocks/culcourse_listing/favourite_post.php?action={{action}}&cid={{cid}}&sesskey={{sesskey}}">
+                <i class="icon {{favclass}}"></i>
+            </a>
         </div>        
     </div>
     <div class="content panel-body">

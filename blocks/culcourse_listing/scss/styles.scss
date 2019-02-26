@@ -1,0 +1,499 @@
+// Boost Styles
+@import "../../../theme/boost/scss/bootstrap";
+@import "../../../theme/boost/scss/fontawesome";
+@import "../../../theme/boost/scss/moodle";
+
+@mixin make-btn {
+  display: inline-block;
+  font-weight: $btn-font-weight;
+  line-height: $btn-line-height;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border-radius: $btn-border-radius;
+  border: $input-btn-border-width solid transparent;
+  @include button-size($btn-padding-y, $btn-padding-x, $font-size-base, $line-height-base, $btn-border-radius);
+  @include transition(all .2s ease-in-out);
+
+  // Share hover and focus styles
+  @include hover-focus {
+    text-decoration: none;
+  }
+
+  &:focus,
+  &.focus {
+    outline: 0;
+    box-shadow: $btn-focus-box-shadow;
+  }
+
+  // Disabled comes first so active can properly restyle
+  &.disabled,
+  &:disabled {
+    opacity: $btn-disabled-opacity;
+    @include box-shadow(none);
+  }
+
+  // Opinionated: add "hand" cursor to non-disabled .btn elements
+  &:not(:disabled):not(.disabled) {
+    cursor: pointer;
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    background-image: none;
+    @include box-shadow($btn-active-box-shadow);
+
+    &:focus {
+      @include box-shadow($btn-focus-box-shadow, $btn-active-box-shadow);
+    }
+  }
+}
+
+$inverse: #CCCCCC;
+
+#region-main {
+    .block {
+        &.block_culcourse_listing {
+            max-width: 930px;
+            margin-bottom: $spacer * 7;
+            // >.block-inner {
+            //     padding: 0;
+            //     .content {
+            //         padding: 0;
+            //         ul#courselistingnav {
+            //             display: flex;
+            //             flex-wrap: wrap;
+            //             align-items: center;
+            //             justify-content: center;
+            //             margin-bottom: $spacer * 2;
+            //             .nav-item {
+            //                 float: none;
+            //                 margin: 0 $spacer / 2;
+            //                 .nav-link {
+            //                     // background-color: transparent;
+            //                     // &:hover,
+            //                     // &:focus {
+            //                     //     background-color: rgba(255, 255, 255, 0.05);
+            //                     // }
+            //                     &.active {
+            //                         // background-color: $primary;
+            //                         // &:hover,
+            //                         // &:focus {
+            //                         //     background-color: $primary;
+            //                         // }
+            //                     }
+            //                     h2 {
+            //                         font-weight: $font-weight-normal;
+            //                     }
+            //                     * {
+            //                         // color: #fff;
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //         button[type="submit"] {
+            //             // @include button-variant($secondary, $secondary);
+            //         }
+            //     }
+            // }
+            .favourites {
+                margin-bottom: 2rem;
+                #favouritesbuttons {
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    justify-content: center;
+                    #clearfavourites,
+                    #reorderfavourites {
+                        .singlebutton {
+                            margin: 0 $spacer / 2;
+                        }
+                    }
+                }
+            }
+            .culcoursebox {
+                background-color: $white;
+                padding: 0;
+                border: 1px solid rgba(0, 0, 0, 0.125);
+                margin-bottom: $spacer;
+                border-radius: $border-radius;
+                overflow: hidden;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+                >.panel-heading {
+                    font-size: $font-size-base;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: stretch;
+                    .move {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        margin: 0;
+                        float: none;
+                        height: auto;
+                        line-height: inherit;
+                        padding: 0 $spacer * .75;
+                        // background-color: $gray-lightest;
+                        img {
+                            width: 18px;
+                        }
+                    }
+                    .coursename_wrapper {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: stretch;
+                        flex-basis: 0%;
+                        flex-grow: 1;
+                        max-width: 100%;
+                        width: 100%;
+                        .coursename {
+                            max-width: 100%;
+                            float: none !important;
+                            line-height: $line-height-base;
+                            margin: 0;
+                            padding: $spacer * .75;
+                            display: flex;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            flex-basis: 0%;
+                            flex-grow: 1;
+                            max-width: 100%;
+                            width: 100%;
+                            a {
+                                color: inherit;
+                                padding-left: $spacer * 1.75;
+                                background-position: left center;
+                                font-family: inherit;
+                                line-height: $line-height-base;
+                                background-image: url([[pix:i/course]]);
+                                background-repeat: no-repeat;
+                                background-position: left middle;
+                                // background-image: url([[pix:theme|course-light]]);
+                                background-size: 16px 16px;
+                                ;
+                            }
+                        }
+                    }
+                }
+                .content {
+                    &.panel-body {
+                        padding: $spacer * .75;
+                        * {
+                            // color: #fff;
+                        }
+                    }
+                }
+                .fa-star-o {
+                    color: $gray;
+                    opacity: 1;
+                }
+                .favouritelink,
+                .moreinfo,
+                .enrolmenticons {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    margin: 0 ($spacer / 2) 0 auto;
+                    line-height: inherit;
+                    width: auto;
+                    // color: $gray-lightest;
+                    // &+.favouritelink {
+                    //     margin: 0;
+                    //     margin-right: $spacer / 2;
+                    // }
+                    a {
+                        display: inline-block;
+                        line-height: 1;
+                    }
+                    .icon {
+                        display: inline-flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        // color: $gray-lightest;
+                        width: auto;
+                        opacity: 1;
+                        // font-size: $h4-font-size;
+                    }
+                }
+                .enrolmenticons {
+                    .icon {
+                        margin: 0;
+                        +.icon {
+                            margin-left: $spacer / 2;
+                        }
+                    }
+                }
+                // .favouritelink {
+                //     display: flex;
+                //     flex-wrap: wrap;
+                //     align-items: center;
+                //     float: none;
+                //     margin: 0 0 0 auto;
+                //     line-height: inherit;
+                //     text-align: center;
+                //     &+.enrolmenticons {
+                //         margin: 0 $spacer * .75 0 0;
+                //     }
+                //     .icon {
+                //         display: inline-flex;
+                //         flex-wrap: wrap;
+                //         align-items: center;
+                //         // color: $gray-lightest;
+                //         width: auto;
+                //         opacity: 1;
+                //         font-size: $h4-font-size;
+                //     }
+                // }
+                &.collapsed .content {
+                    display: none;
+                }
+            }
+            .course_category_tree {
+                &.filter-on {
+                    border: none;
+                    padding: $spacer;
+                }
+                #allcoursesheader {
+                    #allcoursesactions {
+                        display: flex;
+                        flex-wrap: wrap;
+                        // align-items: center;
+                        min-height: 0;
+                        margin: 0;
+                        .filter {
+                            display: inline-block;
+                            width: auto;
+                            margin: 0 auto $spacer auto;
+                            @include media-breakpoint-up(sm) {
+                                margin: 0 0 $spacer / 2 0;
+                            }
+                            form {
+                                display: block;
+                                >div {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    align-items: center;
+                                    justify-content: center;
+                                    span.nowrap {
+                                        margin-bottom: $spacer / 2;
+                                    }
+                                }
+                                label {
+                                    // color: #fff;
+                                    margin: 0 $spacer / 2 0 0;
+                                    vertical-align: middle;
+                                }
+                                select {
+                                    margin: 0 $spacer / 2 0 $spacer / 2;
+                                    @include media-breakpoint-up(sm) {
+                                        margin: 0 $spacer 0 0;
+                                    }
+                                    &.custom-select {
+                                        padding: $spacer * .75 $spacer * 2 $spacer * .75 $spacer;
+                                        // font-size: $h5-font-size;
+                                        // color: $primary;
+                                        line-height: 1.5;
+                                        border-radius: 0.25rem;
+                                    }
+                                }
+                            }
+                        }
+                        .collapsible-actions {
+                            display: inline-block;
+                            width: 100%;
+                            padding: 0;
+                            text-align: center;
+                            margin: 0 auto $spacer auto;
+                            @include media-breakpoint-up(sm) {
+                                width: auto;
+                                text-align: right;
+                                margin: 0 0 $spacer auto;
+                            }
+                            .culcollapseexpand {
+                                padding-left: 20px;
+                                background-image: url([[pix:t/collapsed]]);
+                                background-position: 2px center;
+                                background-repeat:  no-repeat;
+                                @include make-btn;
+                                @include button-variant($white, $gray-400);
+                                margin: 0;
+                                background-position: ($spacer / 2) 50%;
+                                padding: $spacer * .75 $spacer $spacer * .75 $spacer * 2;
+                                // font-size: $h5-font-size;
+                                // color: $primary;
+                                line-height: 1.5;
+                                &:focus,
+                                &:active,
+                                &:focus:active {
+                                    background-image: url([[pix:core|t/collapsed]]);
+                                }
+                                &.hide {
+                                    display: none;
+                                }                                
+                                &.culcollapse-all {
+                                    background-image: url([[pix:core|t/expanded]]);
+                                    &:focus,
+                                    &:active,
+                                    &:focus:active {
+                                        background-image: url([[pix:core|t/expanded]]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .culcategory {
+                    overflow: hidden;
+                    &+.culcategory {
+                        margin-top: $spacer;
+                    }
+                    .content {
+                        margin-top: $spacer;
+                        .subcategories {
+                            padding-left: $spacer * 2.5;
+                        }
+                    }
+                    &.dimmed_category {
+                        a {
+                            color: $inverse !important;
+                        }
+                    }
+                    &:not(.with_children) {
+                        >.info {
+                            >.categoryname {
+                                &:before {
+                                    opacity: 0.2;
+                                }
+                            }
+                        }
+                    }
+                    &.with_children,
+                    &.manage {
+                        &.collapsed {
+                            >.info {
+                                >.categoryname {
+                                    background-image: none;
+                                    &:before {
+                                        content: "\f0da";
+                                        padding-left: $spacer * .2;
+                                    }
+                                }
+                            }
+                        }
+                        >.info {
+                            >.categoryname {
+                                position: relative;
+                                display: flex;
+                                flex-wrap: wrap;
+                                align-items: center;
+                                flex-basis: 0%;
+                                flex-grow: 1;
+                                max-width: 100%;
+                                width: 100%;
+                                margin: 0;
+                                padding: ($spacer * .75) ($spacer * .75) ($spacer * .75) ($spacer * 3.25);
+                                background-image: none;
+                                font-size: $h5-font-size;
+                                line-height: 1;
+                                &:before {
+                                    @include fa-icon();
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    height: 100%;
+                                    content: "\f0d7";
+                                    width: $spacer * 2.5;
+                                    // background-color: $gray-lightest;
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: $h3-font-size;
+                                    // color: $primary;
+                                }
+                                img.spinner {
+                                    display: none !important;
+                                }
+                                a {
+                                    // color: #fff;
+                                    &.overviewlink {
+                                        margin: 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    >.info {
+                        background-color: $gray-100;
+                        border: 1px solid rgba(0, 0, 0, 0.125);
+                        border-radius: 4px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: stretch;
+                        margin: 0;
+                        // border: none;
+                        box-shadow: none;
+                        // background-color: rgba(#fff, .4);
+                        overflow: hidden;
+                        .overviewlink {
+                            display: flex;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            margin-left: auto;
+                            margin-right: $spacer * .75;
+                            i.red {
+                                // color: #fff !important;
+                                width: auto;
+                                margin: 0;
+                                line-height: 1.1;
+                                height: auto;
+                            }
+                        }
+                    }
+                    &.collapsed >.content {
+                        display: none;
+                    }
+                }
+            }
+            .content {
+                .courses {
+                    padding-left: $spacer * 2.5;
+                    &+.subcategories {
+                        margin-top: $spacer;
+                    }
+                }
+            }            
+            .filter-on {
+                background-color: $secondary;
+                border: 5px solid $secondary;
+                #allcoursesheader {
+                    h2,
+                    label,
+                    .collapsible-actions a {
+                        color: $white;
+                    }
+                }
+                .allcourses {
+                    display: none;
+                }
+                .divalert {
+                    display: inline-block;
+                }
+            }
+            .filter-off {
+               .allcourses {
+                    display: inline-block;
+                }
+                .divalert {
+                    display: none;
+                } 
+            }
+        }
+    }
+}
+
