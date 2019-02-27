@@ -556,6 +556,11 @@
                 }
             }
         }
+        .favourite_list {
+            >span {
+                color: $white;
+            }
+        }
         .culcoursebox {
             background-color: rgba($white, .2);
             border: none;
