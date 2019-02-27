@@ -143,7 +143,7 @@ class coursebox implements renderable, templatable {
         $period = block_culcourse_listing_get_filtered_period($config, $preferences);
 
         if (!$this->isfav) {
-            $filtered = $filterfunction($course, $config, $year, $period, $daterangeperiods);
+            $filtered = $filterfunction($this->course, $config, $year, $period, $daterangeperiods);
             // Hide the courses that don't match the filter settings.
             if (!$filtered) {
                 $data->additionalclasses = ' hide';
