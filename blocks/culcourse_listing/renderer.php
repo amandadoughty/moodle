@@ -105,7 +105,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 $filteryears = array_unique($years + $filteryears);
                 // Sort.
                 if ($filteryears) {
-                    asort($filteryears);
+                    arsort($filteryears);
                 }
                 // Append 'ALL' to the start of the array.
                 $filteryears = array($all => $all) + $filteryears;
@@ -134,7 +134,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 $filterperiods = array_unique($periods + $filterperiods);
                 // Sort.
                 if ($filterperiods) {
-                    asort($filterperiods);
+                    arsort($filterperiods);
                 }
                 // Append 'ALL' to the start of the array.
                 $filterperiods = array($all => $all) + $filterperiods;
@@ -659,7 +659,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 $filteryears = array_unique($years + $filteryears);
 
                 if ($filteryears) {
-                    asort($filteryears);
+                    arsort($filteryears);
                 }
             }
 
@@ -669,7 +669,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 $filterperiods = array_unique($periods + $filterperiods);
 
                 if ($filterperiods) {
-                    asort($filterperiods);
+                    arsort($filterperiods);
                 }
             }
 
