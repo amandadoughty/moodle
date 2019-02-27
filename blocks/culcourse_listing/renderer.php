@@ -564,49 +564,12 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
 
         // Add courses with drag and drop hml prepended.
         if ($courses) {
-            $content .= $this->drag_drop($chelper, $courses);
+            foreach ($courses as $course) {
+                $content .= $this->coursecat_course($course, true);
+            }
         }
 
         $content .= html_writer::end_tag('div');
-        return $content;
-    }
-
-    /**
-     * Drag and drop html for favourite courses @TODO template
-     *
-     * @param block_culcourse_listing_helper $chelper various display options
-     * @param array $courses list of favourite courses in sorted order
-     * @param string $prefix identifies the list
-     * @return string $content
-     */
-    public function drag_drop(block_culcourse_listing_helper $chelper, $courses) {
-        $content = '';
-        $courseordernumber = 0;
-        $maxcourses = count($courses);
-        $move = [];
-        $move['spacer'] = $this->output->image_url('spacer', 'moodle')->out();
-        $move['moveupimg'] = $this->output->image_url('t/up', 'moodle')->out();
-        $move['movedownimg'] = $this->output->image_url('t/down', 'moodle')->out();      
-
-        foreach ($courses as $course) {
-            if ($courseordernumber > 0) {
-                $move['moveup'] = true;                
-            } else {
-                $move['moveup'] = false;                
-            }
-            // Add an arrow to move course down.
-            if ($courseordernumber <= $maxcourses - 2) {
-                $move['movedown'] = true;                
-            } else {
-                // Add a spacer to keep keep up arrow icons at right position.
-                $move['movedown'] = false;
-            }
-
-            // Add the course html.
-            $content .= $this->coursecat_course($course, true);
-            $courseordernumber++;
-        }
-
         return $content;
     }
 
