@@ -232,9 +232,9 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
             $mycoursestxt = get_string('mycourses', 'theme_cul_boost');
             $mycoursesmenu = new custom_menu('', current_language());
             $mycourses = $mycoursesmenu->add($mycoursestxt, new moodle_url(''), $mycoursestxt, 12);
-
+// print_r($enrolledcourses);
             if ($enrolledcourses) {
-                foreach($enrolledcourses as $year => $enrolledcourse) {
+                foreach($enrolledcourses as $year => $prds) {
                     if ($year == "other") {
                         continue;
                     }
@@ -242,15 +242,27 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                         $mycourses->add(get_string('morecourses', 'theme_cul_boost'), new moodle_url('/my'), null);
                         break;
                     }
-                    if (count($enrolledcourse) > 0) {
+                    if (count($prds) > 0) {
                         $yearmenu = $mycourses->add($year);
                     }
-                    foreach ($enrolledcourse as $mycourse) {
-                        $coursename = $mycourse->displayname;
-                        $yearmenu->add($coursename,
-                            new moodle_url('/course/view.php', array('id' => $mycourse->id)),
-                            $mycourse->displayname);
-                        $countcourses++;
+
+                    foreach ($prds as $prd => $enrolledcourse) {
+                        if ($prd == "other") {
+                            continue;
+                        }
+
+                        if (count($enrolledcourse) > 0) {
+                            $periodmenu = $yearmenu->add($prd);
+                        }
+
+                        foreach ($enrolledcourse as $mycourse) {
+                            $coursename = $mycourse->displayname;
+                            $periodmenu->add($coursename,
+                                new moodle_url('/course/view.php', array('id' => $mycourse->id)),
+                                $mycourse->displayname);
+                            $countcourses++;
+                        }
+
                     }
                 }
 
@@ -821,27 +833,56 @@ class theme_cul_boost_utility {
             return false;
         }
 
-        $currentcourses = array();
-        $yeararray = array();
+        $currentcourses = [];
+        $yeararray = [];
         $yearnr = date('y', time());
 
         for ($i = 0; $i < $years; $i++) {
             $yearstring = '20' . $yearnr . '-' . ($yearnr+1);
-            $yeararray[$yearstring] = array();
+            $yeararray[$yearstring] = [];
             $yearnr--;
         }
 
-        $yeararray['other'] = array();
+        $yeararray['other'] = [];
+
+        $periodarray = [ // @TODO use strings
+            'PRD3' => 'Term 3',
+            'PRD2' => 'Term 2',
+            'PRD1' => 'Term 1'
+        ];
+
+        $periodarray = [ // @TODO use strings
+            'PRD3' => [],
+            'PRD2' => [],
+            'PRD1' => []
+        ];
 
         foreach ($enrolledcourses as $enrolledcourse) {
             // Set the display name.
             $enrolledcourse->displayname = $enrolledcourse->fullname;
             $found = false;
+            $foundprd = false;
 
-            foreach ($yeararray as $year => &$courses) {
+            foreach ($yeararray as $year => &$prds) {
                 if (strpos($enrolledcourse->shortname, $year)) {
-                    $courses[] = $enrolledcourse;
                     $found = true;
+
+                    foreach ($periodarray as $prd => &$courses) {
+                        if (strpos($enrolledcourse->shortname, $prd)) {
+                            $foundprd = true;
+
+                            if (!in_array($prd, $prds)) {
+                                $prds[$prd] = [];
+                            }
+
+                            $prds[$prd][] = $enrolledcourse;
+
+                        }
+                    }
+
+                    if (!$foundprd) {
+                        $courses['other'][] = $enrolledcourse;
+                    }
                 }
             }
 
