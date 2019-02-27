@@ -203,6 +203,8 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
             $and = get_string('and', 'block_culcourse_listing');
             $filterstring = join($and, $filters);
             $divalert = get_string('divalert', 'block_culcourse_listing', $filterstring);
+            $content .= html_writer::start_tag('div', array(
+            'id' => 'allcoursesactions'));
             // $divalert .= '<i class="fa fa-hand-o-right"></i>';
             
             $heading = html_writer::tag('h2', $header, array('class' => 'allcourses m-0'));
@@ -246,6 +248,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
                 $this->page->requires->strings_for_js(array('collapseall', 'expandall'), 'moodle');
             }
 
+            $content .= html_writer::end_tag('div'); // End #allcoursesactions.
             $content .= html_writer::end_tag('div'); // End #allcourses.
             $content .= html_writer::tag('div', $categorycontent);
             $content .= html_writer::end_tag('div');

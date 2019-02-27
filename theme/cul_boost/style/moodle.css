@@ -1999,8 +1999,10 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 .form-group, .form-buttons,
 .path-admin .buttons,
+#fitem_id_submitbutton,
 .fp-content-center form + div,
-div.backup-section + form {
+div.backup-section + form,
+#fgroup_id_buttonar {
   margin-bottom: 1rem; }
 
 .form-text {
@@ -2247,8 +2249,10 @@ div.backup-section + form {
       margin-bottom: 0; }
     .form-inline .form-group, .form-inline .form-buttons,
     .form-inline .path-admin .buttons, .path-admin .form-inline .buttons,
+    .form-inline #fitem_id_submitbutton,
     .form-inline .fp-content-center form + div, .fp-content-center .form-inline form + div,
-    .form-inline div.backup-section + form {
+    .form-inline div.backup-section + form,
+    .form-inline #fgroup_id_buttonar {
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;
@@ -16550,7 +16554,7 @@ body.path-question-type {
     font: inherit;
     position: static;
     padding-right: .3em; }
-  body.path-question-type .form-group .sr-only, body.path-question-type .form-buttons .sr-only, body.path-question-type .path-admin .buttons .sr-only, .path-admin body.path-question-type .buttons .sr-only, body.path-question-type .fp-content-center form + div .sr-only, .fp-content-center body.path-question-type form + div .sr-only, body.path-question-type div.backup-section + form .sr-only {
+  body.path-question-type .form-group .sr-only, body.path-question-type .form-buttons .sr-only, body.path-question-type .path-admin .buttons .sr-only, .path-admin body.path-question-type .buttons .sr-only, body.path-question-type #fitem_id_submitbutton .sr-only, body.path-question-type .fp-content-center form + div .sr-only, .fp-content-center body.path-question-type form + div .sr-only, body.path-question-type div.backup-section + form .sr-only, body.path-question-type #fgroup_id_buttonar .sr-only {
     position: static;
     width: auto;
     height: auto;
@@ -17188,8 +17192,10 @@ body.path-question-type .mform fieldset.hidden {
 
 .mform .form-inline .form-group, .mform .form-inline .form-buttons,
 .mform .form-inline .path-admin .buttons, .path-admin .mform .form-inline .buttons,
+.mform .form-inline #fitem_id_submitbutton,
 .mform .form-inline .fp-content-center form + div, .fp-content-center .mform .form-inline form + div,
-.mform .form-inline div.backup-section + form {
+.mform .form-inline div.backup-section + form,
+.mform .form-inline #fgroup_id_buttonar {
   margin: 0.1rem 0.25rem 0.1rem 0; }
 
 .mform .form-inline br + label {
@@ -17215,8 +17221,10 @@ body.path-question-type .mform fieldset.hidden {
 
 .mform > .form-group, .mform > .form-buttons,
 .path-admin .mform > .buttons,
+.mform > #fitem_id_submitbutton,
 .fp-content-center .mform > form + div,
-.mform > div.backup-section + form {
+.mform > div.backup-section + form,
+.mform > #fgroup_id_buttonar {
   margin-left: 1.5rem; }
 
 .editor_atto_content.form-control {
@@ -17265,8 +17273,10 @@ input#id_externalurl {
 
 .form-buttons,
 .path-admin .buttons,
+#fitem_id_submitbutton,
 .fp-content-center form + div,
-div.backup-section + form {
+div.backup-section + form,
+#fgroup_id_buttonar {
   padding-left: 0; }
 
 .form-item .form-setting .defaultsnext > input {
@@ -17480,8 +17490,10 @@ textarea[data-auto-rows] {
 
 [data-fieldtype="modgrade"] .form-group, [data-fieldtype="modgrade"] .form-buttons,
 [data-fieldtype="modgrade"] .path-admin .buttons, .path-admin [data-fieldtype="modgrade"] .buttons,
+[data-fieldtype="modgrade"] #fitem_id_submitbutton,
 [data-fieldtype="modgrade"] .fp-content-center form + div, .fp-content-center [data-fieldtype="modgrade"] form + div,
-[data-fieldtype="modgrade"] div.backup-section + form {
+[data-fieldtype="modgrade"] div.backup-section + form,
+[data-fieldtype="modgrade"] #fgroup_id_buttonar {
   padding-bottom: 0.375rem; }
 
 [data-fieldtype="modgrade"] {
@@ -17761,11 +17773,6 @@ div#dock {
     margin-left: 0;
     margin-top: 1rem; }
 
-#page-mod-lesson-view .fitem .felement .custom-select {
-  -webkit-align-self: flex-start;
-      -ms-flex-item-align: start;
-          align-self: flex-start; }
-
 .path-mod-lesson .generaltable td {
   vertical-align: middle; }
   .path-mod-lesson .generaltable td label {
@@ -17861,8 +17868,10 @@ div#dock {
 
 #page-mod-quiz-mod #id_reviewoptionshdr .form-group, #page-mod-quiz-mod #id_reviewoptionshdr .form-buttons,
 #page-mod-quiz-mod #id_reviewoptionshdr .path-admin .buttons, .path-admin #page-mod-quiz-mod #id_reviewoptionshdr .buttons,
+#page-mod-quiz-mod #id_reviewoptionshdr #fitem_id_submitbutton,
 #page-mod-quiz-mod #id_reviewoptionshdr .fp-content-center form + div, .fp-content-center #page-mod-quiz-mod #id_reviewoptionshdr form + div,
-#page-mod-quiz-mod #id_reviewoptionshdr div.backup-section + form {
+#page-mod-quiz-mod #id_reviewoptionshdr div.backup-section + form,
+#page-mod-quiz-mod #id_reviewoptionshdr #fgroup_id_buttonar {
   float: left;
   width: 20rem;
   display: inline-block;
@@ -18196,33 +18205,41 @@ div#dock {
     background-color: #fff; }
   .path-backup .mform .root_setting .form-group, .path-backup .mform .root_setting .form-buttons,
   .path-backup .mform .root_setting .path-admin .buttons, .path-admin .path-backup .mform .root_setting .buttons,
+  .path-backup .mform .root_setting #fitem_id_submitbutton,
   .path-backup .mform .root_setting .fp-content-center form + div, .fp-content-center .path-backup .mform .root_setting form + div,
   .path-backup .mform .root_setting div.backup-section + form,
+  .path-backup .mform .root_setting #fgroup_id_buttonar,
   .path-backup .mform .grouped_settings .form-group,
   .path-backup .mform .grouped_settings .form-buttons,
   .path-backup .mform .grouped_settings .path-admin .buttons,
   .path-admin .path-backup .mform .grouped_settings .buttons,
+  .path-backup .mform .grouped_settings #fitem_id_submitbutton,
   .path-backup .mform .grouped_settings .fp-content-center form + div,
   .fp-content-center .path-backup .mform .grouped_settings form + div,
-  .path-backup .mform .grouped_settings div.backup-section + form {
+  .path-backup .mform .grouped_settings div.backup-section + form,
+  .path-backup .mform .grouped_settings #fgroup_id_buttonar {
     /* These checkboxes with no label on the left. */ }
-    .path-backup .mform .root_setting .form-group .col-md-3.checkbox, .path-backup .mform .root_setting .form-buttons .col-md-3.checkbox, .path-backup .mform .root_setting .path-admin .buttons .col-md-3.checkbox, .path-admin .path-backup .mform .root_setting .buttons .col-md-3.checkbox, .path-backup .mform .root_setting .fp-content-center form + div .col-md-3.checkbox, .fp-content-center .path-backup .mform .root_setting form + div .col-md-3.checkbox, .path-backup .mform .root_setting div.backup-section + form .col-md-3.checkbox,
+    .path-backup .mform .root_setting .form-group .col-md-3.checkbox, .path-backup .mform .root_setting .form-buttons .col-md-3.checkbox, .path-backup .mform .root_setting .path-admin .buttons .col-md-3.checkbox, .path-admin .path-backup .mform .root_setting .buttons .col-md-3.checkbox, .path-backup .mform .root_setting #fitem_id_submitbutton .col-md-3.checkbox, .path-backup .mform .root_setting .fp-content-center form + div .col-md-3.checkbox, .fp-content-center .path-backup .mform .root_setting form + div .col-md-3.checkbox, .path-backup .mform .root_setting div.backup-section + form .col-md-3.checkbox, .path-backup .mform .root_setting #fgroup_id_buttonar .col-md-3.checkbox,
     .path-backup .mform .grouped_settings .form-group .col-md-3.checkbox,
     .path-backup .mform .grouped_settings .form-buttons .col-md-3.checkbox,
     .path-backup .mform .grouped_settings .path-admin .buttons .col-md-3.checkbox,
     .path-admin .path-backup .mform .grouped_settings .buttons .col-md-3.checkbox,
+    .path-backup .mform .grouped_settings #fitem_id_submitbutton .col-md-3.checkbox,
     .path-backup .mform .grouped_settings .fp-content-center form + div .col-md-3.checkbox,
     .fp-content-center .path-backup .mform .grouped_settings form + div .col-md-3.checkbox,
-    .path-backup .mform .grouped_settings div.backup-section + form .col-md-3.checkbox {
+    .path-backup .mform .grouped_settings div.backup-section + form .col-md-3.checkbox,
+    .path-backup .mform .grouped_settings #fgroup_id_buttonar .col-md-3.checkbox {
       width: 0%; }
-    .path-backup .mform .root_setting .form-group .col-md-9.checkbox, .path-backup .mform .root_setting .form-buttons .col-md-9.checkbox, .path-backup .mform .root_setting .path-admin .buttons .col-md-9.checkbox, .path-admin .path-backup .mform .root_setting .buttons .col-md-9.checkbox, .path-backup .mform .root_setting .fp-content-center form + div .col-md-9.checkbox, .fp-content-center .path-backup .mform .root_setting form + div .col-md-9.checkbox, .path-backup .mform .root_setting div.backup-section + form .col-md-9.checkbox,
+    .path-backup .mform .root_setting .form-group .col-md-9.checkbox, .path-backup .mform .root_setting .form-buttons .col-md-9.checkbox, .path-backup .mform .root_setting .path-admin .buttons .col-md-9.checkbox, .path-admin .path-backup .mform .root_setting .buttons .col-md-9.checkbox, .path-backup .mform .root_setting #fitem_id_submitbutton .col-md-9.checkbox, .path-backup .mform .root_setting .fp-content-center form + div .col-md-9.checkbox, .fp-content-center .path-backup .mform .root_setting form + div .col-md-9.checkbox, .path-backup .mform .root_setting div.backup-section + form .col-md-9.checkbox, .path-backup .mform .root_setting #fgroup_id_buttonar .col-md-9.checkbox,
     .path-backup .mform .grouped_settings .form-group .col-md-9.checkbox,
     .path-backup .mform .grouped_settings .form-buttons .col-md-9.checkbox,
     .path-backup .mform .grouped_settings .path-admin .buttons .col-md-9.checkbox,
     .path-admin .path-backup .mform .grouped_settings .buttons .col-md-9.checkbox,
+    .path-backup .mform .grouped_settings #fitem_id_submitbutton .col-md-9.checkbox,
     .path-backup .mform .grouped_settings .fp-content-center form + div .col-md-9.checkbox,
     .fp-content-center .path-backup .mform .grouped_settings form + div .col-md-9.checkbox,
-    .path-backup .mform .grouped_settings div.backup-section + form .col-md-9.checkbox {
+    .path-backup .mform .grouped_settings div.backup-section + form .col-md-9.checkbox,
+    .path-backup .mform .grouped_settings #fgroup_id_buttonar .col-md-9.checkbox {
       width: 100%;
       left: 0; }
 
@@ -19420,9 +19437,11 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
 .path-backup .mform .root_setting .form-buttons .icon:first-of-type,
 .path-backup .mform .root_setting .path-admin .buttons .icon:first-of-type,
 .path-admin .path-backup .mform .root_setting .buttons .icon:first-of-type,
+.path-backup .mform .root_setting #fitem_id_submitbutton .icon:first-of-type,
 .path-backup .mform .root_setting .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-backup .mform .root_setting form + div .icon:first-of-type,
 .path-backup .mform .root_setting div.backup-section + form .icon:first-of-type,
+.path-backup .mform .root_setting #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .root_setting .form-buttons .icon:first-of-type,
 .path-backup .mform .root_setting .path-admin .buttons .icon:first-of-type,
 .path-backup .mform .root_setting .buttons .icon:first-of-type,
@@ -19444,9 +19463,11 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
 .path-backup .mform .grouped_settings .form-buttons .icon:first-of-type,
 .path-backup .mform .grouped_settings .path-admin .buttons .icon:first-of-type,
 .path-admin .path-backup .mform .grouped_settings .buttons .icon:first-of-type,
+.path-backup .mform .grouped_settings #fitem_id_submitbutton .icon:first-of-type,
 .path-backup .mform .grouped_settings .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-backup .mform .grouped_settings form + div .icon:first-of-type,
 .path-backup .mform .grouped_settings div.backup-section + form .icon:first-of-type,
+.path-backup .mform .grouped_settings #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .grouped_settings .form-buttons .icon:first-of-type,
 .path-backup .mform .grouped_settings .path-admin .buttons .icon:first-of-type,
 .path-backup .mform .grouped_settings .buttons .icon:first-of-type,
@@ -19459,91 +19480,126 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
 .path-backup .mform .form-buttons .icon:first-of-type,
 .path-backup .mform .path-admin .buttons .icon:first-of-type,
 .path-admin .path-backup .mform .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div .icon:first-of-type,
 .path-backup .mform div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .form-group .form-buttons .icon:first-of-type,
 .path-backup .mform .form-buttons .form-buttons .icon:first-of-type,
 .path-backup .mform .path-admin .buttons .form-buttons .icon:first-of-type,
 .path-admin .path-backup .mform .buttons .form-buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div .form-buttons .icon:first-of-type,
 .path-backup .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
 .path-backup .mform .form-group .path-admin .buttons .icon:first-of-type,
 .path-backup .mform .form-buttons .path-admin .buttons .icon:first-of-type,
 .path-backup .mform .path-admin .buttons .path-admin .buttons .icon:first-of-type,
 .path-admin .path-backup .mform .buttons .path-admin .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div .path-admin .buttons .icon:first-of-type,
 .path-backup .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
 .path-backup .mform .form-group .buttons .icon:first-of-type,
 .path-backup .mform .form-buttons .buttons .icon:first-of-type,
 .path-backup .mform .path-admin .buttons .buttons .icon:first-of-type,
 .path-admin .path-backup .mform .buttons .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div .buttons .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div .buttons .icon:first-of-type,
 .path-backup .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
 .path-backup .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
 .path-backup .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
 .path-backup .mform .path-admin .buttons #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .path-backup .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div #fitem_id_submitbutton .icon:first-of-type,
 .path-backup .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
 .path-backup .mform .form-group .fp-content-center form + div .icon:first-of-type,
 .path-backup .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
 .path-backup .mform .path-admin .buttons .fp-content-center form + div .icon:first-of-type,
 .path-admin .path-backup .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div .fp-content-center form + div .icon:first-of-type,
 .path-backup .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
 .path-backup .mform .form-group form + div .icon:first-of-type,
 .path-backup .mform .form-buttons form + div .icon:first-of-type,
 .path-backup .mform .path-admin .buttons form + div .icon:first-of-type,
 .path-admin .path-backup .mform .buttons form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton form + div .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div form + div .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div form + div .icon:first-of-type,
 .path-backup .mform div.backup-section + form form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar form + div .icon:first-of-type,
 .path-backup .mform .form-group div.backup-section + form .icon:first-of-type,
 .path-backup .mform .form-buttons div.backup-section + form .icon:first-of-type,
 .path-backup .mform .path-admin .buttons div.backup-section + form .icon:first-of-type,
 .path-admin .path-backup .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div div.backup-section + form .icon:first-of-type,
 .path-backup .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
 .path-backup .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .path-admin .buttons #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .path-backup .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .form-group .form-group .icon:first-of-type,
 .path-backup .mform .form-buttons .form-group .icon:first-of-type,
 .path-backup .mform .path-admin .buttons .form-group .icon:first-of-type,
 .path-admin .path-backup .mform .buttons .form-group .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .form-group .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div .form-group .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div .form-group .icon:first-of-type,
 .path-backup .mform div.backup-section + form .form-group .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .form-group .icon:first-of-type,
 .path-backup .mform .form-group .form-buttons .icon:first-of-type,
 .path-backup .mform .form-buttons .form-buttons .icon:first-of-type,
 .path-backup .mform .path-admin .buttons .form-buttons .icon:first-of-type,
 .path-admin .path-backup .mform .buttons .form-buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div .form-buttons .icon:first-of-type,
 .path-backup .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
 .path-backup .mform .form-group .path-admin .buttons .icon:first-of-type,
 .path-admin .path-backup .mform .form-group .buttons .icon:first-of-type,
 .path-backup .mform .form-buttons .path-admin .buttons .icon:first-of-type,
 .path-admin .path-backup .mform .form-buttons .buttons .icon:first-of-type,
 .path-backup .mform .path-admin .buttons .buttons .icon:first-of-type,
 .path-admin .path-backup .mform .buttons .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
 .path-admin .path-backup .mform .fp-content-center form + div .buttons .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div .path-admin .buttons .icon:first-of-type,
 .path-admin .fp-content-center .path-backup .mform form + div .buttons .icon:first-of-type,
 .path-backup .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
 .path-admin .path-backup .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-backup .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .path-admin .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .path-backup .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
 .path-backup .mform .form-group .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-backup .mform .form-group form + div .icon:first-of-type,
 .path-backup .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
@@ -19552,73 +19608,104 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
 .fp-content-center .path-backup .mform .path-admin .buttons form + div .icon:first-of-type,
 .path-admin .path-backup .mform .buttons .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-admin .path-backup .mform .buttons form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform #fitem_id_submitbutton form + div .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div form + div .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div form + div .icon:first-of-type,
 .path-backup .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-backup .mform div.backup-section + form form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform #fgroup_id_buttonar form + div .icon:first-of-type,
 .path-backup .mform .form-group div.backup-section + form .icon:first-of-type,
 .path-backup .mform .form-buttons div.backup-section + form .icon:first-of-type,
 .path-backup .mform .path-admin .buttons div.backup-section + form .icon:first-of-type,
 .path-admin .path-backup .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div div.backup-section + form .icon:first-of-type,
 .path-backup .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
-.path-backup .mform .form-group .form-buttons .icon:first-of-type,
-.path-backup .mform .form-buttons .form-buttons .icon:first-of-type,
-.path-backup .mform .path-admin .buttons .form-buttons .icon:first-of-type,
-.path-admin .path-backup .mform .buttons .form-buttons .icon:first-of-type,
-.path-backup .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
-.fp-content-center .path-backup .mform form + div .form-buttons .icon:first-of-type,
-.path-backup .mform div.backup-section + form .form-buttons .icon:first-of-type,
-.path-backup .mform .form-group .path-admin .buttons .icon:first-of-type,
-.path-backup .mform .form-buttons .path-admin .buttons .icon:first-of-type,
-.path-backup .mform .path-admin .buttons .path-admin .buttons .icon:first-of-type,
-.path-admin .path-backup .mform .buttons .path-admin .buttons .icon:first-of-type,
-.path-backup .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
-.fp-content-center .path-backup .mform form + div .path-admin .buttons .icon:first-of-type,
-.path-backup .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
-.path-backup .mform .form-group .buttons .icon:first-of-type,
-.path-backup .mform .form-buttons .buttons .icon:first-of-type,
-.path-backup .mform .path-admin .buttons .buttons .icon:first-of-type,
-.path-admin .path-backup .mform .buttons .buttons .icon:first-of-type,
-.path-backup .mform .fp-content-center form + div .buttons .icon:first-of-type,
-.fp-content-center .path-backup .mform form + div .buttons .icon:first-of-type,
-.path-backup .mform div.backup-section + form .buttons .icon:first-of-type,
-.path-backup .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
-.path-backup .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
-.path-backup .mform .path-admin .buttons #fitem_id_submitbutton .icon:first-of-type,
-.path-admin .path-backup .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
-.path-backup .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
-.fp-content-center .path-backup .mform form + div #fitem_id_submitbutton .icon:first-of-type,
-.path-backup .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
-.path-backup .mform .form-group .fp-content-center form + div .icon:first-of-type,
-.path-backup .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
-.path-backup .mform .path-admin .buttons .fp-content-center form + div .icon:first-of-type,
-.path-admin .path-backup .mform .buttons .fp-content-center form + div .icon:first-of-type,
-.path-backup .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
-.fp-content-center .path-backup .mform form + div .fp-content-center form + div .icon:first-of-type,
-.path-backup .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
-.path-backup .mform .form-group form + div .icon:first-of-type,
-.path-backup .mform .form-buttons form + div .icon:first-of-type,
-.path-backup .mform .path-admin .buttons form + div .icon:first-of-type,
-.path-admin .path-backup .mform .buttons form + div .icon:first-of-type,
-.path-backup .mform .fp-content-center form + div form + div .icon:first-of-type,
-.fp-content-center .path-backup .mform form + div form + div .icon:first-of-type,
-.path-backup .mform div.backup-section + form form + div .icon:first-of-type,
-.path-backup .mform .form-group div.backup-section + form .icon:first-of-type,
-.path-backup .mform .form-buttons div.backup-section + form .icon:first-of-type,
-.path-backup .mform .path-admin .buttons div.backup-section + form .icon:first-of-type,
-.path-admin .path-backup .mform .buttons div.backup-section + form .icon:first-of-type,
-.path-backup .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
-.fp-content-center .path-backup .mform form + div div.backup-section + form .icon:first-of-type,
-.path-backup .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
 .path-backup .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .path-admin .buttons #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .path-backup .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
 .fp-content-center .path-backup .mform form + div #fgroup_id_buttonar .icon:first-of-type,
 .path-backup .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .form-group .form-buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .form-buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .form-buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .form-buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .form-buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
+.path-backup .mform .form-group .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .path-admin .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .path-admin .buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
+.path-backup .mform .form-group .buttons .icon:first-of-type,
+.path-backup .mform .form-buttons .buttons .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .buttons .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .buttons .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .buttons .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .buttons .icon:first-of-type,
+.path-backup .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-backup .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .path-admin .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .path-backup .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
+.path-backup .mform .form-group .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .path-admin .buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .path-backup .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.path-backup .mform .form-group form + div .icon:first-of-type,
+.path-backup .mform .form-buttons form + div .icon:first-of-type,
+.path-backup .mform .path-admin .buttons form + div .icon:first-of-type,
+.path-admin .path-backup .mform .buttons form + div .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton form + div .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div form + div .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div form + div .icon:first-of-type,
+.path-backup .mform div.backup-section + form form + div .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar form + div .icon:first-of-type,
+.path-backup .mform .form-group div.backup-section + form .icon:first-of-type,
+.path-backup .mform .form-buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform .path-admin .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .path-backup .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div div.backup-section + form .icon:first-of-type,
+.path-backup .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
+.path-backup .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .path-admin .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .path-backup .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
+.fp-content-center .path-backup .mform form + div #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-backup .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .root_setting .icon:first-of-type,
 .path-admin .mform .root_setting .form-buttons .icon:first-of-type,
 .path-admin .mform .root_setting .path-admin .buttons .icon:first-of-type,
@@ -19631,9 +19718,11 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
 .path-admin .mform .root_setting .form-group .icon:first-of-type,
 .path-admin .mform .root_setting .form-buttons .icon:first-of-type,
 .path-admin .mform .root_setting .buttons .icon:first-of-type,
+.path-admin .mform .root_setting #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .mform .root_setting .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform .root_setting form + div .icon:first-of-type,
 .path-admin .mform .root_setting div.backup-section + form .icon:first-of-type,
+.path-admin .mform .root_setting #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .root_setting .form-buttons .icon:first-of-type,
 .path-admin .mform .root_setting .path-admin .buttons .icon:first-of-type,
 .path-admin .mform .root_setting .buttons .icon:first-of-type,
@@ -19654,9 +19743,11 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
 .path-admin .mform .grouped_settings .form-group .icon:first-of-type,
 .path-admin .mform .grouped_settings .form-buttons .icon:first-of-type,
 .path-admin .mform .grouped_settings .buttons .icon:first-of-type,
+.path-admin .mform .grouped_settings #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .mform .grouped_settings .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform .grouped_settings form + div .icon:first-of-type,
 .path-admin .mform .grouped_settings div.backup-section + form .icon:first-of-type,
+.path-admin .mform .grouped_settings #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .grouped_settings .form-buttons .icon:first-of-type,
 .path-admin .mform .grouped_settings .path-admin .buttons .icon:first-of-type,
 .path-admin .mform .grouped_settings .buttons .icon:first-of-type,
@@ -19668,139 +19759,201 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
 .path-admin .mform .form-group .icon:first-of-type,
 .path-admin .mform .form-buttons .icon:first-of-type,
 .path-admin .mform .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div .icon:first-of-type,
 .path-admin .mform div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .form-group .form-buttons .icon:first-of-type,
 .path-admin .mform .form-buttons .form-buttons .icon:first-of-type,
 .path-admin .mform .buttons .form-buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div .form-buttons .icon:first-of-type,
 .path-admin .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
 .path-admin .mform .form-group .path-admin .buttons .icon:first-of-type,
 .path-admin .mform .form-buttons .path-admin .buttons .icon:first-of-type,
 .path-admin .mform .buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div .path-admin .buttons .icon:first-of-type,
 .path-admin .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
 .path-admin .mform .form-group .buttons .icon:first-of-type,
 .path-admin .mform .form-buttons .buttons .icon:first-of-type,
 .path-admin .mform .buttons .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div .buttons .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div .buttons .icon:first-of-type,
 .path-admin .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
 .path-admin .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .mform .form-group .fp-content-center form + div .icon:first-of-type,
 .path-admin .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
 .path-admin .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div .fp-content-center form + div .icon:first-of-type,
 .path-admin .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
 .path-admin .mform .form-group form + div .icon:first-of-type,
 .path-admin .mform .form-buttons form + div .icon:first-of-type,
 .path-admin .mform .buttons form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton form + div .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div form + div .icon:first-of-type,
 .path-admin .mform div.backup-section + form form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar form + div .icon:first-of-type,
 .path-admin .mform .form-group div.backup-section + form .icon:first-of-type,
 .path-admin .mform .form-buttons div.backup-section + form .icon:first-of-type,
 .path-admin .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div div.backup-section + form .icon:first-of-type,
 .path-admin .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
 .path-admin .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .form-group .form-group .icon:first-of-type,
 .path-admin .mform .form-buttons .form-group .icon:first-of-type,
 .path-admin .mform .buttons .form-group .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .form-group .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div .form-group .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div .form-group .icon:first-of-type,
 .path-admin .mform div.backup-section + form .form-group .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .form-group .icon:first-of-type,
 .path-admin .mform .form-group .form-buttons .icon:first-of-type,
 .path-admin .mform .form-buttons .form-buttons .icon:first-of-type,
 .path-admin .mform .buttons .form-buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div .form-buttons .icon:first-of-type,
 .path-admin .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
 .path-admin .mform .form-group .buttons .icon:first-of-type,
 .path-admin .mform .form-buttons .buttons .icon:first-of-type,
 .path-admin .mform .buttons .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div .buttons .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div .buttons .icon:first-of-type,
 .path-admin .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-admin .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
 .path-admin .mform .form-group .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform .form-group form + div .icon:first-of-type,
 .path-admin .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform .form-buttons form + div .icon:first-of-type,
 .path-admin .mform .buttons .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform .buttons form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform #fitem_id_submitbutton form + div .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div form + div .icon:first-of-type,
 .path-admin .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
 .fp-content-center .path-admin .mform div.backup-section + form form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform #fgroup_id_buttonar form + div .icon:first-of-type,
 .path-admin .mform .form-group div.backup-section + form .icon:first-of-type,
 .path-admin .mform .form-buttons div.backup-section + form .icon:first-of-type,
 .path-admin .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div div.backup-section + form .icon:first-of-type,
 .path-admin .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
-.path-admin .mform .form-group .form-buttons .icon:first-of-type,
-.path-admin .mform .form-buttons .form-buttons .icon:first-of-type,
-.path-admin .mform .buttons .form-buttons .icon:first-of-type,
-.path-admin .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
-.fp-content-center .path-admin .mform form + div .form-buttons .icon:first-of-type,
-.path-admin .mform div.backup-section + form .form-buttons .icon:first-of-type,
-.path-admin .mform .form-group .path-admin .buttons .icon:first-of-type,
-.path-admin .mform .form-buttons .path-admin .buttons .icon:first-of-type,
-.path-admin .mform .buttons .path-admin .buttons .icon:first-of-type,
-.path-admin .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
-.fp-content-center .path-admin .mform form + div .path-admin .buttons .icon:first-of-type,
-.path-admin .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
-.path-admin .mform .form-group .buttons .icon:first-of-type,
-.path-admin .mform .form-buttons .buttons .icon:first-of-type,
-.path-admin .mform .buttons .buttons .icon:first-of-type,
-.path-admin .mform .fp-content-center form + div .buttons .icon:first-of-type,
-.fp-content-center .path-admin .mform form + div .buttons .icon:first-of-type,
-.path-admin .mform div.backup-section + form .buttons .icon:first-of-type,
-.path-admin .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
-.path-admin .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
-.path-admin .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
-.path-admin .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
-.fp-content-center .path-admin .mform form + div #fitem_id_submitbutton .icon:first-of-type,
-.path-admin .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
-.path-admin .mform .form-group .fp-content-center form + div .icon:first-of-type,
-.path-admin .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
-.path-admin .mform .buttons .fp-content-center form + div .icon:first-of-type,
-.path-admin .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
-.fp-content-center .path-admin .mform form + div .fp-content-center form + div .icon:first-of-type,
-.path-admin .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
-.path-admin .mform .form-group form + div .icon:first-of-type,
-.path-admin .mform .form-buttons form + div .icon:first-of-type,
-.path-admin .mform .buttons form + div .icon:first-of-type,
-.path-admin .mform .fp-content-center form + div form + div .icon:first-of-type,
-.fp-content-center .path-admin .mform form + div form + div .icon:first-of-type,
-.path-admin .mform div.backup-section + form form + div .icon:first-of-type,
-.path-admin .mform .form-group div.backup-section + form .icon:first-of-type,
-.path-admin .mform .form-buttons div.backup-section + form .icon:first-of-type,
-.path-admin .mform .buttons div.backup-section + form .icon:first-of-type,
-.path-admin .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
-.fp-content-center .path-admin .mform form + div div.backup-section + form .icon:first-of-type,
-.path-admin .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
 .path-admin .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
 .path-admin .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
 .fp-content-center .path-admin .mform form + div #fgroup_id_buttonar .icon:first-of-type,
-.path-admin .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type {
+.path-admin .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .form-group .form-buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .form-buttons .icon:first-of-type,
+.path-admin .mform .buttons .form-buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .form-buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .form-buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .form-buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .form-buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .form-buttons .icon:first-of-type,
+.path-admin .mform .form-group .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .buttons .path-admin .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .path-admin .buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .path-admin .buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .path-admin .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .path-admin .buttons .icon:first-of-type,
+.path-admin .mform .form-group .buttons .icon:first-of-type,
+.path-admin .mform .form-buttons .buttons .icon:first-of-type,
+.path-admin .mform .buttons .buttons .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .buttons .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .buttons .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .buttons .icon:first-of-type,
+.path-admin .mform div.backup-section + form .buttons .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .buttons .icon:first-of-type,
+.path-admin .mform .form-group #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .form-buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .buttons #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div #fitem_id_submitbutton .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform div.backup-section + form #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fitem_id_submitbutton .icon:first-of-type,
+.path-admin .mform .form-group .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .form-buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .buttons .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div .fp-content-center form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform div.backup-section + form .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar .fp-content-center form + div .icon:first-of-type,
+.path-admin .mform .form-group form + div .icon:first-of-type,
+.path-admin .mform .form-buttons form + div .icon:first-of-type,
+.path-admin .mform .buttons form + div .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton form + div .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div form + div .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div form + div .icon:first-of-type,
+.path-admin .mform div.backup-section + form form + div .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar form + div .icon:first-of-type,
+.path-admin .mform .form-group div.backup-section + form .icon:first-of-type,
+.path-admin .mform .form-buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform .buttons div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton div.backup-section + form .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div div.backup-section + form .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div div.backup-section + form .icon:first-of-type,
+.path-admin .mform div.backup-section + form div.backup-section + form .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar div.backup-section + form .icon:first-of-type,
+.path-admin .mform .form-group #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .form-buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .buttons #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fitem_id_submitbutton #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform .fp-content-center form + div #fgroup_id_buttonar .icon:first-of-type,
+.fp-content-center .path-admin .mform form + div #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform div.backup-section + form #fgroup_id_buttonar .icon:first-of-type,
+.path-admin .mform #fgroup_id_buttonar #fgroup_id_buttonar .icon:first-of-type {
   margin-left: 0.25rem; }
 
 .rubric_manager_launch,
@@ -20159,6 +20312,232 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
               width: auto;
               height: auto;
               color: #555555; }
+  .block.block_searchcourses {
+    background-color: rgba(51, 51, 51, 0.95);
+    padding: 2rem 1rem 2rem 1rem;
+    margin-bottom: 0; }
+    .block.block_searchcourses .block-controls {
+      position: absolute !important;
+      top: 0.5rem;
+      right: 0.5rem; }
+      .block.block_searchcourses .block-controls .editing_move,
+      .block.block_searchcourses .block-controls .dropdown-toggle,
+      .block.block_searchcourses .block-controls .moodle-core-dragdrop-draghandle {
+        color: #fff; }
+        .block.block_searchcourses .block-controls .editing_move > .icon,
+        .block.block_searchcourses .block-controls .dropdown-toggle > .icon,
+        .block.block_searchcourses .block-controls .moodle-core-dragdrop-draghandle > .icon {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          margin: 0;
+          line-height: 1;
+          vertical-align: middle;
+          opacity: 1;
+          color: #fff; }
+      .block.block_searchcourses .block-controls .moodle-core-dragdrop-draghandle > .icon {
+        margin-right: 0.5rem; }
+    .block.block_searchcourses .block-inner {
+      padding: 0; }
+      .block.block_searchcourses .block-inner h3.card-title {
+        font-size: 2.25rem;
+        text-transform: none;
+        color: #fff;
+        font-weight: normal;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center; }
+      .block.block_searchcourses .block-inner #course_search_ac {
+        position: relative; }
+        .block.block_searchcourses .block-inner #course_search_ac:before {
+          display: inline-block;
+          font: normal normal normal 14px/1 FontAwesome;
+          font-size: inherit;
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          content: "\f002";
+          font-size: 2.25rem;
+          color: #A22833;
+          position: absolute;
+          top: 50%;
+          right: 1.25rem;
+          -webkit-transform: translateY(-50%);
+              -ms-transform: translateY(-50%);
+               -o-transform: translateY(-50%);
+                  transform: translateY(-50%);
+          margin-top: -1px; }
+        .block.block_searchcourses .block-inner #course_search_ac > .btn.btn-link, .block.block_searchcourses .block-inner #page-grade-grading-manage .actions #course_search_ac > .btn-link.action, #page-grade-grading-manage .actions .block.block_searchcourses .block-inner #course_search_ac > .btn-link.action, .block.block_searchcourses .block-inner #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel #course_search_ac > input.btn-link, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel .block.block_searchcourses .block-inner #course_search_ac > input.btn-link, .block.block_searchcourses .block-inner #rubric-rubric.gradingform_rubric #course_search_ac > .btn-link.addcriterion, #rubric-rubric.gradingform_rubric .block.block_searchcourses .block-inner #course_search_ac > .btn-link.addcriterion {
+          display: none; }
+        .block.block_searchcourses .block-inner #course_search_ac label {
+          display: none; }
+        .block.block_searchcourses .block-inner #course_search_ac input#ac-input {
+          width: 100%;
+          margin: 0;
+          height: 70px;
+          padding: 1rem 4rem 1rem 1rem;
+          font-size: 1.75rem;
+          color: #A22833;
+          border: none; }
+        .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist {
+          top: 100% !important;
+          left: 0 !important;
+          max-width: 100%;
+          width: 100% !important; }
+          .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist * {
+            color: #fff; }
+          .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-highlight {
+            background-color: #555555; }
+          .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content {
+            background-color: #A22833;
+            -webkit-box-shadow: none;
+                    box-shadow: none; }
+            .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-item {
+              padding: 0.5rem;
+              opacity: 1;
+              background-image: none; }
+              .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-item.yui3-aclist-item-hover {
+                background-color: rgba(0, 0, 0, 0.1); }
+            .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-item-active {
+              background-color: #212529; }
+            .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-list {
+              padding: 0.5rem; }
+              .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-list:empty {
+                display: none; }
+  .block.block_culcourse_listing {
+    background-color: rgba(51, 51, 51, 0.95);
+    padding: 2rem 1rem 2rem 1rem; }
+    .block.block_culcourse_listing .block-controls {
+      position: absolute !important;
+      top: 0.5rem;
+      right: 0.5rem; }
+      .block.block_culcourse_listing .block-controls .editing_move,
+      .block.block_culcourse_listing .block-controls .dropdown-toggle,
+      .block.block_culcourse_listing .block-controls .moodle-core-dragdrop-draghandle {
+        color: #fff; }
+        .block.block_culcourse_listing .block-controls .editing_move > .icon,
+        .block.block_culcourse_listing .block-controls .dropdown-toggle > .icon,
+        .block.block_culcourse_listing .block-controls .moodle-core-dragdrop-draghandle > .icon {
+          color: #fff; }
+      .block.block_culcourse_listing .block-controls .moodle-core-dragdrop-draghandle > .icon {
+        margin-right: 0.5rem; }
+    .block.block_culcourse_listing > .block-inner .content ul#courselistingnav {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-flex-wrap: wrap;
+          -ms-flex-wrap: wrap;
+              flex-wrap: wrap;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      margin-bottom: 2rem; }
+      .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item {
+        float: none;
+        margin: 0 0.5rem; }
+        .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link {
+          background-color: transparent; }
+          .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link:hover, .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link:focus {
+            background-color: rgba(255, 255, 255, 0.05); }
+          .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link.active {
+            background-color: #A22833; }
+            .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link.active:hover, .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link.active:focus {
+              background-color: #A22833; }
+          .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link h2 {
+            font-weight: normal; }
+          .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link * {
+            color: #fff; }
+    .block.block_culcourse_listing > .block-inner .content button[type="submit"] {
+      color: #212529;
+      background-color: #fff;
+      border-color: #A22833;
+      color: #A22833; }
+      .block.block_culcourse_listing > .block-inner .content button[type="submit"]:hover {
+        color: #212529;
+        background-color: #ececec;
+        border-color: #791e26; }
+      .block.block_culcourse_listing > .block-inner .content button[type="submit"]:focus, .block.block_culcourse_listing > .block-inner .content button[type="submit"].focus {
+        -webkit-box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5);
+                box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5); }
+      .block.block_culcourse_listing > .block-inner .content button[type="submit"].disabled, .block.block_culcourse_listing > .block-inner .content button[type="submit"]:disabled {
+        color: #212529;
+        background-color: #fff;
+        border-color: #A22833; }
+      .block.block_culcourse_listing > .block-inner .content button[type="submit"]:not(:disabled):not(.disabled):active, .block.block_culcourse_listing > .block-inner .content button[type="submit"]:not(:disabled):not(.disabled).active,
+      .show > .block.block_culcourse_listing > .block-inner .content button[type="submit"].dropdown-toggle {
+        color: #212529;
+        background-color: #e6e5e5;
+        border-color: #6f1b23; }
+        .block.block_culcourse_listing > .block-inner .content button[type="submit"]:not(:disabled):not(.disabled):active:focus, .block.block_culcourse_listing > .block-inner .content button[type="submit"]:not(:disabled):not(.disabled).active:focus,
+        .show > .block.block_culcourse_listing > .block-inner .content button[type="submit"].dropdown-toggle:focus {
+          -webkit-box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5);
+                  box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5); }
+    .block.block_culcourse_listing .culcoursebox {
+      background-color: rgba(255, 255, 255, 0.2);
+      border: none; }
+      .block.block_culcourse_listing .culcoursebox > .panel-heading .move {
+        background-color: #F5F5F5; }
+      .block.block_culcourse_listing .culcoursebox > .panel-heading .coursename_wrapper .coursename a {
+        color: #fff;
+        background-image: url([[pix:theme|course-light]]); }
+      .block.block_culcourse_listing .culcoursebox .content.panel-body {
+        padding: 0.75rem; }
+        .block.block_culcourse_listing .culcoursebox .content.panel-body * {
+          color: #fff; }
+      .block.block_culcourse_listing .culcoursebox .fa-star {
+        color: gold !important;
+        opacity: 1; }
+      .block.block_culcourse_listing .culcoursebox .fa-star-o {
+        color: #F5F5F5; }
+      .block.block_culcourse_listing .culcoursebox .favouritelink,
+      .block.block_culcourse_listing .culcoursebox .moreinfo,
+      .block.block_culcourse_listing .culcoursebox .enrolmenticons {
+        color: #F5F5F5; }
+        .block.block_culcourse_listing .culcoursebox .favouritelink + .favouritelink,
+        .block.block_culcourse_listing .culcoursebox .moreinfo + .favouritelink,
+        .block.block_culcourse_listing .culcoursebox .enrolmenticons + .favouritelink {
+          margin: 0;
+          margin-right: 0.5rem; }
+        .block.block_culcourse_listing .culcoursebox .favouritelink .icon,
+        .block.block_culcourse_listing .culcoursebox .moreinfo .icon,
+        .block.block_culcourse_listing .culcoursebox .enrolmenticons .icon {
+          color: #F5F5F5;
+          font-size: 1.375rem; }
+    .block.block_culcourse_listing .course_category_tree.filter-on {
+      background-color: #A22833; }
+    .block.block_culcourse_listing .course_category_tree #allcoursesheader {
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center; }
+      .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form label {
+        color: #fff; }
+      .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form select.custom-select {
+        height: auto;
+        font-size: 1.125rem;
+        color: #A22833; }
+      .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand {
+        font-size: 1.125rem !important;
+        color: #A22833 !important; }
+    .block.block_culcourse_listing .course_category_tree .culcategory .categoryname .fa-spinner {
+      color: #fff; }
+    .block.block_culcourse_listing .course_category_tree .culcategory.with_children > .info > .categoryname:before, .block.block_culcourse_listing .course_category_tree .culcategory.manage > .info > .categoryname:before {
+      background-color: #F5F5F5;
+      color: #A22833; }
+    .block.block_culcourse_listing .course_category_tree .culcategory.with_children > .info > .categoryname a, .block.block_culcourse_listing .course_category_tree .culcategory.manage > .info > .categoryname a {
+      color: #fff; }
+    .block.block_culcourse_listing .course_category_tree .culcategory > .info {
+      border: none;
+      background-color: rgba(255, 255, 255, 0.4); }
+      .block.block_culcourse_listing .course_category_tree .culcategory > .info .overviewlink i {
+        color: #fff !important; }
 
 .initialsearch-wrap {
   position: relative;
@@ -20295,600 +20674,6 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
             vertical-align: middle;
             opacity: 1;
             color: #fff; }
-      .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner {
-        padding: 0; }
-        .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner h3.card-title {
-          font-size: 2.25rem;
-          text-transform: none;
-          color: #fff;
-          font-weight: normal;
-          -webkit-box-pack: center;
-          -webkit-justify-content: center;
-              -ms-flex-pack: center;
-                  justify-content: center; }
-        .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac {
-          position: relative; }
-          .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac:before {
-            display: inline-block;
-            font: normal normal normal 14px/1 FontAwesome;
-            font-size: inherit;
-            text-rendering: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            content: "\f002";
-            font-size: 2.25rem;
-            color: #A22833;
-            position: absolute;
-            top: 50%;
-            right: 1.25rem;
-            -webkit-transform: translateY(-50%);
-                -ms-transform: translateY(-50%);
-                 -o-transform: translateY(-50%);
-                    transform: translateY(-50%);
-            margin-top: -1px; }
-          .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac > .btn.btn-link, .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #page-grade-grading-manage .actions #course_search_ac > .btn-link.action, #page-grade-grading-manage .actions .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac > .btn-link.action, .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel #course_search_ac > input.btn-link, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac > input.btn-link, .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #rubric-rubric.gradingform_rubric #course_search_ac > .btn-link.addcriterion, #rubric-rubric.gradingform_rubric .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac > .btn-link.addcriterion {
-            display: none; }
-          .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac label {
-            display: none; }
-          .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac input#ac-input {
-            width: 100%;
-            margin: 0;
-            height: 70px;
-            padding: 1rem 4rem 1rem 1rem;
-            font-size: 1.75rem;
-            color: #A22833;
-            border: none; }
-          .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist {
-            top: 100% !important;
-            left: 0 !important;
-            max-width: 100%;
-            width: 100% !important; }
-            .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist * {
-              color: #fff; }
-            .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-highlight {
-              background-color: #555555; }
-            .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content {
-              background-color: #A22833;
-              -webkit-box-shadow: none;
-                      box-shadow: none; }
-              .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-item {
-                padding: 0.5rem;
-                opacity: 1;
-                background-image: none; }
-                .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-item.yui3-aclist-item-hover {
-                  background-color: rgba(0, 0, 0, 0.1); }
-              .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-item-active {
-                background-color: #212529; }
-              .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-list {
-                padding: 0.5rem; }
-                .findblocks-wrap #block-region-dash-cl .block.block_searchcourses .block-inner #course_search_ac .yui3-aclist .yui3-aclist-content .yui3-aclist-list:empty {
-                  display: none; }
-      .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing {
-        max-width: 930px;
-        margin-bottom: 7rem; }
-        .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner {
-          padding: 0; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content {
-            padding: 0; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav {
-              display: -webkit-box;
-              display: -webkit-flex;
-              display: -ms-flexbox;
-              display: flex;
-              -webkit-flex-wrap: wrap;
-                  -ms-flex-wrap: wrap;
-                      flex-wrap: wrap;
-              -webkit-box-align: center;
-              -webkit-align-items: center;
-                  -ms-flex-align: center;
-                      align-items: center;
-              -webkit-box-pack: center;
-              -webkit-justify-content: center;
-                  -ms-flex-pack: center;
-                      justify-content: center;
-              margin-bottom: 2rem; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item {
-                float: none;
-                margin: 0 0.5rem; }
-                .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link {
-                  background-color: transparent; }
-                  .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link:hover, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link:focus {
-                    background-color: rgba(255, 255, 255, 0.05); }
-                  .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link.active {
-                    background-color: #A22833; }
-                    .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link.active:hover, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link.active:focus {
-                      background-color: #A22833; }
-                  .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link h2 {
-                    font-weight: normal; }
-                  .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content ul#courselistingnav .nav-item .nav-link * {
-                    color: #fff; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"] {
-              color: #fff;
-              background-color: #A22833;
-              border-color: #A22833; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"]:hover {
-                color: #fff;
-                background-color: #832029;
-                border-color: #791e26; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"]:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"].focus {
-                -webkit-box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5);
-                        box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5); }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"].disabled, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"]:disabled {
-                color: #fff;
-                background-color: #A22833;
-                border-color: #A22833; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"]:not(:disabled):not(.disabled):active, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"]:not(:disabled):not(.disabled).active,
-              .show > .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"].dropdown-toggle {
-                color: #fff;
-                background-color: #791e26;
-                border-color: #6f1b23; }
-                .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"]:not(:disabled):not(.disabled):active:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"]:not(:disabled):not(.disabled).active:focus,
-                .show > .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing > .block-inner .content button[type="submit"].dropdown-toggle:focus {
-                  -webkit-box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5);
-                          box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5); }
-        .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .favourites #favouritesbuttons {
-          width: 100%;
-          display: -webkit-box;
-          display: -webkit-flex;
-          display: -ms-flexbox;
-          display: flex;
-          -webkit-flex-wrap: wrap;
-              -ms-flex-wrap: wrap;
-                  flex-wrap: wrap;
-          -webkit-box-align: center;
-          -webkit-align-items: center;
-              -ms-flex-align: center;
-                  align-items: center;
-          -webkit-box-pack: center;
-          -webkit-justify-content: center;
-              -ms-flex-pack: center;
-                  justify-content: center; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .favourites #favouritesbuttons #clearfavourites .singlebutton,
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .favourites #favouritesbuttons #reorderfavourites .singlebutton {
-            margin: 0 0.5rem; }
-        .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox {
-          background-color: rgba(255, 255, 255, 0.2);
-          padding: 0;
-          border: none;
-          margin-bottom: 1rem;
-          border-radius: 0.25rem;
-          overflow: hidden; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox:last-child {
-            margin-bottom: 0; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox > .panel-heading {
-            font-size: 1rem;
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-flex-wrap: wrap;
-                -ms-flex-wrap: wrap;
-                    flex-wrap: wrap;
-            -webkit-box-align: stretch;
-            -webkit-align-items: stretch;
-                -ms-flex-align: stretch;
-                    align-items: stretch; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox > .panel-heading .move {
-              display: -webkit-box;
-              display: -webkit-flex;
-              display: -ms-flexbox;
-              display: flex;
-              -webkit-flex-wrap: wrap;
-                  -ms-flex-wrap: wrap;
-                      flex-wrap: wrap;
-              -webkit-box-align: center;
-              -webkit-align-items: center;
-                  -ms-flex-align: center;
-                      align-items: center;
-              margin: 0;
-              float: none;
-              height: auto;
-              line-height: inherit;
-              padding: 0 0.75rem;
-              background-color: #F5F5F5; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox > .panel-heading .move img {
-                width: 18px; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox > .panel-heading .coursename_wrapper {
-              display: -webkit-box;
-              display: -webkit-flex;
-              display: -ms-flexbox;
-              display: flex;
-              -webkit-flex-wrap: wrap;
-                  -ms-flex-wrap: wrap;
-                      flex-wrap: wrap;
-              -webkit-box-align: stretch;
-              -webkit-align-items: stretch;
-                  -ms-flex-align: stretch;
-                      align-items: stretch;
-              -webkit-flex-basis: 0%;
-                  -ms-flex-preferred-size: 0%;
-                      flex-basis: 0%;
-              -webkit-box-flex: 1;
-              -webkit-flex-grow: 1;
-                  -ms-flex-positive: 1;
-                      flex-grow: 1;
-              max-width: 100%;
-              width: 100%; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox > .panel-heading .coursename_wrapper .coursename {
-                max-width: 100%;
-                float: none !important;
-                line-height: 1.5;
-                margin: 0;
-                padding: 0.75rem;
-                display: -webkit-box;
-                display: -webkit-flex;
-                display: -ms-flexbox;
-                display: flex;
-                -webkit-flex-wrap: wrap;
-                    -ms-flex-wrap: wrap;
-                        flex-wrap: wrap;
-                -webkit-box-align: center;
-                -webkit-align-items: center;
-                    -ms-flex-align: center;
-                        align-items: center;
-                -webkit-flex-basis: 0%;
-                    -ms-flex-preferred-size: 0%;
-                        flex-basis: 0%;
-                -webkit-box-flex: 1;
-                -webkit-flex-grow: 1;
-                    -ms-flex-positive: 1;
-                        flex-grow: 1;
-                max-width: 100%;
-                width: 100%; }
-                .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox > .panel-heading .coursename_wrapper .coursename a {
-                  color: #fff;
-                  padding-left: 1.75rem;
-                  background-position: left center;
-                  font-family: inherit;
-                  line-height: 1.5;
-                  background-image: url([[pix:theme|course-light]]);
-                  -webkit-background-size: 16px 16px;
-                          background-size: 16px 16px; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .content.panel-body {
-            padding: 0.75rem; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .content.panel-body * {
-              color: #fff; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .fa-star-o {
-            color: #F5F5F5;
-            opacity: 1; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .moreinfo,
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .enrolmenticons {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-flex-wrap: wrap;
-                -ms-flex-wrap: wrap;
-                    flex-wrap: wrap;
-            -webkit-box-align: center;
-            -webkit-align-items: center;
-                -ms-flex-align: center;
-                    align-items: center;
-            margin: 0 0.5rem 0 auto;
-            line-height: inherit;
-            width: auto;
-            color: #F5F5F5; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .moreinfo + .favouritelink,
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .enrolmenticons + .favouritelink {
-              margin: 0;
-              margin-right: 0.5rem; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .moreinfo a,
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .enrolmenticons a {
-              display: inline-block;
-              line-height: 1; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .moreinfo .icon,
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .enrolmenticons .icon {
-              display: -webkit-inline-box;
-              display: -webkit-inline-flex;
-              display: -ms-inline-flexbox;
-              display: inline-flex;
-              -webkit-flex-wrap: wrap;
-                  -ms-flex-wrap: wrap;
-                      flex-wrap: wrap;
-              -webkit-box-align: center;
-              -webkit-align-items: center;
-                  -ms-flex-align: center;
-                      align-items: center;
-              color: #F5F5F5;
-              width: auto;
-              opacity: 1;
-              font-size: 1.375rem; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .enrolmenticons .icon {
-            margin: 0; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .enrolmenticons .icon + .icon {
-              margin-left: 0.5rem; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .favouritelink {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-flex-wrap: wrap;
-                -ms-flex-wrap: wrap;
-                    flex-wrap: wrap;
-            -webkit-box-align: center;
-            -webkit-align-items: center;
-                -ms-flex-align: center;
-                    align-items: center;
-            float: none;
-            margin: 0 0 0 auto;
-            line-height: inherit;
-            text-align: center; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .favouritelink + .enrolmenticons {
-              margin: 0 0.75rem 0 0; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .culcoursebox .favouritelink .icon {
-              display: -webkit-inline-box;
-              display: -webkit-inline-flex;
-              display: -ms-inline-flexbox;
-              display: inline-flex;
-              -webkit-flex-wrap: wrap;
-                  -ms-flex-wrap: wrap;
-                      flex-wrap: wrap;
-              -webkit-box-align: center;
-              -webkit-align-items: center;
-                  -ms-flex-align: center;
-                      align-items: center;
-              color: #F5F5F5;
-              width: auto;
-              opacity: 1;
-              font-size: 1.375rem; }
-        .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree.filter-on {
-          border: none;
-          padding: 1rem; }
-        .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader {
-          display: -webkit-box;
-          display: -webkit-flex;
-          display: -ms-flexbox;
-          display: flex;
-          -webkit-flex-wrap: wrap;
-              -ms-flex-wrap: wrap;
-                  flex-wrap: wrap;
-          -webkit-box-align: center;
-          -webkit-align-items: center;
-              -ms-flex-align: center;
-                  align-items: center;
-          min-height: 0;
-          margin: 0; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter {
-            width: auto;
-            margin: 0 auto 1rem auto; }
-            @media (min-width: 576px) {
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter {
-                margin: 0 0 0.5rem 0; } }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form {
-              display: block; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form > div {
-                display: -webkit-box;
-                display: -webkit-flex;
-                display: -ms-flexbox;
-                display: flex;
-                -webkit-flex-wrap: wrap;
-                    -ms-flex-wrap: wrap;
-                        flex-wrap: wrap;
-                -webkit-box-align: center;
-                -webkit-align-items: center;
-                    -ms-flex-align: center;
-                        align-items: center;
-                -webkit-box-pack: center;
-                -webkit-justify-content: center;
-                    -ms-flex-pack: center;
-                        justify-content: center; }
-                .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form > div span.nowrap {
-                  margin-bottom: 0.5rem; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form label {
-                color: #fff;
-                margin: 0 0.5rem 0 0;
-                vertical-align: middle; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form select {
-                margin: 0 0.5rem 0 0.5rem; }
-                @media (min-width: 576px) {
-                  .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form select {
-                    margin: 0 1rem 0 0; } }
-                .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .filter form select.custom-select {
-                  padding: 0.75rem 2rem 0.75rem 1rem;
-                  font-size: 1.125rem;
-                  color: #A22833;
-                  line-height: 1.5; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions {
-            width: 100%;
-            padding: 0;
-            text-align: center;
-            margin: 0 auto 1rem auto; }
-            @media (min-width: 576px) {
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions {
-                width: auto;
-                text-align: right;
-                margin: 0 0 1rem auto; } }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand {
-              display: inline-block;
-              font-weight: normal;
-              line-height: 1.5;
-              text-align: center;
-              white-space: nowrap;
-              vertical-align: middle;
-              cursor: pointer;
-              -webkit-user-select: none;
-                 -moz-user-select: none;
-                  -ms-user-select: none;
-                      user-select: none;
-              border-radius: 0.25rem;
-              border: 1px solid transparent;
-              padding: 0.375rem 0.75rem;
-              font-size: 1rem;
-              line-height: 1.5;
-              border-radius: 0.25rem;
-              -webkit-transition: all 0.2s ease-in-out;
-              -o-transition: all 0.2s ease-in-out;
-              transition: all 0.2s ease-in-out;
-              color: #fff;
-              background-color: #A22833;
-              border-color: #A22833;
-              margin: 0;
-              background-position: 0.5rem 50%;
-              padding: 0.75rem 1rem 0.75rem 2rem;
-              font-size: 1.125rem;
-              color: #A22833;
-              line-height: 1.5; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:hover, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:focus {
-                text-decoration: none; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.focus {
-                outline: 0;
-                -webkit-box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.25);
-                        box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.25); }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.disabled, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:disabled {
-                opacity: 0.65; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:not(:disabled):not(.disabled) {
-                cursor: pointer; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:not(:disabled):not(.disabled):active, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:not(:disabled):not(.disabled).active {
-                background-image: none; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:hover {
-                color: #fff;
-                background-color: #832029;
-                border-color: #791e26; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.focus {
-                -webkit-box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5);
-                        box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5); }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.disabled, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:disabled {
-                color: #fff;
-                background-color: #A22833;
-                border-color: #A22833; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:not(:disabled):not(.disabled):active, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:not(:disabled):not(.disabled).active,
-              .show > .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.dropdown-toggle {
-                color: #fff;
-                background-color: #791e26;
-                border-color: #6f1b23; }
-                .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:not(:disabled):not(.disabled):active:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:not(:disabled):not(.disabled).active:focus,
-                .show > .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.dropdown-toggle:focus {
-                  -webkit-box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5);
-                          box-shadow: 0 0 0 0.2rem rgba(162, 40, 51, 0.5); }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:active, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand:focus:active {
-                background-image: url([[pix:core|t/collapsed]]); }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.hide {
-                display: none; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.culcollapse-all:focus, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.culcollapse-all:active, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree #allcoursesheader .collapsible-actions .culcollapseexpand.culcollapse-all:focus:active {
-                background-image: url([[pix:core|t/expanded]]); }
-        .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory {
-          overflow: hidden; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory + .culcategory {
-            margin-top: 1rem; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory .content {
-            margin-top: 1rem; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory .content .subcategories {
-              padding-left: 2.5rem; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.dimmed_category a {
-            color: #CCCCCC !important; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory:not(.with_children) > .info > .categoryname:before {
-            opacity: 0.2; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.with_children.collapsed > .info > .categoryname, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.manage.collapsed > .info > .categoryname {
-            background-image: none; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.with_children.collapsed > .info > .categoryname:before, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.manage.collapsed > .info > .categoryname:before {
-              content: "\f0da";
-              padding-left: 0.2rem; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.with_children > .info > .categoryname, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.manage > .info > .categoryname {
-            position: relative;
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-flex-wrap: wrap;
-                -ms-flex-wrap: wrap;
-                    flex-wrap: wrap;
-            -webkit-box-align: center;
-            -webkit-align-items: center;
-                -ms-flex-align: center;
-                    align-items: center;
-            -webkit-flex-basis: 0%;
-                -ms-flex-preferred-size: 0%;
-                    flex-basis: 0%;
-            -webkit-box-flex: 1;
-            -webkit-flex-grow: 1;
-                -ms-flex-positive: 1;
-                    flex-grow: 1;
-            max-width: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0.75rem 0.75rem 0.75rem 3.25rem;
-            background-image: none;
-            font-size: 1.125rem;
-            line-height: 1; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.with_children > .info > .categoryname:before, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.manage > .info > .categoryname:before {
-              display: inline-block;
-              font: normal normal normal 14px/1 FontAwesome;
-              font-size: inherit;
-              text-rendering: auto;
-              -webkit-font-smoothing: antialiased;
-              -moz-osx-font-smoothing: grayscale;
-              position: absolute;
-              top: 0;
-              left: 0;
-              height: 100%;
-              content: "\f0d7";
-              width: 2.5rem;
-              background-color: #F5F5F5;
-              display: -webkit-box;
-              display: -webkit-flex;
-              display: -ms-flexbox;
-              display: flex;
-              -webkit-flex-wrap: wrap;
-                  -ms-flex-wrap: wrap;
-                      flex-wrap: wrap;
-              -webkit-box-align: center;
-              -webkit-align-items: center;
-                  -ms-flex-align: center;
-                      align-items: center;
-              -webkit-box-pack: center;
-              -webkit-justify-content: center;
-                  -ms-flex-pack: center;
-                      justify-content: center;
-              font-size: 1.75rem;
-              color: #A22833; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.with_children > .info > .categoryname img.spinner, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.manage > .info > .categoryname img.spinner {
-              display: none !important; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.with_children > .info > .categoryname a, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.manage > .info > .categoryname a {
-              color: #fff; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.with_children > .info > .categoryname a.overviewlink, .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory.manage > .info > .categoryname a.overviewlink {
-                margin: 0; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory > .info {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-flex-wrap: wrap;
-                -ms-flex-wrap: wrap;
-                    flex-wrap: wrap;
-            -webkit-box-align: stretch;
-            -webkit-align-items: stretch;
-                -ms-flex-align: stretch;
-                    align-items: stretch;
-            margin: 0;
-            border: none;
-            -webkit-box-shadow: none;
-                    box-shadow: none;
-            background-color: rgba(255, 255, 255, 0.4);
-            overflow: hidden; }
-            .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory > .info .overviewlink {
-              display: -webkit-box;
-              display: -webkit-flex;
-              display: -ms-flexbox;
-              display: flex;
-              -webkit-flex-wrap: wrap;
-                  -ms-flex-wrap: wrap;
-                      flex-wrap: wrap;
-              -webkit-box-align: center;
-              -webkit-align-items: center;
-                  -ms-flex-align: center;
-                      align-items: center;
-              margin-left: auto;
-              margin-right: 0.75rem; }
-              .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .course_category_tree .culcategory > .info .overviewlink i.red {
-                color: #fff !important;
-                width: auto;
-                margin: 0;
-                line-height: 1.1;
-                height: auto; }
-        .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .content .courses {
-          padding-left: 2.5rem; }
-          .findblocks-wrap #block-region-dash-cl .block.block_culcourse_listing .content .courses + .subcategories {
-            margin-top: 1rem; }
 
 #block-region-content {
   padding: 0 15px; }
@@ -23252,8 +23037,10 @@ li.movehere {
 
 #page-mod-quiz-mod #id_reviewoptionshdr .form-group, #page-mod-quiz-mod #id_reviewoptionshdr .form-buttons,
 #page-mod-quiz-mod #id_reviewoptionshdr .path-admin .buttons, .path-admin #page-mod-quiz-mod #id_reviewoptionshdr .buttons,
+#page-mod-quiz-mod #id_reviewoptionshdr #fitem_id_submitbutton,
 #page-mod-quiz-mod #id_reviewoptionshdr .fp-content-center form + div, .fp-content-center #page-mod-quiz-mod #id_reviewoptionshdr form + div,
-#page-mod-quiz-mod #id_reviewoptionshdr div.backup-section + form {
+#page-mod-quiz-mod #id_reviewoptionshdr div.backup-section + form,
+#page-mod-quiz-mod #id_reviewoptionshdr #fgroup_id_buttonar {
   float: none;
   margin: 0;
   padding: 0 1rem 1rem 0;
@@ -23262,14 +23049,18 @@ li.movehere {
   @media (min-width: 576px) {
     #page-mod-quiz-mod #id_reviewoptionshdr .form-group, #page-mod-quiz-mod #id_reviewoptionshdr .form-buttons,
     #page-mod-quiz-mod #id_reviewoptionshdr .path-admin .buttons, .path-admin #page-mod-quiz-mod #id_reviewoptionshdr .buttons,
+    #page-mod-quiz-mod #id_reviewoptionshdr #fitem_id_submitbutton,
     #page-mod-quiz-mod #id_reviewoptionshdr .fp-content-center form + div, .fp-content-center #page-mod-quiz-mod #id_reviewoptionshdr form + div,
-    #page-mod-quiz-mod #id_reviewoptionshdr div.backup-section + form {
+    #page-mod-quiz-mod #id_reviewoptionshdr div.backup-section + form,
+    #page-mod-quiz-mod #id_reviewoptionshdr #fgroup_id_buttonar {
       width: 50%; } }
   @media (min-width: 992px) {
     #page-mod-quiz-mod #id_reviewoptionshdr .form-group, #page-mod-quiz-mod #id_reviewoptionshdr .form-buttons,
     #page-mod-quiz-mod #id_reviewoptionshdr .path-admin .buttons, .path-admin #page-mod-quiz-mod #id_reviewoptionshdr .buttons,
+    #page-mod-quiz-mod #id_reviewoptionshdr #fitem_id_submitbutton,
     #page-mod-quiz-mod #id_reviewoptionshdr .fp-content-center form + div, .fp-content-center #page-mod-quiz-mod #id_reviewoptionshdr form + div,
-    #page-mod-quiz-mod #id_reviewoptionshdr div.backup-section + form {
+    #page-mod-quiz-mod #id_reviewoptionshdr div.backup-section + form,
+    #page-mod-quiz-mod #id_reviewoptionshdr #fgroup_id_buttonar {
       width: 25%; } }
 
 #page-mod-quiz-mod #id_reviewoptionshdr:not(.collapsed) > .fcontainer {
@@ -23310,10 +23101,10 @@ li.movehere {
 .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form legend {
   padding: 1rem 1rem 0 1rem; }
 
-.moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .form-group.femptylabel .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel.form-buttons .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .path-admin .femptylabel.buttons .col-md-3, .path-admin .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel.buttons .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .fp-content-center form + div.femptylabel .col-md-3, .fp-content-center .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset form + div.femptylabel .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset div.backup-section + form.femptylabel .col-md-3 {
+.moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .form-group.femptylabel .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel.form-buttons .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .path-admin .femptylabel.buttons .col-md-3, .path-admin .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel.buttons .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel#fitem_id_submitbutton .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .fp-content-center form + div.femptylabel .col-md-3, .fp-content-center .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset form + div.femptylabel .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset div.backup-section + form.femptylabel .col-md-3, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel#fgroup_id_buttonar .col-md-3 {
   display: none; }
 
-.moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .form-group.femptylabel .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel.form-buttons .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .path-admin .femptylabel.buttons .col-md-9, .path-admin .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel.buttons .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .fp-content-center form + div.femptylabel .col-md-9, .fp-content-center .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset form + div.femptylabel .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset div.backup-section + form.femptylabel .col-md-9 {
+.moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .form-group.femptylabel .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel.form-buttons .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .path-admin .femptylabel.buttons .col-md-9, .path-admin .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel.buttons .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel#fitem_id_submitbutton .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .fp-content-center form + div.femptylabel .col-md-9, .fp-content-center .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset form + div.femptylabel .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset div.backup-section + form.femptylabel .col-md-9, .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form fieldset .femptylabel#fgroup_id_buttonar .col-md-9 {
   padding: 0 0.5rem;
   -webkit-box-flex: 0;
   -webkit-flex: 0 0 100%;
@@ -23435,14 +23226,20 @@ li.movehere {
 
 #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-group:nth-of-type(3n+1), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-buttons:nth-of-type(3n+1),
 #page-question-type-multichoice .path-admin fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+1), .path-admin #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+1),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fitem_id_submitbutton:nth-of-type(3n+1),
 #page-question-type-multichoice .fp-content-center fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+1), .fp-content-center #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+1),
-#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+1), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-group:nth-of-type(3n+2), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-buttons:nth-of-type(3n+2),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+1),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fgroup_id_buttonar:nth-of-type(3n+1), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-group:nth-of-type(3n+2), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-buttons:nth-of-type(3n+2),
 #page-question-type-multichoice .path-admin fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+2), .path-admin #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+2),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fitem_id_submitbutton:nth-of-type(3n+2),
 #page-question-type-multichoice .fp-content-center fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+2), .fp-content-center #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+2),
-#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+2), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-group:nth-of-type(3n+3), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-buttons:nth-of-type(3n+3),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+2),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fgroup_id_buttonar:nth-of-type(3n+2), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-group:nth-of-type(3n+3), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-buttons:nth-of-type(3n+3),
 #page-question-type-multichoice .path-admin fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+3), .path-admin #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+3),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fitem_id_submitbutton:nth-of-type(3n+3),
 #page-question-type-multichoice .fp-content-center fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+3), .fp-content-center #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+3),
-#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+3) {
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+3),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fgroup_id_buttonar:nth-of-type(3n+3) {
   padding: 1rem 0;
   margin: 0;
   background-color: #F5F5F5;
@@ -23451,21 +23248,27 @@ li.movehere {
 
 #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-group:nth-of-type(3n+1), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-buttons:nth-of-type(3n+1),
 #page-question-type-multichoice .path-admin fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+1), .path-admin #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+1),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fitem_id_submitbutton:nth-of-type(3n+1),
 #page-question-type-multichoice .fp-content-center fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+1), .fp-content-center #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+1),
-#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+1) {
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+1),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fgroup_id_buttonar:nth-of-type(3n+1) {
   border-top: 1px solid #dee2e6; }
 
 #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-group:nth-of-type(3n+3), #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-buttons:nth-of-type(3n+3),
 #page-question-type-multichoice .path-admin fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+3), .path-admin #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .buttons:nth-of-type(3n+3),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fitem_id_submitbutton:nth-of-type(3n+3),
 #page-question-type-multichoice .fp-content-center fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+3), .fp-content-center #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > form + div:nth-of-type(3n+3),
-#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+3) {
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form:nth-of-type(3n+3),
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > #fgroup_id_buttonar:nth-of-type(3n+3) {
   border-bottom: 1px solid #dee2e6;
   margin-bottom: 2rem; }
 
 #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .form-group.femptylabel, #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .femptylabel.form-buttons,
 #page-question-type-multichoice .path-admin fieldset#id_answerhdr > .fcontainer > .femptylabel.buttons, .path-admin #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .femptylabel.buttons,
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .femptylabel#fitem_id_submitbutton,
 #page-question-type-multichoice .fp-content-center fieldset#id_answerhdr > .fcontainer > form + div.femptylabel, .fp-content-center #page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > form + div.femptylabel,
-#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form.femptylabel {
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > div.backup-section + form.femptylabel,
+#page-question-type-multichoice fieldset#id_answerhdr > .fcontainer > .femptylabel#fgroup_id_buttonar {
   border: none;
   background-color: transparent;
   padding: 0;
