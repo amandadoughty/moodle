@@ -138,6 +138,7 @@ class grade_report_culuser extends grade_report_user {
                 }
             }
 
+
             if (!$hide) {
                 /// Excluded Item
                 /**
@@ -146,7 +147,7 @@ class grade_report_culuser extends grade_report_user {
                     $excluded = ' excluded';
                 }
                 **/
-
+                $canviewall = has_capability('moodle/grade:viewall', $this->context);
                 /// Other class information
                 $class .= $hidden . $excluded;
                 if ($this->switch) { // alter style based on whether aggregation is first or last
@@ -167,6 +168,7 @@ class grade_report_culuser extends grade_report_user {
 
                 // Basic grade item information.
                 $gradeitemdata['id'] = $grade_object->id;
+                $gradeitemdata['itemname'] = $grade_object->itemname;
                 $gradeitemdata['itemtype'] = $grade_object->itemtype;
                 $gradeitemdata['itemmodule'] = $grade_object->itemmodule;
                 $gradeitemdata['iteminstance'] = $grade_object->iteminstance;
@@ -174,6 +176,7 @@ class grade_report_culuser extends grade_report_user {
                 $gradeitemdata['categoryid'] = $grade_object->categoryid;
                 $gradeitemdata['outcomeid'] = $grade_object->outcomeid;
                 $gradeitemdata['scaleid'] = $grade_object->outcomeid;
+                $gradeitemdata['locked'] = $canviewall ? $grade_grade->grade_item->is_locked() : null;
 
                 if ($this->showfeedback) {
                     // Copy $class before appending itemcenter as feedback should not be centered
@@ -199,12 +202,14 @@ class grade_report_culuser extends grade_report_user {
                 }
 
                 if ($this->showgrade) {
-                    $gradeitemdata['graderaw'] = '';
+                    $gradeitemdata['graderaw'] = null;
                     $gradeitemdata['gradehiddenbydate'] = false;
                     $gradeitemdata['gradeneedsupdate'] = $grade_grade->grade_item->needsupdate;
                     $gradeitemdata['gradeishidden'] = $grade_grade->is_hidden();
                     $gradeitemdata['gradedatesubmitted'] = $grade_grade->get_datesubmitted();
                     $gradeitemdata['gradedategraded'] = $grade_grade->get_dategraded();
+                    $gradeitemdata['gradeislocked'] = $canviewall ? $grade_grade->is_locked() : null;
+                    $gradeitemdata['gradeisoverridden'] = $canviewall ? $grade_grade->is_overridden() : null;
 
                     if ($grade_grade->grade_item->needsupdate) {
                         $data['grade']['class'] = $class.' gradingerror';
@@ -339,23 +344,36 @@ class grade_report_culuser extends grade_report_user {
                     $gradeitemdata['feedback'] = '';
                     $gradeitemdata['feedbackformat'] = $grade_grade->feedbackformat;
 
+                    if ($grade_grade->feedback) {
+                        $grade_grade->feedback = file_rewrite_pluginfile_urls(
+                            $grade_grade->feedback,
+                            'pluginfile.php',
+                            $grade_grade->get_context()->id,
+                            GRADE_FILE_COMPONENT,
+                            GRADE_FEEDBACK_FILEAREA,
+                            $grade_grade->id
+                        );
+                    }
+
                     if ($grade_grade->overridden > 0 AND ($type == 'categoryitem' OR $type == 'courseitem')) {
-                        $data['feedback']['class'] = $classfeedback.' feedbacktext';
-                        $data['feedback']['content'] = get_string('overridden', 'grades').': ' . format_text($grade_grade->feedback, $grade_grade->feedbackformat);
+                    $data['feedback']['class'] = $classfeedback.' feedbacktext';
+                        $data['feedback']['content'] = get_string('overridden', 'grades').': ' .
+                            format_text($grade_grade->feedback, $grade_grade->feedbackformat,
+                                ['context' => $grade_grade->get_context()]);
                         $gradeitemdata['feedback'] = $grade_grade->feedback;
-                    } else if (!$this->canviewhidden and $grade_grade->is_hidden()) {
+                    } else if (empty($grade_grade->feedback) or (!$this->canviewhidden and $grade_grade->is_hidden())) {
                         $data['feedback']['class'] = $classfeedback.' feedbacktext';
-                        $data['feedback']['content'] = '';
+                        $data['feedback']['content'] = '&nbsp;';
                     } else {
                         $data['feedback']['class'] = $classfeedback.' feedbacktext';
 
-                        if (empty($grade_grade->feedback)) {
+			if (empty($grade_grade->feedback)) {
                             $data['feedback']['content'] = '';
                         } else {                        
                             $data['feedback']['content'] = format_text($grade_grade->feedback, $grade_grade->feedbackformat);
                             $gradeitemdata['feedback'] = $grade_grade->feedback;
                         }
-
+                
                         // At this point $data['feedback']['content'] will contain the feedback or an empty string.
                         // Now we check if there is a feedback function for this module.
                         $feedbackfunction = 'get' . ucfirst($grade_object->itemmodule) . 'Feedback';
@@ -1284,47 +1302,47 @@ function grade_report_culuser_profilereport($course, $user, $viewasuser = false)
     }
 }
 
-// /**
-//  * Add nodes to myprofile page.
-//  *
-//  * @param \core_user\output\myprofile\tree $tree Tree object
-//  * @param stdClass $user user object
-//  * @param bool $iscurrentuser
-//  * @param stdClass $course Course object
-//  */
-// function gradereport_culuser_myprofile_navigation(core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
-//     global $CFG, $USER;
-//     if (empty($course)) {
-//         // We want to display these reports under the site context.
-//         $course = get_fast_modinfo(SITEID)->get_course();
-//     }
-//     $usercontext = context_user::instance($user->id);
-//     $anyreport = has_capability('moodle/user:viewuseractivitiesreport', $usercontext);
+/**
+ * Add nodes to myprofile page.
+ *
+ * @param \core_user\output\myprofile\tree $tree Tree object
+ * @param stdClass $user user object
+ * @param bool $iscurrentuser
+ * @param stdClass $course Course object
+ */
+function gradereport_culuser_myprofile_navigation(core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
+    global $CFG, $USER;
+    if (empty($course)) {
+        // We want to display these reports under the site context.
+        $course = get_fast_modinfo(SITEID)->get_course();
+    }
+    $usercontext = context_user::instance($user->id);
+    $anyreport = has_capability('moodle/user:viewuseractivitiesreport', $usercontext);
 
-//     // Start capability checks.
-//     if ($anyreport || ($course->showreports && $user->id == $USER->id)) {
-//         // Add grade hardcoded grade report if necessary.
-//         $gradeaccess = false;
-//         $coursecontext = context_course::instance($course->id);
-//         if (has_capability('moodle/grade:viewall', $coursecontext)) {
-//             // Can view all course grades.
-//             $gradeaccess = true;
-//         } else if ($course->showgrades) {
-//             if ($iscurrentuser && has_capability('moodle/grade:view', $coursecontext)) {
-//                 // Can view own grades.
-//                 $gradeaccess = true;
-//             } else if (has_capability('moodle/grade:viewall', $usercontext)) {
-//                 // Can view grades of this user - parent most probably.
-//                 $gradeaccess = true;
-//             } else if ($anyreport) {
-//                 // Can view grades of this user - parent most probably.
-//                 $gradeaccess = true;
-//             }
-//         }
-//         if ($gradeaccess) {
-//             $url = new moodle_url('/course/user.php', array('mode' => 'grade', 'id' => $course->id, 'user' => $user->id));
-//             $node = new core_user\output\myprofile\node('reports', 'grade', get_string('grade'), null, $url);
-//             $tree->add_node($node);
-//         }
-//     }
-// }
+    // Start capability checks.
+    if ($anyreport || $iscurrentuser) {
+        // Add grade hardcoded grade report if necessary.
+        $gradeaccess = false;
+        $coursecontext = context_course::instance($course->id);
+        if (has_capability('moodle/grade:viewall', $coursecontext)) {
+            // Can view all course grades.
+            $gradeaccess = true;
+        } else if ($course->showgrades) {
+            if ($iscurrentuser && has_capability('moodle/grade:view', $coursecontext)) {
+                // Can view own grades.
+                $gradeaccess = true;
+            } else if (has_capability('moodle/grade:viewall', $usercontext)) {
+                // Can view grades of this user - parent most probably.
+                $gradeaccess = true;
+            } else if ($anyreport) {
+                // Can view grades of this user - parent most probably.
+                $gradeaccess = true;
+            }
+        }
+        if ($gradeaccess) {
+            $url = new moodle_url('/course/user.php', array('mode' => 'grade', 'id' => $course->id, 'user' => $user->id));
+            $node = new core_user\output\myprofile\node('reports', 'grade', get_string('grade'), null, $url);
+            $tree->add_node($node);
+        }
+    }
+}
