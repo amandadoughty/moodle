@@ -179,13 +179,31 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
 
                         if($rawgradebookfeedback) {
                             $feedback .= $feedbacksubtitle;
+print_r($feedbackplugin->view($grade));
+
+                            $gradebookfeedback = file_rewrite_pluginfile_urls(
+                                $gradebookfeedback,
+                                'pluginfile.php',
+                                $assign->get_context()->id,
+                                GRADE_FILE_COMPONENT,
+                                GRADE_FEEDBACK_FILEAREA,
+                                $grade->id
+                            );
+
+
+
+
                             $feedback .= $gradebookfeedback;
+
+
+
+
                         } elseif($grade) {
                             $feedback .= $feedbackplugin->view($grade);
                         }
                     // Use the plugin function to output the feedback.
-                    } elseif($grade && !$feedbackplugin->is_empty($grade)) {
-                        if($feedbackplugin->get_name() == 'Feedback files') {
+                    } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
+                        if ($feedbackplugin->get_name() == 'Feedback files') {
                                 // Feedback files. We use our own funtion to format these as the 
                                 // plugin produces verbose html.
                                 if($files = $this->assign_get_feedback_files($grade, $context)) {
@@ -194,7 +212,14 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
                                 }
                         } else {                            
                             $feedback .= $feedbacksubtitle;
+
+
+
+
                             $feedback .= $feedbackplugin->view($grade);
+
+
+
                         }
                     }                   
                 }
