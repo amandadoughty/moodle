@@ -18,3 +18,12 @@
         display: none;
     }
 }
+
+#page-mod-assign-index,
+#page-mod-assign-grading,
+#page-grade-report-culuser-index{
+    table .mediaplugin {
+        width: auto;
+        max-width: 500px
+    }
+}
