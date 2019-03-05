@@ -21736,7 +21736,6 @@ a.menu-link .icon {
 #page-mod-assign-index table .mediaplugin,
 #page-mod-assign-grading table .mediaplugin,
 #page-grade-report-culuser-index table .mediaplugin {
-  width: auto;
   max-width: 500px; }
 
 form {
