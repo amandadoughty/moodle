@@ -62,6 +62,8 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      */
     var handleOpenAll = function(e){
         e.preventDefault();
+        e.stopPropagation();
+
         $('ul.culcourse').find(SELECTORS.SECTIONBODY).collapse('show');
     };
 
@@ -74,6 +76,8 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      */
     var handleCloseAll = function(e){
         e.preventDefault();
+        e.stopPropagation();
+
         $('ul.culcourse').find(SELECTORS.SECTIONBODY).collapse('hide');
     };
 
@@ -85,28 +89,32 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      * @param {event} e
      */
     var handleOpen = function(e){
-        var sectionid = $(e.currentTarget).data('preference-key');
+        e.stopPropagation();
 
-        var data = {
-            courseid: courseId,
-            sectionid: sectionid,
-            value: 1,
-            // sesskey: config.sesskey,
-        };
+        if ($(this).is(e.target)) {
+            var sectionid = $(e.currentTarget).data('preference-key');
 
-        var settings = {
-            type: 'POST',
-            dataType: 'json',
-            data: data
-        };
+            var data = {
+                courseid: courseId,
+                sectionid: sectionid,
+                value: 1,
+                // sesskey: config.sesskey,
+            };
 
-        $.ajax(SETURL, settings);
-            // .fail(function (request, status, error) {
-            //     Notification.exception(request);
-            //     console.log(error);
-            // });
+            var settings = {
+                type: 'POST',
+                dataType: 'json',
+                data: data
+            };
 
-        $(SELECTORS.TOGGLEHEAD + sectionid).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
+            $.ajax(SETURL, settings);
+                // .fail(function (request, status, error) {
+                //     Notification.exception(request);
+                //     console.log(error);
+                // });
+
+            $(SELECTORS.TOGGLEHEAD + sectionid).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
+        }
     };
 
     /**
@@ -117,24 +125,28 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
      * @param {event} e
      */
     var handleClose = function(e){
-        var sectionid = $(e.currentTarget).data('preference-key');
+        e.stopPropagation();
 
-        var data = {
-            courseid: courseId,
-            sectionid: sectionid,
-            value: 0,
-            // sesskey: config.sesskey,
-        };
+        if ($(this).is(e.target)) {
+            var sectionid = $(e.currentTarget).data('preference-key');
 
-        var settings = {
-            type: 'POST',
-            dataType: 'json',
-            data: data
-        };
+            var data = {
+                courseid: courseId,
+                sectionid: sectionid,
+                value: 0,
+                // sesskey: config.sesskey,
+            };
 
-        $.ajax(SETURL, settings);
+            var settings = {
+                type: 'POST',
+                dataType: 'json',
+                data: data
+            };
 
-        $(SELECTORS.TOGGLEHEAD + sectionid).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
+            $.ajax(SETURL, settings);
+
+            $(SELECTORS.TOGGLEHEAD + sectionid).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
+        }
     };
 
     return /** @alias module:format_culcourse/sectiontoggle */ {
