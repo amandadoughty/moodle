@@ -48,12 +48,17 @@ class dashboard implements templatable, renderable {
     /**
      * @var $culconfigchanged - Boolean indicating if settings require updating.
      */
-    public $culconfigchanged = false;    
+    public $culconfigchanged = false;
+
+    /**
+     * @var $usercanedit
+     */
+    public $usercanedit = false;   
 
     /**
      * @var $userisediting
      */
-    public $userisediting = null;
+    public $userisediting = false;
 
     /**
      * @var $adminurl
@@ -74,7 +79,11 @@ class dashboard implements templatable, renderable {
     public function __construct($course, $culconfig) {
         global $PAGE;
 
-        $this->userisediting = $PAGE->user_is_editing();
+        $this->usercanedit = has_capability('moodle/course:update', \context_course::instance($course->id));
+
+        if ($this->usercanedit) {
+            $this->userisediting = $PAGE->user_is_editing();
+        }
 
         if ($this->userisediting) {
             $adminurl = new \moodle_url('/course/format/culcourse/dashboard/dashlink_edit_ajax.php');
@@ -171,8 +180,8 @@ class dashboard implements templatable, renderable {
                 );
         }            
 
-        if ($this->userisediting&& ($this->culconfig['show' . $name] != 2)) {
-                $class = 'linkhidden';                
+        if ($this->userisediting && ($this->culconfig['show' . $name] != 2)) {
+            $class = 'linkhidden';                
         }
 
         return [
@@ -197,7 +206,7 @@ class dashboard implements templatable, renderable {
         $role = $DB->get_record('role', ['shortname' => $rolename]);
         $coursecontext = \context_course::instance($course->id);
 
-        if ($role){
+        if ($role) {
             $name = $name;
             $icon = 'fa-users';
             $data = [];
@@ -207,8 +216,10 @@ class dashboard implements templatable, renderable {
             $data = $this->get_quicklink($name, $course);
             $alias = $options[$role->id];
             $lnktxt = $alias . 's';
+            $available = false;
 
-            if (count_role_users($role->id, $coursecontext, false)){
+            if (count_role_users($role->id, $coursecontext, false)) {
+                $available = true;
                 $attrs['title']  = get_string("view-$rolename-photoboard", 'format_culcourse', $alias);
                 $attrs['target'] = '';
                 $url = format_culcourse_get_photoboard_url($course, $role->id);
@@ -218,15 +229,17 @@ class dashboard implements templatable, renderable {
                 $url = 'javascript:void(0);';
             }
 
-            $extradata = [
-                'url' => $url,
-                'icon' => $icon,
-                'attrs' => $attrs,
-                'liattrs' => $liattrs,
-                'text' => $lnktxt
-            ];
+            if ($this->usercanedit || $available) {
+                $extradata = [
+                    'url' => $url,
+                    'icon' => $icon,
+                    'attrs' => $attrs,
+                    'liattrs' => $liattrs,
+                    'text' => $lnktxt
+                ];
 
-            return array_merge($data, $extradata);
+                return array_merge($data, $extradata);
+            }
         }
 
         return false;
@@ -243,7 +256,7 @@ class dashboard implements templatable, renderable {
      *       config form. For now, it's over-engineering.
      */
     public function quicklink_display($course) {
-        global $CFG, $DB, $OUTPUT;
+        global $CFG, $DB, $OUTPUT, $USER;
 
         $linkitems = [];
         $sortedlinkitems = [];
@@ -265,6 +278,7 @@ class dashboard implements templatable, renderable {
             $liattrs = [];
             $data = $this->get_quicklink($name, $course);
             $urldata = $this->externalurls['readinglists'];
+            $available = false;
 
             if (!$urldata) {
                 // Not installed or not configured                
@@ -274,6 +288,7 @@ class dashboard implements templatable, renderable {
                 $liattrs['class'] = 'wide';
             } else {
                 if (OK == $urldata['status']) {
+                    $available = true;
                     $listtype = $urldata['listtype'];
                     $url = $urldata['url'];
 
@@ -293,16 +308,18 @@ class dashboard implements templatable, renderable {
                     $attrs['class'] = 'nolink';
                     $url = 'javascript:void(0);';
                 }
-            }          
+            }
 
-            $extradata = [
-                'url' => $url,
-                'icon' => $icon,
-                'attrs' => $attrs,
-                'liattrs' => $liattrs,
-            ];
+            if ($this->usercanedit || $available) {
+                $extradata = [
+                    'url' => $url,
+                    'icon' => $icon,
+                    'attrs' => $attrs,
+                    'liattrs' => $liattrs,
+                ];
 
-            $linkitems[$name] = array_merge($data, $extradata);
+                $linkitems[$name] = array_merge($data, $extradata);
+            }
         }
 
         // Lib Guides
@@ -315,11 +332,13 @@ class dashboard implements templatable, renderable {
             $liattrs = [];
             $data = $this->get_quicklink($name, $course);
             $urldata = $this->externalurls['libguides'];
+            $available = false;
 
             if (OK == $urldata['status']) {
+                $available = true;
                 $url = $urldata['url'];
-                    $attrs['title'] = get_string('view-libguide-module', 'format_culcourse');
-                    $attrs['target'] = '_blank';
+                $attrs['title'] = get_string('view-libguide-module', 'format_culcourse');
+                $attrs['target'] = '_blank';
             } else if (NODATA == $urldata['status']) {
                 $attrs['title'] = get_string('default-libguide', 'format_culcourse');
                 $attrs['target'] = '_blank';
@@ -330,14 +349,16 @@ class dashboard implements templatable, renderable {
                 $url = 'javascript:void(0);';
             }
 
-            $extradata = [
-                'url' => $url,
-                'icon' => $icon,
-                'attrs' => $attrs,
-                'liattrs' => $liattrs,
-            ];
+            if ($this->usercanedit || $available) {
+                $extradata = [
+                    'url' => $url,
+                    'icon' => $icon,
+                    'attrs' => $attrs,
+                    'liattrs' => $liattrs,
+                ];
 
-            $linkitems[$name] = array_merge($data, $extradata);
+                $linkitems[$name] = array_merge($data, $extradata);
+            }
         }
 
         // Timetable link
@@ -350,6 +371,7 @@ class dashboard implements templatable, renderable {
             $liattrs = [];
             $data = $this->get_quicklink($name, $course);
             $urldata = $this->externalurls['timetable'];
+            $available = false;
 
             if (!$urldata) {
                 // Not installed or not configured.
@@ -358,6 +380,7 @@ class dashboard implements templatable, renderable {
                 $url = 'javascript:void(0);';
             } else {
                 if (OK == $urldata['status']) {
+                    $available = true;
                     $attrs['title']  = get_string('view-timetable', 'format_culcourse');
                     $attrs['target'] = '_blank';
                     $url = $urldata['url'];
@@ -373,14 +396,16 @@ class dashboard implements templatable, renderable {
                 }
             }
 
-            $extradata = [
-                'url' => $url,
-                'icon' => $icon,
-                'attrs' => $attrs,
-                'liattrs' => $liattrs,
-            ];
+            if ($this->usercanedit || $available) {
+                $extradata = [
+                    'url' => $url,
+                    'icon' => $icon,
+                    'attrs' => $attrs,
+                    'liattrs' => $liattrs,
+                ];
 
-            $linkitems[$name] = array_merge($data, $extradata);
+                $linkitems[$name] = array_merge($data, $extradata);
+            }
         }
 
         // Grades
@@ -518,7 +543,12 @@ class dashboard implements templatable, renderable {
             $sequence = array_merge($sequence, $addsequence);
             $value = join(',', $sequence);
             $this->culconfig['quicklinksequence'] = $value;
-            $this->culconfigchanged = true;
+
+            if (!\core\session\manager::is_loggedinas() && !is_role_switched($this->course->id)) {
+                // Don't update preference if user is logged in someone else.
+                $this->culconfigchanged = true;
+            }
+
             // Remove the associative keys from any remaining items as
             // mustache does not like them.
             $linkitems = array_values($linkitems);
@@ -686,7 +716,12 @@ class dashboard implements templatable, renderable {
             $sequence = array_merge($sequence, $addsequence);
             $value = join(',', $sequence);
             $this->culconfig['activitylinksequence'] = $value;
-            $this->culconfigchanged = true;
+
+            if (!\core\session\manager::is_loggedinas() && !is_role_switched($this->course->id)) {
+                // Don't update preference if user is logged in someone else.
+                $this->culconfigchanged = true;
+            }
+
             // Remove the associative keys from any remaining items as
             // mustache does not like them.
             $activities = array_values($activities);
