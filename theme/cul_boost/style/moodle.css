@@ -23328,6 +23328,10 @@ li.movehere {
 #page-mod-choice-view .response {
   overflow-x: scroll; }
 
+#prev-activity-link,
+#next-activity-link {
+  white-space: pre-wrap; }
+
 #existing-records .dataTable {
   overflow: auto;
   display: block;
