@@ -120,6 +120,10 @@ class mod_checklist_privacy_provider_testcase extends \core_privacy\tests\provid
         $this->assertArrayHasKey('userid', $privacyfields);
         $this->assertArrayHasKey('displaytext', $privacyfields);
         $this->assertEquals('privacy:metadata:checklist_item', $table->get_summary());
+        foreach ($privacyfields as $field) {
+            get_string($field, 'mod_checklist');
+        }
+        get_string($table->get_summary(), 'mod_checklist');
 
         $table = array_shift($itemcollection);
         $this->assertEquals('checklist_check', $table->get_name());
@@ -131,6 +135,10 @@ class mod_checklist_privacy_provider_testcase extends \core_privacy\tests\provid
         $this->assertArrayHasKey('teachertimestamp', $privacyfields);
         $this->assertArrayHasKey('teacherid', $privacyfields);
         $this->assertEquals('privacy:metadata:checklist_check', $table->get_summary());
+        foreach ($privacyfields as $field) {
+            get_string($field, 'mod_checklist');
+        }
+        get_string($table->get_summary(), 'mod_checklist');
 
         $table = array_shift($itemcollection);
         $this->assertEquals('checklist_comment', $table->get_name());
@@ -140,6 +148,10 @@ class mod_checklist_privacy_provider_testcase extends \core_privacy\tests\provid
         $this->assertArrayHasKey('commentby', $privacyfields);
         $this->assertArrayHasKey('text', $privacyfields);
         $this->assertEquals('privacy:metadata:checklist_comment', $table->get_summary());
+        foreach ($privacyfields as $field) {
+            get_string($field, 'mod_checklist');
+        }
+        get_string($table->get_summary(), 'mod_checklist');
     }
 
     /**
@@ -335,5 +347,94 @@ class mod_checklist_privacy_provider_testcase extends \core_privacy\tests\provid
         $this->assertEquals($student->id, $DB->get_field('checklist_check', 'userid', []));
         $this->assertEquals($student->id, $DB->get_field_select('checklist_item', 'userid', 'userid <> 0'));
         $this->assertEquals($student->id, $DB->get_field('checklist_comment', 'userid', []));
+    }
+
+    private function do_some_setup_in_another_function_so_travis_stops_complaining_about_it() {
+        global $DB;
+
+        $cms = [
+            get_coursemodule_from_instance('checklist', $this->checklists[0]->id),
+            get_coursemodule_from_instance('checklist', $this->checklists[1]->id),
+            get_coursemodule_from_instance('checklist', $this->checklists[2]->id),
+            get_coursemodule_from_instance('checklist', $this->checklists[3]->id),
+        ];
+        $ctxs = [
+            context_module::instance($cms[0]->id),
+            context_module::instance($cms[1]->id),
+            context_module::instance($cms[2]->id),
+            context_module::instance($cms[3]->id),
+        ];
+
+        // Create another student who will check-off some items in the second checklist.
+        $gen = self::getDataGenerator();
+        $student = $gen->create_user();
+        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $gen->enrol_user($student->id, $this->course->id, $studentrole->id);
+
+        /** @var \mod_checklist\local\checklist_item[] $items */
+        $items = \mod_checklist\local\checklist_item::fetch_all(['checklist' => $this->checklists[1]->id]);
+        $items = array_values($items);
+        $items[1]->set_checked_student($student->id, true);
+
+        return $ctxs;
+    }
+
+    /**
+     * Test provider::get_users_in_context()
+     */
+    public function test_get_users_in_context() {
+        $ctxs = $this->do_some_setup_in_another_function_so_travis_stops_complaining_about_it();
+
+        $userlist = new \core_privacy\local\request\userlist($ctxs[0], 'mod_checklist');
+        provider::get_users_in_context($userlist);
+        $this->assertCount(1, $userlist);
+
+        $userlist = new \core_privacy\local\request\userlist($ctxs[1], 'mod_checklist');
+        provider::get_users_in_context($userlist);
+        $this->assertCount(2, $userlist);
+
+        $userlist = new \core_privacy\local\request\userlist($ctxs[2], 'mod_checklist');
+        provider::get_users_in_context($userlist);
+        $this->assertCount(1, $userlist);
+
+        $userlist = new \core_privacy\local\request\userlist($ctxs[3], 'mod_checklist');
+        provider::get_users_in_context($userlist);
+        $this->assertCount(0, $userlist);
+    }
+
+    /**
+     * Test provider::delete_data_for_users()
+     */
+    public function test_delete_data_for_users() {
+        $ctxs = $this->do_some_setup_in_another_function_so_travis_stops_complaining_about_it();
+
+        // Initial userlist counts tested in test_get_users_in_context(), above.
+
+        // Delete all data for student.
+        $userlist = new \core_privacy\local\request\userlist($ctxs[0], 'mod_checklist');
+        provider::get_users_in_context($userlist);
+        $approvedlist = new \core_privacy\local\request\approved_userlist($ctxs[0], 'mod_checklist', [$this->student->id]);
+        provider::delete_data_for_users($approvedlist);
+
+        // Check user list for checklist 0.
+        $userlist = new \core_privacy\local\request\userlist($ctxs[0], 'mod_checklist');
+        provider::get_users_in_context($userlist);
+        $this->assertCount(0, $userlist);
+
+        // Check user list for checklist 1.
+        $userlist = new \core_privacy\local\request\userlist($ctxs[1], 'mod_checklist');
+        provider::get_users_in_context($userlist);
+        $this->assertCount(1, $userlist);
+
+        // Check user list for checklist 2.
+        $userlist = new \core_privacy\local\request\userlist($ctxs[2], 'mod_checklist');
+        provider::get_users_in_context($userlist);
+        $this->assertCount(0, $userlist);
+
+        // Check user list for checklist 3.
+        $userlist = new \core_privacy\local\request\userlist($ctxs[2], 'mod_checklist');
+        provider::get_users_in_context($userlist);
+        $this->assertCount(0, $userlist);
+
     }
 }
