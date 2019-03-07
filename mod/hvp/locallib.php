@@ -381,10 +381,6 @@ function hvp_get_library_upgrade_info($name, $major, $minor) {
     $core = \mod_hvp\framework::instance();
 
     $library->semantics = $core->loadLibrarySemantics($library->name, $library->version->major, $library->version->minor);
-    if ($library->semantics === null) {
-        http_response_code(404);
-        return;
-    }
 
     $context = \context_system::instance();
     $libraryfoldername = "{$library->name}-{$library->version->major}.{$library->version->minor}";
