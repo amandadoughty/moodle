@@ -58,6 +58,7 @@ $att = new mod_attendance_structure($att, $cm, $course, $context, $pageparams);
 $PAGE->set_url($att->url_sessions(array('action' => $pageparams->action)));
 $PAGE->set_title($course->shortname. ": ".$att->name);
 $PAGE->set_heading($course->fullname);
+$PAGE->force_settings_menu(true);
 $PAGE->set_cacheable(true);
 $PAGE->navbar->add($att->name);
 
@@ -121,7 +122,7 @@ switch ($att->pageparams->action) {
 
         $sessinfo = $att->get_session_info($sessionid);
 
-        $message = get_string('deletecheckfull', '', get_string('session', 'attendance'));
+        $message = get_string('deletecheckfull', 'attendance', get_string('session', 'attendance'));
         $message .= str_repeat(html_writer::empty_tag('br'), 2);
         $message .= userdate($sessinfo->sessdate, get_string('strftimedmyhm', 'attendance'));
         $message .= html_writer::empty_tag('br');
@@ -136,7 +137,7 @@ switch ($att->pageparams->action) {
         exit;
     case mod_attendance_sessions_page_params::ACTION_DELETE_SELECTED:
         $confirm    = optional_param('confirm', null, PARAM_INT);
-        $message = get_string('deletecheckfull', '', get_string('session', 'attendance'));
+        $message = get_string('deletecheckfull', 'attendance', get_string('sessions', 'attendance'));
 
         if (isset($confirm) && confirm_sesskey()) {
             $sessionsids = required_param('sessionsids', PARAM_ALPHANUMEXT);

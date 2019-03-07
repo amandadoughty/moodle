@@ -76,7 +76,7 @@ switch ($action) {
             break;
         }
 
-        $message = get_string('deletecheckfull', '', get_string('variable', 'attendance'));
+        $message = get_string('deletecheckfull', 'attendance', get_string('variable', 'attendance'));
         $message .= str_repeat(html_writer::empty_tag('br'), 2);
         $message .= $status->acronym.': '.
             ($status->description ? $status->description : get_string('nodescription', 'attendance'));
@@ -113,7 +113,7 @@ switch ($action) {
             if ($unmarkedstatus == $id) {
                 $setunmarked = true;
             }
-            if (!isset($studentavailability[$id])) {
+            if (!isset($studentavailability[$id]) || !is_numeric($studentavailability[$id])) {
                 $studentavailability[$id] = 0;
             }
             $errors[$id] = attendance_update_status($status, $acronym[$id], $description[$id], $grade[$id],

@@ -25,6 +25,7 @@
 namespace mod_attendance\task;
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot . '/mod/attendance/lib.php');
 require_once($CFG->dirroot . '/mod/attendance/locallib.php');
 /**
  * Task class
@@ -91,21 +92,31 @@ class notify extends \core\task\scheduled_task {
                     $record = attendance_template_variables($record);
                     $user = $DB->get_record('user', array('id' => $record->userid));
                     $from = \core_user::get_noreply_user();
+                    $oldforcelang = force_current_language($user->lang);
 
                     $emailcontent = format_text($record->emailcontent, $record->emailcontentformat);
+                    $emailsubject = format_text($record->emailsubject, FORMAT_HTML);
+                    email_to_user($user, $from, $emailsubject, $emailcontent, $emailcontent);
 
-                    email_to_user($user, $from, $record->emailsubject, $emailcontent, $emailcontent);
-
+                    force_current_language($oldforcelang);
                     $sentnotifications[$record->userid][] = $record->aid;
                     $numsentusers++;
                 }
             }
             // Only send one warning to this user from each attendance in this run. - flag any higher percent notifications as sent.
+            $thirdpartyusers = array();
             if (!empty($record->thirdpartyemails)) {
                 $sendto = explode(',', $record->thirdpartyemails);
                 $record->percent = round($record->percent * 100)."%";
                 $context = \context_module::instance($record->cmid);
                 foreach ($sendto as $senduser) {
+                    if (empty($senduser)) {
+                        // Probably an extra comma in the thirdpartyusers field.
+                        continue;
+                    }
+                    // Create array of the warnings this user will recieve in case we need to clean up.
+                    $thirdpartyusers[$senduser][] = $record->notifyid;
+
                     // Check user is allowed to receive warningemails.
                     if (has_capability('mod/attendance:warningemails', $context, $senduser)) {
                         if (empty($thirdpartynotifications[$senduser])) {
@@ -132,7 +143,18 @@ class notify extends \core\task\scheduled_task {
         if (!empty($thirdpartynotifications)) {
             foreach ($thirdpartynotifications as $sendid => $notifications) {
                 $user = $DB->get_record('user', array('id' => $sendid));
+                if (empty($user) || !empty($user->deleted)) {
+                    // Clean this user up and remove from the notification list.
+                    $warnings = $DB->get_records_list('attendance_warning', 'id', $thirdpartyusers[$sendid]);
+                    if (!empty($warnings)) {
+                        attendance_remove_user_from_thirdpartyemails($warnings, $sendid);
+                    }
+                    // Don't send and skip to next notification.
+                    continue;
+                }
+
                 $from = \core_user::get_noreply_user();
+                $oldforcelang = force_current_language($user->lang);
 
                 $emailcontent = implode("\n", $notifications);
                 $emailcontent .= "\n\n".get_string('thirdpartyemailtextfooter', 'attendance');
@@ -140,6 +162,7 @@ class notify extends \core\task\scheduled_task {
                 $emailsubject = get_string('thirdpartyemailsubject', 'attendance');
 
                 email_to_user($user, $from, $emailsubject, $emailcontent, $emailcontent);
+                force_current_language($oldforcelang);
                 $numsentthird++;
             }
             if (!empty($numsentthird)) {
