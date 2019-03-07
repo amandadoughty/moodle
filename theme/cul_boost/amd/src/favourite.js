@@ -27,6 +27,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
     function($, ajax, templates, notification, str, url, Y, PubSub, CourseEvents,
         MyOverview, StarredCourses) {
 
+    "use strict";
     var editlink = null;
     
     var editfavourite = function (e) {
@@ -43,7 +44,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 data: querystring,
                 on: {
                     success: function(id, e) {
-                        data = Y.JSON.parse(e.responseText);
+                        var data = Y.JSON.parse(e.responseText);
                         var link = editlink.one('a');
                         var newurl = url + '?' + querystring.replace(data.action, data.newaction);
                         link.setAttribute('data-content', data.text);
@@ -58,7 +59,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                             MyOverview.init(node);
                         });
 
-                        var roots = $('.block_starredcourses .block-starredcourses');
+                        roots = $('.block_starredcourses .block-starredcourses');
                         $.each(roots, function(id, node) {
                             StarredCourses.init(node);
                         });
@@ -83,5 +84,5 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 broadcast:2
             });
         }
-    }
+    };
 });

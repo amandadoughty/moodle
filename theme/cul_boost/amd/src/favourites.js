@@ -25,6 +25,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
     'core/url', 'core/yui', 'core/pubsub', 'core_course/events'],
     function($, ajax, templates, notification, str, url, Y, PubSub, CourseEvents) {
 
+    "use strict";
     // @TODO Replace all the YUI in theme_cul_boost and block_culcourse_listing.
     var updateFavourites = function () {
         Y.use('node', function() {
@@ -55,5 +56,5 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             PubSub.subscribe(CourseEvents.favourited, function() {updateFavourites();});
             PubSub.subscribe(CourseEvents.unfavorited, function() {updateFavourites();});
         }
-    }
+    };
 });
