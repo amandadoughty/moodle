@@ -1,3 +1,68 @@
+### Date:		2019-January-24
+### Release:	v2019012401
+
+#### :wrench: Fixes and enhancements
+
+#### You can now use special characters in file names
+
+When using special characters, such as an umlaut or a dash, in student names or submission titles could cause an error message to show for a small number of users using Windows servers. We've improved how our system reads extended character sets and are happy to report that this error message should no longer be shown. 
+
+#### Non-submitters and Messages boxes will now close correctly
+
+A bug had prevented some users from closing the boxes that appear for the non-submitters and Messages screens.
+
+Big thanks to Rex Lorenzo for the pull request with the fix to this issue!
+
+#### Support for Moodle PHP 7.2
+
+We had received some reports that unit tests could fail when upgraded to PHP 7.2
+
+Many thanks to ilya-catalyst for the pull request and fix!
+
+#### General security fixes.
+
+---
+
+### Date:		2018-December-21
+### Release:	v2018122101
+
+#### :wrench: Fixes and enhancements
+
+---
+
+#### Grade categories are now migrated between V1 and V2
+
+When you migrate from Moodle Direct V1 to Moodle Direct V2, we’ll now keep the grading category associated with the V1 assignment when we perform the transition.
+
+---
+
+### Date:		2018-December-18
+### Release:	v2018121801
+
+#### :zap: What's new
+
+---
+
+#### We now support Moodle 3.6
+
+Getting a head start on the new year by upgrading your Moodle instance? We’ve got you covered. Our Moodle Direct v2 plugin now supports Moodle 3.6. Check out [Check out our guide](https://www.turnitin.com/support/download-integrations) for a full list of the version of Moodle we support.
+
+#### :wrench: Fixes and enhancements
+
+---
+
+#### You can now set ETS as a default setting
+
+Are you a fan of ETS e-rater? Us too! To help you take advantage of it, you can now enable ETS e-rater as a default setting for your assignments.
+
+#### A new warning message when you try to change the Marks Available column
+
+A new warning message when you try to change the Marks Available column - We’ve added this notification just to make sure that editing this field is what you want to do. Editing this field after you’ve finished grading, can change entries in the Moodle gradebook. Don’t worry, you can still edit this field should you need to!
+
+#### A couple of backend security fixes.
+
+---
+
 ### Date:		2018-October-26
 ### Release:	v2018102601
 

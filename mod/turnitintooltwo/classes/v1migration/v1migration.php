@@ -298,16 +298,13 @@ class v1migration {
         $coursemodule->instance = $turnitintooltwoid;
         $coursemodule->section = 0;
 
-        // Add Course module and get course section.
+        // Add Course module.
         $coursemodule->coursemodule = add_course_module($coursemodule);
 
-        if (is_callable('course_add_cm_to_section')) {
-            $sectionid = course_add_cm_to_section($coursemodule->course, $coursemodule->coursemodule, $coursemodule->section);
-        } else {
-            $sectionid = add_mod_to_section($coursemodule);
-        }
+        // Get the section for the V1 assignment.
+        $section = $DB->get_record('course_sections', array('course' => $courseid, 'id' => $this->cm->section), 'section');
+        course_add_cm_to_section($coursemodule->course, $coursemodule->coursemodule, $section->section);
 
-        $DB->set_field("course_modules", "section", $sectionid, array("id" => $coursemodule->coursemodule));
         rebuild_course_cache($coursemodule->coursemodule);
     }
 
@@ -494,6 +491,15 @@ class v1migration {
         $params['itemname'] = $this->v1assignment->name;
         grade_update('mod/turnitintooltwo', $this->courseid, 'mod', 'turnitintooltwo', $v2assignmentid, 0, NULL, $params);
 
+        $gradeitemv1 = grade_item::fetch(array('itemmodule' => 'turnitintool', 'iteminstance' => $this->v1assignment->id, 'courseid' => $this->courseid));
+        $gradeitemv2 = grade_item::fetch(array('itemmodule' => 'turnitintooltwo', 'iteminstance' => $v2assignmentid, 'courseid' => $this->courseid));
+
+        // Update the grade category, if one exists.
+        if (isset($gradeitemv1->categoryid)) {
+            grade_item::set_properties($gradeitemv2, array('categoryid' => $gradeitemv1->categoryid, 'gradepass' => $gradeitemv1->gradepass));
+            $gradeitemv2->update();
+        }
+
         // Perform a grade check to double check the grades are in the gradebook.
         $v1_grades = $this->get_grades_array("turnitintool", $this->v1assignment->id, $this->courseid);
         $v2_grades = $this->get_grades_array("turnitintooltwo", $v2assignmentid, $this->courseid);
@@ -577,60 +583,12 @@ class v1migration {
         global $DB;
 
         $return = array();
-        $idisplaystart = optional_param('iDisplayStart', 0, PARAM_INT);
-        $idisplaylength = optional_param('iDisplayLength', 10, PARAM_INT);
         $secho = optional_param('sEcho', 1, PARAM_INT);
-        $displaycolumns = array('', 'id', 'name', 'migrated');
-        $queryparams = array();
-        // Add sort to query.
-        $isortcol[0] = optional_param('iSortCol_0', null, PARAM_INT);
-        $isortingcols = optional_param('iSortingCols', 0, PARAM_INT);
-        $queryorder = "";
-        if (!is_null( $isortcol[0])) {
-            $queryorder = " ORDER BY ";
-            $startorder = $queryorder;
-            for ($i = 0; $i < intval($isortingcols); $i++) {
-                $isortcol[$i] = optional_param('iSortCol_'.$i, null, PARAM_INT);
-                $bsortable[$i] = optional_param('bSortable_'.$isortcol[$i], null, PARAM_TEXT);
-                $ssortdir[$i] = optional_param('sSortDir_'.$i, null, PARAM_TEXT);
-                if ($bsortable[$i] == "true") {
-                    $queryorder .= $displaycolumns[$isortcol[$i]]." ".$ssortdir[$i].", ";
-                }
-            }
-            if ($queryorder == $startorder) {
-                $queryorder = "";
-            } else {
-                $queryorder = substr_replace($queryorder, "", -2);
-            }
-        }
-        // Add search to query.
-        $ssearch = optional_param('sSearch', '', PARAM_TEXT);
-        $querywhere = ' WHERE ( ';
-        for ($i = 0; $i < count($displaycolumns); $i++) {
-            $bsearchable[$i] = optional_param('bSearchable_'.$i, null, PARAM_TEXT);
-            if (!is_null($bsearchable[$i]) && $bsearchable[$i] == "true" && $ssearch != '') {
-                $include = true;
-                if ($i <= 1) {
-                    if (!is_int($ssearch) || is_null($ssearch)) {
-                        $include = false;
-                    }
-                }
-                if ($include) {
-                    $querywhere .= $DB->sql_like($displaycolumns[$i], ':search_term_'.$i, false)." OR ";
-                    $queryparams['search_term_'.$i] = '%'.$ssearch.'%';
-                }
-            }
-        }
-        if ( $querywhere == ' WHERE ( ' ) {
-            $querywhere = "";
-        } else {
-            $querywhere = substr_replace( $querywhere, "", -3 );
-            $querywhere .= " )";
-        }
-        $query = "SELECT id, name, migrated FROM {turnitintool}".$querywhere.$queryorder;
-        $assignments = $DB->get_records_sql($query, $queryparams, $idisplaystart, $idisplaylength);
 
-        $totalassignments = count($DB->get_records_sql($query, $queryparams));
+        $query = "SELECT id, name, migrated FROM {turnitintool}";
+        $assignments = $DB->get_records_sql($query);
+        $totalassignments = count($assignments);
+
         $return["aaData"] = array();
         foreach ($assignments as $assignment) {
             if ($assignment->migrated == 1) {
