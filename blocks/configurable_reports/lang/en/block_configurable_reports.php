@@ -46,6 +46,7 @@ $string['enablejspagination'] = "Enable JavaScript Pagination";
 $string['export_csv'] = "Export in CSV format";
 $string['export_ods'] = "Export in ODS format";
 $string['export_xls'] = "Export in XLS format";
+$string['export_json'] = "Export in JSON format";
 $string['viewreport'] = "View report";
 $string['norecordsfound'] = "No records found";
 $string['jsordering'] = 'JavaScript Ordering';
@@ -359,6 +360,8 @@ $string['comp_customsql_help'] = '<p>Add a working SQL query. Do no use the mood
 
 <p>You can find a lot of SQL Reports here: <a href="http://docs.moodle.org/en/ad-hoc_contributed_reports" target="_blank">ad-hoc contributed reports</a></p>
 
+<p>An updated layout of Moodle\'s tables and their interconnected relations: <a href="https://docs.moodle.org/dev/Database_Schema" target="_blank">Database schema</a></p> 
+
 <p>Since this block supports Tim Hunt\'s CustomSQL Queries Reports, you can use any query.</p>
 
 <p>Remember to add a "Time filter" if you are going to use reports with time tokens. </p>
@@ -486,3 +489,17 @@ $string['sessionlimittime'] = 'Limit between clicks (in minutes)';
 $string['sessionlimittime_help'] = 'The limit between clicks defines if two clicks are part of the same session or not';
 
 $string['excludedeletedusers'] = 'Exclude deleted users (only for SQL reports)';
+
+// Privacy provider.
+$string['privacy:metadata:block_configurable_reports'] = 'The configurable reports block contains customizable course reports.';
+$string['privacy:metadata:block_configurable_reports:courseid'] = 'Course ID';
+$string['privacy:metadata:block_configurable_reports:ownerid'] = 'The ID of the user who created the report';
+$string['privacy:metadata:block_configurable_reports:visible'] = 'Whether the report is visible or not';
+$string['privacy:metadata:block_configurable_reports:global'] = 'Whether the report is accessible from all the courses or not';
+$string['privacy:metadata:block_configurable_reports:name'] = 'The name of the report';
+$string['privacy:metadata:block_configurable_reports:summary'] = 'The description of the report';
+$string['privacy:metadata:block_configurable_reports:type'] = 'The type of the report';
+$string['privacy:metadata:block_configurable_reports:components'] = 'The configuration of the report. It contains the query,
+ the filters...';
+$string['privacy:metadata:block_configurable_reports:lastexecutiontime'] = 'Time this report took to run last time it was executed,
+ in milliseconds.';
