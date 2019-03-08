@@ -256,6 +256,7 @@ $string['telephone'] = 'Telephone: ';
 
 /***** SECTIONS *****/
 $string['addsections'] = 'Add sections';
+$string['closesection'] = 'Close section';
 $string['collapsed'] = 'collapsed';
 $string['culcourseclosed'] = 'Close all';
 $string['culcourseopened'] = 'Open all';

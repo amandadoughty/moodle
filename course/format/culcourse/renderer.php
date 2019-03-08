@@ -254,7 +254,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $o .= html_writer::end_tag('div'); // .sectionhead.
 
             $attributes = [
-                'class' => 'sectionbody togglesection collapse in',
+                'class' => 'sectionbody togglesection collapse show',
                 'id' => 'togglesection-' . $section->id,
                 'data-preference-key' => $section->id
             ];
@@ -283,15 +283,42 @@ class format_culcourse_renderer extends format_section_renderer_base {
      * Generate the display of the footer part of a section
      *
      * @param stdClass $course The course entry from DB
+     * @param int $section The section order number
      * @param stdClass $section The course_section entry from DB
+     * @param stdClass $context 
+     * @param bool $onsectionpage true if being printed on a section page
 
      * @return string HTML to output.
      */
-    protected function injected_section_footer($course, $section, $context) {
+    protected function injected_section_footer($course, $section, $context, $thissection, $onsectionpage) {
         $o = '';
+        $ariapressed = 'true';
 
         if ($section != 0) {
             $o .= html_writer::end_tag('div'); // .sectionbody.
+
+            $attributes = [
+                'class' => 'sectionclose',
+                'id' => 'footertoggle-' . $thissection->id,
+                'data-toggle' => 'collapse',
+                'href' => '.course-content #togglesection-' . $thissection->id,
+                'role' => 'button', 
+                'aria-pressed' => $ariapressed
+            ];
+
+            if ($onsectionpage) {
+                $attributes['class'] = 'toggle';
+                $attributes['data-toggle'] = '';
+                $attributes['data-target'] = '';
+            }
+
+            $o .= html_writer::start_tag(
+                'a',
+                $attributes
+            );
+
+            $o .= get_string('closesection', 'format_culcourse');
+            $o .= html_writer::end_tag('a');
         }
 
         $o .= html_writer::end_tag('div'); // .content.
@@ -595,7 +622,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     echo $this->section_summary_container($thissection);
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                     echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
-                    echo $this->injected_section_footer($course, $section, $context);
+                    echo $this->injected_section_footer($course, $section, $thissection, $context, false);
                 }
 
                 continue;
@@ -642,7 +669,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
 
                 // We don't insert a section at the end. We allow user to append multiple sections instead.
                 // if ($numsections != $section) {
-                    echo $this->injected_section_footer($course, $section, $context);
+                    echo $this->injected_section_footer($course, $section, $context, $thissection, false);
                 // }
             }
         }        

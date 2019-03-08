@@ -349,6 +349,21 @@ body.format-culcourse .course-content ul.culcourse li#toggle-all {
       padding-left: 28px;
       background-color: transparent !important;
       border: none; }
+    body.format-culcourse .course-content ul.culcourse li.section .content a.sectionclose,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content a.sectionclose {
+      background-image: url([[pix:t/sort_asc]]);
+      /* JavaScript disabled */
+      background-size: 1.75rem 1.75rem;
+      background-position: 0 8px;
+      background-repeat: no-repeat;
+      margin: 0 6px;
+      padding-bottom: 6px;
+      padding-top: 6px;
+      padding-left: 26px;
+      /* The 24px allows the arrow to be with the text next to it. */ }
+      body.format-culcourse .course-content ul.culcourse li.section .content a.sectionclose.collapsed,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content a.sectionclose.collapsed {
+        display: none; }
   body.format-culcourse .course-content ul.culcourse li.section.sectionhidden,
   body.format-culcourse .course-content ul.culcourse li#toggle-all.sectionhidden {
     background-color: #eceeef; }

@@ -39,11 +39,12 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         SECTIONBODY: '.sectionbody',
         TOGGLEHEAD: '.course-content #toggle-',
         TOGGLEBODY: '#togglesection-',
+        TOGGLEFOOTER: '.course-content #footertoggle-',
         DDPROXY: '.yui3-dd-proxy'
         };
     // From Bootstrap collapse.js.    
     var ClassName = {
-        IN: 'in',
+        SHOW: 'show',
         COLLAPSE: 'collapse',
         COLLAPSING: 'collapsing',
         COLLAPSED: 'collapsed'
@@ -114,6 +115,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
                 // });
 
             $(SELECTORS.TOGGLEHEAD + sectionid).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
+            $(SELECTORS.TOGGLEFOOTER + sectionid).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
         }
     };
 
@@ -146,6 +148,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             $.ajax(SETURL, settings);
 
             $(SELECTORS.TOGGLEHEAD + sectionid).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
+            $(SELECTORS.TOGGLEFOOTER + sectionid).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
         }
     };
 
@@ -179,7 +182,8 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
                         // collapse the section.
                         if (sectiontoggles[sectionid] == 0) {
                             $(SELECTORS.TOGGLEHEAD + sectionid).addClass('collapsed');
-                            $(SELECTORS.TOGGLEBODY + sectionid).removeClass('in');
+                            $(SELECTORS.TOGGLEFOOTER + sectionid).addClass('collapsed');
+                            $(SELECTORS.TOGGLEBODY + sectionid).removeClass('show');
                         }
                     }
                 })

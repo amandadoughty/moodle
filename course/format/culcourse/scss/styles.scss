@@ -31,7 +31,7 @@ body.format-culcourse {
                         padding-top: 6px;
                         padding-left: 24px; /* The 24px allows the arrow to be with the text next to it. */
                         padding-right: 24px;
-                    }
+                    }                    
                     .section_availability {
                         margin: 0 4px;                        
                         padding-bottom: 6px;
@@ -229,6 +229,19 @@ body.format-culcourse {
                     background-color: transparent!important;
                     border: none;
                 }
+                a.sectionclose {
+                    background-image: url([[pix:t/sort_asc]]); /* JavaScript disabled */
+                    background-size: 1.75rem 1.75rem;
+                    background-position: 0 8px;
+                    background-repeat: no-repeat;
+                    margin: 0 6px;                        
+                    padding-bottom: 6px;
+                    padding-top: 6px;
+                    padding-left: 26px; /* The 24px allows the arrow to be with the text next to it. */
+                    &.collapsed {
+                        display: none;
+                    }
+                }                
             }
             &.sectionhidden {
                 background-color: #eceeef; // @TODO
