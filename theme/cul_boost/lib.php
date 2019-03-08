@@ -186,14 +186,10 @@ function theme_cul_boost_store_in_localcache($filearea, $args, $options) {
 function theme_cul_boost_get_html_for_settings(renderer_base $output, moodle_page $page) {
     global $CFG, $COURSE;
 
-    $theme = theme_config::load('cul');
-
     $return = new stdClass;
-
     $return->hascourseimage = 'noimage';
-
-
     $return->courseimage = '';
+
     if ($COURSE->id > 1) {
         $course = new core_course_list_element($COURSE);
         // Get course overview files.

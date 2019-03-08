@@ -97,6 +97,8 @@ echo $OUTPUT->doctype() ?>
     </div>
 </div>
 
+<?php echo $OUTPUT->standard_after_main_region_html() ?>
+
 <?php require_once(dirname(__FILE__).'/includes/footer.php'); ?>
 
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
