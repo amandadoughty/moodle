@@ -55,7 +55,14 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
         global $OUTPUT, $CFG;
         $userinfo = $this->user_info();
         $imageurl = $OUTPUT->image_url($userinfo->logoprefix . '-logo', 'theme');
-        $image = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => 'sitelogo '.$userinfo->logoprefix.'logo'));
+        $image = html_writer::empty_tag(
+            'img', 
+            [
+                'src' => $imageurl,
+                'class' => 'sitelogo '.$userinfo->logoprefix . 'logo',
+                'alt' => get_string('logotext', 'theme_cul_boost')
+            ]
+        );
         $link = html_writer::link(new moodle_url('/'), $image , array('class' => 'homelink'));
         return $link;
     }
@@ -64,7 +71,14 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
         global $OUTPUT, $CFG;
         $userinfo = $this->user_info();
         $imageurl = $OUTPUT->image_url($userinfo->logoprefix . '-logo-white', 'theme');
-        $image = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => 'sitelogo '.$userinfo->logoprefix.'logo'));
+        $image = html_writer::empty_tag(
+            'img',
+            [
+                'src' => $imageurl,
+                'class' => 'sitelogo '.$userinfo->logoprefix . 'logo',
+                'alt' => get_string('logotext', 'theme_cul_boost')
+            ]
+        );
         $link = html_writer::link(new moodle_url('/'), $image , array('class' => 'homelink'));
         return $link;
     }

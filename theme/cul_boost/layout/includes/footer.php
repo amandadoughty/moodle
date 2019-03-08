@@ -11,8 +11,14 @@
             }
 
             $imageurl = $OUTPUT->image_url('footerlogo', 'theme');
-            echo html_writer::empty_tag('img', ['class'=>'footerlogo mx-auto mr-md-0 ml-md-auto', 'src'=>$imageurl]);
-
+            echo html_writer::empty_tag(
+                'img',
+                [
+                    'class'=>'footerlogo mx-auto mr-md-0 ml-md-auto',
+                    'src'=>$imageurl,
+                    'alt' => get_string('logotext', 'theme_cul_boost')
+                ]
+            );
             ?>
         </div>
     </div>

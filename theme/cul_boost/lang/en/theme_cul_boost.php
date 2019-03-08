@@ -33,6 +33,7 @@ $string['configtitle'] = 'CUL Boost settings';
 // General Settings
 $string['generalsettings'] = 'General settings';
 $string['logo'] = 'Logo';
+$string['logotext'] = 'City, University of London';
 $string['logodesc'] = 'Please upload your custom logo here if you want to add it to the header.<br>If you upload a logo it will replace the standard icon and name that was displayed by default.';
 $string['customcss'] = 'Custom CSS';
 $string['customcssdesc'] = 'Whatever CSS rules you add to this textarea will be reflected in every page, making for easier customization of this theme.';
