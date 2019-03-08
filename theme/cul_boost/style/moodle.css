@@ -22683,6 +22683,22 @@ table.roleassigntable td#buttonscell {
           #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionbody .section:empty,
           #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionbody .summary:empty {
             display: none; }
+      #page-course-view-culcourse .course-content ul.culcourse > li.section .content a.sectionclose {
+        background: none;
+        padding: 0; }
+        #page-course-view-culcourse .course-content ul.culcourse > li.section .content a.sectionclose:before {
+          display: inline-block;
+          font: normal normal normal 14px/1 FontAwesome;
+          font-size: inherit;
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          content: "\f106";
+          font-size: 1.375rem;
+          margin-top: -1px;
+          width: 2rem;
+          text-align: center;
+          margin-right: 0.25rem; }
       #page-course-view-culcourse .course-content ul.culcourse > li.section .content ul li.activity {
         margin: 0.5rem 0; }
         #page-course-view-culcourse .course-content ul.culcourse > li.section .content ul li.activity:last-child {

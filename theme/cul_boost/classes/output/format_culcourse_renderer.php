@@ -135,7 +135,7 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
 
                     echo $this->courserenderer->course_section_add_cm_control($course, 0, 0); 
 
-                    echo $this->injected_section_footer($course, $section, $context);
+                    echo $this->injected_section_footer($course, $section, $context, $thissection, false);
                 }
                 continue;
             }
@@ -181,7 +181,7 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                 
                 // We don't insert a section at the end. We allow user to append multiple sections instead.
                 // if ($numsections != $section) {
-                    echo $this->injected_section_footer($course, $section, $context);
+                    echo $this->injected_section_footer($course, $section, $context, $thissection, false);
                 // }
             }
         }        

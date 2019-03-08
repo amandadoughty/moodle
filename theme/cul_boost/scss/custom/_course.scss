@@ -649,6 +649,19 @@ $culcourse-arrow-active-color: #fff;
                             }
                         }
                     }
+                    a.sectionclose {
+                        background: none;
+                        padding: 0;
+                        &:before {
+                            @include fa-icon();
+                            content: "\f106";
+                            font-size: $h4-font-size;
+                            margin-top: -1px;
+                            width: $spacer * 2;
+                            text-align: center;
+                            margin-right: $spacer / 4;
+                        }
+                    }
                     ul {
                         li.activity {
                             margin: $spacer / 2 0;
