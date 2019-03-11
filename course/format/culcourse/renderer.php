@@ -848,12 +848,12 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $o .= html_writer::tag(
             'a', 
             get_string('culcourseopened', 'format_culcourse'),
-            ['class' => 'on ', 'href' => '#', 'id' => 'toggles-all-opened']
+            ['class' => 'on btn btn-primary ', 'href' => '#', 'id' => 'toggles-all-opened']
         );
         $o .= html_writer::tag(
             'a', 
             get_string('culcourseclosed', 'format_culcourse'),
-            ['class' => 'off ', 'href' => '#', 'id' => 'toggles-all-closed']
+            ['class' => 'off btn btn-primary ', 'href' => '#', 'id' => 'toggles-all-closed']
         );
         $o .= html_writer::end_tag('h4');
         $o .= html_writer::end_tag('div');
