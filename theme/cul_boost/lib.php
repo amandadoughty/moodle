@@ -87,7 +87,7 @@ function theme_cul_boost_bootstrap_grid($hassidepost) {
         $regions = array('content' => 'col-xs-12 col-lg-10 col-xl-9 border-0 py-0 pb-2 mb-4');
         $regions['post'] = 'd-flex flex-wrap flex-column col-xs-12 col-lg-10 col-xl-3 pb-2 mb-4';
     } else {
-        $regions = array('content' => 'col-xs-12 pb-2 mb-4');
+        $regions = array('content' => 'col-xs-12 pb-2 mb-4 border-0');
         $regions['post'] = 'empty';
     }
     
