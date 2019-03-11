@@ -22420,11 +22420,11 @@ table.roleassigntable td#buttonscell {
   #page-course-view-culcourse .course-content #toggle-all .content h4 {
     padding: 0;
     margin: 0;
-    font-weight: normal; }
+    font-weight: normal;
+    text-align: center; }
   #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-opened,
   #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-closed {
     position: relative;
-    margin: 0;
     background-image: none;
     width: auto;
     display: -webkit-inline-box;
@@ -22436,8 +22436,7 @@ table.roleassigntable td#buttonscell {
         -ms-flex-align: center;
             align-items: center;
     padding: 1rem 1.5rem;
-    font-size: 1.375rem;
-    color: #3C3C3C; }
+    font-size: 1.375rem; }
     #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-opened:hover, #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-opened:focus,
     #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-closed:hover,
     #page-course-view-culcourse .course-content #toggle-all .content #toggles-all-closed:focus {

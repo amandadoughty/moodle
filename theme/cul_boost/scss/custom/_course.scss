@@ -363,18 +363,19 @@ $culcourse-arrow-active-color: #fff;
                     padding: 0;
                     margin: 0;
                     font-weight: normal;
+                    text-align: center;
                 }
                 #toggles-all-opened,
                 #toggles-all-closed {
                     position: relative;
-                    margin: 0;
+                    // margin: 0;
                     background-image: none;
                     width: auto;
                     display: inline-flex;
                     align-items: center;
                     padding: $spacer $spacer * 1.5;
                     font-size: $h4-font-size;
-                    color: $body-color;
+                    // color: $body-color;
                     &:hover,
                     &:focus {
                         background-color: $culcourse-header-bg;
