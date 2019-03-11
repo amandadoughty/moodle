@@ -1,3 +1,18 @@
 .mod-bootstrapelements-toggle .panel-title {
     display: inline-block;
 }
+
+#page-course-view-culcourse {
+	.course-content {
+		ul.culcourse {
+			li.section {
+				.content {
+					a.sectionclose {
+						padding: 0.75rem;
+						margin: 0;
+					}
+				}
+			}
+		}
+	}
+}

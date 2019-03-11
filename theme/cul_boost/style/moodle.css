@@ -22418,7 +22418,6 @@ table.roleassigntable td#buttonscell {
 #page-course-view-culcourse .course-content #toggle-all .content {
   margin: 0; }
   #page-course-view-culcourse .course-content #toggle-all .content h4 {
-    border: 1px solid #f2f2f2;
     padding: 0;
     margin: 0;
     font-weight: normal; }
@@ -23371,6 +23370,10 @@ li.movehere {
 
 .mod-bootstrapelements-toggle .panel-title {
   display: inline-block; }
+
+#page-course-view-culcourse .course-content ul.culcourse li.section .content a.sectionclose {
+  padding: 0.75rem;
+  margin: 0; }
 
 [class^="icon fa fa-fw fa-fw navicon"] {
   display: -webkit-inline-box;
