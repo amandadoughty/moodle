@@ -25,6 +25,7 @@ namespace local_culrollover\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\writer;
@@ -41,16 +42,14 @@ class provider implements
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider {
 
-    use \core_privacy\local\legacy_polyfill;
-
     /**
      * Return the fields which contain personal data.
      *
      * @param collection $items a reference to the collection to use to store the metadata.
      * @return collection the updated collection of metadata items.
      */
-    public static function _get_metadata($items) {
-        $items->add_database_table(
+    public static function get_metadata(collection $collection) : collection {
+        $collection->add_database_table(
             'cul_rollover',
             [
                 'sourceid' => 'privacy:metadata:local_culrollover:sourceid',
@@ -72,7 +71,7 @@ class provider implements
             'privacy:metadata:local_culrollover'
         );
 
-        return $items;
+        return $collection;
     }
 
     /**
@@ -81,7 +80,7 @@ class provider implements
      * @param int $userid the userid.
      * @return contextlist the list of contexts containing user info for the user.
      */
-    public static function _get_contexts_for_userid($userid) {
+    public static function get_contexts_for_userid(int $userid) : contextlist {
         // Rollovers are in the system context.
         $contextlist = new contextlist();
         $contextlist->add_system_context();
@@ -90,11 +89,35 @@ class provider implements
     }
 
     /**
+     * Get the list of users who have data within a context.
+     *
+     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
+     */
+    public static function get_users_in_context(userlist $userlist) {
+        global $DB;
+
+        $context = $userlist->get_context();
+
+        if (!$context instanceof \context_user) {
+            return;
+        }
+
+        $userid = $context->instanceid;
+
+        $hasdata = false;
+        $hasdata = $hasdata || $DB->record_exists_select('cul_rollover', 'userid = ?', [$userid]);
+        
+        if ($hasdata) {
+            $userlist->add_user($userid);
+        }
+    }    
+
+    /**
      * Export personal data for the given approved_contextlist. User and context information is contained within the contextlist.
      *
      * @param approved_contextlist $contextlist a list of contexts approved for export.
      */
-    public static function _export_user_data($contextlist) {
+    public static function export_user_data($contextlist) {
         if (empty($contextlist->count())) {
             return;
         }
@@ -119,7 +142,7 @@ class provider implements
      *
      * @param \context $context the context to delete in.
      */
-    public static function _delete_data_for_all_users_in_context($context) {
+    public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
 
         if (!$context instanceof \context_system) {
@@ -134,7 +157,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist a list of contexts approved for deletion.
      */
-    public static function _delete_data_for_user($contextlist) {
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
 
         if (empty($contextlist->count())) {
@@ -153,6 +176,23 @@ class provider implements
         $userid = $contextlist->get_user()->id;
 
         $DB->delete_records_select('cul_rollover', 'userid = ?', [$userid]);
+    }
+
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist) {
+        $context = $userlist->get_context();
+
+        if (!$context instanceof \context_user) {
+            return;
+        }
+
+        list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+
+        $DB->delete_records_select('cul_rollover', "userid {$userinsql}", $userinparams);
     }
 
     /**
