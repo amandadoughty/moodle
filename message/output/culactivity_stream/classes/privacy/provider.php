@@ -25,7 +25,7 @@ namespace message_culactivity_stream\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
-use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\userlist;
@@ -50,8 +50,8 @@ class provider implements
      * @param collection $items a reference to the collection to use to store the metadata.
      * @return collection the updated collection of metadata items.
      */
-    public static function get_metadata(collection $collection) : collection ;
-        $items->add_database_table(
+    public static function get_metadata(collection $collection) : collection {
+        $collection->add_database_table(
             'message_culactivity_stream',
             [
                 'userid' => 'privacy:metadata:message_culactivity_stream:userid',
@@ -68,7 +68,7 @@ class provider implements
             'privacy:metadata:message_culactivity_stream'
         );
 
-        return $items;
+        return $collection;
     }
 
     /**
@@ -77,7 +77,7 @@ class provider implements
      * @param int $userid the userid.
      * @return contextlist the list of contexts containing user info for the user.
      */
-    public static function get_contexts_for_userid(int $userid) : contextlist
+    public static function get_contexts_for_userid(int $userid) : contextlist {
         // Messages are in the system context.
         $contextlist = new contextlist();
         $contextlist->add_system_context();
@@ -114,7 +114,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist a list of contexts approved for export.
      */
-    public static function export_user_data(approved_contextlist $contextlist)
+    public static function export_user_data(approved_contextlist $contextlist) {
         if (empty($contextlist->count())) {
             return;
         }

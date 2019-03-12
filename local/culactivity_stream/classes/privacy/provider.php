@@ -47,8 +47,8 @@ class provider implements
      * @param collection $items a reference to the collection to use to store the metadata.
      * @return collection the updated collection of metadata items.
      */
-    public static function get_metadata(collection $items) : collection {
-        $items->add_database_table(
+    public static function get_metadata(collection $collection) : collection {
+        $collection->add_database_table(
             'message_culactivity_stream_q',
             [
                 'sent' => 'privacy:metadata:message_culactivity_stream_q:sent',
@@ -65,13 +65,13 @@ class provider implements
             'privacy:metadata:message_culactivity_stream_q'
         );
 
-        $items->add_subsystem_link(
+        $collection->add_subsystem_link(
             'core_message',
             [],
             'privacy:metadata:core_message'
         );
 
-        return $items;
+        return $collection;
     }
 
     /**
@@ -93,7 +93,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist a list of contexts approved for export.
      */
-    public static function _export_user_data($contextlist) {
+    public static function export_user_data($contextlist) {
         if (empty($contextlist->count())) {
             return;
         }
