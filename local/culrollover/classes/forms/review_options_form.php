@@ -340,7 +340,7 @@ class review_options_form extends moodleform {
         $cell->text = $text;
 
         if(strpos($class, 'populated')) {
-            $cell->attributes = ['class' => $class, 'title' => get_string('tooltipwarning', 'local_culrollover']);
+            $cell->attributes = ['class' => $class, 'title' => get_string('tooltipwarning', 'local_culrollover')];
         } elseif ($class == 'what') {
             $cell->attributes = ['class' => $class, 'title' => 'click to edit except if template has been chosen'];
         } elseif ($class == 'source' || $class == 'destination') {

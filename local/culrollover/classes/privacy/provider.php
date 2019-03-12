@@ -77,7 +77,6 @@ class provider implements
                 'courseid' => 'privacy:metadata:local_culrollover:courseid',
                 'name' => 'privacy:metadata:local_culrollover:name',
                 'value' => 'privacy:metadata:local_culrollover:value',
-                'status' => 'privacy:metadata:local_culrollover:status',
                 'timemodified' => 'privacy:metadata:local_culrollover:timemodified',
                 'userid' => 'privacy:metadata:local_culrollover:userid'
             ],
@@ -261,7 +260,6 @@ class provider implements
                 'courseid' => $config->courseid,
                 'name' => $config->name,
                 'value' => $config->value,
-                'status' => $config->status,
                 'timemodified' => transform::datetime($config->timemodified),
                 'userid' => $config->userid
             ];
