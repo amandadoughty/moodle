@@ -356,7 +356,7 @@ class grade_report_culuser extends grade_report_user {
                     }
 
                     if ($grade_grade->overridden > 0 AND ($type == 'categoryitem' OR $type == 'courseitem')) {
-                        $data['feedback']['class'] = $classfeedback.' feedbacktext';
+                        $data['feedback']['class'] = $classfeedback . ' feedbacktext';
                         $data['feedback']['content'] = get_string('overridden', 'grades') .
                             ': ' .
                             format_text(
@@ -366,19 +366,19 @@ class grade_report_culuser extends grade_report_user {
                             );
                             
                         $gradeitemdata['feedback'] = $grade_grade->feedback;
-                    } else if (empty($grade_grade->feedback) or (!$this->canviewhidden and $grade_grade->is_hidden())) {
-                        $data['feedback']['class'] = $classfeedback.' feedbacktext';
+                    } else if (!$this->canviewhidden and $grade_grade->is_hidden()) {
+                        $data['feedback']['class'] = $classfeedback . ' feedbacktext';
                         $data['feedback']['content'] = '&nbsp;';
                     } else {
-                        $data['feedback']['class'] = $classfeedback.' feedbacktext';
+                        $data['feedback']['class'] = $classfeedback . ' feedbacktext';
 
-			         if (empty($grade_grade->feedback)) {
-                            $data['feedback']['content'] = '';
+    			        if (empty($grade_grade->feedback)) {
+                                $data['feedback']['content'] = '';
                         } else {                        
                             $data['feedback']['content'] = format_text($grade_grade->feedback, $grade_grade->feedbackformat);
                             $gradeitemdata['feedback'] = $grade_grade->feedback;
                         }
-                
+                    
                         // At this point $data['feedback']['content'] will contain the feedback or an empty string.
                         // Now we check if there is a feedback function for this module.
                         $feedbackfunction = 'get' . ucfirst($grade_object->itemmodule) . 'Feedback';
@@ -388,7 +388,7 @@ class grade_report_culuser extends grade_report_user {
                         } else {
                             $this->getModfeedback($data, $grade_object);
                         }
-                    }
+                    }                    
 
                     $data['feedback']['headers'] = "$header_cat $header_row feedback";
                 }
