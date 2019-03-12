@@ -1,3 +1,10 @@
+### Date: 		2019-Mar-12
+### Version:	v2019031200
+### Release:    3.6.0
+
+- Updated Privacy API functions.
+- Changed version and release numbers so that whole set is in sync.
+
 ### Date: 		2019-Jan-16
 ### Version:	v2016110404
 ### Release:    3.1.0

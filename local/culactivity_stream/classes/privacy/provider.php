@@ -41,15 +41,13 @@ class provider implements
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider {
 
-    use \core_privacy\local\legacy_polyfill;
-
     /**
      * Return the fields which contain personal data.
      *
      * @param collection $items a reference to the collection to use to store the metadata.
      * @return collection the updated collection of metadata items.
      */
-    public static function _get_metadata($items) {
+    public static function get_metadata(collection $items) : collection {
         $items->add_database_table(
             'message_culactivity_stream_q',
             [
@@ -82,7 +80,7 @@ class provider implements
      * @param int $userid the userid.
      * @return contextlist the list of contexts containing user info for the user.
      */
-    public static function _get_contexts_for_userid($userid) {
+    public static function get_contexts_for_userid(int $userid) : contextlist {
         // Messages are in the system context.
         $contextlist = new contextlist();
         $contextlist->add_system_context();
@@ -120,7 +118,7 @@ class provider implements
      *
      * @param \context $context the context to delete in.
      */
-    public static function _delete_data_for_all_users_in_context($context) {
+    public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
 
         if (!$context instanceof \context_system) {
@@ -135,7 +133,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist a list of contexts approved for deletion.
      */
-    public static function _delete_data_for_user($contextlist) {
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
 
         if (empty($contextlist->count())) {
@@ -155,6 +153,23 @@ class provider implements
 
         $DB->delete_records_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);
     }
+
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist) {
+        $context = $userlist->get_context();
+
+        if (!$context instanceof \context_user) {
+            return;
+        }
+
+        list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+
+        $DB->delete_records_select('message_culactivity_stream_q', "userfromid {$userinsql}", [$userinparams, $userinparams]);
+    }    
 
     /**
      * Export the notification data.

@@ -25,8 +25,10 @@ namespace message_culactivity_stream\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\transform;
+use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 
 defined('MOODLE_INTERNAL') || die();
@@ -89,7 +91,22 @@ class provider implements
      * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      */
     public static function get_users_in_context(userlist $userlist) {
+        global $DB;
 
+        $context = $userlist->get_context();
+
+        if (!$context instanceof \context_user) {
+            return;
+        }
+
+        $userid = $context->instanceid;
+
+        $hasdata = false;
+        $hasdata = $hasdata || $DB->record_exists_select('message_culactivity_stream', 'userid = ? OR userfromid = ?', [$userid, $userid]);
+        
+        if ($hasdata) {
+            $userlist->add_user($userid);
+        }
     }
 
     /**
@@ -122,7 +139,7 @@ class provider implements
      *
      * @param \context $context the context to delete in.
      */
-    public static function delete_data_for_all_users_in_context(\context $context)
+    public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
 
         if (!$context instanceof \context_system) {
@@ -137,7 +154,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist a list of contexts approved for deletion.
      */
-    public static function delete_data_for_user(approved_contextlist $contextlist)
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
 
         if (empty($contextlist->count())) {
@@ -164,7 +181,15 @@ class provider implements
      * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
-        
+        $context = $userlist->get_context();
+
+        if (!$context instanceof \context_user) {
+            return;
+        }
+
+        list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+
+        $DB->delete_records_select('message_culactivity_stream', "userid {$userinsql} OR userfromid {$userinsql}", [$userinparams, $userinparams]);
     }
 
     /**
