@@ -190,9 +190,10 @@ $string['privacy:metadata:local_culrollover:visibledate'] = '';
 $string['privacy:metadata:local_culrollover:completiondate'] = '';
 $string['privacy:metadata:local_culrollover:notify'] = '';
 $string['privacy:metadata:local_culrollover:template'] = '';
-
-
-
-
-
+$string['privacy:metadata:local_culrollover_config'] = '';
+$string['privacy:metadata:local_culrollover:courseid'] = '';
+$string['privacy:metadata:local_culrollover:name'] = '';
+$string['privacy:metadata:local_culrollover:value'] = '';
+$string['privacy:metadata:local_culrollover:status'] = '';
+$string['privacy:metadata:local_culrollover:timemodified'] = '';
 

@@ -30,4 +30,5 @@ $string['descconfig'] = 'Description of the config section';
 $string['descfoo'] = 'Config description';
 $string['headerconfig'] = 'Config section header';
 $string['labelfoo'] = 'Config label';
+$string['privacy:metadata'] = 'The CUL Rollover block updates data managed by the local CUL Rollover plugin.';
 $string['pluginname'] = 'culrollover';

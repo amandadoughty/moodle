@@ -71,6 +71,19 @@ class provider implements
             'privacy:metadata:local_culrollover'
         );
 
+        $collection->add_database_table(
+            'cul_rollover_config',
+            [
+                'courseid' => 'privacy:metadata:local_culrollover:courseid',
+                'name' => 'privacy:metadata:local_culrollover:name',
+                'value' => 'privacy:metadata:local_culrollover:value',
+                'status' => 'privacy:metadata:local_culrollover:status',
+                'timemodified' => 'privacy:metadata:local_culrollover:timemodified',
+                'userid' => 'privacy:metadata:local_culrollover:userid'
+            ],
+            'privacy:metadata:local_culrollover'
+        );
+
         return $collection;
     }
 
@@ -150,6 +163,7 @@ class provider implements
         }
 
         $DB->delete_records('cul_rollover');
+        $DB->delete_records('cul_rollover_config');
     }
 
     /**
@@ -176,6 +190,7 @@ class provider implements
         $userid = $contextlist->get_user()->id;
 
         $DB->delete_records_select('cul_rollover', 'userid = ?', [$userid]);
+        $DB->delete_records_select('cul_rollover_config', 'userid = ?', [$userid]);
     }
 
     /**
@@ -193,6 +208,7 @@ class provider implements
         list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
 
         $DB->delete_records_select('cul_rollover', "userid {$userinsql}", $userinparams);
+        $DB->delete_records_select('cul_rollover_config', "userid {$userinsql}", $userinparams);
     }
 
     /**
@@ -206,8 +222,10 @@ class provider implements
         $context = \context_system::instance();
 
         $rolloverdata = [];
+        $rolloverconfigdata = [];     
         $select = 'userid = ?';
         $local_culrollover = $DB->get_recordset_select('cul_rollover', $select, [$userid], 'datesubmitted ASC');
+
         foreach ($local_culrollover as $rollover) {
             $visibledate = !is_null($rollover->visibledate) ? transform::datetime($rollover->visibledate) : '-';
             $completiondate = !is_null($rollover->completiondate) ? transform::datetime($rollover->completiondate) : '-';
@@ -235,5 +253,23 @@ class provider implements
         $local_culrollover->close();
 
         writer::with_context($context)->export_data([get_string('local_culrollover', 'local_culrollover')], (object) $rolloverdata);
+
+        $local_culrollover_config = $DB->get_recordset_select('cul_rollover_config', $select, [$userid], 'timemodified ASC');
+
+        foreach ($local_culrollover_config as $config) {
+            $data = (object) [
+                'courseid' => $config->courseid,
+                'name' => $config->name,
+                'value' => $config->value,
+                'status' => $config->status,
+                'timemodified' => transform::datetime($config->timemodified),
+                'userid' => $config->userid
+            ];
+
+            $rolloverconfigdata[] = $data;
+        }
+        $local_culrollover->close();
+
+        writer::with_context($context)->export_data([get_string('local_culrollover', 'local_culrollover')], (object) $rolloverconfigdata);
     }
 }
