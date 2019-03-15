@@ -74,20 +74,8 @@ class block_culcourse_listing_privacy_testcase extends \core_privacy\tests\provi
         $this->assertTrue($writer->has_any_data());
         $prefs = $writer->get_user_preferences('block_culcourse_listing');
         $this->assertCount(3, (array) $prefs);
-        $this->assertEquals(
-            get_string('privacy:metadata:preference:culcourse_listing_course_favourites', 'block_culcourse_listing'),
-            $prefs->culcourse_listing_course_favourites->description
-        );
         $this->assertEquals($favourites, unserialize($prefs->culcourse_listing_course_favourites->value));
-        $this->assertEquals(
-            get_string('privacy:metadata:preference:culcourse_listing_filter_year', 'block_culcourse_listing'),
-            $prefs->culcourse_listing_filter_year->description
-        );
         $this->assertEquals('2018-19', $prefs->culcourse_listing_filter_year->value);
-        $this->assertEquals(
-            get_string('privacy:metadata:preference:culcourse_listing_filter_period', 'block_culcourse_listing'),
-            $prefs->culcourse_listing_filter_period->description
-        );
         $this->assertEquals('PRD2', $prefs->culcourse_listing_filter_period->value);
     }
 }
