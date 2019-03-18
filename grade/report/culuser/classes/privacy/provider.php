@@ -26,6 +26,11 @@ namespace gradereport_culuser\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
+use \core_privacy\local\metadata\collection;
+use \core_privacy\local\request\writer;
+use \gradereport_culuser\privacy\provider;
+use \core_privacy\local\request\transform;
+
 /**
  * Privacy Subsystem for gradereport_culuser implementing null_provider.
  *
