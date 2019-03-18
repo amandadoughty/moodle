@@ -24,9 +24,9 @@
 
 namespace format_culcourse\privacy;
 
-use \core_privacy\local\request\writer;
-
 defined('MOODLE_INTERNAL') || die();
+
+use \core_privacy\local\request\writer;
 
 /**
  * Privacy Subsystem for format_culcourse implementing null_provider.
@@ -42,15 +42,13 @@ class provider implements
     \core_privacy\local\request\user_preference_provider
 {
 	
-	use \core_privacy\local\legacy_polyfill;
-
     /**
      * Returns meta data about this system.
      *
      * @param collection $itemcollection The initialised item collection to add items to.
      * @return collection A listing of user data stored through this system.
      */
-    public static function _get_metadata($items) {
+    public static function get_metadata(collection $items) : collection {
         // There are several user preferences.
         $items->add_user_preference('format_culcourse_expanded', 'privacy:metadata:preference:format_culcourse_expanded');
 
@@ -62,7 +60,7 @@ class provider implements
      *
      * @param int $userid The userid of the user whose data is to be exported.
      */
-    public static function _export_user_preferences($userid) {
+    public static function export_user_preferences(int $userid) {
         global $DB;
 
         $preferences = get_user_preferences();
