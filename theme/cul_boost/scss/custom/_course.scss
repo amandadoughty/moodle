@@ -174,6 +174,11 @@ svg.activityicon {
             }
         }
         .side {
+            &.left {
+                &:empty {
+                    display: none;
+                }
+            }
             .section-handle {
                 >.icon {
                     margin-left: $spacer / 2;
@@ -209,6 +214,7 @@ svg.activityicon {
                     width: auto;
                     font-size: $font-size-base;
                     vertical-align: middle;
+                    margin: 0 $spacer / 2;
                 }
             }
             li.activity {
@@ -308,12 +314,12 @@ svg.activityicon {
     }
 }
 
-$culcourse-header-bg: $gray-light;
-$culcourse-header-hover-bg: darken($culcourse-header-bg, 15%);
+$culcourse-header-bg: $gray-700;
+$culcourse-header-hover-bg: $gray-800;
 $culcourse-header-active-bg: $primary;
 $culcourse-header-text-color: #fff;
 $culcourse-header-editing-color: #fff;
-$culcourse-content-bg: $gray-lightest;
+$culcourse-content-bg: $light;
 $culcourse-arrow-color: #fff;
 $culcourse-arrow-hover-color: #fff;
 $culcourse-arrow-active-color: #fff;
@@ -413,6 +419,8 @@ $culcourse-arrow-active-color: #fff;
             clear: both;
             >li.section {
                 border: none;
+                padding-top: 0;
+                margin-top: 0 !important;
                 margin-bottom: .75rem;
                 position: relative;
                 &.hidden {
@@ -465,6 +473,16 @@ $culcourse-arrow-active-color: #fff;
                                         color: $text-muted;
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+                &:not(.hidden) {
+                    .sectionhead {
+                        .section_availability {
+                            color: #fff;
+                            a {
+                                color: #fff;
                             }
                         }
                     }
@@ -632,6 +650,11 @@ $culcourse-arrow-active-color: #fff;
                                 }
                             }
                             .section_availability {
+                                text-align: right;
+                                flex-basis: 0%;
+                                flex-grow: 1;
+                                max-width: 400px;
+                                width: 100%;
                                 margin: 0 0 0 auto;
                                 padding: 0;
                             }
@@ -653,6 +676,7 @@ $culcourse-arrow-active-color: #fff;
                     a.sectionclose {
                         background: none;
                         padding: 0;
+                        display: inline-block;
                         &:before {
                             @include fa-icon();
                             content: "\f106";

@@ -45,3 +45,8 @@
     }
   }
 }
+
+@mixin component-outline {
+    outline: 3px solid rgba($primary, .5);
+    outline-offset: 0;
+}

@@ -12,6 +12,10 @@ aside[id*="block-region-nav-settings"] {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+    @include media-breakpoint-up(sm) {
+        left: auto;
+        right: 0;
+    }
     &.show {
         opacity: 1;
         visibility: visible;
@@ -25,7 +29,7 @@ aside[id*="block-region-nav-settings"] {
         }
     }
     .block_settings .block-controls {
-        float: none!important;
+        float: none !important;
         text-align: right;
         position: absolute !important;
         top: 0;
@@ -71,6 +75,7 @@ aside[id*="block-region-nav-settings"] {
 
     .block_settings #settingsnav {
         padding: 0 !important;
+        overflow: hidden;
     }
 
     .block_settings .block-title {
@@ -91,20 +96,73 @@ aside[id*="block-region-nav-settings"] {
             border-top: 1px solid $gray-lighter;
         }
     }
-
-    .block_settings .block_tree .tree_item.branch {
-        position: relative;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        margin: 0;
-        padding: $spacer / 2 $spacer / 2 $spacer / 2 $spacer * 2;
-        &[aria-expanded="false"].loading {
-            background-position: calc(100% - #{$spacer / 2}) 45%;
+    .block_tree {
+        .type_course,
+        .type_siteadmin {
+            .root_node {
+                &:after {
+                    content: "";
+                    display: inline-block;
+                    font: normal normal normal 14px/1 FontAwesome;
+                    font-size: inherit;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    min-width: 20px;
+                    margin-right: $spacer / 2;
+                    color: $primary;
+                    order: -1;
+                    text-align: center;
+                }
+            }
         }
-        &:hover {
-            &:before {
-                background-color: rgba(0, 0, 0, 0.05);
+        .type_course {
+            .root_node {
+                &:after {
+                    content: "\f19d";
+                }
+            }
+        }
+        .type_siteadmin {
+            .root_node {
+                &:after {
+                    content: "\f023";
+                    padding-right: 3px;
+                }
+            }
+        }
+    }
+    .block.block_settings .block_tree .tree_item {
+        &:not([aria-expanded]) {
+            >a {
+                color: $primary;
+                >span {
+                    color: $primary;
+                }
+            }
+        }
+        &.root_node.branch,
+        &.branch {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 0;
+            padding: $spacer / 2 $spacer / 2 $spacer / 2 $spacer * 2;
+            &[aria-expanded="false"].loading {
+                background-position: calc(100% - #{$spacer * 2}) 45%;
+            }
+            &[aria-expanded] {
+                padding: $spacer / 2 $spacer * 2 $spacer / 2 $spacer / 2;
+                &:before {
+                    left: auto;
+                    right: $spacer * .3;
+                }
+            }
+            &:hover {
+                &:before {
+                    background-color: rgba(0, 0, 0, 0.05);
+                }
             }
         }
     }
@@ -116,14 +174,6 @@ aside[id*="block-region-nav-settings"] {
         width: 100%;
         background-color: #fff;
         padding: $spacer;
-        li>p[aria-expanded="true"]:after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: $spacer * 2;
-            height: 100%;
-        }
     }
 
     .block.block_settings .block_tree p {
@@ -195,14 +245,6 @@ aside[id*="block-region-nav-settings"] {
         padding: $spacer / 2 $spacer / 2 $spacer / 2 $spacer * 2;
         &[aria-expanded="true"] {
             background-color: $gray-lighter;
-            &:after {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: $spacer * 2;
-                height: 100%;
-            }
             &:hover {
                 background-color: $gray-lighter;
             }

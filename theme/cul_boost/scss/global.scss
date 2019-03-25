@@ -5,9 +5,64 @@
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
 
-*:focus,
-a:focus {
-    outline: 0;
+:focus,
+.focus {
+    outline: none;
+}
+
+// Component outline for accessibility
+a,
+a:link {
+    .label &,
+    .tag &,
+    .badge &,
+    .block.block_calendar_month td &,
+    .helptooltip &,
+    &.fa-info-circle,
+    &.accordion-title,
+    &.navbar-brand,
+    &.toggle-display,
+    &.popover-region-toggle,
+    &.editor_atto_content,
+    &.fheader,
+    &.arrow_link {
+        text-decoration: none;
+        transition: none;
+        &:focus,
+        &.focus {
+            @include component-outline();
+        }
+    }
+    .nav-item &,
+    .nav-link &,
+    &.dropdown-toggle,
+    &.dropdown-item,
+    &.menu-action,
+    &.action-icon,
+    &.nav-link,
+    &.btn {
+        text-decoration: none;
+        transition: none;
+        &:focus,
+        &.focus {
+            @include component-outline();
+        }
+    }
+    &.label,
+    &.tag,
+    &.badge {
+        text-decoration: none;
+        transition: none;
+        &:focus,
+        &.focus {
+            @include component-outline();
+        }
+    }
+    &:focus,
+    &.focus {
+        @include component-outline();
+        transition: none;
+    }
 }
 
 html {

@@ -16,7 +16,7 @@ $gray-300: #dee2e6;
 $gray-400: #98989C;
 $gray-500: #555555;
 $gray-600: #696969;
-$gray-700: #495057;
+$gray-700: #434343;
 $gray-800: #333333;
 $gray-900: #212529;
 $black:    #000;
@@ -84,7 +84,8 @@ $theme-colors: map-merge((
   "medium":     $gray-200,
   "dark":       $dark,
   "inverse":    $inverse,
-  "gray-500":   $gray-500
+  "gray-500":   $gray-500,
+  "gray-700":   $gray-700
 ), $theme-colors);
 // stylelint-enable
 
@@ -596,7 +597,7 @@ $nav-pills-link-active-color:       $component-active-color;
 $nav-pills-link-active-bg:          $component-active-bg;
 
 // Navbar
-$navbar-height:                     85px;
+$navbar-height:                     55px;
 $navbar-sm-height:                  70px;
 
 $navbar-padding-y:                  ($spacer / 2);

@@ -43,11 +43,7 @@ define(['jquery', 'core/log'], function($, log) {
                     sib.find('.tree_item.branch').attr('aria-expanded', 'false');
                     sib.find('.tree_item.branch').siblings('ul').attr('aria-hidden', 'true');
 
-                    if (rootnode != true) {
-                        blocktree.css('width', 'calc(' + width + 'px + ' + level + 'rem');
-                    } else {
-                        blocktree.css('width', width);
-                    }
+                    blocktree.css('width', 'calc(' + width + 'px + ' + level + 'rem');
                 }
 
                 function fix_width() {

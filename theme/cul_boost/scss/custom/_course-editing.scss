@@ -20,6 +20,9 @@
                     align-items: center;
                     justify-content: center;
                     background-color: rgba(0, 0, 0, 0.1);
+                    .icon {
+                        margin: 0 $spacer / 2;
+                    }
                 }
                 .actions {
                     position: absolute;

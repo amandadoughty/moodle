@@ -108,6 +108,9 @@
             padding: 0;
             margin: 0;
             font-size: inherit;
+            a.homelink {
+                display: inline-block;
+            }
             img {
                 height: 40px;
                 @include media-breakpoint-up(sm) {
@@ -132,7 +135,7 @@
             z-index: 12;
             padding: 0 $spacer;
             background-color: $primary;
-            transform: translateY(-100%);
+            transform: translateY(-110%);
             border: none;
             box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.3);
             @include media-breakpoint-up(sm) {
@@ -149,7 +152,7 @@
                         max-width: 70px;
                         max-height: 40px;
                         @include media-breakpoint-up(sm) {
-                            max-width: 85px;
+                            max-width: 60px;
                             max-height: 50px;
                         }
                     }
@@ -209,6 +212,14 @@
             .dropdown {
                 +.dropdown {
                     margin-left: $spacer * 1.5;
+                }
+                .dropdown-menu {
+                    .dropdown-item {
+                        padding: 0;
+                        a {
+                            padding: $dropdown-item-padding-y $dropdown-item-padding-x;
+                        }
+                    }
                 }
             }
             >li {
@@ -347,6 +358,17 @@
 .dropdown-submenu {
     &.subopen {
         background-color: $gray-lightest;
+        &.active,
+        &:active {
+            background-color: $primary;
+            .dropdown-menu {
+                &.show {
+                    a {
+                        color: $dropdown-link-color;
+                    }
+                }
+            }
+        }
     }
     .dropdown-menu {
         &.show {
@@ -354,7 +376,6 @@
             position: relative;
             top: auto;
             float: none;
-            margin: 8px (-$spacer) -8px (-$spacer) !important;
             padding: 0;
             border: none;
             background-color: $gray-lightest;
@@ -604,7 +625,7 @@ a.menu-link .icon {
     top: 0;
     left: 0;
     width: 100%;
-    max-width: 100%;
+    max-width: 100vw;
     height: 100vh;
     z-index: 20;
     overflow: auto;

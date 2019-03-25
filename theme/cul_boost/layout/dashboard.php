@@ -72,18 +72,20 @@ echo $OUTPUT->doctype() ?>
             <?php 
 
                 echo html_writer::start_tag('div', ['class'=>'dashboard-blocks-wrap w-100']);
-                    if ($hasdashleft) {
-                        echo $OUTPUT->synergyblocks($dashl, 'col-12 col-md-8 d-flex flex-wrap align-items-stretch mb-4');
-                    }
-                    // if ($hasdashmiddle) {
-                    //     echo $OUTPUT->synergyblocks($dashm, 'col-12 col-md-6 col-xl-4 d-flex flex-wrap align-items-stretch mb-4');
-                    // }
                     // if ($hasdashcontent) {
                     //     echo $OUTPUT->synergyblocks($dashc, 'col-12 col-md-8 d-flex flex-wrap align-items-stretch mb-8');
                     // }
+                    echo html_writer::start_tag('div', ['class'=>'row']);
+                    if ($hasdashleft) {
+                        echo $OUTPUT->synergyblocks($dashl, 'col-12 col-md-4 d-flex flex-wrap align-items-stretch mb-4');
+                    }
+                    if ($hasdashmiddle) {
+                        echo $OUTPUT->synergyblocks($dashm, 'col-12 col-md-4 d-flex flex-wrap align-items-stretch mb-4');
+                    }
                     if ($hasdashright) {
                         echo $OUTPUT->synergyblocks($dashr, 'col-12 col-md-4 d-flex flex-wrap align-items-stretch mb-4');
                     }
+                    echo html_writer::end_tag('div');
                 echo html_writer::end_tag('div');
             ?>
         </div>
