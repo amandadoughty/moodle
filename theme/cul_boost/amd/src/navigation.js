@@ -16,7 +16,6 @@ define(['jquery', 'core/log'], function($, log) {
                 var rightnav = $('.right-navbar').outerHeight();
 
                 if ($('.right-navbar').length == 0) {
-                    console.log('no right navbar');
                     rightnav = 0;
                 }
                 
@@ -29,18 +28,18 @@ define(['jquery', 'core/log'], function($, log) {
                     var window_top = $(window).scrollTop();
                     var anchorpos = anchor.offset().top;
                     var mainnavpos = mainnav.offset().top + bottom;
-                    var reveal = mainnav.offset().top + bottom + rightnav;
+                    var reveal = mainnav.offset().top + bottom + rightnav + 100;
                     var anchorheight = navigation.outerHeight();
                     var fixedbuttons = $('.fixed-buttons');
 
                     if (window_top > position) {
                         var anchorpos = anchor.offset().top;
                         var mainnavpos = mainnav.offset().top + bottom;
-                        var reveal = mainnav.offset().top + bottom + rightnav;
+                        var reveal = mainnav.offset().top + bottom + rightnav + 100;
                     } else {
                         var anchorpos = anchor.offset().top + anchor.outerHeight();
                         var mainnavpos = mainnav.offset().top + bottom;
-                        var reveal = mainnav.offset().top + bottom + rightnav;
+                        var reveal = mainnav.offset().top + bottom + rightnav + 100;
                     }
 
                     position = window_top;

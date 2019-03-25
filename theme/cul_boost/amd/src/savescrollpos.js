@@ -22,7 +22,6 @@ define(['jquery', 'core/log'], function($, log) {
                 if (p.type == 'navigate') {
                     
                     if (localStorage.getItem('scrollPosition') !== null) {
-                        console.log(localStorage.getItem('scrollPosition'));
                         window.scrollTo(0, localStorage.getItem('scrollPosition'));
                     }
 

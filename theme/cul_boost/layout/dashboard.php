@@ -50,7 +50,7 @@ echo $OUTPUT->doctype() ?>
 
     // require_once(dirname(__FILE__).'/includes/findamodule.php');
 
-    echo html_writer::start_tag('div', ['class'=>'dashboard-navbar-wrap container-fluid']);
+    echo html_writer::start_tag('div', ['class'=>'dashboard-navbar-wrap']);
         require_once(dirname(__FILE__).'/includes/navbar.php');
     echo html_writer::end_tag('div');
 

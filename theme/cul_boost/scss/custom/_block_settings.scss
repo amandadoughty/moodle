@@ -97,6 +97,7 @@ aside[id*="block-region-nav-settings"] {
         }
     }
     .block_tree {
+        .type_setting,
         .type_course,
         .type_siteadmin {
             .root_node {
@@ -113,6 +114,13 @@ aside[id*="block-region-nav-settings"] {
                     color: $primary;
                     order: -1;
                     text-align: center;
+                }
+            }
+        }
+        .type_setting {
+            .root_node {
+                &:after {
+                    content: "\f1de";
                 }
             }
         }

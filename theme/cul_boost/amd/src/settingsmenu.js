@@ -63,7 +63,7 @@ define(['jquery', 'core/log'], function($, log) {
                     if (scrollto != true) {
                         $('html, body').animate({
                             scrollTop: settingsblock.offset().top
-                        }, 500);
+                        }, 200);
                     }
 
                     fix_width();

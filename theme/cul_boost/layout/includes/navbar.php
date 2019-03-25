@@ -29,11 +29,14 @@ if (!isset($PAGE->layout_options['nonavbar']) || $PAGE->layout_options['nonavbar
 
     $classes = '';
     if ($PAGE->pagelayout != 'mydashboard') {
-        $classes = ' pb-2 mb-4';
+        $classes = ' mb-4';
     }
 
-    $navbar = html_writer::tag('div', $leftnavbar.$overlay.$rightnavbar, ['id'=>'page-navbar', 'class'=>'d-flex flex-wrap align-items-center'.$classes]);
+    if (($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse') && $PAGE->pagetype != 'notes-index') {
+        echo html_writer::tag('div', $OUTPUT->page_heading(), ['class'=>'page-header container-fluid text-center text-md-left']);
+    }
 
-    echo $navbar;
-    
+    $navbar = html_writer::tag('div', $leftnavbar.$overlay.$rightnavbar, ['class'=>'d-flex flex-wrap align-items-center'.$classes]);
+
+    echo html_writer::tag('div', $navbar, ['id'=>'page-navbar', 'class'=>'container-fluid']);
 }

@@ -1,9 +1,5 @@
 <?php
 
-if (($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse') && $PAGE->pagetype != 'notes-index') {
-    echo html_writer::tag('div', $OUTPUT->page_heading(), ['class'=>'page-header container-fluid']);
-}
-
 if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
 
 	$sectioninfo = '';

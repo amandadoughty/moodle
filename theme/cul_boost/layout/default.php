@@ -42,7 +42,6 @@ echo $OUTPUT->doctype() ?>
 <?php echo $OUTPUT->standard_top_of_body_html(); ?>
 
 <?php require_once(dirname(__FILE__).'/includes/header.php'); ?>
-<?php require_once(dirname(__FILE__).'/includes/courseheader.php'); ?>
 
 <div id="page" class="position-relative">
 
@@ -62,21 +61,23 @@ echo $OUTPUT->doctype() ?>
         }
     ?>
 
+    <?php
+
+    require_once(dirname(__FILE__).'/includes/navbar.php');
+
+    echo $html->gradebookdisclaimer;
+
+    if ($PAGE->pagelayout == 'course' && $COURSE->visible == 0) {
+        $showcoursebtn = $OUTPUT->show_course();
+        echo html_writer::tag('h2', get_string('coursehidden', 'theme_cul_boost') . $showcoursebtn, ['class'=>'module-hidden p-3 bg-light mb-4 text-center']);
+        
+    }
+
+    require_once(dirname(__FILE__).'/includes/courseheader.php');
+
+    ?>
+
     <div class="container-fluid">
-
-        <?php 
-
-            echo $html->gradebookdisclaimer;
-
-            if ($PAGE->pagelayout == 'course' && $COURSE->visible == 0) {
-                $showcoursebtn = $OUTPUT->show_course();
-                echo html_writer::tag('h2', get_string('coursehidden', 'theme_cul_boost') . $showcoursebtn, ['class'=>'module-hidden p-3 bg-light mb-4 text-center']);
-                
-            }
-
-        ?>
-
-        <?php require_once(dirname(__FILE__).'/includes/navbar.php'); ?>
 
         <div id="page-content" class="row justify-content-center">
             <section id="region-main" class="<?php echo $regions['content']; ?>">

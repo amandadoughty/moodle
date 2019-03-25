@@ -161,7 +161,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 	public function page_heading($tag = 'h1') {
 	    global $COURSE;
-	    $heading = html_writer::tag($tag, $this->page->heading, array('class'=>'pageheading font-weight-normal mb-4'));
+	    $heading = html_writer::tag($tag, $this->page->heading, array('class'=>'pageheading font-weight-normal mb-0'));
 	    return $heading;
 	}
 
