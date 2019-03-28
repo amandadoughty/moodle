@@ -686,6 +686,9 @@ $culcourse-arrow-active-color: #fff;
                             text-align: center;
                             margin-right: $spacer / 4;
                         }
+                        &.collapsed {
+                            display: none;
+                        }
                     }
                     ul {
                         li.activity {
