@@ -65,9 +65,11 @@ echo $OUTPUT->doctype() ?>
     <div class="container-fluid">
         <div id="page-content" class="row justify-content-center">
             
-       <!--      <section id="region-main" class="<?php echo $regions['content']; ?>">
+            <section id="region-main" class="<?php echo $regions['content']; ?>">
                 <?php echo $OUTPUT->main_content(); ?>
-            </section> -->
+            </section>
+
+            <?php echo $OUTPUT->blocks('side-post'); ?>          
 
             <?php 
 
@@ -116,7 +118,7 @@ echo $OUTPUT->doctype() ?>
                     
                     echo html_writer::end_tag('div');
                 echo html_writer::end_tag('div');
-            ?>
+            ?>            
         </div>
     </div>
 </div>
