@@ -51,12 +51,16 @@ $string['off'] = 'Turn editing off';
 
 // Dashboard
 $string['dashboard'] = 'Dashboard';
-$string['region-dash-cl'] = 'Dashboard (Course Listing)';
-$string['region-dash-full'] = 'Dashboard (Full Width)';
-$string['region-dash-feed'] = 'Dashboard (Activity Feed)';
+// $string['region-dash-cl'] = 'Dashboard (Course Listing)';
+// $string['region-dash-full'] = 'Dashboard (Full Width)';
+// $string['region-dash-feed'] = 'Dashboard (Activity Feed)';
+$string['region-dash-top-full'] = 'Dashboard (Top Full Width)';
+$string['region-dash-content'] = 'Dashboard (Main Content)';
+$string['region-dash-side'] = 'Dashboard (Side Content)';
 $string['region-dash-left'] = 'Dashboard (Left)';
 $string['region-dash-middle'] = 'Dashboard (Middle)';
 $string['region-dash-right'] = 'Dashboard (Right)';
+$string['region-dash-bottom-full'] = 'Dashboard (Bottom Full Width)';
 $string['frontpageslider'] = 'Frontpage Slider';
 $string['frontpagesliderdesc'] = 'Whatever images are entered in to the slidehow settings will appear on the frontpage slider';
 $string['usefrontpageslider'] = 'Enable Frontpage slider';

@@ -14,22 +14,29 @@ $regions = theme_cul_boost_bootstrap_grid($hassidepost);
 $hasnavsettings = (empty($PAGE->layout_options['noblocks']));
 
 // Dashboard Blocks
-$hasdashcl = (empty($PAGE->layout_options['noblocks']));
-$hasdashfull = (empty($PAGE->layout_options['noblocks']));
-$hasdashfeed = (empty($PAGE->layout_options['noblocks']));
+// $hasdashcl = (empty($PAGE->layout_options['noblocks']));
+// $hasdashfull = (empty($PAGE->layout_options['noblocks']));
+// $hasdashfeed = (empty($PAGE->layout_options['noblocks']));
+
+$hasdashtopfull = (empty($PAGE->layout_options['noblocks']));
+$hasdashcontent = (empty($PAGE->layout_options['noblocks']));
+$hasdashside = (empty($PAGE->layout_options['noblocks']));
 $hasdashleft = (empty($PAGE->layout_options['noblocks']));
 $hasdashmiddle = (empty($PAGE->layout_options['noblocks']));
-$hasdashcontent = (empty($PAGE->layout_options['noblocks']));
 $hasdashright = (empty($PAGE->layout_options['noblocks']));
+$hasdashbottomfull = (empty($PAGE->layout_options['noblocks']));
 
 $navsettings = 'nav-settings';
-$dashcl = 'dash-cl';
-$dashf = 'dash-full';
-$dashfeed = 'dash-feed';
+// $dashcl = 'dash-cl';
+// $dashf = 'dash-full';
+// $dashfeed = 'dash-feed';
+$dashtf = 'dash-top-full';
+$dashc = 'dash-content';
+$dashs = 'dash-side';
 $dashl = 'dash-left';
 $dashm = 'dash-middle';
-$dashc = 'dash-content';
 $dashr = 'dash-right';
+$dashbf = 'dash-bottom-full';
 
 // Dashboard Settings
 $findtitle = (empty($PAGE->theme->settings->findtitle)) ? get_string('findamodule', 'theme_cul_boost') : $PAGE->theme->settings->findtitle;

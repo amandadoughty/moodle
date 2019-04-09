@@ -65,9 +65,9 @@ echo $OUTPUT->doctype() ?>
     <div class="container-fluid">
         <div id="page-content" class="row justify-content-center">
             
-            <section id="region-main" class="<?php echo $regions['content']; ?>">
+       <!--      <section id="region-main" class="<?php echo $regions['content']; ?>">
                 <?php echo $OUTPUT->main_content(); ?>
-            </section>
+            </section> -->
 
             <?php 
 
@@ -75,6 +75,25 @@ echo $OUTPUT->doctype() ?>
                     // if ($hasdashcontent) {
                     //     echo $OUTPUT->synergyblocks($dashc, 'col-12 col-md-8 d-flex flex-wrap align-items-stretch mb-8');
                     // }
+                    echo html_writer::start_tag('div', ['class'=>'row']);
+                    if ($hasdashtopfull) {
+                        echo $OUTPUT->synergyblocks($dashtf, 'col-12 col-md-12 d-flex flex-wrap align-items-stretch mb-4');
+                    }
+
+                    echo html_writer::end_tag('div');
+
+                    echo html_writer::start_tag('div', ['class'=>'row']);
+                    if ($hasdashcontent) {
+                        echo $OUTPUT->synergyblocks($dashc, 'col-12 col-md-8 d-flex flex-wrap align-items-stretch mb-4');
+                    }
+                    if ($hasdashside) {
+                        echo $OUTPUT->synergyblocks($dashs, 'col-12 col-md-4 d-flex flex-wrap align-items-stretch mb-4');
+                    }
+
+
+                    
+                    echo html_writer::end_tag('div');
+
                     echo html_writer::start_tag('div', ['class'=>'row']);
                     if ($hasdashleft) {
                         echo $OUTPUT->synergyblocks($dashl, 'col-12 col-md-4 d-flex flex-wrap align-items-stretch mb-4');
@@ -85,6 +104,16 @@ echo $OUTPUT->doctype() ?>
                     if ($hasdashright) {
                         echo $OUTPUT->synergyblocks($dashr, 'col-12 col-md-4 d-flex flex-wrap align-items-stretch mb-4');
                     }
+
+                    
+                    echo html_writer::end_tag('div');
+
+                    echo html_writer::start_tag('div', ['class'=>'row']);
+                    if ($hasdashbottomfull) {
+                        echo $OUTPUT->synergyblocks($dashbf, 'col-12 col-md-12 d-flex flex-wrap align-items-stretch mb-4');
+                    }
+
+                    
                     echo html_writer::end_tag('div');
                 echo html_writer::end_tag('div');
             ?>
