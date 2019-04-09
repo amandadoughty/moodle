@@ -144,3 +144,13 @@
         margin-top: -2px;
     }
 }
+
+.groupmanagementtable {
+    #buttonscell {
+        width: auto;
+    }
+    #existingcell,
+    #potentialcell {
+        width: 45%;
+    }
+}

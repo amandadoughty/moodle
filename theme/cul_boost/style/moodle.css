@@ -23204,6 +23204,13 @@ li.movehere {
     margin-right: 0;
     margin-top: -2px; }
 
+.groupmanagementtable #buttonscell {
+  width: auto; }
+
+.groupmanagementtable #existingcell,
+.groupmanagementtable #potentialcell {
+  width: 45%; }
+
 .path-mod-assign div[role="main"],
 .path-mod-assign #region-main,
 .path-mod-assign #page-content,
@@ -23552,6 +23559,15 @@ li.movehere {
 #page-course-view-culcourse .course-content ul.culcourse li.section .content a.sectionclose {
   padding: 0.75rem;
   margin: 0; }
+
+.message.clickable.bg-secondary {
+  background-color: #fff !important; }
+
+@media (min-width: 980px) {
+  .message-drawer {
+    height: calc(100% - 230px);
+    top: 230px;
+    z-index: 1; } }
 
 [class^="icon fa fa-fw fa-fw navicon"] {
   display: -webkit-inline-box;
