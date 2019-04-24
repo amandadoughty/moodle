@@ -186,7 +186,14 @@ class photoboard implements templatable, renderable {
             // user does not have capability moodle/course:viewhiddenuserfields.
             $xuser = $draftusers[$user->id];
             $usersprinted[] = $user->id; // Add new user to the array of users printed.
-            $xuser->imghtml = $OUTPUT->user_picture($user, array('size' => 100, 'courseid' => $course->id));
+            $xuser->imghtml = $OUTPUT->user_picture(
+                $user,
+                [
+                    'class' => 'card-img-top',
+                    'size' => 100,
+                    'courseid' => $course->id
+                ]
+            );
             $moduleleaderstr = '';
 
             if (in_array($user->id, $moduleleaders)) {
