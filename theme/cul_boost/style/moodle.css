@@ -23046,6 +23046,9 @@ li.movehere {
       width: auto;
       height: auto; }
 
+#dndupload-status {
+  color: #4a4a4d; }
+
 #page-course-view-culcourse.editing .course-content .section .content .mod-indent-outer {
   padding-left: 0; }
   #page-course-view-culcourse.editing .course-content .section .content .mod-indent-outer > div:not(.mod-indent) {
