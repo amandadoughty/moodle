@@ -23,6 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// vendor/bin/phpunit course/format/culcourse/tests/privacy_test.php
+
 defined('MOODLE_INTERNAL') || die();
 
 use \core_privacy\local\metadata\collection;
@@ -62,8 +64,12 @@ class format_culcourse_privacy_testcase extends \core_privacy\tests\provider_tes
     public function test_export_user_preferences_single() {
         // Define a user preference.
         $user = $this->getDataGenerator()->create_user();
+        $course = $this->getDataGenerator()->create_course();
+        $sectiontoggles = [];
+        $sectiontoggles[3] = 1;
+        $sectiontoggles = json_encode($sectiontoggles, true);
         $this->setUser($user);
-        set_user_preference('format_culcourse_view_user', 1, $user);
+        set_user_preference('format_culcourse_expanded' . $course->id, $sectiontoggles, $user);
 
         // Validate exported data.
         provider::export_user_preferences($user->id);
@@ -72,10 +78,7 @@ class format_culcourse_privacy_testcase extends \core_privacy\tests\provider_tes
         $this->assertTrue($writer->has_any_data());
         $prefs = $writer->get_user_preferences('format_culcourse');
         $this->assertCount(1, (array) $prefs);
-        $this->assertEquals(
-            get_string('privacy:metadata:preference:format_culcourse_view_user', 'format_culcourse'),
-            $prefs->format_culcourse_view_user->description
-        );
-        $this->assertEquals(get_string('yes'), $prefs->format_culcourse_view_user->value);
+        $pref = $prefs->{'format_culcourse_expanded' . $course->id}->value;
+        $this->assertEquals($sectiontoggles, $pref);
     }
 }

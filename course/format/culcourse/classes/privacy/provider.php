@@ -26,6 +26,7 @@ namespace format_culcourse\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
+use \core_privacy\local\metadata\collection;
 use \core_privacy\local\request\writer;
 
 /**
@@ -49,7 +50,9 @@ class provider implements
      * @return collection A listing of user data stored through this system.
      */
     public static function get_metadata(collection $items) : collection {
-        // There are several user preferences.
+        // There are several user preferences in the format
+        // format_culcourse_expanded{$course-id)}. I've used same
+        // methods as tool_usertours.
         $items->add_user_preference('format_culcourse_expanded', 'privacy:metadata:preference:format_culcourse_expanded');
 
         return $items;
