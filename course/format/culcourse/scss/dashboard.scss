@@ -225,6 +225,7 @@ body.format-culcourse.editing {
             list-style: none;
             &.card {
                 display: block;
+                margin-bottom: 0.75rem;
             }
             .card-img {
                 float: left;
@@ -235,7 +236,8 @@ body.format-culcourse.editing {
             }
             .card-body {
                 float: left;
-                width: 50%
+                width: 50%;
+                padding: 0;
             }
             .card-footer {
                 float: right;

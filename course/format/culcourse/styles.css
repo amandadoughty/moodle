@@ -121,7 +121,8 @@ body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.lin
   display: inline-block;
   list-style: none; }
   .path-format-culcourse-photos .userlist li.card {
-    display: block; }
+    display: block;
+    margin-bottom: 0.75rem; }
   .path-format-culcourse-photos .userlist li .card-img {
     float: left;
     width: 25%; }
@@ -129,7 +130,8 @@ body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.lin
       width: auto; }
   .path-format-culcourse-photos .userlist li .card-body {
     float: left;
-    width: 50%; }
+    width: 50%;
+    padding: 0; }
   .path-format-culcourse-photos .userlist li .card-footer {
     float: right;
     width: 25%;
