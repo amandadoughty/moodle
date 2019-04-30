@@ -49,6 +49,7 @@ if (!empty($displaysection && $course->coursedisplay == COURSE_DISPLAY_MULTIPAGE
 }
 
 user_preference_allow_ajax_update('format_culcourse_expanded' . $course->id, PARAM_INT);
+user_preference_allow_ajax_update('format_culcourse_toggledash' . $course->id, PARAM_INT);
 
 // Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');

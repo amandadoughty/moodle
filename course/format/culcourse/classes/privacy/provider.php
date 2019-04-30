@@ -54,6 +54,7 @@ class provider implements
         // format_culcourse_expanded{$course-id)}. I've used same
         // methods as tool_usertours.
         $items->add_user_preference('format_culcourse_expanded', 'privacy:metadata:preference:format_culcourse_expanded');
+        $items->add_user_preference('format_culcourse_toggledash', 'privacy:metadata:preference:format_culcourse_toggledash');
 
         return $items;
     }
@@ -110,6 +111,29 @@ class provider implements
                         get_string($descriptionidentifier, 'format_culcourse', (object) [
                             'course' => $course->fullname,
                             'sectionstates' => $sectionstates,
+                        ])
+                    );
+                }
+            }
+
+            if (strpos($name, 'format_culcourse_toggledash') === 0) {
+                $descriptionidentifier = 'privacy:request:preference:format_culcourse_toggledash';
+                $courseid = substr($name, strlen('format_culcourse_toggledash'));
+            }
+
+            if ($descriptionidentifier !== null) {
+                $modinfo = get_fast_modinfo($courseid);
+                $course = $modinfo->get_course();
+                $dashboardstate = $value ? 'open' : 'closed';
+
+                if ($course) {
+                    writer::export_user_preference(
+                        'format_culcourse',
+                        $name,
+                        $value,
+                        get_string($descriptionidentifier, 'format_culcourse', (object) [
+                            'course' => $course->fullname,
+                            'dashboardstate' => $sectionstates,
                         ])
                     );
                 }

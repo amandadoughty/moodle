@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Section collapse functions for CUL Course Format
+ * Dashboard toggle functions for CUL Course Format
  *
  * @package    course/format
  * @subpackage cul
@@ -33,54 +33,13 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
       * @access private
       */
     var SELECTORS = {
-        OPENALLLINK: 'a#toggles-all-opened',
-        CLOSEALLLINK: 'a#toggles-all-closed',
-        SECTIONHEAD: '.sectionhead',
-        SECTIONBODY: '.sectionbody',
-        TOGGLEHEAD: '.course-content #toggle-',
-        TOGGLEBODY: '#togglesection-',
-        TOGGLEFOOTER: '.course-content #footertoggle-',
-        DDPROXY: '.yui3-dd-proxy'
+        TOGGLELINK: 'a#format_culcourse_toggledashboard',
+        DASHBOARD: '#format_culcourse_dashboard'
         };
-    // From Bootstrap collapse.js.    
-    var ClassName = {
-        SHOW: 'show',
-        COLLAPSE: 'collapse',
-        COLLAPSING: 'collapsing',
-        COLLAPSED: 'collapsed'
-    };
 
-    var GETURL = config.wwwroot + '/course/format/culcourse/getuserprefsections.php';
-    var SETURL = config.wwwroot + '/course/format/culcourse/setuserprefsections.php';
+    var GETURL = config.wwwroot + '/course/format/culcourse/dashboard/getuserprefdashtoggle.php';
+    var SETURL = config.wwwroot + '/course/format/culcourse/dashboard/setuserprefdashtoggle.php';
     var courseId;
-
-    /**
-     * Opens all collapsed sections.
-     *
-     * @access private
-     * @method handleOpenAll
-     * @param {event} e
-     */
-    var handleOpenAll = function(e){
-        e.preventDefault();
-        e.stopPropagation();
-
-        $('ul.culcourse').find(SELECTORS.SECTIONBODY).collapse('show');
-    };
-
-    /**
-     * Closes all open sections.
-     *
-     * @access private
-     * @method handleOpenAll
-     * @param {event} e
-     */
-    var handleCloseAll = function(e){
-        e.preventDefault();
-        e.stopPropagation();
-
-        $('ul.culcourse').find(SELECTORS.SECTIONBODY).collapse('hide');
-    };
 
     /**
      * Saves user preference.
@@ -93,11 +52,9 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         e.stopPropagation();
 
         if ($(this).is(e.target)) {
-            var sectionid = $(e.currentTarget).data('preference-key');
 
             var data = {
                 courseid: courseId,
-                sectionid: sectionid,
                 value: 1,
                 // sesskey: config.sesskey,
             };
@@ -113,9 +70,6 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
                 //     Notification.exception(request);
                 //     console.log(error);
                 // });
-
-            $(SELECTORS.TOGGLEHEAD + sectionid).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
-            $(SELECTORS.TOGGLEFOOTER + sectionid).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
         }
     };
 
@@ -130,11 +84,8 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         e.stopPropagation();
 
         if ($(this).is(e.target)) {
-            var sectionid = $(e.currentTarget).data('preference-key');
-
             var data = {
                 courseid: courseId,
-                sectionid: sectionid,
                 value: 0,
                 // sesskey: config.sesskey,
             };
@@ -146,26 +97,21 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             };
 
             $.ajax(SETURL, settings);
-
-            $(SELECTORS.TOGGLEHEAD + sectionid).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
-            $(SELECTORS.TOGGLEFOOTER + sectionid).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
         }
     };
 
-    return /** @alias module:format_culcourse/sectiontoggle */ {
+    return /** @alias module:format_culcourse/dashtoggle */ {
         /**
-         * Initialize sectiontogglemanager
+         * Initialize dashtogglemanager
          * @access public
          * @param {int} courseid
          */
         init : function(courseid) {
             courseId = courseid;
             var body = $('body');
-            body.delegate(SELECTORS.OPENALLLINK, 'click', handleOpenAll);
-            body.delegate(SELECTORS.CLOSEALLLINK, 'click', handleCloseAll);
 
-            body.delegate(SELECTORS.SECTIONBODY, 'hide.bs.collapse', handleClose);
-            body.delegate(SELECTORS.SECTIONBODY, 'show.bs.collapse', handleOpen);
+            body.delegate(SELECTORS.DASHBOARD, 'hide.bs.collapse', handleClose);
+            body.delegate(SELECTORS.DASHBOARD, 'show.bs.collapse', handleOpen);
 
             // Get the userprefs. They are too large to pass to the function.
             var params = {
@@ -175,17 +121,14 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
             };
             $.post(GETURL, params, function() {})
                 .done(function(data) {
-                    var sectiontoggles = data;
 
-                    for (var sectionid in sectiontoggles) {
-                        // If expanded is set to false then change the classes to
-                        // collapse the section.
-                        if (sectiontoggles[sectionid] == 0) {
-                            $(SELECTORS.TOGGLEHEAD + sectionid).addClass('collapsed');
-                            $(SELECTORS.TOGGLEFOOTER + sectionid).addClass('collapsed');
-                            $(SELECTORS.TOGGLEBODY + sectionid).removeClass('show');
-                        }
+                    // If expanded is set to false then hide the dashboard.
+                    if (!data) {
+                        // $(SELECTORS.DASHBOARD).collapse('hide');
+                        $(SELECTORS.DASHBOARD).addClass('collapsed');
+                        $(SELECTORS.DASHBOARD).removeClass('show');
                     }
+
                 })
                 .fail(function(jqXHR, status, error) {
                     Notification.exception(error);

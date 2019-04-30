@@ -38,14 +38,11 @@
 
 {{#userisediting}}
 <p>
-  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-    Link with href
-  </a>
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-    Button with data-target
+  <button id="format_culcourse_toggledashboard" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#format_culcourse_dashboard" aria-expanded="false" aria-controls="format_culcourse_dashboard">
+    {{# str}} toggledashboard, format_culcourse {{/ str}}
   </button>
 </p>
-<div class="collapse" id="collapseExample">
+<div class="collapse show" id="format_culcourse_dashboard">
 
 {{/userisediting}}
 
@@ -90,6 +87,9 @@
 {{#js}}
     require(['format_culcourse/quicklinks'], function(quicklinkmanager) {
         quicklinkmanager.init('{{adminurl}}');
+    });
+    require(['format_culcourse/dashtoggle'], function(dashtoggle) {
+        dashtoggle.init('{{courseid}}');
     });
 {{/js}}
 {{/userisediting}}

@@ -70,6 +70,7 @@ class format_culcourse_privacy_testcase extends \core_privacy\tests\provider_tes
         $sectiontoggles = json_encode($sectiontoggles, true);
         $this->setUser($user);
         set_user_preference('format_culcourse_expanded' . $course->id, $sectiontoggles, $user);
+        set_user_preference('format_culcourse_toggledash' . $course->id, false, $user);
 
         // Validate exported data.
         provider::export_user_preferences($user->id);
@@ -77,8 +78,10 @@ class format_culcourse_privacy_testcase extends \core_privacy\tests\provider_tes
         $writer = writer::with_context($context);
         $this->assertTrue($writer->has_any_data());
         $prefs = $writer->get_user_preferences('format_culcourse');
-        $this->assertCount(1, (array) $prefs);
+        $this->assertCount(2, (array) $prefs);
         $pref = $prefs->{'format_culcourse_expanded' . $course->id}->value;
         $this->assertEquals($sectiontoggles, $pref);
+        $pref = $prefs->{'format_culcourse_toggledash' . $course->id}->value;
+        $this->assertEquals(false, $pref);
     }
 }

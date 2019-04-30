@@ -97,6 +97,7 @@ class dashboard implements templatable, renderable {
 
     public function export_for_template(renderer_base $output) {        
         $export = new stdClass();
+        $export->courseid = $this->course->id;
         $export->quicklinksexist = false;
         $export->activitiesexist = false;
         $export->userisediting = $this->userisediting;

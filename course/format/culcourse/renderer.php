@@ -622,7 +622,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                     echo $this->section_summary_container($thissection);
                     echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                     echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
-                    echo $this->injected_section_footer($course, $section, $thissection, $context, false);
+                    echo $this->injected_section_footer($course, $section, $context, $thissection, false);
                 }
 
                 continue;

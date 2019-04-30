@@ -53,6 +53,7 @@ $string['defaultshowcoursesummary_desc'] = 'States if the course summary will be
 
 // Dashboard heading
 $string['setdashboardhdr'] = 'Dashboard settings';
+$string['toggledashboard'] = 'Toggle dashboard';
 
 /*** Quick links ***/
 // Show participants.
@@ -275,3 +276,5 @@ $string['showfromothers'] = 'Show section';
 /***** PRIVACY API *****/
 $string['privacy:metadata:preference:format_culcourse_expanded'] = 'The collapsed state of each section in a course.';
 $string['privacy:request:preference:format_culcourse_expanded'] = 'You last left the sections in the course "{$a->course}" as "{$a->sectionstates}".';
+$string['privacy:metadata:preference:format_culcourse_toggledash'] = 'The collapsed state of the dashboard in a course.';
+$string['privacy:request:preference:format_culcourse_toggledash'] = 'You last left the dashboard in the course "{$a->course}" as "{$a->dashboardstate}".';
