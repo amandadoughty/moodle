@@ -22239,6 +22239,10 @@ table.roleassigntable td#buttonscell {
     -webkit-background-size: cover;
             background-size: cover;
     max-height: calc(100% - 50px); }
+  .courseheader p:first-of-type {
+    position: relative;
+    text-align: center;
+    margin-right: auto; }
   body:not(.editing) .courseheader .dash-panel.reveal .dash {
     display: -webkit-box !important;
     display: -webkit-flex !important;

@@ -32,7 +32,7 @@ if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
 	    }
 	}
 	if (isset($renderer) && $course->format == 'culcourse' && !empty($renderer->dashboard_section())) {
-	    $sectioninfo = html_writer::tag('div', $renderer->dashboard_section(), ['class'=>'container-fluid d-flex flex-wrap align-items-stretch position-relative']);
+		$sectioninfo = $renderer->dashboard_section();
 	}
 
 	if ($sectioninfo) {

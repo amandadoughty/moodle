@@ -11,6 +11,11 @@
         background-size: cover;
         max-height: calc(100% - 50px);
     }
+    p:first-of-type {
+        position: relative;
+        text-align: center;
+        margin-right: auto;
+    }
     .dash-panel {
         body:not(.editing) & {
             &.reveal {
