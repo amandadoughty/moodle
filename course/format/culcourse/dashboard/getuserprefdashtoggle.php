@@ -41,4 +41,4 @@ if (is_null($userpref)) {
 }
 
 // The value true means the toggle is open.
-echo json_encode($userpref);
+echo $userpref;

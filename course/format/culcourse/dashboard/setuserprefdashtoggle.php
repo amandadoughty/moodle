@@ -33,23 +33,16 @@ if (!empty($CFG->forcelogin)) {
 
 // Get the name of the preference to update, and check that it is allowed.
 $courseid = required_param('courseid', PARAM_INT);
+$value = required_param('value', PARAM_BOOL);
 $name = 'format_culcourse_toggledash' . $courseid;
 
 if (!isset($USER->ajax_updatable_user_prefs[$name])) {
     print_error('notallowedtoupdateprefremotely');
 }
 
-$userpref = get_user_preferences($name);
-
-if (is_null($userpref)) {
-	$userpref = true;
-}
-
-$value = !$userpref;
-
 // Update.
 if (!set_user_preference($name, $value)) {
     print_error('errorsettinguserpref');
 }
 
-echo json_encode($value);
+echo $value;

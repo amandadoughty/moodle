@@ -55,7 +55,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
 
             var data = {
                 courseid: courseId,
-                value: 1,
+                value: true,
                 // sesskey: config.sesskey,
             };
 
@@ -86,7 +86,7 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         if ($(this).is(e.target)) {
             var data = {
                 courseid: courseId,
-                value: 0,
+                value: false,
                 // sesskey: config.sesskey,
             };
 

@@ -203,7 +203,10 @@ body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.lin
   .format-culcourse.path-format-culcourse-photos h3,
   .format-culcourse.path-format-culcourse-photos .nav,
   .format-culcourse.path-format-culcourse-photos .initialbar,
-  .format-culcourse.path-format-culcourse-photos #showall {
+  .format-culcourse.path-format-culcourse-photos #showall,
+  .format-culcourse.path-format-culcourse-photos .right-navbar-wrap,
+  .format-culcourse.path-format-culcourse-photos .overlay,
+  .format-culcourse.path-format-culcourse-photos #page-footer {
     display: none !important; } }
 body.format-culcourse .course-content ul.culcourse li.section,
 body.format-culcourse .course-content ul.culcourse li#toggle-all {

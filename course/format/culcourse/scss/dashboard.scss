@@ -404,7 +404,10 @@ body.format-culcourse.editing {
         h3,
         .nav,
         .initialbar,
-        #showall {
+        #showall,
+        .right-navbar-wrap,
+        .overlay,
+        #page-footer {
             display: none !important;
         }
     }
