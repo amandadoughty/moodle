@@ -31,7 +31,8 @@ if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
 	        $renderer = $PAGE->get_renderer('format_'. $course->format);
 	    }
 	}
-	if (isset($renderer) && $course->format == 'culcourse' && !empty($renderer->dashboard_section())) {
+	
+	if (isset($renderer) && $course->format == 'culcourse') {
 		$sectioninfo = $renderer->dashboard_section();
 	}
 
