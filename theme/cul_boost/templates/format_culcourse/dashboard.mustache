@@ -42,9 +42,9 @@
     {{# str}} toggledashboard, format_culcourse {{/ str}}
   </button>
 </p>
-<div class="collapse show" id="format_culcourse_dashboard">
+<div class="collapse show" id="format_culcourse_dashboard">    
+{{/userisediting}}
     <div class="container-fluid d-flex flex-wrap align-items-stretch position-relative">
-    {{/userisediting}}
 
         {{# quicklinksexist}}
         <div class="dash-panel quicklinks-wrap col-12 col-md-6 p-4">
@@ -109,8 +109,8 @@
             </nav>
         </div>
         {{/ activitiesexist}}
-{{#userisediting}}
     </div>
+{{#userisediting}}    
 </div>
 {{/userisediting}}
 
