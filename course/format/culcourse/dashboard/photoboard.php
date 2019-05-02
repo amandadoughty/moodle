@@ -257,7 +257,7 @@ $unifiedfilter = null;
 if (has_capability('format/culcourse:viewallphotoboard', $context)) {
     // Render the unified filter.
     $renderer = $PAGE->get_renderer('core_user');
-    $unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied);
+    $unifiedfilter = $renderer->unified_filter($course, $context, $filtersapplied, $baseurl);
 } else {
     // Filter with just groups for students.
     $manager = new course_enrolment_manager($PAGE, $course);
@@ -285,6 +285,11 @@ if (has_capability('format/culcourse:viewallphotoboard', $context)) {
     $indexpage = new \core_user\output\unified_filter($filteroptions, $filtersapplied);
     $templatecontext = $indexpage->export_for_template($OUTPUT);
     $unifiedfilter = $OUTPUT->render_from_template('core_user/unified_filter', $templatecontext);  
+}
+
+// Add filters to the baseurl after creating unified_filter to avoid losing them.
+foreach (array_unique($filtersapplied) as $filterix => $filter) {
+    $baseurl->param('unified-filters[' . $filterix . ']', $filter);
 }
 
 // User search.
@@ -348,7 +353,7 @@ $templatecontext = $photoboard->export_for_template($OUTPUT);
 
 echo $OUTPUT->render_from_template('format_culcourse/photoboard', $templatecontext);
 
-$PAGE->requires->js_call_amd('core_user/name_page_filter', 'init');
+// $PAGE->requires->js_call_amd('core_user/name_page_filter', 'init');
 $perpageurl = clone($baseurl);
 $perpageurl->remove_params('perpage');
 
