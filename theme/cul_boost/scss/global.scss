@@ -110,6 +110,9 @@ body {
 #region-main {
     padding-left: $grid-gutter-width / 2;
     padding-right: $grid-gutter-width / 2;
+    div[role="main"] {
+        overflow-y: auto;
+    }
 }
 
 div[role="main"] {

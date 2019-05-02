@@ -21892,6 +21892,16 @@ a.menu-link .icon {
 #page-grade-report-culuser-index table .mediaplugin {
   max-width: 500px; }
 
+#page-grade-report-culuser-index .mediaplugin,
+#page-mod-assign-view .mediaplugin {
+  width: auto; }
+  #page-grade-report-culuser-index .mediaplugin video,
+  #page-mod-assign-view .mediaplugin video {
+    width: auto; }
+  #page-grade-report-culuser-index .mediaplugin > div,
+  #page-mod-assign-view .mediaplugin > div {
+    margin: 0; }
+
 form {
   margin-bottom: 0; }
   form .formsettingheading {
@@ -22225,6 +22235,30 @@ table.roleassigntable td#buttonscell {
     background-color: #F5F5F5;
     color: #A22833;
     border-radius: 0; }
+
+#page-my-index .block .block-inner .block-title {
+  font-size: 2.25rem;
+  line-height: 2.25rem;
+  margin-bottom: 2rem; }
+
+@media (min-width: 544px) {
+  #page-my-index .card-deck .card, #page-my-index .card-deck #page-enrol-users #filterform, #page-enrol-users #page-my-index .card-deck #filterform, #page-my-index .card-deck .que .history, .que #page-my-index .card-deck .history, #page-my-index .card-deck .userprofile .profile_tree section, .userprofile .profile_tree #page-my-index .card-deck section, #page-my-index .card-deck .groupinfobox, #page-my-index .card-deck .well {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+        -ms-flex: 0 0 auto;
+            flex: 0 0 auto; } }
+
+@media (min-width: 576px) {
+  #page-my-index #page-content .dashboard-card-deck .dashboard-card {
+    width: 100%; } }
+
+@media (min-width: 840px) {
+  #page-my-index #page-content .dashboard-card-deck .dashboard-card {
+    width: calc(50% - 2em); } }
+
+@media (min-width: 1100px) {
+  #page-my-index #page-content .dashboard-card-deck .dashboard-card {
+    width: calc(33.33% - 2rem); } }
 
 .courseheader {
   min-height: 240px; }
@@ -23532,8 +23566,12 @@ li.movehere {
 #page-admin-tool-recyclebin-index .pageheading {
   display: none; }
 
-#page-mod-choice-view .response {
+#page-mod-choice-view .response,
+#page-mod-choice-report .response {
   overflow-x: scroll; }
+
+.choices label {
+  display: inline; }
 
 #prev-activity-link,
 #next-activity-link {
@@ -23916,6 +23954,8 @@ body {
 #region-main {
   padding-left: 15px;
   padding-right: 15px; }
+  #region-main div[role="main"] {
+    overflow-y: auto; }
 
 div[role="main"] {
   clear: both; }

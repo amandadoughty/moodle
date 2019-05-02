@@ -26,3 +26,17 @@
         max-width: 500px
     }
 }
+
+// CMDLTWO-1584
+#page-grade-report-culuser-index,
+#page-mod-assign-view {
+	.mediaplugin {
+		width: auto;
+		video {
+			width: auto;
+		}
+		> div {
+		    margin: 0;
+		}
+	}
+}

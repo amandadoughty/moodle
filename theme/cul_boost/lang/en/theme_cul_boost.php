@@ -31,7 +31,7 @@ $string['region-side-post'] = 'Right';
 $string['configtitle'] = 'CUL Boost settings';
 
 // General Settings
-$string['accessibility'] = 'accessibility';
+$string['toaccessibility'] = 'to accessibility';
 $string['generalsettings'] = 'General settings';
 $string['logo'] = 'Logo';
 $string['logotext'] = 'City, University of London';

@@ -297,8 +297,15 @@
 }
 
 // Scroll bar when looking at the responses of a Choice Activity with too many choices / responses to fit on one page. 
-#page-mod-choice-view .response {
-   overflow-x: scroll;
+#page-mod-choice-view,
+#page-mod-choice-report { 
+    .response {
+        overflow-x: scroll;
+    }
+}
+
+.choices label {
+    display: inline;
 }
 
 #prev-activity-link,
