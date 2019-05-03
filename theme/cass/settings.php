@@ -15,28 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Cass settings.
+ * Snap settings.
  *
  * @package   theme_cass
- * @copyright Copyright (c) 2017 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$settings = null; // Unsets the default $settings object initialised by Moodle.
-$settings = new theme_boost_admin_settingspage_tabs('themesettingcass', 'Cass');
+require_once(__DIR__.'/lib.php');
 
-if ($ADMIN->fulltree) {
-    $checked = '1';
-    $unchecked = '0';
-    require('settings/cass_basics.php');
-    require('settings/cover_settings.php');
-    require('settings/personal_menu_settings.php');
-    require('settings/feature_spots_settings.php');
-    require('settings/featured_courses_settings.php');
-    require('settings/course_settings.php');
-    require('settings/social_media_settings.php');
-    require('settings/navigation_bar_settings.php');
-    require('settings/categories_color_settings.php');
-}
+$checked = '1';
+$unchecked = '0';
+
+$settings = new theme_boost_admin_settingspage_tabs('themesettingcass', 'CASS');
+
+$cascoursesettings = 'require("'.$CFG->dirroot.'/theme/cass/settings/course_settings.php");';
+
+theme_cass_require_snap_settings('snap_basics.php', $settings);
+theme_cass_require_snap_settings('cover_settings.php', $settings);
+theme_cass_require_snap_settings('personal_menu_settings.php', $settings);
+theme_cass_require_snap_settings('feature_spots_settings.php', $settings);
+theme_cass_require_snap_settings('featured_courses_settings.php', $settings);
+theme_cass_require_snap_settings('course_settings.php', $settings, $cascoursesettings);
+theme_cass_require_snap_settings('social_media_settings.php', $settings);
+theme_cass_require_snap_settings('navigation_bar_settings.php', $settings);
+theme_cass_require_snap_settings('categories_color_settings.php', $settings);
+theme_cass_require_snap_settings('profile_based_branding.php', $settings);
+
+require(__DIR__.'/settings/general_settings.php');

@@ -15,15 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Cass AJAX handler
+ * Snap AJAX handler
  *
  * @package   theme_cass
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use theme_cass\controller\kernel;
-use theme_cass\controller\router;
+use theme_snap\controller\kernel;
+use theme_snap\controller\router;
 
 define('AJAX_SCRIPT', true);
 define('NO_DEBUG_DISPLAY', true);
@@ -85,7 +85,7 @@ foreach ($contfiles as $contfile) {
         $classname = '\\theme_cass\\controller\\'.str_ireplace('.php', '', $contfile);
         if (class_exists($classname)) {
             $rc = new ReflectionClass($classname);
-            if ($rc->isSubclassOf('\\theme_cass\\controller\\controller_abstract')) {
+            if ($rc->isSubclassOf('\\theme_snap\\controller\\controller_abstract')) {
                 $router->add_controller(new $classname());
             }
         }

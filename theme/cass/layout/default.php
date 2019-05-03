@@ -17,8 +17,8 @@
 /**
  * Layout - default.
  *
- * @package   theme_cass
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @package   theme_snap
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
@@ -75,7 +75,7 @@ if ($ismodpage && $this->page->theme->settings->highlightfirstactivityinsection)
     }
 }
 
-use theme_cass\local;
+use theme_snap\local;
 
 // @codingStandardsIgnoreStart
 // Note, coding standards ignore is required so that we can have more readable indentation under php tags.
@@ -99,7 +99,7 @@ if ($COURSE->id != SITEID && !empty($coverimagecss)) {
     <?php if ($PAGE->pagetype !== 'site-index') { ?>
         <?php
         if (empty($PAGE->theme->settings->breadcrumbsinnav)) {
-            echo '<div class="breadcrumb-nav" aria-label="breadcrumb">' . $OUTPUT->navbar() . '</div>';
+            echo '<div class="breadcrumb-nav" aria-label="breadcrumb">' . $OUTPUT->navbar($mastimage) . '</div>';
         }
         ?>
     <?php }
@@ -182,7 +182,7 @@ echo $OUTPUT->course_content_footer();
 
 if (stripos($PAGE->bodyclasses, 'format-singleactivity') !== false ) {
     // Shared renderer is only loaded if required at this point.
-    $output = \theme_cass\output\shared::course_tools();
+    $output = \theme_snap\output\shared::course_tools();
     if (!empty($output)) {
         echo $output;
     }

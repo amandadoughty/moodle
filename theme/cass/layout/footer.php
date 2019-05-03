@@ -19,8 +19,8 @@
  * This layout is baed on a moodle site index.php file but has been adapted to show news items in a different
  * way.
  *
- * @package   theme_cass
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @package   theme_snap
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
@@ -30,13 +30,13 @@ global $USER, $DB;
 // If we're on a 'mod' page, retrieve the mod object and check it's completion state in order to conditionally
 // pop a completion modal and show a link to the next activity in the footer.
 // Some mods should auto pop on completion, and some should display a link.
-
 echo  html_writer::start_div('completion-region');
 
-echo \theme_cass\local::render_completion_footer(
-    $this->page->theme->settings->nextactivityinfooter,
-    $this->page->theme->settings->nextactivitymodaldialog,
-    $this->page->theme->settings->nextactivitymodaldialogtolerance
+$renderer = $PAGE->get_renderer('theme_cass');
+echo $renderer->render_completion_footer(
+        $this->page->theme->settings->nextactivityinfooter,
+        $this->page->theme->settings->nextactivitymodaldialog,
+        $this->page->theme->settings->nextactivitymodaldialogtolerance
 );
 
 echo html_writer::end_div();
@@ -46,29 +46,29 @@ $inccoursefooterclass = ($PAGE->theme->settings->coursefootertoggle && strpos($P
 
 <footer id="moodle-footer" role="contentinfo" class="clearfix">
 <?php
-/* Cass custom footer.*/
+/* Snap custom footer.*/
 /* Custom footer edit buttons. */
 $footnote = empty($PAGE->theme->settings->footnote) ? '' : $PAGE->theme->settings->footnote;
-// $footnote = format_text(html_to_text($footnote));
+$footnote = format_text($footnote, FORMAT_HTML, ['noclean' => true]);
 
 if ($this->page->user_is_editing() && $PAGE->pagetype == 'site-index') {
-    $url = new moodle_url('/admin/settings.php', ['section' => 'themesettingcass'], 'admin-footnote');
-    $link = html_writer::link($url, get_string('editcustomfooter', 'theme_cass'), ['class' => 'btn btn-primary btn-sm']);
+    $url = new moodle_url('/admin/settings.php', ['section' => 'themesettingsnap'], 'admin-footnote');
+    $link = html_writer::link($url, get_string('editcustomfooter', 'theme_snap'), ['class' => 'btn btn-primary btn-sm']);
     $footnote .= '<p class="text-right">'.$link.'</p>';
 }
 
 $custommenu = $OUTPUT->custom_menu();
 if (!empty($custommenu) && $this->page->user_is_editing() && $PAGE->pagetype == 'site-index') {
     $url = new moodle_url('/admin/settings.php', ['section' => 'themesettings'], 'id_s__custommenuitems');
-    $link = html_writer::link($url, get_string('editcustommenu', 'theme_cass'), ['class' => 'btn btn-primary btn-sm']);
+    $link = html_writer::link($url, get_string('editcustommenu', 'theme_snap'), ['class' => 'btn btn-primary btn-sm']);
     $custommenu .= '<p class="text-right">'.$link.'</p>';
 }
 
 
-/* Cass main footer. */
-echo '<div id="cass-site-footer">';
+/* Snap main footer. */
+echo '<div id="snap-site-footer">';
 if (!empty($footnote)) {
-    echo '<div id="cass-footer-content">';
+    echo '<div id="snap-footer-content">';
     echo $footnote;
     echo '</div>';
 }
@@ -90,7 +90,7 @@ if (!empty($PAGE->theme->settings->instagram)) {
     $socialmedialinks .= $this->social_menu_link('instagram', $PAGE->theme->settings->instagram);
 }
 if (!empty($socialmedialinks)) {
-    echo '<div id="cass-socialmedia-links">' .$socialmedialinks. '</div>';
+    echo '<div id="snap-socialmedia-links">' .$socialmedialinks. '</div>';
 }
 echo '</div>';
 ?>
@@ -104,7 +104,7 @@ if (!empty($custommenu)) {
     echo '</div>';
 }
 
-$poweredbyrunby = get_string('poweredbyrunby', 'theme_cass');
+$poweredbyrunby = get_string('poweredbyrunby', 'theme_snap');
 
 if (empty($PAGE->theme->settings->copyrightnotice)) {
     echo '<div class="row">

@@ -18,17 +18,16 @@
  * Theme plugin version definition.
  *
  * @package   theme_cass
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2018050100;
-$plugin->requires  = 2017111300;
-$plugin->release   = '3.4.2';
+$plugin->version   = 2018080812;
+$plugin->requires  = 2018051700;
+$plugin->release   = '3.5.2';
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->component = 'theme_cass';
 $plugin->dependencies = [
-    'theme_boost' => '2016120500'
+    'theme_snap' => '2018080811'
 ];

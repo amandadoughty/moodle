@@ -15,144 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace theme_cass;
-use core\event\course_updated;
-use core\event\course_deleted;
-use core\event\course_completion_updated;
-use core\event\course_module_created;
-use core\event\course_module_updated;
-use core\event\course_module_deleted;
-use core\event\course_module_completion_updated;
-use core\event\user_deleted;
-use core\event\user_graded;
-use core\event\base;
+
+defined('MOODLE_INTERNAL') || die;
+
 use core\event\user_loggedout;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * Event handlers.
- *
- * This class contains all the event handlers used by Cass.
+ * Cass event handlers.
  *
  * @package   theme_cass
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class event_handlers {
+    // Redirect to specific URL instead of default login page.
+    public static function user_loggedout (user_loggedout $event) {
+        global $redirect;
 
-    /**
-     * The user logged out event.
-     *
-     * Redirect user based on user theme
-     *
-     * @param course_updated $event
-     * @return void
-     */
-    public static function user_loggedout(user_loggedout $event) {
-
-        // This event gets called for every user logout, regardless of whether cass is the active theme, or whether
+        // This event gets called for every user logout, regardless of whether snap is the active theme, or whether
         // the site allows user themes and regardless of the user theme setting.
         $user  = $event->get_record_snapshot('user', $event->objectid);
 
         if (get_config('core', 'theme') == 'cass' || get_config('core', 'allowuserthemes') && $user->theme == 'cass') {
-            local::logout_redirect();
+            $theme = \theme_config::load('cass');
+            if (!empty($theme->settings->logoutredirection)) {
+                $redirect = $theme->settings->logoutredirection;
+            }
         }
+
     }
-
-    /**
-     * The course update event.
-     *
-     * process cover image.
-     *
-     * @param course_updated $event
-     * @return void
-     */
-    public static function course_updated(course_updated $event) {
-        $context = \context_course::instance($event->objectid);
-
-        local::process_coverimage($context);
-    }
-
-    /**
-     * The course delete event.
-     *
-     * Delete course favorite records when course is deleted.
-     *
-     * @param course_deleted $event
-     */
-    public static function course_deleted(course_deleted $event) {
-        global $DB;
-
-        $select = ['courseid' => $event->objectid];
-        $DB->delete_records('theme_cass_course_favorites', $select);
-    }
-
-    /**
-     * The user delete event.
-     *
-     * Delete course favorite records when an user is deleted.
-     *
-     * @param user_deleted $event
-     */
-    public static function user_deleted($event) {
-        global $DB;
-
-        $select = ['userid' => $event->objectid];
-        $DB->delete_records('theme_cass_course_favorites', $select);
-    }
-
-    /**
-     * Update course grading / completion time stamp for course affected by event.
-     * @param course_completion_updated $event
-     */
-    public static function course_completion_updated(course_completion_updated $event) {
-        // Force an update of affected cache stamps.
-        local::course_completion_cachestamp($event->courseid, true);
-    }
-
-    /**
-     * Update course grading / completion time stamp for course affected by event.
-     * @param course_module_created $event
-     */
-    public static function course_module_created(course_module_created $event) {
-        // Force an update of affected cache stamps.
-        local::course_completion_cachestamp($event->courseid, true);
-    }
-
-    /**
-     * Update course grading / completion time stamp for course affected by event.
-     * @param course_module_updated $event
-     */
-    public static function course_module_updated(course_module_updated $event) {
-        // Force an update of affected cache stamps.
-        local::course_completion_cachestamp($event->courseid, true);
-    }
-
-    /**
-     * Update course grading / completion time stamp for course affected by event.
-     * @param course_module_deleted $event
-     */
-    public static function course_module_deleted(course_module_deleted $event) {
-        // Force an update of affected cache stamps.
-        local::course_completion_cachestamp($event->courseid, true);
-    }
-
-    /**
-     * Purge session level cache for affected course.
-     * @param course_module_completion_updated $event
-     */
-    public static function course_module_completion_updated(course_module_completion_updated $event) {
-        // Force an update for the specific course and user effected by this completion event.
-        local::course_user_completion_cachestamp($event->courseid, $event->relateduserid, true);
-    }
-
-    /**
-     * Record calendar change for affected course.
-     * @param base $event
-     */
-    public static function calendar_change(base $event) {
-        local::add_calendar_change_stamp($event->courseid);
-    }
-
 }
