@@ -19,8 +19,8 @@
  * This layout is baed on a moodle site index.php file but has been adapted to show news items in a different
  * way.
  *
- * @package   theme_cass
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @package   theme_snap
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
@@ -63,12 +63,12 @@ if ($PAGE->pagetype === 'site-index' && !empty($PAGE->theme->settings->cover_car
 $coverimagecss = '';
 if ($PAGE->context->contextlevel === CONTEXT_COURSECAT) {
     if ($PAGE->pagelayout === 'coursecategory') {
-        $coverimagecss = \theme_cass\local::course_cat_coverimage_css($PAGE->context->instanceid);
+        $coverimagecss = \theme_snap\local::course_cat_coverimage_css($PAGE->context->instanceid);
     }
 } else if ($PAGE->pagelayout === 'frontpage' || $PAGE->pagelayout === 'login') {
-    $coverimagecss = \theme_cass\local::site_coverimage_css();
+    $coverimagecss = \theme_snap\local::site_coverimage_css();
 } else {
-    $coverimagecss = \theme_cass\local::course_coverimage_css($COURSE->id);
+    $coverimagecss = \theme_snap\local::course_coverimage_css($COURSE->id);
 }
 
 if (!empty($coverimagecss) && !$carousel) {

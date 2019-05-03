@@ -15,30 +15,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Cass course renderer.
- * Overrides core course renderer.
+ * Mod quiz renderer
  *
  * @package   theme_cass
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace theme_cass\output\core;
- 
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/mod/quiz/renderer.php');
 
 class mod_quiz_renderer extends \mod_quiz_renderer {
-//class theme_cass_mod_quiz_renderer extends mod_quiz_renderer {   
-    
+
     /**
      * Outputs the navigation block panel
      *
      * @param quiz_nav_panel_base $panel instance of quiz_nav_panel_base
      */
     public function navigation_panel(quiz_nav_panel_base $panel) {
-        
+
         // Quiz navigation panel makes the screen too "busy" for normal users.
         // Based on a theme setting.
         if ($this->page->theme->settings->hidequiznavigation) {
@@ -48,5 +45,5 @@ class mod_quiz_renderer extends \mod_quiz_renderer {
         }
         return '';
     }
-    
+
 }

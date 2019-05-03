@@ -15,72 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Cass event hooks.
+ * CASS event hooks.
  *
  * @package   theme_cass
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$observers = array(
-    array (
-        'eventname' => '\core\event\course_updated',
-        'callback'  => '\theme_cass\event_handlers::course_updated',
-    ),
-    array (
-        'eventname' => '\core\event\course_deleted',
-        'callback'  => '\theme_cass\event_handlers::course_deleted'
-    ),
-    array (
-        'eventname' => '\core\event\user_deleted',
-        'callback'  => '\theme_cass\event_handlers::user_deleted'
-    ),
-
-    // Calendar events.
-    array (
-        'eventname' => '\core\event\calendar_event_created',
-        'callback' => '\theme_cass\event_handlers::calendar_change',
-    ),
-    array (
-        'eventname' => '\core\event\calendar_event_updated',
-        'callback' => '\theme_cass\event_handlers::calendar_change'
-    ),
-    array (
-        'eventname' => '\core\event\calendar_event_deleted',
-        'callback' => '\theme_cass\event_handlers::calendar_change'
-    ),
-    array (
-        'eventname' => '\mod_assign\event\extension_granted',
-        'callback' => '\theme_cass\event_handlers::calendar_change'
-    ),
-
-    // All events affecting course completion at course level.
-    array (
-        'eventname' => '\core\event\course_completion_updated',
-        'callback'  => '\theme_cass\event_handlers::course_completion_updated'
-    ),
-    array (
-        'eventname' => '\core\event\course_module_created',
-        'callback'  => '\theme_cass\event_handlers::course_module_created'
-    ),
-    array (
-        'eventname' => '\core\event\course_module_updated',
-        'callback'  => '\theme_cass\event_handlers::course_module_updated'
-    ),
-    array (
-        'eventname' => '\core\event\course_module_deleted',
-        'callback'  => '\theme_cass\event_handlers::course_module_deleted'
-    ),
-
-    // User level course completion event.
-    array (
-        'eventname' => '\core\event\course_module_completion_updated',
-        'callback'  => '\theme_cass\event_handlers::course_module_completion_updated'
-    ),
-    array (
+$observers = [
+    [
         'eventname' => '\core\event\user_loggedout',
-        'callback'  => '\theme_cass\event_handlers::user_loggedout',
-    )
-);
+        'callback'  => '\theme_cass\event_handlers::user_loggedout'
+    ]
+];

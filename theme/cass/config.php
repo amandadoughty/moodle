@@ -17,21 +17,21 @@
 /**
  * Theme config
  *
- * @package   theme_cass
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @package   theme_snap
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
-use theme_cass\local;
-use theme_cass\cass_page_requirements_manager;
+use theme_snap\local;
+use theme_snap\snap_page_requirements_manager;
 
 global $SESSION, $COURSE, $USER, $PAGE;
 
 $theme = local::resolve_theme();
 $themeiscass = $theme === 'cass';
 $notajaxscript = !defined('AJAX_SCRIPT') || AJAX_SCRIPT == false;
-// The code inside this conditional block is to be executed prior to page rendering when the theme is set to cass and
+// The code inside this conditional block is to be executed prior to page rendering when the theme is set to snap and
 // when the current request is not an ajax request.
 // There doesn't appear to be an official hook we can use for doing things prior to page rendering, so this is a
 // workaround.
@@ -39,34 +39,34 @@ if ($themeiscass && $notajaxscript) {
 
     // Setup debugging html.
     // This allows javascript to target debug messages and move them to footer.
-    if (!empty($CFG->casswrapdebug) && !function_exists('xdebug_break')) {
+    if (!empty($CFG->snapwrapdebug) && !function_exists('xdebug_break')) {
         ini_set('error_prepend_string', '<div class="php-debug">');
         ini_set('error_append_string', '</div>');
     }
 
     // SL - dec 2015 - Make sure editing sessions are not carried over between courses.
-    if (empty($SESSION->theme_cass_last_course) || $SESSION->theme_cass_last_course != $COURSE->id) {
+    if (empty($SESSION->theme_snap_last_course) || $SESSION->theme_snap_last_course != $COURSE->id) {
         $USER->editing = 0;
-        $SESSION->theme_cass_last_course = $COURSE->id;
+        $SESSION->theme_snap_last_course = $COURSE->id;
     }
 
     if (isset($SESSION->wantsurl)) {
         // We are taking a backup of this because it can get unset later by core.
-        $SESSION->casswantsurl = $SESSION->wantsurl;
+        $SESSION->snapwantsurl = $SESSION->wantsurl;
     }
 }
 
 $THEME->doctype = 'html5';
 $THEME->yuicssmodules = array('cssgrids'); // This is required for joule grader.
 $THEME->name = 'cass';
-$THEME->parents = array('boost');
+$THEME->parents = ['snap', 'boost'];
 
 $THEME->enable_dock = false;
-$THEME->prescsscallback = 'theme_cass_get_pre_scss';
+$THEME->prescsscallback = 'theme_snap_get_pre_scss'; // OK as theme snap.
 $THEME->scss = function($theme) {
-    return theme_cass_get_main_scss_content($theme);
+    return theme_cass_get_main_scss_content($theme); // Has some alterations for Cass.
 };
-$THEME->csspostprocess = 'theme_cass_process_css';
+$THEME->csspostprocess = 'theme_snap_process_css'; // OK as theme snap.
 $THEME->supportscssoptimisation = false;
 
 $THEME->editor_sheets = array('editor');
@@ -74,13 +74,6 @@ $THEME->editor_sheets = array('editor');
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
 
 $THEME->layouts = array(
-    'format_flexpage' => array(
-        'file' => 'flexpage.php',
-        'regions' => array('side-top', 'side-pre', 'main', 'side-main-box', 'side-post'),
-        'defaultregion' => 'main',
-        'options' => array('langmenu' => true),
-    ),
-
     // Most backwards compatible layout without the blocks - this is the layout used by default.
     'base' => array(
         'file' => 'default.php',
@@ -206,13 +199,13 @@ $THEME->blockrtlmanipulations = array(
 );
 
 if ($themeiscass && $notajaxscript) {
-    if (empty($CFG->casspageinit) && !empty($PAGE)) {
-        $CFG->casspageinit = true;
+    if (empty($CFG->snappageinit) && !empty($PAGE)) {
+        $CFG->snappageinit = true;
         $PAGE->initialise_theme_and_output();
 
-        // Modify $PAGE to use cass requirements manager.
-        $casspman = new cass_page_requirements_manager();
-        $casspman->copy_page_requirements();
+        // Modify $PAGE to use snap requirements manager.
+        $snappman = new snap_page_requirements_manager();
+        $snappman->copy_page_requirements();
     }
 
 }

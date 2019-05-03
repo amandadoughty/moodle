@@ -17,22 +17,23 @@
 /**
  * Course action for affecting section visibility.
  * @author    gthomas2
- * @copyright Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2016 Blackboard Inc. (http://www.blackboard.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace theme_cass\renderables;
 use context_course;
 use section_info;
+use theme_snap\renderables\course_action_section_highlight as snap_course_action_section_highlight;
 
 defined('MOODLE_INTERNAL') || die();
 
-class course_action_section_highlight extends course_action_section_base {
+class course_action_section_highlight extends snap_course_action_section_highlight {
 
     /**
      * @var string
      */
-    public $class = 'cass-highlight';
+    public $class = 'snap-highlight';
 
     /**
      * @var string
@@ -70,11 +71,11 @@ class course_action_section_highlight extends course_action_section_base {
                     $url->param('marker', 0);
                     $this->url = $url;
                     $this->ariapressed = 'aria-pressed="true"';
-                    $this->class .= ' cass-marked';
+                    $this->class .= ' snap-marked';
                 } else {
                     $url->param('marker', $section->section);
                     $this->url = $url;
-                    $this->class .= ' cass-marker';
+                    $this->class .= ' snap-marker';
                 }
             }
         }
