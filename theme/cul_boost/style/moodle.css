@@ -23252,6 +23252,19 @@ li.movehere {
 .groupmanagementtable #potentialcell {
   width: 45%; }
 
+.dragdrop-keyboard-drag [data-drop-target] {
+  font-weight: bold; }
+
+.dragdrop-keyboard-drag [data-drop-target^="module-"] {
+  /* Attribute value starts with this */
+  margin-left: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+  font-weight: normal; }
+
+.dragdrop-keyboard-drag [data-drop-target^="module-"]:before {
+  content: ' - '; }
+
 .path-mod-assign div[role="main"],
 .path-mod-assign #region-main,
 .path-mod-assign #page-content,
