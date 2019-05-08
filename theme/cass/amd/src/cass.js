@@ -1,6 +1,6 @@
 (function() {
     var pluginJSURL = function(path) {
-        return M.cfg.wwwroot + "/pluginfile.php/" + M.cfg.contextid + "/theme_snap/" + path;
+        return M.cfg.wwwroot + "/pluginfile.php/" + M.cfg.contextid + "/theme_cass/" + path;
     };
 
     require.config({
