@@ -14,18 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * @package    mod
- * @subpackage hvp
- * @copyright  2016 Joubel AS <contact@joubel.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019031301;
-$plugin->requires  = 2013051403;
-$plugin->cron      = 0;
-$plugin->component = 'mod_hvp';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.17.2';
+$addons = array(
+    "mod_hvp" => array( // Plugin identifier.
+        'handlers' => array( // Different places where the plugin will display content.
+            'coursehvp' => array( // Handler unique name (alphanumeric).
+                'delegate'    => 'CoreCourseModuleDelegate', // Delegate (where to display the link to the plugin).
+                'method'      => 'mobile_course_view', // Main function in \mod_certificate\output\mobile.
+                'displaydata' => array(
+                    'icon'  => $CFG->wwwroot . '/mod/hvp/pix/icon.svg',
+                    'class' => '',
+                ),
+            )
+        )
+    )
+);
