@@ -19,7 +19,7 @@
  *
  * @package    atto_styles
  * @copyright  2015 Andrew Davidson, Synergy Learning UK <andrew.davidson@synergy-learning.com>
-               on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -56,4 +56,23 @@ function atto_styles_params_for_js($elementid, $options, $fpoptions) {
     $styles = json_encode($styles);
 
     return array('styles' => $styles);
+}
+
+/**
+ * Get icon mapping for font-awesome.
+ */
+function atto_styles_get_fontawesome_icon_map() {
+    return [
+        'atto_styles:icon' => 'fa-tint'
+    ];
+}
+
+/**
+ * Get the list of strings for this plugin.
+ * @param string $elementid
+ */
+function atto_styles_strings_for_js() {
+    global $PAGE;
+
+    $PAGE->requires->strings_for_js(array('inlinehint'), 'atto_styles');
 }
