@@ -3,7 +3,7 @@ define(['jquery', 'core/log'], function($, log) {
     return {
         init: function() {
 
-            $('.viewmorelink').on('click', function() {
+            $('.viewmorelink .viewmore-inner').on('click', function() {
                 $(this).parents('.dash-panel').toggleClass('reveal');
             });
 

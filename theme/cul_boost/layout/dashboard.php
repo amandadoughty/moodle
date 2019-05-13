@@ -73,7 +73,7 @@ echo $OUTPUT->doctype() ?>
                 <?php echo $OUTPUT->main_content(); ?>
             </section>
 
-            <?php echo $OUTPUT->blocks('side-post'); ?>          
+            <?php echo $OUTPUT->blocks('side-post', $regions['post']); ?>          
 
             <?php 
 

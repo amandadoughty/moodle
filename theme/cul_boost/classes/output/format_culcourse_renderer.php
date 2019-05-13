@@ -206,4 +206,191 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
         }        
     }
 
+        /**
+     * Generate the display of the header part of a section before
+     * course modules are included
+     *
+     * @param stdClass $section The course_section entry from DB
+     * @param stdClass $course The course entry from DB
+     * @param bool $onsectionpage true if being printed on a single-section page
+     * @param int $sectionreturn The section to return to after an action
+     * @return string HTML to output.
+     */
+    protected function section_header($section, $course, $onsectionpage, $sectionreturn=null) {
+        $o = '';
+        $currenttext = '';
+        $sectionstyle = '';
+
+        if ($section->section != 0) {
+            // Only in the non-general sections.
+            if (!$section->visible) {
+                $sectionstyle = ' hidden';
+            }
+            if (course_get_format($course)->is_section_current($section)) {
+                $sectionstyle = ' current';
+            }
+        }
+
+        $o.= html_writer::start_tag(
+            'li', 
+            [
+                'id' => 'section-'.$section->section,
+                'class' => 'section main clearfix'.$sectionstyle, 
+                'role'=>'region',
+                'aria-label'=> get_section_name($course, $section)
+            ]
+        );
+
+        // Create a span that contains the section title to be used to create the keyboard section move menu.
+        $o .= html_writer::tag(
+            'span', 
+            get_section_name($course, $section), 
+            ['class' => 'hidden sectionname']
+        );
+
+        $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
+        $o.= html_writer::tag(
+            'div', 
+            $leftcontent, 
+            ['class' => 'left side']
+        );
+
+        $rightcontent = $this->section_right_content($section, $course, $onsectionpage);
+        $o.= html_writer::tag(
+            'div', 
+            $rightcontent, 
+            ['class' => 'right side']
+        );
+        $o.= html_writer::start_tag('div', ['class' => 'content']);
+
+        // When not on a section page, we display the section titles except the general section if null.
+        $hasnamenotsecpg = (!$onsectionpage && ($section->section != 0 || !is_null($section->name)));
+
+        // When on a section page, we only display the general section title, if title is not the default one.
+        $hasnamesecpg = ($onsectionpage && ($section->section == 0 && !is_null($section->name)));
+        $classes = ' accesshide';
+
+        if ($hasnamenotsecpg || $hasnamesecpg) {
+            $classes = '';
+        }
+
+        $ariapressed = 'true';
+
+        if ($section->section != 0) {
+            // user_preference_allow_ajax_update('format_culcourse_expanded' . $section->id, PARAM_INT);
+            // $userpref = 'format_culcourse_expanded' . $section->id;
+            $attributes = [
+                'class' => 'sectionhead toggle',
+                'id' => 'toggle-' . $section->id,
+                'data-toggle' => 'collapse',
+                'data-target' => '.course-content #togglesection-' . $section->id,
+                'role' => 'button', 
+                'aria-pressed' => $ariapressed
+            ];
+
+            if ($onsectionpage) {
+                $attributes['class'] = 'toggle';
+                $attributes['data-toggle'] = '';
+                $attributes['data-target'] = '';
+            }
+
+            $o .= html_writer::start_tag(
+                'div',
+                $attributes
+            );
+
+            $sectionname = html_writer::tag('span', $this->section_title($section, $course));
+            $o .= $this->output->heading($sectionname, 3, 'sectionname' . $classes);
+            $o .= $this->section_availability($section);
+
+            
+            if ($this->culconfig['showsectionsummary'] == 2) {
+                $o .= $this->section_summary_container($section, $onsectionpage);
+            }
+
+            if(!$onsectionpage) {
+                $o .= $this->section_activity_summary($section, $course, null);
+            }
+
+            $o .= html_writer::end_tag('div'); // .sectionhead.
+
+            $attributes = [
+                'class' => 'sectionbody togglesection collapse show',
+                'id' => 'togglesection-' . $section->id,
+                'data-preference-key' => $section->id
+            ];
+
+            if ($onsectionpage) {
+                $attributes['class'] = 'sectionbody';
+            }
+
+            $o .= html_writer::start_tag(
+                'div',
+                $attributes
+            );
+
+            if ($this->culconfig['showsectionsummary'] == 1) {
+                $o .= $this->section_summary_container($section, $onsectionpage);
+            }
+
+        }  else {
+            $o .= html_writer::tag('div', '', ['class' => 'summary']); //@TODO
+        }
+
+        return $o;
+    }
+
+    /**
+     * Generate the display of the footer part of a section
+     *
+     * @param stdClass $course The course entry from DB
+     * @param int $section The section order number
+     * @param stdClass $section The course_section entry from DB
+     * @param stdClass $context 
+     * @param bool $onsectionpage true if being printed on a section page
+
+     * @return string HTML to output.
+     */
+    protected function injected_section_footer($course, $section, $context, $thissection, $onsectionpage) {
+        $o = '';
+        $ariapressed = 'true';
+
+        if ($section != 0) {
+            $o .= html_writer::end_tag('div'); // .sectionbody.
+
+            $attributes = [
+                'class' => 'sectionclose collapsed',
+                'id' => 'footertoggle-' . $thissection->id,
+                'data-toggle' => 'collapse',
+                'href' => '.course-content #togglesection-' . $thissection->id,
+                'role' => 'button', 
+                'aria-pressed' => $ariapressed
+            ];
+
+            if ($onsectionpage) {
+                $attributes['class'] = 'toggle';
+                $attributes['data-toggle'] = '';
+                $attributes['data-target'] = '';
+            }
+
+            $o .= html_writer::start_tag(
+                'a',
+                $attributes
+            );
+
+            $o .= get_string('closesection', 'format_culcourse');
+            $o .= html_writer::end_tag('a');
+        }
+
+        $o .= html_writer::end_tag('div'); // .content.
+
+        if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {                    
+            $o .= $this->insert_section($course, $section + 1);
+        }
+
+        $o .= html_writer::end_tag('li');
+
+        return $o;
+    }
+
 }

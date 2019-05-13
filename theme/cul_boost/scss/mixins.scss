@@ -46,7 +46,8 @@
   }
 }
 
+$highlight: #ffbf47;
 @mixin component-outline {
-    outline: 3px solid rgba($primary, .5);
+    outline: 3px solid $highlight !important;
     outline-offset: 0;
 }

@@ -27,16 +27,11 @@ if (!isset($PAGE->layout_options['nonavbar']) || $PAGE->layout_options['nonavbar
     $close = html_writer::tag('div', '', ['class'=>'close-icon']);
     $overlay = html_writer::tag('div', $close, ['class'=>'overlay']);
 
-    $classes = '';
-    if ($PAGE->pagelayout != 'mydashboard') {
-        $classes = ' mb-4';
-    }
-
     if (($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'incourse') && $PAGE->pagetype != 'notes-index') {
         echo html_writer::tag('div', $OUTPUT->page_heading(), ['class'=>'page-header container-fluid text-center text-md-left']);
     }
 
-    $navbar = html_writer::tag('div', $leftnavbar.$overlay.$rightnavbar, ['class'=>'d-flex flex-wrap align-items-center'.$classes]);
+    $navbar = html_writer::tag('div', $leftnavbar.$overlay.$rightnavbar, ['class'=>'d-flex flex-wrap align-items-center mb-4']);
 
     echo html_writer::tag('div', $navbar, ['id'=>'page-navbar', 'class'=>'container-fluid']);
 }

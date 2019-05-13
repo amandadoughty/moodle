@@ -14,6 +14,10 @@ define(['jquery', 'core/log'], function($, log) {
                 plugin.toggleDrawer();
             });
 
+            $('.mainmenu-wrap .dropdown-item a[href*="#"]').on('click', function() {
+                plugin.toggleDrawer();
+            });
+
             $('.drawer .usermenu_header').on('click touchmove', function() {
                 $('.mainmenu-wrap').collapse('show');
                 $("html").addClass('navopen');

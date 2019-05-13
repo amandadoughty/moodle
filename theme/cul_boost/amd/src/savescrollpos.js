@@ -3,34 +3,57 @@ define(['jquery', 'core/log'], function($, log) {
     return {
         init: function() {
 
-            $('.editbutton button').on('click', function() {
-                localStorage.setItem('scrollPosition', window.scrollY);
-                console.log(localStorage.getItem('scrollPosition'));
-            });
+            var continuescrolling = false;
 
-            function print_nav_timing_data() {
-              // Use getEntriesByType() to just get the "navigation" events
-              var perfEntries = performance.getEntriesByType("navigation");
-
-              for (var i=0; i < perfEntries.length; i++) {
-                var p = perfEntries[i];
-                
-                if (p.type == 'reload') {
-                    localStorage.setItem('scrollPosition', null);
-                }
-
-                if (p.type == 'navigate') {
-                    
-                    if (localStorage.getItem('scrollPosition') !== null) {
-                        window.scrollTo(0, localStorage.getItem('scrollPosition'));
-                    }
-
-                    localStorage.setItem('scrollPosition', null);
-                }
-              }
+            function uniqueClass() {
+                var uniqueClass = $('body').attr('class').match(/course-\d+/)[0];
+                return uniqueClass;
             }
 
-            print_nav_timing_data();
+            function scroll_to_section() {
+
+                var id = localStorage.getItem('scrollPosition-' + uniqueClass());
+
+                if (localStorage.getItem('scrollPosition-' + uniqueClass()) !== null) {
+                    var nav = $('.nav-wrap').outerHeight();
+                    var id = '#' + localStorage.getItem('scrollPosition-' + uniqueClass());
+
+                    localStorage.setItem('savedscrollPosition-' + uniqueClass(), id);
+                    var scrollsection = localStorage.getItem('savedscrollPosition-' + uniqueClass());
+
+                    $('html, body').animate({
+                        scrollTop: $(scrollsection).offset().top - 55
+                    }, 400);
+                }
+
+                continuescrolling = true;
+            }
+
+            $(window).on('load', function() {
+                setTimeout(function() {
+                    scroll_to_section();
+                }, 1000);
+            });
+
+            $(window).scroll(function() {
+
+                if (continuescrolling == true) {
+                    var scroll = $(window).scrollTop();
+                    var section = $('.course-content ul.culcourse li.section');
+                    var sectionheight = section.outerHeight();
+                    var nav = $('.nav-wrap').outerHeight();
+                    section.each(function() {
+                        var sectiontop = $(this).offset().top - nav;
+                        if (scroll > sectiontop &&
+                            scroll < (sectiontop + sectionheight)) {
+                            localStorage.setItem('scrollPosition-' + uniqueClass(), $(this).attr('id'));
+                        } else if (scroll < ($('.course-content ul.culcourse #section-0').offset().top - nav)) {
+                            localStorage.setItem('scrollPosition-' + uniqueClass(), 'top');
+                        }
+                    });
+                }
+
+            });
 
         }
     }

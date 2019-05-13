@@ -211,6 +211,7 @@ aside[id*="block-region-nav-settings"] {
         width: 100%;
         line-height: 1.1;
         color: $body-color;
+        pointer-events: none;
     }
     .block.block_settings .block_tree p>a {
         &:hover {
