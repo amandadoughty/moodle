@@ -16,3 +16,15 @@
 		}
 	}
 }
+
+// Fix jerky image when toggling dashboard; 
+.editing.format-culcourse.jsenabled .courseheader .course-image { 
+    max-height: 100%; 
+} 
+
+// Fix cancel link for non-JS dash links move: 
+.editing.format-culcourse .courseheader .clipboard { 
+    background: $primary; 
+    position: relative; 
+    margin-bottom: 1rem; 
+} 
