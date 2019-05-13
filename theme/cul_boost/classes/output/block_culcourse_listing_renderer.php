@@ -53,7 +53,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
 	    // Generate an id and the required JS call to make this a nice widget.
 	    $id = 'favourites';
 	    // Start content generation.
-	    $content = html_writer::start_tag('div', array('id' => $id, 'class' => 'favourites tab-pane active', 'role'=>'tabpanel'));
+	    $content = html_writer::start_tag('div', array('id' => $id, 'class' => 'favourites tab-pane', 'role'=>'tabpanel'));
 
 	    // Header.
 	    $content .= html_writer::start_tag('div', array('id' => 'favouritesheader', 'class'=>'mb-3'));
@@ -62,7 +62,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
 	        2,
 	        'culcourse_listing m-0'
 	        );
-	    $heading = html_writer::link('#'.$id, $heading, ['class'=>'nav-link favourites-link active', 'data-toggle'=>'tab', 'role'=>'tab', 'aria-expanded'=>'true']);
+	    $heading = html_writer::link('#'.$id, $heading, ['class'=>'nav-link favourites-link', 'data-toggle'=>'tab', 'role'=>'tab', 'aria-expanded'=>'false']);
 	    $content .= html_writer::tag('li', $heading, ['class'=>'nav-item']);
 
 	    $content .= html_writer::start_tag('div', array('id' => 'favouritesbuttons'));
@@ -134,7 +134,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
                 return '';
             }
 
-            $content .= html_writer::start_tag('div', ['id'=>$id, 'class'=>'tab-pane', 'role'=>'tabpanel']); // Start .course_category_tree div.
+            $content .= html_writer::start_tag('div', ['id'=>$id, 'class'=>'tab-pane active', 'role'=>'tabpanel']); // Start .course_category_tree div.
             $content .= html_writer::start_tag('div', $attributes);
             $content .= html_writer::start_tag('div', ['id' => 'allcoursesheader']);
 
@@ -208,7 +208,7 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
             // $divalert .= '<i class="fa fa-hand-o-right"></i>';
             
             $heading = html_writer::tag('h2', $header, array('class' => 'allcourses m-0'));
-            $heading = html_writer::link('#'.$id, $heading, ['class'=>'nav-link allcourses-link', 'data-toggle'=>'tab', 'role'=>'tab']);
+            $heading = html_writer::link('#'.$id, $heading, ['class'=>'nav-link allcourses-link active', 'data-toggle'=>'tab', 'role'=>'tab', 'aria-expanded' => true]);
             $content .= html_writer::tag('li', $heading, ['class'=>'nav-item']);
 
             $content .= html_writer::tag('div', $divalert, array('class' => 'divalert text-center text-white mb-3'));

@@ -20544,6 +20544,11 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
       -webkit-flex-wrap: wrap;
           -ms-flex-wrap: wrap;
               flex-wrap: wrap;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: reverse;
+      -webkit-flex-direction: row-reverse;
+          -ms-flex-direction: row-reverse;
+              flex-direction: row-reverse;
       -webkit-box-align: center;
       -webkit-align-items: center;
           -ms-flex-align: center;

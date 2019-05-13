@@ -522,6 +522,7 @@
                 ul#courselistingnav {
                     display: flex;
                     flex-wrap: wrap;
+                    flex-direction: row-reverse;
                     align-items: center;
                     justify-content: center;
                     margin-bottom: $spacer * 2;
