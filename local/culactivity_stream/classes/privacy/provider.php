@@ -25,7 +25,9 @@ namespace local_culactivity_stream\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
+use core_privacy\local\request\userlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\writer;
 
@@ -39,7 +41,8 @@ defined('MOODLE_INTERNAL') || die();
  */
 class provider implements 
     \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\plugin\provider {
+    \core_privacy\local\request\plugin\provider,
+    \core_privacy\local\request\core_userlist_provider {
 
     /**
      * Return the fields which contain personal data.
@@ -89,11 +92,29 @@ class provider implements
     }
 
     /**
+     * Get the list of users who have data within a context.
+     *
+     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
+     */
+    public static function get_users_in_context(userlist $userlist) {
+        $context = $userlist->get_context();
+
+        if (!$context instanceof \context_system) {
+            return;
+        }
+
+        // Fetch all queued messages.
+        $sql = "SELECT userfromid FROM {message_culactivity_stream_q}";
+        $params = [];
+        $userlist->add_from_sql('userfromid', $sql, $params);
+    }    
+
+    /**
      * Export personal data for the given approved_contextlist. User and context information is contained within the contextlist.
      *
      * @param approved_contextlist $contextlist a list of contexts approved for export.
      */
-    public static function export_user_data($contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist) {
         if (empty($contextlist->count())) {
             return;
         }
@@ -160,15 +181,17 @@ class provider implements
      * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
+        global $DB;
+
         $context = $userlist->get_context();
 
-        if (!$context instanceof \context_user) {
+        if (!$context instanceof \context_system) {
             return;
         }
 
         list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
 
-        $DB->delete_records_select('message_culactivity_stream_q', "userfromid {$userinsql}", [$userinparams, $userinparams]);
+        $DB->delete_records_select('message_culactivity_stream_q', "userfromid {$userinsql}", $userinparams);
     }    
 
     /**
