@@ -84,7 +84,6 @@ class provider implements
         $items->add_database_table(
             'peerassessment_peers',
              [
-                'id' => 'privacy:metadata:peerassessment_peers:userid',
                 'peerassessment' => 'privacy:metadata:peerassessment_peers:peerassessment',
                 'groupid' => 'privacy:metadata:peerassessment_peers:groupid',
                 'grade' => 'privacy:metadata:peerassessment_peers:grade',         
@@ -161,7 +160,7 @@ class provider implements
                   FROM {course_modules} cm
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
                   JOIN {peerassessment} p ON p.id = cm.instance
-                  JOIN {peerassessment_submissions} ps ON ps.assignment = p.id
+                  JOIN {peerassessment_submission} ps ON ps.assignment = p.id
                  WHERE cm.id = :instanceid";
         $userlist->add_from_sql('userid', $sql, $params);
 
@@ -170,7 +169,7 @@ class provider implements
                   FROM {course_modules} cm
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
                   JOIN {peerassessment} p ON p.id = cm.instance
-                  JOIN {peerassessment_submissions} ps ON ps.assignment = p.id
+                  JOIN {peerassessment_submission} ps ON ps.assignment = p.id
                  WHERE cm.id = :instanceid";
         $userlist->add_from_sql('gradedby', $sql, $params);
 
