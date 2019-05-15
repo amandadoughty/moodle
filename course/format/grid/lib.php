@@ -163,6 +163,14 @@ class format_grid extends format_base {
     }
 
     /**
+     * Gets the default image file type.
+     * @return int Default image file type.
+     */
+    public static function get_default_image_file_type() {
+        return 1; // Original.
+    }
+
+    /**
      * Gets the default border colour.
      * @return string Default border colour.
      */
@@ -550,6 +558,7 @@ class format_grid extends format_base {
      */
     public function course_format_options($foreditform = false) {
         static $courseformatoptions = false;
+        $courseconfig = null;
 
         if ($courseformatoptions === false) {
             /* Note: Because 'admin_setting_configcolourpicker' in 'settings.php' needs to use a prefixing '#'
@@ -557,7 +566,19 @@ class format_grid extends format_base {
             $defaults = $this->get_course_format_colour_defaults();
 
             $courseconfig = get_config('moodlecourse');
+            $courseid = $this->get_courseid();
+            if ($courseid == 1) { // New course.
+                $defaultnumsections = $courseconfig->numsections;
+            } else { // Existing course that may not have 'numsections' - see get_last_section().
+                global $DB;
+                $defaultnumsections = $DB->get_field_sql('SELECT max(section) from {course_sections}
+                    WHERE course = ?', array($courseid));
+            }
             $courseformatoptions = array(
+                'numsections' => array(
+                    'default' => $defaultnumsections,
+                    'type' => PARAM_INT,
+                ),
                 'hiddensections' => array(
                     'default' => $courseconfig->hiddensections,
                     'type' => PARAM_INT
@@ -699,12 +720,19 @@ class format_grid extends format_base {
 
             $context = $this->get_context();
 
-            $courseconfig = get_config('moodlecourse');
+            if (is_null($courseconfig)) {
+                $courseconfig = get_config('moodlecourse');
+            }
             $sectionmenu = array();
             for ($i = 0; $i <= $courseconfig->maxsections; $i++) {
                 $sectionmenu[$i] = "$i";
             }
             $courseformatoptionsedit = array(
+                'numsections' => array(
+                    'label' => new lang_string('numbersections', 'format_grid'),
+                    'element_type' => 'select',
+                    'element_attributes' => array($sectionmenu),
+                ),
                 'hiddensections' => array(
                     'label' => new lang_string('hiddensections'),
                     'help' => 'hiddensections',
@@ -727,7 +755,7 @@ class format_grid extends format_base {
                         )
                     ),
                     'help' => 'coursedisplay',
-                    'help_component' => 'moodle',
+                    'help_component' => 'moodle'
                 )
             );
             if (has_capability('format/grid:changeimagecontaineralignment', $context)) {
@@ -1051,7 +1079,7 @@ class format_grid extends format_base {
                 $courseformatoptionsedit['sectiontitlesummarybackgroundcolour'] = array(
                     'label' => $defaults['defaultsectiontitlesummarybackgroundcolour'], 'element_type' => 'hidden');
                 $courseformatoptionsedit['sectiontitlesummarybackgroundopacity'] = array(
-                    'label' => $defaults['defaultsectiontitlesummarybackgroundopacity'], 'element_type' => 'hidden');
+                    'label' => get_config('format_grid', 'defaultsectiontitlesummarybackgroundopacity'), 'element_type' => 'hidden');
             }
 
             $courseformatoptionsedit['newactivity'] = array(
@@ -1167,26 +1195,28 @@ class format_grid extends format_base {
      * @return array array of references to the added form elements.
      */
     public function create_edit_form_elements(&$mform, $forsection = false) {
-        global $CFG, $COURSE, $OUTPUT, $USER;
+        global $CFG, $OUTPUT, $PAGE, $USER;
         MoodleQuickForm::registerElementType('gfcolourpopup', "$CFG->dirroot/course/format/grid/js/gf_colourpopup.php",
                 'MoodleQuickForm_gfcolourpopup');
 
         $elements = parent::create_edit_form_elements($mform, $forsection);
-        if (!$forsection && (empty($COURSE->id) || $COURSE->id == SITEID)) {
-            /* Add "numsections" element to the create course form - it will force new course to be prepopulated
-               with empty sections.
-               The "Number of sections" option is no longer available when editing course, instead teachers should
-               delete and add sections when needed. */
-            $courseconfig = get_config('moodlecourse');
-            $max = (int)$courseconfig->maxsections;
-            $element = $mform->addElement('select', 'numsections', get_string('numberweeks'), range(0, $max ?: 52));
-            $mform->setType('numsections', PARAM_INT);
-            if (is_null($mform->getElementValue('numsections'))) {
-                $mform->setDefault('numsections', $courseconfig->numsections);
-            }
-            array_unshift($elements, $element);
-        }
 
+        /* Increase the number of sections combo box values if the user has increased the number of sections
+           using the icon on the course page beyond course 'maxsections' or course 'maxsections' has been
+           reduced below the number of sections already set for the course on the site administration course
+           defaults page.  This is so that the number of sections is not reduced leaving unintended orphaned
+           activities / resources. */
+        if (!$forsection) {
+            $maxsections = get_config('moodlecourse', 'maxsections');
+            $numsections = $mform->getElementValue('numsections');
+            $numsections = $numsections[0];
+            if ($numsections > $maxsections) {
+                $element = $mform->getElement('numsections');
+                for ($i = $maxsections + 1; $i <= $numsections; $i++) {
+                    $element->addOption("$i", $i);
+                }
+            }
+        }
         $context = $this->get_context();
 
         $changeimagecontaineralignment = has_capability('format/grid:changeimagecontaineralignment', $context);
@@ -1200,6 +1230,17 @@ class format_grid extends format_base {
         $elements[] = $mform->addElement('header', 'gfreset', get_string('gfreset', 'format_grid'));
         $mform->addHelpButton('gfreset', 'gfreset', 'format_grid', '', true);
 
+        $bsfour = false;
+        if (strcmp($PAGE->theme->name, 'boost') === 0) {
+            $bsfour = true;
+        } else if (!empty($PAGE->theme->parents)) {
+            if (in_array('boost', $PAGE->theme->parents) === true) {
+                $bsfour = true;
+            }
+        } else if (strcmp($PAGE->theme->name, 'foundation') === 0) {
+            $bsfour = true;
+        }
+
         $resetelements = array();
 
         if (($changeimagecontaineralignment) ||
@@ -1210,85 +1251,165 @@ class format_grid extends format_base {
             ($changesectiontitleoptions)) {
 
             if ($changeimagecontaineralignment) {
-                $checkboxname = get_string('resetimagecontaineralignment', 'format_grid') .
+                if ($bsfour) {
+                    $checkboxname = get_string('resetimagecontaineralignment', 'format_grid');
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontaineralignment', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetimagecontaineralignment', 'format_grid'));
+                } else {
+                    $checkboxname = get_string('resetimagecontaineralignment', 'format_grid').
                         $OUTPUT->help_icon('resetimagecontaineralignment', 'format_grid');
-                $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontaineralignment', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontaineralignment', '', $checkboxname);
+                }
             }
 
             if ($changeimagecontainernavigation) {
-                $checkboxname = get_string('resetimagecontainernavigation', 'format_grid') .
+                if ($bsfour) {
+                    $checkboxname = get_string('resetimagecontainernavigation', 'format_grid');
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontainernavigation', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetimagecontainernavigation', 'format_grid'));
+                } else {
+                    $checkboxname = get_string('resetimagecontainernavigation', 'format_grid').
                         $OUTPUT->help_icon('resetimagecontainernavigation', 'format_grid');
-                $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontainernavigation', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontainernavigation', '', $checkboxname);
+                }
             }
 
             if ($changeimagecontainersize) {
-                $checkboxname = get_string('resetimagecontainersize', 'format_grid') .
+                if ($bsfour) {
+                    $checkboxname = get_string('resetimagecontainersize', 'format_grid');
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontainersize', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetimagecontainersize', 'format_grid'));
+                } else {
+                    $checkboxname = get_string('resetimagecontainersize', 'format_grid').
                         $OUTPUT->help_icon('resetimagecontainersize', 'format_grid');
-                $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontainersize', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontainersize', '', $checkboxname);
+                }
             }
 
             if ($changeimageresizemethod) {
-                $checkboxname = get_string('resetimageresizemethod', 'format_grid') .
+                if ($bsfour) {
+                    $checkboxname = get_string('resetimageresizemethod', 'format_grid');
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimageresizemethod', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetimageresizemethod', 'format_grid'));
+                } else {
+                    $checkboxname = get_string('resetimageresizemethod', 'format_grid').
                         $OUTPUT->help_icon('resetimageresizemethod', 'format_grid');
-                $resetelements[] = & $mform->createElement('checkbox', 'resetimageresizemethod', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimageresizemethod', '', $checkboxname);
+                }
             }
 
             if ($changeimagecontainerstyle) {
-                $checkboxname = get_string('resetimagecontainerstyle', 'format_grid') .
+                if ($bsfour) {
+                    $checkboxname = get_string('resetimagecontainerstyle', 'format_grid');
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontainerstyle', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetimagecontainerstyle', 'format_grid'));
+                } else {
+                    $checkboxname = get_string('resetimagecontainerstyle', 'format_grid').
                         $OUTPUT->help_icon('resetimagecontainerstyle', 'format_grid');
-                $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontainerstyle', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetimagecontainerstyle', '', $checkboxname);
+                }
             }
 
             if ($changesectiontitleoptions) {
-                $checkboxname = get_string('resetsectiontitleoptions', 'format_grid') .
+                if ($bsfour) {
+                    $checkboxname = get_string('resetsectiontitleoptions', 'format_grid');
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetsectiontitleoptions', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetsectiontitleoptions', 'format_grid'));
+                } else {
+                    $checkboxname = get_string('resetsectiontitleoptions', 'format_grid').
                         $OUTPUT->help_icon('resetsectiontitleoptions', 'format_grid');
-                $resetelements[] = & $mform->createElement('checkbox', 'resetsectiontitleoptions', '', $checkboxname);
+                    $resetelements[] = & $mform->createElement('checkbox', 'resetsectiontitleoptions', '', $checkboxname);
+                }
             }
         }
 
-        $checkboxname = get_string('resetnewactivity', 'format_grid').
-            $OUTPUT->help_icon('resetnewactivity', 'format_grid');
-        $resetelements[] = & $mform->createElement('checkbox', 'resetnewactivity', '', $checkboxname);
+        if ($bsfour) {
+            $checkboxname = get_string('resetnewactivity', 'format_grid');
+            $resetelements[] = & $mform->createElement('checkbox', 'resetnewactivity', '', $checkboxname);
+            $resetelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetnewactivity', 'format_grid'));
 
-        $checkboxname = get_string('resetfitpopup', 'format_grid').
-            $OUTPUT->help_icon('resetfitpopup', 'format_grid');
-        $resetelements[] = & $mform->createElement('checkbox', 'resepopup', '', $checkboxname);
+            $checkboxname = get_string('resetfitpopup', 'format_grid');
+            $resetelements[] = & $mform->createElement('checkbox', 'resetfitpopup', '', $checkboxname);
+            $resetelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetfitpopup', 'format_grid'));
+        } else {
+            $checkboxname = get_string('resetnewactivity', 'format_grid').
+                $OUTPUT->help_icon('resetnewactivity', 'format_grid');
+            $resetelements[] = & $mform->createElement('checkbox', 'resetnewactivity', '', $checkboxname);
+
+            $checkboxname = get_string('resetfitpopup', 'format_grid').
+                $OUTPUT->help_icon('resetfitpopup', 'format_grid');
+            $resetelements[] = & $mform->createElement('checkbox', 'resepopup', '', $checkboxname);
+        }
         $elements[] = $mform->addGroup($resetelements, 'resetgroup', get_string('resetgrp', 'format_grid'), null, false);
 
         if ($resetall) {
             $resetallelements = array();
 
-            $checkboxname = get_string('resetallimagecontaineralignment', 'format_grid').
-                $OUTPUT->help_icon('resetallimagecontaineralignment', 'format_grid');
-            $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontaineralignment', '', $checkboxname);
+            if ($bsfour) {
+                $checkboxname = get_string('resetallimagecontaineralignment', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontaineralignment', '', $checkboxname);
+                $resetallelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetallimagecontaineralignment', 'format_grid'));
 
-            $checkboxname = get_string('resetallimagecontainernavigation', 'format_grid').
-                $OUTPUT->help_icon('resetallimagecontainernavigation', 'format_grid');
-            $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontainernavigation', '', $checkboxname);
+                $checkboxname = get_string('resetallimagecontainernavigation', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontainernavigation', '', $checkboxname);
+                $resetallelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetallimagecontainernavigation', 'format_grid'));
 
-            $checkboxname = get_string('resetallimagecontainersize', 'format_grid').
-                $OUTPUT->help_icon('resetallimagecontainersize', 'format_grid');
-            $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontainersize', '', $checkboxname);
+                $checkboxname = get_string('resetallimagecontainersize', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontainersize', '', $checkboxname);
+                $resetallelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetallimagecontainersize', 'format_grid'));
 
-            $checkboxname = get_string('resetallimageresizemethod', 'format_grid').
-                $OUTPUT->help_icon('resetallimageresizemethod', 'format_grid');
-            $resetallelements[] = & $mform->createElement('checkbox', 'resetallimageresizemethod', '', $checkboxname);
+                $checkboxname = get_string('resetallimageresizemethod', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimageresizemethod', '', $checkboxname);
+                $resetallelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetallimageresizemethod', 'format_grid'));
 
-            $checkboxname = get_string('resetallimagecontainerstyle', 'format_grid').
-                $OUTPUT->help_icon('resetallimagecontainerstyle', 'format_grid');
-            $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontainerstyle', '', $checkboxname);
+                $checkboxname = get_string('resetallimagecontainerstyle', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontainerstyle', '', $checkboxname);
+                $resetallelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetallimagecontainerstyle', 'format_grid'));
 
-            $checkboxname = get_string('resetallsectiontitleoptions', 'format_grid').
-                $OUTPUT->help_icon('resetallsectiontitleoptions', 'format_grid');
-            $resetallelements[] = & $mform->createElement('checkbox', 'resetallsectiontitleoptions', '', $checkboxname);
+                $checkboxname = get_string('resetallsectiontitleoptions', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallsectiontitleoptions', '', $checkboxname);
+                $resetallelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetallsectiontitleoptions', 'format_grid'));
 
-            $checkboxname = get_string('resetallnewactivity', 'format_grid').
-                $OUTPUT->help_icon('resetallnewactivity', 'format_grid');
-            $resetallelements[] = & $mform->createElement('checkbox', 'resetallnewactivity', '', $checkboxname);
+                $checkboxname = get_string('resetallnewactivity', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallnewactivity', '', $checkboxname);
+                $resetallelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetallnewactivity', 'format_grid'));
 
-            $checkboxname = get_string('resetallfitpopup', 'format_grid').
-                $OUTPUT->help_icon('resetallfitpopup', 'format_grid');
-            $resetallelements[] = & $mform->createElement('checkbox', 'resetallfitpopup', '', $checkboxname);
+                $checkboxname = get_string('resetallfitpopup', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallfitpopup', '', $checkboxname);
+                $resetallelements[] = & $mform->createElement('html', $OUTPUT->help_icon('resetallfitpopup', 'format_grid'));
+            } else {
+                $checkboxname = get_string('resetallimagecontaineralignment', 'format_grid').
+                    $OUTPUT->help_icon('resetallimagecontaineralignment', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontaineralignment', '', $checkboxname);
+
+                $checkboxname = get_string('resetallimagecontainernavigation', 'format_grid').
+                    $OUTPUT->help_icon('resetallimagecontainernavigation', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontainernavigation', '', $checkboxname);
+
+                $checkboxname = get_string('resetallimagecontainersize', 'format_grid').
+                    $OUTPUT->help_icon('resetallimagecontainersize', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontainersize', '', $checkboxname);
+
+                $checkboxname = get_string('resetallimageresizemethod', 'format_grid').
+                    $OUTPUT->help_icon('resetallimageresizemethod', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimageresizemethod', '', $checkboxname);
+
+                $checkboxname = get_string('resetallimagecontainerstyle', 'format_grid').
+                    $OUTPUT->help_icon('resetallimagecontainerstyle', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallimagecontainerstyle', '', $checkboxname);
+
+                $checkboxname = get_string('resetallsectiontitleoptions', 'format_grid').
+                    $OUTPUT->help_icon('resetallsectiontitleoptions', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallsectiontitleoptions', '', $checkboxname);
+
+                $checkboxname = get_string('resetallnewactivity', 'format_grid').
+                    $OUTPUT->help_icon('resetallnewactivity', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallnewactivity', '', $checkboxname);
+
+                $checkboxname = get_string('resetallfitpopup', 'format_grid').
+                    $OUTPUT->help_icon('resetallfitpopup', 'format_grid');
+                $resetallelements[] = & $mform->createElement('checkbox', 'resetallfitpopup', '', $checkboxname);
+            }
 
             $elements[] = $mform->addGroup($resetallelements, 'resetallgroup', get_string('resetallgrp', 'format_grid'), null,
                 false);
@@ -1408,7 +1529,7 @@ class format_grid extends format_base {
      * Updates format options for a course
      *
      * In case if course format was changed to 'Grid', we try to copy options
-     * 'coursedisplay' and 'hiddensections' from the previous format.
+     * 'coursedisplay', 'numsections' and 'hiddensections' from the previous format.
      * The layout and colour defaults will come from 'course_format_options'.
      *
      * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data.
@@ -1533,11 +1654,33 @@ class format_grid extends format_base {
                 if (!array_key_exists($key, $data)) {
                     if (array_key_exists($key, $oldcourse)) {
                         $data[$key] = $oldcourse[$key];
+                    } else if ($key === 'numsections') {
+                        // If previous format does not have the field 'numsections'
+                        // and $data['numsections'] is not set,
+                        // we fill it with the maximum section number from the DB
+                        $maxsection = $DB->get_field_sql('SELECT max(section) from {course_sections}
+                            WHERE course = ?', array($this->courseid));
+                        if ($maxsection) {
+                            // If there are no sections, or just default 0-section, 'numsections' will be set to default
+                            $data['numsections'] = $maxsection;
+                        }
                     }
                 }
             }
         }
         $changes = $this->update_format_options($data);
+
+        if ($changes && array_key_exists('numsections', $data)) {
+            // If the numsections was decreased, try to completely delete the orphaned sections (unless they are not empty).
+            $numsections = (int)$data['numsections'];
+            $maxsection = $DB->get_field_sql('SELECT max(section) from {course_sections}
+                        WHERE course = ?', array($this->courseid));
+            for ($sectionnum = $maxsection; $sectionnum > $numsections; $sectionnum--) {
+                if (!$this->delete_section($sectionnum, false)) {
+                    break;
+                }
+            }
+        }
 
         // Now we can change the displayed images if needed.
         if ($changedisplayedimages) {
@@ -1635,10 +1778,15 @@ class format_grid extends format_base {
     public function update_section_format_options($data) {
         $data = (array) $data;
 
-        // Resets the displayed image because changing the section name / details deletes the file.
-        // See CONTRIB-4784.
-        global $DB;
-        $DB->set_field('format_grid_icon', 'displayedimageindex', 0, array('sectionid' => $data['id']));
+        /* Resets the displayed image because changing the section name / details deletes the file.
+           See CONTRIB-4784. */
+        $sectionimage = $this->get_image($this->courseid, $data['id']);
+        if ($sectionimage) {
+            $contextid = $this->get_context()->id;
+            $fs = get_file_storage();
+            $gridimagepath = $this->get_image_path();
+            $this->delete_displayed_image($contextid, $sectionimage, $gridimagepath, $fs);
+        }
 
         return parent::update_section_format_options($data);
     }
@@ -2048,11 +2196,12 @@ class format_grid extends format_base {
 
             if ($convertsuccess == true) {
                 $DB->set_field('format_grid_icon', 'image', $storedfilerecord['filename'],
-                        array('sectionid' => $storedfilerecord['itemid']));
+                    array('sectionid' => $storedfilerecord['itemid']));
 
                 // Set up the displayed image:...
                 $sectionimage->newimage = $storedfilerecord['filename'];
-                $this->setup_displayed_image($sectionimage, $storedfilerecord['contextid'], $this->get_settings());
+                $icbc = self::hex2rgb($this->get_settings()['imagecontainerbackgroundcolour']);
+                $this->setup_displayed_image($sectionimage, $storedfilerecord['contextid'], $this->get_settings(), $icbc, $mime);
             } else {
                 print_error('imagecannotbeused', 'format_grid', $CFG->wwwroot . "/course/view.php?id=" . $this->courseid);
             }
@@ -2071,9 +2220,11 @@ class format_grid extends format_base {
      * @param array $sectionimage Section information from its row in the 'format_grid_icon' table.
      * @param array $contextid The context id to which the image relates.
      * @param array $settings The course settings to apply.
+     * @param array $icbc The 'imagecontainerbackgroundcolour' as an RGB array.
+     * @param string $mime The mime type if already known.
      * @return array The updated $sectionimage data.
      */
-    public function setup_displayed_image($sectionimage, $contextid, $settings) {
+    public function setup_displayed_image($sectionimage, $contextid, $settings, $icbc, $mime = null) {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/repository/lib.php');
         require_once($CFG->libdir . '/gdlib.php');
@@ -2084,21 +2235,9 @@ class format_grid extends format_base {
                 $sectionimage->newimage)) {
             $gridimagepath = $this->get_image_path();
             $convertsuccess = true;
-            $mime = $imagecontainerpathfile->get_mimetype();
-
-            // Updated image.
-            $sectionimage->displayedimageindex++;
-            $created = time();
-            $displayedimagefilerecord = array(
-                'contextid' => $contextid,
-                'component' => 'course',
-                'filearea' => 'section',
-                'itemid' => $sectionimage->sectionid,
-                'filepath' => $gridimagepath,
-                'filename' => $sectionimage->displayedimageindex . '_' . $sectionimage->newimage,
-                'timecreated' => $created,
-                'timemodified' => $created,
-                'mimetype' => $mime);
+            if (!$mime) {
+                $mime = $imagecontainerpathfile->get_mimetype();
+            }
 
             $displayedimageinfo = $this->get_displayed_image_container_properties($settings);
 
@@ -2111,22 +2250,34 @@ class format_grid extends format_base {
             } else {
                 $crop = true;
             }
-            $data = self::generate_image($tmpfilepath, $displayedimageinfo['width'], $displayedimageinfo['height'], $crop);
+            $iswebp = (get_config('format_grid', 'defaultdisplayedimagefiletype') == 2);
+            if ($iswebp) { // WebP.
+                $newmime = 'image/webp';
+            } else {
+                $newmime = $mime;
+            }
+            $data = self::generate_image($tmpfilepath, $displayedimageinfo['width'], $displayedimageinfo['height'], $crop, $icbc, $newmime);
             if (!empty($data)) {
-                if ($fs->file_exists($displayedimagefilerecord['contextid'], $displayedimagefilerecord['component'],
-                                $displayedimagefilerecord['filearea'], $displayedimagefilerecord['itemid'],
-                                $displayedimagefilerecord['filepath'], $displayedimagefilerecord['filename'])) {
-                    /* This can happen with previous CONTRIB-4099 versions where it was possible for the backup file to
-                      have the 'gridimage' files too.  Therefore without this, then 'create_file_from_string' below will
-                      baulk as the file already exists.   Unfortunately has to be here as the restore mechanism restores
-                      the grid format data for the database and then the files.  And the Grid code is called at the 'data'
-                      stage. */
-                    if ($oldfile = $fs->get_file($displayedimagefilerecord['contextid'], $displayedimagefilerecord['component'],
-                            $displayedimagefilerecord['filearea'], $displayedimagefilerecord['itemid'],
-                            $displayedimagefilerecord['filepath'], $displayedimagefilerecord['filename'])) {
-                        // Delete old file.
-                        $oldfile->delete();
-                    }
+                // Updated image.
+                $sectionimage->displayedimageindex++;
+                $created = time();
+                $displayedimagefilerecord = array(
+                    'contextid' => $contextid,
+                    'component' => 'course',
+                    'filearea' => 'section',
+                    'itemid' => $sectionimage->sectionid,
+                    'filepath' => $gridimagepath,
+                    'filename' => $sectionimage->displayedimageindex . '_' . $sectionimage->newimage,
+                    'timecreated' => $created,
+                    'timemodified' => $created,
+                    'mimetype' => $mime);
+
+                $this->remove_existing_new_displayed_image($displayedimagefilerecord, $fs);
+
+                if ($iswebp) { // WebP.
+                    // Displayed image is a webp image from the original, so change a few things.
+                    $displayedimagefilerecord['filename'] = $sectionimage->displayedimageindex . '_' . $sectionimage->newimage.'.webp';
+                    $displayedimagefilerecord['mimetype'] = $newmime;
                 }
                 $fs->create_file_from_string($displayedimagefilerecord, $data);
             } else {
@@ -2135,13 +2286,17 @@ class format_grid extends format_base {
             unlink($tmpfilepath);
 
             if ($convertsuccess == true) {
-                // Now safe to delete old file if it exists.
+                // Now safe to delete old file(s) if they exist.
                 if ($oldfile = $fs->get_file($contextid, 'course', 'section', $sectionimage->sectionid, $gridimagepath,
                         ($sectionimage->displayedimageindex - 1) . '_' . $sectionimage->image)) {
                     $oldfile->delete();
                 }
+                if ($oldfile = $fs->get_file($contextid, 'course', 'section', $sectionimage->sectionid, $gridimagepath,
+                        ($sectionimage->displayedimageindex - 1) . '_' . $sectionimage->image.'.webp')) {
+                    $oldfile->delete();
+                }
                 $DB->set_field('format_grid_icon', 'displayedimageindex', $sectionimage->displayedimageindex,
-                        array('sectionid' => $sectionimage->sectionid));
+                    array('sectionid' => $sectionimage->sectionid));
             } else {
                 print_error('cannotconvertuploadedimagetodisplayedimage', 'format_grid',
                         $CFG->wwwroot . "/course/view.php?id=" . $this->courseid);
@@ -2151,6 +2306,69 @@ class format_grid extends format_base {
         }
 
         return $sectionimage;  // So that the caller can know the new value of displayedimageindex.
+    }
+
+    protected function remove_existing_new_displayed_image($displayedimagefilerecord, $fs) {
+        // Can happen if previously updating the section name did not delete the displayed image.
+        if ($fs->file_exists($displayedimagefilerecord['contextid'], $displayedimagefilerecord['component'],
+            $displayedimagefilerecord['filearea'], $displayedimagefilerecord['itemid'],
+            $displayedimagefilerecord['filepath'], $displayedimagefilerecord['filename'])) {
+            /* This can happen with previous CONTRIB-4099 versions where it was possible for the backup file to
+               have the 'gridimage' files too.  Therefore without this, then 'create_file_from_string' below will
+               baulk as the file already exists.   Unfortunately has to be here as the restore mechanism restores
+               the grid format data for the database and then the files.  And the Grid code is called at the 'data'
+               stage. */
+            if ($oldfile = $fs->get_file($displayedimagefilerecord['contextid'], $displayedimagefilerecord['component'],
+                $displayedimagefilerecord['filearea'], $displayedimagefilerecord['itemid'],
+                $displayedimagefilerecord['filepath'], $displayedimagefilerecord['filename'])) {
+                // Delete old file.
+                $oldfile->delete();
+            }
+        }
+        // WebP version.
+        if ($fs->file_exists($displayedimagefilerecord['contextid'], $displayedimagefilerecord['component'],
+            $displayedimagefilerecord['filearea'], $displayedimagefilerecord['itemid'],
+            $displayedimagefilerecord['filepath'], $displayedimagefilerecord['filename'].'.webp')) {
+            /* This can happen with previous CONTRIB-4099 versions where it was possible for the backup file to
+               have the 'gridimage' files too.  Therefore without this, then 'create_file_from_string' below will
+               baulk as the file already exists.   Unfortunately has to be here as the restore mechanism restores
+               the grid format data for the database and then the files.  And the Grid code is called at the 'data'
+               stage. */
+            if ($oldfile = $fs->get_file($displayedimagefilerecord['contextid'], $displayedimagefilerecord['component'],
+                $displayedimagefilerecord['filearea'], $displayedimagefilerecord['itemid'],
+                $displayedimagefilerecord['filepath'], $displayedimagefilerecord['filename'].'.webp')) {
+                // Delete old file.
+                $oldfile->delete();
+            }
+        }
+    }
+
+    public function output_section_image($section, $sectionname, $sectionimage, $contextid, $thissection, $gridimagepath, $output, $iswebp) {
+        $content = '';
+        if (is_object($sectionimage) && ($sectionimage->displayedimageindex > 0)) {
+            $filename = $sectionimage->displayedimageindex . '_' . $sectionimage->image;
+            if ($iswebp) {
+                $filename .= '.webp';
+            }
+            $imgurl = moodle_url::make_pluginfile_url(
+                $contextid, 'course', 'section', $thissection->id, $gridimagepath,
+                $filename
+            );
+            $content = html_writer::empty_tag('img', array(
+                'src' => $imgurl,
+                'alt' => $sectionname,
+                'role' => 'img',
+                'aria-label' => $sectionname));
+        } else if ($section == 0) {
+            $imgurl = $output->image_url('info', 'format_grid');
+            $content = html_writer::empty_tag('img', array(
+                'src' => $imgurl,
+                'alt' => $sectionname,
+                'class' => 'info',
+                'role' => 'img',
+                'aria-label' => $sectionname));
+        }
+        return $content;
     }
 
     public function delete_image($sectionid, $contextid) {
@@ -2164,10 +2382,14 @@ class format_grid extends format_base {
                 if ($file = $fs->get_file($contextid, 'course', 'section', $sectionid, '/', $sectionimage->image)) {
                     $file->delete();
                     $DB->set_field('format_grid_icon', 'image', null, array('sectionid' => $sectionimage->sectionid));
-                    // Delete the displayed image.
+                    // Delete the displayed image(s).
                     $gridimagepath = $this->get_image_path();
                     if ($file = $fs->get_file($contextid, 'course', 'section', $sectionid, $gridimagepath,
                             $sectionimage->displayedimageindex . '_' . $sectionimage->image)) {
+                        $file->delete();
+                    }
+                    if ($file = $fs->get_file($contextid, 'course', 'section', $sectionid, $gridimagepath,
+                            $sectionimage->displayedimageindex . '_' . $sectionimage->image.'.webp')) {
                         $file->delete();
                     }
                 }
@@ -2192,9 +2414,13 @@ class format_grid extends format_base {
                     if ($file = $fs->get_file($context->id, 'course', 'section', $sectionimage->sectionid, '/',
                             $sectionimage->image)) {
                         $file->delete();
-                        // Delete the displayed image.
+                        // Delete the displayed image(s).
                         if ($file = $fs->get_file($context->id, 'course', 'section', $sectionimage->sectionid, $gridimagepath,
                                 $sectionimage->displayedimageindex . '_' . $sectionimage->image)) {
+                            $file->delete();
+                        }
+                        if ($file = $fs->get_file($context->id, 'course', 'section', $sectionimage->sectionid, $gridimagepath,
+                                $sectionimage->displayedimageindex . '_' . $sectionimage->image.'.webp')) {
                             $file->delete();
                         }
                     }
@@ -2209,21 +2435,31 @@ class format_grid extends format_base {
 
         if (is_array($sectionimages)) {
             global $DB;
-
-            $context = $this->get_context();
+            $contextid = $this->get_context()->id;
             $fs = get_file_storage();
             $gridimagepath = $this->get_image_path();
             $t = $DB->start_delegated_transaction();
 
             foreach ($sectionimages as $sectionimage) {
                 // Delete the displayed image.
-                if ($file = $fs->get_file($context->id, 'course', 'section', $sectionimage->sectionid, $gridimagepath,
-                        $sectionimage->displayedimageindex . '_' . $sectionimage->image)) {
-                    $file->delete();
-                    $DB->set_field('format_grid_icon', 'displayedimageindex', 0, array('sectionid' => $sectionimage->sectionid));
-                }
+                $this->delete_displayed_image($contextid, $sectionimage, $gridimagepath, $fs);
             }
             $t->allow_commit();
+        }
+    }
+
+    protected function delete_displayed_image($contextid, $sectionimage, $gridimagepath, $fs) {
+        global $DB;
+
+        if ($file = $fs->get_file($contextid, 'course', 'section', $sectionimage->sectionid, $gridimagepath,
+            $sectionimage->displayedimageindex . '_' . $sectionimage->image)) {
+            $file->delete();
+            $DB->set_field('format_grid_icon', 'displayedimageindex', 0, array('sectionid' => $sectionimage->sectionid));
+        }
+        if ($file = $fs->get_file($contextid, 'course', 'section', $sectionimage->sectionid, $gridimagepath,
+            $sectionimage->displayedimageindex . '_' . $sectionimage->image.'.webp')) {
+            $file->delete();
+            $DB->set_field('format_grid_icon', 'displayedimageindex', 0, array('sectionid' => $sectionimage->sectionid));
         }
     }
 
@@ -2241,11 +2477,12 @@ class format_grid extends format_base {
         if (is_array($sectionimages)) {
             $context = $this->get_context();
 
+            $icbc = self::hex2rgb($this->get_settings()['imagecontainerbackgroundcolour']);
             $t = $DB->start_delegated_transaction();
             foreach ($sectionimages as $sectionimage) {
                 if ($sectionimage->displayedimageindex > 0) {
                     $sectionimage->newimage = $sectionimage->image;
-                    $sectionimage = $us->setup_displayed_image($sectionimage, $context->id, $settings);
+                    $sectionimage = $us->setup_displayed_image($sectionimage, $context->id, $settings, $icbc);
                 }
             }
             $t->allow_commit();
@@ -2264,10 +2501,12 @@ class format_grid extends format_base {
      * @param string $filepath the full path to the original image file
      * @param int $requestedwidth the width of the requested image.
      * @param int $requestedheight the height of the requested image.
-     * @param bool false = scale, true = crop.
+     * @param bool $crop false = scale, true = crop.
+     * @param array $icbc The 'imagecontainerbackgroundcolour' as an RGB array.
+     * @param string $mime The mime type.
      * @return string|bool false if a problem occurs or the image data.
      */
-    private static function generate_image($filepath, $requestedwidth, $requestedheight, $crop) {
+    private static function generate_image($filepath, $requestedwidth, $requestedheight, $crop, $icbc, $mime) {
         if (empty($filepath) or empty($requestedwidth) or empty($requestedheight)) {
             return false;
         }
@@ -2285,20 +2524,58 @@ class format_grid extends format_base {
             return false;
         }
 
-        $original = imagecreatefromstring(file_get_contents($filepath));
+        $original = imagecreatefromstring(file_get_contents($filepath)); // Need to alter / check for webp support.
 
-        if (function_exists('imagepng')) {
-            $imagefnc = 'imagepng';
-            $filters = PNG_NO_FILTER;
-            $quality = 1;
-        } else if (function_exists('imagejpeg')) {
-            $imagefnc = 'imagejpeg';
-            $filters = null;
-            $quality = 90;
-        } else {
-            debugging('Neither JPEG nor PNG are supported at this server, please fix the system configuration' .
-                    ' to have the GD PHP extension installed.');
-            return false;
+        switch ($mime) {
+            case 'image/png':
+                if (function_exists('imagepng')) {
+                    $imagefnc = 'imagepng';
+                    $filters = PNG_NO_FILTER;
+                    $quality = 1;
+                } else {
+                    debugging('PNG\'s are not supported at this server, please fix the system configuration'.
+                        ' to have the GD PHP extension installed.');
+                    return false;
+                }
+                break;
+            case 'image/jpeg':
+                if (function_exists('imagejpeg')) {
+                    $imagefnc = 'imagejpeg';
+                    $filters = null;
+                    $quality = 90;
+                } else {
+                    debugging('JPG\'s are not supported at this server, please fix the system configuration'.
+                        ' to have the GD PHP extension installed.');
+                    return false;
+                }
+                break;
+            /* Moodle does not yet natively support webp as a mime type, but have here for us on the displayed image and
+               not yet as a source image. */
+            case 'image/webp':
+                if (function_exists('imagewebp')) {
+                    $imagefnc = 'imagewebp';
+                    $filters = null;
+                    $quality = 90;
+                } else {
+                    debugging('WEBP\'s are not supported at this server, please fix the system configuration'.
+                        ' to have the GD PHP extension installed.');
+                    return false;
+                }
+                break;
+            case 'image/gif':
+                if (function_exists('imagegif')) {
+                    $imagefnc = 'imagegif';
+                    $filters = null;
+                    $quality = null;
+                } else {
+                    debugging('GIF\'s are not supported at this server, please fix the system configuration'.
+                        ' to have the GD PHP extension installed.');
+                    return false;
+                }
+                break;
+            default:
+                debugging('Mime type \''.$mime.'\' is not supported as an image format in the Grid format.');
+                return false;
         }
 
         $width = $requestedwidth;
@@ -2327,6 +2604,9 @@ class format_grid extends format_base {
                 imagealphablending($tempimage, false);
                 imagefill($tempimage, 0, 0, imagecolorallocatealpha($tempimage, 0, 0, 0, 127));
                 imagesavealpha($tempimage, true);
+            } else if (($imagefnc === 'imagejpeg') || ($imagefnc === 'imagewebp') || ($imagefnc === 'imagegif')) {
+                imagealphablending($tempimage, false);
+                imagefill($tempimage, 0, 0, imagecolorallocate($tempimage, $icbc['r'], $icbc['g'], $icbc['b']));
             }
         } else {
             $tempimage = imagecreate($width, $height);
@@ -2357,8 +2637,11 @@ class format_grid extends format_base {
                 $finalimage = imagecreatetruecolor($width, $height);
                 if ($imagefnc === 'imagepng') {
                     imagealphablending($finalimage, false);
-                    imagefill($finalimage, 0, 0, imagecolorallocatealpha($tempimage, 0, 0, 0, 127));
+                    imagefill($finalimage, 0, 0, imagecolorallocatealpha($finalimage, 0, 0, 0, 127));
                     imagesavealpha($finalimage, true);
+                } else if (($imagefnc === 'imagejpeg') || ($imagefnc === 'imagegif')) {
+                    imagealphablending($tempimage, false);
+                    imagefill($finalimage, 0, 0, imagecolorallocate($finalimage, $icbc['r'], $icbc['g'], $icbc['b']));
                 }
             } else {
                 $finalimage = imagecreate($width, $height);
@@ -2388,7 +2671,7 @@ class format_grid extends format_base {
             $dsty = floor(($height - $targetheight) / 2);
 
             imagecopybicubic($finalimage, $original, $dstx, $dsty, 0, 0, $targetwidth, $targetheight, $originalwidth,
-                    $originalheight);
+                $originalheight);
         }
 
         ob_start();
@@ -2402,6 +2685,28 @@ class format_grid extends format_base {
         imagedestroy($finalimage);
 
         return $data;
+    }
+
+    /**
+     * Returns the RGB for the given hex.
+     *
+     * @param string $hex
+     * @return array
+     */
+    public static function hex2rgb($hex) {
+        if (strlen($hex) == 3) {
+            $r = substr($hex, 0, 1);
+            $r .= $r;
+            $g = substr($hex, 1, 1);
+            $g .= $g;
+            $b = substr($hex, 2, 1);
+            $b .= $b;
+        } else {
+            $r = substr($hex, 0, 2);
+            $g = substr($hex, 2, 2);
+            $b = substr($hex, 4, 2);
+        }
+        return array('r' => hexdec($r), 'g' => hexdec($g), 'b' => hexdec($b));
     }
 
     /**
@@ -2453,8 +2758,8 @@ class format_grid extends format_base {
      * @return bool
      */
     public function allow_stealth_module_visibility($cm, $section) {
-        // Allow the third visibility state inside visible sections or in section 0.
-        return !$section->section || $section->visible;
+        // Allow the third visibility state inside visible sections or in section 0, not allow in orphaned sections.
+        return !$section->section || ($section->visible && $section->section <= $this->get_course()->numsections);
     }
 
     public function section_action($section, $action, $sr) {
@@ -2538,4 +2843,15 @@ function callback_grid_load_content(&$navigation, $course, $coursenode) {
  */
 function callback_grid_definition() {
     return get_string('topic', 'format_grid');
+}
+
+function grid_format_update_displayed_images() {
+    global $DB;
+
+    if ($gridformatcourses = $DB->get_records('course', array('format' => 'grid'), '', 'id')) {
+        foreach ($gridformatcourses as $gridformatcourse) {
+            $courseformat = course_get_format($gridformatcourse->id);
+            $courseformat->delete_displayed_images();
+        }
+    }
 }

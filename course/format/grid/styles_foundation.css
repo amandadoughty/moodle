@@ -19,7 +19,7 @@
  * @package    course/format
  * @subpackage grid
  * @version    See the value of '$plugin->version' in version.php.
- * @copyright  &copy; 2017 onwards G J Barnard in respect to modifications of standard topics format.
+ * @copyright  &copy; 2018 onwards G J Barnard in respect to modifications of standard topics format.
  * @author     G J Barnard - {@link http://about.me/gjbarnard} and
  *                           {@link http://moodle.org/user/profile.php?id=442195}
  * @author     Based on code originally written by Paul Krix and Julian Ridden.
@@ -42,11 +42,18 @@ div#gridshadebox_overlay {
     z-index: 1000;
 }
 
-#gridshadebox_content ul.gtopics .sectionname {
-    margin-top: .5rem;
-}
-
 #gridshadebox_close {
     z-index: 1000;
 }
 
+#gridshadebox_content ul.gtopics {
+    margin: 0 30px 10px 15px;
+}
+
+#gridshadebox_content ul.gtopics .sectionname {
+    margin-top: .5rem;
+}
+
+#changenumsections {
+    margin-right: 15px;
+}
