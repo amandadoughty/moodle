@@ -7,7 +7,17 @@ class com_wiris_quizzes_impl_QuizzesBuilderImpl extends com_wiris_quizzes_api_Qu
 	}}
 	public function newFeaturedAssertionsRequest($question) {
 		if($question === null) {
-			throw new HException("Question q cannot be null.");
+			throw new HException("Question cannot be null.");
+		}
+		$q = $question;
+		$qr = new com_wiris_quizzes_impl_QuestionRequestImpl();
+		$qr->question = $this->removeSubquestions($q);
+		$qr->addProcess(new com_wiris_quizzes_impl_ProcessGetFeaturedAssertions());
+		return $qr;
+	}
+	public function newFeaturedSyntaxAssertionsRequest($question) {
+		if($question === null) {
+			throw new HException("Question cannot be null.");
 		}
 		$q = $question;
 		$qr = new com_wiris_quizzes_impl_QuestionRequestImpl();
@@ -130,6 +140,8 @@ class com_wiris_quizzes_impl_QuizzesBuilderImpl extends com_wiris_quizzes_api_Qu
 		$s->register(new com_wiris_quizzes_impl_MultipleQuestionResponse());
 		$s->register(new com_wiris_quizzes_impl_Option());
 		$s->register(new com_wiris_quizzes_impl_ProcessGetCheckAssertions());
+		$s->register(new com_wiris_quizzes_impl_ProcessGetFeaturedAssertions());
+		$s->register(new com_wiris_quizzes_impl_ProcessGetFeaturedSyntaxAssertions());
 		$s->register(new com_wiris_quizzes_impl_ProcessGetTranslation());
 		$s->register(new com_wiris_quizzes_impl_ProcessGetVariables());
 		$s->register(new com_wiris_quizzes_impl_ProcessStoreQuestion());
@@ -145,6 +157,8 @@ class com_wiris_quizzes_impl_QuizzesBuilderImpl extends com_wiris_quizzes_api_Qu
 		$s->register(new com_wiris_quizzes_impl_ResultGetTranslation());
 		$s->register(new com_wiris_quizzes_impl_ResultGetVariables());
 		$s->register(new com_wiris_quizzes_impl_ResultStoreQuestion());
+		$s->register(new com_wiris_quizzes_impl_ResultGetFeaturedSyntaxAssertions());
+		$s->register(new com_wiris_quizzes_impl_ResultGetFeaturedAssertions());
 		$s->register(new com_wiris_quizzes_impl_TranslationNameChange());
 		$s->register(new com_wiris_quizzes_impl_UserData());
 		$s->register(new com_wiris_quizzes_impl_Variable());
@@ -684,14 +698,13 @@ class com_wiris_quizzes_impl_QuizzesBuilderImpl extends com_wiris_quizzes_api_Qu
 							$variables[$i1] = null;
 							$n++;
 						} else {
-							if($qq->getLocalData(com_wiris_quizzes_impl_LocalData::$KEY_OPENANSWER_COMPOUND_ANSWER) === com_wiris_quizzes_impl_LocalData::$VALUE_OPENANSWER_COMPOUND_ANSWER_TRUE) {
-								$qqi = $qi;
-								$parts = com_wiris_quizzes_impl_HTMLTools::parseCompoundAnswer($qqi->userData->answers[0]);
+							if($qq->getLocalData(com_wiris_quizzes_impl_LocalData::$KEY_OPENANSWER_COMPOUND_ANSWER) === com_wiris_quizzes_impl_LocalData::$VALUE_OPENANSWER_COMPOUND_ANSWER_TRUE && $q->getCorrectAnswersLength() > 0) {
+								$parts = com_wiris_quizzes_impl_HTMLTools::parseCompoundAnswer($qq->correctAnswers[0]);
 								if(com_wiris_util_type_IntegerTools::isInt($after) && Std::parseInt($after) <= $parts->length) {
 									$variables[$i1] = null;
 									$n++;
 								}
-								unset($qqi,$parts);
+								unset($parts);
 							}
 						}
 						unset($after);
