@@ -48,7 +48,7 @@ define(['jquery', 'core/log'], function($, log) {
                             scroll < (sectiontop + sectionheight)) {
                             localStorage.setItem('scrollPosition-' + uniqueClass(), $(this).attr('id'));
                         } else if (scroll < ($('.course-content ul.culcourse #section-0').offset().top - nav)) {
-                            localStorage.setItem('scrollPosition-' + uniqueClass(), 'top');
+                            localStorage.setItem('scrollPosition-' + uniqueClass(), 'javascript:void(0);');
                         }
                     });
                 }

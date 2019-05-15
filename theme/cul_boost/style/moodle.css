@@ -6967,6 +6967,12 @@ button.bg-gray-700:focus {
   left: 0;
   z-index: 1030; }
 
+.sticky-top {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1020; }
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -13311,6 +13317,10 @@ div.editor_atto_toolbar button .icon {
     padding-left: 0.5rem;
     content: "|"; }
 
+@media (min-width: 576px) {
+  #page-admin-search .container {
+    overflow-wrap: break-word; } }
+
 .blockmovetarget .accesshide {
   position: relative;
   left: initial; }
@@ -13793,8 +13803,10 @@ table.calendartable caption {
 .day-popover-content:empty + .day-popover-alternate {
   display: block; }
 
-.summary-modal-container .description-content > p {
-  margin: 0; }
+.summary-modal-container .description-content {
+  overflow-wrap: break-word; }
+  .summary-modal-container .description-content > p {
+    margin: 0; }
 
 .summary-modal-container .location-content {
   overflow-wrap: break-word; }
@@ -14699,7 +14711,9 @@ span.editinstructions {
   height: 65px;
   /* fixed header height*/
   margin-top: -65px;
-  /* negative fixed header height */ }
+  /* negative fixed header height */
+  width: 1px;
+  pointer-events: none; }
 
 .pagelayout-embedded :target {
   padding-top: initial;
@@ -16480,6 +16494,21 @@ a.ygtvspacer:hover {
     min-height: 1.5rem; }
   .message-drawer .section .collapsing {
     overflow: hidden; }
+  .message-drawer .message .tail {
+    content: '';
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border: 0.5rem solid transparent;
+    position: relative; }
+  .message-drawer .message.send .tail {
+    right: 0;
+    margin-right: -0.5rem;
+    border-bottom-color: #A22833; }
+  .message-drawer .message.received .tail {
+    left: 0;
+    margin-left: -0.5rem;
+    border-bottom-color: #fff; }
   .message-drawer .lazy-load-list {
     overflow-y: auto; }
 
@@ -18502,7 +18531,12 @@ p.arrow_button {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
-  display: inline-flex; }
+  display: inline-flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column; }
   .path-grade-report-grader #region-main > .card, .path-grade-report-grader #page-enrol-users #region-main > #filterform, #page-enrol-users .path-grade-report-grader #region-main > #filterform, .path-grade-report-grader .que #region-main > .history, .que .path-grade-report-grader #region-main > .history, .path-grade-report-grader .userprofile .profile_tree #region-main > section, .userprofile .profile_tree .path-grade-report-grader #region-main > section, .path-grade-report-grader #region-main > .groupinfobox, .path-grade-report-grader #region-main > .well {
     width: auto;
     overflow-x: initial; }
@@ -20812,6 +20846,8 @@ aside[id*="block-region-nav-settings"] {
       aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded]:before, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded]:before {
         left: auto;
         right: 0.3rem; }
+      aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded] > a, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded] > a {
+        pointer-events: none; }
     aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch:hover:before, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch:hover:before {
       background-color: rgba(0, 0, 0, 0.05); }
   aside[id*="block-region-nav-settings"] .block_settings .block_tree .root_node + ul {
@@ -20855,8 +20891,7 @@ aside[id*="block-region-nav-settings"] {
     max-width: 100%;
     width: 100%;
     line-height: 1.1;
-    color: #3C3C3C;
-    pointer-events: none; }
+    color: #3C3C3C; }
   aside[id*="block-region-nav-settings"] .block.block_settings .block_tree p > a:hover {
     color: #A22833; }
   aside[id*="block-region-nav-settings"] .block_settings .block_tree .tree_item {
