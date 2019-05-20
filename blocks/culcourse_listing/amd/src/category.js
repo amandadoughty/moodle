@@ -211,44 +211,46 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/str', 'core/url', 'core/y
      * @param {Node} categorynode The node to apply the animation to
      */
     var run_expansion = function(categorynode) {
-        var categorychildren = categorynode.one(SELECTORS.CONTENTNODE),
-            self = this,
-            ancestor = categorynode.ancestor(SELECTORS.COURSECATEGORYTREE);
 
-        // Add our animation to the categorychildren.
-        add_animation(categorychildren);
+        Y.use('anim-node-plugin', function() {
+            var categorychildren = categorynode.one(SELECTORS.CONTENTNODE),
+                ancestor = categorynode.ancestor(SELECTORS.COURSECATEGORYTREE);
 
-        // If we already have the class, remove it before showing otherwise we perform the
-        // animation whilst the node is hidden.
-        if (categorynode.hasClass(CSS.SECTIONCOLLAPSED)) {
-            // To avoid a jump effect, we need to set the height of the children to 0 here before removing
-            // the SECTIONCOLLAPSED class.
-            categorychildren.setStyle('height', '0');
-            categorynode.removeClass(CSS.SECTIONCOLLAPSED);
-            categorynode.setAttribute('aria-expanded', 'true');
-            categorychildren.fx.set('reverse', false);
-        } else {
-            categorychildren.fx.set('reverse', true);
-            categorychildren.fx.once('end', function(e, categorynode) {
-                categorynode.addClass(CSS.SECTIONCOLLAPSED);
-                categorynode.setAttribute('aria-expanded', 'false');
-            }, this, categorynode);
-        }
+            // Add our animation to the categorychildren.
+            add_animation(categorychildren);
 
-        categorychildren.fx.once('end', function(e, categorychildren) {
-            // Remove the styles that the animation has set.
-            categorychildren.setStyles({
-                height: '',
-                opacity: ''
-            });
+            // If we already have the class, remove it before showing otherwise we perform the
+            // animation whilst the node is hidden.
+            if (categorynode.hasClass(CSS.SECTIONCOLLAPSED)) {
+                // To avoid a jump effect, we need to set the height of the children to 0 here before removing
+                // the SECTIONCOLLAPSED class.
+                categorychildren.setStyle('height', '0');
+                categorynode.removeClass(CSS.SECTIONCOLLAPSED);
+                categorynode.setAttribute('aria-expanded', 'true');
+                categorychildren.fx.set('reverse', false);
+            } else {
+                categorychildren.fx.set('reverse', true);
+                categorychildren.fx.once('end', function(e, categorynode) {
+                    categorynode.addClass(CSS.SECTIONCOLLAPSED);
+                    categorynode.setAttribute('aria-expanded', 'false');
+                }, this, categorynode);
+            }
 
-            // To avoid memory gobbling, remove the animation. It will be added back if called again.
-            this.destroy();
-            self.update_collapsible_actions(ancestor);
-        }, categorychildren.fx, categorychildren);
+            categorychildren.fx.once('end', function(e, categorychildren) {
+                // Remove the styles that the animation has set.
+                categorychildren.setStyles({
+                    height: '',
+                    opacity: ''
+                });
 
-        // Now that everything has been set up, run the animation.
-        categorychildren.fx.run();
+                // To avoid memory gobbling, remove the animation. It will be added back if called again.
+                this.destroy();
+                update_collapsible_actions(ancestor);
+            }, categorychildren.fx, categorychildren);
+
+            // Now that everything has been set up, run the animation.
+            categorychildren.fx.run();
+        });
     };
 
     var collapse_expand_all = function(e) {

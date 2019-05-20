@@ -312,9 +312,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                     ) {
                     $classes[] = 'with_children';
                     $classes[] = 'collapsed';
-                }
-                // Make sure JS file to expand category content is included.
-                $this->coursecat_include_js();
+                }                
             } else {
                 // Load category content.
                 if ($viewchild) {
@@ -335,6 +333,9 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             if (!$view && isset($filter[$coursecat->id]) && !$filter[$coursecat->id]) {
                 $classes[] = 'hide';
             }
+
+            // Make sure JS file to expand category content is included.
+            $this->coursecat_include_js();
 
             $content = html_writer::start_tag('div', array(
                 'class' => join(' ', $classes),
@@ -468,12 +469,8 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         static $jsloaded = false;
 
         if (!$jsloaded) {
-            // We must only load this module once.
-            $this->page->requires->yui_module(
-                'moodle-block_culcourse_listing-category',
-                'M.blocks_culcourse_listing.init_category',
-                array(array('config' => $this->config))
-                );
+            $this->page->requires->js_call_amd('block_culcourse_listing/category', 'initializer', ['config' => $this->config]);
+
             $jsloaded = true;
         }
     }
