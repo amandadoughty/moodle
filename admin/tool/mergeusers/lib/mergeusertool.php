@@ -112,6 +112,16 @@ class MergeUserTool
     protected $tablesProcessedByTableMergers;
 
     /**
+     * @var bool if true then never commit the transaction, used for testing.
+     */
+    protected $alwaysRollback;
+
+    /**
+     * @var bool if true then write out all sql, used for testing.
+     */
+    protected $debugdb;
+
+    /**
      * Initializes
      * @global object $CFG
      * @param tool_mergeusers_config $config local configuration.
@@ -191,6 +201,9 @@ class MergeUserTool
         $this->tableMergers = $tableMergers;
         $this->tablesProcessedByTableMergers = array_flip($tablesProcessedByTableMergers);
 
+        $this->alwaysRollback = !empty($config->alwaysRollback);
+        $this->debugdb = !empty($config->debugdb);
+
         // this will abort execution if local database is not supported.
         $this->checkDatabaseSupport();
 
@@ -263,6 +276,15 @@ class MergeUserTool
         // first of all... initialization!
         $errorMessages = array();
         $actionLog = array();
+
+        if ($this->debugdb) {
+            $DB->set_debug(true);
+        }
+
+        $startTime = time();
+        $startTimeString = get_string('starttime', 'tool_mergeusers', userdate($startTime));
+        $actionLog[] = $startTimeString;
+
         $transaction = $DB->start_delegated_transaction();
 
         try {
@@ -287,11 +309,21 @@ class MergeUserTool
                 // process the given $tableName.
                 $tableMerger->merge($data, $actionLog, $errorMessages);
             }
+
+            $this->updateGrades($toid, $fromid);
         } catch (Exception $e) {
             $errorMessages[] = nl2br("Exception thrown when merging: '" . $e->getMessage() . '".' .
                     html_writer::empty_tag('br') . $DB->get_last_error() . html_writer::empty_tag('br') .
                     'Trace:' . html_writer::empty_tag('br') .
                     $e->getTraceAsString() . html_writer::empty_tag('br'));
+        }
+
+        if ($this->debugdb) {
+            $DB->set_debug(false);
+        }
+
+        if ($this->alwaysRollback) {
+            $transaction->rollback(new Exception('alwaysRollback option is set so rolling back transaction'));
         }
 
         // concludes with true if no error
@@ -304,6 +336,10 @@ class MergeUserTool
                 $skippedTables[] = get_string('tableskipped', 'tool_mergeusers', implode(", ", $this->tablesSkipped));
             }
 
+            $finishTime = time();
+            $actionLog[] = get_string('finishtime', 'tool_mergeusers', userdate($finishTime));
+            $actionLog[] = get_string('timetaken', 'tool_mergeusers', $finishTime - $startTime);
+
             return array(true, array_merge($skippedTables, $actionLog));
         } else {
             try {
@@ -312,6 +348,10 @@ class MergeUserTool
             } catch (Exception $e) { /* do nothing, just for correctness */
             }
         }
+
+        $finishTime = time();
+        $errorMessages[] = $startTimeString;
+        $errorMessages[] = get_string('timetaken', 'tool_mergeusers', $finishTime - $startTime);
 
         // concludes with an array of error messages otherwise.
         return array(false, $errorMessages);
@@ -462,5 +502,35 @@ class MergeUserTool
                 (TABLE_SCHEMA = ? OR TABLE_CATALOG=?) AND
                 COLUMN_NAME IN (" . $userFields . ")",
             array($tableName, $CFG->dbname, $CFG->dbname));
+    }
+
+    /**
+     * Update all of the target user's grades.
+     * @param int $toid User id
+     */
+    private function updateGrades($toid, $fromid) {
+        global $DB, $CFG;
+        require_once($CFG->libdir.'/gradelib.php');
+
+        $sql = "SELECT iteminstance, itemmodule, courseid
+                FROM {grade_grades} gg
+                INNER JOIN {grade_items} gi on gg.itemid = gi.id
+                WHERE itemtype = 'mod' AND (gg.userid = :toid OR gg.userid = :fromid)";
+
+        $iteminstances = $DB->get_records_sql($sql, array('toid' => $toid, 'fromid' => $fromid));
+
+        foreach ($iteminstances as $iteminstance) {
+            if (!$activity = $DB->get_record($iteminstance->itemmodule, array('id' => $iteminstance->iteminstance))) {
+                throw new \Exception("Can not find $iteminstance->itemmodule activity with id $iteminstance->iteminstance");
+            }
+            if (!$cm = get_coursemodule_from_instance($iteminstance->itemmodule, $activity->id, $iteminstance->courseid)) {
+                throw new \Exception('Can not find course module');
+            }
+
+            $activity->modname    = $iteminstance->itemmodule;
+            $activity->cmidnumber = $cm->idnumber;
+
+            grade_update_mod_grades($activity, $toid);
+        }
     }
 }

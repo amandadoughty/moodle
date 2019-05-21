@@ -182,8 +182,13 @@ $string['qa_chosen_action'] = 'Active option for quiz attempts: {$a}.';
 $string['qa_grades'] = 'Grades recalculated for quizzes: {$a}.';
 
 $string['uniquekeynewidtomaintain'] = 'Keep new user\'s data';
-$string['uniquekeynewidtomaintain_desc'] = 'In case of conflict, '
-    . 'like when the user.id related column is a unique key, this plugin will keep '
-    . 'data from new user (by default). This also means that data from old user is '
-    . 'deleted to keep the consistence. Otherwise, if you uncheck this option, '
-    . 'data from old user will be kept.';
+$string['uniquekeynewidtomaintain_desc'] = 'In case of conflict, 
+    like when the user.id related column is a unique key, this plugin will keep 
+    data from new user (by default). This also means that data from old user is 
+    deleted to keep the consistence. Otherwise, if you uncheck this option, 
+    data from old user will be kept.';
+
+$string['starttime'] = 'Started merging at {$a}';
+$string['finishtime'] = 'Finished merging at {$a}';
+$string['timetaken'] = 'Merge took {$a} seconds';
+$string['privacy:metadata'] = 'The Merge User Accounts plugin does not store any personal data.';
