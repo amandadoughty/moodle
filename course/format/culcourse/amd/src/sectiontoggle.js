@@ -187,6 +187,9 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
                         }
                     }
                 })
+                .then(function() {
+                    $(document).trigger($.Event('culcoursesectiontoggle'));
+                })
                 .fail(function(jqXHR, status, error) {
                     Notification.exception(error);
                 });
