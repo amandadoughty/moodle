@@ -78,9 +78,17 @@ class provider implements
      * @return contextlist the list of contexts containing user info for the user.
      */
     public static function get_contexts_for_userid(int $userid) : contextlist {
-        // Messages are in the system context.
+        global $DB;
+
         $contextlist = new contextlist();
-        $contextlist->add_system_context();
+
+        // Messages are in the user context.
+        $hasdata = $DB->record_exists_select('message_culactivity_stream', 'userfromid = ? OR userid = ?', [$userid, $userid]);
+        
+
+        if ($hasdata) {
+            $contextlist->add_user_context($userid);
+        }
 
         return $contextlist;
     }
@@ -101,8 +109,7 @@ class provider implements
 
         $userid = $context->instanceid;
 
-        $hasdata = false;
-        $hasdata = $hasdata || $DB->record_exists_select('message_culactivity_stream', 'userid = ? OR userfromid = ?', [$userid, $userid]);
+        $hasdata = $DB->record_exists_select('message_culactivity_stream', 'userid = ? OR userfromid = ?', [$userid, $userid]);
         
         if ($hasdata) {
             $userlist->add_user($userid);
@@ -115,20 +122,21 @@ class provider implements
      * @param approved_contextlist $contextlist a list of contexts approved for export.
      */
     public static function export_user_data(approved_contextlist $contextlist) {
+
         if (empty($contextlist->count())) {
             return;
         }
 
-        // Remove non-system contexts. If it ends up empty then early return.
-        $contexts = array_filter($contextlist->get_contexts(), function($context) {
-            return $context->contextlevel == CONTEXT_SYSTEM;
+        $userid = $contextlist->get_user()->id;
+
+        // Remove non-user and invalid contexts. If it ends up empty then early return.
+        $contexts = array_filter($contextlist->get_contexts(), function($context) use($userid) {
+            return $context->contextlevel == CONTEXT_USER && $context->instanceid == $userid;
         });
 
         if (empty($contexts)) {
             return;
         }
-
-        $userid = $contextlist->get_user()->id;
 
         // Export the message_culactivity_stream.
         self::export_user_data_message_culactivity_stream($userid);
@@ -142,11 +150,13 @@ class provider implements
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
 
-        if (!$context instanceof \context_system) {
+        if (!$context instanceof \context_user) {
             return;
         }
 
-        $DB->delete_records('message_culactivity_stream');
+        $userid = $context->instanceid;
+
+        $DB->delete_records_select('message_culactivity_stream', 'userfromid = ? OR userid = ?', [$userid, $userid]);
     }
 
     /**
@@ -161,16 +171,16 @@ class provider implements
             return;
         }
 
-        // Remove non-system contexts. If it ends up empty then early return.
-        $contexts = array_filter($contextlist->get_contexts(), function($context) {
-            return $context->contextlevel == CONTEXT_SYSTEM;
+        $userid = $contextlist->get_user()->id;
+
+        // Remove non-user and invalid contexts. If it ends up empty then early return.
+        $contexts = array_filter($contextlist->get_contexts(), function($context) use($userid) {
+            return $context->contextlevel == CONTEXT_USER && $context->instanceid == $userid;
         });
 
         if (empty($contexts)) {
             return;
-        }
-
-        $userid = $contextlist->get_user()->id;
+        }        
 
         $DB->delete_records_select('message_culactivity_stream', 'userid = ? OR userfromid = ?', [$userid, $userid]);
     }
@@ -181,6 +191,8 @@ class provider implements
      * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
+        global $DB;
+
         $context = $userlist->get_context();
 
         if (!$context instanceof \context_user) {
@@ -188,8 +200,12 @@ class provider implements
         }
 
         list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+        list($userinsql2, $userinparams2) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
 
-        $DB->delete_records_select('message_culactivity_stream', "userid {$userinsql} OR userfromid {$userinsql}", [$userinparams, $userinparams]);
+        // Fix error: dml_exception: ERROR: Incorrect number of query parameters. Expected 4, got 2.
+        $userinparams = array_merge($userinparams, $userinparams2);
+
+        $DB->delete_records_select('message_culactivity_stream', "userid {$userinsql} OR userfromid {$userinsql2}", $userinparams);
     }
 
     /**
@@ -200,7 +216,7 @@ class provider implements
     protected static function export_user_data_message_culactivity_stream($userid) {
         global $DB;
 
-        $context = \context_system::instance();
+        $context = \context_user::instance($userid);
 
         $notificationdata = [];
         $select = "userid = ? OR userfromid = ?";

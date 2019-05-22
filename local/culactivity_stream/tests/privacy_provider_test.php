@@ -221,9 +221,6 @@ class local_culactivity_stream_privacy_provider_testcase extends \core_privacy\t
         $this->assertCount(0, $userlist->get_userids());
     }    
 
-/*** ABOVE LINE DONE ***/
-
-
     /**
      * Test for provider::delete_data_for_users().
      */
@@ -262,8 +259,7 @@ class local_culactivity_stream_privacy_provider_testcase extends \core_privacy\t
 
         // After deletion, all messages should have been deleted.
         list($userinsql, $userinparams) = $DB->get_in_or_equal([$this->teacher->id, $teacher2->id], SQL_PARAMS_NAMED);
-        // echo "userfromid {$userinsql}";
-        // print_r($userinparams);
+
         $count = $DB->count_records_select('message_culactivity_stream_q', "userfromid {$userinsql}", $userinparams);
         $this->assertEquals(0, $count);
     }

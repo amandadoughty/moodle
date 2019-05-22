@@ -84,9 +84,17 @@ class provider implements
      * @return contextlist the list of contexts containing user info for the user.
      */
     public static function get_contexts_for_userid(int $userid) : contextlist {
-        // Messages are in the system context.
+        global $DB;
+
         $contextlist = new contextlist();
-        $contextlist->add_system_context();
+
+        // Messages are in the user context.
+        $hasdata = $hasdata || $DB->record_exists_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);
+        
+
+        if ($hasdata) {
+            $contextlist->add_user_context($userid);
+        }
 
         return $contextlist;
     }
@@ -99,14 +107,17 @@ class provider implements
     public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
 
-        if (!$context instanceof \context_system) {
+        if (!$context instanceof \context_user) {
             return;
         }
 
-        // Fetch all queued messages.
-        $sql = "SELECT userfromid FROM {message_culactivity_stream_q}";
-        $params = [];
-        $userlist->add_from_sql('userfromid', $sql, $params);
+        $userid = $context->instanceid;
+
+        $hasdata = $DB->record_exists_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);
+        
+        if ($hasdata) {
+            $userlist->add_user($userid);
+        }
     }    
 
     /**
@@ -115,13 +126,16 @@ class provider implements
      * @param approved_contextlist $contextlist a list of contexts approved for export.
      */
     public static function export_user_data(approved_contextlist $contextlist) {
+
         if (empty($contextlist->count())) {
             return;
         }
 
-        // Remove non-system contexts. If it ends up empty then early return.
-        $contexts = array_filter($contextlist->get_contexts(), function($context) {
-            return $context->contextlevel == CONTEXT_SYSTEM;
+        $userid = $contextlist->get_user()->id;
+
+        // Remove non-user and invalid contexts. If it ends up empty then early return.
+        $contexts = array_filter($contextlist->get_contexts(), function($context) use($userid) {
+            return $context->contextlevel == CONTEXT_USER && $context->instanceid == $userid;
         });
 
         if (empty($contexts)) {
@@ -142,11 +156,11 @@ class provider implements
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
 
-        if (!$context instanceof \context_system) {
+        if (!$context instanceof \context_user) {
             return;
         }
 
-        $DB->delete_records('message_culactivity_stream_q');
+        $DB->delete_records_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);
     }
 
     /**
@@ -202,7 +216,7 @@ class provider implements
     protected static function export_user_data_message_culactivity_stream_q($userid) {
         global $DB;
 
-        $context = \context_system::instance();
+        $context = \context_user::instance($userid);
 
         $notificationdata = [];
         $select = "userfromid = ?";
