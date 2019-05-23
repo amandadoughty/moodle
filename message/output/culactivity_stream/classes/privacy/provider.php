@@ -83,8 +83,7 @@ class provider implements
         $contextlist = new contextlist();
 
         // Messages are in the user context.
-        $hasdata = $DB->record_exists_select('message_culactivity_stream', 'userfromid = ? OR userid = ?', [$userid, $userid]);
-        
+        $hasdata = $DB->record_exists_select('message_culactivity_stream', 'userfromid = ? OR userid = ?', [$userid, $userid]);        
 
         if ($hasdata) {
             $contextlist->add_user_context($userid);
@@ -199,13 +198,18 @@ class provider implements
             return;
         }
 
-        list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
-        list($userinsql2, $userinparams2) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+        // Remove invalid users. If it ends up empty then early return.
+        $userids = array_filter($userlist->get_userids(), function($userid) use($context) {
+            return $context->instanceid == $userid;
+        });
 
-        // Fix error: dml_exception: ERROR: Incorrect number of query parameters. Expected 4, got 2.
-        $userinparams = array_merge($userinparams, $userinparams2);
+        if (empty($userids)) {
+            return;
+        }
 
-        $DB->delete_records_select('message_culactivity_stream', "userid {$userinsql} OR userfromid {$userinsql2}", $userinparams);
+        $userid = $context->instanceid;
+
+        $DB->delete_records_select('message_culactivity_stream', 'userfromid = ? OR userid = ?', [$userid, $userid]);
     }
 
     /**
