@@ -1,10 +1,4 @@
-(function(a) {
-    if (typeof define === "function" && define.amd) {
-        define([ "jquery" ], a);
-    } else {
-        a(jQuery);
-    }
-})(function(a) {
+define(['jquery'], function(a) {
     a.ui = a.ui || {};
     var b = a.ui.version = "1.12.1";
     (function() {
@@ -352,15 +346,7 @@
     var c = a.ui.position;
 });
 
-(function(a) {
-    "use strict";
-    if (typeof define === "function" && define.amd) {
-        define([ "jquery" ], a);
-    } else if (window.jQuery && !window.jQuery.fn.iconpicker) {
-        a(window.jQuery);
-    }
-})(function(a) {
-    "use strict";
+define(['jquery'], function(a) {
     var b = {
         isEmpty: function(a) {
             return a === false || a === "" || a === null || a === undefined;
