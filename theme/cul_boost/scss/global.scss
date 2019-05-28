@@ -112,6 +112,7 @@ body {
     padding-right: $grid-gutter-width / 2;
     div[role="main"] {
         // overflow-y: auto;
+        // overflow-y: unset;
     }
 }
 

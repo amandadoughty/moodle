@@ -710,3 +710,19 @@ a.menu-link .icon {
         }
     }
 }
+
+#theme-cul_boost-mymodules,
+#theme-cul_boost-myfavourites {
+    .dropdown-menu {
+        min-width: 50vw;
+        left: auto;
+        right: 0;
+
+        .dropdown-menu {
+            padding-left: 0.5rem;
+            .dropdown-menu {
+                padding-left: 1rem;
+            }
+        }
+    }
+}

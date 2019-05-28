@@ -162,7 +162,7 @@
 .dragdrop-keyboard-drag [data-drop-target^="module-"] {
   /* Attribute value starts with this */
     margin-left: 2rem;
-margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
     display: block;
     font-weight: normal;
 }
@@ -170,3 +170,13 @@ margin-bottom: 0.5rem;
 .dragdrop-keyboard-drag [data-drop-target^="module-"]:before {
     content: ' - ';
 } 
+
+.editing.format-culcourse.jsenabled .courseheader .course-image {
+    max-height: 100%;
+}
+
+.editing.format-culcourse .courseheader .clipboard {
+    background: #A22833;
+    position: relative;
+    margin-bottom: 1rem;
+}
