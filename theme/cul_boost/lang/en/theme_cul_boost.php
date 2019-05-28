@@ -105,6 +105,11 @@ $string['showcourse'] = 'Show Module';
 $string['confirmshowcourse'] = 'Are you sure you want to make this module visible to students?';
 $string['courseshown'] = 'Module is now visible to students';
 
+// Terms
+$string['PRD1'] = 'Term 1';
+$string['PRD2'] = 'Term 2';
+$string['PRD3'] = 'Term 3';
+
 /* 
  * theme_cul strings
  */
