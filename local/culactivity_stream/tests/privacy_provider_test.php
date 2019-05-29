@@ -114,7 +114,7 @@ class local_culactivity_stream_privacy_provider_testcase extends \core_privacy\t
         $contextlist = provider::get_contexts_for_userid($this->teacher->id);
         $this->assertCount(1, $contextlist);
         $contextforuser = $contextlist->current();
-        $context = context_system::instance();
+        $context = context_user::instance($this->teacher->id);
         $this->assertEquals($context->id, $contextforuser->id);
     }    
 
@@ -122,7 +122,7 @@ class local_culactivity_stream_privacy_provider_testcase extends \core_privacy\t
      * Test for provider::export_user_data().
      */
     public function test_export_for_context() {
-        $context = context_system::instance();
+        $context = context_user::instance($this->teacher->id);
 
         // Export all of the data for the context.
         $this->export_context_data_for_user($this->teacher->id, $context, 'local_culactivity_stream');
@@ -137,7 +137,7 @@ class local_culactivity_stream_privacy_provider_testcase extends \core_privacy\t
         global $DB;
 
         // Delete data based on context.
-        $context = context_system::instance();
+        $context = context_user::instance($this->teacher->id);
         provider::delete_data_for_all_users_in_context($context);
 
         // After deletion, all queued messages should be deleted.
@@ -175,10 +175,10 @@ class local_culactivity_stream_privacy_provider_testcase extends \core_privacy\t
         $count = $DB->count_records('message_culactivity_stream_q');
         $this->assertEquals(2, $count);
 
-        $context = context_system::instance();
+        $context = context_user::instance($this->teacher->id);
 
         $contextlist = new \core_privacy\local\request\approved_contextlist($this->teacher, 'local_culactivity_stream',
-            [context_system::instance()->id]);
+            [$context->id]);
 
         provider::delete_data_for_user($contextlist);
 
@@ -198,7 +198,7 @@ class local_culactivity_stream_privacy_provider_testcase extends \core_privacy\t
      * Test for provider::get_users_in_context().
      */
     public function test_get_users_in_context() {
-        $context = context_system::instance();
+        $context = context_user::instance($this->teacher->id);
 
         $userlist = new \core_privacy\local\request\userlist($context, 'local_culactivity_stream');
         \local_culactivity_stream\privacy\provider::get_users_in_context($userlist);
@@ -248,19 +248,17 @@ class local_culactivity_stream_privacy_provider_testcase extends \core_privacy\t
         $choice = $plugingenerator->create_instance($params);
 
         // Before deletion, we should have 2 messages.
-        $count = $DB->count_records('message_culactivity_stream_q');
-        $this->assertEquals(2, $count);
+        $notifications = $DB->count_records('message_culactivity_stream_q');
+        $this->assertEquals(2, $notifications);
 
-        $context = context_system::instance();
+        $context = context_user::instance($this->teacher->id);
 
         $approveduserlist = new \core_privacy\local\request\approved_userlist($context, 'local_culactivity_stream',
                 [$this->teacher->id, $teacher2->id]);
         provider::delete_data_for_users($approveduserlist);
 
-        // After deletion, all messages should have been deleted.
-        list($userinsql, $userinparams) = $DB->get_in_or_equal([$this->teacher->id, $teacher2->id], SQL_PARAMS_NAMED);
+        $notifications = $DB->get_records('message_culactivity_stream_q');
 
-        $count = $DB->count_records_select('message_culactivity_stream_q', "userfromid {$userinsql}", $userinparams);
-        $this->assertEquals(0, $count);
+        $this->assertCount(1, $notifications);
     }
 }

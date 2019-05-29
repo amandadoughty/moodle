@@ -104,6 +104,8 @@ class provider implements
      * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      */
     public static function get_users_in_context(userlist $userlist) {
+        global $DB;
+
         $context = $userlist->get_context();
 
         if (!$context instanceof \context_user) {
@@ -213,7 +215,7 @@ class provider implements
 
         $userid = $context->instanceid;
 
-        $DB->delete_records_select('message_culactivity_stream_q', "userfromid {$userinsql}", $userinparams);
+        $DB->delete_records_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);
     }    
 
     /**
