@@ -89,8 +89,7 @@ class provider implements
         $contextlist = new contextlist();
 
         // Messages are in the user context.
-        $hasdata = $hasdata || $DB->record_exists_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);
-        
+        $hasdata = $DB->record_exists_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);        
 
         if ($hasdata) {
             $contextlist->add_user_context($userid);
@@ -142,8 +141,6 @@ class provider implements
             return;
         }
 
-        $userid = $contextlist->get_user()->id;
-
         // Export the message_culactivity_stream_q.
         self::export_user_data_message_culactivity_stream_q($userid);
     }
@@ -160,6 +157,8 @@ class provider implements
             return;
         }
 
+        $userid = $context->instanceid;
+
         $DB->delete_records_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);
     }
 
@@ -175,16 +174,16 @@ class provider implements
             return;
         }
 
-        // Remove non-system contexts. If it ends up empty then early return.
-        $contexts = array_filter($contextlist->get_contexts(), function($context) {
-            return $context->contextlevel == CONTEXT_SYSTEM;
+        $userid = $contextlist->get_user()->id;
+
+        // Remove non-user and invalid contexts. If it ends up empty then early return.
+        $contexts = array_filter($contextlist->get_contexts(), function($context) use($userid) {
+            return $context->contextlevel == CONTEXT_USER && $context->instanceid == $userid;
         });
 
         if (empty($contexts)) {
             return;
-        }
-
-        $userid = $contextlist->get_user()->id;
+        }        
 
         $DB->delete_records_select('message_culactivity_stream_q', 'userfromid = ?', [$userid]);
     }
@@ -199,11 +198,20 @@ class provider implements
 
         $context = $userlist->get_context();
 
-        if (!$context instanceof \context_system) {
+        if (!$context instanceof \context_user) {
             return;
         }
 
-        list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+        // Remove invalid users. If it ends up empty then early return.
+        $userids = array_filter($userlist->get_userids(), function($userid) use($context) {
+            return $context->instanceid == $userid;
+        });
+
+        if (empty($userids)) {
+            return;
+        }
+
+        $userid = $context->instanceid;
 
         $DB->delete_records_select('message_culactivity_stream_q', "userfromid {$userinsql}", $userinparams);
     }    
