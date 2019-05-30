@@ -68,7 +68,7 @@ class provider implements
                 'notify' => 'privacy:metadata:local_culrollover:notify',
                 'template' => 'privacy:metadata:local_culrollover:template',                
             ],
-            'privacy:metadata:local_culrollover'
+            'privacy:metadata:cul_rollover'
         );
 
         $collection->add_database_table(
