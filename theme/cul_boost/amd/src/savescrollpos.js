@@ -29,10 +29,8 @@ define(['jquery', 'core/log'], function($, log) {
                 continuescrolling = true;
             }
 
-            $(window).on('load', function() {
-                setTimeout(function() {
-                    scroll_to_section();
-                }, 1000);
+            $(document).on('culcoursesectiontoggle', function() {
+                scroll_to_section();
             });
 
             $(window).scroll(function() {

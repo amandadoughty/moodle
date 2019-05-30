@@ -149,6 +149,19 @@ aside[id*="block-region-nav-settings"] {
                 }
             }
         }
+        &.hasicon.cog {
+            a {
+                &:before {
+                    content: "\f013";
+                    @include fa-icon();
+                    margin: 0 $spacer / 2 0 0;
+                    color: $primary;
+                    min-width: $font-size-base;
+                    text-align: center;
+                    font-size: $font-size-base;
+                }
+            }
+        }
         &.root_node.branch,
         &.branch {
             position: relative;

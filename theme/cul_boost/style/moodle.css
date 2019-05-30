@@ -20934,6 +20934,19 @@ aside[id*="block-region-nav-settings"] {
     color: #A22833; }
     aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item:not([aria-expanded]) > a > span {
       color: #A22833; }
+  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.hasicon.cog a:before {
+    content: "\f013";
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0 0.5rem 0 0;
+    color: #A22833;
+    min-width: 1rem;
+    text-align: center;
+    font-size: 1rem; }
   aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch {
     position: relative;
     display: -webkit-box;
