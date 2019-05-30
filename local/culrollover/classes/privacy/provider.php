@@ -82,7 +82,7 @@ class provider implements
                 'timemodified' => 'privacy:metadata:local_culrollover:timemodified',
                 'userid' => 'privacy:metadata:local_culrollover:userid'
             ],
-            'privacy:metadata:local_culrollover'
+            'privacy:metadata:cul_rolloverconfig'
         );
 
         return $collection;
