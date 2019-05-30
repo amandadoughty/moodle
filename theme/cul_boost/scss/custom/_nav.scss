@@ -326,10 +326,10 @@
             vertical-align: middle;
         }
     }
-    .dropdown-menu {
-        overflow-x: hidden;
+    .dropdown-menu {        
         max-height: 450px;
         overflow: auto;
+        overflow-x: hidden;
         .dropdown-item {
             border-bottom: 1px solid $gray-200;
             &:last-child {

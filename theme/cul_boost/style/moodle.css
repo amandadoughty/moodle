@@ -21584,9 +21584,9 @@ a.dimmed_text:visited,
   vertical-align: middle; }
 
 .dropdown .dropdown-menu {
-  overflow-x: hidden;
   max-height: 450px;
-  overflow: auto; }
+  overflow: auto;
+  overflow-x: hidden; }
   .dropdown .dropdown-menu .dropdown-item {
     border-bottom: 1px solid #E3E3E3; }
     .dropdown .dropdown-menu .dropdown-item:last-child {
@@ -23680,6 +23680,15 @@ li.movehere {
   background: #A22833;
   position: relative;
   margin-bottom: 1rem; }
+
+.block_advnotifications .alert, .block_advnotifications #page-admin-index .releasenoteslink, #page-admin-index .block_advnotifications .releasenoteslink,
+.block_advnotifications #page-admin-index .adminwarning, #page-admin-index .block_advnotifications .adminwarning,
+.block_advnotifications #page-admin-index .adminerror, #page-admin-index .block_advnotifications .adminerror, .block_advnotifications .que .formulation, .que .block_advnotifications .formulation,
+.block_advnotifications .que .outcome, .que .block_advnotifications .outcome,
+.block_advnotifications .que .comment, .que .block_advnotifications .comment {
+  background-color: #A22833 !important;
+  border-color: #8e232d !important;
+  color: #fff !important; }
 
 .message.clickable.bg-secondary {
   background-color: #fff !important; }
