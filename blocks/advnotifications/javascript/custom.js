@@ -236,7 +236,7 @@ require(['jquery'], function($) {
             previewalert.addClass('alert-' + alerttype);
 
             // $('.preview-aicon').find('> img').attr('src', M.cfg.wwwroot + '/blocks/advnotifications/pix/' + alerttype + '.png');
-            $('.preview-aicon').find('> img').attr('src', M.util.image_url(alerttype + '.png', 'block_advnotifications'));
+            $('.preview-aicon').find('> img').attr('src', M.util.image_url(alerttype, 'block_advnotifications'));
 
             // Check if dismissable.
             if (!$('#add_notification_dismissible')[0].checked) {
