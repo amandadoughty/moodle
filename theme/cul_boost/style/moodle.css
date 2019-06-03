@@ -23685,7 +23685,20 @@ li.movehere {
 .block_advnotifications #page-admin-index .adminwarning, #page-admin-index .block_advnotifications .adminwarning,
 .block_advnotifications #page-admin-index .adminerror, #page-admin-index .block_advnotifications .adminerror, .block_advnotifications .que .formulation, .que .block_advnotifications .formulation,
 .block_advnotifications .que .outcome, .que .block_advnotifications .outcome,
-.block_advnotifications .que .comment, .que .block_advnotifications .comment {
+.block_advnotifications .que .comment, .que .block_advnotifications .comment,
+.add_notification_wrapper .alert,
+.add_notification_wrapper #page-admin-index .releasenoteslink,
+#page-admin-index .add_notification_wrapper .releasenoteslink,
+.add_notification_wrapper #page-admin-index .adminwarning,
+#page-admin-index .add_notification_wrapper .adminwarning,
+.add_notification_wrapper #page-admin-index .adminerror,
+#page-admin-index .add_notification_wrapper .adminerror,
+.add_notification_wrapper .que .formulation,
+.que .add_notification_wrapper .formulation,
+.add_notification_wrapper .que .outcome,
+.que .add_notification_wrapper .outcome,
+.add_notification_wrapper .que .comment,
+.que .add_notification_wrapper .comment {
   background-color: #A22833 !important;
   border-color: #8e232d !important;
   color: #fff !important; }

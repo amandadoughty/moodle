@@ -29,7 +29,8 @@
     margin-bottom: 1rem; 
 }
 
-.block_advnotifications .alert {
+.block_advnotifications .alert,
+.add_notification_wrapper .alert {
 	background-color: $primary !important;
     border-color: darken($primary, 5%) !important;
     color: $white !important;
