@@ -53,7 +53,8 @@ class block_advnotifications_renderer extends plugin_renderer_base
 
             if (!empty($notification['aiconflag']) && $notification['aiconflag'] == 1) {
                 $html .= '<img class="notification_aicon" src="' .
-                    $CFG->wwwroot . '/blocks/advnotifications/pix/' . $notification['aicon'] . '.png"/>';
+                    // $CFG->wwwroot . '/blocks/advnotifications/pix/' . $notification['aicon'] . '.png"/>';
+                $this->output->image_url($notification['aicon'], 'block_advnotifications') . '"';
             }
             if (!empty($notification['title'])) {
                 $html .= '<strong>' . $notification['title'] . '</strong> ';
