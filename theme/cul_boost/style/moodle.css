@@ -21894,6 +21894,9 @@ a.menu-link .icon {
     #theme-cul_boost-myfavourites .dropdown-menu .dropdown-menu .dropdown-menu {
       padding-left: 1rem; }
 
+:target::before {
+  display: none; }
+
 .breadcrumb .breadcrumb-item {
   color: #3C3C3C; }
   .breadcrumb .breadcrumb-item a {
