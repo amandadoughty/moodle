@@ -76,7 +76,10 @@ function theme_cul_boost_page_init(moodle_page $page) {
     $page->requires->js_call_amd('theme_cul_boost/showcourse', 'init', ['courseid' => $COURSE->id]);
 
     // Save scroll position when editing is turned on/off
-    $page->requires->js_call_amd('theme_cul_boost/savescrollpos', 'init');
+    // $page->requires->js_call_amd('theme_cul_boost/savescrollpos', 'init');
+
+    // $page->requires->js('/theme/cul_boost/jquery/scroll.js');
+    $page->requires->js_call_amd('theme_cul_boost/offsetheader', 'init');
 
     return true;
 }

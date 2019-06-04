@@ -726,3 +726,8 @@ a.menu-link .icon {
         }
     }
 }
+
+// CMDLTWO-1588
+:target::before {
+    display: none;
+}
