@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// vendor/bin/phpunit message/output/culactivity_stream/tests/privacy_provider_test.php
+// vendor/bin/phpunit local/culrollover/tests/privacy_provider_test.php
 
 use core_privacy\local\metadata\collection;
 use local_culrollover\privacy\provider;
@@ -91,6 +91,8 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
     public function test_get_contexts_for_userid() {
         $this->resetAfterTest();
 
+        $context = \context_system::instance();
+
         $user1 = $this->getDataGenerator()->create_user();
         $user2 = $this->getDataGenerator()->create_user();
         $course1 = $this->getDataGenerator()->create_course();
@@ -108,103 +110,104 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
         // Test for the rollover creator.
         $contextlist = provider::get_contexts_for_userid($user1->id);
         $this->assertCount(1, $contextlist);
-        $contextforuser = $contextlist->current();
+        $context = $contextlist->current();
         $this->assertEquals(
-                context_user::instance($user1->id)->id,
-                $contextforuser->id);
+                context_system::instance()->id,
+                $context->id);
 
         $this->create_rollover_lock($course1->id, $user2->id, time() - (9 * DAYSECS));
 
         // Test for the course editor.
         $contextlist = provider::get_contexts_for_userid($user2->id);
         $this->assertCount(1, $contextlist);
-        $contextforuser = $contextlist->current();
+        $context = $contextlist->current();
         $this->assertEquals(
-                context_user::instance($user2->id)->id,
-                $contextforuser->id);
+                context_system::instance()->id,
+                $context->id);
     }    
 
-    // /**
-    //  * Test for provider::get_users_in_context() when there is a notification between users.
-    //  */
-    // public function test_get_users_in_context() {
-    //     $this->resetAfterTest();
+    /**
+     * Test for provider::get_users_in_context() when there is a notification between users.
+     */
+    public function test_get_users_in_context() {
+        $this->resetAfterTest();
 
-    //     $user1 = $this->getDataGenerator()->create_user();
-    //     $user2 = $this->getDataGenerator()->create_user();
-    //     $course1 = $this->getDataGenerator()->create_course();
+        $context = \context_system::instance();
 
-    //     $user1context = context_user::instance($user1->id);
-    //     $user2context = context_user::instance($user2->id);
+        $user1 = $this->getDataGenerator()->create_user();
+        $user2 = $this->getDataGenerator()->create_user();
+        $course1 = $this->getDataGenerator()->create_course();
+        $course2 = $this->getDataGenerator()->create_course();
 
-    //     // Test nothing is found before notification is created.
-    //     $userlist = new \core_privacy\local\request\userlist($user1context, 'local_culrollover');
-    //     \local_culrollover\privacy\provider::get_users_in_context($userlist);
-    //     $this->assertCount(0, $userlist);
-    //     $userlist = new \core_privacy\local\request\userlist($user2context, 'local_culrollover');
-    //     \local_culrollover\privacy\provider::get_users_in_context($userlist);
-    //     $this->assertCount(0, $userlist);
+        $user1context = context_user::instance($user1->id);
+        $user2context = context_user::instance($user2->id);
 
-    //     $this->create_notification($user1->id, $user2->id, $course1->id, time() - (9 * DAYSECS));
+        // Test nothing is found before rollover is created.
+        $userlist = new \core_privacy\local\request\userlist($context, 'local_culrollover');
+        \local_culrollover\privacy\provider::get_users_in_context($userlist);
+        $this->assertCount(0, $userlist);        
 
-    //     // Test for the sender.
-    //     $userlist = new \core_privacy\local\request\userlist($user1context, 'local_culrollover');
-    //     \local_culrollover\privacy\provider::get_users_in_context($userlist);
-    //     $this->assertCount(1, $userlist);
-    //     $userincontext = $userlist->current();
-    //     $this->assertEquals($user1->id, $userincontext->id);
+        // Test for the rollover user.
+        $this->create_rollover($course1->id, $course2->id, $user1->id, time() - (9 * DAYSECS));
 
-    //     // Test for the receiver.
-    //     $userlist = new \core_privacy\local\request\userlist($user2context, 'local_culrollover');
-    //     \local_culrollover\privacy\provider::get_users_in_context($userlist);
-    //     $this->assertCount(1, $userlist);
-    //     $userincontext = $userlist->current();
-    //     $this->assertEquals($user2->id, $userincontext->id);
-    // }
+        $userlist = new \core_privacy\local\request\userlist($context, 'local_culrollover');
+        \local_culrollover\privacy\provider::get_users_in_context($userlist);
+        $this->assertCount(1, $userlist);
+        $userincontext1 = $userlist->current();
+        $this->assertEquals($user1->id, $userincontext1->id);
 
-    // /**
-    //  * Test for provider::export_user_data().
-    //  */
-    // public function test_export_for_context() {
-    //     $this->resetAfterTest();
+        // Test for the course editor.
+        $this->create_rollover_lock($course2->id, $user2->id, time() - (9 * DAYSECS));
 
-    //     // Create users to test with.
-    //     $user1 = $this->getDataGenerator()->create_user();
-    //     $user2 = $this->getDataGenerator()->create_user();
-    //     $user3 = $this->getDataGenerator()->create_user();
-    //     // Create course.
-    //     $course1 = $this->getDataGenerator()->create_course();
+        $userlist = new \core_privacy\local\request\userlist($context, 'local_culrollover');
+        \local_culrollover\privacy\provider::get_users_in_context($userlist);
+        $this->assertCount(2, $userlist);
+        $userlist->next();
+        $userincontext2 = $userlist->current();
+        $this->assertEquals($user2->id, $userincontext2->id);
+    }
 
-    //     $now = time();
+    /**
+     * Test for provider::export_user_data().
+     */
+    public function test_export_for_context() {
+        $this->resetAfterTest();
 
-    //     // Send notifications from user 1 to user 2.
-    //     $this->create_notification($user1->id, $user2->id, $course1->id, $now + (9 * DAYSECS));
-    //     $this->create_notification($user2->id, $user1->id, $course1->id, $now + (8 * DAYSECS));
-    //     $this->create_notification($user1->id, $user2->id, $course1->id, $now + (7 * DAYSECS));
+        $context = \context_system::instance();
 
-    //     // Send notifications from user 3 to user 1.
-    //     $this->create_notification($user3->id, $user1->id, $course1->id, $now + (6 * DAYSECS));
-    //     $this->create_notification($user1->id, $user3->id, $course1->id, $now + (5 * DAYSECS));
-    //     $this->create_notification($user3->id, $user1->id, $course1->id, $now + (4 * DAYSECS));
+        // Create users to test with.
+        $user1 = $this->getDataGenerator()->create_user();
+        $user2 = $this->getDataGenerator()->create_user();
+        $user3 = $this->getDataGenerator()->create_user();
+        // Create course.
+        $course1 = $this->getDataGenerator()->create_course();
+        $course2 = $this->getDataGenerator()->create_course();
 
-    //     // Send notifications from user 3 to user 2 - should not be part of the export.
-    //     $this->create_notification($user3->id, $user2->id, $course1->id, $now + (3 * DAYSECS));
-    //     $this->create_notification($user2->id, $user3->id, $course1->id, $now + (2 * DAYSECS));
-    //     $this->create_notification($user3->id, $user2->id, $course1->id, $now + (1 * DAYSECS));
+        $now = time();
 
-    //     $user1context = context_user::instance($user1->id);
+        $this->create_rollover($course1->id, $course2->id, $user1->id, time() - (9 * DAYSECS));
+        $this->create_rollover_lock($course2->id, $user2->id, time() - (9 * DAYSECS));       
 
-    //     $this->export_context_data_for_user($user1->id, $user1context, 'local_culrollover');
+        // Confirm the rollovers.
+        $this->export_context_data_for_user($user1->id, $context, 'local_culrollover');
+        $writer = writer::with_context($context);
 
-    //     $writer = writer::with_context($user1context);
+        $this->assertTrue($writer->has_any_data());
 
-    //     $this->assertTrue($writer->has_any_data());
+        $rollovers = (array) $writer->get_data([get_string('cul_rollover', 'local_culrollover')]);
 
-    //     // Confirm the notifications.
-    //     $notifications = (array) $writer->get_data([get_string('local_culrollover', 'local_culrollover')]);
+        $this->assertCount(1, $rollovers);
 
-    //     $this->assertCount(6, $notifications);
-    // }    
+        // Confirm the edits.
+        $this->export_context_data_for_user($user2->id, $context, 'local_culrollover');
+        $writer = writer::with_context($context);
+
+        $this->assertTrue($writer->has_any_data());
+
+        $edits = (array) $writer->get_data([get_string('cul_rollover_config', 'local_culrollover')]);
+
+        $this->assertCount(1, $edits);
+    }    
 
     // /**
     //  * Test for provider::delete_data_for_all_users_in_context().
@@ -343,8 +346,7 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
             $datesubmitted = time();
         }
 
-        $schedule = $visibledate = 
-        $completiondate =  
+        $schedule = $visibledate = $completiondate = $datesubmitted;  
 
         $record = new stdClass();
         $record->sourceid = $sourceid;
@@ -352,14 +354,14 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
         $record->userid = $userid;
         $record->datesubmitted = $datesubmitted;
         $record->status = 'Pending';
-        $record->schedule = ;
+        $record->schedule = $schedule;
         $record->type = 1;
         $record->merge = 0;
         $record->groups = 0;
         $record->enrolments = '9,3,4,11,19,16';
         $record->visible = 0;
-        $record->visibledate = ;
-        $record->completiondate = ;
+        $record->visibledate = $visibledate;
+        $record->completiondate = $completiondate;
         $record->notify = '9,3,4,11,19,16';
         $record->template = null;
   
@@ -385,7 +387,7 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
         $record = new stdClass();
         $record->courseid = $courseid;
         $record->name = 'rolloverlocked';
-        $record->value = 1
+        $record->value = 1;
         $record->timemodified = $timemodified;
         $record->userid = $userid;
   

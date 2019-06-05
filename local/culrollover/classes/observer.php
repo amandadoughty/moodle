@@ -39,6 +39,14 @@ class local_culrollover_observer {
         $eventdata = $event->get_data();
         // If there is no courseid then the value of $event->data['courseid'] is 0.
         $courseid = $eventdata['courseid'];
+
+        // Check that the event has not fired on course creation.
+        $course = $DB->get_record('course', ['id' => $courseid]);
+
+        if ($course->timecreated == $course->timemodified) {
+            return;
+        }
+
         $userid = $eventdata['userid'];
         $configname = 'rolloverlocked';
         $table = 'cul_rollover_config';

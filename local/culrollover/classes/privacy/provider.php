@@ -27,6 +27,7 @@ use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
+use core_privacy\local\request\userlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\writer;
 
@@ -93,9 +94,17 @@ class provider implements
      * @return contextlist the list of contexts containing user info for the user.
      */
     public static function get_contexts_for_userid(int $userid) : contextlist {
-        // Rollovers are in the system context.
+        global $DB;
+
         $contextlist = new contextlist();
-        $contextlist->add_system_context();
+        $hasdata = false;
+        // Rollovers and rollover locks are in the system context.
+        $hasdata = $DB->record_exists_select('cul_rollover', 'userid = ?', [$userid]);
+        $hasdata = $hasdata || $DB->record_exists_select('cul_rollover_config', 'userid = ?', [$userid]);        
+
+        if ($hasdata) {
+            $contextlist->add_system_context();
+        }        
 
         return $contextlist;
     }
@@ -110,18 +119,21 @@ class provider implements
 
         $context = $userlist->get_context();
 
-        if (!$context instanceof \context_user) {
+        if (!$context instanceof \context_system) {
             return;
         }
 
-        $userid = $context->instanceid;
+        // Add Rollover users.
+        $sql = "SELECT userid
+                  FROM {cul_rollover}";
 
-        $hasdata = false;
-        $hasdata = $hasdata || $DB->record_exists_select('cul_rollover', 'userid = ?', [$userid]);
-        
-        if ($hasdata) {
-            $userlist->add_user($userid);
-        }
+        $userlist->add_from_sql('userid', $sql, []);
+
+        // Add course editors.
+        $sql = "SELECT userid
+                  FROM {cul_rollover_config}";
+
+        $userlist->add_from_sql('userid', $sql, []);
     }    
 
     /**
@@ -251,7 +263,7 @@ class provider implements
         }
         $local_culrollover->close();
 
-        writer::with_context($context)->export_data([get_string('local_culrollover', 'local_culrollover')], (object) $rolloverdata);
+        writer::with_context($context)->export_data([get_string('cul_rollover', 'local_culrollover')], (object) $rolloverdata);
 
         $local_culrollover_config = $DB->get_recordset_select('cul_rollover_config', $select, [$userid], 'timemodified ASC');
 
@@ -268,6 +280,6 @@ class provider implements
         }
         $local_culrollover->close();
 
-        writer::with_context($context)->export_data([get_string('local_culrollover', 'local_culrollover')], (object) $rolloverconfigdata);
+        writer::with_context($context)->export_data([get_string('cul_rollover_config', 'local_culrollover')], (object) $rolloverconfigdata);
     }
 }

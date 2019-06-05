@@ -173,6 +173,8 @@ $string['eventrollover_failed'] = "Rollover failed";
 $string['rollovertask'] = "Rollover processing";
 
 // Privacy API
+$string['cul_rollover'] = 'cul_rollover';
+$string['cul_rollover_config'] = 'cul_rollover_config';
 $string['local_culrollover'] = 'local_culrollover';
 $string['privacy:metadata:local_culrollover'] = 'Stores the rollover details.';
 $string['privacy:metadata:local_culrollover:sourceid'] = 'The id of the source course.';
