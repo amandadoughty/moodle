@@ -270,7 +270,8 @@ body.format-culcourse .course-content ul.culcourse li#toggle-all {
       margin: 2px;
       padding-bottom: 1.5em;
       background-color: #eceeef;
-      min-height: 7em; }
+      min-height: 7em;
+      cursor: pointer; }
       body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead:hover,
       body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead:hover {
         background-color: #f4f4f4;

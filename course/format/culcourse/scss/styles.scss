@@ -102,6 +102,7 @@ body.format-culcourse {
                     padding-bottom: 1.5em;
                     background-color: #eceeef; // @TODO
                     min-height: 7em;
+                    cursor: pointer;
                     &:hover {
                         background-color: #f4f4f4; // @TODO
                         @include gradient-horizontal(rgba($white, 0), #f4f4f4, 0, 50%);
