@@ -62,7 +62,17 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
 	        2,
 	        'culcourse_listing m-0'
 	        );
-	    $heading = html_writer::link('#'.$id, $heading, ['class'=>'nav-link favourites-link', 'data-toggle'=>'tab', 'role'=>'tab', 'aria-expanded'=>'false']);
+	    $heading = html_writer::link(
+            '#', 
+            $heading, 
+            [
+                'class'=>'nav-link favourites-link',
+                'data-toggle'=>'tab',
+                'data-target' => '#' . $id,
+                'role'=>'tab',
+                'aria-expanded'=>'false'
+            ]
+        );
 	    $content .= html_writer::tag('li', $heading, ['class'=>'nav-item']);
 
 	    $content .= html_writer::start_tag('div', array('id' => 'favouritesbuttons'));
@@ -208,7 +218,17 @@ class theme_cul_boost_block_culcourse_listing_renderer extends block_culcourse_l
             // $divalert .= '<i class="fa fa-hand-o-right"></i>';
             
             $heading = html_writer::tag('h2', $header, array('class' => 'allcourses m-0'));
-            $heading = html_writer::link('#'.$id, $heading, ['class'=>'nav-link allcourses-link active', 'data-toggle'=>'tab', 'role'=>'tab', 'aria-expanded' => true]);
+            $heading = html_writer::link(
+                '#',
+                $heading,
+                [
+                    'class'=>'nav-link allcourses-link active',
+                    'data-toggle'=>'tab',
+                    'data-target' => '#' . $id,
+                    'role'=>'tab',
+                    'aria-expanded' => true
+                ]
+            );
             $content .= html_writer::tag('li', $heading, ['class'=>'nav-item']);
 
             $content .= html_writer::tag('div', $divalert, array('class' => 'divalert text-center text-white mb-3'));
