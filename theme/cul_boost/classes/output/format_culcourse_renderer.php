@@ -359,10 +359,10 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
             $o .= html_writer::end_tag('div'); // .sectionbody.
 
             $attributes = [
-                'class' => 'sectionclose collapsed',
+                'class' => 'sectionclose',
                 'id' => 'footertoggle-' . $thissection->id,
                 'data-toggle' => 'collapse',
-                'href' => '.course-content #togglesection-' . $thissection->id,
+                'data-target' => '.course-content #togglesection-' . $thissection->id,
                 'role' => 'button', 
                 'aria-pressed' => $ariapressed
             ];
