@@ -141,7 +141,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist a list of contexts approved for export.
      */
-    public static function export_user_data($contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist) {
         if (empty($contextlist->count())) {
             return;
         }
@@ -210,9 +210,11 @@ class provider implements
      * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
+        global $DB;
+        
         $context = $userlist->get_context();
 
-        if (!$context instanceof \context_user) {
+        if (!$context instanceof \context_system) {
             return;
         }
 

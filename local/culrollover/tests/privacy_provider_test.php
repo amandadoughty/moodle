@@ -209,125 +209,118 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
         $this->assertCount(1, $edits);
     }    
 
-    // /**
-    //  * Test for provider::delete_data_for_all_users_in_context().
-    //  */
-    // public function test_delete_data_for_all_users_in_context() {
-    //     global $DB;
+    /**
+     * Test for provider::delete_data_for_all_users_in_context().
+     */
+    public function test_delete_data_for_all_users_in_context() {
+        global $DB;
 
-    //     $this->resetAfterTest();
+        $this->resetAfterTest();
 
-    //     // Create users to test with.
-    //     $user1 = $this->getDataGenerator()->create_user();
-    //     $user2 = $this->getDataGenerator()->create_user();
-    //     $user3 = $this->getDataGenerator()->create_user();
-    //     // Create course.
-    //     $course1 = $this->getDataGenerator()->create_course();
+        $context = \context_system::instance();
 
-    //     $now = time();
-    //     $user1context = context_user::instance($user1->id);
+        // Create users to test with.
+        $user1 = $this->getDataGenerator()->create_user();
+        $user2 = $this->getDataGenerator()->create_user();
+        // Create course.
+        $course1 = $this->getDataGenerator()->create_course();
+        $course2 = $this->getDataGenerator()->create_course();
 
-    //     // Create notifications.
-    //     $n1 = $this->create_notification($user1->id, $user2->id, $course1->id, $now + (9 * DAYSECS));
-    //     $n2 = $this->create_notification($user2->id, $user1->id, $course1->id, $now + (8 * DAYSECS));
-    //     $n3 = $this->create_notification($user2->id, $user3->id, $course1->id, $now + (7 * DAYSECS));
+        $now = time();
 
-    //      // There should be 3 notifications.
-    //     $this->assertEquals(3, $DB->count_records('local_culrollover'));
-    //     provider::delete_data_for_all_users_in_context($user1context);
-    //     // Confirm there is only 1 notification.
-    //     $this->assertEquals(1, $DB->count_records('local_culrollover'));
-    //     // And it is not related to user1.
-    //     $this->assertEquals(0,
-    //             $DB->count_records_select('local_culrollover', 'userfromid = ? OR userid = ? ', [$user1->id, $user1->id]));
-    // }
+        // Create rollover and edit.
+        $this->create_rollover($course1->id, $course2->id, $user1->id, time() - (9 * DAYSECS));
+        $this->create_rollover_lock($course2->id, $user2->id, time() - (9 * DAYSECS));
 
-    // /**
-    //  * Test for provider::delete_data_for_user().
-    //  */
-    // public function test_delete_data_for_user() {
-    //     global $DB;
+        // There should be 1 rollover and 1 edit.
+        $this->assertEquals(1, $DB->count_records('cul_rollover'));
+        $this->assertEquals(1, $DB->count_records('cul_rollover_config'));
+        provider::delete_data_for_all_users_in_context($context);
+        // Confirm there are no rollovers.
+        $this->assertEquals(0, $DB->count_records('cul_rollover'));
+        // Confirm there are no edits.
+        $this->assertEquals(0, $DB->count_records('cul_rollover_config'));
+    }
 
-    //     $this->resetAfterTest();
+    /**
+     * Test for provider::delete_data_for_user().
+     */
+    public function test_delete_data_for_user() {
+        global $DB;
 
-    //     // Create users to test with.
-    //     $user1 = $this->getDataGenerator()->create_user();
-    //     $user2 = $this->getDataGenerator()->create_user();
-    //     $user3 = $this->getDataGenerator()->create_user();
-    //     // Create course.
-    //     $course1 = $this->getDataGenerator()->create_course();
+        $this->resetAfterTest();
 
-    //     $now = time();
-    //     $timeread = $now - DAYSECS;
+        $context = \context_system::instance();
 
-    //     // Create notifications.
-    //     $n1 = $this->create_notification($user1->id, $user2->id, $course1->id, $now + (9 * DAYSECS), $timeread);
-    //     $n2 = $this->create_notification($user2->id, $user1->id, $course1->id, $now + (8 * DAYSECS));
-    //     $n2 = $this->create_notification($user2->id, $user3->id, $course1->id, $now + (8 * DAYSECS));
+        // Create users to test with.
+        $user1 = $this->getDataGenerator()->create_user();
+        $user2 = $this->getDataGenerator()->create_user();
+        // Create course.
+        $course1 = $this->getDataGenerator()->create_course();
+        $course2 = $this->getDataGenerator()->create_course();
 
-    //     // There should be three notifications.
-    //     $this->assertEquals(3, $DB->count_records('local_culrollover'));
+        $now = time();
 
-    //     $user1context = context_user::instance($user1->id);
-    //     $contextlist = new \core_privacy\local\request\approved_contextlist($user1, 'local_culrollover',
-    //         [$user1context->id]);
-    //     provider::delete_data_for_user($contextlist);
+        // Create rollover and edit.
+        $this->create_rollover($course1->id, $course2->id, $user1->id, time() - (9 * DAYSECS));
+        $this->create_rollover_lock($course2->id, $user2->id, time() - (9 * DAYSECS));
 
-    //     // Confirm the user 2 data still exists.
-    //     $notifications = $DB->get_records('local_culrollover');
-    //     $this->assertCount(1, $notifications);
-    //     ksort($notifications);
+         // There should be 1 rollover and 1 edit.
+        $this->assertEquals(1, $DB->count_records('cul_rollover'));
+        $this->assertEquals(1, $DB->count_records('cul_rollover_config'));
+        $contextlist = new \core_privacy\local\request\approved_contextlist($user2, 'local_culrollover',
+            [$context->id]);
 
-    //     $notification = array_shift($notifications);
-    //     $this->assertEquals($user2->id, $notification->userfromid);
-    //     $this->assertEquals($user3->id, $notification->userid);
-    // }
+        provider::delete_data_for_user($contextlist);
+        // Confirm there is still 1 rollover.
+        $this->assertEquals(1, $DB->count_records('cul_rollover'));
+        // Confirm there are no edits.
+        $this->assertEquals(0, $DB->count_records('cul_rollover_config'));
 
-    // /**
-    //  * Test for provider::delete_data_for_users().
-    //  */
-    // public function test_delete_data_for_users() {
-    //     global $DB;
+        // Confirm the user 1 data still exists.
+        $rollovers = $DB->get_records('cul_rollover');
+        $this->assertCount(1, $rollovers);
+        ksort($rollovers);
 
-    //     $this->resetAfterTest();
+        $rollover = array_shift($rollovers);
+        $this->assertEquals($user1->id, $rollover->userid);
+    }
 
-    //     // Create users to test with.
-    //     $user1 = $this->getDataGenerator()->create_user();
-    //     $user2 = $this->getDataGenerator()->create_user();
-    //     $user3 = $this->getDataGenerator()->create_user();
-    //     $user4 = $this->getDataGenerator()->create_user();
-    //     $user5 = $this->getDataGenerator()->create_user();
-    //     $user6 = $this->getDataGenerator()->create_user();
-    //     // Create course.
-    //     $course1 = $this->getDataGenerator()->create_course();
+    /**
+     * Test for provider::delete_data_for_users().
+     */
+    public function test_delete_data_for_users() {
+                global $DB;
 
-    //     $now = time();
+        $this->resetAfterTest();
 
-    //     // Create notifications.
-    //     $n1 = $this->create_notification($user1->id, $user2->id, $course1->id, $now + (9 * DAYSECS));
-    //     $n2 = $this->create_notification($user2->id, $user1->id, $course1->id, $now + (8 * DAYSECS));
-    //     $n2 = $this->create_notification($user2->id, $user3->id, $course1->id, $now + (8 * DAYSECS));
+        $context = \context_system::instance();
 
-    //     // There should be three notifications.
-    //     $this->assertEquals(3, $DB->count_records('local_culrollover'));
+        // Create users to test with.
+        $user1 = $this->getDataGenerator()->create_user();
+        $user2 = $this->getDataGenerator()->create_user();
+        // Create course.
+        $course1 = $this->getDataGenerator()->create_course();
+        $course2 = $this->getDataGenerator()->create_course();
 
-    //     $user1context = context_user::instance($user1->id);
-    //     $approveduserlist = new \core_privacy\local\request\approved_userlist($user1context, 'local_culrollover',
-    //             [$user1->id, $user2->id]);
-    //     provider::delete_data_for_users($approveduserlist);
+        $now = time();
 
-    //     // Only user1's data should be deleted. User2 should be skipped as user2 is an invalid user for user1context.
+        // Create rollover and edit.
+        $this->create_rollover($course1->id, $course2->id, $user1->id, time() - (9 * DAYSECS));
+        $this->create_rollover_lock($course2->id, $user2->id, time() - (9 * DAYSECS));
 
-    //     // Confirm the user 2 data still exists.
-    //     $notifications = $DB->get_records('local_culrollover');
+        // There should be 1 rollover and 1 edit.
+        $this->assertEquals(1, $DB->count_records('cul_rollover'));
+        $this->assertEquals(1, $DB->count_records('cul_rollover_config'));
 
-    //     $this->assertCount(1, $notifications);
-    //     ksort($notifications);
+        $approveduserlist = new \core_privacy\local\request\approved_userlist($context, 'local_culrollover',
+                [$user1->id, $user2->id]);
+        provider::delete_data_for_users($approveduserlist);
 
-    //     $notification = array_shift($notifications);
-    //     $this->assertEquals($user2->id, $notification->userfromid);
-    //     $this->assertEquals($user3->id, $notification->userid);
-    // }   
+        // There should be 0 rollover and 0 edit.
+        $this->assertEquals(0, $DB->count_records('cul_rollover'));
+        $this->assertEquals(0, $DB->count_records('cul_rollover_config'));
+    }   
 
     /**
      * Creates a rollover to be used for testing.
