@@ -396,7 +396,8 @@ body.format-culcourse .course-content ul.culcourse li#toggle-all {
       padding-bottom: 6px;
       padding-top: 6px;
       padding-left: 26px;
-      /* The 24px allows the arrow to be with the text next to it. */ }
+      /* The 24px allows the arrow to be with the text next to it. */
+      cursor: pointer; }
       body.format-culcourse .course-content ul.culcourse li.section .content a.sectionclose.collapsed,
       body.format-culcourse .course-content ul.culcourse li#toggle-all .content a.sectionclose.collapsed {
         display: none; }
