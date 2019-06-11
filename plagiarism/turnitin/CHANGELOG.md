@@ -1,3 +1,26 @@
+### Date:       2019-June-06
+### Release:	v2019060601
+
+#### :zap: What's new
+
+---
+
+#### We now support Moodle 3.7
+
+You can find out more about Moodle 3.7 via Moodle's [release notes](https://docs.moodle.org/dev/Moodle_3.7_release_notes).
+
+#### :wrench: Fixes and enhancements
+
+---
+
+We’ve been doing bug fixing behind the scenes to improve the usability of the Moodle Plagiarism Plugin. 
+
+This includes fixing a bug that was erroneously displaying rubric options when creating a forum in Moodle with the Plagiarism Plugin enabled. This has been resolved and rubric options will no longer be available during forum creation.
+
+Download the latest version from the above link.
+
+---
+
 ### Date:       2019-May-02
 ### Release:    v2019050201
 
