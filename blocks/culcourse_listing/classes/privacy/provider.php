@@ -24,6 +24,7 @@
 
 namespace block_culcourse_listing\privacy;
 
+use \core_privacy\local\metadata\collection;
 use \core_privacy\local\request\writer;
 
 defined('MOODLE_INTERNAL') || die();
@@ -50,11 +51,11 @@ class provider implements
      */
     public static function get_metadata(collection $collection) : collection {
         // There are several user preferences.
-        $items->add_user_preference('culcourse_listing_course_favourites', 'privacy:metadata:preference:culcourse_listing_course_favourites');
-        $items->add_user_preference('culcourse_listing_filter_year', 'privacy:metadata:preference:culcourse_listing_filter_year');
-        $items->add_user_preference('culcourse_listing_filter_period', 'privacy:metadata:preference:culcourse_listing_filter_period');
+        $collection->add_user_preference('culcourse_listing_course_favourites', 'privacy:metadata:preference:culcourse_listing_course_favourites');
+        $collection->add_user_preference('culcourse_listing_filter_year', 'privacy:metadata:preference:culcourse_listing_filter_year');
+        $collection->add_user_preference('culcourse_listing_filter_period', 'privacy:metadata:preference:culcourse_listing_filter_period');
 
-        return $items;
+        return $collection;
     }
 
     /**
