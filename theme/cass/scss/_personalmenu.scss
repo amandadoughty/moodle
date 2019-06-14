@@ -16,3 +16,14 @@
     padding: 1.618em 0.618em 1em 0.618em;
   }
 }
+
+// Hide link to dashboard.
+#snap-pm-header-quicklinks {
+    a[href$="/my"] {
+        display: none;
+    }
+}
+
+#snap-pm-updates h3 {
+    font-family: $font-family-base;
+}

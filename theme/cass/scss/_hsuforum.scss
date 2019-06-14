@@ -20,8 +20,8 @@
   .managesubslink,
   // Hide post numbering.
   .hsuforum-post:before,
-  // No Moodle footer on forums.
-  #moodle-footer,
+  // Hide reply field subject.
+  .hsuforum-reply-wrapper input[name='subject'],
    {
       display: none;
   }
@@ -29,12 +29,6 @@
 
 .hsuforum-thread-replies {
     padding: 0;
-}
-
-// Branded forum header.
-.hsuforum-thread-title {
-    @include cass-activityheader;
-    margin-top: -4rem; // Diffeent dom from most headers so needs pulling up.
 }
 
 // On a course page hide recent posts post title.

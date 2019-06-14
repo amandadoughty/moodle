@@ -28,10 +28,11 @@ $brand-purple:          #8f2b8c;
 $text-color:            #333;
 $modal-bg:              #fff;
 
-$font-family-system:      "ff-meta-web-pro", Georgia, Arial, sans-serif !default;
-$font-family-sans-serif:  "ff-meta-web-pro", Georgia, Arial, sans-serif !default;
-$font-family-feature:     "ff-meta-serif-web-pro", $font-family-system;
-$font-family-fancy:       "ff-meta-web-pro", Helvetica, Arial, sans-serif;
+$font-family-base:         "ff-meta-web-pro", Helvetica, Arial, sans-serif !default;
+$font-family-system:      $font-family-base;
+$font-family-sans-serif:  $font-family-base;
+$font-family-fancy:       "ff-meta-serif-web-pro", Georgia, "Times New Roman", Times, serif;
+$font-family-feature:     $font-family-fancy;
 
 $breadcrumb-divider: "|";
 

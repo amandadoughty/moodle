@@ -2,8 +2,6 @@
 // Course toc & appendicies.
 // -------------------------
 #course-toc {
-  font-size: .764em;
-  font-family: $font-family-fancy;
   position: sticky;
   top: 3rem;
 
@@ -19,6 +17,7 @@
     background: $gray-lighter;
 
     li {
+      font-size: 0.8em;
       padding: 0 0 0.618em 0.618em;
       line-height: 1em;
       min-height: 3em;

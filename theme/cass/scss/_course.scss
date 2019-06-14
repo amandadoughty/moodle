@@ -117,7 +117,6 @@ h4.snap-asset-link .instancename {
 // TODO - initial would work better here but we need inherit for IE11 support.
 // Check that this reset works as expected.
 .section li.snap-activity {
-  margin: inherit;
   padding-bottom: inherit;
 
   &.modtype_forum,
@@ -196,14 +195,13 @@ h4.snap-asset-link {
   width: 2rem;
   height: 2rem;
   position: absolute;
-  left: -1rem;;
-  top: -.4rem; // Magic number to line up with resource title.
+  left: -1rem;
   border-radius: 50%;
   color: #fff;
   background: $brand-info;
   font-size: .7em;
   font-family: $font-family-monospace;
-  font-feature-settings: 'lnum';
+  @include lining;
 }
 // Diffent background colour for the steppers.
 .stepper-future {

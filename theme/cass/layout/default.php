@@ -58,19 +58,16 @@ if (!$PAGE->user_is_editing()) {
     }
 }
 
-// By default, do not add additional CSS classes to the 'page' div
+// By default, do not add additional CSS classes to the 'page' div.
 $modpageclass = '';
-
 // If we are on a mod page, and we are supposed to highlight the first activity in section
-if ($ismodpage && $this->page->theme->settings->highlightfirstactivityinsection) {
-
-    //Get the mod info
+if ($ismodpage) {
+    // Get the mod info.
     $modinfo = $mod->get_modinfo();
-
-    // If this activity is the first in the section
-    // This ignores the possibility of hidden scetions
+    // If this activity is the first in the section.
+    // This ignores the possibility of hidden scetions.
     if ($mod->id == $modinfo->sections[$mod->sectionnum][0]) {
-        // Add an extra CSS class to the page div
+        // Add an extra CSS class to the page div.
         $modpageclass = ' class="firstactivityinsection"';
     }
 }

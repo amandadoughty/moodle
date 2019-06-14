@@ -165,7 +165,6 @@ a.yui3-button,
 #moodle-blocks {
   margin: 0 auto;
   padding: 0 3.444%;
-  font-size: .764em;
   .row {
     margin: 0;
   }
@@ -173,11 +172,18 @@ a.yui3-button,
 
 #mr-nav {
   padding: 0.5em 3.444%;
-  font-family: $font-family-fancy;
+  // Hardcode height so it does not change when breadcrumb has content.
+  height: 67px;
   // Stop mr-nav from hiding/showing in cass theme.
   animation: none !important;
   .breadcrumb-nav {
      padding: 0;
+     // Magin number to center breadcrumb vertically.
+     margin: -.4em 0;
+  }
+  a,
+  .icon {
+    color: $body-color !important;
   }
 }
 
@@ -229,6 +235,10 @@ ol.breadcrumb {
     font-family: FontAwesome;
     color: #000;
   }
+}
+#page-admin-purgecaches #notice {
+    font-size: 1em;
+    padding-top: 3em !important;
 }
 
 .path-mod .breadcrumb li:first-child:before {
@@ -295,19 +305,11 @@ ol.breadcrumb {
   padding-bottom: 0.5em;
 }
 
-// If the page has an image - courses & catagories.
-.mast-image {
-  #course-toc {
-    font-size: .764em;
-  }
-}
-
 // Admin block link.
 #admin-menu-trigger {
   width: 30px;
   height: 30px;
   margin-left: 1em;
-  margin-top: .35em;
 }
 
 .forumpost .content .posting,
@@ -2122,8 +2124,7 @@ body.path-mod #moodle-footer {
 }
 
 
-#snap-modchooser-modal,
-#snap-pm-accessible-tab {
+#snap-modchooser-modal {
   ul.nav.nav-tabs {
     li.tab.active {
       &, a.nav-link {
@@ -2132,6 +2133,24 @@ body.path-mod #moodle-footer {
       }
     }
   }
+}
+
+// Overspecific to overwite snap css.
+#snap-pm-content #snap-pm-accessible-tab {
+    ul.nav.nav-tabs li {
+        margin: 0;
+        border: 0;
+        &.tab,
+        &.tab.active {
+            border: 0;
+            margin: 0;
+            a.nav-link {
+                background-color: transparent;
+                color: $brand-primary;
+                padding: 0 1em 0 0;
+            }
+        }
+    }
 }
 
 .btn-link {

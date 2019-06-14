@@ -77,7 +77,6 @@
   }
 
   h2 {
-    // color: rgba(255,255,255,0.7);
     font-weight: 500;
     line-height: 1;
     padding: 0.5em 0;
@@ -576,4 +575,35 @@ button.snap-icon-toggle.favoritetoggle {
 // Snap media object.
 .snap-media-object .snap-media-meta {
     clear: both;
+}
+
+#mr-nav {
+  #snap-pm-trigger {
+    padding-top: 0;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.snap-icon-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  #nav-notification-popover-container .count-container {
+    top: -2px;
+    left: 22px;
+  }
+
+  #nav-notification-popover-container .popover-region-toggle {
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 0;
+  }
+
+  #admin-menu-trigger {
+    margin-top: 0;
+  }
 }

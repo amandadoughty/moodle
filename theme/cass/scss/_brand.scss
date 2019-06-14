@@ -18,12 +18,22 @@
     left: 50%;
     right: 50%;
     margin: -2rem -50vw 2rem -50vw; // Margin-top pulls the header to avoid a white gap which happens on small screen.
-    padding: 1em 4%;
+    padding: 2em 4%;
     @include media-breakpoint-up(md) {
         // Calculate padding for content to match the 960 container.
-        padding: 3em calc(50vw - 480px) 2rem calc(50vw - 480px);
-        // page width/2 - 480. 480 is half the page container width;
+        padding: 5em calc(50vw - 440px) 2rem calc(50vw - 440px);
+        // page width/2 - 440. 440 is half the page container width;
     }
+}
+
+@mixin lining  {
+    font-kerning: normal;
+    font-variant-ligatures: common-ligatures contextual;
+    font-variant-numeric: lining-nums tabular-nums;
+    -moz-font-feature-settings: "kern", "liga", "clig", "calt", "lnum", "tnum";
+    -ms-font-feature-settings: "kern", "liga", "clig", "calt", "lnum", "tnum";
+    -webkit-font-feature-settings: "kern", "liga", "clig", "calt", "lnum", "tnum";
+    font-feature-settings: "kern", "liga", "clig", "calt", "lnum", "tnum";
 }
 
 // -------------------------
@@ -31,8 +41,8 @@
 // -------------------------
 
 // This is quite fragile, targeting the various header classes and making them look like banners.
-#page-mod-assign-view #maincontent + h4,
-#page-mod-quiz-view #maincontent + h2 {
+#page.firstactivityinsection #maincontent + h4,
+#page.firstactivityinsection #maincontent + h2 {
     @include cass-activityheader;
 }
 
@@ -481,7 +491,7 @@ legend,
 .snap-featured-course-title,
 #coursetools-list a {
   font-family: $font-family-feature;
-  color: #000;
+  color: $body-color;
 }
 
 code {
@@ -618,6 +628,17 @@ table.table {
   vertical-align: top;
   border-top: 1px solid #ddd;
 }
+table {
+    td {
+        @include lining;
+    }
+}
+
+.fn,
+.fraction {
+    @include lining;
+}
+
 
 th.data.header {
   text-align: center;
@@ -923,28 +944,32 @@ h3.qtype {
   line-height: 1.2em;
 }
 
-.formulation select.incorrect,
-.formulation input.incorrect {
-  color: #C9282D;
-  background-color: transparent;
-  box-shadow: none;
-  -webkit-appearance: none;
-  border-bottom: #C9282D 2px solid;
-  -webkit-border-radius: 0px;
-  padding: 0px 10px 0px 5px;
-}
+// Fill in the blanks answer styles.
+#region-main .formulation {
+    select.incorrect,
+    input.incorrect {
+      appearance: none;
+      color: #C9282D;
+      border-bottom: #C9282D 2px solid;
+      border-radius: 0;
+      background: none;
+      width: auto;
+      max-width: 100%;
+      padding: 0 .5em;
+    }
 
-.formulation select.correct,
-.formulation input.correct {
-  color: #6C953C;
-  -webkit-appearance: none;
-  border-bottom: #6C953C 2px solid;
-  -webkit-border-radius: 0px;
-  padding: 0px 10px 0px 5px;
-  background-color: transparent;
-  box-shadow: none;
+    select.correct,
+    input.correct {
+      appearance: none;
+      color: #6C953C;
+      border-bottom: #6C953C 2px solid;
+      border-radius: 0;
+      background: none;
+      width: auto;
+      max-width: 100%;
+      padding: 0 .5em;
+    }
 }
-
 
 //Quiz navigation
 
@@ -1057,12 +1082,6 @@ ul.choices {
   #region-main {
     padding: 0;
   }
-
-  h2 {
-    margin: 0 auto;
-    padding: 1.5em 0 .3em;
-  }
-
   .path-mod-assign td.submissionstatussubmitted {
     padding: 1.618em 0em 1em;
   }
@@ -1075,12 +1094,6 @@ ul.choices {
   .gradingsummary {
     max-width: 960px;
     margin: 0 auto;
-  }
-
-  h3 {
-    max-width: 960px;
-    margin: 0 auto;
-    float: left;
   }
 
   .submissionstatustable {
@@ -1187,15 +1200,7 @@ h3 {
 }
 
 .activity-meta {
-  float: left;
-  padding: 0;
-  margin-right: 2rem;
   line-height: 21px;
-  @media screen and (max-width: 940px) {
-    max-width: 640px;
-    float: left;
-    width: 100%;
-  }
 }
 
 .activity-type {
@@ -1241,18 +1246,6 @@ h3 {
     float: left;
     width: 100%;
   }
-}
-
-
-// Bootstrap 4 uses flex. Cass use col-md-4 and col-md-8 in the html layout for activity meta and content.
-// We need to diable the col-md-8 max width for it to display properly.
-.activity-meta.col-md-4 + .col-md-8 {
-    max-width: 100% !important;
-}
-// Cass use the col-md-12 for full width content.
-// This needs to clear the previous content to avoid not being full width.
-.col-md-12 {
-    clear: both;
 }
 
 .dropcap {

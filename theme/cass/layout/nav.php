@@ -31,7 +31,7 @@ use theme_snap\renderables\bb_dashboard_link;
 
 ?>
 <header id='mr-nav' class='clearfix moodle-has-zindex'>
-<div class="pull-right js-only">
+<div class="pull-right js-only snap-icon-menu">
 <?php
 if (class_exists('local_geniusws\navigation')) {
     $bblink = new bb_dashboard_link();
