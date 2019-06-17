@@ -265,7 +265,7 @@ class provider implements
         }
         $local_culrollover->close();
 
-        writer::with_context($context)->export_data([get_string('cul_rollover', 'local_culrollover')], (object) $rolloverdata);
+        writer::with_context($context)->export_data([get_string('privacy:metadata:cul_rollover', 'local_culrollover')], (object) $rolloverdata);
 
         $local_culrollover_config = $DB->get_recordset_select('cul_rollover_config', $select, [$userid], 'timemodified ASC');
 
@@ -282,6 +282,6 @@ class provider implements
         }
         $local_culrollover->close();
 
-        writer::with_context($context)->export_data([get_string('cul_rollover_config', 'local_culrollover')], (object) $rolloverconfigdata);
+        writer::with_context($context)->export_data([get_string('privacy:metadata:cul_rollover_config', 'local_culrollover')], (object) $rolloverconfigdata);
     }
 }
