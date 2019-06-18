@@ -170,3 +170,5 @@ $string['yearsdesc'] = 'Example: the number of years to show ordered in dropdown
 
 $string['gakey'] = 'Google analytics key';
 $string['gakeydesc'] = 'Please enter you Google Analytics key';
+
+$string['privacy:metadata'] = 'The CUL Boost theme does not store any personal data about any user.';
