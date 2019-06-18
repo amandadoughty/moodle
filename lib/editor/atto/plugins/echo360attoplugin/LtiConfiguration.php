@@ -229,10 +229,29 @@ class LtiConfiguration {
   /**
    * Fetch LTI info
    *
+   * @param  $custom_params An optional array of key => value parameters that will be added to
+   *                        the LTI request.
    * @return array
    */
-  public function generate_lti_configuration() {
-    global $CFG, $COURSE, $USER;
+  public function generate_lti_configuration($custom_params = array()) {
+    global $CFG, $COURSE, $USER, $PAGE;
+
+    // Default to embed for users.
+    $content_intended_use = "embed";
+
+    // List of allowed custom parameters
+    $allowed_custom_params = array(
+      'launch_presentation_document_target',
+      'launch_presentation_width',
+      'launch_presentation_height'
+    );
+
+    // Enable homework linking only for students submitting assignments.
+    if ((strpos($PAGE->pagetype, 'mod-assign-') === 0) &&
+        has_capability('mod/assign:submit', $this->context, $USER->id) &&
+        !has_capability('mod/assign:grade', $this->context, $USER->id)) {
+      $content_intended_use = "homework";
+    }
 
     // configure the LTI form data
     $now = new DateTime();
@@ -240,7 +259,7 @@ class LtiConfiguration {
       'lti_version' => 'LTI-1p0',
       'lti_message_type' => 'basic-lti-launch-request',
       'resource_link_id' => $this->context->id,
-      'ext_content_intended_use' => 'embed',
+      'ext_content_intended_use' => $content_intended_use,
       'tool_consumer_info_product_family_code' => 'moodle',
       'tool_consumer_info_version' => $CFG->version,
       'selection_directive' => 'embed_content',
@@ -261,6 +280,13 @@ class LtiConfiguration {
       'oauth_timestamp' => $now->getTimestamp(),
       'oauth_signature_method' => 'HMAC-SHA1'
     );
+
+    foreach ($custom_params as $key => $value) {
+      // Only add allowed custom parameters
+      if (in_array($key, $allowed_custom_params)) {
+        $launch_data[$key] = $value;
+      }
+    }
 
     // sign the oauth request
     $launch_data['oauth_signature'] = $this->get_oauth_signature($this->launch_url, $launch_data, $this->secret_key);

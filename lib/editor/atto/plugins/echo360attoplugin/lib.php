@@ -27,18 +27,26 @@ use Echo360\LtiConfiguration;
 defined('MOODLE_INTERNAL') || die();
 
 const PLUGIN_NAME = 'atto_echo360attoplugin';
-
 const ERROR_CONTEXT = 'ERROR';
 const DEBUG_CONTEXT = 'DEBUG';
 const INFO_CONTEXT = 'INFO';
+
+const FILTER_PATH = "/filter/echo360/lti_launch.php";
 
 /**
  * Initialize this plugin
  */
 function atto_echo360attoplugin_strings_for_js() {
-  global $PAGE;
+  global $CFG, $PAGE;
 
   $PAGE->requires->strings_for_js(array('dialogtitle', 'ltiConfiguration'), PLUGIN_NAME);
+  // Pass current Context Module Id and Filter LTI Launch URL to Echo360 Atto Plugin button to set in homework embedded URL.
+  if (isset($PAGE->cm->id)) {
+    $PAGE->requires->js_init_code("echo360_context_module_id = " . $PAGE->cm->id . ";");
+  } else {
+    $PAGE->requires->js_init_code("echo360_context_module_id = 0;");
+  }
+  $PAGE->requires->js_init_code("echo360_filter_lti_launch_url = \"" . $CFG->wwwroot . FILTER_PATH . "\";");
 }
 
 /**
