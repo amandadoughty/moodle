@@ -194,7 +194,7 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
 
         $this->assertTrue($writer->has_any_data());
 
-        $rollovers = (array) $writer->get_data([get_string('cul_rollover', 'local_culrollover')]);
+        $rollovers = (array) $writer->get_data([get_string('privacy:metadata:cul_rollover', 'local_culrollover')]);
 
         $this->assertCount(1, $rollovers);
 
@@ -204,7 +204,7 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
 
         $this->assertTrue($writer->has_any_data());
 
-        $edits = (array) $writer->get_data([get_string('cul_rollover_config', 'local_culrollover')]);
+        $edits = (array) $writer->get_data([get_string('privacy:metadata:cul_rollover_config', 'local_culrollover')]);
 
         $this->assertCount(1, $edits);
     }    
