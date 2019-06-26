@@ -40,7 +40,8 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         TOGGLEHEAD: '.course-content #toggle-',
         TOGGLEBODY: '#togglesection-',
         TOGGLEFOOTER: '.course-content #footertoggle-',
-        DDPROXY: '.yui3-dd-proxy'
+        DDPROXY: '.yui3-dd-proxy',
+        SECTIONNAME: '.sectionname a'
         };
     // From Bootstrap collapse.js.    
     var ClassName = {
@@ -161,6 +162,9 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         init : function(courseid) {
             courseId = courseid;
             var body = $('body');
+
+            body.delegate(SELECTORS.SECTIONNAME, 'click', function(e) {e.preventDefault();});
+
             body.delegate(SELECTORS.OPENALLLINK, 'click', handleOpenAll);
             body.delegate(SELECTORS.CLOSEALLLINK, 'click', handleCloseAll);
 
