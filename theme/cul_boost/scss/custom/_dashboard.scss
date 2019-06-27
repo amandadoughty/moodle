@@ -144,6 +144,10 @@
     margin-bottom: 2rem;
 }
 
+#block-region-dash-side {
+    align-content: flex-start;
+}
+
 @media (min-width: 544px) {
     #page-my-index .card-deck .card {
       flex: 0 0 auto;

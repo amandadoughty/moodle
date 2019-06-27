@@ -20120,13 +20120,15 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
   .block.block_culactivity_stream .notificationtext {
     overflow: visible;
     margin-bottom: 1rem; }
-  .block.block_culactivity_stream .culactivity_stream ul {
-    padding: 0; }
-    .block.block_culactivity_stream .culactivity_stream ul li {
-      padding: 0.5rem;
-      margin: 0 0.5rem 0.5rem 0; }
-      .block.block_culactivity_stream .culactivity_stream ul li.old {
-        background-color: #F5F5F5; }
+  .block.block_culactivity_stream .culactivity_stream {
+    max-height: 1000px; }
+    .block.block_culactivity_stream .culactivity_stream ul {
+      padding: 0; }
+      .block.block_culactivity_stream .culactivity_stream ul li {
+        padding: 0.5rem;
+        margin: 0 0.5rem 0.5rem 0; }
+        .block.block_culactivity_stream .culactivity_stream ul li.old {
+          background-color: #F5F5F5; }
   .jsenabled .block.block_culactivity_stream .pages {
     display: none; }
   .block.block_culupcoming_events {
@@ -22290,6 +22292,11 @@ table.roleassigntable td#buttonscell {
   font-size: 2.25rem;
   line-height: 2.25rem;
   margin-bottom: 2rem; }
+
+#block-region-dash-side {
+  -webkit-align-content: flex-start;
+      -ms-flex-line-pack: start;
+          align-content: flex-start; }
 
 @media (min-width: 544px) {
   #page-my-index .card-deck .card, #page-my-index .card-deck #page-enrol-users #filterform, #page-enrol-users #page-my-index .card-deck #filterform, #page-my-index .card-deck .que .history, .que #page-my-index .card-deck .history, #page-my-index .card-deck .userprofile .profile_tree section, .userprofile .profile_tree #page-my-index .card-deck section, #page-my-index .card-deck .groupinfobox, #page-my-index .card-deck .well {
