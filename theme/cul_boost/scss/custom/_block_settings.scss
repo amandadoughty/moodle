@@ -160,6 +160,11 @@ aside[id*="block-region-nav-settings"] {
                     text-align: center;
                     font-size: $font-size-base;
                 }
+                i {
+                    &[aria-hidden="true"] {
+                        display: none;
+                    }
+                }
             }
         }
         &.root_node.branch,
