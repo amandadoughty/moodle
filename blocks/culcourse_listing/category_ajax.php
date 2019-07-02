@@ -35,6 +35,7 @@ require_once($CFG->dirroot.'/blocks/culcourse_listing/locallib.php');
 
 require_sesskey(); // Gotta have the sesskey.
 require_login(); // Gotta be logged in (of course).
+
 $PAGE->set_context(context_system::instance());
 
 $config = get_config('block_culcourse_listing');
