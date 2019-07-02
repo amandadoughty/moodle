@@ -14,7 +14,8 @@ define(['jquery', 'core/log'], function($, log) {
                 plugin.toggleDrawer();
             });
 
-            $('.mainmenu-wrap .dropdown-item a[href*="#"]').on('click', function() {
+            // AD - CMDLTWO-1641 My Modules menu regression.
+            $('.mainmenu-wrap #theme-cul_boost-modulemenu .dropdown-item a[href*="#"]').on('click', function() {
                 plugin.toggleDrawer();
             });
 
