@@ -100,7 +100,7 @@ body {
 }
 
 @media (max-width: 1260px) {
-    #page {
+    #page-my-index #page {
         margin-left: $grid-gutter-width / 2;
         margin-right: $grid-gutter-width / 2;
     }

@@ -24063,7 +24063,7 @@ body {
   position: relative; }
 
 @media (max-width: 1260px) {
-  #page {
+  #page-my-index #page {
     margin-left: 15px;
     margin-right: 15px; } }
 
