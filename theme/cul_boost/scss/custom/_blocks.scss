@@ -44,6 +44,11 @@
             }
         }
     }
+    &.block-recentlyaccessedcourses .text-truncate {
+        overflow: visible;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
     &.block_culactivity_stream {
         #block-region-dash-feed & {
             .block-inner {

@@ -20108,6 +20108,10 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
     padding-left: -8px; }
   .block.block_settings .block_tree .tree_item ul, .block.block_settings .block_tree .tree_item.branch {
     padding-left: 0; }
+  .block.block-recentlyaccessedcourses .text-truncate {
+    overflow: visible;
+    text-overflow: ellipsis;
+    white-space: normal; }
   #block-region-dash-feed .block.block_culactivity_stream .block-inner .block-title {
     font-size: 2.25rem;
     padding: 0;
