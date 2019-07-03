@@ -199,7 +199,7 @@ body.format-culcourse {
                         display: none;
                     }
                     .no-overflow {
-                        display: inline-block;
+                        // display: inline-block; //CMDLTWO-1638
                     }
                     .summary { // @TODO
                         margin-left: 0.2em;

@@ -358,9 +358,6 @@ body.format-culcourse .course-content ul.culcourse li#toggle-all {
       body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody .truncate,
       body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody .truncate {
         display: none; }
-      body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody .no-overflow,
-      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody .no-overflow {
-        display: inline-block; }
       body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody .summary,
       body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody .summary {
         margin-left: 0.2em;
