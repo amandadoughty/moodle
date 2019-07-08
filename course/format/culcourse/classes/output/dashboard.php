@@ -627,8 +627,9 @@ class dashboard implements templatable, renderable {
             if ((isset($this->culconfig['show' . $modname]) && $this->culconfig['show' . $modname] == 2)
                 || $this->userisediting) 
             {
+                $attrs = [];
                 $liattrs = [];
-                $liattrs['title']  = get_string('view-mod', 'format_culcourse', strtolower($modfullname));
+                $attrs['title']  = get_string('view-mod', 'format_culcourse', strtolower($modfullname));
                 $class = '';
                 $editurl = '';
                 $editicon = '';
@@ -683,6 +684,7 @@ class dashboard implements templatable, renderable {
                     'icon' => $icon,
                     'text' => $modfullname,
                     'class' => $class,
+                    'attrs' => $attrs,
                     'liattrs' => $liattrs,
                     'editurl' => $editurl, 
                     'editicon' => $editicon, 
@@ -803,8 +805,9 @@ class dashboard implements templatable, renderable {
             if ((isset($this->culconfig['show' . $nametype]) && $this->culconfig['show' . $nametype] == 2)
                 || $this->userisediting) 
             {
+                $attrs = [];
                 $liattrs = [];
-                $liattrs['title']  = get_string('view-mod', 'format_culcourse', strtolower($modnames['modfullname']));
+                $attrs['title']  = get_string('view-mod', 'format_culcourse', strtolower($modnames['modfullname']));
                 $class = '';
                 $editurl = '';
                 $editicon = '';
@@ -855,6 +858,7 @@ class dashboard implements templatable, renderable {
                     'icon' => $icon,
                     'text' => $modnames['modfullname'],
                     'class' => $class,
+                    'attrs' => $attrs,
                     'liattrs' => $liattrs,
                     'editurl' => $editurl, 
                     'editicon' => $editicon, 

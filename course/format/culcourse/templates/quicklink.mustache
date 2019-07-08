@@ -44,6 +44,7 @@
         {{^attrs.class}}
         <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
             <i class="fa {{icon}}"></i>
+            <span class="sr-only">{{attrs.title}}</span>
         </a>
         {{/attrs.class}}
         {{#attrs.class}}
@@ -52,6 +53,7 @@
                 <i class="fa {{icon}} fa-stack-1x"></i>
                 <i class="fa fa-ban fa-stack-2x"></i>
             </span>
+            <span class="sr-only">{{attrs.title}}</span>
         </a>
         {{/attrs.class}}
         <a title="{{attrs.title}}" class="dash-text {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
