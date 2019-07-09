@@ -426,12 +426,15 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $alt = empty($item['pixattr']['alt']) ? '' : $item['pixattr']['alt'];
             $url = new moodle_url($url);
             $icon = $this->output->pix_icon($icon, $alt, $component, $item['attr']);
+            $screenreadertxt = html_writer::tag('span', $name, ['class' => 'sr-only']);
 
-            $culcontrols[] = html_writer::link(
+            $link = html_writer::link(
                     $url,
-                    $icon,
+                    $icon . $screenreadertxt,
                     $attr
-                );
+                );            
+
+            $culcontrols[] = $link;
         }
 
         return $culcontrols;        
