@@ -117,7 +117,9 @@ class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
             if (!empty($item->preceedwithhr) && $item->preceedwithhr===true) {
                 $content = html_writer::empty_tag('hr') . $content;
             }
-            $liattr['aria-labelledby'] = $nodetextid;
+
+            // Broken ARIA reference.
+            // $liattr['aria-labelledby'] = $nodetextid;
             $content = html_writer::tag('li', $content, $liattr);
             $lis[] = $content;
         }
