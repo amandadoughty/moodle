@@ -140,7 +140,8 @@ class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
             $content .= html_writer::tag('label', s(get_string('searchinsettings', 'admin')), array('for'=>'adminsearchquery', 'class'=>'accesshide'));
             $content .= html_writer::empty_tag('input', array('id'=>'adminsearchquery', 'class'=>'form-control', 'type'=>'text', 'name'=>'query', 'value'=>s($searchvalue)));
             $content .= html_writer::start_tag('div', ['class'=>'input-group-append']);
-                $content .= html_writer::tag('button', get_string('search'), array('class'=>'btn btn-primary', 'type'=>'button'));
+                // $content .= html_writer::tag('button', get_string('search'), array('class'=>'btn btn-primary', 'type'=>'button'));
+            $content .= html_writer::empty_tag('input', array('class'=>'btn btn-primary', 'type'=>'submit', 'value'=>s(get_string('search'))));
             $content .= html_writer::end_tag('div');
         $content .= html_writer::end_tag('div');
         $content .= html_writer::end_tag('form');
