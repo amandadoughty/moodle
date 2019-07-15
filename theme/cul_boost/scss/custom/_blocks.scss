@@ -44,9 +44,7 @@
             }
         }
     }
-    &.block_recentlyaccessedcourses .text-truncate {
-        overflow: visible;
-        text-overflow: ellipsis;
+    &.block_recentlyaccessedcourses .text-truncate {        
         white-space: normal;
     }
     &.block_culactivity_stream {

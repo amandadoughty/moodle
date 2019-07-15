@@ -20079,6 +20079,9 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
 .pagelayout-mydashboard .moodle-dialogue-base.moodle-dialogue-confirm .moodle-dialogue {
   z-index: 999 !important; }
 
+.moodle-dialogue-base .moodle-dialogue-wrap {
+  z-index: 11; }
+
 .block {
   margin-bottom: 3rem; }
   .block:last-of-type {
@@ -20109,8 +20112,6 @@ span[data-flexitour="container"][x-placement="right"], span[data-flexitour="cont
   .block.block_settings .block_tree .tree_item ul, .block.block_settings .block_tree .tree_item.branch {
     padding-left: 0; }
   .block.block_recentlyaccessedcourses .text-truncate {
-    overflow: visible;
-    text-overflow: ellipsis;
     white-space: normal; }
   #block-region-dash-feed .block.block_culactivity_stream .block-inner .block-title {
     font-size: 2.25rem;
@@ -22299,6 +22300,7 @@ table.roleassigntable td#buttonscell {
   line-height: 2.25rem;
   margin-bottom: 2rem; }
 
+#block-region-dash-content,
 #block-region-dash-side {
   -webkit-align-content: flex-start;
       -ms-flex-line-pack: start;
@@ -23721,6 +23723,21 @@ li.movehere {
   background-color: #A22833 !important;
   border-color: #8e232d !important;
   color: #fff !important; }
+  .block_advnotifications .alert > .notification_aicon, .block_advnotifications #page-admin-index .releasenoteslink > .notification_aicon, #page-admin-index .block_advnotifications .releasenoteslink > .notification_aicon, .block_advnotifications #page-admin-index .adminwarning > .notification_aicon, #page-admin-index .block_advnotifications .adminwarning > .notification_aicon, .block_advnotifications #page-admin-index .adminerror > .notification_aicon, #page-admin-index .block_advnotifications .adminerror > .notification_aicon, .block_advnotifications .que .formulation > .notification_aicon, .que .block_advnotifications .formulation > .notification_aicon, .block_advnotifications .que .outcome > .notification_aicon, .que .block_advnotifications .outcome > .notification_aicon, .block_advnotifications .que .comment > .notification_aicon, .que .block_advnotifications .comment > .notification_aicon,
+  .add_notification_wrapper .alert > .notification_aicon,
+  .add_notification_wrapper #page-admin-index .releasenoteslink > .notification_aicon,
+  #page-admin-index .add_notification_wrapper .releasenoteslink > .notification_aicon,
+  .add_notification_wrapper #page-admin-index .adminwarning > .notification_aicon,
+  #page-admin-index .add_notification_wrapper .adminwarning > .notification_aicon,
+  .add_notification_wrapper #page-admin-index .adminerror > .notification_aicon,
+  #page-admin-index .add_notification_wrapper .adminerror > .notification_aicon,
+  .add_notification_wrapper .que .formulation > .notification_aicon,
+  .que .add_notification_wrapper .formulation > .notification_aicon,
+  .add_notification_wrapper .que .outcome > .notification_aicon,
+  .que .add_notification_wrapper .outcome > .notification_aicon,
+  .add_notification_wrapper .que .comment > .notification_aicon,
+  .que .add_notification_wrapper .comment > .notification_aicon {
+    top: 1.5rem !important; }
 
 .message.clickable.bg-secondary {
   background-color: #fff !important; }
