@@ -220,7 +220,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         // Get the courses.
         $courses = array();
         $options = array();
-        $options['sort'] = array('shortname' => 1, 'visible' => -1);
+        $options['sort'] = array('fullname' => 1, 'visible' => -1);
         $courses = $coursecat->get_courses($options);
         $content .= $this->coursecat_courses($chelper, $courses, $viewcourses, $coursecat->get_courses_count());
         // Get the subcategories.
