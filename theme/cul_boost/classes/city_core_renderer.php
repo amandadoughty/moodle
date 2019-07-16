@@ -217,6 +217,8 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
     }
 
     public function my_modules_menu() {
+        global $CFG;
+        
         // Add 'My modules' menu - a list of courses in which the user is enrolled.
         $years = 0;
 
