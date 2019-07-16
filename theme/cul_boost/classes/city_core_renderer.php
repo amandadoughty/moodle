@@ -865,17 +865,15 @@ class theme_cul_boost_utility {
                 if (strpos($enrolledcourse->shortname, $year)) {
                     $found = true;
 
-                    foreach ($periodarray as $prd => &$courses) {
+                    foreach ($periodarray as $prd => $courses) {
                         if (strpos($enrolledcourse->shortname, $prd)) {
                             $foundprd = true;
 
-                            if (!in_array($prd, $prds)) {
+                            if (!array_key_exists($prd, $prds)) {
                                 $prds[$prd] = [];
                             }
 
                             $prds[$prd][] = $enrolledcourse;
-
-                            break 2;
                         }                        
                     }
 
@@ -889,7 +887,7 @@ class theme_cul_boost_utility {
                 $yeararray['other'][] = $enrolledcourse;
             }
         }
-
+// print_r($yeararray);
         return $yeararray;
     }
 
