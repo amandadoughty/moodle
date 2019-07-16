@@ -227,7 +227,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
         $enrolledcourses = theme_cul_boost_utility::get_user_enrolled_courses($years);
 
         if ($enrolledcourses) {
-            $maxdropdowncourses = 50;
+            $maxdropdowncourses = $CFG->frontpagecourselimit;
             $countcourses = 0;
             $mycoursestxt = get_string('mycourses', 'theme_cul_boost');
             $mycoursesmenu = new custom_menu('', current_language());
