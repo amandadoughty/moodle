@@ -258,9 +258,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                             $coursename = $mycourse->displayname;
 
                             if ($prd == "other") {
-                                $yearmenu->add($coursename,
-                                    new moodle_url('/course/view.php', ['id' => $mycourse->id]),
-                                    $mycourse->displayname);
+                                continue;
                             } else {
                                 $periodmenu->add($coursename,
                                     new moodle_url('/course/view.php', ['id' => $mycourse->id]),
@@ -268,6 +266,15 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                             }
 
                             $countcourses++;
+                        }
+                    }
+
+                    if (isset($prds['other'])) {
+                        foreach ($prds['other'] as $mycourse) {
+                            $coursename = $mycourse->displayname;
+                            $yearmenu->add($coursename,
+                                        new moodle_url('/course/view.php', ['id' => $mycourse->id]),
+                                        $mycourse->displayname);
                         }
                     }
                 }
