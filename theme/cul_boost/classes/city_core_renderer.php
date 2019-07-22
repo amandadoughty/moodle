@@ -26,105 +26,105 @@ defined('MOODLE_INTERNAL') || die;
 
 class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_renderer {
 
-	/**
-	 * Internal implementation of user image rendering.
-	 *
-	 * @param user_picture $userpicture
-	 * @return string
-	 */
-	protected function render_user_picture(\user_picture $userpicture) {
-	    global $CFG, $DB, $COURSE;        
+	// /**
+	//  * Internal implementation of user image rendering.
+	//  *
+	//  * @param user_picture $userpicture
+	//  * @return string
+	//  */
+	// protected function render_user_picture(\user_picture $userpicture) {
+	//     global $CFG, $DB, $COURSE;        
 
-	    $context = \context_course::instance($COURSE->id);
+	//     $context = \context_course::instance($COURSE->id);
 
-	    if (!has_capability('moodle/course:viewhiddenuserfields', $context)) {
+	//     if (!has_capability('moodle/course:viewhiddenuserfields', $context)) {
 	    
 
-	        $sql = 'SELECT shortname, data
-	                FROM {user_info_data} uid
-	                JOIN {user_info_field} uif
-	                ON uid.fieldid = uif.id
-	                WHERE uid.userid = :userid';
+	//         $sql = 'SELECT shortname, data
+	//                 FROM {user_info_data} uid
+	//                 JOIN {user_info_field} uif
+	//                 ON uid.fieldid = uif.id
+	//                 WHERE uid.userid = :userid';
 
-	        if ($result = $DB->get_records_sql($sql, array('userid' => $userpicture->user->id))){                      ;
-	            if(isset($result['publicphoto']->data) && $result['publicphoto']->data == 0) {
-	                $userpicture->user->picture = 0;
-	            }
-	        }
-	    }
+	//         if ($result = $DB->get_records_sql($sql, array('userid' => $userpicture->user->id))){                      ;
+	//             if(isset($result['publicphoto']->data) && $result['publicphoto']->data == 0) {
+	//                 $userpicture->user->picture = 0;
+	//             }
+	//         }
+	//     }
 
-	    $user = $userpicture->user;
+	//     $user = $userpicture->user;
 
-	    if ($userpicture->alttext) {
-	        if (!empty($user->imagealt)) {
-	            $alt = $user->imagealt;
-	        } else {
-	            $alt = get_string('pictureof', '', fullname($user));
-	        }
-	    } else {
-	        $alt = '';
-	    }
+	//     if ($userpicture->alttext) {
+	//         if (!empty($user->imagealt)) {
+	//             $alt = $user->imagealt;
+	//         } else {
+	//             $alt = get_string('pictureof', '', fullname($user));
+	//         }
+	//     } else {
+	//         $alt = '';
+	//     }
 
-	    if (empty($userpicture->size)) {
-	        $size = 35;
-	    } else if ($userpicture->size === true or $userpicture->size == 1) {
-	        $size = 100;
-	    } else {
-	        $size = $userpicture->size;
-	    }
+	//     if (empty($userpicture->size)) {
+	//         $size = 35;
+	//     } else if ($userpicture->size === true or $userpicture->size == 1) {
+	//         $size = 100;
+	//     } else {
+	//         $size = $userpicture->size;
+	//     }
 
-	    $class = $userpicture->class;
+	//     $class = $userpicture->class;
 
-	    if ($user->picture == 0) {
-	        $class .= ' defaultuserpic';
-	    }
+	//     if ($user->picture == 0) {
+	//         $class .= ' defaultuserpic';
+	//     }
 
-	    $src = $userpicture->get_url($this->page, $this);
+	//     $src = $userpicture->get_url($this->page, $this);
 
-	    $attributes = array('src'=>$src, 'alt'=>$alt, 'title'=>$alt, 'class'=>$class, 'width'=>$size, 'height'=>$size);
-	    if (!$userpicture->visibletoscreenreaders) {
-	        $attributes['role'] = 'presentation';
-	    }
+	//     $attributes = array('src'=>$src, 'alt'=>$alt, 'class'=>$class, 'width'=>$size, 'height'=>$size);
+	//     if (!$userpicture->visibletoscreenreaders) {
+	//         $attributes['role'] = 'presentation';
+	//     }
 
-	    // get the image html output fisrt
-	    $output = html_writer::empty_tag('img', $attributes);
+	//     // get the image html output fisrt
+	//     $output = html_writer::empty_tag('img', $attributes);
 
-	    // Show fullname together with the picture when desired.
-	    if ($userpicture->includefullname) {
-	        $output .= fullname($userpicture->user);
-	    }
+	//     // Show fullname together with the picture when desired.
+	//     if ($userpicture->includefullname) {
+	//         $output .= fullname($userpicture->user);
+	//     }
 
-	    // then wrap it in link if needed
-	    if (!$userpicture->link) {
-	        return $output;
-	    }
+	//     // then wrap it in link if needed
+	//     if (!$userpicture->link) {
+	//         return $output;
+	//     }
 
-	    if (empty($userpicture->courseid)) {
-	        $courseid = $this->page->course->id;
-	    } else {
-	        $courseid = $userpicture->courseid;
-	    }
+	//     if (empty($userpicture->courseid)) {
+	//         $courseid = $this->page->course->id;
+	//     } else {
+	//         $courseid = $userpicture->courseid;
+	//     }
 
-	    if ($courseid == SITEID) {
-	        $url = new moodle_url('/user/profile.php', array('id' => $user->id));
-	    } else {
-	        $url = new moodle_url('/user/view.php', array('id' => $user->id, 'course' => $courseid));
-	    }
+	//     if ($courseid == SITEID) {
+	//         $url = new moodle_url('/user/profile.php', array('id' => $user->id));
+	//     } else {
+	//         $url = new moodle_url('/user/view.php', array('id' => $user->id, 'course' => $courseid));
+	//     }
 
-	    $attributes = array('href'=>$url);
-	    if (!$userpicture->visibletoscreenreaders) {
-	        $attributes['tabindex'] = '-1';
-	        $attributes['aria-hidden'] = 'true';
-	    }
+	//     $attributes = array('href'=>$url);
+	//     if (!$userpicture->visibletoscreenreaders) {
+	//         $attributes['tabindex'] = '-1';
+	//         $attributes['aria-hidden'] = 'true';
+	//     }
 
-	    if ($userpicture->popup) {
-	        $id = html_writer::random_id('userpicture');
-	        $attributes['id'] = $id;
-	        $this->add_action_handler(new popup_action('click', $url), $id);
-	    }
+	//     if ($userpicture->popup) {
+	//         $id = html_writer::random_id('userpicture');
+	//         $attributes['id'] = $id;
+	//         $this->add_action_handler(new popup_action('click', $url), $id);
+	//     }
 
-	    return html_writer::tag('a', $output, $attributes);
-	}
+	//     return html_writer::tag('a', $output, $attributes);
+	// }
 
     /**
      * City University main menu
@@ -435,11 +435,13 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
             if ($menunode->get_url() !== null) {
                 $url = $menunode->get_url();
             } else {
-                $url = '#cm_submenu_'.$submenucount;
+                // CMDLTWO-1649 Accessibilty - Fix errors identified using WAVE.
+                // $url = '#cm_submenu_'.$submenucount;
+                $url = '#';
             }
 
             $content .= html_writer::start_tag('a', array('href' => $url,
-                'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'title' => $menunode->get_title()));
+                'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
             $content .= $menunode->get_text();
 
             $content .= '</a>';
@@ -467,7 +469,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
                 $url = '';
             }
 
-            $content .= html_writer::link($url, $menunode->get_text(), array('title' => $menunode->get_title()));
+            $content .= html_writer::link($url, $menunode->get_text());
         }
         return $content;
     }

@@ -821,7 +821,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         $src = $userpicture->get_url($this->page, $this);
 
-        $attributes = array('src'=>$src, 'alt'=>$alt, 'title'=>$alt, 'class'=>$class, 'width'=>$size, 'height'=>$size);
+        $attributes = array('src'=>$src, 'alt'=>$alt, 'class'=>$class, 'width'=>$size, 'height'=>$size);
         if (!$userpicture->visibletoscreenreaders) {
             $attributes['role'] = 'presentation';
         }
