@@ -132,7 +132,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
     protected function section_right_content($section, $course, $onsectionpage) {
         $o = '';
         $controls = $this->section_edit_control_items($course, $section, $onsectionpage);
-        
+
         if (!empty($controls)) {
             $o = implode('', $controls);
             $o = html_writer::div(
@@ -372,7 +372,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                         'pixattr' => ['class' => '', 'alt' => $markedthistopic],
                         'attr' => [
                             'class' => 'icon ', 
-                            'title' => $markedthistopic,
+                            // 'title' => $markedthistopic,
                             'data-action' => 'removemarker'
                         ]
                     ];
@@ -388,7 +388,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
                         'pixattr' => ['class' => '', 'alt' => $markthistopic],
                         'attr' => [
                             'class' => 'icon ', 
-                            'title' => $markthistopic,
+                            // 'title' => $markthistopic,
                             'data-action' => 'setmarker'
                         ]
                     ];
@@ -422,6 +422,8 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $component = empty($item['component']) ? 'moodle' : $item['component'];
             $name = empty($item['name']) ? '' : $item['name'];
             $attr = empty($item['attr']) ? '' : $item['attr'];
+            // CMDLTWO-1649 Fixing WAVE alerts (Redundant title text).
+            unset($attr['title']);
             $class = empty($item['pixattr']['class']) ? '' : $item['pixattr']['class'];
             $alt = empty($item['pixattr']['alt']) ? '' : $item['pixattr']['alt'];
             $url = new moodle_url($url);
