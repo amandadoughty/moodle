@@ -351,7 +351,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             $categorylink = html_writer::link(
                 $viewcategoryurl,
                 $categoryname,
-                array('class' => 'overviewlink', 'title' => $categoryname)
+                array('class' => 'overviewlink')
                 );
             $content .= html_writer::start_tag('div', array('class' => 'info'));
             $content .= html_writer::tag(($depth > 1) ? 'h4' : 'h3', $categorylink, array('class' => 'categoryname'));
@@ -361,7 +361,8 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 $editcategoryurl = new moodle_url(' /course/index.php', array('categoryid' => $coursecat->id, 'categoryedit' => 1));
                 $icon = html_writer::tag('i', '', array('class' => 'fa fa-pencil'));
                 $title = get_string('editcategory', 'block_culcourse_listing');
-                $content .= html_writer::link($editcategoryurl, $icon, array('class' => 'overviewlink', 'title' => $title));
+                $srtext = html_writer::tag('span', $title, ['class' => 'sr-only']);                
+                $content .= html_writer::link($editcategoryurl, $icon . $srtext, array('class' => 'overviewlink', 'title' => $title));
             }
 
             $content .= html_writer::end_tag('div'); // End .info.

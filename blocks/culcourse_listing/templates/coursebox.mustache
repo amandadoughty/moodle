@@ -53,7 +53,7 @@
                 {{> block_culcourse_listing/move }}
             {{/ move }}
             <div class="coursename">
-                <a title="{{coursename}}" href="/course/view.php?id={{cid}}">{{coursename}}</a>
+                <a href="/course/view.php?id={{cid}}">{{coursename}}</a>
             </div>
         </div>
         <div class="enrolmenticons">
@@ -70,6 +70,7 @@
         <div class="favouritelink">
             <a class="favouritelink favouritelink_{{cid}}" title="{{favtitle}}" href="/blocks/culcourse_listing/favourite_post.php?action={{action}}&cid={{cid}}&sesskey={{sesskey}}">
                 <i class="icon {{favclass}}"></i>
+                <span class="sr-only>">{{favtitle}}</span>
             </a>
         </div>        
     </div>
