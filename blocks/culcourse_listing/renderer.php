@@ -361,7 +361,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                 $editcategoryurl = new moodle_url(' /course/index.php', array('categoryid' => $coursecat->id, 'categoryedit' => 1));
                 $icon = html_writer::tag('i', '', array('class' => 'fa fa-pencil'));
                 $title = get_string('editcategory', 'block_culcourse_listing');
-                $srtext = html_writer::tag('span', $title, ['class' => 'sr-only']);                
+                $srtext = html_writer::tag('span', $title, ['class' => 'accesshide']);                
                 $content .= html_writer::link($editcategoryurl, $icon . $srtext, array('class' => 'overviewlink', 'title' => $title));
             }
 
