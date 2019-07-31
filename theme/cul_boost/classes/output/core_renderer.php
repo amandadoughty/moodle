@@ -60,7 +60,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    $output = html_writer::start_tag('div', array('class' => 'slidersearchform d-flex flex-wrap align-items-center'));
 	    $output .= html_writer::start_tag('form', array('action' => '' . $CFG->wwwroot . '/search/index.php', 'method' => 'get'));
 	    $output .= html_writer::tag('label', get_string('enteryoursearchquery', 'search'),
-            array('for' => $id, 'class' => 'sr-only'));
+            array('for' => $id, 'class' => 'accesshide'));
 	    $output .= html_writer::empty_tag('input', array(
 	    	'id' => $id,
 	        'class' => 'w-100',
@@ -70,7 +70,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	        'placeholder' => get_string('searchfor','theme_cul_boost')
 	    ));
 	    $output .= html_writer::tag('button',
-	    	'<i class="fa fa-search"></i><span class="sr-only">Search</span>', array(
+	    	'<i class="fa fa-search"></i><span class="accesshide">Search</span>', array(
 	        'type' => 'submit',
 	        'class' => 'btn btn-primary p-0'
 	    ));
@@ -155,7 +155,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         $hometext = html_writer::tag('b', get_string('home'), array('class' => 'showoncollapse'));
-        $homelink = html_writer::link(new moodle_url('/'), '<i class="fa fa-home"></i><span class="sr-only">' . $hometext . '</span>', ['class'=>'d-flex align-items-center']);
+        $homelink = html_writer::link(new moodle_url('/'), '<i class="fa fa-home"></i><span class="accesshide">' . $hometext . '</span>', ['class'=>'d-flex align-items-center']);
         array_shift($breadcrumbs);
         array_unshift($breadcrumbs, $homelink);
 
@@ -728,7 +728,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		));
 
 		$favouritetxt = get_string($actionstring, 'theme_cul_boost');
-		$favouritesrtxt = html_writer::tag('span', $favouritetxt, ['class' => 'sr-only']);
+		$favouritesrtxt = html_writer::tag('span', $favouritetxt, ['class' => 'accesshide']);
 		
 		$content = html_writer::link($favouriteurl, $favouritesrtxt, ['class'=>'text-white '.$class, 'data-toggle'=>'popover', 'data-content'=>$favouritetxt, 'data-placement'=>'left', 'data-trigger'=>'hover']);
 
