@@ -361,6 +361,7 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
             $attributes = [
                 'class' => 'sectionclose',
                 'id' => 'footertoggle-' . $thissection->id,
+                'href' => '',
                 'data-toggle' => 'collapse',
                 'data-target' => '.course-content #togglesection-' . $thissection->id,
                 'role' => 'button', 
