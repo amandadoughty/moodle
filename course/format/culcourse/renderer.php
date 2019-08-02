@@ -300,6 +300,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $attributes = [
                 'class' => 'sectionclose',
                 'id' => 'footertoggle-' . $thissection->id,
+                'href' => '',
                 'data-toggle' => 'collapse',
                 'data-target' => '.course-content #togglesection-' . $thissection->id,
                 'role' => 'button', 
