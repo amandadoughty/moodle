@@ -141,10 +141,8 @@ class dashboard implements templatable, renderable {
         return $export;
     }
 
-    public function get_quicklink($name, $course) {
+    public function get_quicklink($name, $course, $lnktxt = '') {
         global $USER;
-
-        $lnktxt = '';
 
         if (get_string_manager()->string_exists($name, 'format_culcourse')) {
             $lnktxt = get_string($name, 'format_culcourse');
@@ -165,13 +163,15 @@ class dashboard implements templatable, renderable {
             list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                 $course->id, 
                 $name, 
-                $this->culconfig['show' . $name]
+                $this->culconfig['show' . $name],
+                $lnktxt
                 );
 
             list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
                 $course->id, 
                 $name,
-                'quicklink'
+                'quicklink',
+                $lnktxt
                 );
 
             list($movetourl, $movetoicon, $movetoattrs) = format_culcourse_get_moveto_link(
@@ -213,10 +213,10 @@ class dashboard implements templatable, renderable {
             $data = [];
             $extradata =[];
             $attrs  = [];
-            $liattrs = [];
-            $data = $this->get_quicklink($name, $course);
+            $liattrs = [];            
             $alias = $options[$role->id];
             $lnktxt = $alias . 's';
+            $data = $this->get_quicklink($name, $course, $lnktxt);
             $available = false;
 
             if (count_role_users($role->id, $coursecontext, false)) {
@@ -645,13 +645,15 @@ class dashboard implements templatable, renderable {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                         $course->id, 
                         $modname, 
-                        $this->culconfig['show' . $modname]
+                        $this->culconfig['show' . $modname],
+                        $modfullname
                         );
 
                     list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
                         $course->id, 
                         $modname,
-                        'activitylink'
+                        'activitylink',
+                        $modfullname
                         );
 
                     list($movetourl, $movetoicon, $movetoattrs) = format_culcourse_get_moveto_link(
@@ -824,13 +826,15 @@ class dashboard implements templatable, renderable {
                     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                             $course->id, 
                             $nametype, 
-                            $this->culconfig['show' . $nametype]
+                            $this->culconfig['show' . $nametype],
+                            $modnames['modfullname']
                             );
 
                     list($moveurl, $moveicon, $moveattrs) = format_culcourse_get_move_link(
                         $course->id, 
                         $nametype,
-                        'activitylink'
+                        'activitylink',
+                        $modnames['modfullname']
                         );
 
                     list($movetourl, $movetoicon, $movetoattrs) = format_culcourse_get_moveto_link(

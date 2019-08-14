@@ -73,8 +73,10 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         Y.Node.all(baseselector).each(function(quicklinknode) {
             // Replace move icons.
             var move = quicklinknode.one('a' + '.' + CSS.MOVE);
+            var str = move.get('text');
+
             if (move) {
-                move.replace(this.get_drag_handle(M.util.get_string('movequicklink', 'format_culcourse'),
+                move.replace(this.get_drag_handle(str,
                              CSS.MOVE, CSS.ICONCLASS, true));
             }
         }, this);
@@ -281,8 +283,10 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         Y.Node.all(baseselector).each(function(activitylinknode) {
             // Replace move icons.
             var move = activitylinknode.one('a' + '.' + CSS.MOVE);
+            var str = move.get('text');
+
             if (move) {
-                move.replace(this.get_drag_handle(M.util.get_string('moveactivitylink', 'format_culcourse'),
+                move.replace(this.get_drag_handle(str,
                              CSS.MOVE, CSS.ICONCLASS, true));
             }
         }, this);

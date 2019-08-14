@@ -230,12 +230,12 @@ $string['view-mod'] = 'View list of {$a}';
 
 /***** EDITING LINKS ON COURSE PAGE *****/
 // Editing links
-$string['dashshowlink'] = 'Show this link';
-$string['dashhidelink'] = 'Hide this link';
+$string['dashshowlink'] = 'Show \'{$a}\' link';
+$string['dashhidelink'] = 'Hide \'{$a}\' link';
 $string['dashmovelink'] = 'Move \'{$a}\' to this location';
-$string['moveactivitylink'] = 'Move this link';
+$string['moveactivitylink'] = 'Move \'{$a}\' link';
 $string['moving'] = 'Moving dash link: {$a}';
-$string['movequicklink'] = 'Move this link';
+$string['movequicklink'] = 'Move \'{$a}\' link';
 $string['noeditcoursesettings'] = 'You are not permitted to edit course settings.';
 
 /* PHOTOBOARD */

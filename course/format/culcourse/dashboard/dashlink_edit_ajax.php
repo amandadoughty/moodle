@@ -36,6 +36,7 @@ $copy = optional_param('copy', null, PARAM_RAW);
 $moveto = optional_param('moveto', null, PARAM_RAW);
 $cancelcopy = optional_param('cancelcopy', 0, PARAM_BOOL);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
+$lnktxt = optional_param('lnktxt', '', PARAM_RAW);
 
 require_login();
 
@@ -48,7 +49,7 @@ if (!$usercanedit) {
 
 if ($action == SHOWHIDE) {
     if ($name) {
-        echo format_culcourse_quicklink_visibility($courseid, $name, $showhide);
+        echo format_culcourse_quicklink_visibility($courseid, $name, $showhide, $lnktxt);
     } else {
         print_error('noname', 'format_culcourse');
     }

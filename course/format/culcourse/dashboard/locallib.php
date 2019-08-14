@@ -533,7 +533,7 @@ function format_culcourse_get_coursecode_data($coursecode) { //TODO: Candidate f
     return $codedata;
 }
 
-function format_culcourse_quicklink_visibility($courseid, $name, $value) {
+function format_culcourse_quicklink_visibility($courseid, $name, $value, $lnktxt = '') {
     global $DB;
 
     // Important: Cannot use $format->update_course_format_options($options)
@@ -557,13 +557,15 @@ function format_culcourse_quicklink_visibility($courseid, $name, $value) {
     list($editurl, $editicon, $editattrs) = format_culcourse_get_edit_link(
                 $courseid, 
                 $name, 
-                $value
+                $value,
+                $lnktxt
                 );
 
     $data = new stdClass();
     $data->editurl = $editurl;
     $data->editicon = $editicon;
     $data->editattrs = $editattrs;
+    $data->userisediting = true;
 
     return json_encode($data);
 }
@@ -621,7 +623,7 @@ function format_culcourse_dashlink_move($courseid, $name, $link, $moveto = null)
     return false;
 }
 
-function format_culcourse_get_edit_link($courseid, $name, $value) {    
+function format_culcourse_get_edit_link($courseid, $name, $value, $namestr) {    
     // Course format settings are 2 = show, 1 = hide.
     if ($value == 2) {
         $newvalue = 1;
@@ -634,7 +636,7 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
     }
 
     $name = 'show' . $name;
-    $editattrs['title'] = get_string($title, 'format_culcourse');
+    $editattrs['title'] = get_string($title, 'format_culcourse', $namestr);
     $editattrs['class'] = 'dashlinkedit';
     $params = [
         'courseid' => $courseid,
@@ -653,10 +655,10 @@ function format_culcourse_get_edit_link($courseid, $name, $value) {
     return [$editurl, $editicon, $editattrs];
 }
 
-function format_culcourse_get_move_link($courseid, $copy, $name) {    
+function format_culcourse_get_move_link($courseid, $copy, $name, $namestr) {    
     $moveicon = 'fa-arrows';        
     $title = 'dashmovelink';
-    $moveattrs['title'] = get_string('move');
+    $moveattrs['title'] = get_string('movequicklink', 'format_culcourse', $namestr);
     $moveattrs['class'] = 'dashlinkmove';
     $params = [
         'courseid' => $courseid,
