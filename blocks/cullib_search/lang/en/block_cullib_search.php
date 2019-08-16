@@ -33,6 +33,7 @@ $string['cullib_search:myaddinstance'] = 'Add a new CityLibrary Search Block to 
 $string['default_actionurl'] = 'http://city.summon.serialssolutions.com/search';
 $string['pluginname'] = 'CityLibrary Search';
 $string['privacy:metadata'] = 'The CUL City Library Search fetches search results from an external systema nd stores no data.';
+$string['refine'] = 'Refine search';
 
 // Search form strings.
 $string['books'] = 'Books/eBooks';
