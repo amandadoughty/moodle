@@ -15,40 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Login block
+ * Library Search block
  *
- * @package   block_login
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
+ * @package    block_cullib_search
+ * @copyright  2019 Amanda Doughty
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-
-    'block/cullib_search:myaddinstance' => array(
+$capabilities = [
+    'block/cullib_search:myaddinstance' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array(
+        'archetypes' => [
             'user' => CAP_ALLOW
-        ),
-
+        ],
         'clonepermissionsfrom' => 'moodle/my:manageblocks'
-    ),
+    ],
 
-    'block/cullib_search:addinstance' => array(
+    'block/cullib_search:addinstance' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        ),
-
+        ],
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
-    ),
-
-
-
-);
+    ],
+]

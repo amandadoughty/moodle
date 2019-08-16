@@ -15,29 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Library Search block
+ * Block CUL Library search renderer.
  *
  * @package    block_cullib_search
  * @copyright  2019 Amanda Doughty
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_cullib_search\output;
 defined('MOODLE_INTERNAL') || die();
 
-if ($ADMIN->fulltree) {
-	// Heading
-	$settings->add(new admin_setting_heading(
-	    'actionurl_heading', 
-	    get_string('actionurl_heading', 'block_cullib_search'), 
-	    get_string('actionurl_heading_description', 'block_cullib_search')
-	    ));
+use plugin_renderer_base;
+use renderable;
 
-	// Timetable URL
-	$settings->add(new admin_setting_configtext(
-	    'block_cullib_search/actionurl', 
-	    get_string('actionurl', 'block_cullib_search'), 
-	    get_string('actionurl_description', 'block_cullib_search'), 
-	    get_string('default_actionurl', 'block_cullib_search'), 
-	    PARAM_TEXT
-	    ));
+/**
+ * Block CUL Library search renderer.
+ *
+ * @package    block_cullib_search
+ * @copyright  2019 Amanda Doughty
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class renderer extends plugin_renderer_base {
+
+    /**
+     * Render search form.
+     *
+     * @param renderable $searchform The search form.
+     * @return string
+     */
+    public function render_search_form(renderable $searchform) {
+        return $this->render_from_template('block_cullib_search/search_form', $searchform->export_for_template($this));
+    }
+
 }

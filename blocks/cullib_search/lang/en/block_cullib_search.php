@@ -17,15 +17,25 @@
 /**
  * Library Search block
  *
- * @package   block_cullib_search
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
+ * @package    block_cullib_search
+ * @copyright  2019 Amanda Doughty
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['actionurl'] = 'CUL Library search URL';
+$string['actionurl_description'] = 'The url to use for the CUL Library search form';
+$string['actionurl_heading'] = 'Config';
+$string['actionurl_heading_description'] = 'Key settings';
+
 $string['blocktext'] = 'Heading (Optional)';
-$string['descconfig'] = 'Description of the config section';
-$string['headerconfig'] = 'Config section header';
 $string['cullib_search:addinstance'] = 'Add a new CityLibrary Search Block';
 $string['cullib_search:myaddinstance'] = 'Add a new CityLibrary Search Block to my moodle';
+$string['default_actionurl'] = 'http://city.summon.serialssolutions.com/search';
 $string['pluginname'] = 'CityLibrary Search';
 $string['privacy:metadata'] = 'The CUL City Library Search fetches search results from an external systema nd stores no data.';
+
+// Search form strings.
+$string['books'] = 'Books/eBooks';
+$string['everything'] = 'Everything';
+$string['journalarticles'] = 'Journal Articles';
+$string['placeholder'] = 'Search for books, articles and more ...';

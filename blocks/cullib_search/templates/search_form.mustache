@@ -1,0 +1,31 @@
+<div class="searchform">
+    <form class="form-inline" action="{{actionurl}}" target="_blank">
+        <fieldset class="invisiblefieldset w-100">
+            <div class="input-group w-100">
+                <label class="sr-only" for="searchform_search">{{#str}}search{{/str}}</label>
+                <input id="searchcullibform_search" name="s.q" type="text" class="form-control" size="10" placeholder="{{#str}}placeholder, block_cullib_search{{/str}}">
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" id="searchform_button" type="submit">{{#str}}search{{/str}}</button>
+                </div>
+            </div>
+            <fieldset class="radiogroup">                         
+                <label for="all">
+                    <input name="s.cmd" class="refinels mr-2 mt-1" type="radio" id="all" value="" checked="">
+                    {{#str}}everything, block_cullib_search{{/str}}
+                </label>                  
+                <label for="journal">
+                    <input name="s.cmd" class="refinels mr-2 mt-1" type="radio" id="journal" value="addFacetValueFilters(ContentType,Journal Article,f|ContentType,Journal / eJournal,f)">
+                    {{#str}}journalarticles, block_cullib_search{{/str}}
+                </label>                       
+                <label for="book">
+                    <input name="s.cmd" class="refinels mr-2 mt-1" type="radio" id="book" value="addFacetValueFilters(ContentType,Book / eBook)">
+                    {{#str}}books, block_cullib_search{{/str}}               
+                </label>           
+                <input name="s.cmd" type="hidden" value="addFacetValueFilters(ContentType,Book Review:t)">
+                <input name="s.cmd" type="hidden" value="addFacetValueFilters(ContentType,Newspaper Article:t)">
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+

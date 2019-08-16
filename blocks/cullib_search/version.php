@@ -17,15 +17,15 @@
 /**
  * Library Search block
  *
- * @package   block_cullib_search
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
+ * @package    block_cullib_search
+ * @copyright  2019 Amanda Doughty
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 // The current plugin version (Date: YYYYMMDDXX).
-$plugin->version   = 2015022602;
+$plugin->version   = 2015022604;
 // Requires this Moodle version.
 $plugin->requires  = 2012112900;
 // Full name of the plugin (used for diagnostics).

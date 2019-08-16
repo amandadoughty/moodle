@@ -18,7 +18,7 @@
  * Library Search block
  *
  * @package   block_cullib_search
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
+ * @copyright 2019 Amanda Doughty
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,34 +39,12 @@ class block_cullib_search extends block_base {
 
         $this->content = new stdClass();
         $this->content->footer = '';
+        $this->content->text = '';
 
-        if (!empty($this->config->text)) {
-            $this->content->text = '<p>' .$this->config->text . '</p>';
-        } else {
-
-            $this->content->text = '';
-        }
-
-        $strsearch  = get_string('search');
-
-        // @TODO refactor using Moodle form classes.
-        $this->content->text .= '<form name="search" action="http://city.summon.serialssolutions.com/search" method="get"';
-        $this->content->text .= 'target="_blank">';
-        $this->content->text .= '<input id="searchform_search" name="s.q" type="text" size="16" style="width: 70%;"';
-        $this->content->text .= 'placeholder="Search for books, articles and more ..."/>';
-        $this->content->text .= '<button type="submit" title="'.$strsearch.'">'.$strsearch.'</button><br />';
-        $this->content->text .= '<input name="s.cmd" class="refinels" type="radio" id="all" style="margin: 0px 2px 2px 2px;"';
-        $this->content->text .= 'value="" checked/>';
-        $this->content->text .= '<label for = "all">Everything</label>';
-        $this->content->text .= '<input name="s.cmd" class="refinels" type="radio" id="journal" style="margin: 0px 2px 2px 12px;"';
-        $this->content->text .= 'value="addFacetValueFilters(ContentType,Journal Article,f|ContentType,Journal / eJournal,f)" />';
-        $this->content->text .= '<label for = "journal">Journal Articles</label>';
-        $this->content->text .= '<input name="s.cmd" class="refinels" type="radio" id="book" style="margin: 0px 2px 2px 12px;"';
-        $this->content->text .= 'value="addFacetValueFilters(ContentType,Book / eBook)" />';
-        $this->content->text .= '<label for = "book">Books/eBooks</label>';
-        $this->content->text .= '<input name="s.cmd" type="hidden" value="addFacetValueFilters(ContentType,Book Review:t)" />';
-        $this->content->text .= '<input name="s.cmd" type="hidden" value="addFacetValueFilters(ContentType,Newspaper Article:t)"/>';
-        $this->content->text .= '</form>';
+        $actionurl = get_config('block_cullib_search', 'actionurl');
+        $output = $this->page->get_renderer('block_cullib_search');
+        $searchform = new \block_cullib_search\output\search_form($actionurl);
+        $this->content->text = $output->render($searchform);
 
         return $this->content;
     }
@@ -78,5 +56,4 @@ class block_cullib_search extends block_base {
     public function has_config() {
         return true;
     }
-
 }
