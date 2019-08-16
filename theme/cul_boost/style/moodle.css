@@ -10664,9 +10664,9 @@ a.dimmed_text:visited,
   #page-admin-report-backups-index .backup-notyetrun[href]:focus {
     background-color: #006b62; }
 
-.tag-info, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release, .assignfeedback_editpdf_widget .label, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count, .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
+.tag-info, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release, .assignfeedback_editpdf_widget .label, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count {
   background-color: #98989C; }
-  .tag-info[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:hover, .assignfeedback_editpdf_widget .label[href]:hover, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:hover, .cul-generic[href]:hover, .editor_atto_menu .atto_styles_button .dropdown-menu > li[href]:hover:nth-child(3), .tag-info[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:focus, .assignfeedback_editpdf_widget .label[href]:focus, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:focus, .cul-generic[href]:focus, .editor_atto_menu .atto_styles_button .dropdown-menu > li[href]:focus:nth-child(3) {
+  .tag-info[href]:hover, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:hover, .assignfeedback_editpdf_widget .label[href]:hover, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:hover, .tag-info[href]:focus, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity200 .info.release[href]:focus, .assignfeedback_editpdf_widget .label[href]:focus, #page-course-view-culcourse .course-content ul.culcourse > li.section .content .sectionhead.toggle .section-summary-progress .activity-count[href]:focus {
     background-color: #7e7e83; }
 
 .tag-warning, .statuswarning, #page-admin-report-backups-index .backup-warning, #page-admin-index .updateplugin .updatepluginconfirmexternal, #page-admin-index .adminwarning.availableupdatesinfo .moodleupdateinfo.maturity100 .info.release,
@@ -23011,6 +23011,7 @@ table.roleassigntable td#buttonscell {
     color: #fff; }
 
 .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
+  background-color: #747479;
   margin: 0 0.25rem 0.25rem 0;
   font-size: 1rem;
   white-space: normal;
