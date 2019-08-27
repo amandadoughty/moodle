@@ -388,14 +388,33 @@ function peerassessment_get_indpeergradestotal($peerassessment, $group, $user) {
 function peerassessment_get_groupcount($peerassessment, $group) {
     global $DB;
 
-    if ($peerassessment->treat0asgrade) {
-        $count = (int)$DB->count_records_sql('SELECT COUNT(grade) FROM {peerassessment_peers} WHERE peerassessment=? AND groupid=?',
-            array($peerassessment->id, $group->id));
-    } else {
-        $count = (int)$DB->count_records_sql('SELECT COUNT(grade) FROM {peerassessment_peers} WHERE grade>0 AND
-            peerassessment=? AND groupid=?',
-            array($peerassessment->id, $group->id));
+    $members = groups_get_members($group->id);
+    $peers = array_keys($members);
+    list($insql1, $inparams1) = $DB->get_in_or_equal($peers, SQL_PARAMS_NAMED);
+    list($insql2, $inparams2) = $DB->get_in_or_equal($peers, SQL_PARAMS_NAMED);
+
+    $conditions[] = 'p.peerassessment = :peerassessment';
+    $conditions[] = 'p.groupid = :groupid';
+    $conditions[] = 'gradedby ' . $insql1;
+    $conditions[] = 'gradefor ' . $insql2;
+    $params = [
+        'peerassessment' => $peerassessment->id,
+        'groupid' => $group->id
+    ];
+
+    $params = array_merge($params, $inparams1, $inparams2);
+
+    if (!$peerassessment->treat0asgrade) {
+        $conditions[] = 'p.grade > 0';
     }
+
+    $conditions = implode(' AND ', $conditions);
+
+    $sql = "SELECT COUNT(grade) 
+        FROM {peerassessment_peers} p
+        WHERE $conditions";
+
+    $count = (int)$DB->count_records_sql($sql, $params); 
 
     if (!$count) {
         return 0;
@@ -413,14 +432,33 @@ function peerassessment_get_groupcount($peerassessment, $group) {
 function peerassessment_get_grouppeergradestotal($peerassessment, $group) {
     global $DB;
 
-    if ($peerassessment->treat0asgrade) {
-        $gradesum = $DB->get_record_sql('SELECT SUM(grade) AS s FROM {peerassessment_peers} WHERE peerassessment=? AND groupid=?',
-            array($peerassessment->id, $group->id));
-    } else {
-        $gradesum = $DB->get_record_sql('SELECT SUM(grade) AS s FROM {peerassessment_peers} WHERE grade>0 AND
-            peerassessment=? AND groupid=?',
-            array($peerassessment->id, $group->id));
+    $members = groups_get_members($group->id);
+    $peers = array_keys($members);
+    list($insql1, $inparams1) = $DB->get_in_or_equal($peers, SQL_PARAMS_NAMED);
+    list($insql2, $inparams2) = $DB->get_in_or_equal($peers, SQL_PARAMS_NAMED);
+
+    $conditions[] = 'p.peerassessment = :peerassessment';
+    $conditions[] = 'p.groupid = :groupid';
+    $conditions[] = 'gradedby ' . $insql1;
+    $conditions[] = 'gradefor ' . $insql2;
+    $params = [
+        'peerassessment' => $peerassessment->id,
+        'groupid' => $group->id
+    ];
+
+    $params = array_merge($params, $inparams1, $inparams2);
+
+    if (!$peerassessment->treat0asgrade) {
+        $conditions[] = 'p.grade > 0';
     }
+
+    $conditions = implode(' AND ', $conditions);
+
+    $sql = "SELECT SUM(grade) as s
+        FROM {peerassessment_peers} p
+        WHERE $conditions";
+
+    $gradesum = $DB->get_record_sql($sql, $params); 
 
     return $gradesum->s;
 }
