@@ -60,7 +60,7 @@ foreach ($members as $member) {
     $header[] = 'Grade for ' . fullname($member);
     $header[] = 'Feedback for ' . fullname($member);
     // How I graded others.
-    $grades = peerassessment_grade_by_user($peerassessment, $member, $membersgradeable);
+    $grades = peerassessment_grade_by_user($peerassessment, $member, $membersgradeable, $group);
     foreach ($members as $peer) {
         $row[] = $grades->grade[$peer->id];
         $row[] = html_to_text($grades->feedback[$peer->id]);

@@ -117,7 +117,7 @@ foreach ($allgroups as $group) {
         $row = array(fullname($member));
         $header[] = 'Grade for ' . fullname($member);
         $header[] = 'Feedback for ' . fullname($member);
-        $grades = peerassessment_grade_by_user($peerassessment, $member, $membersgradeable);
+        $grades = peerassessment_grade_by_user($peerassessment, $member, $membersgradeable, $group);
         foreach (groups_get_members($group->id) as $peer) {
             $row[] = $grades->grade[$peer->id];
             $row[] = html_to_text($grades->feedback[$peer->id]);

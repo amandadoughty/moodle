@@ -189,7 +189,7 @@ if (!$isopen->code) {
     $data = array();
 
     // How I graded others.
-    $data['igraded'] = peerassessment_grade_by_user($peerassessment, $USER, $membersgradeable);
+    $data['igraded'] = peerassessment_grade_by_user($peerassessment, $USER, $membersgradeable, $group);
 
     $output = $PAGE->get_renderer('mod_peerassessment');
     $data['files'] = peerassessment_submission_files($context, $group);
@@ -227,7 +227,7 @@ if (!$myassessments || $edit == true) {
     $entry->submission = $draftitemid;
 
     if ($myassessments) {
-        $data = peerassessment_grade_by_user($peerassessment, $USER, $membersgradeable);
+        $data = peerassessment_grade_by_user($peerassessment, $USER, $membersgradeable, $group);
         $entry->grade = $data->grade;
         $entry->feedback = $data->feedback;
     }
@@ -251,7 +251,7 @@ if (!$myassessments || $edit == true) {
     $data = array();
 
     // How I graded others.
-    $data['igraded'] = peerassessment_grade_by_user($peerassessment, $USER, $membersgradeable);
+    $data['igraded'] = peerassessment_grade_by_user($peerassessment, $USER, $membersgradeable, $group);
 
     $output = $PAGE->get_renderer('mod_peerassessment');
     $data['files'] = peerassessment_submission_files($context, $group);

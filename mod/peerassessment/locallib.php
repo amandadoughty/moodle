@@ -40,6 +40,15 @@ define('PEERASSESSMENT_OUTLIER', 'outlier');
 
 require_once($CFG->dirroot . '/lib/grouplib.php');
 
+/**
+ * Gets the peers that the current can grade.
+ *
+ * @param int $courseid The id of the course.
+ * @param int $peerassessment 
+ * @param int $groupingid optional returns only groups in the specified grouping.
+ * @return array|bool Returns an array of the users for the specified
+ * group or false if no users or an error returned.
+ */
 function peerassessment_get_peers($course, $peerassessment, $groupingid, $group = null) {
     global $USER;
 
@@ -87,10 +96,12 @@ function peerassessment_get_mygroup($courseid, $userid, $groupingid = 0, $die = 
 /**
  * Gets the status.
  * @param $peerassessment
- * @param int $group returns only groups in the specified grouping.
+ * @param int $group 
+ * @return stdClass status
  */
 function peerassessment_get_status($peerassessment, $group) {
     global $DB;
+
     $submission = $DB->get_record('peerassessment_submission', array('assignment' => $peerassessment->id, 'groupid' => $group->id));
     $status = new stdClass();
     $duedate = peerassessment_due_date($peerassessment);
@@ -132,14 +143,13 @@ function peerassessment_get_status($peerassessment, $group) {
 }
 
 /**
- * FOLLOWING METHOD COPIED FROM ASSIGN TO CHECK IF ANY SUBMISSIONS OR GRADES YET.
- * Does an assignment have submission(s) or grade(s) already?
- *
+ * Does the peerassessment have submission(s) or grade(s) already?
+ * @param $peerassessment
  * @return bool
  */
 function has_been_graded($peerassessment) {
-
     global $DB;
+
     $submissions = $DB->get_records('peerassessment_submission', array('assignment' => $peerassessment->id));
     $status = new stdClass();
     $status->code = '';
@@ -162,6 +172,7 @@ function has_been_graded($peerassessment) {
 /**
  * Was due date used and has it passed?
  * @param $peerassessment
+ * @return int
  */
 function peerassessment_due_date($peerassessment) {
     if (!$peerassessment->duedate) {
@@ -176,8 +187,9 @@ function peerassessment_due_date($peerassessment) {
 }
 
 /**
- * Was from date used and is it after?
+ * Was from date used and has it passed?
  * @param $peerassessment
+ * @return int
  */
 function peerassessment_from_date($peerassessment) {
     if (!$peerassessment->fromdate) {
@@ -194,14 +206,18 @@ function peerassessment_from_date($peerassessment) {
 /**
  * Can student $user submit/edit based on the current status?
  * @param $peerassessment
+ * @param $groupid
+ * @return stdClass
  */
 function peerassessment_is_open($peerassessment, $groupid = 0) {
     global $DB;
+
     $status = new stdClass();
     $status->code = false;
 
     // Is it before from date?
     $fromdate = peerassessment_from_date($peerassessment);
+
     if ($fromdate == PEERASSESSMENT_FROMDATE_BEFORE) {
         $status->text = "Assessment not open yet.";
         return $status;
@@ -212,6 +228,7 @@ function peerassessment_is_open($peerassessment, $groupid = 0) {
 
     // Is it already graded?
     $pstatus = peerassessment_get_status($peerassessment, $group);
+
     if ($pstatus->code == PEERASSESSMENT_STATUS_GRADED) {
         $status->text = "Assessment already graded.";
         return $status;
@@ -219,6 +236,7 @@ function peerassessment_is_open($peerassessment, $groupid = 0) {
 
     // Is it after due date?
     $duedate = peerassessment_due_date($peerassessment);
+
     if ($duedate == PEERASSESSMENT_DUEDATE_PASSED) {
         if ($peerassessment->allowlatesubmissions) {
             $status->code = true;
@@ -232,6 +250,7 @@ function peerassessment_is_open($peerassessment, $groupid = 0) {
     // If we are here it means it's between from date and due date.
     $status->code = true;
     $status->text = "Assessment open.";
+
     return $status;
 }
 
@@ -239,15 +258,38 @@ function peerassessment_is_open($peerassessment, $groupid = 0) {
  * Get grades for all peers in a group
  * @param $peerassessment
  * @param $group
+ * @param $membersgradeable
+ * @param $full
+ * @return stdClass
  */
 function peerassessment_get_peer_grades($peerassessment, $group, $membersgradeable = null, $full = true) {
     global $DB;
 
-    $return = new stdClass();
+    $members = groups_get_members($group->id);
+    $members = array_keys($members);
+    list($insql1, $inparams1) = $DB->get_in_or_equal($members, SQL_PARAMS_NAMED);
+    list($insql2, $inparams2) = $DB->get_in_or_equal($members, SQL_PARAMS_NAMED);
 
-    $peers = $DB->get_records('peerassessment_peers', array('peerassessment' => $peerassessment->id, 'groupid' => $group->id));
-    $grades = array();
-    $feedback = array();
+    $conditions[] = 'p.peerassessment = :peerassessment';
+    $conditions[] = 'p.groupid = :groupid';
+    $conditions[] = 'gradedby ' . $insql1;
+    $conditions[] = 'gradefor ' . $insql2;
+    $params = [
+        'peerassessment' => $peerassessment->id,
+        'groupid' => $group->id
+    ];
+
+    $params = array_merge($params, $inparams1, $inparams2);
+    $conditions = implode(' AND ', $conditions);
+
+    $sql = "SELECT p.*
+        FROM {peerassessment_peers} p
+        WHERE $conditions";
+
+    $peers = $DB->get_records_sql($sql, $params);
+    $return = new stdClass();
+    $grades = [];
+    $feedback = [];
 
     foreach ($peers as $peer) {
         $grades[$peer->gradedby][$peer->gradefor] = $peer->grade;
@@ -274,30 +316,30 @@ function peerassessment_get_peer_grades($peerassessment, $group, $membersgradeab
 }
 
 /**
- * How was user graded by his peers
+ * How was user graded by his peers - not used
  *
  * @param $id peer assessment id
  * @param $userid user id
  */
-function peerassessment_gradedme($id, $userid, $membersgradeable) {
-    global $DB;
-    $gradedme = new stdClass();
+// function peerassessment_gradedme($id, $userid, $membersgradeable) {
+//     global $DB;
+//     $gradedme = new stdClass();
 
-    // How others graded me.
-    $myresults = $DB->get_records('peerassessment_peers', array('peerassessment' => $id, 'gradefor' => $userid),
-        '', 'gradedby,feedback,grade');
-    foreach ($membersgradeable as $member) {
-        if (isset($myresults[$member->id])) {
-            $gradedme->feedback[$member->id] = $myresults[$member->id]->feedback;
-            $gradedme->grade[$member->id] = $myresults[$member->id]->grade;
-        } else {
-            $gradedme->feedback[$member->id] = '-';
-            $gradedme->grade[$member->id] = '-';
-        }
-    }
+//     // How others graded me.
+//     $myresults = $DB->get_records('peerassessment_peers', array('peerassessment' => $id, 'gradefor' => $userid),
+//         '', 'gradedby,feedback,grade');
+//     foreach ($membersgradeable as $member) {
+//         if (isset($myresults[$member->id])) {
+//             $gradedme->feedback[$member->id] = $myresults[$member->id]->feedback;
+//             $gradedme->grade[$member->id] = $myresults[$member->id]->grade;
+//         } else {
+//             $gradedme->feedback[$member->id] = '-';
+//             $gradedme->grade[$member->id] = '-';
+//         }
+//     }
 
-    return $gradedme;
-}
+//     return $gradedme;
+// }
 
 
 /**
@@ -305,22 +347,40 @@ function peerassessment_gradedme($id, $userid, $membersgradeable) {
  * @param $peerassessment
  * @param $group
  * @param $user
+ * @return array
  */
 function peerassessment_get_indpeergrades($peerassessment, $group, $user) {
     global $DB;
 
-    if ($peerassessment->treat0asgrade) {
-        $records = $DB->get_records_sql('SELECT id, grade FROM {peerassessment_peers} WHERE peerassessment=? AND groupid=?
-            AND gradefor=?',
-            array($peerassessment->id, $group->id, $user->id));
-    } else {
-        $records = $DB->get_records_sql('SELECT id, grade FROM {peerassessment_peers} WHERE grade>0 AND peerassessment=?
-            AND groupid=? AND gradefor=?',
-            array($peerassessment->id, $group->id, $user->id));
+    $members = groups_get_members($group->id);
+    $peers = array_keys($members);
+    list($insql1, $inparams1) = $DB->get_in_or_equal($peers, SQL_PARAMS_NAMED);
 
+    $conditions[] = 'p.peerassessment = :peerassessment';
+    $conditions[] = 'p.groupid = :groupid';
+    $conditions[] = 'gradedby ' . $insql1;
+    $conditions[] = 'gradefor = :userid';
+    $params = [
+        'peerassessment' => $peerassessment->id,
+        'groupid' => $group->id,
+        'userid' => $user->id
+    ];
+
+    $params = array_merge($params, $inparams1);
+
+    if (!$peerassessment->treat0asgrade) {
+        $conditions[] = 'p.grade > 0';
     }
 
-    $peergrades = array();
+    $conditions = implode(' AND ', $conditions);
+
+    $sql = "SELECT id, grade 
+        FROM {peerassessment_peers} p
+        WHERE $conditions";
+
+    $records = $DB->get_records_sql($sql, $params);
+    $peergrades = [];
+
     foreach ($records as $record) {
         $peergrades[] = $record->grade;
     }
@@ -328,25 +388,43 @@ function peerassessment_get_indpeergrades($peerassessment, $group, $user) {
     return $peergrades;
 }
 
-
 /**
  * Get count of an individuals peer grades. Takes into account treat0asgrade
  * @param $peerassessment
  * @param $group
  * @param $user
+ * @return int
  */
 function peerassessment_get_indcount($peerassessment, $group, $user) {
     global $DB;
 
-    if ($peerassessment->treat0asgrade) {
-        $count = (int)$DB->count_records_sql('SELECT COUNT(grade) FROM {peerassessment_peers} WHERE peerassessment=?
-            AND groupid=? AND gradefor=?',
-            array($peerassessment->id, $group->id, $user->id));
-    } else {
-        $count = (int)$DB->count_records_sql('SELECT COUNT(grade) FROM {peerassessment_peers} WHERE grade>0 AND peerassessment=?
-            AND groupid=? AND gradefor=?',
-            array($peerassessment->id, $group->id, $user->id));
+    $members = groups_get_members($group->id);
+    $peers = array_keys($members);
+    list($insql1, $inparams1) = $DB->get_in_or_equal($peers, SQL_PARAMS_NAMED);
+
+    $conditions[] = 'p.peerassessment = :peerassessment';
+    $conditions[] = 'p.groupid = :groupid';
+    $conditions[] = 'gradedby ' . $insql1;
+    $conditions[] = 'gradefor = :userid';
+    $params = [
+        'peerassessment' => $peerassessment->id,
+        'groupid' => $group->id,
+        'userid' => $user->id
+    ];
+
+    $params = array_merge($params, $inparams1);
+
+    if (!$peerassessment->treat0asgrade) {
+        $conditions[] = 'p.grade > 0';
     }
+
+    $conditions = implode(' AND ', $conditions);
+
+    $sql = "SELECT COUNT(grade) 
+        FROM {peerassessment_peers} p
+        WHERE $conditions";
+
+    $count = (int)$DB->count_records_sql($sql, $params); 
 
     if (!$count) {
         return 0;
@@ -355,35 +433,52 @@ function peerassessment_get_indcount($peerassessment, $group, $user) {
     }
 }
 
-
 /**
  * Get sum of an individuals peer grades. Rounded to two decimal places.
  * @param $peerassessment
  * @param $group
  * @param $user
+ * @return int
  */
 function peerassessment_get_indpeergradestotal($peerassessment, $group, $user) {
     global $DB;
 
-    if ($peerassessment->treat0asgrade) {
-        $gradesum = $DB->get_record_sql('SELECT SUM(grade) AS s FROM {peerassessment_peers} WHERE peerassessment=? AND
-            groupid=? AND gradefor=?',
-            array($peerassessment->id, $group->id, $user->id));
-    } else {
-        $gradesum = $DB->get_record_sql('SELECT SUM(grade) AS s FROM {peerassessment_peers} WHERE grade>0 AND peerassessment=?
-            AND groupid=? AND gradefor=?',
-            array($peerassessment->id, $group->id, $user->id));
+    $members = groups_get_members($group->id);
+    $peers = array_keys($members);
+    list($insql1, $inparams1) = $DB->get_in_or_equal($peers, SQL_PARAMS_NAMED);
 
+    $conditions[] = 'p.peerassessment = :peerassessment';
+    $conditions[] = 'p.groupid = :groupid';
+    $conditions[] = 'gradedby ' . $insql1;
+    $conditions[] = 'gradefor = :userid';
+    $params = [
+        'peerassessment' => $peerassessment->id,
+        'groupid' => $group->id,
+        'userid' => $user->id
+    ];
+
+    $params = array_merge($params, $inparams1);
+
+    if (!$peerassessment->treat0asgrade) {
+        $conditions[] = 'p.grade > 0';
     }
+
+    $conditions = implode(' AND ', $conditions);
+
+    $sql = "SELECT SUM(grade) as s
+        FROM {peerassessment_peers} p
+        WHERE $conditions";
+
+    $gradesum = $DB->get_record_sql($sql, $params); 
 
     return $gradesum->s;
 }
 
-
 /**
- * Get count of peer grades. Takes into account treat0asgrade
+ * Get count of all peer grades. Takes into account treat0asgrade
  * @param $peerassessment
  * @param $group
+ * @return int
  */
 function peerassessment_get_groupcount($peerassessment, $group) {
     global $DB;
@@ -423,11 +518,11 @@ function peerassessment_get_groupcount($peerassessment, $group) {
     }
 }
 
-
 /**
- * Get sum of peer grades. Rounded to two decimal places.
+ * Get sum of all peer grades. Rounded to two decimal places.
  * @param $peerassessment
  * @param $group
+ * @return int
  */
 function peerassessment_get_grouppeergradestotal($peerassessment, $group) {
     global $DB;
@@ -463,11 +558,11 @@ function peerassessment_get_grouppeergradestotal($peerassessment, $group) {
     return $gradesum->s;
 }
 
-
 /**
  * Get group average. Either simple or adjusted for outlier.
  * @param $peerassessment
  * @param $group
+ * @return float
  */
 function peerassessment_get_groupaverage($peerassessment, $group) {
     global $DB;
@@ -488,11 +583,11 @@ function peerassessment_get_groupaverage($peerassessment, $group) {
     return $groupaverage;
 }
 
-
 /**
  * Get simple group average. Rounded to two decimal places.
  * @param $peerassessment
  * @param $group
+ * @return float
  */
 function peerassessment_get_simplegravg($peerassessment, $group) {
     global $DB;
@@ -501,15 +596,13 @@ function peerassessment_get_simplegravg($peerassessment, $group) {
     $total = peerassessment_get_grouppeergradestotal($peerassessment, $group);
 
     return round($total / $count, 2);
-
-    // return $count;
 }
-
 
 /**
  * Get adjusted group average. Rounded to two decimal places.
  * @param $peerassessment
  * @param $group
+ * @return float
  */
 function peerassessment_get_adjustedgravg($peerassessment, $group) {
     global $DB;
@@ -518,8 +611,8 @@ function peerassessment_get_adjustedgravg($peerassessment, $group) {
     $averagetotal = 0;
     $count = 0;
     $groupaverage = 0;
-
     $members = groups_get_members($group->id);
+
     foreach ($members as $member) {
         $standarddev = peerassessment_get_indsd($peerassessment, $group, $member);
         $indaverage = peerassessment_get_simpleindavg($peerassessment, $group, $member);
@@ -537,8 +630,8 @@ function peerassessment_get_adjustedgravg($peerassessment, $group) {
 
     // THIS CAN'T BE DONE UNTIL INDIVIDUAL AVERAGES ARE ALL SET TO INDAV OR 0. NEEDS TO BE A SEPARATE FOREACH.
     foreach ($members as $member) {
-
         $averagetotal = $averagetotal + $peermarks[$member->id]->indaverage;
+
         if ($peermarks[$member->id]->standarddev <= get_config('peerassessment', 'standard_deviation')) {
             $count = $count + 1;
         }
@@ -547,14 +640,13 @@ function peerassessment_get_adjustedgravg($peerassessment, $group) {
     $groupaverage = $averagetotal / $count;
 
     return round($groupaverage, 2);
-
 }
-
 
 /**
  * Get individual average.
  * @param $peerassessment
  * @param $group
+ * @return float
  */
 function peerassessment_get_individualaverage($peerassessment, $group, stdClass $member) {
     global $DB;
@@ -575,11 +667,12 @@ function peerassessment_get_individualaverage($peerassessment, $group, stdClass 
     return $average;
 }
 
-
 /**
  * Get individual user average.
  * @param $peerassessment
  * @param $group
+ * @param $user
+ * @return float
  */
 function peerassessment_get_simpleindavg($peerassessment, $group, $user) {
     global $DB;
@@ -594,22 +687,22 @@ function peerassessment_get_simpleindavg($peerassessment, $group, $user) {
     }
 }
 
-
 /**
  * Get adjusted individual user average which takes into account the standard deviation also
  * @param $peerassessment
  * @param $group
+ * @param $member
+ * @return float
  */
 function peerassessment_get_adjustedindavg($peerassessment, $group, $member) {
     global $DB;
 
     $thisperson = $member;
-
     $peermarks = array();
     $averagetotal = 0;
     $count = 0;
-
     $members = groups_get_members($group->id);
+
     foreach ($members as $member) {
         $standarddev = peerassessment_get_indsd($peerassessment, $group, $member);
         $indaverage = peerassessment_get_simpleindavg($peerassessment, $group, $member);
@@ -627,8 +720,8 @@ function peerassessment_get_adjustedindavg($peerassessment, $group, $member) {
 
     // THIS CAN'T BE DONE UNTIL INDIVIDUAL AVERAGES ARE ALL SET TO INDAV OR 0. NEEDS TO BE A SEPARATE FOREACH.
     foreach ($members as $member) {
-
         $averagetotal = $averagetotal + $peermarks[$member->id]->indaverage;
+
         if ($peermarks[$member->id]->standarddev <= get_config('peerassessment', 'standard_deviation')) {
             $count = $count + 1;
         }
@@ -645,10 +738,15 @@ function peerassessment_get_adjustedindavg($peerassessment, $group, $member) {
     }
 
     return $peermarks[$thisperson->id]->indaverage;
-
 }
 
-
+/**
+ * Get standard deviation for individual.
+ * @param $peerassessment
+ * @param $group
+ * @param $user
+ * @return float
+ */
 function peerassessment_get_indsd($peerassessment, $group, $user) {
     global $DB;
 
@@ -659,13 +757,18 @@ function peerassessment_get_indsd($peerassessment, $group, $user) {
     }
 
     $peergrades = peerassessment_get_indpeergrades($peerassessment, $group, $user);
-
     $result = peerassessment_get_pstd_dev($peergrades);
 
     return round($result, 2);
 }
 
-
+/**
+ * Get final grade for individual.
+ * @param $peerassessment
+ * @param $group
+ * @param $member
+ * @return float
+ */
 function peerassessment_get_grade($peerassessment, $group, stdClass $member) {
     global $DB;
 
@@ -685,11 +788,17 @@ function peerassessment_get_grade($peerassessment, $group, stdClass $member) {
     return $grade;
 }
 
+/**
+ * Get final simple grade for individual.
+ * @param $peerassessment
+ * @param $group
+ * @param $member
+ * @return float
+ */
 function peerassessment_get_simple_grade($peerassessment, $group, stdClass $member) {
     global $CFG, $DB;
 
     $thisperson = $member;
-
     $peermarks = array();
 
     // Can't calculate grade if student does not belong to any group.
@@ -732,11 +841,11 @@ function peerassessment_get_simple_grade($peerassessment, $group, stdClass $memb
 }
 
 /**
- * Description
- * @param type $peerassessment 
- * @param type $group 
- * @param stdClass $member 
- * @return type
+ * Get final outlier grade for individual.
+ * @param $peerassessment
+ * @param $group
+ * @param $member
+ * @return float
  */
 function peerassessment_get_outlier_adjusted_grade($peerassessment, $group, stdClass $member) {
     global $CFG, $DB;
@@ -811,9 +920,16 @@ function peerassessment_fillup() {
 
 }
 
+/**
+ * Get submission files.
+ * @param $context
+ * @param $group
+ * @return array
+ */
 function peerassessment_submission_files($context, $group) {
     $allfiles = array();
     $fs = get_file_storage();
+
     if ($files = $fs->get_area_files($context->id, 'mod_peerassessment', 'submission', $group->id, 'sortorder', false)) {
         foreach ($files as $file) {
             $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(),
@@ -822,13 +938,20 @@ function peerassessment_submission_files($context, $group) {
             $allfiles[] = "<a href='$fileurl'>" . $file->get_filename() . '</a>';
         }
     }
+
     return $allfiles;
 }
 
-
+/**
+ * Get feedback files.
+ * @param $context
+ * @param $group
+ * @return array
+ */
 function peerassessment_feedback_files($context, $group) {
     $allfiles = array();
     $fs = get_file_storage();
+
     if ($files = $fs->get_area_files($context->id, 'mod_peerassessment', 'feedback_files', $group->id, 'sortorder', false)) {
         foreach ($files as $file) {
             $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(),
@@ -837,15 +960,45 @@ function peerassessment_feedback_files($context, $group) {
             $allfiles[] = "<a href='$fileurl'>" . $file->get_filename() . '</a>';
         }
     }
+
     return $allfiles;
 }
 
-function peerassessment_grade_by_user($peerassessment, $user, $membersgradeable) {
+/**
+ * Get grades given to others by this user.
+ * @param $peerassessment
+ * @param $user
+ * @param $membersgradeable
+ * @param $group
+ * @return stdClass
+ */
+function peerassessment_grade_by_user($peerassessment, $user, $membersgradeable, $group) {
     global $DB;
 
+    $members = groups_get_members($group->id);
+    $peers = array_keys($members);
+    list($insql1, $inparams1) = $DB->get_in_or_equal($peers, SQL_PARAMS_NAMED);
+
+    $conditions[] = 'p.peerassessment = :peerassessment';
+    $conditions[] = 'p.groupid = :groupid';
+    $conditions[] = 'gradefor ' . $insql1;
+    $conditions[] = 'gradedby = :userid';
+    $params = [
+        'peerassessment' => $peerassessment->id,
+        'groupid' => $group->id,
+        'userid' => $user->id
+    ];
+
+    $params = array_merge($params, $inparams1);
+    $conditions = implode(' AND ', $conditions);
+
+    $sql = "SELECT p.gradefor, p.feedback, p.grade
+        FROM {peerassessment_peers} p
+        WHERE $conditions";
+
+    $mygrades = $DB->get_records_sql($sql, $params);
     $data = new stdClass();
-    $mygrades = $DB->get_records('peerassessment_peers', array('peerassessment' => $peerassessment->id,
-        'gradedby' => $user->id), '', 'gradefor,feedback,grade');
+
     foreach ($membersgradeable as $member) {
         if (isset($mygrades[$member->id])) {
             $data->feedback[$member->id] = $mygrades[$member->id]->feedback;
@@ -859,35 +1012,48 @@ function peerassessment_grade_by_user($peerassessment, $user, $membersgradeable)
     return $data;
 }
 
+/**
+ * Description.
+ * @param $peerassessment
+ * @return array
+ */
 function peerassessment_get_fileoptions($peerassessment) {
     return array('mainfile' => '', 'subdirs' => 0, 'maxbytes' => -1, 'maxfiles' => $peerassessment->maxfiles,
         'accepted_types' => '*', 'return_types' => null);
 }
 
-
 /**
  * Find members of the group that did not submit feedback and graded peers.
  * @param $peerassessment
  * @param $group
+ * @return array|bool Returns an array of the users for the specified
+ * group or false if no users or an error returned.
  */
 function peerassessment_outstanding($peerassessment, $group) {
     global $DB;
 
     $members = groups_get_members($group->id);
+
     foreach ($members as $k => $member) {
-        if ($DB->get_record('peerassessment_peers', array('peerassessment' => $peerassessment->id, 'groupid' => $group->id,
-            'gradedby' => $member->id), 'id', IGNORE_MULTIPLE)) {
+        if ($DB->get_record('peerassessment_peers', ['peerassessment' => $peerassessment->id, 'groupid' => $group->id,
+            'gradedby' => $member->id], 'id', IGNORE_MULTIPLE)) {
             unset($members[$k]);
         }
 
     }
+
     return $members;
 }
 
+/**
+ * Description.
+ * @param $context
+ * @return array
+ */
 function peerassessment_teachers($context) {
     global $CFG;
 
-    $contacts = array();
+    $contacts = [];
     if (empty($CFG->coursecontact)) {
         return $contacts;
     }
@@ -898,6 +1064,19 @@ function peerassessment_teachers($context) {
     return $contacts;
 }
 
+/**
+ * Save the submission data.
+ * @param $peerassessment
+ * @param $submission
+ * @param $group
+ * @param $course
+ * @param $cm
+ * @param $context
+ * @param $data
+ * @param $draftitemid
+ * @param $context
+ * @param $membersgradeable
+ */
 function peerassessment_save($peerassessment, $submission, $group, $course, $cm, $context, $data, $draftitemid, $membersgradeable) {
     global $USER, $DB;
 
@@ -945,6 +1124,7 @@ function peerassessment_save($peerassessment, $submission, $group, $course, $cm,
 
     // Check special case when there were no files at the time of submission and none were added.
     $skipfile = false;
+
     if ($data->files == 0 && count($draftfiles) == 0) {
         $skipfile = true;
     }
@@ -952,6 +1132,7 @@ function peerassessment_save($peerassessment, $submission, $group, $course, $cm,
     if (!$skipfile) {
         // Get all contenthashes being submitted.
         $newhashes = array();
+
         foreach ($draftfiles as $file) {
             $newhashes[$file->get_contenthash()] = $file->get_contenthash();
         }
@@ -966,7 +1147,6 @@ function peerassessment_save($peerassessment, $submission, $group, $course, $cm,
         $samehashes = array_intersect($newhashes, $oldhashes);
         $addedhashes = array_diff($newhashes, $oldhashes);
         $deletedhashes = array_diff($oldhashes, $newhashes);
-
         $filesubmissioncount = count($newhashes);
         $filelist = array();
         $filedeletedcount = count($deletedhashes);
@@ -1037,14 +1217,15 @@ function peerassessment_save($peerassessment, $submission, $group, $course, $cm,
         $peer->gradedby = $USER->id;
         $peer->gradefor = $member->id;
         $peer->timecreated = time();
+
         if (isset($data->grade[$member->id])) {
             $peer->grade = $data->grade[$member->id];
         } else {
             $peer->grade = 0;
         }
+
         $peer->feedback = $data->feedback[$member->id];
         $peer->id = $DB->insert_record('peerassessment_peers', $peer);
-
         $fullname = fullname($member);
 
         $params = array(
@@ -1068,32 +1249,47 @@ function peerassessment_save($peerassessment, $submission, $group, $course, $cm,
     }
 }
 
+/**
+ * Send confirmation of submission to all members.
+ * @param $course
+ * @param $submission
+ * @param $draftfiles
+ * @param $membersgradeable
+ * @param $data
+ * @return string The formatted ID ready for appending to the email headers.
+ */
 function mail_confirmation_submission($course, $submission, $draftfiles, $membersgradeable, $data) {
     global $CFG, $USER;
 
     $subject = get_string('confirmationmailsubject', 'peerassessment', $course->fullname);
-
     $a = new stdClass();
     $a->time = userdate(time());
-
     $files = array();
+
     foreach ($draftfiles as $draftfile) {
         $files[] = $draftfile->get_filename();
     }
-    $a->files = implode("\n", $files);
 
+    $a->files = implode("\n", $files);
     $grades = '';
+
     foreach ($membersgradeable as $member) {
         $grades .= fullname($member) . ': ' . $data->grade[$member->id] . "\n";
     }
+
     $a->grades = $grades;
-
     $a->url = $CFG->wwwroot . "/mod/peerassessment/view.php?n=" . $submission->assignment;
-
     $body = get_string('confirmationmailbody', 'peerassessment', $a);
+
     return email_to_user($USER, core_user::get_noreply_user(), $subject, $body);
 }
 
+/**
+ * Calculate standard deviation.
+ * @param $a
+ * @param $sample
+ * @return float
+ */
 function peerassessment_get_pstd_dev(array $a, $sample = false) {
     $n = count($a);
 
@@ -1101,13 +1297,15 @@ function peerassessment_get_pstd_dev(array $a, $sample = false) {
         trigger_error("The array has zero elements", E_USER_WARNING);
         return false;
     }
+
     if ($sample && $n === 1) {
         trigger_error("The array has only 1 element", E_USER_WARNING);
         return false;
     }
-    $mean = array_sum($a) / $n;
 
+    $mean = array_sum($a) / $n;
     $carry = 0.0;
+
     foreach ($a as $val) {
         $d = ((double) $val) - $mean;
 
