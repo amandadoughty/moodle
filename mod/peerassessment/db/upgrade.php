@@ -119,9 +119,33 @@ function xmldb_peerassessment_upgrade($oldversion) {
         }
 
         upgrade_mod_savepoint(true, 2017030608, 'peerassessment');
-
     }
 
+    if ($oldversion < 2017030613) {
+
+        $table = new xmldb_table('peerassessment_submission');
+        $field = new xmldb_field('grade', XMLDB_TYPE_NUMBER, '10, 2', null, null, null, null, 'attemptnumber');
+        $dbman->change_field_type($table, $field);
+
+        $field = new xmldb_field('groupaverage', XMLDB_TYPE_NUMBER, '10, 2', null, null, null, null, 'grade');
+        $dbman->change_field_type($table, $field);
+
+        $field = new xmldb_field('individualaverage', XMLDB_TYPE_INTEGER, '10', null,
+            XMLDB_NOTNULL, null, '0');
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        $field = new xmldb_field('finalgrade', XMLDB_TYPE_INTEGER, '10', null,
+            XMLDB_NOTNULL, null, '0');
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2017030613, 'peerassessment');
+    }
 
     // Final return of upgrade result (true, all went good) to Moodle.
     return true;

@@ -595,6 +595,10 @@ function peerassessment_get_simplegravg($peerassessment, $group) {
     $count = peerassessment_get_groupcount($peerassessment, $group);
     $total = peerassessment_get_grouppeergradestotal($peerassessment, $group);
 
+    if ($count === 0) {
+        return 0;
+    }
+
     return round($total / $count, 2);
 }
 
@@ -680,8 +684,8 @@ function peerassessment_get_simpleindavg($peerassessment, $group, $user) {
     $count = peerassessment_get_indcount($peerassessment, $group, $user);
     $total = peerassessment_get_indpeergradestotal($peerassessment, $group, $user);
 
-    if ($count ==0) {
-        return '-';
+    if ($count === 0) {
+        return 0;
     } else {
         return round($total / $count, 2);
     }
@@ -799,7 +803,7 @@ function peerassessment_get_simple_grade($peerassessment, $group, stdClass $memb
     global $CFG, $DB;
 
     $thisperson = $member;
-    $peermarks = array();
+    $peermarks = [];
 
     // Can't calculate grade if student does not belong to any group.
     if (!$group) {
@@ -819,8 +823,8 @@ function peerassessment_get_simple_grade($peerassessment, $group, stdClass $memb
     $gravg = peerassessment_get_simplegravg($peerassessment, $group);
     // $multiply = get_config('peerassessment', 'multiplyby');
     $members = groups_get_members($group->id);
-    foreach ($members as $member) {
 
+    foreach ($members as $member) {
         $peermarks[$member->id] = new stdClass();
         $peermarks[$member->id]->userid = $member->id;
         $peermarks[$member->id]->indaverage = peerassessment_get_simpleindavg($peerassessment, $group, $member);

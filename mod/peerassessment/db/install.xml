@@ -42,11 +42,9 @@
         <FIELD NAME="status" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The status of this assignment submission. The current statuses are DRAFT and SUBMITTED." PREVIOUS="timemodified" NEXT="groupid"/>
         <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The group id for team submissions" PREVIOUS="status" NEXT="attemptnumber"/>
         <FIELD NAME="attemptnumber" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Used to track attempts for an assignment" PREVIOUS="groupid" NEXT="grade"/>
-        <FIELD NAME="grade" TYPE="int" LENGTH="5" NOTNULL="false" SEQUENCE="false" PREVIOUS="attemptnumber" NEXT="groupaverage"/>
-        <FIELD NAME="groupaverage" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="grade" NEXT="individualaverage"/>
-        <FIELD NAME="individualaverage" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="groupaverage" NEXT="finalgrade"/>
-        <FIELD NAME="finalgrade" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="individualaverage" NEXT="feedbacktext"/>
-        <FIELD NAME="feedbacktext" TYPE="text" NOTNULL="false" SEQUENCE="false" PREVIOUS="finalgrade" NEXT="feedbackformat"/>
+        <FIELD NAME="grade" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2" PREVIOUS="attemptnumber" NEXT="groupaverage"/>
+        <FIELD NAME="groupaverage" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2" PREVIOUS="grade" NEXT="feedbacktext"/>
+        <FIELD NAME="feedbacktext" TYPE="text" NOTNULL="false" SEQUENCE="false" PREVIOUS="groupaverage" NEXT="feedbackformat"/>
         <FIELD NAME="feedbackformat" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" PREVIOUS="feedbacktext" NEXT="timegraded"/>
         <FIELD NAME="timegraded" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="feedbackformat" NEXT="gradedby"/>
         <FIELD NAME="gradedby" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="timegraded"/>

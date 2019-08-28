@@ -45,7 +45,7 @@ class mod_peerassessment_grade_form extends moodleform
         $mform->setType('groupid', PARAM_INT);
 
         $mform->addElement('text', 'grade', "Grade out of 100", array('maxlength' => 15, 'size' => 10));
-        $mform->setType('grade', PARAM_INT);
+        $mform->setType('grade', PARAM_FLOAT);
         // $mform->setDefault('grade', 'defult string value for the textarea');
         // $mform->addHelpButton('grade', 'langkey_help', 'peerassessment');
         // $mform->disabledIf('grade', 'value1', 'eq|noteq', 'value2');
