@@ -22,6 +22,7 @@
  */
 
 class mod_peerassessment_renderer extends plugin_renderer_base {
+
     public function render_peerassessment_summary(peerassessment_summary $summary) {
         $group = $summary->group;
         $data = $summary->data;
@@ -30,28 +31,30 @@ class mod_peerassessment_renderer extends plugin_renderer_base {
         $isopen = peerassessment_is_open($peerassessment, $group->id);
         $status = $summary->status;
         $files = $data['files'];
+
         if (isset($data['outstanding'])) {
             $outstanding = $data['outstanding'];
         } else {
             $outstanding = array();
         }
-        $t = new html_table();
 
+        $t = new html_table();
         $row = new html_table_row();
         $cell1 = new html_table_cell('Group');
         $cell2 = new html_table_cell($group->name);
         $row->cells = array($cell1, $cell2);
         $t->data[] = $row;
-
         $row = new html_table_row();
         $cell1 = new html_table_cell('Submission status');
-
         $users = '';
+
         foreach ($outstanding as $member) {
             $users .= fullname($member) . ',';
         }
+
         $text = "<p>$status</p>";
         $users = rtrim($users, ',');
+
         if ($users) {
             if ($isopen->code) {
                 $text .= "<p>". get_string('userswhodidnotsubmitbefore', 'peerassessment', $users) . "</p>";
@@ -70,17 +73,17 @@ class mod_peerassessment_renderer extends plugin_renderer_base {
             $row = new html_table_row();
             $cell1 = new html_table_cell('Due date');
             $cell2 = new html_table_cell(userdate($peerassessment->duedate));
-
             $row->cells = array($cell1, $cell2);
             $t->data[] = $row;
-
             $row = new html_table_row();
             $cell1 = new html_table_cell('Time remaining');
+
             if ($peerassessment->duedate > time()) {
                 $cell2 = new html_table_cell(format_time($peerassessment->duedate - time()));
             } else {
                 $cell2 = new html_table_cell('(over due by ' . format_time($peerassessment->duedate - time()) .')');
             }
+
             $row->cells = array($cell1, $cell2);
             $t->data[] = $row;
         }
@@ -88,15 +91,14 @@ class mod_peerassessment_renderer extends plugin_renderer_base {
         $row = new html_table_row();
         $cell1 = new html_table_cell('File submission');
         $cell2 = new html_table_cell(implode('<br />', $files));
-
         $row->cells = array($cell1, $cell2);
         $t->data[] = $row;
 
         if (isset($data['igraded'])) {
             $row = new html_table_row();
             $cell1 = new html_table_cell('Peer grades');
-
             $users = '';
+
             foreach ($membersgradeable as $member) {
                 $users .= '<p>' . fullname($member) . ': ' . $data['igraded']->grade[$member->id] .
                 ' (' . $data['igraded']->feedback[$member->id] . ')</p>';
@@ -110,8 +112,8 @@ class mod_peerassessment_renderer extends plugin_renderer_base {
         if (isset($data['gradedme'])) {
             $row = new html_table_row();
             $cell1 = new html_table_cell('Graded me');
-
             $users = '';
+            
             foreach ($membersgradeable as $member) {
                 $users .= '<p>' . fullname($member) . ': ' . $data['gradedme']->grade[$member->id] .
                 ' (' . $data['gradedme']->feedback[$member->id] . ')</p>';

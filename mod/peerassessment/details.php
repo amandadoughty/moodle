@@ -28,10 +28,8 @@ require_once($CFG->dirroot . '/mod/peerassessment/add_submission_form.php');
 require_once($CFG->dirroot . '/mod/peerassessment/locallib.php');
 require_once($CFG->dirroot . '/mod/peerassessment/grade_form.php');
 
-
 $id = required_param('id', PARAM_INT);
 $groupid = required_param('groupid', PARAM_INT);
-
 $cm = get_coursemodule_from_id('peerassessment', $id, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 $peerassessment = $DB->get_record('peerassessment', array('id' => $cm->instance), '*', MUST_EXIST);
@@ -44,7 +42,6 @@ require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 
 // Print the page header.
-
 $PAGE->set_url('/mod/peerassessment/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($peerassessment->name));
 $PAGE->set_heading(format_string($course->fullname));
@@ -57,14 +54,16 @@ $mform = new mod_peerassessment_grade_form();
 $draftitemid = file_get_submitted_draft_itemid('feedback_files');
 file_prepare_draft_area($draftitemid, $context->id, 'mod_peerassessment', 'feedback_files',
     $groupid, peerassessment_get_fileoptions($peerassessment));
-
 $data = array('id' => $id, 'groupid' => $groupid, 'feedback_files' => $draftitemid);
+
 if ($status->code == PEERASSESSMENT_STATUS_GRADED) {
     $data['feedback']['text'] = $submission->feedbacktext;
     $data['feedback']['format'] = $submission->feedbackformat;
     $data['grade'] = $submission->grade;
 }
+
 $mform->set_data($data);
+
 if ($mform->is_cancelled()) {
     // Form cancelled, redirect.
     redirect(new moodle_url('view.php', array('id' => $cm->id)));
@@ -84,7 +83,6 @@ if ($mform->is_cancelled()) {
 
     // add final grade here
     //$submission->finalgrade = peerassessment_get_grade($peerassessment, $group, $member);
-
     if (isset($submission->id)) {
         $DB->update_record('peerassessment_submission', $submission);
     } else {
@@ -93,9 +91,11 @@ if ($mform->is_cancelled()) {
 
     // Update grades for every group member.
     $members = groups_get_members($group->id);
+
     foreach ($members as $member) {
         peerassessment_update_grades($peerassessment, $member->id);
     }
+    
     // Save the file submitted.
     file_save_draft_area_files($draftitemid, $context->id, 'mod_peerassessment', 'feedback_files',
         $group->id, mod_peerassessment_grade_form::$fileoptions);
@@ -138,7 +138,6 @@ $t->attributes['class'] = 'userenrolment';
 $t->id = 'mod-peerassessment-summary-table';
 $t->head[] = '';
 $grades = peerassessment_get_peer_grades($peerassessment, $group, $members);
-
 // Add Averages 1 line.
 $indaverages = array('<b>Average</b>');
 
@@ -147,44 +146,47 @@ $indaverages = array('<b>Average</b>');
 foreach ($members as $member) {
     $t->head[] = fullname($member);
     $row = new html_table_row();;
-
-        // $src = $OUTPUT->pix_url('help');
-        // $alt = 'alt';
-        // $attributes = array('src'=>$src, 'alt'=>$alt, 'class'=>'iconhelp');
-        // $output = html_writer::empty_tag('img', $attributes);
-
     $row->cells = array();
     $row->cells[] = fullname($member);
 
     foreach ($members as $peer) {
         $feedbacktext = '';
+
         if ($grades->feedback[$member->id][$peer->id] != '-') {
             $feedbacktext = print_collapsible_region($grades->feedback[$member->id][$peer->id], 'peerassessment-feedback',
                 'peerassessment-feedback-' . $member->id . '-' . $peer->id,
                 shorten_text($grades->feedback[$member->id][$peer->id], 20), '', true, true);
         }
+
         $row->cells[] = $grades->grades[$member->id][$peer->id] . $feedbacktext;
 
     }
     $t->data[] = $row;
     // Add Averages 2 lines.
     $indaverage = peerassessment_get_individualaverage($peerassessment, $group, $member);
-    
+
+    if ($indaverage == 0) {
+        $indaverage = '-';
+    }
+
     $indaverages[] = '<b>' . $indaverage . '</b>';
 }
 
 // Add Averages 1 line.
 $t->data[] = $indaverages;
-
 echo html_writer::table($t);
 
 // Add Averages 2 lines.
 $gravg = peerassessment_get_groupaverage($peerassessment, $group);
+
+if ($gravg == 0) {
+    $gravg = '-';
+}
+
 echo $OUTPUT->box("Group Average grade: $gravg " . $OUTPUT->help_icon('groupaverage', 'peerassessment'));
 
 // If graded then show grade for submission and adjusted grades for each peer.
 if ($status->code == PEERASSESSMENT_STATUS_GRADED) {
-
     echo $OUTPUT->box_start();
     echo $OUTPUT->heading("Final grades ". $OUTPUT->help_icon('finalgrades', 'peerassessment'), 3);
     echo $OUTPUT->box_start();
@@ -195,16 +197,33 @@ if ($status->code == PEERASSESSMENT_STATUS_GRADED) {
     $t->attributes['class'] = 'userenrolment';
     $t->id = 'mod-peerassessment-summary-table';
     $t->head = array('Name', 'Grade');
+
     foreach ($members as $member) {
-        // TODO also add grade from gradebook in case it's overwritten,
-        // $t->data[] = array(fullname($member), $peermarks[$member->id]->final_grade);
+        $gradinginfo = grade_get_grades(
+            $course->id,
+            'mod',
+            'peerassessment',
+            $peerassessment->id,
+            array_keys($members)
+        );
 
-        $t->data[] = array(fullname($member), peerassessment_get_grade($peerassessment, $group, $member));
+        $grade = $gradinginfo->items[0]->grades[$member->id];
+        $gradetxt = '';
 
+        // Format mixed bool/integer parameters.
+        $grade->hidden = (empty($grade->hidden)) ? 0 : $grade->hidden;
+        $grade->locked = (empty($grade->locked)) ? 0 : $grade->locked;
+        $grade->overridden = (empty($grade->overridden)) ? 0 : $grade->overridden;
+
+        if ($grade->overridden) {
+            $gradetxt .= get_string('overridden', 'mod_peerassessment');
+        }
+
+        $t->data[] = array(fullname($member), $grade->str_grade . $gradetxt);
     }
+
     echo html_writer::table($t);
     echo $OUTPUT->box_end();
-
     echo $OUTPUT->box_start();
     echo $OUTPUT->heading("Feedback ". $OUTPUT->help_icon('teacherfeedback', 'peerassessment'), 3);
     echo $OUTPUT->box($submission->feedbacktext);

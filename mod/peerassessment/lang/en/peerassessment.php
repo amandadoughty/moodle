@@ -80,6 +80,7 @@ $string['groupaverage'] = 'Group Average grade';
 $string['groupaverage_help'] = 'This is the overall average of peer grades for the group.';
 $string['finalgrades'] = 'Final grades';
 $string['finalgrades_help'] = 'The final grade is calculated from adding or subtracting the individual/group average differential that is multiplied by five. The outcome is dependent on whether the individual\'s average is greater or lesser than the group\'s average.';
+$string['overridden'] = ' (Overridden in gradebook)';
 $string['teacherfeedback'] = 'Grader feedback';
 $string['teacherfeedback_help'] = 'This is the feedback given by the grader.';
 $string['latesubmissionsubject'] = 'Late submission';

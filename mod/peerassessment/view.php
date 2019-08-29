@@ -113,11 +113,11 @@ if (has_capability('mod/peerassessment:grade', $context)) {
     $t->attributes['class'] = 'userenrolment';
     $t->id = 'mod-peerassessment-summary-table';
     $t->head = array('name', '# members', '# peer grades', 'status', 'actions');
+
     foreach ($allgroups as $group) {
         $members = groups_get_members($group->id);
         $status = peerassessment_get_status($peerassessment, $group);
         $grades = peerassessment_get_peer_grades($peerassessment, $group, $members, false);
-
         $options = array();
         /* if ($status->code != PEERASSESSMENT_STATUS_SUBMITTED) {
             $options = array('disabled' => true);
@@ -126,6 +126,7 @@ if (has_capability('mod/peerassessment:grade', $context)) {
         $row = new html_table_row();
         $actions = '';
         $status = peerassessment_get_status($peerassessment, $group);
+
         if ($status->code == PEERASSESSMENT_STATUS_GRADED) {
             $actions .= $OUTPUT->single_button(new moodle_url('details.php', array('id' => $cm->id,
                 'groupid' => $group->id)), "Edit", 'get');
@@ -133,6 +134,7 @@ if (has_capability('mod/peerassessment:grade', $context)) {
             $actions .= $OUTPUT->single_button(new moodle_url('details.php', array('id' => $cm->id,
                 'groupid' => $group->id)), "Grade", 'get');
         }
+
         $actions .= $OUTPUT->single_button(new moodle_url('export.php', array('id' => $cm->id,
             'groupid' => $group->id)), "Export", 'post');
         $row->cells = array($OUTPUT->action_link(new moodle_url('details.php', array('id' => $cm->id,
@@ -144,8 +146,8 @@ if (has_capability('mod/peerassessment:grade', $context)) {
         );
         $t->data[] = $row;
     }
-    echo html_writer::table($t);
 
+    echo html_writer::table($t);
     echo $OUTPUT->box_start('generalbox', null);
     echo $OUTPUT->single_button(new moodle_url('exportxls.php', array('id' => $cm->id,  'groupingid' => $groupingid)),
         get_string("exportxls", 'mod_peerassessment'), 'post', array("class" => 'yui3-u singlebutton'));
@@ -178,6 +180,7 @@ $duedate = peerassessment_due_date($peerassessment);
 // No point in doing any checks if it's not open.
 $hidden = false;
 $gradinginfo = grade_get_grades($course->id, 'mod', 'peerassessment', $peerassessment->id, array($USER->id));
+
 if ($gradinginfo &&
     isset($gradinginfo->items[0]->grades[$USER->id]) &&
     $gradinginfo->items[0]->grades[$USER->id]->hidden
@@ -190,7 +193,6 @@ if (!$isopen->code) {
 
     // How I graded others.
     $data['igraded'] = peerassessment_grade_by_user($peerassessment, $USER, $membersgradeable, $group);
-
     $output = $PAGE->get_renderer('mod_peerassessment');
     $data['files'] = peerassessment_submission_files($context, $group);
     $data['outstanding'] = peerassessment_outstanding($peerassessment, $group);
@@ -198,7 +200,14 @@ if (!$isopen->code) {
     // If graded and grade not hidden in gradebook.
     if ($status->code == PEERASSESSMENT_STATUS_GRADED && !$hidden) {
         // My grade.
-        $data['mygrade'] = peerassessment_get_grade($peerassessment, $group, $USER);
+        if ($gradinginfo &&
+            isset($gradinginfo->items[0]->grades[$USER->id]) &&
+            $gradinginfo->items[0]->grades[$USER->id]->str_grade
+        ) {
+            $data['mygrade'] = $gradinginfo->items[0]->grades[$USER->id]->str_grade;
+        } else {
+            $data['mygrade'] = '-';
+        }
 
         // Feedback.
         $data['feedback'] = $submission->feedbacktext;
@@ -246,7 +255,6 @@ if (!$myassessments || $edit == true) {
 
     $event = \mod_peerassessment\event\submission_viewed::create($params);
     $event->trigger();
-
 } else {
     $data = array();
 
@@ -266,6 +274,7 @@ if (!$myassessments || $edit == true) {
         $data['feedback'] = $submission->feedbacktext;
         $data['feedback_files'] = peerassessment_feedback_files($context, $group);
     }
+
     $summary = new peerassessment_summary($group, $data, $membersgradeable, $peerassessment, $status->text .
         ' Editable because: ' . $isopen->text);
     echo $output->render($summary);
@@ -273,4 +282,5 @@ if (!$myassessments || $edit == true) {
     echo $OUTPUT->single_button($url, 'Edit submission');
 
 }
+
 echo $OUTPUT->footer();
