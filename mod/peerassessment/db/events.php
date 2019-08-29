@@ -15,11 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CUL Activity Stream plugin event handler definition.
+ * CUL Peerassessment plugin event handler definition.
  *
- * @package    local
- * @subpackage culactivity_stream
- * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>
+ * @package    mod_peerassessment
+ * @copyright  2019 Amanda Doughty <amanda.doughty.1@city.ac.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -27,19 +26,19 @@
 $observers = [
 
     /*
-     * Course module created.
+     * Group member added.
      */
     [
         'eventname' => '\core\event\group_member_added',
-        'callback'  => 'local_culactivity_stream_observer::course_module_created',
+        'callback'  => 'mod_peerassessment_observer::group_members_updated',
     ],
 
     /*
-     * Course module updated.
+     * Group member removed.
      */
     [
         'eventname' => '\core\event\group_member_removed',
-        'callback'  => 'local_culactivity_stream_observer::course_module_updated',
+        'callback'  => 'mod_peerassessment_observer::group_members_updated',
     ],
 
 ];

@@ -15,11 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CUL Activity Stream event handlers
+ * CUL Peerassessment plugin event handlers.
  *
- * @package    local
- * @subpackage culactivity_stream
- * @copyright  2013 Amanda Doughty <amanda.doughty.1@city.ac.uk>
+ * @package    mod_peerassessment
+ * @copyright  2019 Amanda Doughty <amanda.doughty.1@city.ac.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -29,30 +28,9 @@ defined('MOODLE_INTERNAL') || die;
 /**
  * Event observer.
  *
- * Responds to course module events emitted by the Moodle event manager.
+ * Responds to group events emitted by the Moodle event manager.
  */
 class mod_peerassessment_observer {
-    /**
-     * Course module created.
-     *
-     * @param \core\event\course_module_created $event The event that triggered our execution.
-     *
-     * @return void
-     */
-    public static function course_module_created(\core\event\course_module_created $event) {
-        static::schedule_notification($event);
-    }
-
-    /**
-     * Course module updated.
-     *
-     * @param \core\event\course_module_updated $event The event that triggered our execution.
-     *
-     * @return void
-     */
-    public static function course_module_updated(\core\event\course_module_updated $event) {
-        static::schedule_notification($event);
-    }
 
     /**
      * Event handler.
@@ -64,30 +42,30 @@ class mod_peerassessment_observer {
      * @return boolean true
      *
      */
-    protected static function schedule_notification(\core\event\base $event) {
+    protected static function group_members_updated(\core\event\base $event) {
             global $CFG, $DB;
 
-            $course = $DB->get_record('course', array('id' => $event->courseid));
-            $module = $event->other['modulename'];
-            $modulename = $event->other['name'];
-            $messagetext = get_string($event->action, 'mod_peerassessment', $modulename);
-            $coursename = $course->idnumber ? $course->idnumber : $course->fullname;
-            $messagetext .= get_string('incourse', 'mod_peerassessment', $coursename);
+            // $course = $DB->get_record('course', array('id' => $event->courseid));
+            // $module = $event->other['modulename'];
+            // $modulename = $event->other['name'];
+            // $messagetext = get_string($event->action, 'mod_peerassessment', $modulename);
+            // $coursename = $course->idnumber ? $course->idnumber : $course->fullname;
+            // $messagetext .= get_string('incourse', 'mod_peerassessment', $coursename);
 
-            $message = new stdClass();
-            $message->userfromid = $event->userid;
-            $message->courseid = $event->courseid;
-            $message->cmid = $event->objectid;
-            $message->smallmessage     = $messagetext;
-            $message->component = 'mod_peerassessment';
-            $message->modulename = $module;
-            $message->timecreated = time();
-            $message->contexturl = "$CFG->wwwroot/mod/$module/view.php?id=$event->objectid";
-            $message->contexturlname  = $modulename;
+            // $message = new stdClass();
+            // $message->userfromid = $event->userid;
+            // $message->courseid = $event->courseid;
+            // $message->cmid = $event->objectid;
+            // $message->smallmessage     = $messagetext;
+            // $message->component = 'mod_peerassessment';
+            // $message->modulename = $module;
+            // $message->timecreated = time();
+            // $message->contexturl = "$CFG->wwwroot/mod/$module/view.php?id=$event->objectid";
+            // $message->contexturlname  = $modulename;
 
-            // Add base message to queue - message_culactivity_queue.
-            $result = $DB->insert_record('message_culactivity_stream_q', $message);
+            // // Add base message to queue - message_culactivity_queue.
+            // $result = $DB->insert_record('message_culactivity_stream_q', $message);
 
-            return $result;
+            // return $result;
     }
 }
