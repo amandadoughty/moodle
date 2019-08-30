@@ -42,49 +42,115 @@ class mod_peerassessment_observer {
      * @return boolean true
      *
      */
-    public static function group_members_updated(\core\event\base $event) {
-            global $CFG, $DB;
+    public static function group_member_added(\core\event\base $event) {
+        mod_peerassessment_observer::group_members_updated($event, false);
+    }
 
-            require($CFG->dirroot . '/mod/peerassessment/lib.php');
+    /**
+     * Event handler.
+     *
+     * Called by observers to handle notification sending.
+     *
+     * @param \core\event\base $event The event object.
+     *
+     * @return boolean true
+     *
+     */
+    public static function group_member_removed(\core\event\base $event) {
+        mod_peerassessment_observer::group_members_updated($event);
+    }
 
-            $groupid = $event->objectid;
-            $members = groups_get_members($groupid);
+    /**
+     * Function updates the gradebook when there is a change
+     * to the group members.
+     *
+     * @param \core\event\base $event The event object.
+     * @param $removed boolean
+     *
+     *
+     */
+    protected static function group_members_updated(\core\event\base $event, $removed = true) {
+        global $CFG, $DB;
 
-            $sql = "SELECT DISTINCT p.*
-                FROM {peerassessment} p
-                INNER JOIN {peerassessment_submission} ps
-                ON p.id = ps.assignment
-                INNER JOIN {groups} g
-                ON ps.groupid = g.id
-                WHERE g.id = :groupid";
+        require($CFG->dirroot . '/mod/peerassessment/lib.php');
 
-            $params = ['groupid' => $groupid];
+        $groupid = $event->objectid;
+        $userid = $event->relateduserid;
+        $members = groups_get_members($groupid);
 
-            try {
-                $peerassessments = $DB->get_records_sql($sql, $params);
-            } catch (exception $e) {
+        $sql = "SELECT DISTINCT p.*
+            FROM {peerassessment} p
+            INNER JOIN {peerassessment_submission} ps
+            ON p.id = ps.assignment
+            INNER JOIN {groups} g
+            ON ps.groupid = g.id
+            WHERE g.id = :groupid";
 
-            }
+        $params = ['groupid' => $groupid];
 
-            if ($peerassessments) {
-                foreach ($peerassessments as $id => $peerassessment) {
-                    foreach ($members as $member) {
-                        try {
-                            peerassessment_update_grades($peerassessment, $member->id);
-                        } catch (exception $e) {
+        try {
+            $peerassessments = $DB->get_records_sql($sql, $params);
+        } catch (exception $e) {
+            $params = [
+                'context' => $context,
+                'objectid' => $peerassessment->id,
+                'other' => [
+                    'error' => $e->getMessage(),
+                    'groupid' => $groupid
+                ]
+            ];
 
-                        }
+            $event = \mod_peerassessment\event\gradebookupdate_failed::create($params);
+            $event->trigger();
+        }
+
+        if ($peerassessments) {
+            foreach ($peerassessments as $id => $peerassessment) {
+
+                $cm = get_coursemodule_from_instance('peerassessment', $peerassessment->id, $peerassessment->course, false, MUST_EXIST);
+                $context = context_module::instance($cm->id);
+
+                if ($removed) {
+                    require_once($CFG->libdir . '/gradelib.php');
+                    
+                    $grade = [];
+
+                    $gradinginfo = grade_get_grades(
+                        $peerassessment->course,
+                        'mod',
+                        'peerassessment',
+                        $peerassessment->id,
+                        [$userid]
+                    );
+
+                    $grade['userid'] = $userid;
+                    $grade['itemid'] = $gradinginfo->items[0]->id;                   
+                    $grade_grade = grade_grade::fetch($grade);
+
+                    if ($grade_grade) {
+                        $grade_grade->delete();
+                    }
+                }
+
+                foreach ($members as $member) {
+                    try {
+                        peerassessment_update_grades($peerassessment, $member->id);
+                    } catch (exception $e) {
+                        $params = [
+                            'context' => $context,
+                            'objectid' => $peerassessment->id,
+                            'relateduserid' => $member->id,
+                            'other' => [
+                                'error' => $e->getMessage(),
+                                'groupid' => $groupid
+                            ]
+                        ];
+
+                        $event = \mod_peerassessment\event\gradebookupdate_failed::create($params);
+                        $event->trigger();
                     }
                 }
             }
-
-
-
-
-    
-  
-
-
-            // return $result;
+        }
     }
 }

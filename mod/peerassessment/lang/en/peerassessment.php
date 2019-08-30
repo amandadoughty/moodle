@@ -124,7 +124,7 @@ $string['eventsubmission_graded'] = 'peerassessment grade';
 $string['eventsubmissions_downloaded'] = 'peerassessment download all';
 $string['eventsubmission_exported'] = 'peerassessment export';
 $string['eventsubmissions_exported'] = 'peerassessment export all';
-
+$string['eventgradebookupdate_failed'] = 'peerassessment gradebook update';
 $string['multiplegroups'] = 'The following people belong to more than one group: {$a}. Their grades have not been updated.';
 $string['messageprovider:late_submission'] = 'Late submission';
 

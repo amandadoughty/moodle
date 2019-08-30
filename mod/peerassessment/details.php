@@ -215,10 +215,6 @@ if ($status->code == PEERASSESSMENT_STATUS_GRADED) {
 
         if ($grade->overridden) {
             $gradetxt .= get_string('overridden', 'mod_peerassessment');
-        } else {
-            // Get the one stored here in case anything has
-            // changed and the gradebook has not updated.
-            $gradetxt = peerassessment_get_grade($peerassessment, $group, $member);
         }
 
         $t->data[] = array(fullname($member), $gradetxt);

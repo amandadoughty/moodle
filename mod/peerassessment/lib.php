@@ -248,11 +248,10 @@ function peerassessment_scale_used_anywhere($scaleid) {
  * @param stdClass $peerassessment instance object with extra cmidnumber and modname property
  * @return void
  */
-function peerassessment_grade_item_update(stdClass $peerassessment, $grades = null) {
+function peerassessment_grade_item_update(stdClass $peerassessment, $grades = null, $item = []) {
     global $CFG;
     require_once($CFG->libdir . '/gradelib.php');
 
-    $item = array();
     $item['itemname'] = clean_param($peerassessment->name, PARAM_NOTAGS);
     $item['gradetype'] = GRADE_TYPE_VALUE;
     $item['grademax'] = 100;
