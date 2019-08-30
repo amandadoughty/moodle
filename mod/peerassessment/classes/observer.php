@@ -42,29 +42,48 @@ class mod_peerassessment_observer {
      * @return boolean true
      *
      */
-    protected static function group_members_updated(\core\event\base $event) {
+    public static function group_members_updated(\core\event\base $event) {
             global $CFG, $DB;
 
-            // $course = $DB->get_record('course', array('id' => $event->courseid));
-            // $module = $event->other['modulename'];
-            // $modulename = $event->other['name'];
-            // $messagetext = get_string($event->action, 'mod_peerassessment', $modulename);
-            // $coursename = $course->idnumber ? $course->idnumber : $course->fullname;
-            // $messagetext .= get_string('incourse', 'mod_peerassessment', $coursename);
+            require($CFG->dirroot . '/mod/peerassessment/lib.php');
 
-            // $message = new stdClass();
-            // $message->userfromid = $event->userid;
-            // $message->courseid = $event->courseid;
-            // $message->cmid = $event->objectid;
-            // $message->smallmessage     = $messagetext;
-            // $message->component = 'mod_peerassessment';
-            // $message->modulename = $module;
-            // $message->timecreated = time();
-            // $message->contexturl = "$CFG->wwwroot/mod/$module/view.php?id=$event->objectid";
-            // $message->contexturlname  = $modulename;
+            $groupid = $event->objectid;
+            $members = groups_get_members($groupid);
 
-            // // Add base message to queue - message_culactivity_queue.
-            // $result = $DB->insert_record('message_culactivity_stream_q', $message);
+            $sql = "SELECT DISTINCT p.*
+                FROM {peerassessment} p
+                INNER JOIN {peerassessment_submission} ps
+                ON p.id = ps.assignment
+                INNER JOIN {groups} g
+                ON ps.groupid = g.id
+                WHERE g.id = :groupid";
+
+            $params = ['groupid' => $groupid];
+
+            try {
+                $peerassessments = $DB->get_records_sql($sql, $params);
+            } catch (exception $e) {
+
+            }
+
+            if ($peerassessments) {
+                foreach ($peerassessments as $id => $peerassessment) {
+                    foreach ($members as $member) {
+                        try {
+                            peerassessment_update_grades($peerassessment, $member->id);
+                        } catch (exception $e) {
+
+                        }
+                    }
+                }
+            }
+
+
+
+
+    
+  
+
 
             // return $result;
     }

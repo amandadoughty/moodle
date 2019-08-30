@@ -208,18 +208,20 @@ if ($status->code == PEERASSESSMENT_STATUS_GRADED) {
         );
 
         $grade = $gradinginfo->items[0]->grades[$member->id];
-        $gradetxt = '';
+        $gradetxt = $grade->str_grade;
 
         // Format mixed bool/integer parameters.
-        $grade->hidden = (empty($grade->hidden)) ? 0 : $grade->hidden;
-        $grade->locked = (empty($grade->locked)) ? 0 : $grade->locked;
         $grade->overridden = (empty($grade->overridden)) ? 0 : $grade->overridden;
 
         if ($grade->overridden) {
             $gradetxt .= get_string('overridden', 'mod_peerassessment');
+        } else {
+            // Get the one stored here in case anything has
+            // changed and the gradebook has not updated.
+            $gradetxt = peerassessment_get_grade($peerassessment, $group, $member);
         }
 
-        $t->data[] = array(fullname($member), $grade->str_grade . $gradetxt);
+        $t->data[] = array(fullname($member), $gradetxt);
     }
 
     echo html_writer::table($t);

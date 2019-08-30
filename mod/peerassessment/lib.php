@@ -280,12 +280,12 @@ function peerassessment_update_grades(stdClass $peerassessment, $userid = 0, $nu
     $groupingid = $peerassessment->submissiongroupingid;
     $courseid = $peerassessment->course;
     $error = array();
+    $cm = get_coursemodule_from_instance('peerassessment', $peerassessment->id, $peerassessment->course, false, MUST_EXIST);
 
     if ($userid == 0) {
         // Get all users in a course.
         // Maybe we should take all roles with archetype student.
-        $role = $DB->get_record('role', array('shortname' => 'student'), '*', MUST_EXIST);
-        $cm = get_coursemodule_from_instance('peerassessment', $peerassessment->id, $peerassessment->course, false, MUST_EXIST);
+        $role = $DB->get_record('role', array('shortname' => 'student'), '*', MUST_EXIST);        
         $context = context_module::instance($cm->id);
         $users = get_role_users($role->id, $context, true);
     } else {
