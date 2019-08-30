@@ -100,8 +100,8 @@ class mod_peerassessment_observer {
                 ]
             ];
 
-            $event = \mod_peerassessment\event\gradebookupdate_failed::create($params);
-            $event->trigger();
+            $newevent = \mod_peerassessment\event\gradebookupdate_failed::create($params);
+            $newevent->trigger();
         }
 
         if ($peerassessments) {
@@ -146,8 +146,8 @@ class mod_peerassessment_observer {
                             ]
                         ];
 
-                        $event = \mod_peerassessment\event\gradebookupdate_failed::create($params);
-                        $event->trigger();
+                        $newevent = \mod_peerassessment\event\gradebookupdate_failed::create($params);
+                        $newevent->trigger();
                     }
                 }
             }
