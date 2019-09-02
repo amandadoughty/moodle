@@ -67,7 +67,6 @@ function peerassessment_add_instance(stdClass $peerassessment, mod_peerassessmen
     global $DB;
 
     $peerassessment->timecreated = time();
-
     $peerassessment->id = $DB->insert_record('peerassessment', $peerassessment);
     peerassessment_grade_item_update($peerassessment);
 
@@ -90,7 +89,6 @@ function peerassessment_update_instance(stdClass $peerassessment, mod_peerassess
 
     $peerassessment->timemodified = time();
     $peerassessment->id = $peerassessment->instance;
-
     $return = $DB->update_record('peerassessment', $peerassessment);
     peerassessment_update_grades($peerassessment);
 
@@ -115,7 +113,6 @@ function peerassessment_delete_instance($id) {
     }
 
     // Delete any dependent records here.
-
     $DB->delete_records('peerassessment', array('id' => $peerassessment->id));
 
     return true;
@@ -391,14 +388,12 @@ function peerassessment_pluginfile($course, $cm, $context, $filearea, $args, $fo
     global $DB, $USER;
 
     if ($context->contextlevel != CONTEXT_MODULE) {
-
         return false;
     }
 
     require_login();
 
     if ($filearea != 'submission' && $filearea != 'feedback_files') {
-
         return false;
     }
 
@@ -411,14 +406,13 @@ function peerassessment_pluginfile($course, $cm, $context, $filearea, $args, $fo
     // or belong to the group same as $itemid.
     if (!has_capability('mod/peerassessment:grade', $context)) {
         if ($itemid != $mygroup) {
-
             return false;
         }
     }
 
     $fs = get_file_storage();
-
     $filename = array_pop($args);
+
     if (empty($args)) {
         $filepath = '/';
     } else {
@@ -426,8 +420,8 @@ function peerassessment_pluginfile($course, $cm, $context, $filearea, $args, $fo
     }
 
     $file = $fs->get_file($context->id, 'mod_peerassessment', $filearea, $itemid, $filepath, $filename);
-    if (!$file) {
 
+    if (!$file) {
         return false;
     }
 

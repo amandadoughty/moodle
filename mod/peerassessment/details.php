@@ -82,7 +82,6 @@ if ($mform->is_cancelled()) {
     $submission->feedbackformat = $data->feedback['format'];
 
     // add final grade here
-    //$submission->finalgrade = peerassessment_get_grade($peerassessment, $group, $member);
     if (isset($submission->id)) {
         $DB->update_record('peerassessment_submission', $submission);
     } else {
@@ -111,7 +110,7 @@ if ($mform->is_cancelled()) {
             );
 
     $event = \mod_peerassessment\event\submission_graded::create($params);
-    $event->add_record_snapshot('peerassessment_submission', $submission);
+    // $event->add_record_snapshot('peerassessment_submission', $submission); ?? Not all fields are here so snapsot fails.
     $event->trigger();
 
     redirect(new moodle_url('details.php', array('id' => $id, 'groupid' => $groupid)));

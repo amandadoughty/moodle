@@ -316,33 +316,6 @@ function peerassessment_get_peer_grades($peerassessment, $group, $membersgradeab
 }
 
 /**
- * How was user graded by his peers - not used
- *
- * @param $id peer assessment id
- * @param $userid user id
- */
-// function peerassessment_gradedme($id, $userid, $membersgradeable) {
-//     global $DB;
-//     $gradedme = new stdClass();
-
-//     // How others graded me.
-//     $myresults = $DB->get_records('peerassessment_peers', array('peerassessment' => $id, 'gradefor' => $userid),
-//         '', 'gradedby,feedback,grade');
-//     foreach ($membersgradeable as $member) {
-//         if (isset($myresults[$member->id])) {
-//             $gradedme->feedback[$member->id] = $myresults[$member->id]->feedback;
-//             $gradedme->grade[$member->id] = $myresults[$member->id]->grade;
-//         } else {
-//             $gradedme->feedback[$member->id] = '-';
-//             $gradedme->grade[$member->id] = '-';
-//         }
-//     }
-
-//     return $gradedme;
-// }
-
-
-/**
  * Get peer grades for an individual. Takes into account treat0asgrade
  * @param $peerassessment
  * @param $group
@@ -637,13 +610,15 @@ function peerassessment_get_adjustedgravg($peerassessment, $group) {
         $averagetotal = $averagetotal + $peermarks[$member->id]->indaverage;
 
         if ($peermarks[$member->id]->standarddev <= get_config('peerassessment', 'standard_deviation')) {
+            // Spreadsheet is doing a different calculation.
+            // Spreadsheet is doing 
             $count = $count + 1;
         }
     }
 
     $groupaverage = $averagetotal / $count;
 
-    return round($groupaverage, 2);
+    return $groupaverage;
 }
 
 /**
@@ -701,47 +676,17 @@ function peerassessment_get_simpleindavg($peerassessment, $group, $user) {
 function peerassessment_get_adjustedindavg($peerassessment, $group, $member) {
     global $DB;
 
-    $thisperson = $member;
-    $peermarks = array();
-    $averagetotal = 0;
-    $count = 0;
-    $members = groups_get_members($group->id);
+    $standarddev = peerassessment_get_indsd($peerassessment, $group, $member);
+    $indaverage = peerassessment_get_simpleindavg($peerassessment, $group, $member);
+    $groupaverage = peerassessment_get_adjustedgravg($peerassessment, $group);
 
-    foreach ($members as $member) {
-        $standarddev = peerassessment_get_indsd($peerassessment, $group, $member);
-        $indaverage = peerassessment_get_simpleindavg($peerassessment, $group, $member);
-
-        $peermarks[$member->id] = new stdClass();
-        $peermarks[$member->id]->userid = $member->id;
-        $peermarks[$member->id]->standarddev = $standarddev;
-
-        if ($peermarks[$member->id]->standarddev <= get_config('peerassessment', 'standard_deviation')) {
-            $peermarks[$member->id]->indaverage = $indaverage;
-        } else {
-            $peermarks[$member->id]->indaverage = 0;
-        }
+    if ($standarddev <= get_config('peerassessment', 'standard_deviation')) {
+            $indaverage = $indaverage;
+    } else {
+        $indaverage = round($groupaverage, 2);
     }
 
-    // THIS CAN'T BE DONE UNTIL INDIVIDUAL AVERAGES ARE ALL SET TO INDAV OR 0. NEEDS TO BE A SEPARATE FOREACH.
-    foreach ($members as $member) {
-        $averagetotal = $averagetotal + $peermarks[$member->id]->indaverage;
-
-        if ($peermarks[$member->id]->standarddev <= get_config('peerassessment', 'standard_deviation')) {
-            $count = $count + 1;
-        }
-    }
-
-    $groupaverage = 0;
-    $groupaverage = $averagetotal / $count;
-
-    foreach ($members as $member) {
-
-        if ($peermarks[$member->id]->standarddev > get_config('peerassessment', 'standard_deviation')) {
-            $peermarks[$member->id]->indaverage = round($groupaverage, 2);
-        }
-    }
-
-    return $peermarks[$thisperson->id]->indaverage;
+    return $indaverage;
 }
 
 /**
@@ -802,7 +747,6 @@ function peerassessment_get_grade($peerassessment, $group, stdClass $member) {
 function peerassessment_get_simple_grade($peerassessment, $group, stdClass $member) {
     global $CFG, $DB;
 
-    $thisperson = $member;
     $peermarks = [];
 
     // Can't calculate grade if student does not belong to any group.
@@ -810,7 +754,7 @@ function peerassessment_get_simple_grade($peerassessment, $group, stdClass $memb
         return null;
     }
 
-    // $multiply = get_config('peerassessment', 'multiplyby');
+    // $multiplier = get_config('peerassessment', 'multiplyby');die($multiplier);
     $multiplier = 5;
     $indavg = peerassessment_get_simpleindavg($peerassessment, $group, $member);
     $gravg = peerassessment_get_simplegravg($peerassessment, $group);
@@ -821,17 +765,10 @@ function peerassessment_get_simple_grade($peerassessment, $group, stdClass $memb
     }
 
     $gravg = peerassessment_get_simplegravg($peerassessment, $group);
-    // $multiply = get_config('peerassessment', 'multiplyby');
-    $members = groups_get_members($group->id);
-
-    foreach ($members as $member) {
-        $peermarks[$member->id] = new stdClass();
-        $peermarks[$member->id]->userid = $member->id;
-        $peermarks[$member->id]->indaverage = peerassessment_get_simpleindavg($peerassessment, $group, $member);
-        $peermarks[$member->id]->final_grade = $submission->grade + (($peermarks[$member->id]->indaverage - $gravg) * $multiplier);
-    }
-
-    $grade = $peermarks[$thisperson->id]->final_grade;
+    $peermarks[$member->id] = new stdClass();
+    $peermarks[$member->id]->userid = $member->id;
+    $peermarks[$member->id]->indaverage = peerassessment_get_simpleindavg($peerassessment, $group, $member);
+    $grade = $submission->grade + (($peermarks[$member->id]->indaverage - $gravg) * $multiplier);
 
     if ($grade > 100) {
         $grade = 100;
@@ -854,8 +791,6 @@ function peerassessment_get_simple_grade($peerassessment, $group, stdClass $memb
 function peerassessment_get_outlier_adjusted_grade($peerassessment, $group, stdClass $member) {
     global $CFG, $DB;
 
-    $thisperson = $member;
-
     $peermarks = array();
 
     // Can't calculate grade if student does not belong to any group.
@@ -863,9 +798,8 @@ function peerassessment_get_outlier_adjusted_grade($peerassessment, $group, stdC
         return null;
     }
 
-    // $multiply = get_config('peerassessment', 'multiplyby');
+    // $multiplier = get_config('peerassessment', 'multiplyby');
     $multiplier = 4;
-    $indavg = peerassessment_get_simpleindavg($peerassessment, $group, $member);
     $groupaverage = peerassessment_get_groupaverage($peerassessment, $group);
     $submission = $DB->get_record('peerassessment_submission', array('assignment' => $peerassessment->id, 'groupid' => $group->id));
 
@@ -873,38 +807,30 @@ function peerassessment_get_outlier_adjusted_grade($peerassessment, $group, stdC
         return '-';
     }
 
-    $members = groups_get_members($group->id);
-    foreach ($members as $member) {
-        $standarddev = peerassessment_get_indsd($peerassessment, $group, $member);
-        $indaverage = peerassessment_get_simpleindavg($peerassessment, $group, $member);
+    $standarddev = peerassessment_get_indsd($peerassessment, $group, $member);
+    $indaverage = peerassessment_get_simpleindavg($peerassessment, $group, $member);
 
-        $peermarks[$member->id] = new stdClass();
-        $peermarks[$member->id]->userid = $member->id;
-        $peermarks[$member->id]->standarddev = $standarddev;
+    $peermarks[$member->id] = new stdClass();
+    $peermarks[$member->id]->userid = $member->id;
+    $peermarks[$member->id]->standarddev = $standarddev;
 
-        if ($peermarks[$member->id]->standarddev <= get_config('peerassessment', 'standard_deviation')) {
-            $peermarks[$member->id]->indaverage = $indaverage;
-        } else {
-            $peermarks[$member->id]->indaverage = 0;
-        }
+    if ($peermarks[$member->id]->standarddev <= get_config('peerassessment', 'standard_deviation')) {
+        $peermarks[$member->id]->indaverage = $indaverage;
+    } else {
+        $peermarks[$member->id]->indaverage = 0;
     }
 
-    foreach ($members as $member) {
-
-        if ($peermarks[$member->id]->standarddev > get_config('peerassessment', 'standard_deviation')) {
-            $peermarks[$member->id]->indaverage = $groupaverage;
-        }
-
-        $peermarks[$member->id]->mm = round(($peermarks[$member->id]->indaverage - $groupaverage) * $multiplier, 2);
-
-        if (abs($peermarks[$member->id]->mm) < get_config('peerassessment', 'moderation')) {
-            $peermarks[$member->id]->mm = 0;
-        }
-
-        $peermarks[$member->id]->final_grade = $submission->grade + $peermarks[$member->id]->mm;
+    if ($peermarks[$member->id]->standarddev > get_config('peerassessment', 'standard_deviation')) {
+        $peermarks[$member->id]->indaverage = $groupaverage;
     }
 
-    $grade = $peermarks[$thisperson->id]->final_grade;
+    $peermarks[$member->id]->mm = round(($peermarks[$member->id]->indaverage - $groupaverage) * $multiplier, 2);
+
+    if (abs($peermarks[$member->id]->mm) < get_config('peerassessment', 'moderation')) {
+        $peermarks[$member->id]->mm = 0;
+    }
+
+    $grade = $submission->grade + $peermarks[$member->id]->mm;
 
     if ($grade > 100) {
         $grade = 100;
