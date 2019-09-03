@@ -72,7 +72,7 @@ class mod_peerassessment_observer {
     protected static function group_members_updated(\core\event\base $event, $removed = true) {
         global $CFG, $DB;
 
-        require($CFG->dirroot . '/mod/peerassessment/lib.php');
+        require_once($CFG->dirroot . '/mod/peerassessment/lib.php');
 
         $groupid = $event->objectid;
         $userid = $event->relateduserid;

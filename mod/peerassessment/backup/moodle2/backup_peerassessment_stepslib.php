@@ -33,8 +33,7 @@ class backup_peerassessment_activity_structure_step extends backup_activity_stru
         $peerassessment = new backup_nested_element('peerassessment', array('id'), array(
             'name', 'intro', 'introformat', 'timecreated',
             'timemodified', 'selfgrading', 'duedate', 'maxfiles',
-            'fromdate', 'notifylatesubmissions', 'allowlatesubmissions', 'treat0asgrade',
-            'calculationtype', 'standard_deviation', 'moderation', 'multiplyby',
+            'fromdate', 'notifylatesubmissions', 'allowlatesubmissions', 'treat0asgrade', 'moderation', 'calculationtype', 'standard_deviation',
             'submissiongroupingid'));
 
         $peers = new backup_nested_element('peers');
@@ -48,7 +47,7 @@ class backup_peerassessment_activity_structure_step extends backup_activity_stru
         $submission = new backup_nested_element('submission', array('id'), array(
             'userid',
             'timecreated', 'timemodified', 'status', 'groupid', 'attemptnumber',
-            'grade', 'feedbacktext', 'feedbackformat', 'timegraded',
+            'grade', 'groupaverage', 'feedbacktext', 'feedbackformat', 'timegraded',
             'gradedby'));
 
         // Build the tree.
