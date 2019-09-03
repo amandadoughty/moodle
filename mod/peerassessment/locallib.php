@@ -553,7 +553,7 @@ function peerassessment_get_groupaverage($peerassessment, $group) {
         return null;
     }
 
-    return $groupaverage;
+    return round($groupaverage, 2);
 }
 
 /**
