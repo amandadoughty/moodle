@@ -61,7 +61,13 @@ function block_culcourse_listing_get_preferences() {
  * @param array $favourites of course ids in sort order
  */
 function block_culcourse_listing_update_favourites_pref($favourites) {
-    set_user_preference('culcourse_listing_course_favourites', serialize($favourites));
+
+    try {
+        set_user_preference('culcourse_listing_course_favourites', $value);
+        return true;
+    } catch (exception $e) {
+        return false;
+    }    
 }
 
 /**
@@ -170,7 +176,11 @@ function block_culcourse_listing_edit_favourites($action, $cid, $userid = 0) {
             break;
     }
     // Update the user preference.
-    block_culcourse_listing_update_favourites_pref($favourites);
+    $success = block_culcourse_listing_update_favourites_pref($favourites);
+
+    if (!$success) {
+        return false;
+    }
 
     return $favourites;
 }

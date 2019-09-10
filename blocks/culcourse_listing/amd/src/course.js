@@ -64,10 +64,18 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 data: params,
                 context: self,
                 success: function(response) {
-                    editfavouritesuccess(response, params);
+                    if (response.error) {
+                        // throw response.error;
+                        Notification.alert(
+                            null,
+                            response.error
+                        );
+                    } else {
+                        editfavouritesuccess(response, params);
+                    }
                 },
                 error: function() {
-
+                    
                 },
                 complete: function() {
                     editrunning = false;
