@@ -202,7 +202,7 @@ class format_culcourse extends format_base {
         global $DB;
 
         $blocks = $DB->get_records('block', null, '', 'name');
-        $defaultblocks = get_config('format_culcourse', 'defaultblocks_cul');
+        $defaultblocks = get_config('format_culcourse', 'defaultblocks_culcourse');
         $defaultblocks = preg_replace('/\s+/', '', $defaultblocks);
         $defaultblocks = explode(',', $defaultblocks);
 

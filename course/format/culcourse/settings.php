@@ -60,7 +60,7 @@ $settings->add(new admin_setting_configselect($name, $title, $description, $defa
 $name = 'format_culcourse/defaultblocks_culcourse';
 $title = get_string('defaultblocks', 'format_culcourse');
 $description = get_string('defaultblocks_desc', 'format_culcourse');
-$default = 'settings,culactivity_stream,culupcoming_events,school_html,quickmail';
+$default = 'settings,culactivity_stream,culupcoming_events,culschool_html,quickmail';
 $settings->add(new admin_setting_configtextarea($name, $title, $description, $default));
 
 /* Quicklinks.
