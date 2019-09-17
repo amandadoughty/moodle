@@ -231,6 +231,14 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
             }
         }
 
+        $title = get_section_name($course, $section);
+
+        $o .= html_writer::link(
+            "#endofsection-{$section->section}",
+            get_string('skipsection', 'format_culcourse', $title),
+            ['class' => 'sr-only sr-only-focusable']
+        );
+
         $o.= html_writer::start_tag(
             'li', 
             [
@@ -390,6 +398,7 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
         }
 
         $o .= html_writer::end_tag('li');
+        $o .= html_writer::tag('span', '', ['id' => "#endofsection-{$thissection->section}"]);
 
         return $o;
     }
