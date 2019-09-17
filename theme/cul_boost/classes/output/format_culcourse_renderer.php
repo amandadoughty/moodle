@@ -398,7 +398,7 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
         }
 
         $o .= html_writer::end_tag('li');
-        $o .= html_writer::tag('span', '', ['id' => "#endofsection-{$thissection->section}"]);
+        $o .= html_writer::tag('span', '', ['id' => "endofsection-{$thissection->section}"]);
 
         return $o;
     }
