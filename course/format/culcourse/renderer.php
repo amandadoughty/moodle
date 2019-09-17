@@ -337,7 +337,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         }
 
         $o .= html_writer::end_tag('li');
-        $o .= html_writer::tag('span', '', ['id' => "#endofsection-{$thissection->section}"]);
+        $o .= html_writer::tag('span', '', ['id' => "endofsection-{$thissection->section}"]);
 
         return $o;
     }
@@ -513,6 +513,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         $o .= $this->section_activity_summary($section, $course, null);
         $o .= html_writer::end_tag('div');
         $o .= html_writer::end_tag('li');
+        $o .= html_writer::tag('span', '', ['id' => "endofsection-{$thissection->section}"]);
 
         return $o;
     }
