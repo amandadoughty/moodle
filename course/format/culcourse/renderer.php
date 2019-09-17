@@ -170,7 +170,15 @@ class format_culcourse_renderer extends format_section_renderer_base {
             }
         }
 
-        $o.= html_writer::start_tag(
+        $title = get_section_name($course, $section);
+
+        $o .= html_writer::link(
+            "#endofsection-{$section->section}",
+            get_string('skipsection', 'format_culcourse', $title),
+            ['class' => 'sr-only sr-only-focusable']
+        );
+
+        $o .= html_writer::start_tag(
             'li', 
             [
                 'id' => 'section-'.$section->section,
@@ -188,19 +196,19 @@ class format_culcourse_renderer extends format_section_renderer_base {
         );
 
         $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
-        $o.= html_writer::tag(
+        $o .= html_writer::tag(
             'div', 
             $leftcontent, 
             ['class' => 'left side']
         );
 
         $rightcontent = $this->section_right_content($section, $course, $onsectionpage);
-        $o.= html_writer::tag(
+        $o .= html_writer::tag(
             'div', 
             $rightcontent, 
             ['class' => 'right side']
         );
-        $o.= html_writer::start_tag('div', ['class' => 'content']);
+        $o .= html_writer::start_tag('div', ['class' => 'content']);
 
         // When not on a section page, we display the section titles except the general section if null.
         $hasnamenotsecpg = (!$onsectionpage && ($section->section != 0 || !is_null($section->name)));
@@ -284,7 +292,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
      *
      * @param stdClass $course The course entry from DB
      * @param int $section The section order number
-     * @param stdClass $section The course_section entry from DB
+     * @param stdClass $thissection The course_section entry from DB
      * @param stdClass $context 
      * @param bool $onsectionpage true if being printed on a section page
 
@@ -329,6 +337,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         }
 
         $o .= html_writer::end_tag('li');
+        $o .= html_writer::tag('span', '', ['id' => "#endofsection-{$thissection->section}"]);
 
         return $o;
     }
@@ -463,8 +472,15 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $classattr .= ' current';
         }
 
-        $title = get_section_name($course, $section);
         $o = '';
+        $title = get_section_name($course, $section);
+
+        $o .= html_writer::link(
+            "#endofsection-{$section->section}",
+            get_string('skipsection', 'format_culcourse', $title),
+            ['class' => 'sr-only sr-only-focusable']
+        );
+
         $o .= html_writer::start_tag(
             'li', 
             [
@@ -491,10 +507,10 @@ class format_culcourse_renderer extends format_section_renderer_base {
         }
 
         $o .= $this->output->heading($title, 3, 'section-title');
-        $o.= html_writer::start_tag('div', ['class' => 'summarytext']);
-        $o.= $this->format_summary_text($section);
-        $o.= html_writer::end_tag('div');
-        $o.= $this->section_activity_summary($section, $course, null);
+        $o .= html_writer::start_tag('div', ['class' => 'summarytext']);
+        $o .= $this->format_summary_text($section);
+        $o .= html_writer::end_tag('div');
+        $o .= $this->section_activity_summary($section, $course, null);
         $o .= html_writer::end_tag('div');
         $o .= html_writer::end_tag('li');
 
@@ -568,15 +584,15 @@ class format_culcourse_renderer extends format_section_renderer_base {
 
         // Output section activities summary:
         $o = '';
-        $o.= html_writer::start_tag('div', ['class' => 'section-summary-activities']);
+        $o .= html_writer::start_tag('div', ['class' => 'section-summary-activities']);
 
         foreach ($sectionmods as $mod) {
-            $o.= html_writer::start_tag('span', ['class' => 'activity-count']);
-            $o.= $mod['name'].': '.$mod['count'];
-            $o.= html_writer::end_tag('span');
+            $o .= html_writer::start_tag('span', ['class' => 'activity-count']);
+            $o .= $mod['name'].': '.$mod['count'];
+            $o .= html_writer::end_tag('span');
         }
 
-        $o.= html_writer::end_tag('div');
+        $o .= html_writer::end_tag('div');
 
         // Output section completion data.
         if ($total > 0) {
@@ -584,9 +600,9 @@ class format_culcourse_renderer extends format_section_renderer_base {
             $a->complete = $complete;
             $a->total = $total;
 
-            $o.= html_writer::start_tag('div', ['class' => 'section-summary-progress']);
-            $o.= html_writer::tag('span', get_string('progresstotal', 'completion', $a), ['class' => 'activity-count']);
-            $o.= html_writer::end_tag('div');
+            $o .= html_writer::start_tag('div', ['class' => 'section-summary-progress']);
+            $o .= html_writer::tag('span', get_string('progresstotal', 'completion', $a), ['class' => 'activity-count']);
+            $o .= html_writer::end_tag('div');
         }
 
         return $o;

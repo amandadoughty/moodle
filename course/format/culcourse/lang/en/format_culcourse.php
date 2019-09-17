@@ -272,6 +272,7 @@ $string['newsectionname'] = 'New name for section {$a}';
 $string['sectionname'] = 'Section';
 $string['section0name'] = 'General';
 $string['showfromothers'] = 'Show section';
+$string['skipsection'] = 'Skip section titled {$a}';
 
 /***** PRIVACY API *****/
 $string['privacy:metadata:preference:format_culcourse_expanded'] = 'The collapsed state of each section in a course.';
