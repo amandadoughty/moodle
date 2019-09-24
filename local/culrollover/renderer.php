@@ -46,20 +46,21 @@ class local_culrollover_renderer extends plugin_renderer_base {
         }
 
         // Get record set.
-        $requests = $DB->get_recordset_sql("SELECT 
-                                                r.*, 
-                                                c1.shortname as srcshortname, 
-                                                c1.fullname as srcfullname, 
-                                                c1.shortname as dstshortname, 
-                                                c1.fullname as dstfullname,
-                                                u.firstname,
-                                                u.lastname,
-                                                u.alternatename
-                                            FROM {cul_rollover} r 
-                                            JOIN {course} c1 ON c1.id = r.sourceid
-                                            JOIN {course} c2 ON c2.id = r.destid
-                                            JOIN {user} u ON u.id = r.userid
-                                            WHERE $where");
+        $requests = $DB->get_recordset_sql("
+            SELECT 
+                r.*, 
+                c1.shortname as srcshortname, 
+                c1.fullname as srcfullname, 
+                c2.shortname as dstshortname, 
+                c2.fullname as dstfullname,
+                u.firstname,
+                u.lastname,
+                u.alternatename
+            FROM {cul_rollover} r 
+            LEFT OUTER JOIN {course} c1 ON c1.id = r.sourceid
+            LEFT OUTER JOIN {course} c2 ON c2.id = r.destid
+            LEFT OUTER JOIN {user} u ON u.id = r.userid
+            WHERE $where");
 
         if (!empty($requests)) {
             $table .= html_writer::start_tag('table', array('id' => 'previous', 'class' => 'dataTable'));

@@ -76,9 +76,9 @@ if($delentry) {
                 $cfullname = fullname($cuser);
                 $date = date('d/M/Y', $record->datesubmitted);
                 $sourcecourse = $DB->get_record('course', array('id' => $record->sourceid));
-                $sourcecoursename = $sourcecourse->shortname;
+                $sourcecoursename = $sourcecourse? $sourcecourse->shortname : get_string('deleted');
                 $destcourse = $DB->get_record('course', array('id' => $record->destid));
-                $destcoursename = $destcourse->shortname;
+                $destcoursename = $destcourse? $destcourse->shortname : get_string('deleted');
                 $dfullname = fullname($USER);
                 $logstr = "Deleted rollover (id= $delentry) for $cfullname (submitted: $date $sourcecoursename -> $destcoursename). Record deleted by $dfullname.";
 
@@ -123,9 +123,9 @@ if($repentry) {
                 $cfullname = fullname($cuser);
                 $date = date('d/M/Y', $record->datesubmitted);
                 $sourcecourse = $DB->get_record('course', array('id' => $record->sourceid));
-                $sourcecoursename = $sourcecourse->shortname;
+                $sourcecoursename = $sourcecourse? $sourcecourse->shortname : get_string('deleted');
                 $destcourse = $DB->get_record('course', array('id' => $record->destid));
-                $destcoursename = $destcourse->shortname;
+                $destcoursename = $destcourse? $destcourse->shortname : get_string('deleted');
                 $dfullname = fullname($USER);
                 $logstr = "Repeated rollover (id= $repentry) for $cfullname (submitted: $date $sourcecoursename -> $destcoursename). Rollover repeated by $dfullname.";
                 $repeated .= html_writer::tag('p', $logstr);
