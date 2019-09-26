@@ -54,18 +54,21 @@ user_preference_allow_ajax_update('format_culcourse_toggledash' . $course->id, P
 // Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');
 $PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['courseid' => $course->id]);
-$PAGE->requires->string_for_js('moveactivitylink', 'format_culcourse');
-$PAGE->requires->string_for_js('movequicklink', 'format_culcourse');
-$PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_quicklinkdd',
-            [[
-                'courseid' => $course->id,
-                'ajaxurl' => $ajaxurl,
-                'config' => 0,
-            ]], null, true);
 
-$PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_activitylinkdd',
-            [[
-                'courseid' => $course->id,
-                'ajaxurl' => $ajaxurl,
-                'config' => 0,
-            ]], null, true);
+if ($PAGE->user_is_editing()) {
+    $PAGE->requires->string_for_js('moveactivitylink', 'format_culcourse');
+    $PAGE->requires->string_for_js('movequicklink', 'format_culcourse');
+    $PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_quicklinkdd',
+                [[
+                    'courseid' => $course->id,
+                    'ajaxurl' => $ajaxurl,
+                    'config' => 0,
+                ]], null, true);
+
+    $PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_activitylinkdd',
+                [[
+                    'courseid' => $course->id,
+                    'ajaxurl' => $ajaxurl,
+                    'config' => 0,
+                ]], null, true);
+}

@@ -435,9 +435,6 @@ M.format_culcourse.init_activitylinkdd = function(params) {
     new ACTIVITYLINK(params);
 };
 
-
-
-
 }, '@VERSION@', {
     "requires": [
         "base",
