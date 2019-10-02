@@ -233,12 +233,6 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
 
         $title = get_section_name($course, $section);
 
-        $o .= html_writer::link(
-            "#endofsection-{$section->section}",
-            get_string('skipsection', 'format_culcourse', $title),
-            ['class' => 'sr-only sr-only-focusable']
-        );
-
         $o.= html_writer::start_tag(
             'li', 
             [
@@ -247,6 +241,12 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
                 'role'=>'region',
                 'aria-label'=> get_section_name($course, $section)
             ]
+        );
+
+        $o .= html_writer::link(
+            "#endofsection-{$section->section}",
+            get_string('skipsection', 'format_culcourse', $title),
+            ['class' => 'sr-only sr-only-focusable']
         );
 
         // Create a span that contains the section title to be used to create the keyboard section move menu.
@@ -397,8 +397,8 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
             $o .= $this->insert_section($course, $section + 1);
         }
 
-        $o .= html_writer::end_tag('li');
         $o .= html_writer::tag('span', '', ['id' => "endofsection-{$thissection->section}"]);
+        $o .= html_writer::end_tag('li');
 
         return $o;
     }
