@@ -13,4 +13,4 @@ var CSS = {
         QUICKLINK: 'quicklink',
         QUICKLINKCONTAINER: 'quicklinks',
         QUICKLINKDRAGGABLE: 'quicklinkdraggable'
-    };    
+    };

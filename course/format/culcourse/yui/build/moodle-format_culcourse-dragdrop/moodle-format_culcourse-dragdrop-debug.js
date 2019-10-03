@@ -15,7 +15,7 @@ var CSS = {
         QUICKLINK: 'quicklink',
         QUICKLINKCONTAINER: 'quicklinks',
         QUICKLINKDRAGGABLE: 'quicklinkdraggable'
-    };    /**
+    };/**
  * Quick link drag and drop.
  *
  * @class M.format_culcourse_dragdrop
@@ -31,12 +31,11 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
     goingLeft: null,
 
     initializer: function() {
-        
         // Set group for parent class.
         this.groups = [CSS.QUICKLINKDRAGGABLE];
         // Initialise quicklinks dragging.
         this.quicklinklistselector = '.' + CSS.QUICKLINK;
-        
+
         if(Y.Node.all(this.quicklinklistselector).size()) {
             this.setup_for_quicklink(this.quicklinklistselector);
             this.samenodeclass = CSS.QUICKLINK;
@@ -73,9 +72,9 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         Y.Node.all(baseselector).each(function(quicklinknode) {
             // Replace move icons.
             var move = quicklinknode.one('a' + '.' + CSS.MOVE);
-            var str = move.get('text');
 
             if (move) {
+                var str = move.get('text');
                 move.replace(this.get_drag_handle(str,
                              CSS.MOVE, CSS.ICONCLASS, true));
             }
@@ -241,12 +240,12 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
 
     goingLeft: null,
 
-    initializer: function() {        
+    initializer: function() {
         // Set group for parent class.
         this.groups = [CSS.ACTIVITYLINKDRAGGABLE];
         // Initialise activitylinks dragging
         this.activitylinklistselector = '.' + CSS.ACTIVITYLINK;
-        
+
         if(Y.Node.all(this.activitylinklistselector).size()) {
             this.setup_for_activitylink(this.activitylinklistselector);
             this.samenodeclass = CSS.ACTIVITYLINK;
@@ -283,9 +282,9 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         Y.Node.all(baseselector).each(function(activitylinknode) {
             // Replace move icons.
             var move = activitylinknode.one('a' + '.' + CSS.MOVE);
-            var str = move.get('text');
 
             if (move) {
+                var str = move.get('text');
                 move.replace(this.get_drag_handle(str,
                              CSS.MOVE, CSS.ICONCLASS, true));
             }

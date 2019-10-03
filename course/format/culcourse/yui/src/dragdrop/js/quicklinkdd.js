@@ -14,12 +14,11 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
     goingLeft: null,
 
     initializer: function() {
-        
         // Set group for parent class.
         this.groups = [CSS.QUICKLINKDRAGGABLE];
         // Initialise quicklinks dragging.
         this.quicklinklistselector = '.' + CSS.QUICKLINK;
-        
+
         if(Y.Node.all(this.quicklinklistselector).size()) {
             this.setup_for_quicklink(this.quicklinklistselector);
             this.samenodeclass = CSS.QUICKLINK;
@@ -56,9 +55,9 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         Y.Node.all(baseselector).each(function(quicklinknode) {
             // Replace move icons.
             var move = quicklinknode.one('a' + '.' + CSS.MOVE);
-            var str = move.get('text');
 
             if (move) {
+                var str = move.get('text');
                 move.replace(this.get_drag_handle(str,
                              CSS.MOVE, CSS.ICONCLASS, true));
             }
