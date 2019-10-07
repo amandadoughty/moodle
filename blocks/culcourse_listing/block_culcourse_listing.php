@@ -78,7 +78,7 @@ class block_culcourse_listing extends block_base {
         // Anyone who has a category role assignment will still see the categories even if they
         // are empty.
         $filteredcourseids = block_culcourse_listing_get_filtered_course_ids($enrolledcourses, $config, $preferences, $chelper->get_daterange_periods());
-        $favourites = block_culcourse_listing_get_favourite_courses($preferences);
+        $favourites = block_culcourse_listing_get_favourite_api_courses($preferences);
         // Get categories with enrolled courses.
         list($mycategories, $filteredcategoryids) = block_culcourse_listing_get_categories($enrolledcourses, $filteredcourseids);
         $attributes = block_culcourse_listing_get_filter_state($config, $preferences);

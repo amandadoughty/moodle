@@ -90,7 +90,7 @@ class coursebox implements renderable, templatable {
 
         $config = get_config('block_culcourse_listing');
         $preferences = block_culcourse_listing_get_preferences();
-        $favourites = block_culcourse_listing_get_favourite_courses($preferences);
+        $favourites = block_culcourse_listing_get_favourite_api_courses($preferences);
         $chelper = new \block_culcourse_listing_helper();        
 
         if ($config->filtertype == 'date') {

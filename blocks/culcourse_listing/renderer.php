@@ -596,7 +596,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
 
         $content = '';
         $filterform = '';
-        $favourites = block_culcourse_listing_get_favourite_courses($this->preferences);
+        $favourites = block_culcourse_listing_get_favourite_api_courses($this->preferences);
 
         if ($type === core_course_renderer::COURSECAT_TYPE_CATEGORY) {
             // This is a request for a category list of some kind.
