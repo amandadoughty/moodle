@@ -54,15 +54,21 @@ class coursebox implements renderable, templatable {
     protected $isfirst;
 
     /**
+     * @var array 
+     */
+    protected $favourites;
+
+    /**
      * Constructor.
      *
      * @param id/core_course_list_element $course
      * @param string $additionalclasses additional classes to add to the main <div> tag (usually
      *    depend on the course position in list - first/last/even/odd)
      * @param string $move html for the move icons (only used for favourites) 
-     * @param bool $isfav true if course has been fvourited/starred
+     * @param bool $isfav true if we are rendering a course in the favourites area.
+     * @param array $favourites all favourites
      */
-    public function __construct($course, $isfav = false, $isfirst = false) {
+    public function __construct($course, $isfav = false, $isfirst = false, $favourites = []) {
         // $this->chelper = $chelper;
         // $config = $config;
         // $preferences = $preferences;
@@ -75,6 +81,7 @@ class coursebox implements renderable, templatable {
         $this->course = $course;
         $this->isfav = $isfav;
         $this->isfirst = $isfirst;
+        $this->favourites = $favourites;
     }
 
     /**
@@ -90,7 +97,7 @@ class coursebox implements renderable, templatable {
 
         $config = get_config('block_culcourse_listing');
         $preferences = block_culcourse_listing_get_preferences();
-        $favourites = block_culcourse_listing_get_favourite_api_courses($preferences);
+        // $favourites = block_culcourse_listing_get_favourite_courses($preferences);
         $chelper = new \block_culcourse_listing_helper();        
 
         if ($config->filtertype == 'date') {
@@ -110,7 +117,7 @@ class coursebox implements renderable, templatable {
         $data->firstclass = $this->isfirst? ' first' : '';
         $move = [];
 
-        if ($favourites && array_key_exists($this->course->id, $favourites)) {
+        if ($this->favourites && array_key_exists($this->course->id, $this->favourites)) {
             $data->action = 'remove';
             $data->favclass = 'gold fa fa-star';
             $data->favtitle = get_string('favouriteremove', 'block_culcourse_listing');
@@ -122,8 +129,8 @@ class coursebox implements renderable, templatable {
                 $move['moveup'] = true;
                 $move['movedown'] = true;
 
-                $first = current($favourites); // array_key_first php 7.3.
-                $last = end($favourites); // array_key_last php 7.3.
+                $first = current($this->favourites); // array_key_first php 7.3.
+                $last = end($this->favourites); // array_key_last php 7.3.
 
                 if ($first->id == $this->course->id) {
                     $move['moveup'] = false;

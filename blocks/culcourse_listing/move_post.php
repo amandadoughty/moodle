@@ -34,7 +34,7 @@ $move = required_param('move', PARAM_INT);
 $preferences = block_culcourse_listing_get_preferences();
 // Calling this function ensures we only get exisitng courses visible to user
 // as courses may have been deleted or hidden since being added to favourites.
-$favourites = block_culcourse_listing_get_favourite_api_courses($preferences);
+$favourites = block_culcourse_listing_get_favourite_courses($preferences);
 $sortorder = array_keys($favourites);
 // Now resort based on new weight for chosen course.
 $neworder = array();
@@ -86,4 +86,6 @@ if ($move == -1) {
 }
 // Update the user preference.
 block_culcourse_listing_update_favourites_pref($neworder);
+// Update the Favourites API.
+block_culcourse_listing_update_favourites_api($neworder);
 redirect(new moodle_url('/my/index.php'));

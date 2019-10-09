@@ -34,8 +34,10 @@ $PAGE->set_context(context_system::instance());
 
 $config = get_config('block_culcourse_listing');
 $preferences = block_culcourse_listing_get_preferences();
-$favourites = block_culcourse_listing_get_favourite_api_courses($preferences);
+$favourites = block_culcourse_listing_get_favourite_courses($preferences);
 // Update the user preference.
+block_culcourse_listing_reorder_favourites($preferences, $favourites);
+// Update the Favourites API.
 $favourites = block_culcourse_listing_reorder_favourites_api($favourites);
 // Render the favourites.
 $renderer = $PAGE->get_renderer('block_culcourse_listing');

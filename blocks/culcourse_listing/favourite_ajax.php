@@ -39,12 +39,13 @@ $success = block_culcourse_listing_edit_favourites($action, $cid);
 
 if ($success !== false) { // Could be an empty array.
 	block_culcourse_listing_edit_favourites_api($action, $cid);
-
+	$preferences = block_culcourse_listing_get_preferences();
+	$favourites = block_culcourse_listing_get_favourite_courses($preferences);
 	$chelper = new block_culcourse_listing_helper();
 	$course = $DB->get_record('course', array('id' => $cid), '*', MUST_EXIST);
 	$course = new core_course_list_element($course);
 	$renderer = $PAGE->get_renderer('block_culcourse_listing');
-	$coursebox = new block_culcourse_listing\output\coursebox($course, false);
+	$coursebox = new block_culcourse_listing\output\coursebox($course, false, false, $favourites);
 	$data = $coursebox->export_for_template($renderer);
 } else {
 	$data = ['error' => get_string('favouritefailed', 'block_culcourse_listing')];

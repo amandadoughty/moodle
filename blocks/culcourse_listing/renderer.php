@@ -426,7 +426,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                     $first = true;
                 }
 
-                $content .= $this->coursecat_course($course, false, $first);
+                $content .= $this->coursecat_course($chelper, $course, false, $first);
             }
         }
 
@@ -450,7 +450,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * @param bool $isfav 
      * @return string
      */
-    protected function coursecat_course($course, $isfav = false, $isfirst = false) {
+    protected function coursecat_course(block_culcourse_listing_helper $chelper, $course, $isfav = false, $isfirst = false) {
         global $CFG;
 
         // Check if course exists.
@@ -462,7 +462,8 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             return '';
         }
 
-        $coursebox = new \block_culcourse_listing\output\coursebox($course, $isfav, $isfirst);
+        $favourites = $chelper->get_favourites();
+        $coursebox = new \block_culcourse_listing\output\coursebox($course, $isfav, $isfirst, $favourites);
         $content = $this->render_from_template('block_culcourse_listing/coursebox', $coursebox->export_for_template($this));
 
         return $content;
@@ -569,7 +570,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         // Add courses with drag and drop hml prepended.
         if ($courses) {
             foreach ($courses as $course) {
-                $content .= $this->coursecat_course($course, true);
+                $content .= $this->coursecat_course($chelper, $course, true);
             }
         }
 
@@ -596,7 +597,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
 
         $content = '';
         $filterform = '';
-        $favourites = block_culcourse_listing_get_favourite_api_courses($this->preferences);
+        $favourites = block_culcourse_listing_get_favourite_courses($this->preferences);
 
         if ($type === core_course_renderer::COURSECAT_TYPE_CATEGORY) {
             // This is a request for a category list of some kind.
