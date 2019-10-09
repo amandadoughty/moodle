@@ -160,28 +160,33 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             .fail(Notification.exception);
     };
 
-    var updateFavouriteViaApi = function() {
+    var updateFavouriteViaApi = function(courseid, action) {
         // Find out what changed via the api.
-        // $.ajax({
-        //     url: APIURL,
-        //     method: 'POST',
-        //     data: {sesskey: M.cfg.sesskey},
-        //     context: self,
-        //     success: function(response) {
-        //         if (response.data) {
-        //             editfavouritesuccess(response.data, response);
-        //             return true;
-        //         } else {
-        //             return false;
-        //         }
-        //     },
-        //     error: function(response) {
-        //         Notification.addNotification({
-        //             message: response.error,
-        //             type: 'error'
-        //         });
-        //     }
-        // }).fail(Notification.exception);
+        console.log(courseid);
+        $.ajax({
+            url: APIURL,
+            method: 'POST',
+            data: {
+                sesskey: M.cfg.sesskey,
+                cid: courseid,
+                action: action
+            },
+            context: self,
+            success: function(response) {
+                if (response.data) {
+                    editfavouritesuccess(response.data, response);
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            error: function(response) {
+                Notification.addNotification({
+                    message: response.error,
+                    type: 'error'
+                });
+            }
+        }).fail(Notification.exception);
     };
 
     return {
@@ -195,8 +200,8 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
             /* Not useful until course id is passed. Could maybe reload favourites
             and try and edit the course if it has been rendered */
-            PubSub.subscribe(CourseEvents.favourited, function() {updateFavouriteViaApi();});
-            PubSub.subscribe(CourseEvents.unfavorited, function() {updateFavouriteViaApi();});
+            PubSub.subscribe(CourseEvents.favourited, function(courseid) {updateFavouriteViaApi(courseid, 'add');});
+            PubSub.subscribe(CourseEvents.unfavorited, function(courseid) {updateFavouriteViaApi(courseid, 'delete');});
         }
     };
 });

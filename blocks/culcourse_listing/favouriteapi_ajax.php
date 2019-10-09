@@ -32,8 +32,11 @@ require_sesskey();
 require_login();
 $PAGE->set_context(context_system::instance());
 
+$action = required_param('action', PARAM_RAW);
+$cid = optional_param('cid', 0, PARAM_INT);
+
 // Update the favourites.
-$result = block_culcourse_listing_update_from_favourites_api();
+$result = block_culcourse_listing_update_from_favourites_api($action, $cid);
 $result['data'] = false;
 
 if ($result['cid']) {

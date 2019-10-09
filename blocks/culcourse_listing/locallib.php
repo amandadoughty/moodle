@@ -70,7 +70,7 @@ function block_culcourse_listing_update_favourites_pref($favourites) {
     } 
 
     try {
-        set_user_preference('culcourse_listing_course_favourites', $value);
+        set_user_preference('culcourse_listing_course_favourites', $favourites);
         return true;
     } catch (exception $e) {
         return false;
@@ -300,10 +300,9 @@ function block_culcourse_listing_edit_favourites_api($action, $cid, $userid = 0)
  *
  * @param string $action add or delete
  * @param int $cid course id
- * @param int $userid user id
  * @return array $favourites a sorted array of course id's
  */
-function block_culcourse_listing_update_from_favourites_api() {
+function block_culcourse_listing_update_from_favourites_api($action, $cid) {
     global $USER;
 
     $existing = [];
@@ -325,30 +324,27 @@ function block_culcourse_listing_update_from_favourites_api() {
 
     $favourites = [];
 
-    if (!is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+    if ($cid && !is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
         $favourites = (array)unserialize($myfavourites);
-    }
 
-    foreach ($apifavourites as $apifavourite) {
-        if (!in_array($apifavourite->itemid, $favourites)) {
-            $add[] = $apifavourite->itemid;
+        if ($action == 'add') {
+            $favourites[] = $cid;
         } else {
-            $existing[] = $apifavourite->itemid;
+            if (($key = array_search($cid, $favourites)) !== false) {                
+                unset($favourites[$key]);
+            }
         }
+
+        // Update the user preference.
+        block_culcourse_listing_update_favourites_pref($favourites);
     }
-
-    $remove = array_diff($favourites, $existing);
-    // Remove favourites that are not in api.
-    $favourites = array_intersect($favourites, $existing);
-    // Add new favourites from api.
-    $favourites = array_merge($favourites, $add);
-    // Update the user preference (if it exists).
-    block_culcourse_listing_update_favourites_pref($favourites);
-
-    if (!empty($remove)) {
-        return ['action' => 'remove', 'cid' => array_shift($remove)]; // Return all in case there has been an error?
-    } else if (!empty($add)) {
-        return ['action' => 'add', 'cid' => array_shift($add)]; //@TODO return node
+  
+    if ($cid) {
+        if ($action == 'delete') {
+            return ['action' => 'remove', 'cid' => $cid];
+        } else if ($action == 'add') {
+            return ['action' => 'add', 'cid' => $cid]; //@TODO return node
+        }
     } else {
         return ['action' => 'error', 'cid' => null];
     }
