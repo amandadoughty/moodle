@@ -127,7 +127,7 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
             $logo->website = "cass.city.ac.uk";
             $logo->studenthub = "http://www.cass.city.ac.uk/intranet/student";
             $logo->staffhub = "http://www.cass.city.ac.uk/intranet/staff";
-            $logo->library = "http://www.cass.city.ac.uk/intranet/staff/services/learning-resource-centre";
+            // $logo->library = "http://www.cass.city.ac.uk/intranet/staff/services/learning-resource-centre";
         }
         // School of Arts and Social Sciences
         if ((trim($userschool) == 'AASOAR') OR (trim($userschool) == 'ASSASS') OR (trim($userschool) == 'SSSOSS') OR (trim($userschool) == 'ASSOCL')) {
