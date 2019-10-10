@@ -17,7 +17,7 @@
 /**
  * Helper functions for culcourse_listing block
  *
- * @package    block_culcourse_listing
+ * @package    block_culcourse501_listing
  * @copyright  2014 onwards Amanda Doughty (amanda.doughty.1@city.ac.uk)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -70,7 +70,7 @@ function block_culcourse_listing_update_favourites_pref($favourites) {
     } 
 
     try {
-        set_user_preference('culcourse_listing_course_favourites', $favourites);
+        set_user_preference('culcourse_listing_course_favourites', serialize($favourites));
         return true;
     } catch (exception $e) {
         return false;
@@ -442,68 +442,26 @@ function block_culcourse_listing_reorder_favourites_api($favourites) {
         unset($favourites[$site->id]);
     }
 
-    // $favourites = $DB->get_records_list('course', 'id', array_keys($favourites));
-
-    // foreach ($favourites as $favourite) {
-    //     // Get array of core_course_list_element objects in usersortorder.
-    //     $favourites[$favourite->id] = new core_course_list_element($favourite);
-    // }
-
     // Sort in aphabetical order.
     uasort($favourites, 'block_culcourse_listing_strcasecmp');
     // Update the favourites.
     $i = 1;
 
     foreach ($favourites as $courseid => $course) {
-        $coursecontext = \context_course::instance($courseid);    
+        $coursecontext = \context_course::instance($courseid);
 
-        $favourite = $favouritesrepo->find_favourite($USER->id, 'core_course', 'courses', $courseid,
-            $coursecontext->id);
+        try {
+            $favourite = $favouritesrepo->find_favourite($USER->id, 'core_course', 'courses', $courseid,
+                $coursecontext->id);
 
-        $favourite->ordering = $i;
-        $favouritesrepo->update($favourite);
-
-        $i++;
-    }
-
-    return $favourites;
-}
-
-/**
- * Updates the sort order of the favourites.
- *
- * @param array $favourites of course ids
- * @return array $favourites of favourite objects
- */
-function block_culcourse_listing_update_favourites_api($favourites) {
-    global $CFG, $DB, $USER;
-
-    $usercontext = \context_user::instance($USER->id);
-    $favouritesrepo = new \core_favourites\local\repository\favourite_repository($usercontext);
-
-    if (!$favourites) {
-        return false;
-    }
-
-    $site = get_site();
-
-    if (in_array($site->id, $favourites)) {
-        unset($favourites[$site->id]);
-    }
-
-    // Update the favourites.
-    $i = 1;
-
-    foreach ($favourites as $courseid) {
-        $coursecontext = \context_course::instance($courseid);    
-
-        $favourite = $favouritesrepo->find_favourite($USER->id, 'core_course', 'courses', $courseid,
-            $coursecontext->id);
-
-        $favourite->ordering = $i;
-        $favouritesrepo->update($favourite);
-
-        $i++;
+            $favourite->ordering = $i;
+            $favouritesrepo->update($favourite);
+            $i++;
+        } catch (Exception $e) {
+            debugging("The course with id $courseid is not in the 
+                Favourite API",
+              DEBUG_DEVELOPER);
+        }   
     }
 
     return $favourites;

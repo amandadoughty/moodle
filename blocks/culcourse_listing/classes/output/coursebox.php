@@ -62,9 +62,7 @@ class coursebox implements renderable, templatable {
      * Constructor.
      *
      * @param id/core_course_list_element $course
-     * @param string $additionalclasses additional classes to add to the main <div> tag (usually
-     *    depend on the course position in list - first/last/even/odd)
-     * @param string $move html for the move icons (only used for favourites) 
+     * @param bool $isfirst 
      * @param bool $isfav true if we are rendering a course in the favourites area.
      * @param array $favourites all favourites
      */

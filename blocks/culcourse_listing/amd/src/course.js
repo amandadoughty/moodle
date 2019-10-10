@@ -32,7 +32,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             COURSEBOXLISTCOURSEBOX: '.course_category_tree .culcoursebox',
             FAVOURITELIST: '.favourite_list',
             FAVOURITECOURSEBOX: '.favourite_list .culcoursebox',
-            FAVOURITELINK: '.favouritelink',
+            FAVOURITELINK: '.favouritelink i',
             FAVOURITEICON: '.favouritelink i',
             FAVOURITECLEARBUTTON: '.block_culcourse_listing #clearfavourites',
             FAVOURITEREORDERBUTTON: '.block_culcourse_listing #reorderfavourites',
@@ -40,16 +40,16 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         };
     var URL = M.cfg.wwwroot + '/blocks/culcourse_listing/favourite_ajax.php';
     var APIURL = M.cfg.wwwroot + '/blocks/culcourse_listing/favouriteapi_ajax.php';
-    var editrunning = false;
+    window.editrunning = false;
 
     var editfavourite = function (e) {
         e.preventDefault();
 
-        if (editrunning) {
+        if (window.editrunning) {
             return;
         }
 
-        editrunning = true;
+        window.editrunning = true;
         var link = e.target.get('parentNode');
         var href = link.get('href').split('?');
         var querystring = href[1];
@@ -78,7 +78,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                     
                 },
                 complete: function() {
-                    editrunning = false;
+                    window.editrunning = false;
                     Y.fire('culcourse-listing:update-favourites');
 
                     var roots = $('.block_myoverview .block-myoverview');

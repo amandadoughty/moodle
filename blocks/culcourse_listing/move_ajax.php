@@ -33,4 +33,4 @@ $sortorder = required_param_array('sortorder', PARAM_INT);
 // Update the user preference.
 block_culcourse_listing_update_favourites_pref($sortorder);
 // Update the Favourites API.
-block_culcourse_listing_update_favourites_api($sortorder);
+block_culcourse_listing_reorder_favourites_api($sortorder);
