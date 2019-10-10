@@ -303,26 +303,6 @@ function block_culcourse_listing_edit_favourites_api($action, $cid, $userid = 0)
  * @return array $favourites a sorted array of course id's
  */
 function block_culcourse_listing_update_from_favourites_api($action, $cid) {
-    global $USER;
-
-    $existing = [];
-    $add = [];
-    $remove = [];
-    $usercontext = \context_user::instance($USER->id);
-
-    // Get the user favourites service, scoped to a single user (their favourites only).
-    $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
-
-    // Get the favourites, by type, for the user.
-    $apifavourites = $userservice->find_favourites_by_type('core_course', 'courses');
-
-    // Sort the favourites getting first added first.
-    usort($apifavourites, function($a, $b) {
-        if ($a->timemodified == $b->timemodified) return 0;
-        return ($a->timemodified < $b->timemodified) ? -1 : 1;
-    });
-
-    $favourites = [];
 
     if ($cid && !is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
         $favourites = (array)unserialize($myfavourites);
