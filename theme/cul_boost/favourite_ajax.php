@@ -36,15 +36,12 @@ $action = required_param('action', PARAM_RAW);
 $cid = required_param('cid', PARAM_INT);
 // Edit the favourites
 $favourites = theme_cul_boost_edit_favourites($action, $cid);
-// Update the user preference
+// Update the user preference if it exists.
 theme_cul_boost_update_favourites($favourites);
 theme_cul_boost_edit_favourites_api($action, $cid);
-// Retrieve the favourites from preferences again in case the update did not work, we want  
+// Retrieve the favourites again in case the update did not work, we want  
 // to ensure the link reflects the current status of favourites.
-$favourites = array();
-if (!is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
-    $favourites = unserialize($myfavourites);
-}
+$favourites = theme_cul_boost_utility::get_user_favourites();
 
 if (in_array($cid, $favourites)) {
 	$newaction = 'remove';

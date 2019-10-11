@@ -790,20 +790,65 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
  */
 class theme_cul_boost_utility {
     /**
+     * theme_cul_boost_utility::get_user_favourites()
+     *
+     * @return array of courseids indexed by order
+     */
+    public static function get_user_favourites() {
+        global $DB, $USER;
+
+        // If the users favourites have not been transferred to the Favourite API then use the user preference.
+        $userfavourites = get_user_preferences('culcourse_listing_course_favourites');
+        if (!is_null($userfavourites)) {
+            $userfavourites = unserialize($userfavourites);
+        } else {
+            $usercontext = context_user::instance($USER->id);
+
+            // Get the user favourites service, scoped to a single user (their favourites only).
+            $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+
+            // Get the favourites, by type, for the user.
+            $favourites = $userservice->find_favourites_by_type('core_course', 'courses');
+
+            // Sort the favourites by order set and then last added.
+            usort($favourites, function($a, $b) {
+                /* We don't want null to count as zero because that will display last added courses first. */
+                if (is_null($b->ordering)) {
+                    $b->ordering = $a->ordering + 1;
+                }
+
+                $ordering = $a->ordering - $b->ordering;
+
+                if ($ordering === 0) {
+                    return $a->timemodified - $b->timemodified;
+                }
+
+                return $ordering;
+            });
+
+            $userfavourites = [];
+
+            foreach ($favourites as $favourite) {
+                $userfavourites[$favourite->ordering] = $favourite->itemid;
+            }
+        }
+
+        return $userfavourites;
+    }
+
+    /**
      * theme_cul_boost_utility::get_user_favourites_courses()
      *
      * @return array of objects - course data (favorites)
      */
     public static function get_user_favourites_courses() {
-        global $DB;
+        global $DB, $USER;
 
-        $courseids = array();
-        $userfavourites = unserialize(get_user_preferences('culcourse_listing_course_favourites'));
+        $courseids = [];
+        $userfavourites = self::get_user_favourites();
 
         if (is_array($userfavourites) && !empty($userfavourites)) {
             $courseids = array_values($userfavourites);
-        } else {
-            return array();
         }
 
         // Filter-out non-integers. There won't be any, but I'm defensive where SQL injection's concerned!
@@ -812,14 +857,14 @@ class theme_cul_boost_utility {
         });
 
         if (empty($courseids)) {
-            return array();
+            return [];
         }
 
         $projection = 'id, shortname, fullname, idnumber, visible, category';
         $selection  = 'id IN (' . implode(', ', $courseids) . ')';
 
         if (!$favouritescourses = $DB->get_records_select('course', $selection, null, 'id', $projection, 0, 999)) {
-            return array();
+            return [];
         }
 
         // Ensure correct ordering.

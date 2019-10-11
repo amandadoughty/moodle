@@ -48,21 +48,9 @@ echo $OUTPUT->doctype() ?>
 <?php require_once(dirname(__FILE__).'/includes/header.php'); ?>
 
 <?php 
-    // if($PAGE->theme->settings->usefrontpageslider == 1) {
-    //     require_once(dirname(__FILE__).'/includes/imageslider.php');
-    // }  
-
-    // require_once(dirname(__FILE__).'/includes/findamodule.php');
-
     echo html_writer::start_tag('div', ['class'=>'dashboard-navbar-wrap']);
         require_once(dirname(__FILE__).'/includes/navbar.php');
     echo html_writer::end_tag('div');
-
-    // require_once(dirname(__FILE__).'/includes/recentcourses.php');
-
-    // if ($hasdashfull) {
-    //     echo $OUTPUT->synergyblocks($dashf, 'w-100 d-flex flex-wrap align-items-stretch mb-5');
-    // }
 ?>
 
 <div id="page">

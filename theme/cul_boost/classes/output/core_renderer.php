@@ -556,104 +556,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    return $content;
 	}
 
-	public function recent_courses($courses) {
-	    global $CFG, $DB, $USER;
-
-	    require_once($CFG->dirroot.'/course/renderer.php');
-
-	    if (!empty($USER->currentcourseaccess)) {
-	    	$courses = $USER->currentcourseaccess;
-	    } else if (!empty($USER->lastcourseaccess)) {
-	    	$courses = $USER->lastcourseaccess;
-	    }
-
-	    arsort($courses);
-
-	    $content = '';
-
-	    $i = 0;
-
-	    $content .= html_writer::start_tag('div', ['class'=>'featured-courses col-12 col-lg-8']);
-
-	    $title = html_writer::tag('h2', get_string('recentmodules', 'theme_cul_boost'), ['class'=>'section-title col-12 col-sm p-0 mb-3 mb-sm-0']);
-	    $buttons = html_writer::tag('div', get_string('mymodules', 'theme_cul_boost'), ['class'=>'allmodules-btn btn btn-primary ml-sm-auto']);
-	    $buttons .= html_writer::tag('div', get_string('myfavourites', 'theme_cul_boost'), ['class'=>'favourites-btn btn btn-primary ml-2']);
-
-	    $content .= html_writer::tag('div', $title.$buttons, ['class'=>'recentmodules-header d-flex flex-wrap align-items-center col-12 p-0 mb-3']);
-
-	    $content .= html_writer::start_tag('div', ['class'=>'recentmodules-content h-100']);
-	    $content .= html_writer::start_tag('div', ['class'=>'row']);
-
-	   	foreach ($courses as $course => $date) {
-
-	   		$i++;
-
-	   		if ($i >= 3) {
-	   			break;
-	   		}
-
-		    $lastcourse = $DB->get_record('course', array('id'=>$course));
-
-		    if (!$lastcourse) {
-		    	continue;
-		    }
-		    
-		    $course = new core_course_list_element($lastcourse);
-
-		    $courseinfo = new stdClass();
-		    $courseinfo->name = $course->fullname;
-
-		    $category = $DB->get_record('course_categories', array('id'=>$lastcourse->category));
-		    $courseinfo->category = $category->name;
-		    
-		    $courselink = new moodle_url('/course/view.php', array('id'=>$course->id));
-		    $courseinfo->url = $courselink->out();
-		    
-		    $shortsummary = $course->summary;
-		    $courseinfo->summary = format_text((strlen($shortsummary) > 200) ? substr($shortsummary, 0, 200) . '&hellip;' : $shortsummary);
-		    
-		    $url = '';
-		    foreach ($course->get_course_overviewfiles() as $file) {
-		        $isimage = $file->is_valid_image();
-		        $url = file_encode_url("$CFG->wwwroot/pluginfile.php",
-		                '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
-		                $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
-		    }
-
-		    $courseinfo->hasimage = false;
-		    
-		    if (!empty($url)) {
-		        $courseinfo->hasimage = true;
-		    }
-
-		    $courseinfo->image = $url;
-		    $courseinfo->lastaccess = date('d/m/y', $date);
-
-		    $courseinfo->featured = false;
-
-		    if ($i < 3) {
-		    	$courseinfo->featured = true;
-		    }
-
-		    if ($i == 3) {
-		    	$content .= html_writer::end_tag('div');
-		    	$content .= html_writer::end_tag('div');
-		    	$content .= html_writer::start_tag('div', ['class'=>'recent-courses col-12 col-lg-5 py-3']);
-		    	$content .= html_writer::start_tag('div', ['class'=>'recent-courses-inner']);
-		    }
-
-		    $content .= $this->render_from_template('theme_cul_boost/lastcourse', $courseinfo);
-
-		}
-
-		$content .= html_writer::end_tag('div');
-		$content .= html_writer::end_tag('div');
-		$content .= html_writer::end_tag('div');
-
-	    return $content;
-
-	}
-
 	/**
      * Prints a nice side block with an optional header.
      *
@@ -697,19 +599,32 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 	// Straight copy from the City University module menu with some visual differences
 	public function favourite_course() {
-
 		global $CFG, $PAGE, $COURSE;
 		
 		$content = '';
+		$isfav = false;
 
 		// Add Favourite url
 		$favourites = null;
 
+		// Try the old method of saving favourites in user preference.
 		if (!is_null($favourites = get_user_preferences('culcourse_listing_course_favourites'))) {
 		    $favourites = unserialize($favourites);
+
+		    if ($favourites && in_array($COURSE->id, $favourites)){
+		    	$isfav = true;
+		    }
+	    // Favourites have been transferred to Favourite API.
+		} else {
+			$usercontext = context_user::instance($USER->id);
+
+		    // Get the user favourites service, scoped to a single user (their favourites only).
+		    $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+
+		    $isfav = $ufservice->favourite_exists('core_course', 'courses', $cid, $coursecontext);
 		}
 
-		if ($favourites && in_array($COURSE->id, $favourites)) {
+		if ($isfav) {
 		    $action = 'remove';
 		    $class = 'favourited';
 		    $id = 'theme-cul_boost-removefromfavourites';

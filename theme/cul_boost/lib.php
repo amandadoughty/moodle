@@ -329,23 +329,30 @@ function theme_cul_boost_initialise_favourites(moodle_page $page) {
  * @return array $favourites a sorted array of course id's
  */
 function theme_cul_boost_edit_favourites($action, $cid) {
-    $favourites = array();
+    $favourites = [];
 
-    if (!is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+    if (is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+        return false;
+    } else {
         $favourites = unserialize($myfavourites);
     }
 
     switch ($action) {
         case 'add':
-            if (!in_array($cid, $favourites)){
+            // Original block user preference setting.
+            if (!in_array($cid, $favourites)) {
                 $favourites[] = $cid;
             }
+
             break;
         case 'remove':
+            // Original block user preference setting.
             $key = array_search($cid, $favourites);
-            if ($key !== false){
+
+            if ($key !== false) {
                 unset($favourites[$key]);
             }
+
             break;
         default:
             break;
@@ -369,15 +376,21 @@ function theme_cul_boost_edit_favourites_api($action, $cid, $userid = 0) {
     $usercontext = \context_user::instance($USER->id);
     $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
 
+    $exists = $ufservice->favourite_exists('core_course', 'courses', $cid, $coursecontext);
+
     switch ($action) {
         case 'add':
             // New favourite api.
-            $ufservice->create_favourite('core_course', 'courses', $cid, $coursecontext);
+            if (!$exists) {
+                $ufservice->create_favourite('core_course', 'courses', $cid, $coursecontext);
+            }
 
             break;
         case 'remove':
             // New favourite api.
-            $ufservice->delete_favourite('core_course', 'courses', $cid, $coursecontext);
+            if ($exists) {
+                $ufservice->delete_favourite('core_course', 'courses', $cid, $coursecontext);
+            }
 
             break;
         default:
@@ -391,7 +404,19 @@ function theme_cul_boost_edit_favourites_api($action, $cid, $userid = 0) {
  * @param array $favourites of course ids in sort order
  */
 function theme_cul_boost_update_favourites($favourites) {
-    set_user_preference('culcourse_listing_course_favourites', serialize($favourites));
+    // If user favourites have been transferred to the 
+    // Favourites API then do not recreate the user
+    // preference.
+    if (is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+        return true;
+    } 
+
+    try {
+        set_user_preference('culcourse_listing_course_favourites', serialize($favourites));
+        return true;
+    } catch (exception $e) {
+        return false;
+    }
 }
 
 /**
