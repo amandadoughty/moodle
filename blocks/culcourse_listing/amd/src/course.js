@@ -75,7 +75,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                     }
                 },
                 error: function() {
-                    
+
                 },
                 complete: function() {
                     window.editrunning = false;
@@ -162,7 +162,6 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
     var updateFavouriteViaApi = function(courseid, action) {
         // Find out what changed via the api.
-        console.log(courseid);
         $.ajax({
             url: APIURL,
             method: 'POST',
