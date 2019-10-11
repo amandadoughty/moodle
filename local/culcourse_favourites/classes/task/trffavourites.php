@@ -67,7 +67,7 @@ class trffavourites extends \core\task\scheduled_task {
             mtrace("\n  Searching for favourites to transfer ...");
 
             $limit = $config->limit;
-            $userpreferences = $DB->get_records('user_preferences', ['name' => 'culcourse_listing_course_favourites'], '', '*', 0, $limit);
+            $userpreferences = $DB->get_records('user_preferences', ['name' => 'culcourse_listing_course_favourites'], 'id DESC', '*', 0, $limit);
 
             foreach ($userpreferences as $userpreference) {
                 $userid = $userpreference->userid;
