@@ -171,9 +171,9 @@ function block_culcourse_listing_get_favourite_courses($preferences) {
     // Sort the favourites by order set and then last added.
     usort($favourites, function($a, $b) {
         /* We don't want null to count as zero because that will display last added courses first. */
-        if (is_null($b->ordering)) {
-            $b->ordering = $a->ordering + 1;
-        }
+        // if (is_null($b->ordering)) {
+        //     $b->ordering = $a->ordering + 1;
+        // }
 
         $ordering = $a->ordering - $b->ordering;
 
