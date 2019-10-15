@@ -81,10 +81,14 @@ echo $OUTPUT->doctype() ?>
 
     ?>
 
-    <div class="container-fluid">
-
-        <div id="page-content" class="row justify-content-center">
+    <div class="container-fluid">        
+        <div id="page-content" class="row justify-content-center">            
             <section id="region-main" class="<?php echo $regions['content']; ?>">
+                <?php 
+                if ($PAGE->pagelayout == 'mypublic') {
+                    echo $OUTPUT->context_header(); 
+                }
+                ?>
                 <?php
                     echo $OUTPUT->course_content_header();
                     echo $OUTPUT->main_content();
