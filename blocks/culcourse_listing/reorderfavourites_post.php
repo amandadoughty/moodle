@@ -53,7 +53,7 @@ if (!$reorder) {
 $preferences = block_culcourse_listing_get_preferences();
 $favourites = block_culcourse_listing_get_favourite_courses($preferences);
 // Update the user preference.
-block_culcourse_listing_reorder_favourites($preferences, $favourites);
+block_culcourse_listing_reorder_favourites($preferences, $favourites, true);
 // Update the Favourites API.
-block_culcourse_listing_reorder_favourites_api($favourites);
+block_culcourse_listing_reorder_favourites_api($favourites, true);
 redirect(new moodle_url('/my/index.php'));

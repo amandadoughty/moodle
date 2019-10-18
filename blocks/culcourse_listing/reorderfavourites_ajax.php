@@ -38,7 +38,7 @@ $favourites = block_culcourse_listing_get_favourite_courses($preferences);
 // Update the user preference.
 block_culcourse_listing_reorder_favourites($preferences, $favourites);
 // Update the Favourites API.
-$favourites = block_culcourse_listing_reorder_favourites_api($favourites);
+$favourites = block_culcourse_listing_reorder_favourites_api($favourites, true);
 // Render the favourites.
 $renderer = $PAGE->get_renderer('block_culcourse_listing');
 $renderer->set_preferences($preferences);

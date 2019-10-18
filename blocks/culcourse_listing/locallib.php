@@ -360,8 +360,8 @@ function block_culcourse_listing_clear_favourites_api() {
 /**
  * Binary safe case-insensitive string comparison.
  *
- * @param array a first favourite core_course_list_element object
- * @param string b second favourite core_course_list_element object
+ * @param $a first favourite core_course_list_element object
+ * @param $b second favourite core_course_list_element object
  * @return Returns < 0 if a->displayname is less than b->displayname;
  * > 0 if a->displayname is greater than b->displayname, and 0 if they are equal.
  */
@@ -382,10 +382,11 @@ function block_culcourse_listing_strcasecmp($a, $b) {
  * The new sort order is updated in the user preference setting.
  *
  * @param array $preferences
- * @param array $favourites of course ids
+ * @param array $favourites of core_course_list_element objects
+ * @param bool $reset
  * @return array $favourites of core_course_list_element objects
  */
-function block_culcourse_listing_reorder_favourites($preferences, $favourites) {
+function block_culcourse_listing_reorder_favourites($preferences, $favourites, $reset = false) {
     global $CFG, $DB, $USER;
 
     if (is_null($preferences['culcourse_listing_course_favourites'])) {
@@ -398,18 +399,18 @@ function block_culcourse_listing_reorder_favourites($preferences, $favourites) {
 
     $site = get_site();
 
-    if (in_array($site->id, $favourites)) {
+    if (array_key_exists($site->id, $favourites)) {
         unset($favourites[$site->id]);
     }
 
-    $favourites = $DB->get_records_list('course', 'id', array_keys($favourites));
+    // $favourites = $DB->get_records_list('course', 'id', array_keys($favourites));
 
-    foreach ($favourites as $favourite) {
-        // Get array of core_course_list_element objects in usersortorder.
-        $favourites[$favourite->id] = new core_course_list_element($favourite);
-    }
+    // foreach ($favourites as $favourite) {
+    //     // Get array of core_course_list_element objects in usersortorder.
+    //     $favourites[$favourite->id] = new core_course_list_element($favourite);
+    // }
 
-    if ($reorder) {
+    if ($reset) {
         // Sort in aphabetical order.
         uasort($favourites, 'block_culcourse_listing_strcasecmp');
     }
@@ -424,10 +425,11 @@ function block_culcourse_listing_reorder_favourites($preferences, $favourites) {
  * Sorts the favourites by display name.
  * The new sort order is updated in the user preference setting.
  *
- * @param array $favourites of course ids
+ * @param array $favourites of core_course_list_element objects
+ * @param bool $reset
  * @return array $favourites of favourite objects
  */
-function block_culcourse_listing_reorder_favourites_api($favourites, $reorder = false) {
+function block_culcourse_listing_reorder_favourites_api($favourites, $reset = false) {
     global $CFG, $DB, $USER;
 
     $usercontext = \context_user::instance($USER->id);
@@ -443,7 +445,7 @@ function block_culcourse_listing_reorder_favourites_api($favourites, $reorder = 
         unset($favourites[$site->id]);
     }
 
-    if ($reorder) {
+    if ($reset) {
         // Sort in aphabetical order.
         uasort($favourites, 'block_culcourse_listing_strcasecmp');
     }
@@ -451,7 +453,7 @@ function block_culcourse_listing_reorder_favourites_api($favourites, $reorder = 
     // Update the favourites.
     $i = 1;
 
-    foreach ($favourites as $ordering => $courseid) {
+    foreach ($favourites as $courseid => $course) {
         $coursecontext = \context_course::instance($courseid);
 
         try {

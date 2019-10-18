@@ -84,9 +84,16 @@ if ($move == -1) {
         }
     }
 }
-print_r($neworder);
+
+$orderfavs = [];
+
+// Sort the favourites by the new order.
+foreach ($neworder as $courseid) {
+    $orderfavs[$courseid] = $favourites[$courseid];
+}
+
 // Update the user preference.
-block_culcourse_listing_update_favourites_pref($neworder);
+block_culcourse_listing_update_favourites_pref($orderfavs);
 // Update the Favourites API.
-block_culcourse_listing_reorder_favourites_api($neworder);
+block_culcourse_listing_reorder_favourites_api($orderfavs);
 redirect(new moodle_url('/my/index.php'));
