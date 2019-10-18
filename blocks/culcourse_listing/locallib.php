@@ -169,19 +169,17 @@ function block_culcourse_listing_get_favourite_courses($preferences) {
     $favourites = $userservice->find_favourites_by_type('core_course', 'courses');
 
     // Sort the favourites by order set and then last added.
-    usort($favourites, function($a, $b) {
-        /* We don't want null to count as zero because that will display last added courses first. */
-        // if (is_null($b->ordering)) {
-        //     $b->ordering = $a->ordering + 1;
-        // }
-
-        $ordering = $a->ordering - $b->ordering;
-
-        if ($ordering === 0) {
+    usort($favourites, function($a, $b) {        
+        if ($a->ordering === $b->ordering) {
             return $a->timemodified - $b->timemodified;
+        /* We don't want null to count as zero because that will display last added courses first. */
+        } else if (is_null($a->ordering)) {
+            return 1;
+        } else if (is_null($b->ordering)) {
+            return -1;
+        } else {
+            return $a->ordering - $b->ordering;
         }
-
-        return $ordering;
     });
 
     $formattedcourses = [];
