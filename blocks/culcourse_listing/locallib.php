@@ -409,8 +409,11 @@ function block_culcourse_listing_reorder_favourites($preferences, $favourites) {
         $favourites[$favourite->id] = new core_course_list_element($favourite);
     }
 
-    // Sort in aphabetical order.
-    uasort($favourites, 'block_culcourse_listing_strcasecmp');
+    if ($reorder) {
+        // Sort in aphabetical order.
+        uasort($favourites, 'block_culcourse_listing_strcasecmp');
+    }
+
     // Update the user preference.
     block_culcourse_listing_update_favourites_pref(array_keys($favourites));
 
@@ -424,7 +427,7 @@ function block_culcourse_listing_reorder_favourites($preferences, $favourites) {
  * @param array $favourites of course ids
  * @return array $favourites of favourite objects
  */
-function block_culcourse_listing_reorder_favourites_api($favourites) {
+function block_culcourse_listing_reorder_favourites_api($favourites, $reorder = false) {
     global $CFG, $DB, $USER;
 
     $usercontext = \context_user::instance($USER->id);
@@ -440,12 +443,15 @@ function block_culcourse_listing_reorder_favourites_api($favourites) {
         unset($favourites[$site->id]);
     }
 
-    // Sort in aphabetical order.
-    uasort($favourites, 'block_culcourse_listing_strcasecmp');
+    if ($reorder) {
+        // Sort in aphabetical order.
+        uasort($favourites, 'block_culcourse_listing_strcasecmp');
+    }
+
     // Update the favourites.
     $i = 1;
 
-    foreach ($favourites as $courseid => $course) {
+    foreach ($favourites as $ordering => $courseid) {
         $coursecontext = \context_course::instance($courseid);
 
         try {
