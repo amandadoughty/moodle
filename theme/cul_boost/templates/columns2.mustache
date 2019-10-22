@@ -15,87 +15,117 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template theme_boost/columns2
+    @template theme_cul_boost/columns2
 
-    Admin time setting template.
-
-    Boost 2 column layout template.
+    CUL Boost 2 column layout template.
 
     Context variables required for this template:
-    * sitename - The name of the site
+
     * output - The core renderer for the page
+    * isloggedin - 
     * bodyattributes - attributes for the body tag as a string of html attributes
-    * sidepreblocks - HTML for the blocks
+    * sidepostblocks - HTML for the blocks
     * hasblocks - true if there are blocks on this page
-    * navdraweropen - true if the nav drawer should be open on page load
-    * regionmainsettingsmenu - HTML for the region main settings menu
-    * hasregionmainsettingsmenu - There is a region main settings menu on this page.
+    * classes - classes for the content region
+    * iscourse - true if this is a course page
+    * sectioninfo - HTML for the CUL course format dashboard links
+    * courseimgurl - URL of the course image file
+    * iscoursevisible - true if course is visible
+    * navbar.hasnavbar - true if there is a navbar on this page
 
     Example context (json):
     {
-        "sitename": "Moodle",
         "output": {
             "doctype": "<!DOCTYPE html>",
             "page_title": "Test page",
             "favicon": "favicon.ico",
             "main_content": "<h1>Headings make html validators happier</h1>"
-         },
+        },
+        "isloggedin":true,
         "bodyattributes":"",
-        "sidepreblocks": "<h2>Blocks html goes here</h2>",
+        "sidepostblocks": "<h2>Blocks html goes here</h2>",
         "hasblocks":true,
-        "navdraweropen":true,
-        "regionmainsettingsmenu": "",
-        "hasregionmainsettingsmenu": false
+        "classes":"",
+        "sectioninfo":"CUL course format dashboard links go here",
+        "iscourse":true,
+        "courseimgurl":"",
+        "iscoursevisible":true,
+        "navbar": {
+            "hasnavbar":true,
+        }
     }
 }}
+
 {{> theme_cul_boost/head }}
-
 <body {{{ bodyattributes }}}>
-
-
-
     {{{ output.standard_top_of_body_html }}}
-
     {{> theme_cul_boost/header }}
-
     <div id="page" class="position-relative">
 
-    {{! Add the course favourite star and docker }}
-
+    {{! Favourite star and block docker }}
+    {{# iscourse }}
+    <div class="fixed-anchor"></div>
+    <div class="fixed-buttons">
+    {{# hasblocks }}
+    <div class="toggleblocks-btn fixed-btn d-none d-xl-flex flex-wrap align-items-center justify-content-center bg-dark h3 m-0 text-white">
+        <i
+            class="fa fa-angle-double-left"
+            data-toggle="popover"
+            data-content="{{#str}}hideblocks, theme_cul_boost{{/str}}"
+            data-placement="left"
+            data-trigger="hover"
+        >
+        </i>
+        <i
+            class="fa fa-angle-double-right"
+            data-toggle="popover"
+            data-content="{{#str}}showblocks, theme_cul_boost{{/str}}"
+            data-placement="left"
+            data-trigger="hover"
+        >
+        </i>
+    </div>
+    {{/ hasblocks }}
+    {{{ output.favourite_course }}}
+    </div>
+    {{/ iscourse }}
     {{# navbar.hasnavbar }}
     {{> theme_cul_boost/navbar }}
     {{/ navbar.hasnavbar }}
 
-    {{! Add gradebook disclaimer }}
+    {{! Gradebook disclaimer }}
+    {{{ output.gradebook_disclaimer }}}
 
-    {{! Add hidden button }}
+    {{! Show course button }}
+    {{^ iscoursevisible }}
+    <h2 class="module-hidden p-3 bg-light mb-4 text-center">
+        {{#str}}coursehidden, theme_cul_boost{{/str}}
+        {{{ output.show_course }}}
+    </h2>
+    {{/ iscoursevisible }}
 
     {{> theme_cul_boost/courseheader }}
-
     <div class="container-fluid"> 
-
         <div id="page-content" class="row justify-content-center">
             <section id="region-main" class="{{ classes }}">
 
-                {{! mypublic context header }}
-
+                {{! Add themypublic context header }}
+                {{^ iscourse }}
+                    {{{! output.context_header }}}
+                {{/ iscourse }}
                 {{{ output.course_content_header }}}
                 {{{ output.main_content }}}
                 {{{ output.activity_navigation }}}
                 {{{ output.course_content_footer }}}
-
             </section>
-
             {{# hasblocks }}
                 {{{ sidepostblocks }}}
             {{/ hasblocks }}
-
         </div>
     </div>
     {{{ output.standard_after_main_region_html }}}
     {{> theme_cul_boost/footer }}
 {{{ output.standard_after_main_region_html }}}
-
 </body>
 </html>
 {{#js}}

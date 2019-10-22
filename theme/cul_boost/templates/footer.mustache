@@ -17,25 +17,44 @@
 {{!
     Page footer.
 }}
-<footer id="page-footer" class="py-3 bg-dark text-light">
-    <div class="container">
-        <div id="course-footer">{{{ output.course_footer }}}</div>
 
-        {{# output.page_doc_link }}
-            <p class="helplink">{{{ output.page_doc_link }}}</p>
-        {{/ output.page_doc_link }}
-
-        {{{ output.login_info }}}
-        <div class="tool_usertours-resettourcontainer"></div>
-        {{{ output.home_link }}}
-        <nav class="nav navbar-nav d-md-none">
-            {{# output.custom_menu_flat }}
-                <ul class="list-unstyled pt-3">
-                    {{> theme_boost/custom_menu_footer }}
-                </ul>
-            {{/ output.custom_menu_flat }}
-        </nav>
-        {{{ output.standard_footer_html }}}
-        {{{ output.standard_end_of_body_html }}}
+<footer id="page-footer" class="footer mt-5 w-100 bg-primary text-white">
+    <div class="container-fluid">
+        <div class="footerlinks d-flex flex-wrap text-center text-md-left py-5">
+            {{# footer.footnote }}
+            <div class="footnote col-12 col-md-6 mb-4 mb-md-0 p-0">
+                {{{ footer.footnote }}}
+            </div>
+            {{/ footer.footnote }}
+            {{# footer.footerimageurl }}
+            <img
+                class="footerlogo mx-auto mr-md-0 ml-md-auto"
+                src="{{ footer.footerimageurl }}"
+                alt="{{#str}}logotext, theme_cul_boost{{/str}}"
+            />
+            {{/ footer.footerimageurl }}
+        </div>
+    </div>
+    <div class="footer-bottom py-3">
+        <div class="container-fluid d-flex flex-wrap align-items-between">
+            {{# footer.copyright }}
+            <div class="copyright">
+                {{{ footer.copyright }}}
+            </div>
+            {{/ footer.copyright }}
+            <a
+                href="#top"
+                class="scrolltop text-white mx-auto"
+            >
+                {{#str}}scrolltop, theme_cul_boost{{/str}}
+                <i class="fa fa-angle-up ml-2"></i>
+            </a>
+            {{# footer.footerlinks }}
+            <div class="footerlinks">
+                {{{ footer.footerlinks }}}
+            </div>
+            {{/ footer.footerlinks }}
+        </div>
     </div>
 </footer>
+{{{ output.google_analytics }}}

@@ -45,7 +45,7 @@ echo $OUTPUT->doctype() ?>
 
 <?php echo $OUTPUT->standard_top_of_body_html(); ?>
 
-<?php require_once(dirname(__FILE__).'/includes/header.php'); ?>
+<?php require_once(dirname(__FILE__).'/includes/header_orig.php'); ?>
 
 <?php 
     echo html_writer::start_tag('div', ['class'=>'dashboard-navbar-wrap']);
@@ -115,7 +115,7 @@ echo $OUTPUT->doctype() ?>
     </div>
 </div>
 
-<?php require_once(dirname(__FILE__).'/includes/footer.php'); ?>
+<?php require_once(dirname(__FILE__).'/includes/footer_orig.php'); ?>
 
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
 

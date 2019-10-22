@@ -599,7 +599,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 	// Straight copy from the City University module menu with some visual differences
 	public function favourite_course() {
-		global $CFG, $PAGE, $COURSE;
+		global $CFG, $PAGE, $COURSE, $USER;
 		
 		$content = '';
 		$isfav = false;
@@ -616,12 +616,13 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		    }
 	    // Favourites have been transferred to Favourite API.
 		} else {
-			$usercontext = context_user::instance($USER->id);
+			$usercontext = \context_user::instance($USER->id);
+			$coursecontext = \context_user::instance($COURSE->id);
 
 		    // Get the user favourites service, scoped to a single user (their favourites only).
-		    $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+		    $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
 
-		    $isfav = $ufservice->favourite_exists('core_course', 'courses', $cid, $coursecontext);
+		    $isfav = $ufservice->favourite_exists('core_course', 'courses', $COURSE->id, $coursecontext);
 		}
 
 		if ($isfav) {
@@ -643,6 +644,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		));
 
 		$favouritetxt = get_string($actionstring, 'theme_cul_boost');
+
+		// @TODO template
 		$favouritesrtxt = html_writer::tag('span', $favouritetxt, ['class' => 'accesshide']);
 		
 		$content = html_writer::link($favouriteurl, $favouritesrtxt, ['class'=>'text-white '.$class, 'data-toggle'=>'popover', 'data-content'=>$favouritetxt, 'data-placement'=>'left', 'data-trigger'=>'hover']);
@@ -779,5 +782,134 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         return html_writer::tag('a', $output, $attributes);
+    }
+
+    public function gradebook_disclaimer() {
+	    $gradebookids = array (
+	        'page-grade-report-user-index',
+	        'page-grade-report-culuser-index',
+	        'page-grade-report-overview-index',
+	        'page-course-user'
+	    );
+
+	    $content = '';
+
+	    if (in_array($this->page->bodyid, $gradebookids)) {
+	        $disclaimer = html_writer::tag('p', get_string('gradebookdisclaimer', 'theme_cul_boost'));
+	        $content = html_writer::tag('div', $disclaimer,
+	            array('class' => 'alert alert-warning', 'role' => 'note'));
+	    }
+
+	    return $content;
+	}
+
+	    private function user_info() {
+        global $USER;
+
+        $logo = new stdClass();
+        if (isset($USER->institution)) {
+            $userschool = trim($USER->institution);
+        } else {
+            $userschool = '';
+        }
+
+        if (isset($USER->department)) {
+            $userdept = trim($USER->department);
+        } else {
+            $userdept = '';
+        }
+
+        // Get school code for logo.
+        // Default settings.
+        $logo->logoprefix = "city";
+        $logo->gaschool = "UUCITY";
+        $logo->title = "City Unversity London homepage";
+        $logo->website = "city.ac.uk";
+        $logo->studenthub = "https://studenthub.city.ac.uk/";
+        $logo->staffhub = "https://staffhub.city.ac.uk/";
+        $logo->library = "https://www.city.ac.uk/library";
+
+        // City Uni Central Services.
+        if ((trim($userschool) == 'UUCITY') && (substr(trim($userdept), 0, 1) == 'U')) {
+            $logo->logoprefix = 'city';
+            $logo->gaschool = 'UUCITY';
+        }
+        // Law School.
+        if (trim($userschool) == 'LLILAW')  {
+            $logo->gaschool = 'LLILAW';
+        }
+        // Cass Business School.
+        if (trim($userschool) == 'BBCASS') {
+            $logo->logoprefix = 'cass';
+            $logo->gaschool = 'BBCASS';
+            $logo->title = "Cass Business School homepage";
+            // CMDLTWO-362 Cass global nav.
+            $logo->website = "cass.city.ac.uk";
+            $logo->studenthub = "http://www.cass.city.ac.uk/intranet/student";
+            $logo->staffhub = "http://www.cass.city.ac.uk/intranet/staff";
+            // $logo->library = "http://www.cass.city.ac.uk/intranet/staff/services/learning-resource-centre";
+        }
+        // School of Arts and Social Sciences
+        if ((trim($userschool) == 'AASOAR') OR (trim($userschool) == 'ASSASS') OR (trim($userschool) == 'SSSOSS') OR (trim($userschool) == 'ASSOCL')) {
+            $logo->gaschool = 'ASSASS';
+        }
+        // School of Engineering and Maths and Informatics
+        if ((trim($userschool) == 'EESEMS') OR (trim($userschool) == 'EEMCSE') OR (trim($userschool) == 'IISOIN') OR (substr(trim($userschool), 0, 2) == 'EE')) {
+            $logo->gaschool = 'EEMCSE';
+        }
+        // School of Health Sciences (leave as schs for Google Analytics).
+        if ((trim($userschool) == 'HASAHS') OR (trim($userschool) == 'HNSONM') OR (trim($userschool) == 'HHSOHS') OR (trim($userschool) == 'HSSOHS')) {
+            $logo->gaschool = 'HSSOHS';
+        }
+        return $logo;
+    }
+
+    // Google Analytics code.
+    public function google_analytics() {
+        global $DB , $USER, $COURSE, $PAGE;
+
+        $userinfo = $this->user_info();
+
+        $trackurl = $userinfo->gaschool;
+        if ($COURSE->id != 1 ) {
+            // Add course category idnumber.
+            if ($category = $DB->get_record('course_categories', array('id' => $COURSE->category))) {
+                $trackurl .= '/' . urlencode($category->idnumber);
+            }
+
+            // Add course name.
+            $trackurl .= '/' . urlencode($COURSE->shortname);
+
+            // Get role in course.
+            $userroles = get_user_roles_in_course($USER->id, $COURSE->id);
+            if ($userroles == '') {
+                $userroles = 'norole';
+            }
+            $trackurl .= '/' . strip_tags($userroles);
+        }
+
+        // Get page type.
+        $trackurl .= '/' . urlencode($PAGE->pagetype);
+
+        // Get page action and id ... bit after ? in URL but only if it has any.
+
+        if (strpos($PAGE->url, '?') > 0) {
+            $args = substr( ($PAGE->url), strrpos(($PAGE->url), '?' ) + 1 );
+            $trackurl .= '/' . (str_replace('&amp;', '+', $args));
+        }
+
+        $script = '
+        <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push([\'_setAccount\', \''.$PAGE->theme->settings->gakey.'\']);
+        _gaq.push([\'_trackPageview\',\''. $trackurl .'\']);
+
+        (function() {
+        var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true;
+        ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
+        var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        </script>';
+        return $script;
     }
 }

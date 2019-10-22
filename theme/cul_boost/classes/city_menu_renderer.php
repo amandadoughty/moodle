@@ -230,52 +230,5 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
         return $tscript;
     }
 
-    // Google Analytics code.
-    public function google_analytics() {
-        global $DB , $USER, $COURSE, $PAGE;
 
-        $userinfo = $this->user_info();
-
-        $trackurl = $userinfo->gaschool;
-        if ($COURSE->id != 1 ) {
-            // Add course category idnumber.
-            if ($category = $DB->get_record('course_categories', array('id' => $COURSE->category))) {
-                $trackurl .= '/' . urlencode($category->idnumber);
-            }
-
-            // Add course name.
-            $trackurl .= '/' . urlencode($COURSE->shortname);
-
-            // Get role in course.
-            $userroles = get_user_roles_in_course($USER->id, $COURSE->id);
-            if ($userroles == '') {
-                $userroles = 'norole';
-            }
-            $trackurl .= '/' . strip_tags($userroles);
-        }
-
-        // Get page type.
-        $trackurl .= '/' . urlencode($PAGE->pagetype);
-
-        // Get page action and id ... bit after ? in URL but only if it has any.
-
-        if (strpos($PAGE->url, '?') > 0) {
-            $args = substr( ($PAGE->url), strrpos(($PAGE->url), '?' ) + 1 );
-            $trackurl .= '/' . (str_replace('&amp;', '+', $args));
-        }
-
-        $script = '
-        <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push([\'_setAccount\', \''.$PAGE->theme->settings->gakey.'\']);
-        _gaq.push([\'_trackPageview\',\''. $trackurl .'\']);
-
-        (function() {
-        var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true;
-        ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
-        var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-        </script>';
-        return $script;
-    }
 };

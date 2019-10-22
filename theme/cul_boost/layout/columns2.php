@@ -29,6 +29,7 @@ require_once($CFG->libdir . '/behat/lib.php');
 require_once(dirname(__FILE__).'/includes/navbar.php');
 require_once(dirname(__FILE__) . '/includes/header.php');
 require_once(dirname(__FILE__) . '/includes/courseheader.php');
+require_once(dirname(__FILE__) . '/includes/footer.php');
 
 $PAGE->set_popup_notification_allowed(false);
 $isloggedin = isloggedin();
@@ -36,9 +37,9 @@ theme_cul_boost_initialise_favourites($PAGE);
 // Accessibility stuff.
 $OUTPUT->standard_head_html();
 $PAGE->requires->skip_link_to('accessibility', get_string('toaccessibility', 'theme_cul_boost'));
-$extraclasses = [];
-$bodyattributes = $OUTPUT->body_attributes($extraclasses);
+$bodyattributes = $OUTPUT->body_attributes();
 $iscourse = $PAGE->pagelayout == 'course' && $COURSE->id != 1;
+$iscoursevisible = $iscourse && $COURSE->visible == 1;
 
 // Block region setup
 $hasblocks = $PAGE->blocks->region_has_content('side-post', $OUTPUT);
@@ -49,18 +50,20 @@ if ($knownregionpost) {
     $blockshtml = $OUTPUT->blocks('side-post', $regions['post']);
 }
 
-$templatecontext = [
-    'isloggedin' => $isloggedin,
-    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
-    'output' => $OUTPUT,    
+$templatecontext = [    
+    'output' => $OUTPUT,
+    'isloggedin' => $isloggedin,   
     'sidepostblocks' => $blockshtml,
-    'hasblocks' => $hasblocks,
+    'hasblocks' => $hasblocks,    
     'classes' => $regions['content'],
     'bodyattributes' => $bodyattributes,
+    'iscourse' => $iscourse,
     'sectioninfo' => $sectioninfo,
     'courseimgurl' => $url,
+    'iscoursevisible' => $iscoursevisible,
     'navbar' => $navbartemplatecontext,
-    'header' => $headertemplatecontext
+    'header' => $headertemplatecontext,
+    'footer' => $footertemplatecontext
 ];
 
 echo $OUTPUT->render_from_template('theme_cul_boost/columns2', $templatecontext);

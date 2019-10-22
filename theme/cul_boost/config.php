@@ -38,13 +38,13 @@ $THEME->requiredblocks = 'settings';
 $THEME->layouts = [
     // Most backwards compatible layout without the blocks - this is the layout used by default.
     'base' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array('nav-settings'),
         'defaultregion' => 'nav-settings',
     ),
     // Standard layout with blocks, this is recommended for most pages with general information.
     'standard' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array('side-post', 'nav-settings'),
         'defaultregion' => 'side-post',
     ),
@@ -55,26 +55,26 @@ $THEME->layouts = [
         'defaultregion' => 'side-post',
     ),
     'coursecategory' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array('side-post', 'nav-settings'),
         'defaultregion' => 'side-post',
     ),
     // Part of course, typical for modules - default page layout if $cm specified in require_login().
     'incourse' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array('side-post', 'nav-settings'),
         'defaultregion' => 'side-post',
     ),
     // The site home page.
     'frontpage' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array('side-post', 'nav-settings'),
         'defaultregion' => 'side-post',
         'options' => array('nonavbar' => true),
     ),
     // Server administration scripts.
     'admin' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array('side-post', 'nav-settings'),
         'defaultregion' => 'side-post',
     ),
@@ -86,25 +86,25 @@ $THEME->layouts = [
     ),
     // My public page.
     'mypublic' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array('side-post', 'nav-settings'),
         'defaultregion' => 'side-post',
     ),
     'login' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array(),
         'options' => array('nonavbar' => true),
     ),
 
     // Pages that appear in pop-up windows - no navigation, no blocks, no header.
     'popup' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array(),
         'options' => array('nofooter' => true, 'nonavbar' => true),
     ),
     // No blocks and minimal footer - used for legacy frame layouts only!
     'frametop' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array(),
         'options' => array('nofooter' => true, 'nocoursefooter' => true),
     ),
@@ -122,7 +122,7 @@ $THEME->layouts = [
     ),
     // Should display the content and basic headers only.
     'print' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array(),
         'options' => array('nofooter' => true, 'nonavbar' => false),
     ),
@@ -133,7 +133,7 @@ $THEME->layouts = [
     ),
     // The pagelayout used for reports.
     'report' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array('side-post', 'nav-settings'),
         'defaultregion' => 'side-post',
     ),

@@ -224,6 +224,7 @@ function theme_cul_boost_get_html_for_settings(renderer_base $output, moodle_pag
     return $return;
 }
 
+// @TODO move this and other functions to core renderer
 function theme_cul_boost_gradebook_disclaimer($page) {
 
     $gradebookids = array (
