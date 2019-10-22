@@ -27,21 +27,16 @@ defined('MOODLE_INTERNAL') || die();
 // user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 require_once(dirname(__FILE__).'/includes/navbar.php');
+require_once(dirname(__FILE__) . '/includes/header.php');
 require_once(dirname(__FILE__) . '/includes/courseheader.php');
 
 $PAGE->set_popup_notification_allowed(false);
+$isloggedin = isloggedin();
+theme_cul_boost_initialise_favourites($PAGE);
 // Accessibility stuff.
+$OUTPUT->standard_head_html();
 $PAGE->requires->skip_link_to('accessibility', get_string('toaccessibility', 'theme_cul_boost'));
-
-// if (isloggedin()) {
-//     $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
-// } else {
-//     $navdraweropen = false;
-// }
 $extraclasses = [];
-// if ($navdraweropen) {
-//     $extraclasses[] = 'drawer-open-left';
-// }
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $iscourse = $PAGE->pagelayout == 'course' && $COURSE->id != 1;
 
@@ -54,27 +49,19 @@ if ($knownregionpost) {
     $blockshtml = $OUTPUT->blocks('side-post', $regions['post']);
 }
 
-// $blockshtml = $OUTPUT->blocks('side-post');
-// $hasblocks = strpos($blockshtml, 'data-block=') !== false;
-// $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 $templatecontext = [
+    'isloggedin' => $isloggedin,
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,    
-    'haspageheading' => $haspageheading,
-    'hasnavbar' => $hasnavbar,    
-    'hasleftnavbar' => $hasleftnavbar,
-    'hasnavsettings' => $hasnavsettings,
     'sidepostblocks' => $blockshtml,
     'hasblocks' => $hasblocks,
     'classes' => $regions['content'],
     'bodyattributes' => $bodyattributes,
     'sectioninfo' => $sectioninfo,
     'courseimgurl' => $url,
-    // 'navdraweropen' => $navdraweropen,
-    // 'regionmainsettingsmenu' => $regionmainsettingsmenu,
-    // 'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu)
+    'navbar' => $navbartemplatecontext,
+    'header' => $headertemplatecontext
 ];
 
-// $templatecontext['flatnavigation'] = $PAGE->flatnav;
 echo $OUTPUT->render_from_template('theme_cul_boost/columns2', $templatecontext);
 

@@ -17,3 +17,45 @@
 {{!
     Page header.
 }}
+
+<nav id="top" class="navbar navbar-default d-block" role="header">
+    <div class="topmenu d-none d-md-block">
+        <div class="container-fluid">
+            {{{ header.globalnav }}}
+        </div>
+    </div>
+    <div class="main-navigation">
+        <div class="container-fluid d-lg-flex flex-wrap align-items-center position-relative py-3 py-md-4">
+            <div class="right-float-menu d-none d-lg-flex flex-wrap mx-auto mb-3">
+                {{{ header.help }}}
+            </div>
+            <div class="d-flex flex-wrap align-items-center w-100">
+                <div class="navbar-header col py-2 pl-0">
+                    <div class="navbar-brand">
+                        {{{ header.logo }}}
+                    </div>
+                </div>
+                {{# isloggedin }}
+                <div class="nav-outer-wrap ml-auto">
+                    <div class="nav-wrap d-flex flex-wrap align-items-stretch">
+                        {{{ header.whitelogo }}}                        
+                        <div class="nav-inner d-none d-lg-flex flex-wrap align-items-stretch ml-lg-auto">
+                            {{{ header.custommenu }}}
+                        </div>
+                        <div class="nav-extras d-flex flex-wrap align-items-stretch ml-auto ml-lg-0">
+                            <div class="global_search d-none d-sm-flex flex-wrap justify-content-end p-0 ml-4">
+                                {{{ header.search }}}
+                            </div>
+                            {{{ header.usermenu }}}
+                            <div class="navbar-toggle d-lg-none ml-3">
+                                <span class="icon-bar"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/ isloggedin }}
+            </div>
+        </div>
+    </div>
+</nav>
+{{> theme_cul_boost/drawer }}

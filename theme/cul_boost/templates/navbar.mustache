@@ -17,17 +17,17 @@
 {{!
     Page navbar.
 }}
-{{# haspageheading }}
+{{# navbar.haspageheading }}
 <div class="page-header container-fluid text-center text-md-left">
     {{{ output.page_heading }}}
 </div>
-{{/ haspageheading }}
+{{/ navbar.haspageheading }}
 
-{{# hasnavbar}}
+{{# navbar.hasnavbar}}
 <div id="page-navbar" class="container-fluid">   
     <div class="d-flex flex-wrap align-items-center mb-4">
         {{! leftnavbar }}
-        {{# hasleftnavbar }}
+        {{# navbar.hasleftnavbar }}
         <nav 
             class="breadcrumb-nav d-flex flex-wrap align-items-center justify-content-center justify-content-md-start col-12 col-md p-0"
             role="navigation"
@@ -35,7 +35,7 @@
         >
             {{{ output.navbar }}}
         </nav>
-        {{/ hasleftnavbar }}
+        {{/ navbar.hasleftnavbar }}
 
         {{! overlay }}
         <div class="overlay">
@@ -43,7 +43,7 @@
         </div>
 
         {{! rightnavbar }}
-        {{# hasnavsettings }}
+        {{# navbar.hasnavsettings }}
         <div class="right-navbar-wrap mt-3 mt-md-0 mx-auto mr-md-0 ml-md-auto">
             <div class="right-navbar d-flex flex-wrap align-items-center bg-gray-700 p-3">
                 {{{ output.page_heading_button }}}
@@ -51,21 +51,21 @@
                     <a 
                         href="javascript:void(0)" 
                         class="trigger d-flex flex-wrap align-items-center h5 mb-0 text-white"
-                    >
-                        <i class="fa fa-cog ml-2"></i>
+                    >                        
                         <span class="trigger-text line-height-1">
                             {{#str}}settings, core{{/str}}
                         </span>
+                        <i class="fa fa-cog ml-2"></i>
                     </a>
-                    {{{ settingsblock }}}
+                    {{{ navbar.settingsblock }}}
                 </div>
             </div>
         </div>
-        {{/ hasnavsettings }}
-        {{^ hasnavsettings }}
+        {{/ navbar.hasnavsettings }}
+        {{^ navbar.hasnavsettings }}
         {{{ output.page_heading_button }}}
-        {{/ hasnavsettings }}
+        {{/ navbar.hasnavsettings }}
     </div>
 </div>
-{{/ hasnavbar}}
+{{/ navbar.hasnavbar}}
 

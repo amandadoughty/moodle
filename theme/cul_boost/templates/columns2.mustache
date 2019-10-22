@@ -62,11 +62,13 @@
 
     {{! Add the course favourite star and docker }}
 
-    {{# hasnavbar }}
+    {{# navbar.hasnavbar }}
     {{> theme_cul_boost/navbar }}
-    {{/ hasnavbar }}
+    {{/ navbar.hasnavbar }}
 
-    {{! gradebook disclaimer }}
+    {{! Add gradebook disclaimer }}
+
+    {{! Add hidden button }}
 
     {{> theme_cul_boost/courseheader }}
 

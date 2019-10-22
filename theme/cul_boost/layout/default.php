@@ -67,7 +67,7 @@ echo $OUTPUT->doctype() ?>
 
     <?php
 
-    require_once(dirname(__FILE__).'/includes/navbar.php');
+    require_once(dirname(__FILE__).'/includes/navbar_orig.php');
 
     echo $html->gradebookdisclaimer;
 
@@ -77,7 +77,7 @@ echo $OUTPUT->doctype() ?>
         
     }
 
-    require_once(dirname(__FILE__).'/includes/courseheader.php');
+    require_once(dirname(__FILE__).'/includes/courseheader_orig.php');
 
     ?>
 
