@@ -50,7 +50,7 @@ $THEME->layouts = [
     ),
     // Main course page.
     'course' => array(
-        'file' => 'default.php',
+        'file' => 'columns2.php',
         'regions' => array('side-post', 'nav-settings'),
         'defaultregion' => 'side-post',
     ),
