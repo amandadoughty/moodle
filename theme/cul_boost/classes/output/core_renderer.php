@@ -803,10 +803,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    return $content;
 	}
 
-	    private function user_info() {
+    public function user_info() {
         global $USER;
 
-        $logo = new stdClass();
+        $userinfo = new stdClass();
+
         if (isset($USER->institution)) {
             $userschool = trim($USER->institution);
         } else {
@@ -821,47 +822,51 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         // Get school code for logo.
         // Default settings.
-        $logo->logoprefix = "city";
-        $logo->gaschool = "UUCITY";
-        $logo->title = "City Unversity London homepage";
-        $logo->website = "city.ac.uk";
-        $logo->studenthub = "https://studenthub.city.ac.uk/";
-        $logo->staffhub = "https://staffhub.city.ac.uk/";
-        $logo->library = "https://www.city.ac.uk/library";
+        $userinfo->logoprefix = "city";
+        $userinfo->gaschool = "UUCITY";
+        $userinfo->title = "City Unversity London homepage";
+        $userinfo->website = "city.ac.uk";
+        $userinfo->studenthub = "https://studenthub.city.ac.uk/";
+        $userinfo->staffhub = "https://staffhub.city.ac.uk/";
+        $userinfo->library = "https://www.city.ac.uk/library";
 
         // City Uni Central Services.
         if ((trim($userschool) == 'UUCITY') && (substr(trim($userdept), 0, 1) == 'U')) {
-            $logo->logoprefix = 'city';
-            $logo->gaschool = 'UUCITY';
+            $userinfo->logoprefix = 'city';
+            $userinfo->gaschool = 'UUCITY';
         }
         // Law School.
         if (trim($userschool) == 'LLILAW')  {
-            $logo->gaschool = 'LLILAW';
+            $userinfo->gaschool = 'LLILAW';
         }
         // Cass Business School.
         if (trim($userschool) == 'BBCASS') {
-            $logo->logoprefix = 'cass';
-            $logo->gaschool = 'BBCASS';
-            $logo->title = "Cass Business School homepage";
+            $userinfo->logoprefix = 'cass';
+            $userinfo->gaschool = 'BBCASS';
+            $userinfo->title = "Cass Business School homepage";
             // CMDLTWO-362 Cass global nav.
-            $logo->website = "cass.city.ac.uk";
-            $logo->studenthub = "http://www.cass.city.ac.uk/intranet/student";
-            $logo->staffhub = "http://www.cass.city.ac.uk/intranet/staff";
-            // $logo->library = "http://www.cass.city.ac.uk/intranet/staff/services/learning-resource-centre";
+            $userinfo->website = "cass.city.ac.uk";
+            $userinfo->studenthub = "http://www.cass.city.ac.uk/intranet/student";
+            $userinfo->staffhub = "http://www.cass.city.ac.uk/intranet/staff";
+            // $userinfo->library = "http://www.cass.city.ac.uk/intranet/staff/services/learning-resource-centre";
         }
         // School of Arts and Social Sciences
         if ((trim($userschool) == 'AASOAR') OR (trim($userschool) == 'ASSASS') OR (trim($userschool) == 'SSSOSS') OR (trim($userschool) == 'ASSOCL')) {
-            $logo->gaschool = 'ASSASS';
+            $userinfo->gaschool = 'ASSASS';
         }
         // School of Engineering and Maths and Informatics
         if ((trim($userschool) == 'EESEMS') OR (trim($userschool) == 'EEMCSE') OR (trim($userschool) == 'IISOIN') OR (substr(trim($userschool), 0, 2) == 'EE')) {
-            $logo->gaschool = 'EEMCSE';
+            $userinfo->gaschool = 'EEMCSE';
         }
         // School of Health Sciences (leave as schs for Google Analytics).
         if ((trim($userschool) == 'HASAHS') OR (trim($userschool) == 'HNSONM') OR (trim($userschool) == 'HHSOHS') OR (trim($userschool) == 'HSSOHS')) {
-            $logo->gaschool = 'HSSOHS';
+            $userinfo->gaschool = 'HSSOHS';
         }
-        return $logo;
+
+        $userinfo->logourl = $this->image_url($userinfo->logoprefix . '-logo', 'theme');
+		$userinfo->whitelogourl = $this->image_url($userinfo->logoprefix . '-logo-white', 'theme');
+
+        return $userinfo;
     }
 
     // Google Analytics code.

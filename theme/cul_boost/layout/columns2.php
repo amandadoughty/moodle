@@ -40,11 +40,11 @@ $PAGE->requires->skip_link_to('accessibility', get_string('toaccessibility', 'th
 $bodyattributes = $OUTPUT->body_attributes();
 $iscourse = $PAGE->pagelayout == 'course' && $COURSE->id != 1;
 $iscoursevisible = $iscourse && $COURSE->visible == 1;
-
 // Block region setup
 $hasblocks = $PAGE->blocks->region_has_content('side-post', $OUTPUT);
 $knownregionpost = $PAGE->blocks->is_known_region('side-post');
 $regions = theme_cul_boost_bootstrap_grid($hasblocks);
+$blockshtml = '';
 
 if ($knownregionpost) {
     $blockshtml = $OUTPUT->blocks('side-post', $regions['post']);

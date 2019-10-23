@@ -25,32 +25,6 @@
 
 class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
     
-    public function get_coursename($link = true) {
-        global $COURSE, $PAGE;
-        if ($COURSE->id > 1) {
-            $name = $COURSE->fullname;
-
-            if ($link) {
-                $url = new moodle_url('/course/view.php', array('id' => $COURSE->id));
-            } else {
-                $url = '#';
-            }
-            return html_writer::link($url,
-                $name, array('class' => 'courselink'));
-        } else {
-            if ($PAGE->bodyid == 'page-login-index') {
-                return '';
-            }
-            if ($link) {
-                $url = new moodle_url('/');
-            } else {
-                $url = '#';
-            }
-            return html_writer::link($url,
-                get_string('mymoodle', 'my'), array('class' => 'courselink'));
-        }
-    }
-
     public function get_logo() {
         global $OUTPUT, $CFG;
         $userinfo = $this->user_info();
@@ -151,7 +125,6 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
         global $OUTPUT, $CFG;
 
         $logo = $this->user_info();
-
         $content = html_writer::start_tag('div' , array('id' => 'cross-domain'));
         $hideoncollapse = array();
         $attributes = $hideoncollapse + array('target' => '_blank');
@@ -166,69 +139,11 @@ class theme_cul_boost_city_menu_renderer extends plugin_renderer_base {
             html_writer::link($logo->staffhub, 'Staff Hub', $hideoncollapse),
         );
         $content .= html_writer::alist( $listitems, array('id' => 'cross-domain-nav', 'class'=>'d-flex flex-wrap'), 'ul');
-        
-
-        // $content .= $OUTPUT->login_info(true);
-
-        // // $loggedinas = $OUTPUT->login_info(true);
-
-        // $content .= '<div class="logininfo loginwarn"><i class="fa fa-exclamation-triangle"></i></div>';
-
-        // $content .= str_replace('<div class="logininfo">', '<div class="loginwarn"><i class="fa fa-exclamation-triangle"></i></div><div class="logininfo">', $loggedinas);
-
-
         $content .= html_writer::end_tag('div');
         return $content;
     }
 
-    /*
-     * Prints the footer menu navigation
-     */
-    public function city_footer_navigation() {
 
-        $baseurl = 'http://www.city.ac.uk';
-        $listitems = array (
-            html_writer::link($baseurl . '/contact', 'Contact us'),
-            html_writer::link($baseurl . '/visit', 'Maps'),
-            html_writer::link($baseurl . '/about/working-at-city', 'Jobs'),
-            html_writer::link($baseurl . '/about/city-information/legal', 'Legal'),
-            html_writer::link($baseurl . '/about/city-information', 'City Information'),
-            html_writer::link($baseurl . '/about/city-information/governance/charity-information', 'Charity Information'),
-            html_writer::link($baseurl . '/media', 'Press'),
-            html_writer::link($baseurl . '/accessibility', 'Accessibility'),
-            html_writer::link($baseurl . '/about/city-information/legal/cookies', 'Cookies'),
-            html_writer::link('http://estore.city.ac.uk/', 'Store'),
-        );
-        $content  = html_writer::alist($listitems, array('id' => 'footer-links'), 'ul');
-        $content .= html_writer::start_tag('div', array('class' => 'footerbottom'));
-        $content .= html_writer::start_tag('div', array('class' => 'vcard'));
-        $content .= html_writer::link($baseurl, 'City, University of London');
-        $content .= html_writer::tag('span', ' London', array('class' => 'locality'));
-        $content .= html_writer::tag('span', ' EC1V 0HB', array('class' => 'postal-code'));
-        $content .= html_writer::tag('span', ' United Kingdom', array('class' => 'country-name'));
-        $content .= html_writer::tag('span', ' +44 (0)20 7040 5060', array('class' => 'phone-number'));
-        $content .= html_writer::end_tag('div');
-        $content .= html_writer::tag('div', '', array('class' => 'clearer'));
-        $content .= html_writer::end_tag('div');
-        return $content;
-    }
-
-    // CMDLTWO-349 Crazy Egg.
-    public function tracking_script() {
-        $tscript = '';
-        global $PAGE, $COURSE;
-        if (!empty($PAGE->theme->settings->tracking) && $PAGE->theme->settings->tracking == '1') {
-            $tscript = '
-            <script type="text/javascript">
-            setTimeout(function(){var a=document.createElement("script");
-            var b=document.getElementsByTagName("script")[0];
-            a.src=document.location.protocol+
-            "//dnn506yrbagrg.cloudfront.net/pages/scripts/0011/9622.js?"+Math.floor(new Date().getTime()/3600000);
-            a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
-            </script>';
-        }
-        return $tscript;
-    }
 
 
 };

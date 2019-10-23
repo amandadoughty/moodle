@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A two column layout for the boost theme.
+ * 
  *
  * @package   theme_cul_boost
  * @copyright 2019 Amanda Doughty
@@ -24,18 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__) . '/userinfo.php');
+$userinfo = $OUTPUT->user_info();
 
-$citycore = $PAGE->get_renderer('theme_cul_boost', 'city_core');
-$help = $OUTPUT->help();
-$helpmobile = $OUTPUT->help_mobile();
-$custommenu = $citycore->custom_menu();
-$search = $OUTPUT->global_search();
-
-$headertemplatecontext = [
-    'help' => $help,
-    'helpmobile' => $helpmobile,
-    'custommenu' => $custommenu,
-    'search' => $search,
-    'userinfo' => $userinfotemplatecontext
-];
+$userinfotemplatecontext = (array)$userinfo;

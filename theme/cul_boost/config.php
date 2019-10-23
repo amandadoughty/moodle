@@ -145,4 +145,4 @@ $THEME->layouts = [
     )
 ];
 
-$THEME->iconsystem = '\\theme_cul_boost\\output\\icon_system_fontawesome';
+// $THEME->iconsystem = theme_cul_boost\output\icon_system::FONTAWESOME;
