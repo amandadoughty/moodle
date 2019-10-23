@@ -53,33 +53,7 @@ use action_menu_filler;
 
 class core_renderer extends \theme_boost\output\core_renderer {
 
-	public function global_search() {
-	    global $CFG;
-
-	    $id = 'id_q_' . uniqid();
-	    $output = html_writer::start_tag('div', array('class' => 'slidersearchform d-flex flex-wrap align-items-center'));
-	    $output .= html_writer::start_tag('form', array('action' => '' . $CFG->wwwroot . '/search/index.php', 'method' => 'get'));
-	    $output .= html_writer::tag('label', get_string('enteryoursearchquery', 'search'),
-            array('for' => $id, 'class' => 'accesshide'));
-	    $output .= html_writer::empty_tag('input', array(
-	    	'id' => $id,
-	        'class' => 'w-100',
-	        'type' => 'text',
-	        'name' => 'q',
-	        'alt' => get_string('searchfor','theme_cul_boost'),
-	        'placeholder' => get_string('searchfor','theme_cul_boost')
-	    ));
-	    $output .= html_writer::tag('button',
-	    	'<i class="fa fa-search"></i><span class="accesshide">Search</span>', array(
-	        'type' => 'submit',
-	        'class' => 'btn btn-primary p-0'
-	    ));
-	    $output .= html_writer::end_tag('form');
-	    $output .= html_writer::end_tag('div');
-	    // END Search
-
-	    return $output;
-	}
+	/*** OVERRIDDEN FUNCTIONS ***/
 
 	/**
 	 * Returns HTML to display a "Turn editing on/off" button in a form.
@@ -136,11 +110,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    return $this->render($button);
 	}
 
-	protected function render_edit_button(single_button $button) {
-	    $data = $button->export_for_template($this);
-	    $data->state = $button->state;
-	    return $this->render_from_template('theme_cul_boost/edit_button', $data);
-	}
+
 
 	/*
 	 * This renders the navbar.
@@ -367,69 +337,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    );
 	}
 
-	public function synergyblocks($region, $classes = array(), $tag = 'aside') {
-	    $classes = (array)$classes;
-	    $classes[] = 'block-region';
-	    $attributes = array(
-	        'id' => 'block-region-'.preg_replace('#[^a-zA-Z0-9_\-]+#', '-', $region),
-	        'class' => join(' ', $classes),
-	        'data-blockregion' => $region,
-	        'data-droptarget' => '1'
-	    );
-	    $content = '';
-	    if ($this->page->blocks->region_has_content($region, $this)) {
-	        $content = $this->blocks_for_region($region);
-	    }
-	    return html_writer::tag($tag, $content, $attributes);
-	}
-
-	/**
-	 * City University help menu
-	 */
-	public function help_menu() {
-	    global $CFG, $PAGE;
-
-	    if (!empty($this->page->theme->settings->customhelpmenuitems)) {
-	        $customhelpmenuitems = $this->page->theme->settings->customhelpmenuitems;
-	        $helptxt = get_string('helptext', 'theme_cul_boost');
-	        $helpmenu = new custom_menu($customhelpmenuitems);
-	        return $helpmenu;
-	    }
-
-	    return false;
-	}
-
-	public function help() {
-		global $CFG, $PAGE, $USER, $OUTPUT;
-
-		$content = '';
-		$showmenu = isloggedin() && !isguestuser();
-
-		// Help & Support from CUL Theme Settings
-		if ($showmenu) {
-		    if ($helpmenu = $this->help_menu()) {
-		        $content .= $this->render_custom_menu($helpmenu);
-		    }
-		}
-
-		return $content;
-	}
-
-	public function help_mobile() {
-		global $CFG, $PAGE, $USER, $OUTPUT;
-
-		$content = '';
-		$showmenu = isloggedin() && !isguestuser();
-
-		// Help & Support from CUL Theme Settings
-		if ($showmenu) {
-		    if ($helpmenu = $this->help_menu()) {
-		        $content .= $this->render_help_menu($helpmenu);
-		    }
-		}
-
-		return $content;
-	}
 
 	/*
 	 * This renders the bootstrap top menu.
@@ -476,111 +383,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	}
 
 
-	   //  /**
-    //  * theme_cul_boost_core_renderer::render_custom_menu()
-    //  * Render a bootstrap top menu. This renderer is needed to enable the Bootstrap style navigation.
-    //  * @param custom_menu $menu
-    //  * @return string $content
-    //  */
-    // protected function render_custom_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch justify-content-center') {
-    //     global $COURSE, $PAGE, $CFG, $USER;
-
-    //     $content = '';
-    //     $content .= html_writer::start_tag('ul', array('class' => $classes, 'role' => 'menubar'));
-
-    //     foreach ($menu->get_children() as $item) {
-    //         $content .= $this->render_custom_menu_item($item, 1);
-    //     }
-
-    //     $content .= html_writer::end_tag('ul');
-    //     return $content;
-    // }
-
-
-
-	
-
-	public function render_help_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch justify-content-center') {
-	    global $COURSE, $PAGE, $CFG, $USER;
-
-	    $content = '';
-	    $content .= html_writer::start_tag('ul', array('class' => $classes, 'role' => 'menubar'));
-
-	    foreach ($menu->get_children() as $item) {
-	        $content .= $this->render_help_menu_item($item, 1);
-	    }
-
-	    $content .= html_writer::end_tag('ul');
-	    return $content;
-	}
-
-	/**
-	 * This code renders the custom menu items for the
-	 * bootstrap dropdown menu.
-	 */
-	protected function render_help_menu_item(custom_menu_item $menunode, $level = 0 ) {
-	    static $submenucount = 0;
-
-	    $id = strtolower($menunode->get_title());
-	    $id = str_replace(' ', '', $id);
-	    $id = 'theme-cul_boost-' . $id;
-
-	    if ($menunode->has_children()) {
-
-	        if ($level == 1) {
-	            $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-2';
-	        } else {
-	            $class = 'dropdown-item dropdown-submenu';
-	        }
-
-	        $content = html_writer::start_tag('li', array(
-	            'id' => $id,
-	            'class' => $class
-	            )
-	        );
-	        // If the child has menus render it as a sub menu.
-	        $submenucount++;
-
-	        if ($menunode->get_url() !== null) {
-	            $url = $menunode->get_url();
-	        } else {
-	            $url = '#cm_submenu_'.$submenucount;
-	        }
-
-	        $content .= html_writer::start_tag('a', array('href' => $url,
-	            'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'title' => $menunode->get_title()));
-	        $content .= $menunode->get_text();
-
-	        $content .= '</a>';
-	        $content .= '<ul class="dropdown-menu mt-0">';
-
-	        foreach ($menunode->get_children() as $menunode) {
-	            $content .= $this->render_help_menu_item($menunode, 0);
-	        }
-
-	        $content .= '</ul>';
-	    } else {
-	        
-	        $class = 'dropdown-item d-flex flex-wrap align-items-center justify-content-center';
-
-	        if (!$menunode->has_children() && $level == 1) {
-	            $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-2';
-	        }
-
-	        $content = html_writer::start_tag('li', array('id' => $id, 'class'=>$class));
-
-	        // The node doesn't have children so produce a final menuitem.
-	        if ($menunode->get_url() !== null) {
-	            $url = $menunode->get_url();
-	        } else {
-	            $url = '';
-	        }
-
-	        $content .= html_writer::link($url, $menunode->get_text(), array('title' => $menunode->get_title()));
-	    }
-	    return $content;
-	}
-
 	/**
      * Prints a nice side block with an optional header.
      *
@@ -622,92 +424,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $this->render_from_template('core/block', $context);
     }
 
-	// Straight copy from the City University module menu with some visual differences
-	public function favourite_course() {
-		global $CFG, $PAGE, $COURSE, $USER;
-		
-		$content = '';
-		$isfav = false;
-
-		// Add Favourite url
-		$favourites = null;
-
-		// Try the old method of saving favourites in user preference.
-		if (!is_null($favourites = get_user_preferences('culcourse_listing_course_favourites'))) {
-		    $favourites = unserialize($favourites);
-
-		    if ($favourites && in_array($COURSE->id, $favourites)){
-		    	$isfav = true;
-		    }
-	    // Favourites have been transferred to Favourite API.
-		} else {
-			$usercontext = \context_user::instance($USER->id);
-			$coursecontext = \context_user::instance($COURSE->id);
-
-		    // Get the user favourites service, scoped to a single user (their favourites only).
-		    $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
-
-		    $isfav = $ufservice->favourite_exists('core_course', 'courses', $COURSE->id, $coursecontext);
-		}
-
-		if ($isfav) {
-		    $action = 'remove';
-		    $class = 'favourited';
-		    $id = 'theme-cul_boost-removefromfavourites';
-		    $actionstring = 'favouriteremove';
-		} else {
-		    $action = 'add';
-		    $class = '';
-		    $id = 'theme-cul_boost-addtofavourites';
-		    $actionstring = 'favouriteadd';
-		}
-
-		$favouriteurl = new moodle_url('/theme/cul_boost/favourite_post.php', array(
-		    'action' => $action,
-		    'cid' => $COURSE->id,
-		    'sesskey' => sesskey()
-		));
-
-		$favouritetxt = get_string($actionstring, 'theme_cul_boost');
-
-		// @TODO template
-		$favouritesrtxt = html_writer::tag('span', $favouritetxt, ['class' => 'accesshide']);
-		
-		$content = html_writer::link($favouriteurl, $favouritesrtxt, ['class'=>'text-white '.$class, 'data-toggle'=>'popover', 'data-content'=>$favouritetxt, 'data-placement'=>'left', 'data-trigger'=>'hover']);
-
-		$content = html_writer::tag('div', $content, ['id'=>$id, 'class'=>'favourite-btn fixed-btn d-flex flex-wrap align-items-center justify-content-center bg-dark h4 m-0 text-white']);
-
-		return $content;
-	}
-
-	/**
-     * Returns a link to make a hidden course visible.
-     *
-     * @return string the HTML to be output.
-     */
-	public function show_course() {
-
-		global $COURSE, $OUTPUT;
-
-		$content = '';
-		$coursecontext = context_course::instance($COURSE->id);
-
-		if (!has_capability('moodle/course:update', $coursecontext)) {
-            return $content;
-        }        
-
-        $showcourseurl = new moodle_url(
-        	'/theme/cul_boost/unhide_post.php', 
-        	[
-			    'cid' => $COURSE->id,
-			    'sesskey' => sesskey()
-			]
-		);
-
-		$showcoursetxt = get_string('showcourse', 'theme_cul_boost');		
-
-		return $OUTPUT->single_button($showcourseurl, $showcoursetxt, 'post', ['class' => 'showcourse d-inline-block ml-4']);
-    }
 
     /**
      * Internal implementation of user image rendering.
@@ -812,74 +528,22 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 
 
-    // /**
-    //  * This code renders the custom menu items for the
-    //  * bootstrap dropdown menu.
-    //  */
-    // protected function render_custom_menu_item(custom_menu_item $menunode, $level = 0 ) {
-    //     static $submenucount = 0;
 
-    //     $id = strtolower($menunode->get_title());
-    //     $id = str_replace(' ', '', $id);
-    //     $id = 'theme-cul_boost-' . $id;
 
-    //     if ($menunode->has_children()) {
 
-    //         if ($level == 1) {
-    //             $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
-    //         } else {
-    //             $class = 'dropdown-item dropdown-submenu';
-    //         }
 
-    //         $content = html_writer::start_tag('li', array(
-    //             'id' => $id,
-    //             'class' => $class
-    //             )
-    //         );
-    //         // If the child has menus render it as a sub menu.
-    //         $submenucount++;
 
-    //         if ($menunode->get_url() !== null) {
-    //             $url = $menunode->get_url();
-    //         } else {
-    //             // CMDLTWO-1649 Accessibilty - Fix errors identified using WAVE.
-    //             // $url = '#cm_submenu_'.$submenucount;
-    //             $url = '#';
-    //         }
 
-    //         $content .= html_writer::start_tag('a', array('href' => $url,
-    //             'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
-    //         $content .= $menunode->get_text();
 
-    //         $content .= '</a>';
-    //         $content .= '<ul class="dropdown-menu mt-0">';
 
-    //         foreach ($menunode->get_children() as $menunode) {
-    //             $content .= $this->render_custom_menu_item($menunode, 0);
-    //         }
 
-    //         $content .= '</ul>';
-    //     } else {
-            
-    //         $class = 'dropdown-item d-flex flex-wrap align-items-center justify-content-center';
 
-    //         if (!$menunode->has_children() && $level == 1) {
-    //             $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
-    //         }
 
-    //         $content = html_writer::start_tag('li', array('id' => $id, 'class'=>$class));
 
-    //         // The node doesn't have children so produce a final menuitem.
-    //         if ($menunode->get_url() !== null) {
-    //             $url = $menunode->get_url();
-    //         } else {
-    //             $url = '';
-    //         }
+	
 
-    //         $content .= html_writer::link($url, $menunode->get_text());
-    //     }
-    //     return $content;
-    // }
+
+
 
     /**
      * This code renders the navbar button to control the display of the custom menu
@@ -1042,95 +706,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $output;
     }
 
-    /**
-     * theme_cul_boost_topmenu_renderer::topmenu_tree()
-     *
-     * @param navigation_node $navigation
-     * @param mixed $title
-     * @return string Menu tree.
-     */
-    public function topmenu_tree(navigation_node $navigation, $title) {
-        if (!$navigation->has_children() || $navigation->children->count() == 0) {
-            return '';
-        }
 
-        $content  = "$title|\n";
-        $content .= $this->topmenu_node($navigation);
-        return $content;
-    }
-
-    /**
-     * theme_cul_boost_topmenu_renderer::topmenu_node()
-     *
-     * @param mixed $node
-     * @param integer $navcounter
-     * @return
-     */
-    protected function topmenu_node(navigation_node $node, $navcounter = 0) {
-        $prefix = '';
-        $maxlen = 28; // Maximum length of menu item text before it will be shortened for display.
-
-        for ($i = 0; $i <= $navcounter; $i++) {
-            $prefix .= '-';
-        }
-
-        $navcounter++;
-        $items = $node->children;
-
-        if ($items->count() == 0) {
-            return '';
-        }
-
-        $lis = array();
-
-        foreach ($items as $item) {
-            if (empty($item->text) || !$item->display) {
-                continue;
-            }
-
-            $item->hideicon = true;
-            $action = '';
-
-            if (empty($item->action)) {
-                $action = $this->page->url;
-            } else if (is_object($item->action) && property_exists($item->action, 'scheme')) {
-                $action = new moodle_url($item->action);
-
-                // CMDLTWO-240, CMDLTWO-370
-                // If the node has children as well as an associated action,
-                // then append it as a submenu item, to allow acccess from the menu.
-                $children = $item->children;
-
-                if ( ($children->count() > 1)
-                     || (($children->count() === 1) && ($children->last()->action !== $item->action)) ) {
-
-                     $subitemprops = array('text'   => $item->text,
-                                           'type'   => $item->type,
-                                           'action' => $action
-                                           );
-                     $item->add_node(new navigation_node($subitemprops));
-                }
-                // CMDLTWO-586: Cannot print chapter or book from book module.
-            } else if (is_object($item->action) && property_exists($item->action, 'url')) {
-                $action = new moodle_url($item->action->url);
-            } else {
-                $action = new moodle_url('javascript:void(0);');
-            }
-
-            $content  = $item->text . "|{$action}|{$item->title}\n";
-            $content .= $this->topmenu_node($item, $navcounter);
-            $content  = $prefix . $content;
-            $lis[]    = $content;
-        }
-
-        if (count($lis)) {
-            $navcounter = 0;
-            $prefix = '';
-            return $prefix . implode($lis);
-        } else {
-            return '';
-        }
-    }
 
 
           /**
@@ -1567,6 +1143,366 @@ class core_renderer extends \theme_boost\output\core_renderer {
         </script>';
         return $script;
     }
+
+
+	public function global_search() {
+	    global $CFG;
+
+	    $id = 'id_q_' . uniqid();
+	    $output = html_writer::start_tag('div', array('class' => 'slidersearchform d-flex flex-wrap align-items-center'));
+	    $output .= html_writer::start_tag('form', array('action' => '' . $CFG->wwwroot . '/search/index.php', 'method' => 'get'));
+	    $output .= html_writer::tag('label', get_string('enteryoursearchquery', 'search'),
+            array('for' => $id, 'class' => 'accesshide'));
+	    $output .= html_writer::empty_tag('input', array(
+	    	'id' => $id,
+	        'class' => 'w-100',
+	        'type' => 'text',
+	        'name' => 'q',
+	        'alt' => get_string('searchfor','theme_cul_boost'),
+	        'placeholder' => get_string('searchfor','theme_cul_boost')
+	    ));
+	    $output .= html_writer::tag('button',
+	    	'<i class="fa fa-search"></i><span class="accesshide">Search</span>', array(
+	        'type' => 'submit',
+	        'class' => 'btn btn-primary p-0'
+	    ));
+	    $output .= html_writer::end_tag('form');
+	    $output .= html_writer::end_tag('div');
+	    // END Search
+
+	    return $output;
+	}
+
+	protected function render_edit_button(single_button $button) {
+	    $data = $button->export_for_template($this);
+	    $data->state = $button->state;
+	    return $this->render_from_template('theme_cul_boost/edit_button', $data);
+	}
+
+	public function render_help_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch justify-content-center') {
+	    global $COURSE, $PAGE, $CFG, $USER;
+
+	    $content = '';
+	    $content .= html_writer::start_tag('ul', array('class' => $classes, 'role' => 'menubar'));
+
+	    foreach ($menu->get_children() as $item) {
+	        $content .= $this->render_help_menu_item($item, 1);
+	    }
+
+	    $content .= html_writer::end_tag('ul');
+	    return $content;
+	}
+
+	/**
+	 * This code renders the custom menu items for the
+	 * bootstrap dropdown menu.
+	 */
+	protected function render_help_menu_item(custom_menu_item $menunode, $level = 0 ) {
+	    static $submenucount = 0;
+
+	    $id = strtolower($menunode->get_title());
+	    $id = str_replace(' ', '', $id);
+	    $id = 'theme-cul_boost-' . $id;
+
+	    if ($menunode->has_children()) {
+
+	        if ($level == 1) {
+	            $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-2';
+	        } else {
+	            $class = 'dropdown-item dropdown-submenu';
+	        }
+
+	        $content = html_writer::start_tag('li', array(
+	            'id' => $id,
+	            'class' => $class
+	            )
+	        );
+	        // If the child has menus render it as a sub menu.
+	        $submenucount++;
+
+	        if ($menunode->get_url() !== null) {
+	            $url = $menunode->get_url();
+	        } else {
+	            $url = '#cm_submenu_'.$submenucount;
+	        }
+
+	        $content .= html_writer::start_tag('a', array('href' => $url,
+	            'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'title' => $menunode->get_title()));
+	        $content .= $menunode->get_text();
+
+	        $content .= '</a>';
+	        $content .= '<ul class="dropdown-menu mt-0">';
+
+	        foreach ($menunode->get_children() as $menunode) {
+	            $content .= $this->render_help_menu_item($menunode, 0);
+	        }
+
+	        $content .= '</ul>';
+	    } else {
+	        
+	        $class = 'dropdown-item d-flex flex-wrap align-items-center justify-content-center';
+
+	        if (!$menunode->has_children() && $level == 1) {
+	            $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-2';
+	        }
+
+	        $content = html_writer::start_tag('li', array('id' => $id, 'class'=>$class));
+
+	        // The node doesn't have children so produce a final menuitem.
+	        if ($menunode->get_url() !== null) {
+	            $url = $menunode->get_url();
+	        } else {
+	            $url = '';
+	        }
+
+	        $content .= html_writer::link($url, $menunode->get_text(), array('title' => $menunode->get_title()));
+	    }
+	    return $content;
+	}
+
+public function synergyblocks($region, $classes = array(), $tag = 'aside') {
+	    $classes = (array)$classes;
+	    $classes[] = 'block-region';
+	    $attributes = array(
+	        'id' => 'block-region-'.preg_replace('#[^a-zA-Z0-9_\-]+#', '-', $region),
+	        'class' => join(' ', $classes),
+	        'data-blockregion' => $region,
+	        'data-droptarget' => '1'
+	    );
+	    $content = '';
+	    if ($this->page->blocks->region_has_content($region, $this)) {
+	        $content = $this->blocks_for_region($region);
+	    }
+	    return html_writer::tag($tag, $content, $attributes);
+	}
+
+	/**
+	 * City University help menu
+	 */
+	public function help_menu() {
+	    global $CFG, $PAGE;
+
+	    if (!empty($this->page->theme->settings->customhelpmenuitems)) {
+	        $customhelpmenuitems = $this->page->theme->settings->customhelpmenuitems;
+	        $helptxt = get_string('helptext', 'theme_cul_boost');
+	        $helpmenu = new custom_menu($customhelpmenuitems);
+	        return $helpmenu;
+	    }
+
+	    return false;
+	}
+
+	public function help() {
+		global $CFG, $PAGE, $USER, $OUTPUT;
+
+		$content = '';
+		$showmenu = isloggedin() && !isguestuser();
+
+		// Help & Support from CUL Theme Settings
+		if ($showmenu) {
+		    if ($helpmenu = $this->help_menu()) {
+		        $content .= $this->render_custom_menu($helpmenu);
+		    }
+		}
+
+		return $content;
+	}
+
+	public function help_mobile() {
+		global $CFG, $PAGE, $USER, $OUTPUT;
+
+		$content = '';
+		$showmenu = isloggedin() && !isguestuser();
+
+		// Help & Support from CUL Theme Settings
+		if ($showmenu) {
+		    if ($helpmenu = $this->help_menu()) {
+		        $content .= $this->render_help_menu($helpmenu);
+		    }
+		}
+
+		return $content;
+	}
+
+
+	// Straight copy from the City University module menu with some visual differences
+	public function favourite_course() {
+		global $CFG, $PAGE, $COURSE, $USER;
+		
+		$content = '';
+		$isfav = false;
+
+		// Add Favourite url
+		$favourites = null;
+
+		// Try the old method of saving favourites in user preference.
+		if (!is_null($favourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+		    $favourites = unserialize($favourites);
+
+		    if ($favourites && in_array($COURSE->id, $favourites)){
+		    	$isfav = true;
+		    }
+	    // Favourites have been transferred to Favourite API.
+		} else {
+			$usercontext = \context_user::instance($USER->id);
+			$coursecontext = \context_user::instance($COURSE->id);
+
+		    // Get the user favourites service, scoped to a single user (their favourites only).
+		    $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+
+		    $isfav = $ufservice->favourite_exists('core_course', 'courses', $COURSE->id, $coursecontext);
+		}
+
+		if ($isfav) {
+		    $action = 'remove';
+		    $class = 'favourited';
+		    $id = 'theme-cul_boost-removefromfavourites';
+		    $actionstring = 'favouriteremove';
+		} else {
+		    $action = 'add';
+		    $class = '';
+		    $id = 'theme-cul_boost-addtofavourites';
+		    $actionstring = 'favouriteadd';
+		}
+
+		$favouriteurl = new moodle_url('/theme/cul_boost/favourite_post.php', array(
+		    'action' => $action,
+		    'cid' => $COURSE->id,
+		    'sesskey' => sesskey()
+		));
+
+		$favouritetxt = get_string($actionstring, 'theme_cul_boost');
+
+		// @TODO template
+		$favouritesrtxt = html_writer::tag('span', $favouritetxt, ['class' => 'accesshide']);
+		
+		$content = html_writer::link($favouriteurl, $favouritesrtxt, ['class'=>'text-white '.$class, 'data-toggle'=>'popover', 'data-content'=>$favouritetxt, 'data-placement'=>'left', 'data-trigger'=>'hover']);
+
+		$content = html_writer::tag('div', $content, ['id'=>$id, 'class'=>'favourite-btn fixed-btn d-flex flex-wrap align-items-center justify-content-center bg-dark h4 m-0 text-white']);
+
+		return $content;
+	}
+
+	/**
+     * Returns a link to make a hidden course visible.
+     *
+     * @return string the HTML to be output.
+     */
+	public function show_course() {
+
+		global $COURSE, $OUTPUT;
+
+		$content = '';
+		$coursecontext = context_course::instance($COURSE->id);
+
+		if (!has_capability('moodle/course:update', $coursecontext)) {
+            return $content;
+        }        
+
+        $showcourseurl = new moodle_url(
+        	'/theme/cul_boost/unhide_post.php', 
+        	[
+			    'cid' => $COURSE->id,
+			    'sesskey' => sesskey()
+			]
+		);
+
+		$showcoursetxt = get_string('showcourse', 'theme_cul_boost');		
+
+		return $OUTPUT->single_button($showcourseurl, $showcoursetxt, 'post', ['class' => 'showcourse d-inline-block ml-4']);
+    }
+
+    /**
+     * theme_cul_boost_topmenu_renderer::topmenu_tree()
+     *
+     * @param navigation_node $navigation
+     * @param mixed $title
+     * @return string Menu tree.
+     */
+    public function topmenu_tree(navigation_node $navigation, $title) {
+        if (!$navigation->has_children() || $navigation->children->count() == 0) {
+            return '';
+        }
+
+        $content  = "$title|\n";
+        $content .= $this->topmenu_node($navigation);
+        return $content;
+    }
+
+    /**
+     * theme_cul_boost_topmenu_renderer::topmenu_node()
+     *
+     * @param mixed $node
+     * @param integer $navcounter
+     * @return
+     */
+    protected function topmenu_node(navigation_node $node, $navcounter = 0) {
+        $prefix = '';
+        $maxlen = 28; // Maximum length of menu item text before it will be shortened for display.
+
+        for ($i = 0; $i <= $navcounter; $i++) {
+            $prefix .= '-';
+        }
+
+        $navcounter++;
+        $items = $node->children;
+
+        if ($items->count() == 0) {
+            return '';
+        }
+
+        $lis = array();
+
+        foreach ($items as $item) {
+            if (empty($item->text) || !$item->display) {
+                continue;
+            }
+
+            $item->hideicon = true;
+            $action = '';
+
+            if (empty($item->action)) {
+                $action = $this->page->url;
+            } else if (is_object($item->action) && property_exists($item->action, 'scheme')) {
+                $action = new moodle_url($item->action);
+
+                // CMDLTWO-240, CMDLTWO-370
+                // If the node has children as well as an associated action,
+                // then append it as a submenu item, to allow acccess from the menu.
+                $children = $item->children;
+
+                if ( ($children->count() > 1)
+                     || (($children->count() === 1) && ($children->last()->action !== $item->action)) ) {
+
+                     $subitemprops = array('text'   => $item->text,
+                                           'type'   => $item->type,
+                                           'action' => $action
+                                           );
+                     $item->add_node(new navigation_node($subitemprops));
+                }
+                // CMDLTWO-586: Cannot print chapter or book from book module.
+            } else if (is_object($item->action) && property_exists($item->action, 'url')) {
+                $action = new moodle_url($item->action->url);
+            } else {
+                $action = new moodle_url('javascript:void(0);');
+            }
+
+            $content  = $item->text . "|{$action}|{$item->title}\n";
+            $content .= $this->topmenu_node($item, $navcounter);
+            $content  = $prefix . $content;
+            $lis[]    = $content;
+        }
+
+        if (count($lis)) {
+            $navcounter = 0;
+            $prefix = '';
+            return $prefix . implode($lis);
+        } else {
+            return '';
+        }
+    }
+
+    
 }
 
 
@@ -1748,5 +1684,6 @@ class theme_cul_boost_utility {
 // print_r($yeararray);
         return $yeararray;
     }
+
 
 }
