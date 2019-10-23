@@ -286,167 +286,7 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
             return $myprofilemenu;
     }
 
-    /**
-     * theme_cul_boost_core_renderer::render_custom_menu()
-     * Render a bootstrap top menu. This renderer is needed to enable the Bootstrap style navigation.
-     * @param custom_menu $menu
-     * @return string $content
-     */
-    protected function render_custom_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch justify-content-center') {
-        global $COURSE, $PAGE, $CFG, $USER;
 
-        $content = '';
-        $content .= html_writer::start_tag('ul', array('class' => $classes, 'role' => 'menubar'));
-
-        foreach ($menu->get_children() as $item) {
-            $content .= $this->render_custom_menu_item($item, 1);
-        }
-
-        $content .= html_writer::end_tag('ul');
-        return $content;
-    }
-
-    /**
-     * This code renders the custom menu items for the
-     * bootstrap dropdown menu.
-     */
-    protected function render_custom_menu_item(custom_menu_item $menunode, $level = 0 ) {
-        static $submenucount = 0;
-
-        $id = strtolower($menunode->get_title());
-        $id = str_replace(' ', '', $id);
-        $id = 'theme-cul_boost-' . $id;
-
-        if ($menunode->has_children()) {
-
-            if ($level == 1) {
-                $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
-            } else {
-                $class = 'dropdown-item dropdown-submenu';
-            }
-
-            $content = html_writer::start_tag('li', array(
-                'id' => $id,
-                'class' => $class
-                )
-            );
-            // If the child has menus render it as a sub menu.
-            $submenucount++;
-
-            if ($menunode->get_url() !== null) {
-                $url = $menunode->get_url();
-            } else {
-                // CMDLTWO-1649 Accessibilty - Fix errors identified using WAVE.
-                // $url = '#cm_submenu_'.$submenucount;
-                $url = '#';
-            }
-
-            $content .= html_writer::start_tag('a', array('href' => $url,
-                'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
-            $content .= $menunode->get_text();
-
-            $content .= '</a>';
-            $content .= '<ul class="dropdown-menu mt-0">';
-
-            foreach ($menunode->get_children() as $menunode) {
-                $content .= $this->render_custom_menu_item($menunode, 0);
-            }
-
-            $content .= '</ul>';
-        } else {
-            
-            $class = 'dropdown-item d-flex flex-wrap align-items-center justify-content-center';
-
-            if (!$menunode->has_children() && $level == 1) {
-                $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
-            }
-
-            $content = html_writer::start_tag('li', array('id' => $id, 'class'=>$class));
-
-            // The node doesn't have children so produce a final menuitem.
-            if ($menunode->get_url() !== null) {
-                $url = $menunode->get_url();
-            } else {
-                $url = '';
-            }
-
-            $content .= html_writer::link($url, $menunode->get_text());
-        }
-        return $content;
-    }
-
-    /**
-     * This code renders the navbar button to control the display of the custom menu
-     * on smaller screens.
-     *
-     * Do not display the button if the menu is empty.
-     *
-     * @return string HTML fragment
-     */
-    public function navbar_button() {
-        global $CFG;
-
-        if (empty($CFG->custommenuitems) && $this->lang_menu() == '') {
-            return '';
-        }
-
-        $iconbar = html_writer::tag('span', '', array('class' => 'icon-bar'));
-        $button = html_writer::tag('a', $iconbar . "\n" . $iconbar. "\n" . $iconbar, array(
-            'class'       => 'btn btn-navbar',
-            'data-toggle' => 'collapse',
-            'data-target' => '.nav-collapse'
-        ));
-        return $button;
-    }    
-
-    /**
-     * Renders tabtree
-     *
-     * @param tabtree $tabtree
-     * @return string
-     */
-    protected function render_tabtree(tabtree $tabtree) {
-        if (empty($tabtree->subtree)) {
-            return '';
-        }
-
-        $firstrow = $secondrow = '';
-
-        foreach ($tabtree->subtree as $tab) {
-            $firstrow .= $this->render($tab);
-
-            if (($tab->selected || $tab->activated) && !empty($tab->subtree) && $tab->subtree !== array()) {
-                $secondrow = $this->tabtree($tab->subtree);
-            }
-        }
-
-        return html_writer::tag('ul', $firstrow, array('class' => 'nav nav-tabs')) . $secondrow;
-    }
-
-    /**
-     * Renders tabobject (part of tabtree)
-     *
-     * This function is called from {@link core_renderer::render_tabtree()}
-     * and also it calls itself when printing the $tabobject subtree recursively.
-     *
-     * @param tabobject $tabobject
-     * @return string HTML fragment
-     */
-    protected function render_tabobject(tabobject $tab) {
-        if ($tab->selected or $tab->activated) {
-            return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'active'));
-        } else if ($tab->inactive) {
-            return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'disabled'));
-        } else {
-            if (!($tab->link instanceof moodle_url)) {
-                $link = "<a href=\"$tab->link\" title=\"$tab->title\">$tab->text</a>";
-            } else {
-                $link = html_writer::link($tab->link, $tab->text, array('title' => $tab->title));
-            }
-
-            return html_writer::tag('li', $link);
-        }
-    }
 
     /**
      * Serves requests to /theme/cul_boost/favourites_ajax.php
@@ -488,182 +328,202 @@ class theme_cul_boost_city_core_renderer extends \theme_boost\output\core_render
         return $content;
     }
 
-    /**
-     * Overridden renderer - Returns a search box.
-     *
-     * @param  string $id     The search box wrapper div id, defaults to an autogenerated one.
-     * @return string         HTML with the search form hidden by default.
-     */
-    public function search_box($id = false) {
-        global $CFG;
+    // /**
+    //  * Overridden renderer - Returns a search box.
+    //  *
+    //  * @param  string $id     The search box wrapper div id, defaults to an autogenerated one.
+    //  * @return string         HTML with the search form hidden by default.
+    //  */
+    // public function search_box($id = false) {
+    //     global $CFG;
 
-        // Accessing $CFG directly as using \core_search::is_global_search_enabled would
-        // result in an extra included file for each site, even the ones where global search
-        // is disabled.
-        if (empty($CFG->enableglobalsearch) || !has_capability('moodle/search:query', context_system::instance())) {
-            return '';
-        }
+    //     // Accessing $CFG directly as using \core_search::is_global_search_enabled would
+    //     // result in an extra included file for each site, even the ones where global search
+    //     // is disabled.
+    //     if (empty($CFG->enableglobalsearch) || !has_capability('moodle/search:query', context_system::instance())) {
+    //         return '';
+    //     }
 
-        if ($id == false) {
-            $id = uniqid();
-        } else {
-            // Needs to be cleaned, we use it for the input id.
-            $id = clean_param($id, PARAM_ALPHANUMEXT);
-        }
+    //     if ($id == false) {
+    //         $id = uniqid();
+    //     } else {
+    //         // Needs to be cleaned, we use it for the input id.
+    //         $id = clean_param($id, PARAM_ALPHANUMEXT);
+    //     }
 
-        // JS to animate the form.
-        $this->page->requires->js_call_amd('core/search-input', 'init', array($id));
+    //     // JS to animate the form.
+    //     $this->page->requires->js_call_amd('core/search-input', 'init', array($id));
 
-        $searchicon = html_writer::tag('div', '<i class="fa fa-search">&nbsp;</i>',
-            array('role' => 'button', 'tabindex' => 0));
-        $formattrs = array('class' => 'search-input-form', 'action' => $CFG->wwwroot . '/search/index.php');
-        $inputattrs = array('type' => 'text', 'name' => 'q', 'placeholder' => get_string('search', 'search'),
-            'size' => 13, 'tabindex' => -1, 'id' => 'id_q_' . $id);
+    //     $searchicon = html_writer::tag('div', '<i class="fa fa-search">&nbsp;</i>',
+    //         array('role' => 'button', 'tabindex' => 0));
+    //     $formattrs = array('class' => 'search-input-form', 'action' => $CFG->wwwroot . '/search/index.php');
+    //     $inputattrs = array('type' => 'text', 'name' => 'q', 'placeholder' => get_string('search', 'search'),
+    //         'size' => 13, 'tabindex' => -1, 'id' => 'id_q_' . $id);
 
-        $contents = html_writer::tag('label', get_string('enteryoursearchquery', 'search'),
-            array('for' => 'id_q_' . $id, 'class' => 'accesshide')) . html_writer::tag('input', '', $inputattrs);
-        $searchinput = html_writer::tag('form', $contents, $formattrs);
+    //     $contents = html_writer::tag('label', get_string('enteryoursearchquery', 'search'),
+    //         array('for' => 'id_q_' . $id, 'class' => 'accesshide')) . html_writer::tag('input', '', $inputattrs);
+    //     $searchinput = html_writer::tag('form', $contents, $formattrs);
 
-        return html_writer::tag('div', $searchicon . $searchinput, array('class' => 'search-input-wrapper nav-link', 'id' => $id));
-    }    
+    //     return html_writer::tag('div', $searchicon . $searchinput, array('class' => 'search-input-wrapper nav-link', 'id' => $id));
+    // }    
 
-    /**
-     * Overwritten renderer - Output all the blocks in a particular region.
-     *
-     * @param string $region the name of a region on this page.
-     * @return string the HTML to be output.
-     */
-    public function blocks_for_region($region) {
-        global $COURSE;
+    // /**
+    //  * Overwritten renderer - Output all the blocks in a particular region.
+    //  *
+    //  * @param string $region the name of a region on this page.
+    //  * @return string the HTML to be output.
+    //  */
+    // public function blocks_for_region($region) {
+    //     global $COURSE;
 
-        $blockcontents = $this->page->blocks->get_content_for_region($region, $this);
-        $blocks = $this->page->blocks->get_blocks_for_region($region);
-        $lastblock = null;
-        $zones = array();
-        $can_edit = false;
-        $admininstanceid = -1;
+    //     $blockcontents = $this->page->blocks->get_content_for_region($region, $this);
+    //     $blocks = $this->page->blocks->get_blocks_for_region($region);
+    //     $lastblock = null;
+    //     $zones = array();
+    //     $can_edit = false;
+    //     $admininstanceid = -1;
 
-        if (has_capability('moodle/course:update', context_course::instance($COURSE->id))) {
-            $can_edit = true;
-        }
+    //     if (has_capability('moodle/course:update', context_course::instance($COURSE->id))) {
+    //         $can_edit = true;
+    //     }
 
-        foreach ($blocks as $block) {
-            if (!$can_edit && $block->name() == 'settings') {
-                $admininstanceid = $block->instance->id;
-                continue;
-            }
+    //     foreach ($blocks as $block) {
+    //         if (!$can_edit && $block->name() == 'settings') {
+    //             $admininstanceid = $block->instance->id;
+    //             continue;
+    //         }
 
-            $zones[] = $block->title;
-        }
+    //         $zones[] = $block->title;
+    //     }
 
-        $output = '';
+    //     $output = '';
 
-        foreach ($blockcontents as $bc) {
-            if ($bc->blockinstanceid == $admininstanceid) {
-                continue;
-            }
+    //     foreach ($blockcontents as $bc) {
+    //         if ($bc->blockinstanceid == $admininstanceid) {
+    //             continue;
+    //         }
 
-            if ($bc instanceof block_contents) {
-                $output .= $this->block($bc, $region);
-                $lastblock = $bc->title;
-            } else if ($bc instanceof block_move_target) {
-                $output .= $this->block_move_target($bc, $zones, $lastblock, $region);
-            } else {
-                throw new coding_exception('Unexpected type of thing (' . get_class($bc) . ') found in list of block contents.');
-            }
-        }
-        return $output;
-    }
+    //         if ($bc instanceof block_contents) {
+    //             $output .= $this->block($bc, $region);
+    //             $lastblock = $bc->title;
+    //         } else if ($bc instanceof block_move_target) {
+    //             $output .= $this->block_move_target($bc, $zones, $lastblock, $region);
+    //         } else {
+    //             throw new coding_exception('Unexpected type of thing (' . get_class($bc) . ') found in list of block contents.');
+    //         }
+    //     }
+    //     return $output;
+    // }
 
-    /**
-     * theme_cul_boost_topmenu_renderer::topmenu_tree()
-     *
-     * @param navigation_node $navigation
-     * @param mixed $title
-     * @return string Menu tree.
-     */
-    public function topmenu_tree(navigation_node $navigation, $title) {
-        if (!$navigation->has_children() || $navigation->children->count() == 0) {
-            return '';
-        }
+    // /**
+    //  * theme_cul_boost_topmenu_renderer::topmenu_tree()
+    //  *
+    //  * @param navigation_node $navigation
+    //  * @param mixed $title
+    //  * @return string Menu tree.
+    //  */
+    // public function topmenu_tree(navigation_node $navigation, $title) {
+    //     if (!$navigation->has_children() || $navigation->children->count() == 0) {
+    //         return '';
+    //     }
 
-        $content  = "$title|\n";
-        $content .= $this->topmenu_node($navigation);
-        return $content;
-    }
+    //     $content  = "$title|\n";
+    //     $content .= $this->topmenu_node($navigation);
+    //     return $content;
+    // }
 
-    /**
-     * theme_cul_boost_topmenu_renderer::topmenu_node()
-     *
-     * @param mixed $node
-     * @param integer $navcounter
-     * @return
-     */
-    protected function topmenu_node(navigation_node $node, $navcounter = 0) {
-        $prefix = '';
-        $maxlen = 28; // Maximum length of menu item text before it will be shortened for display.
+    // /**
+    //  * theme_cul_boost_topmenu_renderer::topmenu_node()
+    //  *
+    //  * @param mixed $node
+    //  * @param integer $navcounter
+    //  * @return
+    //  */
+    // protected function topmenu_node(navigation_node $node, $navcounter = 0) {
+    //     $prefix = '';
+    //     $maxlen = 28; // Maximum length of menu item text before it will be shortened for display.
 
-        for ($i = 0; $i <= $navcounter; $i++) {
-            $prefix .= '-';
-        }
+    //     for ($i = 0; $i <= $navcounter; $i++) {
+    //         $prefix .= '-';
+    //     }
 
-        $navcounter++;
-        $items = $node->children;
+    //     $navcounter++;
+    //     $items = $node->children;
 
-        if ($items->count() == 0) {
-            return '';
-        }
+    //     if ($items->count() == 0) {
+    //         return '';
+    //     }
 
-        $lis = array();
+    //     $lis = array();
 
-        foreach ($items as $item) {
-            if (empty($item->text) || !$item->display) {
-                continue;
-            }
+    //     foreach ($items as $item) {
+    //         if (empty($item->text) || !$item->display) {
+    //             continue;
+    //         }
 
-            $item->hideicon = true;
-            $action = '';
+    //         $item->hideicon = true;
+    //         $action = '';
 
-            if (empty($item->action)) {
-                $action = $this->page->url;
-            } else if (is_object($item->action) && property_exists($item->action, 'scheme')) {
-                $action = new moodle_url($item->action);
+    //         if (empty($item->action)) {
+    //             $action = $this->page->url;
+    //         } else if (is_object($item->action) && property_exists($item->action, 'scheme')) {
+    //             $action = new moodle_url($item->action);
 
-                // CMDLTWO-240, CMDLTWO-370
-                // If the node has children as well as an associated action,
-                // then append it as a submenu item, to allow acccess from the menu.
-                $children = $item->children;
+    //             // CMDLTWO-240, CMDLTWO-370
+    //             // If the node has children as well as an associated action,
+    //             // then append it as a submenu item, to allow acccess from the menu.
+    //             $children = $item->children;
 
-                if ( ($children->count() > 1)
-                     || (($children->count() === 1) && ($children->last()->action !== $item->action)) ) {
+    //             if ( ($children->count() > 1)
+    //                  || (($children->count() === 1) && ($children->last()->action !== $item->action)) ) {
 
-                     $subitemprops = array('text'   => $item->text,
-                                           'type'   => $item->type,
-                                           'action' => $action
-                                           );
-                     $item->add_node(new navigation_node($subitemprops));
-                }
-                // CMDLTWO-586: Cannot print chapter or book from book module.
-            } else if (is_object($item->action) && property_exists($item->action, 'url')) {
-                $action = new moodle_url($item->action->url);
-            } else {
-                $action = new moodle_url('javascript:void(0);');
-            }
+    //                  $subitemprops = array('text'   => $item->text,
+    //                                        'type'   => $item->type,
+    //                                        'action' => $action
+    //                                        );
+    //                  $item->add_node(new navigation_node($subitemprops));
+    //             }
+    //             // CMDLTWO-586: Cannot print chapter or book from book module.
+    //         } else if (is_object($item->action) && property_exists($item->action, 'url')) {
+    //             $action = new moodle_url($item->action->url);
+    //         } else {
+    //             $action = new moodle_url('javascript:void(0);');
+    //         }
 
-            $content  = $item->text . "|{$action}|{$item->title}\n";
-            $content .= $this->topmenu_node($item, $navcounter);
-            $content  = $prefix . $content;
-            $lis[]    = $content;
-        }
+    //         $content  = $item->text . "|{$action}|{$item->title}\n";
+    //         $content .= $this->topmenu_node($item, $navcounter);
+    //         $content  = $prefix . $content;
+    //         $lis[]    = $content;
+    //     }
 
-        if (count($lis)) {
-            $navcounter = 0;
-            $prefix = '';
-            return $prefix . implode($lis);
-        } else {
-            return '';
-        }
-    }
+    //     if (count($lis)) {
+    //         $navcounter = 0;
+    //         $prefix = '';
+    //         return $prefix . implode($lis);
+    //     } else {
+    //         return '';
+    //     }
+    // }
+
+    //         /**
+    //  * theme_cul_boost_core_renderer::render_custom_menu()
+    //  * Render a bootstrap top menu. This renderer is needed to enable the Bootstrap style navigation.
+    //  * @param custom_menu $menu
+    //  * @return string $content
+    //  */
+    // protected function render_custom_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch justify-content-center') {
+    //     global $COURSE, $PAGE, $CFG, $USER;
+
+    //     $content = '';
+    //     $content .= html_writer::start_tag('ul', array('class' => $classes, 'role' => 'menubar'));
+
+    //     foreach ($menu->get_children() as $item) {
+    //         $content .= $this->render_custom_menu_item($item, 1);
+    //     }
+
+    //     $content .= html_writer::end_tag('ul');
+    //     return $content;
+    // }
 
 }
 
@@ -834,24 +694,4 @@ class theme_cul_boost_utility {
         return $yeararray;
     }
 
-    /**
-     * theme_cul_boost_utility::shorten_string()
-     * Shorten a string for display, and append an ellipsis to indicate continuation.
-     * //TODO: Candidate for moving to external general culutility class...
-     * @param string $string The string to shorten.
-     * @param integer $maxlen The total maximum length of output string, including ellipsis.
-     * @param string $ellipsis The string to append to the shortened string to indicate continuation.
-     * @return string
-     */
-    public static function shorten_string($string, $maxlen = 22, $ellipsis = '...') {
-        $boundary = $maxlen - strlen($ellipsis);
-
-        if ((strlen($string) > $maxlen)) {
-            $shortstring = substr($string, 0, $boundary) . $ellipsis;
-        } else {
-            $shortstring = $string;
-        }
-
-        return $shortstring;
-    }
 }

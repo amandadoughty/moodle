@@ -475,6 +475,31 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    return $content;
 	}
 
+
+	   //  /**
+    //  * theme_cul_boost_core_renderer::render_custom_menu()
+    //  * Render a bootstrap top menu. This renderer is needed to enable the Bootstrap style navigation.
+    //  * @param custom_menu $menu
+    //  * @return string $content
+    //  */
+    // protected function render_custom_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch justify-content-center') {
+    //     global $COURSE, $PAGE, $CFG, $USER;
+
+    //     $content = '';
+    //     $content .= html_writer::start_tag('ul', array('class' => $classes, 'role' => 'menubar'));
+
+    //     foreach ($menu->get_children() as $item) {
+    //         $content .= $this->render_custom_menu_item($item, 1);
+    //     }
+
+    //     $content .= html_writer::end_tag('ul');
+    //     return $content;
+    // }
+
+
+
+	
+
 	public function render_help_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch justify-content-center') {
 	    global $COURSE, $PAGE, $CFG, $USER;
 
@@ -783,6 +808,151 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         return html_writer::tag('a', $output, $attributes);
     }
+
+
+
+
+    // /**
+    //  * This code renders the custom menu items for the
+    //  * bootstrap dropdown menu.
+    //  */
+    // protected function render_custom_menu_item(custom_menu_item $menunode, $level = 0 ) {
+    //     static $submenucount = 0;
+
+    //     $id = strtolower($menunode->get_title());
+    //     $id = str_replace(' ', '', $id);
+    //     $id = 'theme-cul_boost-' . $id;
+
+    //     if ($menunode->has_children()) {
+
+    //         if ($level == 1) {
+    //             $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
+    //         } else {
+    //             $class = 'dropdown-item dropdown-submenu';
+    //         }
+
+    //         $content = html_writer::start_tag('li', array(
+    //             'id' => $id,
+    //             'class' => $class
+    //             )
+    //         );
+    //         // If the child has menus render it as a sub menu.
+    //         $submenucount++;
+
+    //         if ($menunode->get_url() !== null) {
+    //             $url = $menunode->get_url();
+    //         } else {
+    //             // CMDLTWO-1649 Accessibilty - Fix errors identified using WAVE.
+    //             // $url = '#cm_submenu_'.$submenucount;
+    //             $url = '#';
+    //         }
+
+    //         $content .= html_writer::start_tag('a', array('href' => $url,
+    //             'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
+    //         $content .= $menunode->get_text();
+
+    //         $content .= '</a>';
+    //         $content .= '<ul class="dropdown-menu mt-0">';
+
+    //         foreach ($menunode->get_children() as $menunode) {
+    //             $content .= $this->render_custom_menu_item($menunode, 0);
+    //         }
+
+    //         $content .= '</ul>';
+    //     } else {
+            
+    //         $class = 'dropdown-item d-flex flex-wrap align-items-center justify-content-center';
+
+    //         if (!$menunode->has_children() && $level == 1) {
+    //             $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
+    //         }
+
+    //         $content = html_writer::start_tag('li', array('id' => $id, 'class'=>$class));
+
+    //         // The node doesn't have children so produce a final menuitem.
+    //         if ($menunode->get_url() !== null) {
+    //             $url = $menunode->get_url();
+    //         } else {
+    //             $url = '';
+    //         }
+
+    //         $content .= html_writer::link($url, $menunode->get_text());
+    //     }
+    //     return $content;
+    // }
+
+    /**
+     * This code renders the navbar button to control the display of the custom menu
+     * on smaller screens.
+     *
+     * Do not display the button if the menu is empty.
+     *
+     * @return string HTML fragment
+     */
+    public function navbar_button() {
+        global $CFG;
+
+        if (empty($CFG->custommenuitems) && $this->lang_menu() == '') {
+            return '';
+        }
+
+        $iconbar = html_writer::tag('span', '', array('class' => 'icon-bar'));
+        $button = html_writer::tag('a', $iconbar . "\n" . $iconbar. "\n" . $iconbar, array(
+            'class'       => 'btn btn-navbar',
+            'data-toggle' => 'collapse',
+            'data-target' => '.nav-collapse'
+        ));
+        return $button;
+    }    
+
+    /**
+     * Renders tabtree
+     *
+     * @param tabtree $tabtree
+     * @return string
+     */
+    protected function render_tabtree(tabtree $tabtree) {
+        if (empty($tabtree->subtree)) {
+            return '';
+        }
+
+        $firstrow = $secondrow = '';
+
+        foreach ($tabtree->subtree as $tab) {
+            $firstrow .= $this->render($tab);
+
+            if (($tab->selected || $tab->activated) && !empty($tab->subtree) && $tab->subtree !== array()) {
+                $secondrow = $this->tabtree($tab->subtree);
+            }
+        }
+
+        return html_writer::tag('ul', $firstrow, array('class' => 'nav nav-tabs')) . $secondrow;
+    }
+
+    /**
+     * Renders tabobject (part of tabtree)
+     *
+     * This function is called from {@link core_renderer::render_tabtree()}
+     * and also it calls itself when printing the $tabobject subtree recursively.
+     *
+     * @param tabobject $tabobject
+     * @return string HTML fragment
+     */
+    protected function render_tabobject(tabobject $tab) {
+        if ($tab->selected or $tab->activated) {
+            return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'active'));
+        } else if ($tab->inactive) {
+            return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'disabled'));
+        } else {
+            if (!($tab->link instanceof moodle_url)) {
+                $link = "<a href=\"$tab->link\" title=\"$tab->title\">$tab->text</a>";
+            } else {
+                $link = html_writer::link($tab->link, $tab->text, array('title' => $tab->title));
+            }
+
+            return html_writer::tag('li', $link);
+        }
+    }    
 
     public function gradebook_disclaimer() {
 	    $gradebookids = array (
