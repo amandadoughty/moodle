@@ -26,10 +26,9 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__) . '/userinfo.php');
 
-$citycore = $PAGE->get_renderer('theme_cul_boost', 'city_core');
 $help = $OUTPUT->help();
 $helpmobile = $OUTPUT->help_mobile();
-$custommenu = $citycore->custom_menu();
+$custommenu = $OUTPUT->custom_menu();
 $search = $OUTPUT->global_search();
 
 $headertemplatecontext = [
