@@ -60,67 +60,46 @@
 <body {{{ bodyattributes }}}>
     {{{ output.standard_top_of_body_html }}}
     {{> theme_cul_boost/header }}
+    <div class="dashboard-navbar-wrap">
+        {{# navbar.hasnavbar }}
+        {{> theme_cul_boost/navbar }}
+        {{/ navbar.hasnavbar }}
+    </div>
     <div id="page" class="position-relative">
-
-    {{! Favourite star and block docker }}
-    {{# iscourse }}
-    <div class="fixed-anchor"></div>
-    <div class="fixed-buttons">
-    {{# hasblocks }}
-    <div class="toggleblocks-btn fixed-btn d-none d-xl-flex flex-wrap align-items-center justify-content-center bg-dark h3 m-0 text-white">
-        <i
-            class="fa fa-angle-double-left"
-            data-toggle="popover"
-            data-content="{{#str}}hideblocks, theme_cul_boost{{/str}}"
-            data-placement="left"
-            data-trigger="hover"
-        >
-        </i>
-        <i
-            class="fa fa-angle-double-right"
-            data-toggle="popover"
-            data-content="{{#str}}showblocks, theme_cul_boost{{/str}}"
-            data-placement="left"
-            data-trigger="hover"
-        >
-        </i>
-    </div>
-    {{/ hasblocks }}
-    {{{ output.favourite_course }}}
-    </div>
-    {{/ iscourse }}
-    {{# navbar.hasnavbar }}
-    {{> theme_cul_boost/navbar }}
-    {{/ navbar.hasnavbar }}
-
-    {{! Gradebook disclaimer }}
-    {{{ output.gradebook_disclaimer }}}
-
-    {{! Show course button }}
-    {{^ iscoursevisible }}
-    <h2 class="module-hidden p-3 bg-light mb-4 text-center">
-        {{#str}}coursehidden, theme_cul_boost{{/str}}
-        {{{ output.show_course }}}
-    </h2>
-    {{/ iscoursevisible }}
-
-    {{> theme_cul_boost/courseheader }}
-    <div class="container-fluid"> 
-        <div id="page-content" class="row justify-content-center">
-            <section id="region-main" class="{{ classes }}">
-
-                {{! Add themypublic context header }}
-                {{^ iscourse }}
-                    {{{! output.context_header }}}
-                {{/ iscourse }}
-                {{{ output.course_content_header }}}
-                {{{ output.main_content }}}
-                {{{ output.activity_navigation }}}
-                {{{ output.course_content_footer }}}
-            </section>
-            {{# hasblocks }}
-                {{{ sidepostblocks }}}
-            {{/ hasblocks }}
+        <div class="container-fluid"> 
+            <div id="page-content" class="row justify-content-center">
+                <section id="region-main" class="{{ classes }}">
+                    {{{ output.main_content }}}
+                </section>
+                {{# hasblocks }}
+                    {{{ sidepostblocks }}}
+                {{/ hasblocks }}
+                <div class="dashboard-blocks-wrap w-100">
+                    {{# hasdashtopfull }}
+                    <div clss="row">                    
+                        {{{ dashtopfull }}}                    
+                    </div>
+                    {{/ hasdashtopfull }}
+                    {{# hastwocols }}
+                        <div clss="row">                    
+                            {{{ hasdashcontent }}}
+                            {{{ hasdashside }}}                  
+                        </div>
+                    {{/ hastwocols }}
+                    {{# hasthreecols }}
+                        <div clss="row">                    
+                            {{{ hasdashleft }}}
+                            {{{ hasdashmiddle }}}
+                            {{{ hasdashright }}}                  
+                        </div>
+                    {{/ hasthreecols }}
+                    {{# hasdashbottomfull }}
+                        <div clss="row">                    
+                            {{{ dashtopfull }}}                    
+                        </div>
+                    {{/ hasdashbottomfull }}
+                </div>
+            </div>
         </div>
     </div>
     {{{! output.standard_after_main_region_html }}}

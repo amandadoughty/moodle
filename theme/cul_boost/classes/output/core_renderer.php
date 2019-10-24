@@ -1306,6 +1306,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    return $content;
 	}
 
+
+// Template
 public function synergyblocks($region, $classes = array(), $tag = 'aside') {
 	    $classes = (array)$classes;
 	    $classes[] = 'block-region';
