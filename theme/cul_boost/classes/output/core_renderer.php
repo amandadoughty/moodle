@@ -112,34 +112,89 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 
 
-	/*
-	 * This renders the navbar.
-	 * Uses bootstrap compatible html.
-	 */
-	public function navbar() {
-        $breadcrumbs = array();
+
+
+    /**
+     * Return the navbar content so that it can be echoed out by the layout
+     * Overridden to:
+     *	 Add classes to ol an li tags
+     *	 Remove arrow separator
+     *	 change home link to icon
+     *
+     * @return string XHTML navbar
+     */
+    public function navbar() {
         $items = $this->page->navbar->get_items();
-        foreach ($items as $item) {
-            $item->hideicon = true;
-            $breadcrumbs[] = $this->render($item);
+        $itemcount = count($items);
+
+        if ($itemcount === 0) {
+            return '';
         }
 
-        $hometext = html_writer::tag('b', get_string('home'), array('class' => 'showoncollapse'));
-        $homelink = html_writer::link(new moodle_url('/'), '<i class="fa fa-home"></i><span class="accesshide">' . $hometext . '</span>', ['class'=>'d-flex align-items-center']);
-        array_shift($breadcrumbs);
-        array_unshift($breadcrumbs, $homelink);
+        $htmlblocks = [];
+        // Iterate the navarray and display each node
 
-        $listitems = '<li class="breadcrumb-item d-inline-flex flex-wrap align-items-center">' . join(' </li><li class="breadcrumb-item d-inline-flex flex-wrap align-items-center">', $breadcrumbs) . '</li>';
-        $title = '<span class="accesshide">' . get_string('pagepath') . '</span>';
-        return $title . '<ol class="breadcrumb d-flex flex-wrap align-items-center justify-content-center justify-content-md-start bg-transparent px-0 py-2 mb-0">'.$listitems.'</ul>';
+        for ($i=0;$i < $itemcount;$i++) {
+            $item = $items[$i];
+            $item->hideicon = true;
+
+            $content = html_writer::tag(
+            	'li',
+            	$this->render($item),
+            	['class' => 'breadcrumb-item d-inline-flex flex-wrap align-items-center']
+            );
+
+            $htmlblocks[] = $content;
+        }
+
+        $hometext = html_writer::tag('b', get_string('home'), ['class' => 'showoncollapse']);
+        $homelink = html_writer::link(new moodle_url('/'), '<i class="fa fa-home"></i><span class="accesshide">' . $hometext . '</span>', ['class'=>'d-flex align-items-center']);
+        $homeitem = html_writer::tag(
+                	'li',
+                	$homelink,
+                	['class' => 'breadcrumb-item d-inline-flex flex-wrap align-items-center']
+                );
+        array_shift($htmlblocks);
+        array_unshift($htmlblocks, $homeitem);
+
+        //accessibility: heading for navbar list  (MDL-20446)
+        $navbarcontent = html_writer::tag('span', get_string('pagepath'),
+                array('class' => 'accesshide', 'id' => 'navbar-label'));
+        $navbarcontent .= html_writer::tag(
+        	'nav',
+            html_writer::tag(
+            	'ol',
+            	join('', $htmlblocks),
+            	['class' => 'breadcrumb d-flex flex-wrap align-items-center justify-content-center justify-content-md-start bg-transparent px-0 py-2 mb-0']
+            ),
+            ['aria-labelledby' => 'navbar-label']
+        );
+        // XHTML
+        return $navbarcontent;
     }
 
+
+
+
+
+    /**
+     * Gets HTML for the page heading.
+     * Overridden to add classes
+     *
+     * @since Moodle 2.5.1 2.6
+     * @param string $tag The tag to encase the heading in. h1 by default.
+     * @return string HTML.
+     */
 	public function page_heading($tag = 'h1') {
 	    global $COURSE;
-	    $heading = html_writer::tag($tag, $this->page->heading, array('class'=>'pageheading font-weight-normal mb-0'));
+
+	    $heading = html_writer::tag($tag, $this->page->heading, ['class'=>'pageheading font-weight-normal mb-0']);
+
 	    return $heading;
 	}
 
+
+// Check if this is based on older version and update it
 	/**
 	 * Construct a user menu, returning HTML that can be echoed out by a
 	 * layout file.
@@ -337,198 +392,179 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    );
 	}
 
+	// /**
+ //     * Prints a nice side block with an optional header.
+ //     *
+ //     * @param block_contents $bc HTML for the content
+ //     * @param string $region the region the block is appearing in.
+ //     * @return string the HTML to be output.
+ //     */
+ //    public function block(block_contents $bc, $region) {
+ //        $bc = clone($bc); // Avoid messing up the object passed in.
+ //        if (empty($bc->blockinstanceid) || !strip_tags($bc->title)) {
+ //            $bc->collapsible = block_contents::NOT_HIDEABLE;
+ //        }
 
-	/*
-	 * This renders the bootstrap top menu.
-	 *
-	 * This renderer is needed to enable the Bootstrap style navigation.
-	 */
-	protected function render_custom_menu(custom_menu $menu) {
-	    global $CFG;
+ //        $id = !empty($bc->attributes['id']) ? $bc->attributes['id'] : uniqid('block-');
+ //        $context = new stdClass();
+ //        $context->skipid = $bc->skipid;
+ //        $context->blockinstanceid = $bc->blockinstanceid;
+ //        $context->dockable = $bc->dockable;
+ //        $context->id = $id;
 
-	    $langs = get_string_manager()->get_list_of_translations();
-	    $haslangmenu = $this->lang_menu() != '';
+ //        if (strpos($bc->attributes['class'], 'invisible') !== false) {
+ //            $context->hidden = true;
+ //        }
 
-	    if (!$menu->has_children() && !$haslangmenu) {
-	        return '';
-	    }
+ //        $context->skiptitle = strip_tags($bc->title);
+ //        $context->showskiplink = !empty($context->skiptitle);
+ //        $context->arialabel = $bc->arialabel;
+ //        $context->ariarole = !empty($bc->attributes['role']) ? $bc->attributes['role'] : 'complementary';
+ //        $context->type = $bc->attributes['data-block'];
+ //        $context->title = $bc->title;
+ //        $context->content = $bc->content;
+ //        $context->annotation = $bc->annotation;
+ //        $context->footer = $bc->footer;
+ //        $context->hascontrols = !empty($bc->controls);
+ //        if ($context->hascontrols) {
+ //            $context->controls = $this->block_controls($bc->controls, $id);
+ //        }
 
-	    if ($haslangmenu) {
-	        $strlang = get_string('language');
-	        $currentlang = current_language();
-	        if (isset($langs[$currentlang])) {
-	            $currentlang = $langs[$currentlang];
-	        } else {
-	            $currentlang = $strlang;
-	        }
-	        $this->language = $menu->add($currentlang, new moodle_url('#'), $strlang, 10000);
-	        foreach ($langs as $langtype => $langname) {
-	            $this->language->add($langname, new moodle_url($this->page->url, array('lang' => $langtype)), $langname);
-	        }
-	    }
-
-	    $content = '';
-	    foreach ($menu->get_children() as $item) {
-	        $context = $item->export_for_template($this);
-
-	        $context->tours = false;
-	        if ($item->get_title() == 'User tour') {
-	        	$context->tours = true;
-	        }
-	        
-	        $content .= $this->render_from_template('core/custom_menu_item', $context);
-	    }
-
-	    return $content;
-	}
+ //        return $this->render_from_template('core/block', $context);
+ //    }
 
 
-	/**
-     * Prints a nice side block with an optional header.
-     *
-     * @param block_contents $bc HTML for the content
-     * @param string $region the region the block is appearing in.
-     * @return string the HTML to be output.
-     */
-    public function block(block_contents $bc, $region) {
-        $bc = clone($bc); // Avoid messing up the object passed in.
-        if (empty($bc->blockinstanceid) || !strip_tags($bc->title)) {
-            $bc->collapsible = block_contents::NOT_HIDEABLE;
-        }
+    // /**
+    //  * Internal implementation of user image rendering.
+    //  *
+    //  * @param user_picture $userpicture
+    //  * @return string
+    //  */
+    // protected function render_user_picture(\user_picture $userpicture) {
+    //     global $CFG, $DB, $COURSE;        
 
-        $id = !empty($bc->attributes['id']) ? $bc->attributes['id'] : uniqid('block-');
-        $context = new stdClass();
-        $context->skipid = $bc->skipid;
-        $context->blockinstanceid = $bc->blockinstanceid;
-        $context->dockable = $bc->dockable;
-        $context->id = $id;
+    //     $context = \context_course::instance($COURSE->id);
 
-        if (strpos($bc->attributes['class'], 'invisible') !== false) {
-            $context->hidden = true;
-        }
+    //     if (!has_capability('moodle/course:viewhiddenuserfields', $context)) {
+        
 
-        $context->skiptitle = strip_tags($bc->title);
-        $context->showskiplink = !empty($context->skiptitle);
-        $context->arialabel = $bc->arialabel;
-        $context->ariarole = !empty($bc->attributes['role']) ? $bc->attributes['role'] : 'complementary';
-        $context->type = $bc->attributes['data-block'];
-        $context->title = $bc->title;
-        $context->content = $bc->content;
-        $context->annotation = $bc->annotation;
-        $context->footer = $bc->footer;
-        $context->hascontrols = !empty($bc->controls);
-        if ($context->hascontrols) {
-            $context->controls = $this->block_controls($bc->controls, $id);
-        }
+    //         $sql = 'SELECT shortname, data
+    //                 FROM {user_info_data} uid
+    //                 JOIN {user_info_field} uif
+    //                 ON uid.fieldid = uif.id
+    //                 WHERE uid.userid = :userid';
 
-        return $this->render_from_template('core/block', $context);
-    }
+    //         if ($result = $DB->get_records_sql($sql, array('userid' => $userpicture->user->id))){                      ;
+    //             if(isset($result['publicphoto']->data) && $result['publicphoto']->data == 0) {
+    //                 $userpicture->user->picture = 0;
+    //             }
+    //         }
+    //     }
+
+    //     $user = $userpicture->user;
+
+    //     if ($userpicture->alttext) {
+    //         if (!empty($user->imagealt)) {
+    //             $alt = $user->imagealt;
+    //         } else {
+    //             $alt = get_string('pictureof', '', fullname($user));
+    //         }
+    //     } else {
+    //         $alt = '';
+    //     }
+
+    //     if (empty($userpicture->size)) {
+    //         $size = 35;
+    //     } else if ($userpicture->size === true or $userpicture->size == 1) {
+    //         $size = 100;
+    //     } else {
+    //         $size = $userpicture->size;
+    //     }
+
+    //     $class = $userpicture->class;
+
+    //     if ($user->picture == 0) {
+    //         $class .= ' defaultuserpic';
+    //     }
+
+    //     $src = $userpicture->get_url($this->page, $this);
+
+    //     $attributes = array('src'=>$src, 'alt'=>$alt, 'class'=>$class, 'width'=>$size, 'height'=>$size);
+    //     if (!$userpicture->visibletoscreenreaders) {
+    //         $attributes['role'] = 'presentation';
+    //     }
+
+    //     // get the image html output fisrt
+    //     $output = html_writer::empty_tag('img', $attributes);
+
+    //     // Show fullname together with the picture when desired.
+    //     if ($userpicture->includefullname) {
+    //         $output .= fullname($userpicture->user);
+    //     }
+
+    //     // then wrap it in link if needed
+    //     if (!$userpicture->link) {
+    //         return $output;
+    //     }
+
+    //     if (empty($userpicture->courseid)) {
+    //         $courseid = $this->page->course->id;
+    //     } else {
+    //         $courseid = $userpicture->courseid;
+    //     }
+
+    //     if ($courseid == SITEID) {
+    //         $url = new moodle_url('/user/profile.php', array('id' => $user->id));
+    //     } else {
+    //         $url = new moodle_url('/user/view.php', array('id' => $user->id, 'course' => $courseid));
+    //     }
+
+    //     $attributes = array('href'=>$url);
+    //     if (!$userpicture->visibletoscreenreaders) {
+    //         $attributes['tabindex'] = '-1';
+    //         $attributes['aria-hidden'] = 'true';
+    //     }
+
+    //     if ($userpicture->popup) {
+    //         $id = html_writer::random_id('userpicture');
+    //         $attributes['id'] = $id;
+    //         $this->add_action_handler(new popup_action('click', $url), $id);
+    //     }
+
+    //     return html_writer::tag('a', $output, $attributes);
+    // }
+
+
 
 
     /**
      * Internal implementation of user image rendering.
+     * Overridden to hide photo if student has selected this option
      *
      * @param user_picture $userpicture
      * @return string
      */
     protected function render_user_picture(\user_picture $userpicture) {
-        global $CFG, $DB, $COURSE;        
+        global $DB, $COURSE;        
 
         $context = \context_course::instance($COURSE->id);
 
-        if (!has_capability('moodle/course:viewhiddenuserfields', $context)) {
-        
+        if (!has_capability('moodle/course:viewhiddenuserfields', $context)) { 
+	        $sql = 'SELECT shortname, data
+	                FROM {user_info_data} uid
+	                JOIN {user_info_field} uif
+	                ON uid.fieldid = uif.id
+	                WHERE uid.userid = :userid';
 
-            $sql = 'SELECT shortname, data
-                    FROM {user_info_data} uid
-                    JOIN {user_info_field} uif
-                    ON uid.fieldid = uif.id
-                    WHERE uid.userid = :userid';
+	        if ($result = $DB->get_records_sql($sql, array('userid' => $userpicture->user->id))){                      ;
+	            if(isset($result['publicphoto']->data) && $result['publicphoto']->data == 0) {
+	                $userpicture->user->picture = 0;
+	            }
+	        }
+	    }
 
-            if ($result = $DB->get_records_sql($sql, array('userid' => $userpicture->user->id))){                      ;
-                if(isset($result['publicphoto']->data) && $result['publicphoto']->data == 0) {
-                    $userpicture->user->picture = 0;
-                }
-            }
-        }
-
-        $user = $userpicture->user;
-
-        if ($userpicture->alttext) {
-            if (!empty($user->imagealt)) {
-                $alt = $user->imagealt;
-            } else {
-                $alt = get_string('pictureof', '', fullname($user));
-            }
-        } else {
-            $alt = '';
-        }
-
-        if (empty($userpicture->size)) {
-            $size = 35;
-        } else if ($userpicture->size === true or $userpicture->size == 1) {
-            $size = 100;
-        } else {
-            $size = $userpicture->size;
-        }
-
-        $class = $userpicture->class;
-
-        if ($user->picture == 0) {
-            $class .= ' defaultuserpic';
-        }
-
-        $src = $userpicture->get_url($this->page, $this);
-
-        $attributes = array('src'=>$src, 'alt'=>$alt, 'class'=>$class, 'width'=>$size, 'height'=>$size);
-        if (!$userpicture->visibletoscreenreaders) {
-            $attributes['role'] = 'presentation';
-        }
-
-        // get the image html output fisrt
-        $output = html_writer::empty_tag('img', $attributes);
-
-        // Show fullname together with the picture when desired.
-        if ($userpicture->includefullname) {
-            $output .= fullname($userpicture->user);
-        }
-
-        // then wrap it in link if needed
-        if (!$userpicture->link) {
-            return $output;
-        }
-
-        if (empty($userpicture->courseid)) {
-            $courseid = $this->page->course->id;
-        } else {
-            $courseid = $userpicture->courseid;
-        }
-
-        if ($courseid == SITEID) {
-            $url = new moodle_url('/user/profile.php', array('id' => $user->id));
-        } else {
-            $url = new moodle_url('/user/view.php', array('id' => $user->id, 'course' => $courseid));
-        }
-
-        $attributes = array('href'=>$url);
-        if (!$userpicture->visibletoscreenreaders) {
-            $attributes['tabindex'] = '-1';
-            $attributes['aria-hidden'] = 'true';
-        }
-
-        if ($userpicture->popup) {
-            $id = html_writer::random_id('userpicture');
-            $attributes['id'] = $id;
-            $this->add_action_handler(new popup_action('click', $url), $id);
-        }
-
-        return html_writer::tag('a', $output, $attributes);
+        return parent::render_user_picture($userpicture);       
     }
-
-
-
-
-
 
 
 
@@ -553,45 +589,47 @@ class core_renderer extends \theme_boost\output\core_renderer {
      *
      * @return string HTML fragment
      */
-    public function navbar_button() {
-        global $CFG;
+    // public function navbar_button() {
+    //     global $CFG;
 
-        if (empty($CFG->custommenuitems) && $this->lang_menu() == '') {
-            return '';
-        }
+    //     if (empty($CFG->custommenuitems) && $this->lang_menu() == '') {
+    //         return '';
+    //     }
 
-        $iconbar = html_writer::tag('span', '', array('class' => 'icon-bar'));
-        $button = html_writer::tag('a', $iconbar . "\n" . $iconbar. "\n" . $iconbar, array(
-            'class'       => 'btn btn-navbar',
-            'data-toggle' => 'collapse',
-            'data-target' => '.nav-collapse'
-        ));
-        return $button;
-    }    
+    //     $iconbar = html_writer::tag('span', '', array('class' => 'icon-bar'));
+    //     $button = html_writer::tag('a', $iconbar . "\n" . $iconbar. "\n" . $iconbar, array(
+    //         'class'       => 'btn btn-navbar',
+    //         'data-toggle' => 'collapse',
+    //         'data-target' => '.nav-collapse'
+    //     ));
+    //     return $button;
+    // }    
 
+
+// Check if gollowing two functions are copies of older code
     /**
      * Renders tabtree
      *
      * @param tabtree $tabtree
      * @return string
      */
-    protected function render_tabtree(tabtree $tabtree) {
-        if (empty($tabtree->subtree)) {
-            return '';
-        }
+    // protected function render_tabtree(tabtree $tabtree) {
+    //     if (empty($tabtree->subtree)) {
+    //         return '';
+    //     }
 
-        $firstrow = $secondrow = '';
+    //     $firstrow = $secondrow = '';
 
-        foreach ($tabtree->subtree as $tab) {
-            $firstrow .= $this->render($tab);
+    //     foreach ($tabtree->subtree as $tab) {
+    //         $firstrow .= $this->render($tab);
 
-            if (($tab->selected || $tab->activated) && !empty($tab->subtree) && $tab->subtree !== array()) {
-                $secondrow = $this->tabtree($tab->subtree);
-            }
-        }
+    //         if (($tab->selected || $tab->activated) && !empty($tab->subtree) && $tab->subtree !== array()) {
+    //             $secondrow = $this->tabtree($tab->subtree);
+    //         }
+    //     }
 
-        return html_writer::tag('ul', $firstrow, array('class' => 'nav nav-tabs')) . $secondrow;
-    }
+    //     return html_writer::tag('ul', $firstrow, array('class' => 'nav nav-tabs')) . $secondrow;
+    // }
 
     /**
      * Renders tabobject (part of tabtree)
@@ -602,109 +640,113 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @param tabobject $tabobject
      * @return string HTML fragment
      */
-    protected function render_tabobject(tabobject $tab) {
-        if ($tab->selected or $tab->activated) {
-            return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'active'));
-        } else if ($tab->inactive) {
-            return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'disabled'));
-        } else {
-            if (!($tab->link instanceof moodle_url)) {
-                $link = "<a href=\"$tab->link\" title=\"$tab->title\">$tab->text</a>";
-            } else {
-                $link = html_writer::link($tab->link, $tab->text, array('title' => $tab->title));
-            }
+    // protected function render_tabobject(tabobject $tab) {
+    //     if ($tab->selected or $tab->activated) {
+    //         return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'active'));
+    //     } else if ($tab->inactive) {
+    //         return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'disabled'));
+    //     } else {
+    //         if (!($tab->link instanceof moodle_url)) {
+    //             $link = "<a href=\"$tab->link\" title=\"$tab->title\">$tab->text</a>";
+    //         } else {
+    //             $link = html_writer::link($tab->link, $tab->text, array('title' => $tab->title));
+    //         }
 
-            return html_writer::tag('li', $link);
-        }
-    }
+    //         return html_writer::tag('li', $link);
+    //     }
+    // }
 
 
+
+// Check if older code - only differenc is $searchicon
          /**
      * Overridden renderer - Returns a search box.
      *
      * @param  string $id     The search box wrapper div id, defaults to an autogenerated one.
      * @return string         HTML with the search form hidden by default.
      */
-    public function search_box($id = false) {
-        global $CFG;
+    // public function search_box($id = false) {
+    //     global $CFG;
 
-        // Accessing $CFG directly as using \core_search::is_global_search_enabled would
-        // result in an extra included file for each site, even the ones where global search
-        // is disabled.
-        if (empty($CFG->enableglobalsearch) || !has_capability('moodle/search:query', context_system::instance())) {
-            return '';
-        }
+    //     // Accessing $CFG directly as using \core_search::is_global_search_enabled would
+    //     // result in an extra included file for each site, even the ones where global search
+    //     // is disabled.
+    //     if (empty($CFG->enableglobalsearch) || !has_capability('moodle/search:query', context_system::instance())) {
+    //         return '';
+    //     }
 
-        if ($id == false) {
-            $id = uniqid();
-        } else {
-            // Needs to be cleaned, we use it for the input id.
-            $id = clean_param($id, PARAM_ALPHANUMEXT);
-        }
+    //     if ($id == false) {
+    //         $id = uniqid();
+    //     } else {
+    //         // Needs to be cleaned, we use it for the input id.
+    //         $id = clean_param($id, PARAM_ALPHANUMEXT);
+    //     }
 
-        // JS to animate the form.
-        $this->page->requires->js_call_amd('core/search-input', 'init', array($id));
+    //     // JS to animate the form.
+    //     $this->page->requires->js_call_amd('core/search-input', 'init', array($id));
 
-        $searchicon = html_writer::tag('div', '<i class="fa fa-search">&nbsp;</i>',
-            array('role' => 'button', 'tabindex' => 0));
-        $formattrs = array('class' => 'search-input-form', 'action' => $CFG->wwwroot . '/search/index.php');
-        $inputattrs = array('type' => 'text', 'name' => 'q', 'placeholder' => get_string('search', 'search'),
-            'size' => 13, 'tabindex' => -1, 'id' => 'id_q_' . $id);
+    //     $searchicon = html_writer::tag('div', '<i class="fa fa-search">&nbsp;</i>',
+    //         array('role' => 'button', 'tabindex' => 0));
+    //     $formattrs = array('class' => 'search-input-form', 'action' => $CFG->wwwroot . '/search/index.php');
+    //     $inputattrs = array('type' => 'text', 'name' => 'q', 'placeholder' => get_string('search', 'search'),
+    //         'size' => 13, 'tabindex' => -1, 'id' => 'id_q_' . $id);
 
-        $contents = html_writer::tag('label', get_string('enteryoursearchquery', 'search'),
-            array('for' => 'id_q_' . $id, 'class' => 'accesshide')) . html_writer::tag('input', '', $inputattrs);
-        $searchinput = html_writer::tag('form', $contents, $formattrs);
+    //     $contents = html_writer::tag('label', get_string('enteryoursearchquery', 'search'),
+    //         array('for' => 'id_q_' . $id, 'class' => 'accesshide')) . html_writer::tag('input', '', $inputattrs);
+    //     $searchinput = html_writer::tag('form', $contents, $formattrs);
 
-        return html_writer::tag('div', $searchicon . $searchinput, array('class' => 'search-input-wrapper nav-link', 'id' => $id));
-    }    
+    //     return html_writer::tag('div', $searchicon . $searchinput, array('class' => 'search-input-wrapper nav-link', 'id' => $id));
+    // }    
 
+
+// Check if older version of code
     /**
      * Overwritten renderer - Output all the blocks in a particular region.
      *
      * @param string $region the name of a region on this page.
      * @return string the HTML to be output.
      */
-    public function blocks_for_region($region) {
-        global $COURSE;
+    // public function blocks_for_region($region) {
+    //     global $COURSE;
 
-        $blockcontents = $this->page->blocks->get_content_for_region($region, $this);
-        $blocks = $this->page->blocks->get_blocks_for_region($region);
-        $lastblock = null;
-        $zones = array();
-        $can_edit = false;
-        $admininstanceid = -1;
+    //     $blockcontents = $this->page->blocks->get_content_for_region($region, $this);
+    //     $blocks = $this->page->blocks->get_blocks_for_region($region);
+    //     $lastblock = null;
+    //     $zones = array();
+    //     $can_edit = false;
+    //     $admininstanceid = -1;
 
-        if (has_capability('moodle/course:update', context_course::instance($COURSE->id))) {
-            $can_edit = true;
-        }
+    //     if (has_capability('moodle/course:update', context_course::instance($COURSE->id))) {
+    //         $can_edit = true;
+    //     }
 
-        foreach ($blocks as $block) {
-            if (!$can_edit && $block->name() == 'settings') {
-                $admininstanceid = $block->instance->id;
-                continue;
-            }
+    //     foreach ($blocks as $block) {
+    //         if (!$can_edit && $block->name() == 'settings') {
+    //             $admininstanceid = $block->instance->id;
+    //             continue;
+    //         }
 
-            $zones[] = $block->title;
-        }
+    //         $zones[] = $block->title;
+    //     }
 
-        $output = '';
+    //     $output = '';
 
-        foreach ($blockcontents as $bc) {
-            if ($bc->blockinstanceid == $admininstanceid) {
-                continue;
-            }
+    //     foreach ($blockcontents as $bc) {
+    //         if ($bc->blockinstanceid == $admininstanceid) {
+    //             continue;
+    //         }
 
-            if ($bc instanceof block_contents) {
-                $output .= $this->block($bc, $region);
-                $lastblock = $bc->title;
-            } else if ($bc instanceof block_move_target) {
-                $output .= $this->block_move_target($bc, $zones, $lastblock, $region);
-            } else {
-                throw new coding_exception('Unexpected type of thing (' . get_class($bc) . ') found in list of block contents.');
-            }
-        }
-        return $output;
-    }
+    //         if ($bc instanceof block_contents) {
+    //             $output .= $this->block($bc, $region);
+    //             $lastblock = $bc->title;
+    //         } else if ($bc instanceof block_move_target) {
+    //             $output .= $this->block_move_target($bc, $zones, $lastblock, $region);
+    //         } else {
+    //             throw new coding_exception('Unexpected type of thing (' . get_class($bc) . ') found in list of block contents.');
+    //         }
+    //     }
+    //     return $output;
+    // }
 
 
 
@@ -1144,7 +1186,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $script;
     }
 
-
+// Template
 	public function global_search() {
 	    global $CFG;
 
@@ -1172,6 +1214,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 	    return $output;
 	}
+
+
+
+
 
 	protected function render_edit_button(single_button $button) {
 	    $data = $button->export_for_template($this);
