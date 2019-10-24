@@ -48,21 +48,14 @@ if ($knownregionpost) {
 }
 
 // Main region setup.
-// $hasdashtopfull = (empty($PAGE->layout_options['noblocks']));
-// $hasdashcontent = (empty($PAGE->layout_options['noblocks']));
-// $hasdashside = (empty($PAGE->layout_options['noblocks']));
-// $hasdashleft = (empty($PAGE->layout_options['noblocks']));
-// $hasdashmiddle = (empty($PAGE->layout_options['noblocks']));
-// $hasdashright = (empty($PAGE->layout_options['noblocks']));
-// $hasdashbottomfull = (empty($PAGE->layout_options['noblocks']));
-$dashclasses = 'col-12 col-md-4 d-flex flex-wrap align-items-stretch mb-4';
-$dashtopfull = $OUTPUT->synergyblocks('dash-top-full', $dashclasses);
-$dashcontent = $OUTPUT->synergyblocks('dash-content', $dashclasses);
-$dashside = $OUTPUT->synergyblocks('dash-side', $dashclasses);
-$dashleft = $OUTPUT->synergyblocks('dash-left', $dashclasses);
-$dashmiddle = $OUTPUT->synergyblocks('dash-middle', $dashclasses);
-$dashright = $OUTPUT->synergyblocks('dash-right', $dashclasses);
-$dashbottomfull = $OUTPUT->synergyblocks('dash-bottom-full', $dashclasses);
+$dashclasses = 'd-flex flex-wrap align-items-stretch mb-4';
+$dashtopfull = $OUTPUT->synergyblocks('dash-top-full', $dashclasses . ' col-12 col-md-12');
+$dashcontent = $OUTPUT->synergyblocks('dash-content', $dashclasses . ' col-12 col-md-8');
+$dashside = $OUTPUT->synergyblocks('dash-side', $dashclasses . ' col-12 col-md-4');
+$dashleft = $OUTPUT->synergyblocks('dash-left', $dashclasses . ' col-12 col-md-4');
+$dashmiddle = $OUTPUT->synergyblocks('dash-middle', $dashclasses . ' col-12 col-md-4');
+$dashright = $OUTPUT->synergyblocks('dash-right', $dashclasses . ' col-12 col-md-4');
+$dashbottomfull = $OUTPUT->synergyblocks('dash-bottom-full', $dashclasses . ' col-12 col-md-12');
 
 $templatecontext = [    
     'output' => $OUTPUT,
@@ -71,7 +64,13 @@ $templatecontext = [
     'hasblocks' => $hasblocks,    
     'classes' => $regions['content'],
     'bodyattributes' => $bodyattributes,
-
+    'dashtopfull' => $dashtopfull,
+    'dashcontent' => $dashcontent,
+    'dashside' => $dashside,
+    'dashleft' => $dashleft,
+    'dashmiddle' => $dashmiddle,
+    'dashright' => $dashright,
+    'dashbottomfull' => $dashbottomfull,
     'navbar' => $navbartemplatecontext,
     'header' => $headertemplatecontext,
     'footer' => $footertemplatecontext

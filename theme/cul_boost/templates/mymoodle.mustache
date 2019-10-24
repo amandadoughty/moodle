@@ -74,30 +74,22 @@
                 {{# hasblocks }}
                     {{{ sidepostblocks }}}
                 {{/ hasblocks }}
-                <div class="dashboard-blocks-wrap w-100">
-                    {{# hasdashtopfull }}
+                <div class="dashboard-blocks-wrap w-100">                    
                     <div clss="row">                    
                         {{{ dashtopfull }}}                    
                     </div>
-                    {{/ hasdashtopfull }}
-                    {{# hastwocols }}
-                        <div clss="row">                    
-                            {{{ hasdashcontent }}}
-                            {{{ hasdashside }}}                  
-                        </div>
-                    {{/ hastwocols }}
-                    {{# hasthreecols }}
-                        <div clss="row">                    
-                            {{{ hasdashleft }}}
-                            {{{ hasdashmiddle }}}
-                            {{{ hasdashright }}}                  
-                        </div>
-                    {{/ hasthreecols }}
-                    {{# hasdashbottomfull }}
-                        <div clss="row">                    
-                            {{{ dashtopfull }}}                    
-                        </div>
-                    {{/ hasdashbottomfull }}
+                    <div clss="row">                    
+                        {{{ dashcontent }}}
+                        {{{ dashside }}}                  
+                    </div>
+                    <div clss="row">                    
+                        {{{ dashleft }}}
+                        {{{ dashmiddle }}}
+                        {{{ dashright }}}                  
+                    </div>
+                    <div clss="row">                    
+                        {{{ dashbottomfull }}}                    
+                    </div>
                 </div>
             </div>
         </div>
