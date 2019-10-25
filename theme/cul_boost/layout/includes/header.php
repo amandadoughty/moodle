@@ -29,12 +29,12 @@ require_once(dirname(__FILE__) . '/userinfo.php');
 $help = $OUTPUT->help();
 $helpmobile = $OUTPUT->help_mobile();
 $custommenu = $OUTPUT->custom_menu();
-$search = $OUTPUT->global_search();
+$usermenu = $OUTPUT->user_menu();
 
 $headertemplatecontext = [
     'help' => $help,
     'helpmobile' => $helpmobile,
     'custommenu' => $custommenu,
-    'search' => $search,
+    'usermenu' => $usermenu,
     'userinfo' => $userinfotemplatecontext
 ];

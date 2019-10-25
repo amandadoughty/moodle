@@ -33,13 +33,13 @@ require_once(dirname(__FILE__) . '/includes/footer.php');
 
 $PAGE->set_popup_notification_allowed(false);
 $isloggedin = isloggedin();
-theme_cul_boost_initialise_favourites($PAGE);
 // Accessibility stuff.
 $OUTPUT->standard_head_html();
 $PAGE->requires->skip_link_to('accessibility', get_string('toaccessibility', 'theme_cul_boost'));
 $bodyattributes = $OUTPUT->body_attributes();
 $iscourse = $PAGE->pagelayout == 'course' && $COURSE->id != 1;
 $iscoursevisible = $iscourse && $COURSE->visible == 1;
+$isgradebookdisclaimer = $OUTPUT->gradebook_disclaimer();
 // Block region setup
 $hasblocks = $PAGE->blocks->region_has_content('side-post', $OUTPUT);
 $knownregionpost = $PAGE->blocks->is_known_region('side-post');
@@ -58,6 +58,7 @@ $templatecontext = [
     'classes' => $regions['content'],
     'bodyattributes' => $bodyattributes,
     'iscourse' => $iscourse,
+    'isgradebookdisclaimer' => $isgradebookdisclaimer,
     'sectioninfo' => $sectioninfo,
     'courseimgurl' => $url,
     'iscoursevisible' => $iscoursevisible,

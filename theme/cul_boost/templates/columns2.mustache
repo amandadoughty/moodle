@@ -86,7 +86,7 @@
         </i>
     </div>
     {{/ hasblocks }}
-    {{{ output.favourite_course }}}
+    {{{ output.favourite_course_button }}}
     </div>
     {{/ iscourse }}
     {{# navbar.hasnavbar }}
@@ -94,17 +94,19 @@
     {{/ navbar.hasnavbar }}
 
     {{! Gradebook disclaimer }}
-    {{{ output.gradebook_disclaimer }}}
+    {{# isgradebookdisclaimer }}
+    {{> theme_cul_boost/gradebook_disclaimer }}
+    {{/ isgradebookdisclaimer }}
 
     {{! Show course button }}
     {{^ iscoursevisible }}
     <h2 class="module-hidden p-3 bg-light mb-4 text-center">
         {{#str}}coursehidden, theme_cul_boost{{/str}}
-        {{{ output.show_course }}}
+        {{{ output.show_course_button }}}
     </h2>
     {{/ iscoursevisible }}
 
-    {{> theme_cul_boost/courseheader }}
+    {{> theme_cul_boost/course_header }}
     <div class="container-fluid"> 
         <div id="page-content" class="row justify-content-center">
             <section id="region-main" class="{{ classes }}">
@@ -113,6 +115,7 @@
                 {{^ iscourse }}
                     {{{! output.context_header }}}
                 {{/ iscourse }}
+
                 {{{ output.course_content_header }}}
                 {{{ output.main_content }}}
                 {{{ output.activity_navigation }}}

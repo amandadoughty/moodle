@@ -64,6 +64,8 @@ function theme_cul_boost_page_init(moodle_page $page) {
     // Save scroll position when editing is turned on/off
     // $page->requires->js_call_amd('theme_cul_boost/savescrollpos', 'init');
     $page->requires->js_call_amd('theme_cul_boost/offsetheader', 'init');
+    $page->requires->js_call_amd('theme_cul_boost/favourites', 'init');
+    $page->requires->js_call_amd('theme_cul_boost/favourite', 'init');
 
     return true;
 }
@@ -158,55 +160,3 @@ function theme_cul_boost_store_in_localcache($filearea, $args, $options) {
         return true;
     }
 }
-
-
-
-// theme_cul functions
-
-// /**
-//  * Returns an object containing HTML for the areas affected by settings.
-//  *
-//  * @param renderer_base $output Pass in $OUTPUT.
-//  * @param moodle_page $page Pass in $PAGE.
-//  * @return stdClass An object with the following properties:
-//  *      - navbarclass A CSS class to use on the navbar. By default ''.
-//  *      - heading HTML to use for the heading. A logo if one is selected or the default heading.
-//  *      - footnote HTML to use as a footnote. By default ''.
-//  */
-// function theme_cul_boost_get_html_for_settings(renderer_base $output, moodle_page $page) {
-//     global $CFG, $COURSE;
-
-//     $return = new stdClass;
-//     $return->hascourseimage = 'noimage';
-//     $return->courseimage = '';
-
-//     if ($COURSE->id > 1) {
-//         $course = new core_course_list_element($COURSE);
-//         // Get course overview files.
-//         $contentimages = $contentfiles = '';
-//         foreach ($course->get_course_overviewfiles() as $file) {
-//             $isimage = $file->is_valid_image();
-//             $url = file_encode_url("$CFG->wwwroot/pluginfile.php",
-//                     '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
-//                     $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
-//             if ($isimage) {
-//                 $style = 'background-image: url('.$url.');';
-//                 if ($dimensions = $file->get_imageinfo()) {
-//                     $ratio = $dimensions['width'] / $dimensions['height'];
-//                     if ($ratio < 2) {
-//                         $style .= 'background-size: auto 100%; background-position: right center; ratio:' .$ratio .';';
-//                     } else {
-//                         $style .= 'background-size: cover;';
-//                     }
-//                 }
-//                 $return->courseimage = html_writer::tag('div','', array('style' => $style, 'class' => 'imagediv'));
-//                 $return->hascourseimage = 'hasimage';
-//             }
-//         }
-//     }
-
-//     $return->gradebookdisclaimer = theme_cul_boost_gradebook_disclaimer($page);
-
-//     return $return;
-// }
-

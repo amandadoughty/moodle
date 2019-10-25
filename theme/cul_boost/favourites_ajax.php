@@ -27,14 +27,12 @@
 define('AJAX_SCRIPT', true);
 
 require_once(dirname(__FILE__) . '/../../config.php');
-require_once($CFG->dirroot . '/theme/bootstrapbase/renderers/core_renderer.php');
-require_once($CFG->dirroot . '/theme/cul_boost/classes/city_core_renderer.php');
 
 if ($CFG->forcelogin) {
     require_login();
 }
 
 $PAGE->set_context(context_system::instance());
-$citycore = $PAGE->get_renderer('theme_cul_boost', 'city_core');
+$citycore = $PAGE->get_renderer('theme_cul_boost', 'core');
 
 echo json_encode($citycore->favourites_ajax());

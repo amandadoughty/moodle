@@ -23,6 +23,7 @@
  */
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/lib.php');
+require_once(dirname(__FILE__) . '/locallib.php');
 
 $cid = required_param('cid', PARAM_INT);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);

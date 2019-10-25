@@ -27,6 +27,7 @@ global $PAGE;
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/lib.php');
+require_once(dirname(__FILE__) . '/locallib.php');
 
 require_sesskey();
 require_login();
@@ -41,7 +42,8 @@ theme_cul_boost_update_favourites($favourites);
 theme_cul_boost_edit_favourites_api($action, $cid);
 // Retrieve the favourites again in case the update did not work, we want  
 // to ensure the link reflects the current status of favourites.
-$favourites = theme_cul_boost_utility::get_user_favourites();
+$renderer = $PAGE->get_renderer('theme_cul_boost', 'core');
+$favourites = $renderer::get_user_favourites();
 
 if (in_array($cid, $favourites)) {
 	$newaction = 'remove';
