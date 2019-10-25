@@ -49,13 +49,13 @@ if ($knownregionpost) {
 
 // Main region setup.
 $dashclasses = 'd-flex flex-wrap align-items-stretch mb-4';
-$dashtopfull = $OUTPUT->synergyblocks('dash-top-full', $dashclasses . ' col-12 col-md-12');
-$dashcontent = $OUTPUT->synergyblocks('dash-content', $dashclasses . ' col-12 col-md-8');
-$dashside = $OUTPUT->synergyblocks('dash-side', $dashclasses . ' col-12 col-md-4');
-$dashleft = $OUTPUT->synergyblocks('dash-left', $dashclasses . ' col-12 col-md-4');
-$dashmiddle = $OUTPUT->synergyblocks('dash-middle', $dashclasses . ' col-12 col-md-4');
-$dashright = $OUTPUT->synergyblocks('dash-right', $dashclasses . ' col-12 col-md-4');
-$dashbottomfull = $OUTPUT->synergyblocks('dash-bottom-full', $dashclasses . ' col-12 col-md-12');
+$dashtopfull = $OUTPUT->synergyblocks('dash-top-full', 'col-12 col-md-12 ' . $dashclasses);
+$dashcontent = $OUTPUT->synergyblocks('dash-content', 'col-12 col-md-8 ' . $dashclasses);
+$dashside = $OUTPUT->synergyblocks('dash-side', 'col-12 col-md-4 ' . $dashclasses);
+$dashleft = $OUTPUT->synergyblocks('dash-left', 'col-12 col-md-4 ' . $dashclasses);
+$dashmiddle = $OUTPUT->synergyblocks('dash-middle', 'col-12 col-md-4 ' . $dashclasses);
+$dashright = $OUTPUT->synergyblocks('dash-right', 'col-12 col-md-4 ' . $dashclasses);
+$dashbottomfull = $OUTPUT->synergyblocks('dash-bottom-full', 'col-12 col-md-12 ' . $dashclasses);
 
 $templatecontext = [    
     'output' => $OUTPUT,
