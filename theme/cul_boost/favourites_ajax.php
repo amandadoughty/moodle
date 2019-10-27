@@ -33,6 +33,6 @@ if ($CFG->forcelogin) {
 }
 
 $PAGE->set_context(context_system::instance());
-$citycore = $PAGE->get_renderer('theme_cul_boost', 'core');
+$renderer = $PAGE->get_renderer('theme_cul_boost', 'core');
 
-echo json_encode($citycore->favourites_ajax());
+echo json_encode($renderer->favourites_ajax());

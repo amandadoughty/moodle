@@ -581,6 +581,50 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $content;
     }
 
+    /*
+     * Overridden renderer - This renders the bootstrap top menu.
+     * 
+     * This renderer is needed to enable the Bootstrap style navigation.
+     * Overriden to add id to nodes for JS
+     */
+    protected function render_custom_menu(custom_menu $menu) {
+        global $CFG;
+
+        $langs = get_string_manager()->get_list_of_translations();
+        $haslangmenu = $this->lang_menu() != '';
+
+        if (!$menu->has_children() && !$haslangmenu) {
+            return '';
+        }
+
+        if ($haslangmenu) {
+            $strlang = get_string('language');
+            $currentlang = current_language();
+            if (isset($langs[$currentlang])) {
+                $currentlang = $langs[$currentlang];
+            } else {
+                $currentlang = $strlang;
+            }
+            $this->language = $menu->add($currentlang, new moodle_url('#'), $strlang, 10000);
+            foreach ($langs as $langtype => $langname) {
+                $this->language->add($langname, new moodle_url($this->page->url, array('lang' => $langtype)), $langname);
+            }
+        }
+
+        $content = '';
+
+        foreach ($menu->get_children() as $item) {
+            $context = $item->export_for_template($this);
+            $id = strtolower($item->get_title());
+	        $id = str_replace(' ', '', $id);
+	        $id = 'theme-cul_boost-' . $id;
+	        $context->id = $id;
+            $content .= $this->render_from_template('core/custom_menu_item', $context);
+        }
+
+        return $content;
+    }    
+
     /**
      * City University my menu
      */
@@ -1304,7 +1348,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	    // Favourites have been transferred to Favourite API.
 		} else {
 			$usercontext = \context_user::instance($USER->id);
-			$coursecontext = \context_user::instance($COURSE->id);
+			$coursecontext = \context_course::instance($COURSE->id);
 
 		    // Get the user favourites service, scoped to a single user (their favourites only).
 		    $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
@@ -1406,7 +1450,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         foreach ($menu->get_children() as $item) {
-            $content .= $this->render_custom_menu_item($item, 1);
+            $context = $item->export_for_template($this);
+            $id = strtolower($item->get_title());
+	        $id = str_replace(' ', '', $id);
+	        $id = 'theme-cul_boost-' . $id;
+	        $context->id = $id;
+            $content .= $this->render_from_template('core/custom_menu_item', $context);
         }
 
         return $content;

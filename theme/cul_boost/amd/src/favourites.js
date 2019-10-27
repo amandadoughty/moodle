@@ -32,15 +32,17 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             Y.io(M.cfg.wwwroot + '/theme/cul_boost/favourites_ajax.php', {
                 on: {
                     success: function(id, e) {
-                        var favourites = Y.one('li#theme-cul_boost-myfavourites');
+                        var favourites = Y.one('#theme-cul_boost-myfavourites');
                         var html = Y.JSON.parse(e.responseText);
                         var newnode = Y.Node.create(html);
+                        var navwrap = Y.one('.navbar .nav-wrap');
+                        var existingnode = navwrap.one('.nav-item:nth-of-type(2)');
 
                         if (favourites) {
                             favourites.remove();
                         }
-
-                        Y.one('.navbar .nav-wrap .nav:nth-of-type(2)').prepend(newnode);
+                        
+                        navwrap.insert(newnode, existingnode);
                     }
                 }
             });
