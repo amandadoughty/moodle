@@ -24,15 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$help = $OUTPUT->help();
-$helpmobile = $OUTPUT->help_mobile();
+$help = $OUTPUT->help_menu();
 $custommenu = $OUTPUT->custom_menu();
 $usermenu = $OUTPUT->user_menu();
 $userinfo = $OUTPUT->user_info();
 
 $headertemplatecontext = [
     'help' => $help,
-    'helpmobile' => $helpmobile,
     'custommenu' => $custommenu,
     'usermenu' => $usermenu,
     'userinfo' => $userinfo

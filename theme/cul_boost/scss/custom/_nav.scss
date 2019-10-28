@@ -158,7 +158,7 @@
                     }
                 }
                 .nav {
-                    >li {
+                    >.nav-item {
                         >a {
                             color: $navbar-dark-active-color;
                             &:hover,
@@ -201,48 +201,56 @@
         .homelink {
             display: none;
         }
-        .nav {
+        .nav-item {
             margin: 0 0 0 ($spacer * 1.5);
             &:empty {
                 display: none !important;
             }
             &:first-of-type {
-                margin-left: 0;
+                // margin-left: 0;
             }
-            .dropdown {
+            &.dropdown {
                 +.dropdown {
                     margin-left: $spacer * 1.5;
                 }
                 .dropdown-menu {
-                    .dropdown-item {
-                        padding: 0;
-                        a {
-                            padding: $dropdown-item-padding-y $dropdown-item-padding-x;
-                        }
+                    margin: 0;
+                    .dropdown-item {                        
+                        padding: $dropdown-item-padding-y $dropdown-item-padding-x;
                     }
                 }
             }
-            >li {
+        // >.nav-item {
+            &:hover,
+            &:focus {
+                background-color: transparent;
+            }
+            &.dropdown-item {
+                padding: 0;
+                >a {
+                    display: inline-block;
+                }
+            }
+            >a {
+                color: $navbar-light-color;
+                font-size: $h5-font-size;
+                margin: 0;
+                padding: 0;
                 &:hover,
                 &:focus {
-                    background-color: transparent;
+                    color: $navbar-light-hover-color;
                 }
-                &.dropdown-item {
-                    padding: 0;
-                    >a {
-                        display: inline-block;
-                    }
-                }
-                >a {
-                    color: $navbar-light-color;
-                    font-size: $h5-font-size;
-                    margin: 0;
-                    padding: 0;
-                    &:hover,
-                    &:focus {
-                        color: $navbar-light-hover-color;
-                    }
-                }
+            }
+            // }
+        }
+        .nav-item.nav-link {
+            color: $navbar-light-color;
+            font-size: $h5-font-size;
+            margin: 0;
+            padding: 0;
+            &:hover,
+            &:focus {
+                color: $navbar-light-hover-color;
             }
         }
         .global_search {

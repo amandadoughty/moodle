@@ -614,19 +614,63 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
         }
 
-        $content = '';
+        $menuitems = '';
 
-        foreach ($menu->get_children() as $item) {
-            $context = $item->export_for_template($this);
-            $id = strtolower($item->get_title());
-	        $id = str_replace(' ', '', $id);
-	        $id = 'theme-cul_boost-' . $id;
-	        $context->id = $id;
-            $content .= $this->render_from_template('core/custom_menu_item', $context);
+        foreach ($menu->get_children() as $menuitem) {
+            // $context = $menuitem->export_for_template($this);
+         //    $id = strtolower($menuitem->get_title());
+	        // $id = str_replace(' ', '', $id);
+	        // $id = 'theme-cul_boost-' . $id;
+	        // $context->id = $id;
+            
+        	// $content .= $this->render_custom_menu_item($menuitem);
+
+        	$menuitems .= $this->render_custom_menu_item($menuitem);
+
+        	
         }
 
+        $content = $this->render_from_template('theme_cul_boost/custom_menu', ['menuitems' => $menuitems]);
+
         return $content;
-    }    
+    }
+
+    /*
+     * Overridden renderer - This renders the bootstrap top menu.
+     * 
+     * This renderer is needed to enable the Bootstrap style navigation.
+     * Overriden to add id to nodes for JS
+     */
+    protected function render_custom_menu_item(custom_menu_item $menuitem) {
+        global $CFG;
+
+        $content = '';
+
+        if ($menuitem->has_children()) {
+
+	        foreach ($menuitem->get_children() as $item) {
+	            $context = $item->export_for_template($this);
+
+
+	            
+	            $content .= $this->render_from_template('core/custom_menu_item', $context);
+
+	            if ($item->has_children()) {
+	                foreach ($item->get_children() as $subitem) {
+	                    $content .= $this->render_custom_menu_item($subitem);
+	                }
+	            } 
+	        }
+	    } else {
+	    	$context = $menuitem->export_for_template($this);
+
+
+	            
+	            $content .= $this->render_from_template('core/custom_menu_item', $context);
+	    }
+
+        return $content;
+    } 
 
     /**
      * City University my menu
@@ -1058,20 +1102,21 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	/**
 	 * City University help menu
 	 */
-	public function help_menu() {
+	public function help_menu_items() {
 	    global $CFG, $PAGE;
 
 	    if (!empty($this->page->theme->settings->customhelpmenuitems)) {
 	        $customhelpmenuitems = $this->page->theme->settings->customhelpmenuitems;
 	        $helptxt = get_string('helptext', 'theme_cul_boost');
 	        $helpmenu = new custom_menu($customhelpmenuitems);
+
 	        return $helpmenu;
 	    }
 
 	    return false;
 	}
 
-	public function help() {
+	public function help_menu() {
 		global $CFG, $PAGE, $USER, $OUTPUT;
 
 		$content = '';
@@ -1079,109 +1124,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 		// Help & Support from CUL Theme Settings
 		if ($showmenu) {
-		    if ($helpmenu = $this->help_menu()) {
+		    if ($helpmenu = $this->help_menu_items()) {
 		        $content .= $this->render_custom_menu($helpmenu);
 		    }
 		}
 
 		return $content;
-	}
-
-	public function help_mobile() {
-		global $CFG, $PAGE, $USER, $OUTPUT;
-
-		$content = '';
-		$showmenu = isloggedin() && !isguestuser();
-
-		// Help & Support from CUL Theme Settings
-		if ($showmenu) {
-		    if ($helpmenu = $this->help_menu()) {
-		        $content .= $this->render_help_menu($helpmenu);
-		    }
-		}
-
-		return $content;
-	}	
-
-	public function render_help_menu(custom_menu $menu, $classes = 'nav d-flex flex-wrap align-items-stretch justify-content-center') {
-	    global $COURSE, $PAGE, $CFG, $USER;
-
-	    $content = '';
-	    $content .= html_writer::start_tag('ul', array('class' => $classes, 'role' => 'menubar'));
-
-	    foreach ($menu->get_children() as $item) {
-	        $content .= $this->render_help_menu_item($item, 1);
-	    }
-
-	    $content .= html_writer::end_tag('ul');
-	    return $content;
-	}
-
-	/**
-	 * This code renders the custom menu items for the
-	 * bootstrap dropdown menu.
-	 */
-	protected function render_help_menu_item(custom_menu_item $menunode, $level = 0 ) {
-	    static $submenucount = 0;
-
-	    $id = strtolower($menunode->get_title());
-	    $id = str_replace(' ', '', $id);
-	    $id = 'theme-cul_boost-' . $id;
-
-	    if ($menunode->has_children()) {
-
-	        if ($level == 1) {
-	            $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-2';
-	        } else {
-	            $class = 'dropdown-item dropdown-submenu';
-	        }
-
-	        $content = html_writer::start_tag('li', array(
-	            'id' => $id,
-	            'class' => $class
-	            )
-	        );
-	        // If the child has menus render it as a sub menu.
-	        $submenucount++;
-
-	        if ($menunode->get_url() !== null) {
-	            $url = $menunode->get_url();
-	        } else {
-	            $url = '#cm_submenu_'.$submenucount;
-	        }
-
-	        $content .= html_writer::start_tag('a', array('href' => $url,
-	            'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'title' => $menunode->get_title()));
-	        $content .= $menunode->get_text();
-
-	        $content .= '</a>';
-	        $content .= '<ul class="dropdown-menu mt-0">';
-
-	        foreach ($menunode->get_children() as $menunode) {
-	            $content .= $this->render_help_menu_item($menunode, 0);
-	        }
-
-	        $content .= '</ul>';
-	    } else {
-	        
-	        $class = 'dropdown-item d-flex flex-wrap align-items-center justify-content-center';
-
-	        if (!$menunode->has_children() && $level == 1) {
-	            $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-2';
-	        }
-
-	        $content = html_writer::start_tag('li', array('id' => $id, 'class'=>$class));
-
-	        // The node doesn't have children so produce a final menuitem.
-	        if ($menunode->get_url() !== null) {
-	            $url = $menunode->get_url();
-	        } else {
-	            $url = '';
-	        }
-
-	        $content .= html_writer::link($url, $menunode->get_text(), array('title' => $menunode->get_title()));
-	    }
-	    return $content;
 	}
 
 	public function synergyblocks($region, $classes = array(), $tag = 'aside') {
