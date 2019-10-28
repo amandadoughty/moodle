@@ -99,12 +99,14 @@
     {{/ isgradebookdisclaimer }}
 
     {{! Show course button }}
+    {{# iscourse }}
     {{^ iscoursevisible }}
     <h2 class="module-hidden p-3 bg-light mb-4 text-center">
         {{#str}}coursehidden, theme_cul_boost{{/str}}
         {{{ output.show_course_button }}}
     </h2>
     {{/ iscoursevisible }}
+    {{/ iscourse }}
 
     {{> theme_cul_boost/course_header }}
     <div class="container-fluid"> 

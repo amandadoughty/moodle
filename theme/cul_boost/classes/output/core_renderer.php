@@ -204,7 +204,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	/**
 	 * Overridden function - Construct a user menu, returning HTML that can be echoed out by a
 	 * layout file.
-	 * Overridden to change html
+	 * Overridden to:
+	 *    Move user text to dropdown
+	 *    Remove dividers
+	 *    Change styling of logged in as image
 	 *
 	 * @param stdClass $user A user object, usually $USER.
 	 * @param bool $withlinks true if a dropdown should be built.
@@ -430,7 +433,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     /**
      * Overridden function - Renders tabtree
-     * Overridden
+     * Overridden to use core function instead of Boost
      *
      * @param tabtree $tabtree
      * @return string
@@ -455,7 +458,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     /**
      * Overridden function - Renders tabobject (part of tabtree)
-     * Overridden
+     * Overridden to use core function instead of Boost
      *
      * This function is called from {@link core_renderer::render_tabtree()}
      * and also it calls itself when printing the $tabobject subtree recursively.
@@ -1274,7 +1277,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         $userinfo->logourl = $this->image_url($userinfo->logoprefix . '-logo', 'theme');
-		$userinfo->whitelogourl = $this->image_url($userinfo->logoprefix . '-logo-white', 'theme');
 
         return $userinfo;
     }

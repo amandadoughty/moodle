@@ -24,17 +24,16 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__) . '/userinfo.php');
-
 $help = $OUTPUT->help();
 $helpmobile = $OUTPUT->help_mobile();
 $custommenu = $OUTPUT->custom_menu();
 $usermenu = $OUTPUT->user_menu();
+$userinfo = $OUTPUT->user_info();
 
 $headertemplatecontext = [
     'help' => $help,
     'helpmobile' => $helpmobile,
     'custommenu' => $custommenu,
     'usermenu' => $usermenu,
-    'userinfo' => $userinfotemplatecontext
+    'userinfo' => $userinfo
 ];
