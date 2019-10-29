@@ -614,25 +614,18 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
         }
 
-        $menuitems = '';
-
-        foreach ($menu->get_children() as $menuitem) {
-            // $context = $menuitem->export_for_template($this);
-         //    $id = strtolower($menuitem->get_title());
-	        // $id = str_replace(' ', '', $id);
-	        // $id = 'theme-cul_boost-' . $id;
-	        // $context->id = $id;
-            
-        	// $content .= $this->render_custom_menu_item($menuitem);
-
-        	$menuitems .= $this->render_custom_menu_item($menuitem);
-
-        	
-        }
-
-        $content = $this->render_from_template('theme_cul_boost/custom_menu', ['menuitems' => $menuitems]);
-
-        return $content;
+        $content = '';
+        
+	    foreach ($menu->get_children() as $item) {
+	        $context = $item->export_for_template($this);
+	        $context->tours = false;
+	        if ($item->get_title() == 'User tour') {
+	        	$context->tours = true;
+	        }
+	        
+	        $content .= $this->render_from_template('core/custom_menu_item', $context);
+	    }
+	    return $content;
     }
 
     /*
@@ -645,6 +638,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         global $CFG;
 
         $content = '';
+
+        $context = $menuitem->export_for_template($this);	            
+        $content .= $this->render_from_template('core/custom_menu_item', $context);
 
         if ($menuitem->has_children()) {
 
@@ -662,15 +658,70 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	            } 
 	        }
 	    } else {
-	    	$context = $menuitem->export_for_template($this);
+	    	// $context = $menuitem->export_for_template($this);
 
 
 	            
-	            $content .= $this->render_from_template('core/custom_menu_item', $context);
+	     //        $content .= $this->render_from_template('core/custom_menu_item', $context);
 	    }
 
         return $content;
-    } 
+    }
+
+
+
+
+
+        // $id = strtolower($menunode->get_title());
+        // $id = str_replace(' ', '', $id);
+        // $id = 'theme-cul_boost-' . $id;
+
+        // if ($menunode->has_children()) {
+        //     if ($level == 1) {
+        //         $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
+        //     } else {
+        //         $class = 'dropdown-item dropdown-submenu';
+        //     }
+
+        //     // If the child has menus render it as a sub menu.
+        //     if ($menunode->get_url() !== null) {
+        //         $url = $menunode->get_url();
+        //     } else {
+        //         // CMDLTWO-1649 Accessibilty - Fix errors identified using WAVE.
+        //         // $url = '#cm_submenu_'.$submenucount;
+        //         $url = '#';
+        //     }
+
+        //     foreach ($menunode->get_children() as $menunode) {
+        //         $content .= $this->render_custom_menu_item($menunode, 0);
+        //     }
+
+
+        // } else {
+            
+        //     $class = 'dropdown-item d-flex flex-wrap align-items-center justify-content-center';
+
+        //     if (!$menunode->has_children() && $level == 1) {
+        //         $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
+        //     }
+
+        //     // The node doesn't have children so produce a final menuitem.
+        //     if ($menunode->get_url() !== null) {
+        //         $url = $menunode->get_url();
+        //     } else {
+        //         $url = '';
+        //     }
+
+            
+        // }
+
+        // return $content;
+
+
+
+
+
+
 
     /**
      * City University my menu

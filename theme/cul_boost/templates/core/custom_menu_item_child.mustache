@@ -1,6 +1,6 @@
 {{^ divider }}
 {{# haschildren }}
-<div id="{{ id }}" class="dropdown nav-item">
+<div class="dropdown-item nav-item">
     <a class="dropdown-toggle nav-link" id="drop-down-{{ uniqid }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" {{# title }}title="{{{ title }}}"{{/ title }} href="#">
         {{{text}}}
     </a>
@@ -22,7 +22,7 @@
 </div>
 {{/ haschildren }}
 {{^ haschildren }}
-<a id="{{ id }}" class="nav-item nav-link" href="{{{ url }}}" {{# title }}title="{{{ title }}}"{{/ title }}>{{{ text }}}</a>
+<a class="nav-item nav-link" href="{{{ url }}}" {{# title }}title="{{{ title }}}"{{/ title }}>{{{ text }}}</a>
 {{/ haschildren }}
 {{/ divider }}
 

@@ -157,15 +157,12 @@
                         }
                     }
                 }
-                .nav {
-                    >.nav-item {
-                        >a {
-                            color: $navbar-dark-active-color;
-                            &:hover,
-                            &:focus {
-                                color: $navbar-dark-active-color;
-                            }
-                        }
+                .nav-item.nav-link,
+                .nav-itm >a {
+                    color: $navbar-dark-active-color;
+                    &:hover,
+                    &:focus {
+                        color: $navbar-dark-active-color;
                     }
                 }
                 .global_search {
@@ -201,37 +198,44 @@
         .homelink {
             display: none;
         }
-        .nav-item {
+        .nav-inner {
+            .dropdown {
+                +.dropdown {
+                    margin-left: $spacer * 1.5;
+                }
+                .dropdown-menu {
+                    .dropdown-item {
+                        padding: 0;
+                        a {
+                            padding: $dropdown-item-padding-y $dropdown-item-padding-x;
+                        }
+                    }
+                }
+            }
+        }
+
+        .nav-inner >.nav-item {
             margin: 0 0 0 ($spacer * 1.5);
             &:empty {
                 display: none !important;
             }
             &:first-of-type {
-                // margin-left: 0;
+                margin-left: 0;
             }
-            &.dropdown {
-                +.dropdown {
-                    margin-left: $spacer * 1.5;
+            
+            >.nav-link,
+            &.nav-link {
+                &:hover,
+                &:focus {
+                    background-color: transparent;
                 }
-                .dropdown-menu {
-                    margin: 0;
-                    .dropdown-item {                        
-                        padding: $dropdown-item-padding-y $dropdown-item-padding-x;
-                    }
-                }
-            }
-        // >.nav-item {
-            &:hover,
-            &:focus {
-                background-color: transparent;
-            }
-            &.dropdown-item {
+
                 padding: 0;
                 >a {
                     display: inline-block;
                 }
-            }
-            >a {
+
+     
                 color: $navbar-light-color;
                 font-size: $h5-font-size;
                 margin: 0;
@@ -241,16 +245,17 @@
                     color: $navbar-light-hover-color;
                 }
             }
-            // }
-        }
-        .nav-item.nav-link {
-            color: $navbar-light-color;
-            font-size: $h5-font-size;
-            margin: 0;
-            padding: 0;
-            &:hover,
-            &:focus {
-                color: $navbar-light-hover-color;
+            .dropdown-menu {
+                min-width: 50vw;
+                left: auto;
+                right: 0;
+
+                .dropdown-menu {
+                    padding-left: 0.5rem;
+                    .dropdown-menu {
+                        padding-left: 1rem;
+                    }
+                }
             }
         }
         .global_search {
@@ -363,7 +368,7 @@
     }
 }
 
-.dropdown-submenu {
+.dropdown-menu {
     &.subopen {
         background-color: $gray-lightest;
         &.active,
@@ -719,21 +724,21 @@ a.menu-link .icon {
     }
 }
 
-#theme-cul_boost-mymodules,
-#theme-cul_boost-myfavourites {
-    .dropdown-menu {
-        min-width: 50vw;
-        left: auto;
-        right: 0;
+// #theme-cul_boost-mymodules,
+// #theme-cul_boost-myfavourites {
+//     .dropdown-menu {
+//         min-width: 50vw;
+//         left: auto;
+//         right: 0;
 
-        .dropdown-menu {
-            padding-left: 0.5rem;
-            .dropdown-menu {
-                padding-left: 1rem;
-            }
-        }
-    }
-}
+//         .dropdown-menu {
+//             padding-left: 0.5rem;
+//             .dropdown-menu {
+//                 padding-left: 1rem;
+//             }
+//         }
+//     }
+// }
 
 // CMDLTWO-1588
 :target::before {
