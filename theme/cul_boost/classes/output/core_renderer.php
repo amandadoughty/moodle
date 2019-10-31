@@ -1276,6 +1276,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         $userinfo->logourl = $this->image_url($userinfo->logoprefix . '-logo', 'theme');
+        $userinfo->logourlwhite = $this->image_url($userinfo->logoprefix . '-logo-white', 'theme');
 
         return $userinfo;
     }
