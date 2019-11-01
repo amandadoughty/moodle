@@ -46,7 +46,7 @@ $temp = new admin_settingpage('theme_cul_boost_general',  get_string('generalset
     $name = 'theme_cul_boost/copyright';
     $title = get_string('copyright', 'theme_cul_boost');
     $description = get_string('copyrightdesc', 'theme_cul_boost');
-    $default = get_string('findamodule', 'theme_cul_boost');
+    $default = get_string('copyrightdefault', 'theme_cul_boost');
     $setting = new admin_setting_configtext($name, $title, $description, $default);
     $temp->add($setting);
 
