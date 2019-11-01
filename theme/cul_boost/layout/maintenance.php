@@ -44,5 +44,5 @@ $templatecontext = [
     'bodyattributes' => $bodyattributes,
 ];
 
-echo $OUTPUT->render_from_template('theme_cul_boost/maintenace', $templatecontext);
+echo $OUTPUT->render_from_template('theme_cul_boost/maintenance', $templatecontext);
 
