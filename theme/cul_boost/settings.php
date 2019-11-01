@@ -31,4 +31,3 @@ if (!$ADMIN->locate('theme_cul_boost')) {
 }
 
     require($CFG->dirroot.'/theme/cul_boost/settings/general.php');
-    require($CFG->dirroot.'/theme/cul_boost/settings/dashboard.php');

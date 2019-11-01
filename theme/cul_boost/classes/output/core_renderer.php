@@ -623,7 +623,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	        	$context->tours = true;
 	        }
 	        
-	        $content .= $this->render_from_template('core/custom_menu_item', $context);
+	        $content .= $this->render_from_template('theme_cul_boost/custom_menu_item', $context);
 	    }
 	    return $content;
     }
@@ -657,71 +657,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 	                }
 	            } 
 	        }
-	    } else {
-	    	// $context = $menuitem->export_for_template($this);
-
-
-	            
-	     //        $content .= $this->render_from_template('core/custom_menu_item', $context);
 	    }
 
         return $content;
     }
-
-
-
-
-
-        // $id = strtolower($menunode->get_title());
-        // $id = str_replace(' ', '', $id);
-        // $id = 'theme-cul_boost-' . $id;
-
-        // if ($menunode->has_children()) {
-        //     if ($level == 1) {
-        //         $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
-        //     } else {
-        //         $class = 'dropdown-item dropdown-submenu';
-        //     }
-
-        //     // If the child has menus render it as a sub menu.
-        //     if ($menunode->get_url() !== null) {
-        //         $url = $menunode->get_url();
-        //     } else {
-        //         // CMDLTWO-1649 Accessibilty - Fix errors identified using WAVE.
-        //         // $url = '#cm_submenu_'.$submenucount;
-        //         $url = '#';
-        //     }
-
-        //     foreach ($menunode->get_children() as $menunode) {
-        //         $content .= $this->render_custom_menu_item($menunode, 0);
-        //     }
-
-
-        // } else {
-            
-        //     $class = 'dropdown-item d-flex flex-wrap align-items-center justify-content-center';
-
-        //     if (!$menunode->has_children() && $level == 1) {
-        //         $class = 'dropdown d-flex flex-wrap align-items-center justify-content-center py-3';
-        //     }
-
-        //     // The node doesn't have children so produce a final menuitem.
-        //     if ($menunode->get_url() !== null) {
-        //         $url = $menunode->get_url();
-        //     } else {
-        //         $url = '';
-        //     }
-
-            
-        // }
-
-        // return $content;
-
-
-
-
-
-
 
     /**
      * City University my menu
@@ -1176,7 +1115,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		// Help & Support from CUL Theme Settings
 		if ($showmenu) {
 		    if ($helpmenu = $this->help_menu_items()) {
-		        $content .= $this->render_custom_menu($helpmenu);
+		        $content .= parent::render_custom_menu($helpmenu);
 		    }
 		}
 
