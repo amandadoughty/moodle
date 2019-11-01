@@ -24,16 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$blockshtml = $OUTPUT->blocks('side-pre');
-$hasblocks = strpos($blockshtml, 'data-block=') !== false;
-$bodyattributes = $OUTPUT->body_attributes();
-
 $templatecontext = [
-    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
-    'output' => $OUTPUT,
-    'bodyattributes' => $bodyattributes,
-    'sidepreblocks' => $blockshtml,
-    'hasblocks' => $hasblocks
+    // We cannot pass the context to format_string, this layout can be used during
+    // installation. At that stage database tables do not exist yet.
+    'sitename' => format_string($SITE->shortname, true, ["escape" => false]),
+    'output' => $OUTPUT
 ];
 
 echo $OUTPUT->render_from_template('theme_boost/secure', $templatecontext);
