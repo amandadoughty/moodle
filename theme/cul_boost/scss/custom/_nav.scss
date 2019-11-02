@@ -165,8 +165,8 @@
                     }
                 }
                 /*** Sticky Dropdowns (.nav-inner) ***/
-                .nav-inner >.nav-item.nav-link,
-                .nav-inner >.nav-item >a {
+                .nav-inner .nav-item.nav-link,
+                .nav-inner .dropdown >a {
                     color: $navbar-dark-active-color;
                     &:hover,
                     &:focus {
@@ -210,15 +210,14 @@
         }
         /*** Dropdowns (.nav-inner) ***/
         /* Top level menu titles - a or div.dropdown */
-        .nav-inner >.nav-item,
+        .nav-inner .nav-item,
         .dropdown { 
             margin: 0 0 0 ($spacer * 1.5);
             &:empty {
                 display: none !important;
             }
             &.nav-link, /* Menu item without dropdown - My Moodle */
-            >.dropdown-toggle /* Dropdowns - My Modules etc */
-             {
+            >.dropdown-toggle {/* Dropdowns - My Modules etc */             
                 padding: 0;
                 color: $navbar-light-color;
                 font-size: $h5-font-size;
@@ -235,13 +234,13 @@
                 left: auto;
                 right: 0;
                 &.show {
-                    display: block;
-                    position: relative;
-                    top: auto;
-                    float: none;
-                    padding: 0;
-                    border: none;
-                    background-color: transparent;                        
+                    // display: block;
+                    // position: relative;
+                    // top: auto;
+                    // float: none;
+                    // padding: 0;
+                    // border: none;
+                    // background-color: transparent;                        
                 }                
                 .dropdown-item {
                     padding: 0;                
