@@ -38,6 +38,8 @@ function theme_cul_boost_edit_favourites($action, $cid) {
             break;
     }
 
+    theme_cul_boost_update_favourites($favourites);
+
     return $favourites;
 }
 

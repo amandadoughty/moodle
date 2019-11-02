@@ -741,7 +741,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $favouritename = $favouritescourse->displayname;
                 $favourites->add($favouritename,
                     new moodle_url('/course/view.php', array('id' => $favouritescourse->id)),
-                    $favouritescourse->displayname);
+                    $favouritename);
             }
             return $favouritesmenu;
         }
@@ -876,7 +876,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 }
             }
 
-            $coursemenutree = $this->topmenu_tree($currentcoursenav, get_string('coursemenu', 'theme_cul_boost'));
+            $coursemenutree = $this->get_custom_menu_tree($currentcoursenav, get_string('coursemenu', 'theme_cul_boost'));
             $coursemenu = new custom_menu($coursemenutree, current_language());
             return $coursemenu;
         }
@@ -885,7 +885,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
-     * self::get_user_favourites()
+     * Gets the favourites from the user preference (if it exists)
+     * elso the Favourites API.
      *
      * @return array of courseids indexed by order
      */
@@ -934,7 +935,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
     /**
      * Gets the favourites for the My Favourites menu.
      *
-     * @return array of objects - course data (favorites)
+     * @return array of objects - course data (favourites)
      */
     public static function get_user_favourites_courses() {
         global $DB, $USER;
@@ -955,10 +956,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
             return [];
         }
 
-        $projection = 'id, shortname, fullname, idnumber, visible, category';
-        $selection  = 'id IN (' . implode(', ', $courseids) . ')';
+        $fields = 'id, shortname, fullname, idnumber, visible, category';
+        $select  = 'id IN (' . implode(', ', $courseids) . ')';
 
-        if (!$favouritescourses = $DB->get_records_select('course', $selection, null, 'id', $projection, 0, 999)) {
+        if (!$favouritescourses = $DB->get_records_select('course', $select, null, 'id', $fields, 0, 999)) {
             return [];
         }
 
@@ -967,6 +968,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             if (!empty($favouritescourses[$courseid]) && is_numeric($favouritescourses[$courseid]->id)) {
                 // Set the display name.
                 $favouritescourses[$courseid]->displayname = $favouritescourses[$courseid]->fullname;
+                // Replace the courseid with the course object.
                 $userfavourites[$ordpos] = $favouritescourses[$courseid];
             } else {
                 unset($userfavourites[$ordpos]);
@@ -1043,30 +1045,30 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }    
 
     /**
-     * theme_cul_boost_topmenu_renderer::topmenu_tree()
+     * Creates the top level custom menu item.
      *
      * @param navigation_node $navigation
      * @param mixed $title
      * @return string Menu tree.
      */
-    public function topmenu_tree(navigation_node $navigation, $title) {
+    public function get_custom_menu_tree(navigation_node $navigation, $title) {
         if (!$navigation->has_children() || $navigation->children->count() == 0) {
             return '';
         }
 
         $content  = "$title|\n";
-        $content .= $this->topmenu_node($navigation);
+        $content .= $this->navigation_node_to_custom_menu($navigation);
         return $content;
     }
 
     /**
-     * theme_cul_boost_topmenu_renderer::topmenu_node()
+     * Converts a navigation node into custom menu syntax.
      *
      * @param mixed $node
      * @param integer $navcounter
-     * @return
+     * @return string Menu tree.
      */
-    protected function topmenu_node(navigation_node $node, $navcounter = 0) {
+    protected function navigation_node_to_custom_menu(navigation_node $node, $navcounter = 0) {
         $prefix = '';
         $maxlen = 28; // Maximum length of menu item text before it will be shortened for display.
 
@@ -1118,7 +1120,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
 
             $content  = $item->text . "|{$action}|{$item->title}\n";
-            $content .= $this->topmenu_node($item, $navcounter);
+            $content .= $this->navigation_node_to_custom_menu($item, $navcounter);
             $content  = $prefix . $content;
             $lis[]    = $content;
         }
@@ -1444,8 +1446,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         return $content;
     }
-
-    // TODO
 
     /**
 	 * Serve the grading panel as a fragment.

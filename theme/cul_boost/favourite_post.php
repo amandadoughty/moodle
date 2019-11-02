@@ -22,7 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__) . '/../../config.php');
-require_once(dirname(__FILE__) . '/lib.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
 require_sesskey();
@@ -30,9 +29,8 @@ require_login();
 
 $action = required_param('action', PARAM_RAW);
 $cid = required_param('cid', PARAM_INT);
-// Edit the favourites
+// Update the user preference if it exists.
 $favourites = theme_cul_boost_edit_favourites($action, $cid);
-// Update the user preference
-theme_cul_boost_update_favourites($favourites);
+// Update the Favourites API.
 theme_cul_boost_edit_favourites_api($action, $cid);
 redirect(new moodle_url('/course/view.php', array('id' => $cid)));

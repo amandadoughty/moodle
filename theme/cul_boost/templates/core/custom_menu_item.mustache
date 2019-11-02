@@ -1,6 +1,6 @@
 {{^divider}}
 {{#haschildren}}
-<li class="dropdown nav-item dropdown d-flex flex-wrap align-items-center justify-content-center py-2">
+<li class="dropdown nav-item dropdown d-flex flex-wrap align-items-center justify-content-center">
     <a class="dropdown-toggle nav-link" id="drop-down-{{uniqid}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#" aria-controls="drop-down-menu-{{uniqid}}">
         {{{text}}}
     </a>
@@ -17,7 +17,7 @@
 </li>
 {{/haschildren}}
 {{^haschildren}}
-<li class="nav-item dropdown d-flex flex-wrap align-items-center justify-content-center py-2">
+<li class="nav-item dropdown d-flex flex-wrap align-items-center justify-content-center">
     <a class="nav-item nav-link" href="{{{url}}}" {{#title}}title="{{{title}}}"{{/title}}>{{{text}}}</a>
 </li>
 {{/haschildren}}

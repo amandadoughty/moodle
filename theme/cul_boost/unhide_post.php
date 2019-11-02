@@ -40,7 +40,7 @@ if ($confirm && isloggedin() && confirm_sesskey()) {
     redirect($returnurl, get_string('courseshown', 'theme_cul_boost'));
 }
 
-// Otherwise, show a button to actually purge the caches.
+// Otherwise, show a confirmation page.
 $params = ['cid' => $cid, 'sesskey' => sesskey(), 'confirm' => 1];
 $actionurl = new moodle_url('/theme/cul_boost/unhide_post.php', $params);
 
