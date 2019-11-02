@@ -228,7 +228,7 @@
                     display: inline-block;
                 }
             }
-            /* First level menu */
+            /* First level menu + */
             .dropdown-menu {
                 min-width: 50vw;
                 padding: 0;             
@@ -257,7 +257,7 @@
                         outline-offset: -3px!important;
                         background-color: transparent;
                     }
-                    /* Second level menu (Years/ Participants etc) */
+                    /* Second level menu + (Years/ Participants etc) */
                     &.dropdown-submenu {
                         border-bottom: 1px solid $gray-200;
                         .dropdown-toggle:focus {
@@ -755,53 +755,26 @@ a.menu-link .icon {
                 }
             }
         }
-
-        /*** City Custom menu ***/
-
-/*** Dropdowns (.nav-inner) ***/
-        /* Top level menu titles - a or div.dropdown */
-        // .nav-inner >.nav-item,
-        // .dropdown { 
-        //     margin: 0 0 0 ($spacer * 1.5);
-        //     &:empty {
-        //         display: none !important;
-        //     }
-        //     &.nav-link, /* Menu item without dropdown - My Moodle */
-        //     >.dropdown-toggle /* Dropdowns - My Modules etc */
-        //      {
-
-
-
-
+        /*** City Custom menu & Help Menu ***/
         .mainmenu-wrap {
             /* Top level menu titles - a or div.dropdown */
-            >.nav-item,
+            .nav-item,
             .dropdown {
+                position: relative;
                 display: block;
                 width: 100%;
-                >.nav-link,
-                &.nav-link {
+                &.nav-link, /* Menu item without dropdown - My Moodle */
+                >.dropdown-toggle { /* Dropdowns - My Modules etc */
                     font-size: $h4-font-size;
-                    color: $navbar-light-color;
-                }
-            }
-            .nav-item {
-                position: relative;
-                .dropdown {
-                    padding-bottom: 0;
+                    color: $navbar-light-color;                    
                 }
                 &.show {
-                    background-color: rgba(0, 0, 0, 0.05);
-                    .dropdown {
-                        // background-color: rgba(0, 0, 0, 0.05);
-                    }
-                    .dropdown-menu {
-                        // display: block;
-                    }
+                    background-color: $gray-lightest;
                 }
                 &:hover a {
                     color: $navbar-toggle-icon-bar-color;
                 }
+                /* First level menu + */
                 .dropdown-menu {
                     position: relative !important;
                     transform: none !important;
@@ -812,45 +785,37 @@ a.menu-link .icon {
                     margin: $spacer / 2 0 0 0 !important;
                     padding: 0;
                     border: none;
-                    max-height: 100%;                    
-                }
-                .dropdown-item,
-                .dropdown-item:hover {
-                    padding-left: 0;
-                    padding-right: 0; 
-                    border-bottom: 1px solid $gray-200;                   
-                    // padding-bottom: 0;
-                    text-align: center;
-                     &.dropdown-submenu {
-                        &.subopen {
-                            background-color: rgba(0, 0, 0, 0.05);
-                            padding-bottom: 0;                            
+                    max-height: 100%;
+                    .dropdown-item,
+                    .dropdown-item:hover {
+                        padding-left: 0;
+                        padding-right: 0; 
+                        border-bottom: 1px solid $gray-200;                   
+                        text-align: center;
+                        /* Second level menu + (Years/ Participants etc) */
+                         &.dropdown-submenu {
+                            &.subopen {
+                                background-color: rgba(0, 0, 0, 0.05);
+                                padding-bottom: 0;                            
+                            }
                         }
+                        .dropdown-toggle {
+                            padding: 0;
+                            &:focus {
+                                outline-offset: -3px!important;
+                            }
+                        }               
                     }
-                    .dropdown-toggle {
-                        padding: 0;
-                        &:focus {
-                            outline-offset: -3px!important;
-                        }
+                    .dropdown-item:hover {
+                        background-color: rgba(0, 0, 0, 0.05);
+                        color: $navbar-toggle-icon-bar-color;
                     }
-                    .dropdown-item:active {
-                        // background-color: transparent;
-                    }                  
-                }
-                .dropdown-item:hover {
-                    background-color: rgba(0, 0, 0, 0.05); 
-                }
-                .dropdown-item:active .dropdown-toggle {
-                    color: $navbar-light-color;
-                }
-                .dropdown-menu {
+                    .dropdown-item:active .dropdown-toggle {
+                        // color: $navbar-light-color;
+                    }
                     &.show .dropdown-item:last-child {
                         border-bottom: 0;
-                        // padding-bottom: 0;
                     }
-                }
-                &.show .dropdown-menu:last-child {
-                    border-bottom: 0;
                 }
             }
             .help-menu-wrap {
