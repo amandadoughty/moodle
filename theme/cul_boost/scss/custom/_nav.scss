@@ -558,6 +558,96 @@ a.menu-link .icon {
     margin-top: -4px;
 }
 
+
+/*** Menu toggle button 
+   * - in .nav-extras when closed and in drawer when open 
+ ***/
+.navbar-toggle {
+    background-color: $navbar-toggle-bg;
+    position: relative;
+    width: $navbar-toggle;
+    height: $navbar-toggle;
+    appearance: none;
+    border-radius: $border-radius;
+    border: none;
+    cursor: pointer;
+    align-self: center;
+    .navbar .menubar & {
+        padding: 0;
+        border: transparent;
+        background-color: transparent;
+    }
+    &:hover,
+    &:focus {
+        outline: none;
+        background-color: $navbar-toggle-focus-bg;
+        span,
+        span:before,
+        span:after {
+            background-color: darken($navbar-toggle-icon-bar-color, 10%);
+        }
+    }
+    span {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 25px;
+        height: 4px;
+        background-color: $navbar-toggle-icon-bar-color;
+        transform: translate(-50%, -50%);
+        border-radius: 1px;
+        .stick & {
+            background-color: #fff;
+            &:before,
+            &:after {
+                background-color: #fff;
+            }
+        }
+        &.close-icon {
+            background-color: #fff;
+            &:before,
+            &:after {
+                background-color: #fff;
+                border-radius: 1px;
+            }
+        }
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            display: block;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: $navbar-toggle-icon-bar-color;
+            border-radius: 1px;
+        }
+        &:before {
+            transition-property: top, transform;
+            top: -8px;
+        }
+        &:after {
+            transition-property: bottom, transform;
+            bottom: -8px;
+        }
+    }
+    .navopen & {
+        background-color: $navbar-toggle-focus-bg;
+        span {
+            background-color: transparent;
+            &:before {
+                top: 0;
+                transform: rotate(45deg);
+            }
+            &:after {
+                bottom: 0;
+                transform: rotate(-45deg);
+            }
+        }
+    }
+}
+
 /*** Mobile Menu ***/
 .drawer-wrap {
     position: fixed;
@@ -585,92 +675,7 @@ a.menu-link .icon {
             overflow-y: auto;
         }
 
-        /*** Menu toggle button ***/
-        .navbar-toggle {
-            background-color: $navbar-toggle-bg;
-            position: relative;
-            width: $navbar-toggle;
-            height: $navbar-toggle;
-            appearance: none;
-            border-radius: $border-radius;
-            border: none;
-            cursor: pointer;
-            align-self: center;
-            .navbar .menubar & {
-                padding: 0;
-                border: transparent;
-                background-color: transparent;
-            }
-            &:hover,
-            &:focus {
-                outline: none;
-                background-color: $navbar-toggle-focus-bg;
-                span,
-                span:before,
-                span:after {
-                    background-color: darken($navbar-toggle-icon-bar-color, 10%);
-                }
-            }
-            span {
-                display: block;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 25px;
-                height: 4px;
-                background-color: $navbar-toggle-icon-bar-color;
-                transform: translate(-50%, -50%);
-                border-radius: 1px;
-                .stick & {
-                    background-color: #fff;
-                    &:before,
-                    &:after {
-                        background-color: #fff;
-                    }
-                }
-                &.close-icon {
-                    background-color: #fff;
-                    &:before,
-                    &:after {
-                        background-color: #fff;
-                        border-radius: 1px;
-                    }
-                }
-                &:before,
-                &:after {
-                    content: "";
-                    position: absolute;
-                    display: block;
-                    left: 0;
-                    width: 100%;
-                    height: 4px;
-                    background-color: $navbar-toggle-icon-bar-color;
-                    border-radius: 1px;
-                }
-                &:before {
-                    transition-property: top, transform;
-                    top: -8px;
-                }
-                &:after {
-                    transition-property: bottom, transform;
-                    bottom: -8px;
-                }
-            }
-            .navopen & {
-                background-color: $navbar-toggle-focus-bg;
-                span {
-                    background-color: transparent;
-                    &:before {
-                        top: 0;
-                        transform: rotate(45deg);
-                    }
-                    &:after {
-                        bottom: 0;
-                        transform: rotate(-45deg);
-                    }
-                }
-            }
-        }
+
         /*** City Custom menu ***/
         .mainmenu-wrap {
             >.nav-item {

@@ -21757,6 +21757,98 @@ a.menu-link .icon {
   vertical-align: middle;
   margin-top: -4px; }
 
+/*** Menu toggle button 
+   * - in .nav-extras when closed and in drawer when open 
+ ***/
+.navbar-toggle {
+  background-color: transparent;
+  position: relative;
+  width: 25px;
+  height: 25px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  -webkit-align-self: center;
+      -ms-flex-item-align: center;
+          align-self: center; }
+  .navbar .menubar .navbar-toggle {
+    padding: 0;
+    border: transparent;
+    background-color: transparent; }
+  .navbar-toggle:hover, .navbar-toggle:focus {
+    outline: none;
+    background-color: transparent; }
+    .navbar-toggle:hover span,
+    .navbar-toggle:hover span:before,
+    .navbar-toggle:hover span:after, .navbar-toggle:focus span,
+    .navbar-toggle:focus span:before,
+    .navbar-toggle:focus span:after {
+      background-color: #791e26; }
+  .navbar-toggle span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 25px;
+    height: 4px;
+    background-color: #A22833;
+    -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+         -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    border-radius: 1px; }
+    .stick .navbar-toggle span {
+      background-color: #fff; }
+      .stick .navbar-toggle span:before, .stick .navbar-toggle span:after {
+        background-color: #fff; }
+    .navbar-toggle span.close-icon {
+      background-color: #fff; }
+      .navbar-toggle span.close-icon:before, .navbar-toggle span.close-icon:after {
+        background-color: #fff;
+        border-radius: 1px; }
+    .navbar-toggle span:before, .navbar-toggle span:after {
+      content: "";
+      position: absolute;
+      display: block;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: #A22833;
+      border-radius: 1px; }
+    .navbar-toggle span:before {
+      -webkit-transition-property: top, -webkit-transform;
+      transition-property: top, -webkit-transform;
+      -o-transition-property: top, -o-transform;
+      transition-property: top, transform;
+      transition-property: top, transform, -webkit-transform, -o-transform;
+      top: -8px; }
+    .navbar-toggle span:after {
+      -webkit-transition-property: bottom, -webkit-transform;
+      transition-property: bottom, -webkit-transform;
+      -o-transition-property: bottom, -o-transform;
+      transition-property: bottom, transform;
+      transition-property: bottom, transform, -webkit-transform, -o-transform;
+      bottom: -8px; }
+  .navopen .navbar-toggle {
+    background-color: transparent; }
+    .navopen .navbar-toggle span {
+      background-color: transparent; }
+      .navopen .navbar-toggle span:before {
+        top: 0;
+        -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+             -o-transform: rotate(45deg);
+                transform: rotate(45deg); }
+      .navopen .navbar-toggle span:after {
+        bottom: 0;
+        -webkit-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+             -o-transform: rotate(-45deg);
+                transform: rotate(-45deg); }
+
 /*** Mobile Menu ***/
 .drawer-wrap {
   position: fixed;
@@ -21784,99 +21876,10 @@ a.menu-link .icon {
     width: 100%;
     min-height: 100vh;
     color: #F5F5F5;
-    /*** Menu toggle button ***/
     /*** City Custom menu ***/ }
     .drawer-wrap .drawer .drawer-content {
       overflow-x: hidden;
       overflow-y: auto; }
-    .drawer-wrap .drawer .navbar-toggle {
-      background-color: transparent;
-      position: relative;
-      width: 25px;
-      height: 25px;
-      -webkit-appearance: none;
-         -moz-appearance: none;
-              appearance: none;
-      border-radius: 0.25rem;
-      border: none;
-      cursor: pointer;
-      -webkit-align-self: center;
-          -ms-flex-item-align: center;
-              align-self: center; }
-      .navbar .menubar .drawer-wrap .drawer .navbar-toggle {
-        padding: 0;
-        border: transparent;
-        background-color: transparent; }
-      .drawer-wrap .drawer .navbar-toggle:hover, .drawer-wrap .drawer .navbar-toggle:focus {
-        outline: none;
-        background-color: transparent; }
-        .drawer-wrap .drawer .navbar-toggle:hover span,
-        .drawer-wrap .drawer .navbar-toggle:hover span:before,
-        .drawer-wrap .drawer .navbar-toggle:hover span:after, .drawer-wrap .drawer .navbar-toggle:focus span,
-        .drawer-wrap .drawer .navbar-toggle:focus span:before,
-        .drawer-wrap .drawer .navbar-toggle:focus span:after {
-          background-color: #791e26; }
-      .drawer-wrap .drawer .navbar-toggle span {
-        display: block;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 25px;
-        height: 4px;
-        background-color: #A22833;
-        -webkit-transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-             -o-transform: translate(-50%, -50%);
-                transform: translate(-50%, -50%);
-        border-radius: 1px; }
-        .stick .drawer-wrap .drawer .navbar-toggle span {
-          background-color: #fff; }
-          .stick .drawer-wrap .drawer .navbar-toggle span:before, .stick .drawer-wrap .drawer .navbar-toggle span:after {
-            background-color: #fff; }
-        .drawer-wrap .drawer .navbar-toggle span.close-icon {
-          background-color: #fff; }
-          .drawer-wrap .drawer .navbar-toggle span.close-icon:before, .drawer-wrap .drawer .navbar-toggle span.close-icon:after {
-            background-color: #fff;
-            border-radius: 1px; }
-        .drawer-wrap .drawer .navbar-toggle span:before, .drawer-wrap .drawer .navbar-toggle span:after {
-          content: "";
-          position: absolute;
-          display: block;
-          left: 0;
-          width: 100%;
-          height: 4px;
-          background-color: #A22833;
-          border-radius: 1px; }
-        .drawer-wrap .drawer .navbar-toggle span:before {
-          -webkit-transition-property: top, -webkit-transform;
-          transition-property: top, -webkit-transform;
-          -o-transition-property: top, -o-transform;
-          transition-property: top, transform;
-          transition-property: top, transform, -webkit-transform, -o-transform;
-          top: -8px; }
-        .drawer-wrap .drawer .navbar-toggle span:after {
-          -webkit-transition-property: bottom, -webkit-transform;
-          transition-property: bottom, -webkit-transform;
-          -o-transition-property: bottom, -o-transform;
-          transition-property: bottom, transform;
-          transition-property: bottom, transform, -webkit-transform, -o-transform;
-          bottom: -8px; }
-      .navopen .drawer-wrap .drawer .navbar-toggle {
-        background-color: transparent; }
-        .navopen .drawer-wrap .drawer .navbar-toggle span {
-          background-color: transparent; }
-          .navopen .drawer-wrap .drawer .navbar-toggle span:before {
-            top: 0;
-            -webkit-transform: rotate(45deg);
-                -ms-transform: rotate(45deg);
-                 -o-transform: rotate(45deg);
-                    transform: rotate(45deg); }
-          .navopen .drawer-wrap .drawer .navbar-toggle span:after {
-            bottom: 0;
-            -webkit-transform: rotate(-45deg);
-                -ms-transform: rotate(-45deg);
-                 -o-transform: rotate(-45deg);
-                    transform: rotate(-45deg); }
     .drawer-wrap .drawer .mainmenu-wrap > .nav-item {
       display: block;
       width: 100%; }
