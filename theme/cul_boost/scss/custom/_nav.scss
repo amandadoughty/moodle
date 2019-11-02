@@ -210,13 +210,15 @@
         }
         /*** Dropdowns (.nav-inner) ***/
         /* Top level menu titles - a or div.dropdown */
-        .nav-inner >.nav-item { 
+        .nav-inner >.nav-item,
+        .dropdown { 
             margin: 0 0 0 ($spacer * 1.5);
             &:empty {
                 display: none !important;
             }
-            >.nav-link,
-            &.nav-link {
+            &.nav-link, /* Menu item without dropdown - My Moodle */
+            >.dropdown-toggle /* Dropdowns - My Modules etc */
+             {
                 padding: 0;
                 color: $navbar-light-color;
                 font-size: $h5-font-size;
@@ -226,15 +228,21 @@
                     display: inline-block;
                 }
             }
-
-            .dropdown-toggle {
-
-            }
+            /* First level menu */
             .dropdown-menu {
                 min-width: 50vw;
                 padding: 0;             
                 left: auto;
                 right: 0;
+                &.show {
+                    display: block;
+                    position: relative;
+                    top: auto;
+                    float: none;
+                    padding: 0;
+                    border: none;
+                    background-color: transparent;                        
+                }                
                 .dropdown-item {
                     padding: 0;                
                     &:active,
@@ -249,56 +257,42 @@
                         outline-offset: -3px!important;
                         background-color: transparent;
                     }
+                    /* Second level menu (Years/ Participants etc) */
                     &.dropdown-submenu {
                         border-bottom: 1px solid $gray-200;
+                        .dropdown-toggle:focus {
+                            outline-offset: -3px!important;
+                        }
+                        /* Third level menu (Terms etc) */
+                        .dropdown-submenu {
+                            &.subopen {
+                                background-color: rgba(0, 0 ,0, 0.05);
+                            }
+                            .dropdown-toggle {
+                                padding-left: 2rem;
+                            }
+                            a.dropdown-item {
+                                padding: $dropdown-item-padding-y 2*$dropdown-item-padding-x;
+                            }
+                        }
+                        &.subopen {
+                            background-color: $gray-lightest;
+                            a.dropdown-item {
+                                padding: $dropdown-item-padding-y 2*$dropdown-item-padding-x;
+                                &:hover {
+                                    background-color: rgba(0, 0 ,0, 0.05);
+                                }
+                            }
+                        }
                     }                    
                 }
+                /* A menu item which is not a submenu dropdown */
                 a.dropdown-item {
                     padding: $dropdown-item-padding-y $dropdown-item-padding-x;
                     border-bottom: 1px solid $gray-200;
                     &:last-child {
                         border-bottom: 0;
                     }
-                }
-                .dropdown-toggle:focus {
-                    outline-offset: -3px!important;
-                }                    
-                .dropdown-submenu {
-                    .dropdown-submenu {
-                        // padding-left: 1rem;
-                        &.subopen {
-                            background-color: rgba(0, 0 ,0, 0.05);
-                        }
-                        .dropdown-toggle {
-                            padding-left: 2rem;
-                        }
-                        a.dropdown-item {
-                            padding: $dropdown-item-padding-y 2*$dropdown-item-padding-x;
-                        }
-                    }
-                    &.subopen {
-                        background-color: $gray-lightest;
-                        a.dropdown-item {
-                            padding: $dropdown-item-padding-y 2*$dropdown-item-padding-x;
-                            &:hover {
-                                background-color: rgba(0, 0 ,0, 0.05);
-                            }
-                        }
-                    }
-                    >.dropdown-menu.show {
-                        // background-color: $gray-lightest;
-                    }                    
-                }
-                .dropdown-menu {
-                    &.show {
-                        display: block;
-                        position: relative;
-                        top: auto;
-                        float: none;
-                        padding: 0;
-                        border: none;
-                        background-color: transparent;                        
-                    }                    
                 }
             }
         }
@@ -675,10 +669,114 @@ a.menu-link .icon {
             overflow-y: auto;
         }
 
+        /* Menu toggle button */
+        .navbar-toggle {
+            background-color: $navbar-toggle-bg;
+            position: relative;
+            width: $navbar-toggle;
+            height: $navbar-toggle;
+            appearance: none;
+            border-radius: $border-radius;
+            border: none;
+            cursor: pointer;
+            align-self: center;
+            .navbar .menubar & {
+                padding: 0;
+                border: transparent;
+                background-color: transparent;
+            }
+            &:hover,
+            &:focus {
+                outline: none;
+                background-color: $navbar-toggle-focus-bg;
+                span,
+                span:before,
+                span:after {
+                    background-color: darken($navbar-toggle-icon-bar-color, 10%);
+                }
+            }
+            span {
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 25px;
+                height: 4px;
+                background-color: $navbar-toggle-icon-bar-color;
+                transform: translate(-50%, -50%);
+                border-radius: 1px;
+                .stick & {
+                    background-color: #fff;
+                    &:before,
+                    &:after {
+                        background-color: #fff;
+                    }
+                }
+                &.close-icon {
+                    background-color: #fff;
+                    &:before,
+                    &:after {
+                        background-color: #fff;
+                        border-radius: 1px;
+                    }
+                }
+                &:before,
+                &:after {
+                    content: "";
+                    position: absolute;
+                    display: block;
+                    left: 0;
+                    width: 100%;
+                    height: 4px;
+                    background-color: $navbar-toggle-icon-bar-color;
+                    border-radius: 1px;
+                }
+                &:before {
+                    transition-property: top, transform;
+                    top: -8px;
+                }
+                &:after {
+                    transition-property: bottom, transform;
+                    bottom: -8px;
+                }
+            }
+            .navopen & {
+                background-color: $navbar-toggle-focus-bg;
+                span {
+                    background-color: transparent;
+                    &:before {
+                        top: 0;
+                        transform: rotate(45deg);
+                    }
+                    &:after {
+                        bottom: 0;
+                        transform: rotate(-45deg);
+                    }
+                }
+            }
+        }
 
         /*** City Custom menu ***/
+
+/*** Dropdowns (.nav-inner) ***/
+        /* Top level menu titles - a or div.dropdown */
+        // .nav-inner >.nav-item,
+        // .dropdown { 
+        //     margin: 0 0 0 ($spacer * 1.5);
+        //     &:empty {
+        //         display: none !important;
+        //     }
+        //     &.nav-link, /* Menu item without dropdown - My Moodle */
+        //     >.dropdown-toggle /* Dropdowns - My Modules etc */
+        //      {
+
+
+
+
         .mainmenu-wrap {
-            >.nav-item {
+            /* Top level menu titles - a or div.dropdown */
+            >.nav-item,
+            .dropdown {
                 display: block;
                 width: 100%;
                 >.nav-link,
