@@ -304,20 +304,23 @@ function block_culcourse_listing_update_from_favourites_api($action, $cid) {
 
     if ($cid && !is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
         $favourites = (array)unserialize($myfavourites);
+        $changed = false;
+        $key = array_search($cid, $favourites);
 
-        if ($action == 'add') {
+        if ($action == 'add' && $key === false) {
             $favourites[] = $cid;
-        } else {
-            if (($key = array_search($cid, $favourites)) !== false) {                
-                unset($favourites[$key]);
-            }
-        }
-
-        // Update the user preference.
-        block_culcourse_listing_update_favourites_pref($favourites);
+            $changed = true;
+            // Update the user preference.
+            block_culcourse_listing_update_favourites_pref($favourites);
+        } else if ($action == 'delete' && $key !== false) {                
+            unset($favourites[$key]);
+            $changed = true;
+            // Update the user preference.
+            block_culcourse_listing_update_favourites_pref($favourites);
+        }            
     }
   
-    if ($cid) {
+    if ($changed) {
         if ($action == 'delete') {
             return ['action' => 'remove', 'cid' => $cid];
         } else if ($action == 'add') {

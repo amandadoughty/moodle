@@ -132,7 +132,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
 
                         return;
 
-                } else {
+                } else if (params.action == 'delete') {
                     Str.get_string('nofavourites', 'block_culcourse_listing').then(function(langstring) {
                         var courseboxnode = $(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
                         var favouritenode = $(SELECTORS.FAVOURITELIST + ' [data-courseid="' + params.cid + '"]');
@@ -184,6 +184,9 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                     message: response.error,
                     type: 'error'
                 });
+            },
+            complete: function() {
+                Y.fire('culcourse-listing:update-favourites');
             }
         }).fail(Notification.exception);
     };
