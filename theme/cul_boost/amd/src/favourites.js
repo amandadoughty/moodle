@@ -32,11 +32,13 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             Y.io(M.cfg.wwwroot + '/theme/cul_boost/favourites_ajax.php', {
                 on: {
                     success: function(id, e) {
-                        var favourites = Y.one('#theme-cul_boost-myfavourites');
+                        var favourites = Y.one('#theme_cul_boost_myfavourites');
                         var html = Y.JSON.parse(e.responseText);
                         var newnode = Y.Node.create(html);
                         var navwrap = Y.one('.navbar .nav-wrap');
-                        var existingnode = navwrap.one('.nav-item:nth-of-type(2)');
+                        var existingnode = navwrap.one('.dropdown:nth-of-type(2)');
+
+                        console.log(existingnode);
 
                         if (favourites) {
                             favourites.remove();

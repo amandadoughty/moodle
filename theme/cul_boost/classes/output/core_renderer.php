@@ -52,31 +52,31 @@ use action_menu_filler;
  */
 
 class core_renderer extends \theme_boost\output\core_renderer {
-	/*** OVERRIDDEN FUNCTIONS ***/
+    /*** OVERRIDDEN FUNCTIONS ***/
 
-	/**
-	 * Overridden function - Returns HTML to display a "Turn editing on/off" button in a form.
-	 * Overridden to use copy core function and ignore Boost
-	 * override.
-	 *
-	 * @param moodle_url $url The URL + params to send through when clicking the button
-	 * @return string HTML the button
-	 */
-	public function edit_button(moodle_url $url) {
+    /**
+     * Overridden function - Returns HTML to display a "Turn editing on/off" button in a form.
+     * Overridden to use copy core function and ignore Boost
+     * override.
+     *
+     * @param moodle_url $url The URL + params to send through when clicking the button
+     * @return string HTML the button
+     */
+    public function edit_button(moodle_url $url) {
 
-	    $url->param('sesskey', sesskey());
-	    if ($this->page->user_is_editing()) {
-	        $url->param('edit', 'off');
-	        $editstring = get_string('turneditingoff');
-	    } else {
-	        $url->param('edit', 'on');
-	        $editstring = get_string('turneditingon');
-	    }
+        $url->param('sesskey', sesskey());
+        if ($this->page->user_is_editing()) {
+            $url->param('edit', 'off');
+            $editstring = get_string('turneditingoff');
+        } else {
+            $url->param('edit', 'on');
+            $editstring = get_string('turneditingon');
+        }
 
-	    return $this->single_button($url, $editstring);
-	}
+        return $this->single_button($url, $editstring);
+    }
 
-	/**
+    /**
      * Overridden function - Returns a form with a single button.
      * Overridden to add sate
      *
@@ -89,47 +89,47 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @param array $options associative array {disabled, title, etc.}
      * @return string HTML fragment
      */
-	public function single_button($url, $label, $method='post', array $options=null) {
-	    if (!($url instanceof moodle_url)) {
-	        $url = new moodle_url($url);
-	    }
+    public function single_button($url, $label, $method='post', array $options=null) {
+        if (!($url instanceof moodle_url)) {
+            $url = new moodle_url($url);
+        }
 
-	    if ($label == get_string('blockseditoff')
-	            || $label == get_string('turneditingoff')
-	            || $label == get_string('updatemymoodleoff')) {
-	        $label = get_string('off', 'theme_cul_boost');
-	        $options['state'] = 'off';
-	    } else if ($label == get_string('blocksediton')
-	            || $label == get_string('turneditingon')
-	            || $label == get_string('updatemymoodleon')) {
-	        $label = get_string('on', 'theme_cul_boost');
-	        $options['state'] = 'on';
-	    }
+        if ($label == get_string('blockseditoff')
+                || $label == get_string('turneditingoff')
+                || $label == get_string('updatemymoodleoff')) {
+            $label = get_string('off', 'theme_cul_boost');
+            $options['state'] = 'off';
+        } else if ($label == get_string('blocksediton')
+                || $label == get_string('turneditingon')
+                || $label == get_string('updatemymoodleon')) {
+            $label = get_string('on', 'theme_cul_boost');
+            $options['state'] = 'on';
+        }
 
-	    $button = new single_button($url, $label, $method);
-	    foreach ((array)$options as $key=>$value) {
-	        $button->$key = $value;
-	    }
+        $button = new single_button($url, $label, $method);
+        foreach ((array)$options as $key=>$value) {
+            $button->$key = $value;
+        }
 
-	    if ($label == get_string('on', 'theme_cul_boost')
-	            || $label == get_string('off', 'theme_cul_boost')) {
-	        return $this->render_edit_button($button);
-	    }
+        if ($label == get_string('on', 'theme_cul_boost')
+                || $label == get_string('off', 'theme_cul_boost')) {
+            return $this->render_edit_button($button);
+        }
 
-	    if (!isset($button->large)) {
-	        $button->small = true;
-	    }
+        if (!isset($button->large)) {
+            $button->small = true;
+        }
 
 
-	    return $this->render($button);
-	}
+        return $this->render($button);
+    }
 
     /**
      * Overridden function - Return the navbar content so that it can be echoed out by the layout
      * Overridden to:
-     *	 Add classes to ol an li tags
-     *	 Remove arrow separator
-     *	 change home link to icon
+     *   Add classes to ol an li tags
+     *   Remove arrow separator
+     *   change home link to icon
      *
      * @return string XHTML navbar
      */
@@ -149,9 +149,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $item->hideicon = true;
 
             $content = html_writer::tag(
-            	'li',
-            	$this->render($item),
-            	['class' => 'breadcrumb-item d-inline-flex flex-wrap align-items-center']
+                'li',
+                $this->render($item),
+                ['class' => 'breadcrumb-item d-inline-flex flex-wrap align-items-center']
             );
 
             $htmlblocks[] = $content;
@@ -160,9 +160,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $hometext = html_writer::tag('b', get_string('home'), ['class' => 'showoncollapse']);
         $homelink = html_writer::link(new moodle_url('/'), '<i class="fa fa-home"></i><span class="accesshide">' . $hometext . '</span>', ['class'=>'d-flex align-items-center']);
         $homeitem = html_writer::tag(
-                	'li',
-                	$homelink,
-                	['class' => 'breadcrumb-item d-inline-flex flex-wrap align-items-center']
+                    'li',
+                    $homelink,
+                    ['class' => 'breadcrumb-item d-inline-flex flex-wrap align-items-center']
                 );
         array_shift($htmlblocks);
         array_unshift($htmlblocks, $homeitem);
@@ -171,11 +171,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $navbarcontent = html_writer::tag('span', get_string('pagepath'),
                 array('class' => 'accesshide', 'id' => 'navbar-label'));
         $navbarcontent .= html_writer::tag(
-        	'nav',
+            'nav',
             html_writer::tag(
-            	'ol',
-            	join('', $htmlblocks),
-            	['class' => 'breadcrumb d-flex flex-wrap align-items-center justify-content-center justify-content-md-start bg-transparent px-0 py-2 mb-0']
+                'ol',
+                join('', $htmlblocks),
+                ['class' => 'breadcrumb d-flex flex-wrap align-items-center justify-content-center justify-content-md-start bg-transparent px-0 py-2 mb-0']
             ),
             ['aria-labelledby' => 'navbar-label']
         );
@@ -191,216 +191,216 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @param string $tag The tag to encase the heading in. h1 by default.
      * @return string HTML.
      */
-	public function page_heading($tag = 'h1') {
-	    global $COURSE;
+    public function page_heading($tag = 'h1') {
+        global $COURSE;
 
-	    $heading = html_writer::tag($tag, $this->page->heading, ['class'=>'pageheading font-weight-normal mb-0']);
+        $heading = html_writer::tag($tag, $this->page->heading, ['class'=>'pageheading font-weight-normal mb-0']);
 
-	    return $heading;
-	}
+        return $heading;
+    }
 
-	// TODO test how much difference this makes to look and feel?
+    // TODO test how much difference this makes to look and feel?
 
-	/**
-	 * Overridden function - Construct a user menu, returning HTML that can be echoed out by a
-	 * layout file.
-	 * Overridden to:
-	 *    Move user text to dropdown
-	 *    Remove dividers
-	 *    Change styling of logged in as image
-	 *
-	 * @param stdClass $user A user object, usually $USER.
-	 * @param bool $withlinks true if a dropdown should be built.
-	 * @return string HTML fragment.
-	 */
-	public function user_menu($user = null, $withlinks = null) {
-	    global $USER, $CFG;
-	    require_once($CFG->dirroot . '/user/lib.php');
+    /**
+     * Overridden function - Construct a user menu, returning HTML that can be echoed out by a
+     * layout file.
+     * Overridden to:
+     *    Move user text to dropdown
+     *    Remove dividers
+     *    Change styling of logged in as image
+     *
+     * @param stdClass $user A user object, usually $USER.
+     * @param bool $withlinks true if a dropdown should be built.
+     * @return string HTML fragment.
+     */
+    public function user_menu($user = null, $withlinks = null) {
+        global $USER, $CFG;
+        require_once($CFG->dirroot . '/user/lib.php');
 
-	    if (is_null($user)) {
-	        $user = $USER;
-	    }
+        if (is_null($user)) {
+            $user = $USER;
+        }
 
-	    // Note: this behaviour is intended to match that of core_renderer::login_info,
-	    // but should not be considered to be good practice; layout options are
-	    // intended to be theme-specific. Please don't copy this snippet anywhere else.
-	    if (is_null($withlinks)) {
-	        $withlinks = empty($this->page->layout_options['nologinlinks']);
-	    }
+        // Note: this behaviour is intended to match that of core_renderer::login_info,
+        // but should not be considered to be good practice; layout options are
+        // intended to be theme-specific. Please don't copy this snippet anywhere else.
+        if (is_null($withlinks)) {
+            $withlinks = empty($this->page->layout_options['nologinlinks']);
+        }
 
-	    // Add a class for when $withlinks is false.
-	    $usermenuclasses = 'usermenu d-flex flex-wrap align-items-center';
-	    if (!$withlinks) {
-	        $usermenuclasses .= ' withoutlinks';
-	    }
+        // Add a class for when $withlinks is false.
+        $usermenuclasses = 'usermenu d-flex flex-wrap align-items-center';
+        if (!$withlinks) {
+            $usermenuclasses .= ' withoutlinks';
+        }
 
-	    $returnstr = "";
+        $returnstr = "";
 
-	    // If during initial install, return the empty return string.
-	    if (during_initial_install()) {
-	        return $returnstr;
-	    }
+        // If during initial install, return the empty return string.
+        if (during_initial_install()) {
+            return $returnstr;
+        }
 
-	    $loginpage = $this->is_login_page();
-	    $loginurl = get_login_url();
-	    // If not logged in, show the typical not-logged-in string.
-	    if (!isloggedin()) {
-	        $returnstr = '';
-	        if (!$loginpage) {
-	            $returnstr = "";
-	            $returnstr .= " <a class='btn btn-primary loginbtn' href=\"$loginurl\">" . get_string('login') . '</a>';
-	        }
-	        return html_writer::div(
-	            html_writer::span(
-	                $returnstr,
-	                'login'
-	            ),
-	            $usermenuclasses
-	        );
+        $loginpage = $this->is_login_page();
+        $loginurl = get_login_url();
+        // If not logged in, show the typical not-logged-in string.
+        if (!isloggedin()) {
+            $returnstr = '';
+            if (!$loginpage) {
+                $returnstr = "";
+                $returnstr .= " <a class='btn btn-primary loginbtn' href=\"$loginurl\">" . get_string('login') . '</a>';
+            }
+            return html_writer::div(
+                html_writer::span(
+                    $returnstr,
+                    'login'
+                ),
+                $usermenuclasses
+            );
 
-	    }
+        }
 
-	    // If logged in as a guest user, show a string to that effect.
-	    if (isguestuser()) {
-	        $returnstr = get_string('loggedinasguest');
-	        if (!$loginpage && $withlinks) {
-	            $returnstr .= " (<a href=\"$loginurl\">".get_string('login').'</a>)';
-	        }
+        // If logged in as a guest user, show a string to that effect.
+        if (isguestuser()) {
+            $returnstr = get_string('loggedinasguest');
+            if (!$loginpage && $withlinks) {
+                $returnstr .= " (<a href=\"$loginurl\">".get_string('login').'</a>)';
+            }
 
-	        return html_writer::div(
-	            html_writer::span(
-	                $returnstr,
-	                'login'
-	            ),
-	            $usermenuclasses
-	        );
-	    }
+            return html_writer::div(
+                html_writer::span(
+                    $returnstr,
+                    'login'
+                ),
+                $usermenuclasses
+            );
+        }
 
-	    // Get some navigation opts.
-	    $opts = user_get_user_navigation_info($user, $this->page, array('avatarsize'=>36));
+        // Get some navigation opts.
+        $opts = user_get_user_navigation_info($user, $this->page, array('avatarsize'=>36));
 
-	    $divider = new stdClass();
-	    $divider->itemtype = 'divider';
+        $divider = new stdClass();
+        $divider->itemtype = 'divider';
 
-	    $logout = null;
-	    $switchrole = null;
+        $logout = null;
+        $switchrole = null;
 
-	    $check = array_pop($opts->navitems);
-	    if ($check->pix == 'a/logout') {
-	        $logout = $check;
-	    } else if ($check->pix == 'i/switchrole') {
-	        $logout = array_pop($opts->navitems);
-	        $switchrole = $check;
-	    }
+        $check = array_pop($opts->navitems);
+        if ($check->pix == 'a/logout') {
+            $logout = $check;
+        } else if ($check->pix == 'i/switchrole') {
+            $logout = array_pop($opts->navitems);
+            $switchrole = $check;
+        }
 
-	    $opts->navitems[] = $divider;
-	    $opts->navitems[] = $logout;
+        $opts->navitems[] = $divider;
+        $opts->navitems[] = $logout;
 
-	    if ($switchrole) {
-	        $opts->navitems[] = $divider;
-	        $opts->navitems[] = $switchrole;
-	    }
+        if ($switchrole) {
+            $opts->navitems[] = $divider;
+            $opts->navitems[] = $switchrole;
+        }
 
-	    $avatarclasses = "avatars";
-	    $avatarcontents = html_writer::span($opts->metadata['useravatar'], 'avatar current bg-light');
-	    $usertextcontents = $opts->metadata['userfullname'];
+        $avatarclasses = "avatars";
+        $avatarcontents = html_writer::span($opts->metadata['useravatar'], 'avatar current bg-light');
+        $usertextcontents = $opts->metadata['userfullname'];
 
-	    // Other user.
-	    if (!empty($opts->metadata['asotheruser'])) {
-	        $avatarcontents .= html_writer::span(
-	            $opts->metadata['realuseravatar'],
-	            'avatar realuser'
-	        );
-	        $usertextcontents .= html_writer::tag(
-	            'span',
-	            get_string(
-	                'loggedinas',
-	                'moodle',
-	                html_writer::span(
-	                    $opts->metadata['userfullname'],
-	                    'value'
-	                )
-	            ),
-	            array('class' => 'meta viewingas')
-	        );
-	    }
+        // Other user.
+        if (!empty($opts->metadata['asotheruser'])) {
+            $avatarcontents .= html_writer::span(
+                $opts->metadata['realuseravatar'],
+                'avatar realuser'
+            );
+            $usertextcontents .= html_writer::tag(
+                'span',
+                get_string(
+                    'loggedinas',
+                    'moodle',
+                    html_writer::span(
+                        $opts->metadata['userfullname'],
+                        'value'
+                    )
+                ),
+                array('class' => 'meta viewingas')
+            );
+        }
 
-	    // Role.
-	    if (!empty($opts->metadata['asotherrole'])) {
-	        $role = core_text::strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['rolename'])));
-	        $usertextcontents .= html_writer::span(
-	            ' | '.$opts->metadata['rolename'],
-	            'meta role role-' . $role
-	        );
-	    }
+        // Role.
+        if (!empty($opts->metadata['asotherrole'])) {
+            $role = core_text::strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['rolename'])));
+            $usertextcontents .= html_writer::span(
+                ' | '.$opts->metadata['rolename'],
+                'meta role role-' . $role
+            );
+        }
 
-	    // User login failures.
-	    if (!empty($opts->metadata['userloginfail'])) {
-	        $usertextcontents .= html_writer::span(
-	            $opts->metadata['userloginfail'],
-	            'meta loginfailures'
-	        );
-	    }
+        // User login failures.
+        if (!empty($opts->metadata['userloginfail'])) {
+            $usertextcontents .= html_writer::span(
+                $opts->metadata['userloginfail'],
+                'meta loginfailures'
+            );
+        }
 
-	    // MNet.
-	    if (!empty($opts->metadata['asmnetuser'])) {
-	        $mnet = strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['mnetidprovidername'])));
-	        $usertextcontents .= html_writer::span(
-	            $opts->metadata['mnetidprovidername'],
-	            'meta mnet mnet-' . $mnet
-	        );
-	    }
+        // MNet.
+        if (!empty($opts->metadata['asmnetuser'])) {
+            $mnet = strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['mnetidprovidername'])));
+            $usertextcontents .= html_writer::span(
+                $opts->metadata['mnetidprovidername'],
+                'meta mnet mnet-' . $mnet
+            );
+        }
 
-	    $returnstr .= html_writer::span(
-	        html_writer::span($usertextcontents, 'usertext') .
-	        html_writer::span($avatarcontents, $avatarclasses),
-	        'userbutton'
-	    );
+        $returnstr .= html_writer::span(
+            html_writer::span($usertextcontents, 'usertext') .
+            html_writer::span($avatarcontents, $avatarclasses),
+            'userbutton'
+        );
 
-	    $usertextcontents = html_writer::tag('div', $usertextcontents, array('class'=>'py-2 px-3 h5 m-0 bg-medium username'));
+        $usertextcontents = html_writer::tag('div', $usertextcontents, array('class'=>'py-2 px-3 h5 m-0 bg-medium username'));
 
-	    $content = '';
-	    foreach ($opts->navitems as $item) {
-	        switch ($item->itemtype) {
-	            case 'divider':
-	                $content .= html_writer::empty_tag('hr');
-	                break;
-	            case 'invalid':
-	                break;
-	            case 'link':
-	                $pix = null;
-	                if (isset($item->pix) && !empty($item->pix)) {
-	                    $pix = new pix_icon($item->pix, $item->title, null, array('class' => 'iconsmall'));
-	                } else if (isset($item->imgsrc) && !empty($item->imgsrc)) {
-	                    $item->title = html_writer::img(
-	                        $item->imgsrc,
-	                        $item->title,
-	                        array('class' => 'iconsmall')
-	                    ) . $item->title;
-	                }
+        $content = '';
+        foreach ($opts->navitems as $item) {
+            switch ($item->itemtype) {
+                case 'divider':
+                    $content .= html_writer::empty_tag('hr');
+                    break;
+                case 'invalid':
+                    break;
+                case 'link':
+                    $pix = null;
+                    if (isset($item->pix) && !empty($item->pix)) {
+                        $pix = new pix_icon($item->pix, $item->title, null, array('class' => 'iconsmall'));
+                    } else if (isset($item->imgsrc) && !empty($item->imgsrc)) {
+                        $item->title = html_writer::img(
+                            $item->imgsrc,
+                            $item->title,
+                            array('class' => 'iconsmall')
+                        ) . $item->title;
+                    }
 
-	                $content .= html_writer::start_tag('div', array('class'=>'menu-item'));
-	                $icon = '';
-	                if ($pix) {
-	                    $icon = html_writer::tag('span', $this->render($pix), array('class'=>'icon m-a-0'));
-	                }
-	                $title = html_writer::tag('span', $item->title, array('class'=>'title'));
+                    $content .= html_writer::start_tag('div', array('class'=>'menu-item'));
+                    $icon = '';
+                    if ($pix) {
+                        $icon = html_writer::tag('span', $this->render($pix), array('class'=>'icon m-a-0'));
+                    }
+                    $title = html_writer::tag('span', $item->title, array('class'=>'title'));
 
-	                $content .= html_writer::link($item->url, $icon.$title, array('class'=>'menu-link d-block dropdown-item px-3'));
-	                $content .= html_writer::end_tag('div');
-	                break;
-	        }
-	    }
+                    $content .= html_writer::link($item->url, $icon.$title, array('class'=>'menu-link d-block dropdown-item px-3'));
+                    $content .= html_writer::end_tag('div');
+                    break;
+            }
+        }
 
-	    $user = html_writer::link('javascript://void(0)', $avatarcontents, array('data-toggle'=>"dropdown", 'class'=>'usermenu_header d-flex flex-wrap align-items-center dropdown-toggle text-default'));
+        $user = html_writer::link('javascript://void(0)', $avatarcontents, array('data-toggle'=>"dropdown", 'class'=>'usermenu_header d-flex flex-wrap align-items-center dropdown-toggle text-default'));
 
-	    $content = html_writer::tag('div', $usertextcontents.$content, array('id'=>'usermenu_content', 'class'=>"usermenu_content m-0 pt-0 dropdown-menu dropdown-menu-right"));
+        $content = html_writer::tag('div', $usertextcontents.$content, array('id'=>'usermenu_content', 'class'=>"usermenu_content m-0 pt-0 dropdown-menu dropdown-menu-right"));
 
-	    return html_writer::div(
-	        $user.$content,
-	        $usermenuclasses.' dropdown ml-4'
-	    );
-	}
+        return html_writer::div(
+            $user.$content,
+            $usermenuclasses.' dropdown ml-4'
+        );
+    }
 
     /**
      * Overridden function - Internal implementation of user image rendering.
@@ -415,18 +415,18 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $context = \context_course::instance($COURSE->id);
 
         if (!has_capability('moodle/course:viewhiddenuserfields', $context)) { 
-	        $sql = 'SELECT shortname, data
-	                FROM {user_info_data} uid
-	                JOIN {user_info_field} uif
-	                ON uid.fieldid = uif.id
-	                WHERE uid.userid = :userid';
+            $sql = 'SELECT shortname, data
+                    FROM {user_info_data} uid
+                    JOIN {user_info_field} uif
+                    ON uid.fieldid = uif.id
+                    WHERE uid.userid = :userid';
 
-	        if ($result = $DB->get_records_sql($sql, array('userid' => $userpicture->user->id))){                      ;
-	            if(isset($result['publicphoto']->data) && $result['publicphoto']->data == 0) {
-	                $userpicture->user->picture = 0;
-	            }
-	        }
-	    }
+            if ($result = $DB->get_records_sql($sql, array('userid' => $userpicture->user->id))){                      ;
+                if(isset($result['publicphoto']->data) && $result['publicphoto']->data == 0) {
+                    $userpicture->user->picture = 0;
+                }
+            }
+        }
 
         return parent::render_user_picture($userpicture);       
     }
@@ -530,7 +530,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $output;
     }
 
-	/**
+    /**
      * Overridden function - Prints a nice side block with an optional header.
      *
      * @param block_contents $bc HTML for the content
@@ -575,11 +575,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     /*** THEME SPECIFIC FUNCTIONS ***/
 
-	protected function render_edit_button(single_button $button) {
-	    $data = $button->export_for_template($this);
-	    $data->state = $button->state;
-	    return $this->render_from_template('theme_cul_boost/edit_button', $data);
-	}
+    protected function render_edit_button(single_button $button) {
+        $data = $button->export_for_template($this);
+        $data->state = $button->state;
+        return $this->render_from_template('theme_cul_boost/edit_button', $data);
+    }
 
     /**
      * City University main menu
@@ -659,16 +659,22 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         $content = '';
         
-	    foreach ($menu->get_children() as $item) {
-	        $context = $item->export_for_template($this);
-	        $context->tours = false;
-	        if ($item->get_title() == 'User tour') {
-	        	$context->tours = true;
-	        }
-	        
-	        $content .= $this->render_from_template('theme_cul_boost/custom_menu_item', $context);
-	    }
-	    return $content;
+        foreach ($menu->get_children() as $item) {
+            $context = $item->export_for_template($this);
+            $context->tours = false;            
+
+            if ($item->get_title() == 'User tour') {
+                $context->tours = true;
+            } else if ($item->get_title()) {
+                $id = strtolower($item->get_title());
+                $id = str_replace(' ', '', $id);
+                $id = 'theme_cul_boost_' . $id;
+                $context->id = $id;
+            }
+            
+            $content .= $this->render_from_template('theme_cul_boost/custom_menu_item', $context);
+        }
+        return $content;
     }
 
     /*
@@ -677,33 +683,29 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * This renderer is needed to enable the Bootstrap style navigation.
      * Overriden to add id to nodes for JS
      */
-    protected function render_custom_menu_item(custom_menu_item $menuitem) {
-        global $CFG;
+    // protected function render_custom_menu_item(custom_menu_item $menuitem) {
+    //     global $CFG;
 
-        $content = '';
+    //     $content = '';
+    //     $context = $menuitem->export_for_template($this);
+    //     $content .= $this->render_from_template('core/custom_menu_item', $context);
 
-        $context = $menuitem->export_for_template($this);	            
-        $content .= $this->render_from_template('core/custom_menu_item', $context);
+    //     if ($menuitem->has_children()) {
 
-        if ($menuitem->has_children()) {
+       //      foreach ($menuitem->get_children() as $item) {
+       //          $context = $item->export_for_template($this);                
+       //          $content .= $this->render_from_template('core/custom_menu_item', $context);
 
-	        foreach ($menuitem->get_children() as $item) {
-	            $context = $item->export_for_template($this);
+       //          if ($item->has_children()) {
+       //              foreach ($item->get_children() as $subitem) {
+       //                  $content .= $this->render_custom_menu_item($subitem);
+       //              }
+       //          } 
+       //      }
+       //  }
 
-
-	            
-	            $content .= $this->render_from_template('core/custom_menu_item', $context);
-
-	            if ($item->has_children()) {
-	                foreach ($item->get_children() as $subitem) {
-	                    $content .= $this->render_custom_menu_item($subitem);
-	                }
-	            } 
-	        }
-	    }
-
-        return $content;
-    }
+    //     return $content;
+    // }
 
     /**
      * City University my menu
@@ -1134,71 +1136,71 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
     }
 
-	/**
-	 * City University help menu
-	 */
-	public function help_menu_items() {
-	    global $CFG, $PAGE;
+    /**
+     * City University help menu
+     */
+    public function help_menu_items() {
+        global $CFG, $PAGE;
 
-	    if (!empty($this->page->theme->settings->customhelpmenuitems)) {
-	        $customhelpmenuitems = $this->page->theme->settings->customhelpmenuitems;
-	        $helptxt = get_string('helptext', 'theme_cul_boost');
-	        $helpmenu = new custom_menu($customhelpmenuitems);
+        if (!empty($this->page->theme->settings->customhelpmenuitems)) {
+            $customhelpmenuitems = $this->page->theme->settings->customhelpmenuitems;
+            $helptxt = get_string('helptext', 'theme_cul_boost');
+            $helpmenu = new custom_menu($customhelpmenuitems);
 
-	        return $helpmenu;
-	    }
+            return $helpmenu;
+        }
 
-	    return false;
-	}
+        return false;
+    }
 
-	public function help_menu() {
-		global $CFG, $PAGE, $USER, $OUTPUT;
+    public function help_menu() {
+        global $CFG, $PAGE, $USER, $OUTPUT;
 
-		$content = '';
-		$showmenu = isloggedin() && !isguestuser();
+        $content = '';
+        $showmenu = isloggedin() && !isguestuser();
 
-		// Help & Support from CUL Theme Settings
-		if ($showmenu) {
-		    if ($helpmenu = $this->help_menu_items()) {
-		        $content .= parent::render_custom_menu($helpmenu);
-		    }
-		}
+        // Help & Support from CUL Theme Settings
+        if ($showmenu) {
+            if ($helpmenu = $this->help_menu_items()) {
+                $content .= parent::render_custom_menu($helpmenu);
+            }
+        }
 
-		return $content;
-	}
+        return $content;
+    }
 
-	public function synergyblocks($region, $classes = array(), $tag = 'aside') {
-	    $classes = (array)$classes;
-	    $classes[] = 'block-region';
-	    $attributes = array(
-	        'id' => 'block-region-'.preg_replace('#[^a-zA-Z0-9_\-]+#', '-', $region),
-	        'class' => join(' ', $classes),
-	        'data-blockregion' => $region,
-	        'data-droptarget' => '1'
-	    );
-	    $content = '';
+    public function synergyblocks($region, $classes = array(), $tag = 'aside') {
+        $classes = (array)$classes;
+        $classes[] = 'block-region';
+        $attributes = array(
+            'id' => 'block-region-'.preg_replace('#[^a-zA-Z0-9_\-]+#', '-', $region),
+            'class' => join(' ', $classes),
+            'data-blockregion' => $region,
+            'data-droptarget' => '1'
+        );
+        $content = '';
 
-	    if ($this->page->blocks->region_has_content($region, $this)) {
-	        $content = $this->blocks_for_region($region);
-	    }
+        if ($this->page->blocks->region_has_content($region, $this)) {
+            $content = $this->blocks_for_region($region);
+        }
 
-	    return html_writer::tag($tag, $content, $attributes);
-	}
+        return html_writer::tag($tag, $content, $attributes);
+    }
 
-	public function gradebook_disclaimer() {
-	    $gradebookids = array (
-	        'page-grade-report-user-index',
-	        'page-grade-report-culuser-index',
-	        'page-grade-report-overview-index',
-	        'page-course-user'
-	    );
+    public function gradebook_disclaimer() {
+        $gradebookids = array (
+            'page-grade-report-user-index',
+            'page-grade-report-culuser-index',
+            'page-grade-report-overview-index',
+            'page-course-user'
+        );
 
-	    if (in_array($this->page->bodyid, $gradebookids)) {
-	    	return true;
-	    }
+        if (in_array($this->page->bodyid, $gradebookids)) {
+            return true;
+        }
 
-	    return false;
-	}
+        return false;
+    }
 
     public function user_info() {
         global $USER;
@@ -1314,95 +1316,95 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $script;
     }
 
-	// Outputs the favourite button on course pages.
-	public function favourite_course_button() {
-		global $CFG, $PAGE, $COURSE, $USER;
-		
-		$content = '';
-		$isfav = false;
+    // Outputs the favourite button on course pages.
+    public function favourite_course_button() {
+        global $CFG, $PAGE, $COURSE, $USER;
+        
+        $content = '';
+        $isfav = false;
 
-		// Add Favourite url
-		$favourites = null;
+        // Add Favourite url
+        $favourites = null;
 
-		// Try the old method of saving favourites in user preference.
-		if (!is_null($favourites = get_user_preferences('culcourse_listing_course_favourites'))) {
-		    $favourites = unserialize($favourites);
+        // Try the old method of saving favourites in user preference.
+        if (!is_null($favourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+            $favourites = unserialize($favourites);
 
-		    if ($favourites && in_array($COURSE->id, $favourites)){
-		    	$isfav = true;
-		    }
-	    // Favourites have been transferred to Favourite API.
-		} else {
-			$usercontext = \context_user::instance($USER->id);
-			$coursecontext = \context_course::instance($COURSE->id);
+            if ($favourites && in_array($COURSE->id, $favourites)){
+                $isfav = true;
+            }
+        // Favourites have been transferred to Favourite API.
+        } else {
+            $usercontext = \context_user::instance($USER->id);
+            $coursecontext = \context_course::instance($COURSE->id);
 
-		    // Get the user favourites service, scoped to a single user (their favourites only).
-		    $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+            // Get the user favourites service, scoped to a single user (their favourites only).
+            $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
 
-		    $isfav = $ufservice->favourite_exists('core_course', 'courses', $COURSE->id, $coursecontext);
-		}
+            $isfav = $ufservice->favourite_exists('core_course', 'courses', $COURSE->id, $coursecontext);
+        }
 
-		if ($isfav) {
-		    $action = 'remove';
-		    $class = 'favourited';
-		    $id = 'theme-cul_boost-removefromfavourites';
-		    $actionstring = 'favouriteremove';
-		} else {
-		    $action = 'add';
-		    $class = '';
-		    $id = 'theme-cul_boost-addtofavourites';
-		    $actionstring = 'favouriteadd';
-		}
+        if ($isfav) {
+            $action = 'remove';
+            $class = 'favourited';
+            $id = 'theme-cul_boost-removefromfavourites';
+            $actionstring = 'favouriteremove';
+        } else {
+            $action = 'add';
+            $class = '';
+            $id = 'theme-cul_boost-addtofavourites';
+            $actionstring = 'favouriteadd';
+        }
 
-		$favouriteurl = new moodle_url('/theme/cul_boost/favourite_post.php', array(
-		    'action' => $action,
-		    'cid' => $COURSE->id,
-		    'sesskey' => sesskey()
-		));
+        $favouriteurl = new moodle_url('/theme/cul_boost/favourite_post.php', array(
+            'action' => $action,
+            'cid' => $COURSE->id,
+            'sesskey' => sesskey()
+        ));
 
-		$favouritetxt = get_string($actionstring, 'theme_cul_boost');
+        $favouritetxt = get_string($actionstring, 'theme_cul_boost');
 
-		$data = [
-			'favouriteurl' => $favouriteurl,
-			'favouritetxt' => $favouritetxt,
-			'class' => $class,
-			'id' => $id			
-		];
+        $data = [
+            'favouriteurl' => $favouriteurl,
+            'favouritetxt' => $favouritetxt,
+            'class' => $class,
+            'id' => $id         
+        ];
 
-		return $this->render_from_template('theme_cul_boost/favourite_course_button', $data);
-	}
+        return $this->render_from_template('theme_cul_boost/favourite_course_button', $data);
+    }
 
-	/**
+    /**
      * Returns a button to make a hidden course visible.
      *
      * @return string the HTML to be output.
      */
-	public function show_course_button() {
+    public function show_course_button() {
 
-		global $COURSE, $OUTPUT;
+        global $COURSE, $OUTPUT;
 
-		$content = '';
-		$coursecontext = context_course::instance($COURSE->id);
+        $content = '';
+        $coursecontext = context_course::instance($COURSE->id);
 
-		if (!has_capability('moodle/course:update', $coursecontext)) {
+        if (!has_capability('moodle/course:update', $coursecontext)) {
             return $content;
         }        
 
         $showcourseurl = new moodle_url(
-        	'/theme/cul_boost/unhide_post.php', 
-        	[
-			    'cid' => $COURSE->id,
-			    'sesskey' => sesskey()
-			]
-		);
+            '/theme/cul_boost/unhide_post.php', 
+            [
+                'cid' => $COURSE->id,
+                'sesskey' => sesskey()
+            ]
+        );
 
-		$showcoursetxt = get_string('showcourse', 'theme_cul_boost');		
+        $showcoursetxt = get_string('showcourse', 'theme_cul_boost');       
 
-		return $OUTPUT->single_button($showcourseurl, $showcoursetxt, 'post', ['class' => 'showcourse d-inline-block ml-4']);
+        return $OUTPUT->single_button($showcourseurl, $showcoursetxt, 'post', ['class' => 'showcourse d-inline-block ml-4']);
     }
 
     /**
-     * Retuns menu item html
+     * Returns menu item html
      * Serves requests to /theme/cul_boost/favourites_ajax.php
      *
      *
@@ -1438,61 +1440,61 @@ class core_renderer extends \theme_boost\output\core_renderer {
         foreach ($menu->get_children() as $item) {
             $context = $item->export_for_template($this);
             $id = strtolower($item->get_title());
-	        $id = str_replace(' ', '', $id);
-	        $id = 'theme-cul_boost-' . $id;
-	        $context->id = $id;
-            $content .= $this->render_from_template('core/custom_menu_item', $context);
+            $id = str_replace(' ', '', $id);
+            $id = 'theme_cul_boost_' . $id;
+            $context->id = $id;
+            $content .= $this->render_from_template('theme_cul_boost/custom_menu_item', $context);
         }
 
         return $content;
     }
 
     /**
-	 * Serve the grading panel as a fragment.
-	 *
-	 * @param array $args List of named arguments for the fragment loader.
-	 * @return string
-	 */
-	function fragment_gradealert($args) {
-	    global $CFG, $OUTPUT;
+     * Serve the grading panel as a fragment.
+     *
+     * @param array $args List of named arguments for the fragment loader.
+     * @return string
+     */
+    function fragment_gradealert($args) {
+        global $CFG, $OUTPUT;
 
-	    require_once($CFG->libdir.'/gradelib.php');
-	    require_once($CFG->dirroot . '/mod/assign/locallib.php');
+        require_once($CFG->libdir.'/gradelib.php');
+        require_once($CFG->dirroot . '/mod/assign/locallib.php');
 
-	    $o = '';    
-	    $courseid = clean_param($args['courseid'], PARAM_INT); 
-	    $assignid = clean_param($args['assignid'], PARAM_INT); 
-	    $userid = clean_param($args['userid'], PARAM_INT); 
-	    $context = $args['context'];
-	    $cangrade = has_capability('mod/assign:grade', $context);
+        $o = '';    
+        $courseid = clean_param($args['courseid'], PARAM_INT); 
+        $assignid = clean_param($args['assignid'], PARAM_INT); 
+        $userid = clean_param($args['userid'], PARAM_INT); 
+        $context = $args['context'];
+        $cangrade = has_capability('mod/assign:grade', $context);
 
-	    if ($context->contextlevel != CONTEXT_MODULE) {
-	        return null;
-	    }
-	    if($cangrade) {
-	        $gradinginfo = grade_get_grades(
-	            $courseid,
-	            'mod',
-	            'assign',
-	            $assignid,
-	            $userid
-	        );
+        if ($context->contextlevel != CONTEXT_MODULE) {
+            return null;
+        }
+        if($cangrade) {
+            $gradinginfo = grade_get_grades(
+                $courseid,
+                'mod',
+                'assign',
+                $assignid,
+                $userid
+            );
 
-	        $gradingitem = null;
-	        $gradebookgrade = null;
+            $gradingitem = null;
+            $gradebookgrade = null;
 
-	        if (isset($gradinginfo->items[0])) {
-	            $gradingitem = $gradinginfo->items[0];
-	            $gradebookgrade = $gradingitem->grades[$userid];
-	        }
+            if (isset($gradinginfo->items[0])) {
+                $gradingitem = $gradinginfo->items[0];
+                $gradebookgrade = $gradingitem->grades[$userid];
+            }
 
-	        if ($gradebookgrade->hidden){
-	            $o .= $OUTPUT->notification(get_string('gradehidden', 'theme_cul_boost'), 'error hazard');
-	        } else {
-	            $o .= $OUTPUT->notification(get_string('gradenothidden', 'theme_cul_boost'), 'error hazard');
-	        }
-	    }
+            if ($gradebookgrade->hidden){
+                $o .= $OUTPUT->notification(get_string('gradehidden', 'theme_cul_boost'), 'error hazard');
+            } else {
+                $o .= $OUTPUT->notification(get_string('gradenothidden', 'theme_cul_boost'), 'error hazard');
+            }
+        }
 
-	    return $o;
-	}
+        return $o;
+    }
 }
