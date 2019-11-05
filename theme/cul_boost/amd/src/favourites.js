@@ -23,32 +23,35 @@
 
 define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str', 
     'core/url', 'core/yui', 'core/pubsub', 'core_course/events'],
-    function($, ajax, templates, notification, str, url, Y, PubSub, CourseEvents) {
+    function($, ajax, templates, Notification, str, url, Y, PubSub, CourseEvents) {
 
     "use strict";
     // @TODO Replace all the YUI in theme_cul_boost and block_culcourse_listing.
+    var URL = M.cfg.wwwroot + '/theme/cul_boost/favourites_ajax.php';
+
     var updateFavourites = function () {
-        Y.use('node', function() {
-            Y.io(M.cfg.wwwroot + '/theme/cul_boost/favourites_ajax.php', {
-                on: {
-                    success: function(id, e) {
-                        var favourites = Y.one('#theme_cul_boost_myfavourites');
-                        var html = Y.JSON.parse(e.responseText);
-                        var newnode = Y.Node.create(html);
-                        var navwrap = Y.one('.navbar .nav-wrap');
-                        var existingnode = navwrap.one('.dropdown:nth-of-type(2)');
+        $.ajax({
+            url: URL,
+            success: function(response) {
+                var favourites = $('#theme_cul_boost_myfavourites');                
 
-                        console.log(existingnode);
-
-                        if (favourites) {
-                            favourites.remove();
-                        }
-                        
-                        navwrap.insert(newnode, existingnode);
-                    }
+                if (favourites) {
+                    favourites.remove();
                 }
-            });
-        });
+
+                if (response) {
+                    // TODO use fragment.
+                    var newnode = $.parseHTML(response);
+                    var existingnode = $('.navbar .nav-wrap .nav-inner >a.nav-item');                    
+                    existingnode.after(newnode);
+                }
+            },
+            error: function() {
+
+            },
+            complete: function() {
+            }
+        }).fail(Notification.exception);
     };
 
     return {
