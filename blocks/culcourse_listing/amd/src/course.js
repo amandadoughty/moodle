@@ -102,37 +102,37 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 var newfavouritenode = $(html);
 
                 if (params.action == 'add') {
-                        var courseboxnode = $(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
+                    var courseboxnode = $(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
 
-                        if (courseboxnode) {
-                            courseboxnode.replaceWith(newcourseboxnode);
-                        }
+                    if (courseboxnode) {
+                        courseboxnode.replaceWith(newcourseboxnode);
+                    }
 
-                        newfavouritenode.css('opacity', 0);
-                        $(SELECTORS.FAVOURITELIST).append(newfavouritenode);
+                    newfavouritenode.css('opacity', 0);
+                    $(SELECTORS.FAVOURITELIST).append(newfavouritenode);
 
-                        // Add all the listeners to the new node. - delegate should remove need for this?
-                        // Keeping the YUI code to avoid complete rewrite.
-                        var newfavourite = Y.one(SELECTORS.FAVOURITELIST + ' [data-courseid="' + params.cid + '"]');
-                        var config = {node: newfavourite};
-                        Favourite.initializer(config);
+                    // Add all the listeners to the new node. - delegate should remove need for this?
+                    // Keeping the YUI code to avoid complete rewrite.
+                    var newfavourite = Y.one(SELECTORS.FAVOURITELIST + ' [data-courseid="' + params.cid + '"]');
+                    var config = {node: newfavourite};
+                    Favourite.initializer(config);
 
-                        // There must be at least one favourite now, so show the favourite buttons
-                        // if they are hidden and hide the 'no favourites' message.
-                        if ($(SELECTORS.FAVOURITECOURSEBOX).length > 0) {
-                            $(SELECTORS.FAVOURITECLEARBUTTON).show().css('display', 'inline-block');
-                            $(SELECTORS.FAVOURITEREORDERBUTTON).show().css('display', 'inline-block');
-                            $(SELECTORS.FAVOURITEALERT).text('');
-                        }
+                    // There must be at least one favourite now, so show the favourite buttons
+                    // if they are hidden and hide the 'no favourites' message.
+                    if ($(SELECTORS.FAVOURITECOURSEBOX).length > 0) {
+                        $(SELECTORS.FAVOURITECLEARBUTTON).show().css('display', 'inline-block');
+                        $(SELECTORS.FAVOURITEREORDERBUTTON).show().css('display', 'inline-block');
+                        $(SELECTORS.FAVOURITEALERT).text('');
+                    }
 
-                        newfavouritenode.animate({
-                            opacity: 1
-                        }, 1000, function() {
-                        });
+                    newfavouritenode.animate({
+                        opacity: 1
+                    }, 1000, function() {
+                    });
 
-                        return;
+                    return;
 
-                } else if (params.action == 'delete') {
+                } else if (params.action == 'remove') {
                     Str.get_string('nofavourites', 'block_culcourse_listing').then(function(langstring) {
                         var courseboxnode = $(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
                         var favouritenode = $(SELECTORS.FAVOURITELIST + ' [data-courseid="' + params.cid + '"]');
