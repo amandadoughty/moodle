@@ -143,8 +143,7 @@ class photoboard implements templatable, renderable {
             $userids[] = $user->id;
             $xuser = new stdClass();
 
-            // Create a copy of the user with hidden fields removed if current
-            // USER does not have capability moodle/course:viewhiddenuserfields.
+            // Create a copy of the user with hidden fields removed if current USER does not have capability moodle/course:viewhiddenuserfields.
             foreach ($user as $key => $value) {
                 if (!in_array($value, $hiddenfields)) {
                     $xuser->$key = $value;
@@ -208,6 +207,7 @@ class photoboard implements templatable, renderable {
             }
 
             $xuser->fullname = $fullname;
+
             // $xuser->userlink = $userlink;
 
             // Added temp sql to get maildisplay above.
@@ -222,6 +222,8 @@ class photoboard implements templatable, renderable {
                 || ($user->id == $USER->id)
             ) {
                 $xuser->email = $user->email;                
+            } else {
+                $xuser->email = false;
             }
 
             if (has_capability('moodle/course:viewhiddenuserfields', $context, $user)) {
