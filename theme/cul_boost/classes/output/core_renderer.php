@@ -584,6 +584,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
     /**
      * City University main menu
      */
+
+    /**
+     * Renders the City University Main menu items.
+     *
+     * @return string the HTML to be output.
+     */    
     public function custom_menu($custommenuitems = '') {
         global $CFG, $PAGE, $USER, $OUTPUT;
 
@@ -677,38 +683,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $content;
     }
 
-    /*
-     * Overridden renderer - This renders the bootstrap top menu.
-     * 
-     * This renderer is needed to enable the Bootstrap style navigation.
-     * Overriden to add id to nodes for JS
-     */
-    // protected function render_custom_menu_item(custom_menu_item $menuitem) {
-    //     global $CFG;
-
-    //     $content = '';
-    //     $context = $menuitem->export_for_template($this);
-    //     $content .= $this->render_from_template('core/custom_menu_item', $context);
-
-    //     if ($menuitem->has_children()) {
-
-       //      foreach ($menuitem->get_children() as $item) {
-       //          $context = $item->export_for_template($this);                
-       //          $content .= $this->render_from_template('core/custom_menu_item', $context);
-
-       //          if ($item->has_children()) {
-       //              foreach ($item->get_children() as $subitem) {
-       //                  $content .= $this->render_custom_menu_item($subitem);
-       //              }
-       //          } 
-       //      }
-       //  }
-
-    //     return $content;
-    // }
-
     /**
-     * City University my menu
+     * Builds the My Moodle menu.
+     *
+     * @return custom_menu object.
      */
     public function my_menu() {
         global $CFG, $PAGE;
@@ -720,8 +698,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
-     * City University favourites menu
-     */
+     * Builds a menu of courses in the users favourites..
+     *
+     * @return custom_menu|bool false custom menu object or false.
+     */    
     public function favourites_menu() {
         $favouritescourses = self::get_user_favourites_courses();
 
@@ -750,6 +730,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return false;
     }
 
+    /**
+     * Builds a menu of courses the user is enrolled in
+     * broken down by year and term.
+     *
+     * @return custom_menu|bool false custom menu object or false.
+     */
     public function my_modules_menu() {
         global $CFG;
         
@@ -833,8 +819,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
-     * City University module menu
-     */
+     * Manipulates the modules navigation node.
+     *
+     * @return custom_menu|bool false custom menu object or false.
+     */     
     public function module_menu() {
         global $CFG, $PAGE, $COURSE;
 
@@ -1139,6 +1127,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
     /**
      * City University help menu
      */
+
+    /**
+     * Gets the help menu setting and converts string to object..
+     *
+     * @return custom_menu object.
+     */     
     public function help_menu_items() {
         global $CFG, $PAGE;
 
@@ -1153,6 +1147,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return false;
     }
 
+    /**
+     * Gets the help menu and renders it.
+     *
+     * @return string the HTML to be output.
+     */ 
     public function help_menu() {
         global $CFG, $PAGE, $USER, $OUTPUT;
 
@@ -1169,6 +1168,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $content;
     }
 
+    /**
+     * Outputs block regions.
+     *
+     * @return string the HTML to be output.
+     */ 
     public function synergyblocks($region, $classes = array(), $tag = 'aside') {
         $classes = (array)$classes;
         $classes[] = 'block-region';
@@ -1187,6 +1191,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return html_writer::tag($tag, $content, $attributes);
     }
 
+    /**
+     * Checks if page requires gradebook discalimer.
+     *
+     * @return bool true if page requires discalimer.
+     */ 
     public function gradebook_disclaimer() {
         $gradebookids = array (
             'page-grade-report-user-index',
@@ -1202,6 +1211,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return false;
     }
 
+    /**
+     * Provides personalisation data.
+     *
+     * @return stdClass object containing personalised settings.
+     */ 
     public function user_info() {
         global $USER;
 
@@ -1267,9 +1281,24 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $userinfo;
     }
 
-    // Google Analytics code.
+    /**
+     * Outputs the Google Analytics code.
+     *
+     * @return string the HTML to be output.
+     */     
     public function google_analytics() {
         global $DB , $USER, $COURSE, $PAGE;
+
+        // Has the user accepted tracking cookies?
+        $cookiepolicy = get_config('theme_cul_boost', 'cookiepolicy');
+
+        if ($cookiepolicy) {
+            $accepted = tool_policy\api::is_user_version_accepted($USER->id, $cookiepolicy);
+            // If null or false (declined).
+            if (!$accepted) {
+                return '';
+            }
+        }
 
         $userinfo = $this->user_info();
 
@@ -1316,7 +1345,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $script;
     }
 
-    // Outputs the favourite button on course pages.
+    /**
+     * Outputs the favourite button on course pages.
+     *
+     * @return string the HTML to be output.
+     */    
     public function favourite_course_button() {
         global $CFG, $PAGE, $COURSE, $USER;
         
@@ -1407,7 +1440,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * Returns menu item html
      * Serves requests to /theme/cul_boost/favourites_ajax.php
      *
-     *
      * @return array
      */
     public function favourites_ajax() {
@@ -1450,7 +1482,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
-     * Serve the grading panel as a fragment.
+     * Serves the grading panel as a fragment.
      *
      * @param array $args List of named arguments for the fragment loader.
      * @return string

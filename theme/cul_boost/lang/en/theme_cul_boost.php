@@ -27,20 +27,16 @@ defined('MOODLE_INTERNAL') || die();
 // Generic
 $string['choosereadme'] = 'Theme CUL Boost is a child theme of Boost.';
 $string['pluginname'] = 'CUL Boost';
-$string['region-side-post'] = 'Right';
-$string['configtitle'] = 'CUL Boost settings';
+
+// $string['configtitle'] = 'CUL Boost settings';
 
 // General Settings
-$string['toaccessibility'] = 'Skip to accessibility';
 $string['generalsettings'] = 'General settings';
 $string['logo'] = 'Logo';
 $string['logotext'] = 'City, University of London';
 $string['logodesc'] = 'Please upload your custom logo here if you want to add it to the header.<br>If you upload a logo it will replace the standard icon and name that was displayed by default.';
 $string['customcss'] = 'Custom CSS';
 $string['customcssdesc'] = 'Whatever CSS rules you add to this textarea will be reflected in every page, making for easier customization of this theme.';
-$string['searchfor'] = 'Search for...';
-$string['region-nav-settings'] = 'Settings (Navbar)';
-$string['scrolltop'] = 'Back to top';
 $string['footnote'] = 'Footnote';
 $string['footnotedesc'] = 'Whatever you add to this textarea will be displayed in the footer throughout your Moodle site.';
 $string['copyright'] = 'Copyright';
@@ -48,11 +44,16 @@ $string['copyrightdesc'] = 'The name of your organisation.';
 $string['copyrightdefault'] = 'City, University of London';
 $string['footerlinks'] = 'Footer Links';
 $string['footerlinksdesc'] = 'Content area used for the bottom right of the footer.';
-$string['on'] = 'Turn editing on';
-$string['off'] = 'Turn editing off';
+$string['cookiepolicy'] = 'Policies';
+$string['cookiepolicydesc'] = 'Choose the policy that determines if user has consented to tracking cookies.';
+$string['years'] = 'Years ordered in dropdown';
+$string['yearsdesc'] = 'Example: the number of years to show ordered in dropdown';
+$string['gakey'] = 'Google analytics key';
+$string['gakeydesc'] = 'Please enter you Google Analytics key';
 
 // Dashboard
 $string['dashboard'] = 'Dashboard';
+$string['region-nav-settings'] = 'Settings (Navbar)';
 $string['region-dash-top-full'] = 'Dashboard (Top Full Width)';
 $string['region-dash-content'] = 'Dashboard (Main Content)';
 $string['region-dash-side'] = 'Dashboard (Side Content)';
@@ -60,14 +61,16 @@ $string['region-dash-left'] = 'Dashboard (Left)';
 $string['region-dash-middle'] = 'Dashboard (Middle)';
 $string['region-dash-right'] = 'Dashboard (Right)';
 $string['region-dash-bottom-full'] = 'Dashboard (Bottom Full Width)';
+$string['region-side-post'] = 'Right';
+$string['settings'] = 'Settings';
 
-$string['coursesearch'] = 'Search for modules...';
-$string['recentmodules'] = 'Recently Accessed Modules';
-$string['mymodules'] = 'My Modules';
-$string['myfavourites'] = 'My Favourites';
+// $string['coursesearch'] = 'Search for modules...';
+// $string['recentmodules'] = 'Recently Accessed Modules';
+// $string['mymodules'] = 'My Modules';
+// $string['myfavourites'] = 'My Favourites';
 
 
-// Course
+// Course.
 $string['hideblocks'] = 'Hide Sidebar';
 $string['showblocks'] = 'Show Sidebar';
 $string['viewmore'] = 'View More';
@@ -77,14 +80,11 @@ $string['showcourse'] = 'Show Module';
 $string['confirmshowcourse'] = 'Are you sure you want to make this module visible to students?';
 $string['courseshown'] = 'Module is now visible to students';
 
-// Terms
+// CUL Course Listing Block.
 $string['PRD1'] = 'Term 1';
 $string['PRD2'] = 'Term 2';
 $string['PRD3'] = 'Term 3';
-
-/* 
- * theme_cul strings
- */
+$string['searchfor'] = 'Search for...';
 
 // Gradebook disclaimer.
 $string['gradebookdisclaimer'] = 'In accordance with City University policy, any marks shown here are provisional, subject to consideration by an Assessment board and approval by Senate.';
@@ -98,15 +98,25 @@ $string['markingguide'] = 'Marking guide';
 $string['rubric'] = 'Rubric';
 $string['returntoassign'] = 'Return to assignment';
 
-$string['mycourses'] = 'My Courses';
-$string['settings'] = 'Settings';
-$string['fullscreen'] = 'enter fullscreen';
-$string['closefullscreen'] = 'exit fullscreen';
+$string['toaccessibility'] = 'Skip to accessibility';
+$string['access'] = 'Accessibility Help';
+$string['accesslink'] = 'http://www.city.ac.uk/accessibility';
+$string['scrolltop'] = 'Back to top';
+$string['on'] = 'Turn editing on';
+$string['off'] = 'Turn editing off';
+
+// Menus
+// $string['mycourses'] = 'My Courses';
+
+// $string['fullscreen'] = 'enter fullscreen';
+// $string['closefullscreen'] = 'exit fullscreen';
+$string['myfavourites'] = 'My Favourites';
 $string['mycourses'] = 'My Modules';
+$string['mymodules'] = 'My Modules';
 $string['myprofile'] = 'My Profile';
-$string['morecourses'] = 'More Modules';
+// $string['morecourses'] = 'More Modules';
 $string['coursemenu'] = 'Module Menu';
-$string['settings'] = 'Settings';
+// $string['settings'] = 'Settings';
 
 $string['favouriteadd'] = 'Add to Favourites';
 $string['favouriteremove'] = 'Remove from Favourites';
@@ -128,19 +138,11 @@ $string['studentguidance'] = 'Student Guidance';
 $string['studentguidancelink'] = 'http://www.city.ac.uk/edtechhelp/student';
 $string['staffguidance'] = 'Staff Guidance';
 $string['staffguidancelink'] = 'http://www.city.ac.uk/edtechhelp/staff';
-$string['access'] = 'Accessibility Help';
-$string['accesslink'] = 'http://www.city.ac.uk/accessibility';
-
 $string['tooltext'] = 'Tools';
 $string['rollovertool'] = 'Rollover Tool';
 $string['rollovertoollink'] = '/local/culrollover/';
 $string['rolloverguidance'] = 'Rollover Guidance';
 $string['rolloverguidancelink'] = 'http://bit.ly/cityunirollovertool';
 
-$string['years'] = 'Years ordered in dropdown';
-$string['yearsdesc'] = 'Example: the number of years to show ordered in dropdown';
-
-$string['gakey'] = 'Google analytics key';
-$string['gakeydesc'] = 'Please enter you Google Analytics key';
-
+// Privacy.
 $string['privacy:metadata'] = 'The CUL Boost theme does not store any personal data about any user.';
