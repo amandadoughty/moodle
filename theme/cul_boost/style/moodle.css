@@ -21588,6 +21588,15 @@ a.dimmed_text:visited,
             .navbar .nav-wrap .nav-inner .nav-item .dropdown-menu .dropdown-item.dropdown-submenu .dropdown-toggle:focus,
             .navbar .nav-wrap .dropdown .dropdown-menu .dropdown-item.dropdown-submenu .dropdown-toggle:focus {
               outline-offset: -3px !important; }
+            .navbar .nav-wrap .nav-inner .nav-item .dropdown-menu .dropdown-item.dropdown-submenu .dropdown-menu.show,
+            .navbar .nav-wrap .dropdown .dropdown-menu .dropdown-item.dropdown-submenu .dropdown-menu.show {
+              display: block;
+              position: relative;
+              top: auto;
+              float: none;
+              padding: 0;
+              border: none;
+              background-color: transparent; }
             .navbar .nav-wrap .nav-inner .nav-item .dropdown-menu .dropdown-item.dropdown-submenu .dropdown-submenu.subopen,
             .navbar .nav-wrap .dropdown .dropdown-menu .dropdown-item.dropdown-submenu .dropdown-submenu.subopen {
               background-color: rgba(0, 0, 0, 0.05); }

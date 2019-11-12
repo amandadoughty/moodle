@@ -233,15 +233,6 @@
                 padding: 0;             
                 left: auto;
                 right: 0;
-                &.show {
-                    // display: block;
-                    // position: relative;
-                    // top: auto;
-                    // float: none;
-                    // padding: 0;
-                    // border: none;
-                    // background-color: transparent;                        
-                }                
                 .dropdown-item {
                     padding: 0;                
                     &:active,
@@ -263,6 +254,17 @@
                             outline-offset: -3px!important;
                         }
                         /* Third level menu (Terms etc) */
+                        .dropdown-menu {
+                            &.show {
+                                display: block;
+                                position: relative;
+                                top: auto;
+                                float: none;
+                                padding: 0;
+                                border: none;
+                                background-color: transparent;                        
+                            }
+                        }                        
                         .dropdown-submenu {
                             &.subopen {
                                 background-color: rgba(0, 0 ,0, 0.05);
@@ -272,7 +274,7 @@
                             }
                             a.dropdown-item {
                                 padding: $dropdown-item-padding-y 2*$dropdown-item-padding-x;
-                            }
+                            }                            
                         }
                         &.subopen {
                             background-color: $gray-lightest;
