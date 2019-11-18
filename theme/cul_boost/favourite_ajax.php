@@ -26,25 +26,22 @@ define('AJAX_SCRIPT', true);
 global $PAGE;
 
 require_once(dirname(__FILE__) . '/../../config.php');
-require_once(dirname(__FILE__) . '/lib.php');
+require_once(dirname(__FILE__) . '/locallib.php');
 
 require_sesskey();
 require_login();
 
-$PAGE->set_context(context_system::instance()); //TODO?
+$PAGE->set_context(context_system::instance());
 $action = required_param('action', PARAM_RAW);
 $cid = required_param('cid', PARAM_INT);
-// Edit the favourites
+// Update the user preference if it exists.
 $favourites = theme_cul_boost_edit_favourites($action, $cid);
-// Update the user preference
-theme_cul_boost_update_favourites($favourites);
+// Update the Favourites API.
 theme_cul_boost_edit_favourites_api($action, $cid);
-// Retrieve the favourites from preferences again in case the update did not work, we want  
+// Retrieve the favourites again in case the update did not work, we want  
 // to ensure the link reflects the current status of favourites.
-$favourites = array();
-if (!is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
-    $favourites = unserialize($myfavourites);
-}
+$renderer = $PAGE->get_renderer('theme_cul_boost', 'core');
+$favourites = $renderer::get_user_favourites();
 
 if (in_array($cid, $favourites)) {
 	$newaction = 'remove';
@@ -53,7 +50,6 @@ if (in_array($cid, $favourites)) {
 }
 
 $properties = array();
-//$newaction = ($action == 'add'? 'remove' : 'add');
 $properties['action'] = $action;
 $properties['newaction'] = $newaction;
 $properties['text'] = get_string('favourite' . $newaction, 'theme_cul_boost');

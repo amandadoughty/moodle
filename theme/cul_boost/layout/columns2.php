@@ -26,6 +26,10 @@ defined('MOODLE_INTERNAL') || die();
 
 // user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
+require_once(dirname(__FILE__).'/includes/navbar.php');
+require_once(dirname(__FILE__) . '/includes/header.php');
+require_once(dirname(__FILE__) . '/includes/courseheader.php');
+require_once(dirname(__FILE__) . '/includes/footer.php');
 
 $PAGE->set_popup_notification_allowed(false);
 $isloggedin = isloggedin();
@@ -33,16 +37,35 @@ $isloggedin = isloggedin();
 $OUTPUT->standard_head_html();
 $PAGE->requires->skip_link_to('accessibility', get_string('toaccessibility', 'theme_cul_boost'));
 $bodyattributes = $OUTPUT->body_attributes();
+$iscourse = $PAGE->pagelayout == 'course' && $COURSE->id != 1;
+$iscoursevisible = $iscourse && $COURSE->visible == 1;
+$isgradebookdisclaimer = $OUTPUT->gradebook_disclaimer();
 // Block region setup
 $hasblocks = $PAGE->blocks->region_has_content('side-post', $OUTPUT);
+$knownregionpost = $PAGE->blocks->is_known_region('side-post');
 $regions = theme_cul_boost_bootstrap_grid($hasblocks);
+$blockshtml = '';
+
+if ($knownregionpost) {
+    $blockshtml = $OUTPUT->blocks('side-post', $regions['post']);
+}
 
 $templatecontext = [    
     'output' => $OUTPUT,
-    'isloggedin' => $isloggedin,
+    'isloggedin' => $isloggedin,   
+    'sidepostblocks' => $blockshtml,
+    'hasblocks' => $hasblocks,    
     'classes' => $regions['content'],
     'bodyattributes' => $bodyattributes,
+    'iscourse' => $iscourse,
+    'isgradebookdisclaimer' => $isgradebookdisclaimer,
+    'sectioninfo' => $sectioninfo,
+    'courseimgurl' => $url,
+    'iscoursevisible' => $iscoursevisible,
+    'navbar' => $navbartemplatecontext,
+    'header' => $headertemplatecontext,
+    'footer' => $footertemplatecontext
 ];
 
-echo $OUTPUT->render_from_template('theme_cul_boost/secure', $templatecontext);
+echo $OUTPUT->render_from_template('theme_cul_boost/columns2', $templatecontext);
 

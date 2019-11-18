@@ -158,7 +158,7 @@ var DEBUG = !!grunt.option('dbug');
             deletesourcemap: {
                 command: 'rm -rf style/*.map'
             },
-            decache: 'vagrant ssh -c "cd ' + vagrantmoodleroot + ' && sudo -u www-data /usr/bin/php admin/cli/purge_caches.php"'
+            // decache: 'vagrant ssh -c "cd ' + vagrantmoodleroot + ' && sudo -u www-data /usr/bin/php admin/cli/purge_caches.php"'
         }
     });
 
@@ -181,6 +181,10 @@ var DEBUG = !!grunt.option('dbug');
         "replace:font_fix",
         "exec:postcss",
         "exec:deletesourcemap",
-        "decache"]);
-    grunt.registerTask("amd", ["uglify", "decache"]);
+        // "decache"
+        ]);
+    grunt.registerTask("amd", [
+        "uglify", 
+        // "decache"
+        ]);
 };

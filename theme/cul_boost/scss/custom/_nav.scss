@@ -1,8 +1,10 @@
+/*** Header ***/
 .navbar {
     padding: 0;
     max-height: 100%;
     border-radius: 0;
     box-shadow: none;
+    /*** Global Navigation ***/
     .topmenu {
         background-color: $gray-lightest;
         ul#cross-domain-nav {
@@ -25,6 +27,7 @@
             }
         }
     }
+    /*** Theme settings menu (Tools, Help, Usertour) ***/
     .right-float-menu {
         border-bottom-left-radius: $border-radius;
         border-bottom-right-radius: $border-radius;
@@ -97,7 +100,8 @@
             }
         }
     }
-    .navbar-header {
+    /* Logo */
+    .navbar-outer-wrap .navbar-header {
         width: auto;
         max-width: 100%;
         .navbar-brand {
@@ -122,10 +126,12 @@
             }
         }
     }
+    /* City custom menu*/
     .nav-wrap {
         @include media-breakpoint-up(lg) {
             border-bottom: 1px solid $gray-lighter;
         }
+        /*** City custom menu inside sticky red bar ***/
         &.stick {
             position: fixed;
             top: 0;
@@ -143,6 +149,7 @@
             }
             &.stuck {
                 transition: transform .2s ease;
+                /*** Sticky Logo ***/
                 .homelink {
                     display: flex;
                     flex-wrap: wrap;
@@ -157,17 +164,16 @@
                         }
                     }
                 }
-                .nav {
-                    >li {
-                        >a {
-                            color: $navbar-dark-active-color;
-                            &:hover,
-                            &:focus {
-                                color: $navbar-dark-active-color;
-                            }
-                        }
+                /*** Sticky Dropdowns (.nav-inner) ***/
+                .nav-inner .nav-item.nav-link,
+                .nav-inner .dropdown >a {
+                    color: $navbar-dark-active-color;
+                    &:hover,
+                    &:focus {
+                        color: $navbar-dark-active-color;
                     }
                 }
+                /*** Sticky Other nav (.nav-extras) ***/
                 .global_search {
                     .slidersearchform {
                         input[type="text"] {
@@ -198,53 +204,101 @@
                 }
             }
         }
+        /*** Logo ***/
         .homelink {
             display: none;
         }
-        .nav {
+        /*** Dropdowns (.nav-inner) ***/
+        /* Top level menu titles - a or div.dropdown */
+        .nav-inner .nav-item,
+        .dropdown { 
             margin: 0 0 0 ($spacer * 1.5);
             &:empty {
                 display: none !important;
             }
-            &:first-of-type {
-                margin-left: 0;
-            }
-            .dropdown {
-                +.dropdown {
-                    margin-left: $spacer * 1.5;
+            &.nav-link, /* Menu item without dropdown - My Moodle */
+            >.dropdown-toggle {/* Dropdowns - My Modules etc */             
+                padding: 0;
+                color: $navbar-light-color;
+                font-size: $h5-font-size;
+                margin: 0;
+                padding: 0;
+                >a {
+                    display: inline-block;
                 }
-                .dropdown-menu {
-                    .dropdown-item {
-                        padding: 0;
-                        a {
-                            padding: $dropdown-item-padding-y $dropdown-item-padding-x;
+            }
+            /* First level menu + */
+            .dropdown-menu {
+                min-width: 50vw;
+                padding: 0;             
+                left: auto;
+                right: 0;
+                .dropdown-item {
+                    padding: 0;                
+                    &:active,
+                    &.active {
+                        background-color: transparent;
+                        color: $navbar-light-color;
+                        >a {
+                            color: $navbar-light-color;
                         }
                     }
-                }
-            }
-            >li {
-                &:hover,
-                &:focus {
-                    background-color: transparent;
-                }
-                &.dropdown-item {
-                    padding: 0;
-                    >a {
-                        display: inline-block;
-                    }
-                }
-                >a {
-                    color: $navbar-light-color;
-                    font-size: $h5-font-size;
-                    margin: 0;
-                    padding: 0;
-                    &:hover,
                     &:focus {
-                        color: $navbar-light-hover-color;
+                        outline-offset: -3px!important;
+                        background-color: transparent;
+                    }
+                    /* Second level menu + (Years/ Participants etc) */
+                    &.dropdown-submenu {
+                        border-bottom: 1px solid $gray-200;
+                        .dropdown-toggle:focus {
+                            outline-offset: -3px!important;
+                        }
+                        /* Third level menu (Terms etc) */
+                        .dropdown-menu {
+                            &.show {
+                                display: block;
+                                position: relative;
+                                top: auto;
+                                float: none;
+                                padding: 0;
+                                border: none;
+                                background-color: transparent;                        
+                            }
+                        }                        
+                        .dropdown-submenu {
+                            &.subopen {
+                                background-color: rgba(0, 0 ,0, 0.05);
+                            }
+                            .dropdown-toggle {
+                                padding-left: 2rem;
+                            }
+                            a.dropdown-item {
+                                padding: $dropdown-item-padding-y 2*$dropdown-item-padding-x;
+                            }                            
+                        }
+                        &.subopen {
+                            background-color: $gray-lightest;
+                            a.dropdown-item {
+                                padding: $dropdown-item-padding-y 2*$dropdown-item-padding-x;
+                                &:hover {
+                                    background-color: rgba(0, 0 ,0, 0.05);
+                                }
+                            }
+                        }
+                    }                    
+                }
+                /* A menu item which is not a submenu dropdown */
+                a.dropdown-item {
+                    padding: $dropdown-item-padding-y $dropdown-item-padding-x;
+                    border-bottom: 1px solid $gray-200;
+                    &:last-child {
+                        border-bottom: 0;
                     }
                 }
             }
         }
+
+        /*** Other nav (.nav-extras) ***/
         .global_search {
             .slidersearchform {
                 width: 200px;
@@ -320,6 +374,52 @@
     }
 }
 
+/*** Global search form (.navbar .nav-wrap .global_search) ***/
+.slidersearchform {
+    position: relative;
+    width: 100%;
+    max-width: 645px;
+    cursor: pointer;
+    button {
+        width: 43px;
+        height: 43px;
+        background-color: transparent;
+        color: $body-color;
+        border: none;
+        border-radius: 0;
+        line-height: 1;
+        position: absolute;
+        right: 1px;
+        top: 1px;
+        text-align: center;
+        font-size: $h5-font-size;
+        &:hover,
+        &:focus,
+        &:hover:focus,
+        &:active,
+        &.active,
+        &:active:focus {
+            background-color: $gray-lightest;
+            color: $primary;
+        }
+    }
+    input[type="text"] {
+        background-color: #fff;
+        border: 1px solid $gray-lightest;
+        width: 100%;
+        box-shadow: none;
+        height: 45px;
+        padding-right: 45px;
+        margin-bottom: 0;
+        &:focus {
+            &+button {
+                color: $primary;
+            }
+        }
+    }
+}
+
+/*** Bootstrap dropdowns ***/
 .dropdown {
     .dropdown-toggle {
         &:after {
@@ -351,43 +451,6 @@
         }
         a {
             white-space: normal;
-        }
-    }
-}
-
-.dropdown-submenu {
-    &.subopen {
-        background-color: $gray-lightest;
-        &.active,
-        &:active {
-            background-color: $primary;
-            .dropdown-menu {
-                &.show {
-                    a {
-                        color: $dropdown-link-color;
-                    }
-                }
-            }
-        }
-    }
-    .dropdown-menu {
-        &.show {
-            display: block;
-            position: relative;
-            top: auto;
-            float: none;
-            padding: 0;
-            border: none;
-            background-color: $gray-lightest;
-            .dropdown-item {
-                &:last-child {
-                    border-bottom: 1px solid $gray-200;
-                }
-                &:hover,
-                &:focus {
-                    background-color: darken($gray-lightest, 5%);
-                }
-            }
         }
     }
 }
@@ -490,50 +553,10 @@ a.menu-link .icon {
     margin-top: -4px;
 }
 
-.slidersearchform {
-    position: relative;
-    width: 100%;
-    max-width: 645px;
-    cursor: pointer;
-    button {
-        width: 43px;
-        height: 43px;
-        background-color: transparent;
-        color: $body-color;
-        border: none;
-        border-radius: 0;
-        line-height: 1;
-        position: absolute;
-        right: 1px;
-        top: 1px;
-        text-align: center;
-        font-size: $h5-font-size;
-        &:hover,
-        &:focus,
-        &:hover:focus,
-        &:active,
-        &.active,
-        &:active:focus {
-            background-color: $gray-lightest;
-            color: $primary;
-        }
-    }
-    input[type="text"] {
-        background-color: #fff;
-        border: 1px solid $gray-lightest;
-        width: 100%;
-        box-shadow: none;
-        height: 45px;
-        padding-right: 45px;
-        margin-bottom: 0;
-        &:focus {
-            &+button {
-                color: $primary;
-            }
-        }
-    }
-}
 
+/*** Menu toggle button 
+   * - in .nav-extras when closed and in drawer when open 
+ ***/
 .navbar-toggle {
     background-color: $navbar-toggle-bg;
     position: relative;
@@ -620,6 +643,7 @@ a.menu-link .icon {
     }
 }
 
+/*** Mobile Menu ***/
 .drawer-wrap {
     position: fixed;
     top: 0;
@@ -645,15 +669,113 @@ a.menu-link .icon {
             overflow-x: hidden;
             overflow-y: auto;
         }
-        .mainmenu-wrap {
-            ul.nav {
+
+        /* Menu toggle button */
+        .navbar-toggle {
+            background-color: $navbar-toggle-bg;
+            position: relative;
+            width: $navbar-toggle;
+            height: $navbar-toggle;
+            appearance: none;
+            border-radius: $border-radius;
+            border: none;
+            cursor: pointer;
+            align-self: center;
+            .navbar .menubar & {
+                padding: 0;
+                border: transparent;
+                background-color: transparent;
+            }
+            &:hover,
+            &:focus {
+                outline: none;
+                background-color: $navbar-toggle-focus-bg;
+                span,
+                span:before,
+                span:after {
+                    background-color: darken($navbar-toggle-icon-bar-color, 10%);
+                }
+            }
+            span {
                 display: block;
-                >li.dropdown {
-                    width: 100%;
-                    >a {
-                        font-size: $h4-font-size;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 25px;
+                height: 4px;
+                background-color: $navbar-toggle-icon-bar-color;
+                transform: translate(-50%, -50%);
+                border-radius: 1px;
+                .stick & {
+                    background-color: #fff;
+                    &:before,
+                    &:after {
+                        background-color: #fff;
                     }
                 }
+                &.close-icon {
+                    background-color: #fff;
+                    &:before,
+                    &:after {
+                        background-color: #fff;
+                        border-radius: 1px;
+                    }
+                }
+                &:before,
+                &:after {
+                    content: "";
+                    position: absolute;
+                    display: block;
+                    left: 0;
+                    width: 100%;
+                    height: 4px;
+                    background-color: $navbar-toggle-icon-bar-color;
+                    border-radius: 1px;
+                }
+                &:before {
+                    transition-property: top, transform;
+                    top: -8px;
+                }
+                &:after {
+                    transition-property: bottom, transform;
+                    bottom: -8px;
+                }
+            }
+            .navopen & {
+                background-color: $navbar-toggle-focus-bg;
+                span {
+                    background-color: transparent;
+                    &:before {
+                        top: 0;
+                        transform: rotate(45deg);
+                    }
+                    &:after {
+                        bottom: 0;
+                        transform: rotate(-45deg);
+                    }
+                }
+            }
+        }
+        /*** City Custom menu & Help Menu ***/
+        .mainmenu-wrap {
+            /* Top level menu titles - a or div.dropdown */
+            .nav-item,
+            .dropdown {
+                position: relative;
+                display: block;
+                width: 100%;
+                &.nav-link, /* Menu item without dropdown - My Moodle */
+                >.dropdown-toggle { /* Dropdowns - My Modules etc */
+                    font-size: $h4-font-size;
+                    color: $navbar-light-color;                    
+                }
+                &.show {
+                    background-color: $gray-lightest;
+                }
+                &:hover a {
+                    color: $navbar-toggle-icon-bar-color;
+                }
+                /* First level menu + */
                 .dropdown-menu {
                     position: relative !important;
                     transform: none !important;
@@ -665,63 +787,48 @@ a.menu-link .icon {
                     padding: 0;
                     border: none;
                     max-height: 100%;
-                }
-                .dropdown-item,
-                .dropdown-item:hover {
-                    background-color: transparent;
-                    text-align: center;
-                    &.dropdown-submenu {
-                        &.subopen {
-                            background-color: rgba(0, 0, 0, 0.05);
+                    .dropdown-item,
+                    .dropdown-item:hover {
+                        padding-left: 0;
+                        padding-right: 0; 
+                        border-bottom: 1px solid $gray-200;                   
+                        text-align: center;
+                        /* Second level menu + (Years/ Participants etc) */
+                         &.dropdown-submenu {
+                            &.subopen {
+                                background-color: rgba(0, 0, 0, 0.05);
+                                padding-bottom: 0;                            
+                            }
                         }
-                        .dropdown-menu {
-                            font-size: $font-size-sm;
-                            background-color: transparent;
-                        }
+                        .dropdown-toggle {
+                            padding: 0;
+                            &:focus {
+                                outline-offset: -3px!important;
+                            }
+                        }               
                     }
-                }
-                li {
-                    position: relative;
-                    a {
-                        color: $navbar-light-color;
+                    .dropdown-item:hover {
+                        background-color: rgba(0, 0, 0, 0.05);
+                        color: $navbar-toggle-icon-bar-color;
                     }
-                    &:hover,
-                    &:focus,
-                    .open {
-                        background-color: $gray-lightest;
-                        a {
-                            color: $navbar-light-hover-color;
-                        }
+                    .dropdown-item:active .dropdown-toggle {
+                        // color: $navbar-light-color;
                     }
-                    .dropdown-menu {
-                        background-color: $gray-lightest;
+                    &.show .dropdown-item:last-child {
+                        border-bottom: 0;
                     }
                 }
             }
             .help-menu-wrap {
-                ul.nav {
-                    >li.dropdown {
-                        >a {
-                            font-size: $h5-font-size;
-                        }
+                >.nav-item {
+                    >a {
+                        font-size: $h5-font-size;
+                        color: $navbar-light-color;
+                    }
+                    &:hover >a {
+                        color: $navbar-toggle-icon-bar-color;
                     }
                 }
-            }
-        }
-    }
-}
-
-#theme-cul_boost-mymodules,
-#theme-cul_boost-myfavourites {
-    .dropdown-menu {
-        min-width: 50vw;
-        left: auto;
-        right: 0;
-
-        .dropdown-menu {
-            padding-left: 0.5rem;
-            .dropdown-menu {
-                padding-left: 1rem;
             }
         }
     }

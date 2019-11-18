@@ -1,0 +1,91 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    Page header.
+}}
+
+<nav id="top" class="navbar navbar-default d-block" role="header">
+    <div class="topmenu d-none d-md-block">
+        <div class="container-fluid">
+            <div id="cross-domain">
+                <ul id="cross-domain-nav" class="d-flex flex-wrap">
+                    <li>
+                        <a href="https://www.{{ header.userinfo.website }}/">{{ header.userinfo.website }}</a>
+                    </li>
+                    <li>
+                        <a href="https://outlook.office.com/" target="_blank">Email</a>
+                    </li>
+                    <li>
+                        <a href="/" class="active" style="pointer-events: none">Moodle</a>
+                    </li>
+                    <li>
+                        <a href="{{ header.userinfo.library }}/">Library</a>
+                    </li>
+                    <li>
+                        <a href="{{ header.userinfo.studenthub }}/">Student Hub</a>
+                    </li>
+                    <li>
+                        <a href="{{ header.userinfo.staffhub }}/">Staff Hub</a>
+                    </li>
+            </div>
+        </div>
+    </div>
+    <div class="main-navigation">
+        <div class="container-fluid d-lg-flex flex-wrap align-items-center position-relative py-3 py-md-4">
+            <div class="right-float-menu d-none d-lg-flex flex-wrap mx-auto mb-3">
+                {{{ header.help }}}
+            </div>
+            <div class="d-flex flex-wrap align-items-center w-100">
+                <div class="navbar-header col py-2 pl-0">
+                    <div class="navbar-brand">
+                        <a href="/" class="homelink">
+                            <img
+                                src="{{{ header.userinfo.logourl }}}"
+                                class="sitelogo {{ header.userinfo.logoprefix }}logo"
+                                alt="{{#str}}logotext, theme_cul_boost{{/str}}"
+                            />
+                        </a>
+                    </div>
+                </div>
+                {{# isloggedin }}
+                <div class="nav-outer-wrap ml-auto">
+                    <div class="nav-wrap d-flex flex-wrap align-items-stretch">
+                        <a href="/" class="homelink">
+                            <img
+                                src="{{{ header.userinfo.logourlwhite }}}"
+                                class="sitelogo{{ header.userinfo.logoprefix }}logo"
+                                alt="{{#str}}logotext, theme_cul_boost{{/str}}"
+                            />
+                        </a>
+                        <div class="nav-inner d-none d-lg-flex flex-wrap align-items-stretch ml-lg-auto">
+                            {{{ header.custommenu }}}
+                        </div>
+                        <div class="nav-extras d-flex flex-wrap align-items-stretch ml-auto ml-lg-0">
+                            {{> theme_cul_boost/global_search }}
+                            {{{ header.usermenu }}}
+                            <div class="navbar-toggle d-lg-none ml-3">
+                                <span class="icon-bar"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/ isloggedin }}
+            </div>
+        </div>
+    </div>
+</nav>
+{{> theme_cul_boost/drawer }}

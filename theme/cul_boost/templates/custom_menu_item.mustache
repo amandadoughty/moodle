@@ -1,0 +1,33 @@
+{{^ divider }}
+{{# haschildren }}
+<div id="{{ id }}" class="dropdown d-flex flex-wrap align-items-center justify-content-center py-3">
+    <a class="dropdown-toggle nav-link" id="drop-down-{{ uniqid }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" {{# title }}title="{{{ title }}}"{{/ title }} href="#">
+        {{{text}}}
+    </a>
+    <div class="dropdown-menu mt-0" aria-labelledby="drop-down-{{ uniqid }}">
+        {{# children }}
+        {{# haschildren }}
+        {{> theme_cul_boost/custom_menu_item_child }}
+        {{/ haschildren }}
+        {{^ haschildren }}
+            {{^ divider }}
+                <a class="dropdown-item" href="{{{ url }}}" {{# title }}title="{{{ title }}}"{{/ title }}>{{{ text }}}</a>
+            {{/ divider }}
+            {{# divider }}
+                <div class="dropdown-divider"></div>
+            {{/ divider }}
+        {{/ haschildren }}
+        {{/ children }}
+    </div>
+</div>
+{{/ haschildren }}
+{{^ haschildren }}
+<a id="{{ id }}" class="nav-item nav-link d-flex flex-wrap align-items-center justify-content-center py-3" href="{{{ url }}}" {{# title }}title="{{{ title }}}"{{/ title }}>{{{ text }}}</a>
+{{/ haschildren }}
+{{/ divider }}
+
+
+
+
+
+

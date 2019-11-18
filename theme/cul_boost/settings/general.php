@@ -46,7 +46,7 @@ $temp = new admin_settingpage('theme_cul_boost_general',  get_string('generalset
     $name = 'theme_cul_boost/copyright';
     $title = get_string('copyright', 'theme_cul_boost');
     $description = get_string('copyrightdesc', 'theme_cul_boost');
-    $default = get_string('findamodule', 'theme_cul_boost');
+    $default = get_string('copyrightdefault', 'theme_cul_boost');
     $setting = new admin_setting_configtext($name, $title, $description, $default);
     $temp->add($setting);
 
@@ -78,6 +78,23 @@ $temp = new admin_settingpage('theme_cul_boost_general',  get_string('generalset
     $setting = new admin_setting_configtext($name, $title, $description, $default);
     $temp->add($setting);
 
+    // Google Analytics consent
+    $policyopts = [];
+    $policies = tool_policy\api::list_current_versions(tool_policy\policy_version::AUDIENCE_GUESTS);
+
+    if ($policies) {
+        foreach ($policies as $policy) {
+            $policyopts[$policy->id] = $policy->name;
+        }
+
+        $name = 'theme_cul_boost/cookiepolicy';
+        $title = get_string('cookiepolicy', 'theme_cul_boost');
+        $description = get_string('cookiepolicydesc', 'theme_cul_boost');
+        $default = null;
+        $setting = new admin_setting_configselect($name, $title, $description, $default, $policyopts);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $temp->add($setting);
+    }
 
 if (!$ADMIN->locate($temp->name)) {
     $ADMIN->add('theme_cul_boost', $temp);

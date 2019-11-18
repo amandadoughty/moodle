@@ -24,40 +24,25 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/setup.php');
+// user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
+require_once($CFG->libdir . '/behat/lib.php');
 
 $PAGE->set_popup_notification_allowed(false);
-echo $OUTPUT->doctype() ?>
+$isloggedin = isloggedin();
+// Accessibility stuff.
+$OUTPUT->standard_head_html();
+$PAGE->requires->skip_link_to('accessibility', get_string('toaccessibility', 'theme_cul_boost'));
+$bodyattributes = $OUTPUT->body_attributes();
+// Block region setup
+$hasblocks = $PAGE->blocks->region_has_content('side-post', $OUTPUT);
+$regions = theme_cul_boost_bootstrap_grid($hasblocks);
 
-<html <?php echo $OUTPUT->htmlattributes(); ?>>
-<head>
-    <title><?php echo $OUTPUT->page_title(); ?></title>
-    <link rel="shortcut icon" href="<?php echo $OUTPUT->favicon(); ?>" />
-    <?php echo $OUTPUT->standard_head_html(); ?>
-    <?php 
-    // Accessibility stuff.
-    $PAGE->requires->skip_link_to('accessibility', get_string('toaccessibility', 'theme_cul_boost'));
-    ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
-</head>
+$templatecontext = [    
+    'output' => $OUTPUT,
+    'isloggedin' => $isloggedin,
+    'classes' => $regions['content'],
+    'bodyattributes' => $bodyattributes,
+];
 
-<body <?php echo $OUTPUT->body_attributes(); ?>>
+echo $OUTPUT->render_from_template('theme_cul_boost/embedded', $templatecontext);
 
-<?php echo $OUTPUT->standard_top_of_body_html(); ?>
-
-<div id="page">
-    <div id="page-content">
-        <section id="main-region" class="<?php echo $regions['content']; ?>">
-            <?php
-                echo $OUTPUT->course_content_header();
-                echo $OUTPUT->main_content();
-                echo $OUTPUT->course_content_footer();
-            ?>
-        </section>
-    </div>
-</div>
-
-<?php echo $OUTPUT->standard_end_of_body_html() ?>
-
-</body>
-</html>

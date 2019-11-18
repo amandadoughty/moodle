@@ -1,0 +1,72 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    Page navbar.
+}}
+
+{{# navbar.haspageheading }}
+<div class="page-header container-fluid text-center text-md-left">
+    {{{ output.page_heading }}}
+</div>
+{{/ navbar.haspageheading }}
+
+{{# navbar.hasnavbar}}
+<div id="page-navbar" class="container-fluid">   
+    <div class="d-flex flex-wrap align-items-center mb-4">
+        {{! leftnavbar }}
+        {{# navbar.hasleftnavbar }}
+        <nav 
+            class="breadcrumb-nav d-flex flex-wrap align-items-center justify-content-center justify-content-md-start col-12 col-md p-0"
+            role="navigation"
+            aria-label="breadcrumb"
+        >
+            {{{ output.navbar }}}
+        </nav>
+        {{/ navbar.hasleftnavbar }}
+
+        {{! overlay }}
+        <div class="overlay">
+            <div class="close-icon"></div>
+        </div>
+
+        {{! rightnavbar }}
+        {{# navbar.hasnavsettings }}
+        <div class="right-navbar-wrap mt-3 mt-md-0 mx-auto mr-md-0 ml-md-auto">
+            <div class="right-navbar d-flex flex-wrap align-items-center bg-gray-700 p-3">
+                {{{ output.page_heading_button }}}
+                <div class="settings-block-wrap">
+                    <a 
+                        href="javascript:void(0)" 
+                        class="trigger d-flex flex-wrap align-items-center h5 mb-0 text-white"
+                    >                        
+                        <span class="trigger-text line-height-1">
+                            {{#str}}settings, core{{/str}}
+                        </span>
+                        <i class="fa fa-cog ml-2"></i>
+                    </a>
+                    {{{ navbar.settingsblock }}}
+                </div>
+            </div>
+        </div>
+        {{/ navbar.hasnavsettings }}
+        {{^ navbar.hasnavsettings }}
+        {{{ output.page_heading_button }}}
+        {{/ navbar.hasnavsettings }}
+    </div>
+</div>
+{{/ navbar.hasnavbar}}
+

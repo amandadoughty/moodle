@@ -23,6 +23,7 @@
  */
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/lib.php');
+require_once(dirname(__FILE__) . '/locallib.php');
 
 $cid = required_param('cid', PARAM_INT);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
@@ -39,7 +40,7 @@ if ($confirm && isloggedin() && confirm_sesskey()) {
     redirect($returnurl, get_string('courseshown', 'theme_cul_boost'));
 }
 
-// Otherwise, show a button to actually purge the caches.
+// Otherwise, show a confirmation page.
 $params = ['cid' => $cid, 'sesskey' => sesskey(), 'confirm' => 1];
 $actionurl = new moodle_url('/theme/cul_boost/unhide_post.php', $params);
 
