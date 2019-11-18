@@ -1,0 +1,7 @@
+<form method="get" action="{{action}}" class="adminsearchform d-flex flex-wrap align-items-center bg-white position-relative p-2" role="search">
+    <div class="form-group col p-0 m-0">
+        <label class="accesshide" for="adminsearchquery">{{label}}</label>
+        <input class="form-control w-100" type="text" name="query" value="{{searchvalue}}" id="adminsearchquery" size="10">
+    </div>
+    <input type="submit" class="btn btn-primary ml-1" value={{#quote}}{{#str}}search{{/str}}{{/quote}}>
+</form>

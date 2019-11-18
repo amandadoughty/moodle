@@ -1,0 +1,449 @@
+/*// @import "../../../../theme/boost/scss/bootstrap/_variables.scss";*/
+/*@import "cul.scss";*/
+/*** Colours ***/
+/*** Dashboard ***/
+body.format-culcourse .course-content .dash-panel {
+  margin-bottom: 1rem; }
+  body.format-culcourse .course-content .dash-panel .linkscontainer ul.links {
+    margin: 0;
+    padding: 2px;
+    list-style: none; }
+    body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li {
+      position: relative;
+      display: block;
+      float: left;
+      text-align: left;
+      padding: 0;
+      margin: 0;
+      width: auto;
+      border: none; }
+      body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li .dash-move {
+        position: absolute;
+        left: 0; }
+        body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li .dash-move i {
+          margin-top: 7px;
+          margin-left: 0;
+          color: #262626; }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li .dash-move i:hover {
+            color: #262626; }
+      body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link {
+        position: relative;
+        display: block;
+        height: 2.5rem;
+        margin: 3px;
+        border: 1px solid #888888;
+        overflow: hidden; }
+        body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {
+          display: inline-block;
+          line-height: 2.5rem;
+          border-bottom: medium none !important;
+          /** 'disabled'/unavailable links **/ }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a i {
+            width: 100%;
+            color: #ffffff;
+            text-align: center; }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a .fa-stack {
+            width: 100%;
+            font-size: 0.7rem;
+            text-align: center; }
+            body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a .fa-stack .fa.fa-stack-2x {
+              color: #888888; }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a img.iconsmall {
+            width: 1rem;
+            height: 1rem;
+            padding: 0 0.75rem;
+            margin: 0 auto; }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.nolink, body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a:hover.nolink, body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a:visited.nolink {
+            text-decoration: none !important;
+            color: #888888 !important;
+            cursor: default; }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dashlinkedit {
+            position: absolute;
+            right: 0; }
+            body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dashlinkedit i {
+              margin-top: 7px;
+              margin-right: 0.3rem;
+              color: inherit; }
+              body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dashlinkedit i:hover {
+                color: inherit; }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-icon {
+            height: 100%;
+            width: 2.5rem;
+            vertical-align: top;
+            border-right: none;
+            background: #000000; }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-text {
+            display: none; }
+          body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
+            display: none; }
+        body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link.linkhidden {
+          border: 1px dashed #262626;
+          opacity: 0.7; }
+
+body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li {
+  margin: 1rem; }
+  body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link {
+    margin-left: 1.2rem; }
+    body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a {
+      /** 'disabled'/unavailable links **/ }
+      body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
+        display: inline-block; }
+body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li.movehere img.movetarget {
+  height: 16px;
+  width: 80px; }
+
+/* css for photoboard */
+.path-format-culcourse-photos .cul-modelist {
+  border-bottom: 1px solid #ddd; }
+.path-format-culcourse-photos .cul-modelist {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none; }
+.path-format-culcourse-photos .mode-item {
+  float: left;
+  margin-bottom: -1px; }
+.path-format-culcourse-photos .mode-link {
+  display: block;
+  padding: .5em 1em;
+  border: 1px solid transparent;
+  border-top-right-radius: .25rem;
+  border-top-left-radius: .25rem; }
+.path-format-culcourse-photos .mode-link.active,
+.path-format-culcourse-photos .mode-item.open .mode-link,
+.path-format-culcourse-photos .mode-link.active:focus,
+.path-format-culcourse-photos .mode-item.open .mode-link:focus,
+.path-format-culcourse-photos .mode-link.active:hover,
+.path-format-culcourse-photos .mode-item.open .mode-link:hover {
+  color: #55595c;
+  background-color: #f4f4f4;
+  border-color: #ddd #ddd transparent; }
+.path-format-culcourse-photos .userlist li {
+  display: inline-block;
+  list-style: none; }
+  .path-format-culcourse-photos .userlist li.card {
+    display: block;
+    margin-bottom: 0.75rem; }
+  .path-format-culcourse-photos .userlist li .card-img {
+    float: left;
+    width: 25%; }
+    .path-format-culcourse-photos .userlist li .card-img .card-img-top {
+      width: auto; }
+  .path-format-culcourse-photos .userlist li .card-body {
+    float: left;
+    width: 50%;
+    padding: 0; }
+  .path-format-culcourse-photos .userlist li .card-footer {
+    float: right;
+    width: 25%;
+    background: none;
+    border: none; }
+  .path-format-culcourse-photos .userlist li .userpicture {
+    border-radius: 0; }
+.path-format-culcourse-photos .briefuser li.card {
+  flex: 0 0 auto;
+  max-width: 150px;
+  border: none; }
+  .path-format-culcourse-photos .briefuser li.card a {
+    display: block;
+    width: 100%;
+    text-align: center; }
+  .path-format-culcourse-photos .briefuser li.card .card-img-top {
+    max-width: 100px;
+    height: auto; }
+
+@media (min-width: 480px) {
+  body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li {
+    width: 50%;
+    max-width: none; }
+    body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-icon {
+      border-right: 1px solid #888888; }
+    body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-text {
+      display: inline-block;
+      width: calc(100% - 3rem);
+      text-overflow: ellipsis;
+      /* Required for text-overflow to do anything */
+      white-space: nowrap;
+      overflow: hidden; }
+  body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-edit {
+    display: inline-block; }
+  body.format-culcourse.editing .course-content .dash-panel .linkscontainer ul.links li span.dash-link a.dash-text {
+    display: inline-block;
+    width: calc(100% - 6rem);
+    text-overflow: ellipsis;
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden; } }
+@media (min-width: 980px) {
+  body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li {
+    width: 33.33%;
+    max-width: none; }
+  body.format-culcourse.used-region-side-pre.used-region-side-post .course-content .dash-panel .linkscontainer ul.links li {
+    width: 50%;
+    max-width: none; } }
+@media (min-width: 1200px) {
+  body.format-culcourse .course-content .dash-panel .linkscontainer ul.links li {
+    width: 25%;
+    max-width: none; }
+  body.format-culcourse.used-region-side-pre.used-region-side-post .course-content .dash-panel .linkscontainer ul.links li {
+    width: 33.33%;
+    max-width: none; } }
+@media (min-width: 576px) {
+  .card-deck.briefuser .card {
+    width: calc(100%); } }
+@media (min-width: 840px) {
+  .card-deck.briefuser .card {
+    width: calc(50% - 2rem); } }
+@media (min-width: 1100px) {
+  .card-deck.briefuser .card {
+    width: calc(33.33% - 2rem); } }
+@media print {
+  .format-culcourse.path-format-culcourse-photos nav,
+  .format-culcourse.path-format-culcourse-photos header,
+  .format-culcourse.path-format-culcourse-photos form,
+  .format-culcourse.path-format-culcourse-photos h3,
+  .format-culcourse.path-format-culcourse-photos .nav,
+  .format-culcourse.path-format-culcourse-photos .initialbar,
+  .format-culcourse.path-format-culcourse-photos #showall,
+  .format-culcourse.path-format-culcourse-photos .right-navbar-wrap,
+  .format-culcourse.path-format-culcourse-photos .overlay,
+  .format-culcourse.path-format-culcourse-photos #page-footer {
+    display: none !important; } }
+body.format-culcourse .course-content ul.culcourse li.section,
+body.format-culcourse .course-content ul.culcourse li#toggle-all {
+  margin: 4px 1px 1px 1px;
+  border-bottom: none;
+  list-style: none; }
+  body.format-culcourse .course-content ul.culcourse li.section .content,
+  body.format-culcourse .course-content ul.culcourse li#toggle-all .content {
+    margin: 0 !important;
+    padding: 0 !important; }
+    body.format-culcourse .course-content ul.culcourse li.section .content .toggle h3.sectionname,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle h3.sectionname {
+      display: block;
+      width: auto;
+      background-color: transparent;
+      background-image: url([[pix:t/expanded]]);
+      /* JavaScript disabled */
+      background-size: 1.75rem 1.75rem;
+      background-position: 0 6px;
+      background-repeat: no-repeat;
+      margin: 0 4px;
+      padding-bottom: 6px;
+      padding-top: 6px;
+      padding-left: 24px;
+      /* The 24px allows the arrow to be with the text next to it. */
+      padding-right: 24px; }
+    body.format-culcourse .course-content ul.culcourse li.section .content .toggle .section_availability,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle .section_availability {
+      margin: 0 4px;
+      padding-bottom: 6px;
+      padding-left: 24px;
+      /* The 24px allows the arrow to be with the text next to it. */
+      padding-right: 24px; }
+    body.format-culcourse .course-content ul.culcourse li.section .content .toggle h4 a,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle h4 a {
+      background-size: 1.75rem 1.75rem;
+      background-position: 0 0;
+      background-repeat: no-repeat;
+      margin: 0 4px;
+      padding-left: 24px;
+      /* The 24px allows the arrow to be with the text next to it. */
+      padding-right: 24px;
+      cursor: pointer;
+      font-size: 1.75rem;
+      line-height: 1.5rem; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .toggle h4 a.off,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle h4 a.off {
+        background-image: url([[pix:t/expanded]]); }
+      body.format-culcourse .course-content ul.culcourse li.section .content .toggle h4 a.on,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle h4 a.on {
+        background-image: url([[pix:t/collapsed]]); }
+    body.format-culcourse .course-content ul.culcourse li.section .content .toggle.collapsed h3.sectionname,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .toggle.collapsed h3.sectionname {
+      background-image: url([[pix:t/collapsed]]);
+      /* JavaScript disabled */
+      background-position: 0% 6px; }
+    body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead {
+      position: relative;
+      width: auto;
+      margin: 2px;
+      padding-bottom: 1.5em;
+      background-color: #eceeef;
+      min-height: 7em;
+      cursor: pointer; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead:hover,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead:hover {
+        background-color: #f4f4f4;
+        background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFF4F4F4', GradientType=1); }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead span,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead span {
+        text-align: left; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .truncate,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .truncate {
+        display: none; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .no-overflow,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .no-overflow {
+        display: block;
+        min-height: 3.4em; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead.collapsed .truncate,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead.collapsed .truncate {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        height: 3.4em;
+        width: 100%;
+        line-height: 1.5rem; }
+        body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead.collapsed .truncate.truncated::after,
+        body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead.collapsed .truncate.truncated::after {
+          content: "\02026";
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 50%;
+          padding-right: 5px;
+          text-align: right;
+          background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #eceeef 50%);
+          background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #eceeef 50%);
+          background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #eceeef 50%);
+          background-repeat: repeat-x;
+          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFECEEEF', GradientType=1); }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead.collapsed .no-overflow,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead.collapsed .no-overflow {
+        display: none;
+        line-height: 16px; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead h3.section-title,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead h3.section-title {
+        margin: 0 !important;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-size: 1.25rem; }
+        body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead h3.section-title span.quickediticon img,
+        body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead h3.section-title span.quickediticon img {
+          background: transparent;
+          border: none; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .section-summary-activities,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .section-summary-activities {
+        position: absolute;
+        right: 4px;
+        bottom: 0;
+        margin-right: 4px; }
+        body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .section-summary-activities .activity-count,
+        body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .section-summary-activities .activity-count {
+          color: #262626; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .section-summary-progress,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .section-summary-progress {
+        position: absolute;
+        left: 31px;
+        bottom: 0;
+        margin-right: 4px; }
+        body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead .section-summary-progress .activity-count,
+        body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead .section-summary-progress .activity-count {
+          color: #262626; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionhead.collapsed:hover .truncate.truncated::after,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionhead.collapsed:hover .truncate.truncated::after {
+        background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0, #f4f4f4 50%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#FFF4F4F4', GradientType=1); }
+    body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody {
+      margin: 2px;
+      background-color: #ffffff; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody .truncate,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody .truncate {
+        display: none; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody .summary,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody .summary {
+        margin-left: 0.2em;
+        margin-bottom: 1em;
+        padding-left: 0;
+        padding-top: 1em; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody.collapsed .truncate,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody.collapsed .truncate {
+        display: none; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody.collapsed .no-overflow,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody.collapsed .no-overflow {
+        display: none; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody .section-modchooser,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody .section-modchooser {
+        margin-right: 4px; }
+      body.format-culcourse .course-content ul.culcourse li.section .content .sectionbody .activity,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content .sectionbody .activity {
+        margin: 0.5em 0; }
+    body.format-culcourse .course-content ul.culcourse li.section .content .summary,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content .summary {
+      margin-left: .2em;
+      margin-right: .2em;
+      padding-left: 28px;
+      background-color: transparent !important;
+      border: none; }
+    body.format-culcourse .course-content ul.culcourse li.section .content a.sectionclose,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .content a.sectionclose {
+      background-image: url([[pix:t/sort_asc]]);
+      /* JavaScript disabled */
+      background-size: 1.75rem 1.75rem;
+      background-position: 0 8px;
+      background-repeat: no-repeat;
+      margin: 0 6px;
+      padding-bottom: 6px;
+      padding-top: 6px;
+      padding-left: 26px;
+      /* The 24px allows the arrow to be with the text next to it. */
+      cursor: pointer; }
+      body.format-culcourse .course-content ul.culcourse li.section .content a.sectionclose.collapsed,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .content a.sectionclose.collapsed {
+        display: none; }
+  body.format-culcourse .course-content ul.culcourse li.section.sectionhidden,
+  body.format-culcourse .course-content ul.culcourse li#toggle-all.sectionhidden {
+    background-color: #eceeef; }
+  body.format-culcourse .course-content ul.culcourse li.section .side,
+  body.format-culcourse .course-content ul.culcourse li#toggle-all .side {
+    padding: 0; }
+    body.format-culcourse .course-content ul.culcourse li.section .side a,
+    body.format-culcourse .course-content ul.culcourse li#toggle-all .side a {
+      display: block; }
+      body.format-culcourse .course-content ul.culcourse li.section .side a:first-of-type > .icon,
+      body.format-culcourse .course-content ul.culcourse li#toggle-all .side a:first-of-type > .icon {
+        margin-left: 0; }
+body.format-culcourse .course-content ul.culcourse li:last-child .add_section {
+  display: none; }
+body.format-culcourse .insertsection {
+  text-align: center; }
+  body.format-culcourse .insertsection .sectionbutton {
+    display: inline-block;
+    margin: 1rem; }
+
+body.format-culcourse.editing .course-content ul.culcourse li.section .content,
+body.format-culcourse.editing .course-content ul.culcourse li#toggle-all .content {
+  /* Default for non tablets / mobiles.  If the language file has 'culsidewidth' for the current language, then will be set in format.php. */
+  margin: 0 40px !important;
+  padding: 0 !important; }
+  body.format-culcourse.editing .course-content ul.culcourse li.section .content .inplaceeditable.inplaceeditingon .editinstructions,
+  body.format-culcourse.editing .course-content ul.culcourse li#toggle-all .content .inplaceeditable.inplaceeditingon .editinstructions {
+    margin-top: -30px; }
+body.format-culcourse.editing .course-content ul.culcourse li.section .side,
+body.format-culcourse.editing .course-content ul.culcourse li#toggle-all .side {
+  padding: 10px 0 0 0; }
+  body.format-culcourse.editing .course-content ul.culcourse li.section .side .fa,
+  body.format-culcourse.editing .course-content ul.culcourse li.section .side .section-handle,
+  body.format-culcourse.editing .course-content ul.culcourse li#toggle-all .side .fa,
+  body.format-culcourse.editing .course-content ul.culcourse li#toggle-all .side .section-handle {
+    padding: 2px 0; }
+body.format-culcourse.editing .course-content ul.culcourse li.section.current,
+body.format-culcourse.editing .course-content ul.culcourse li#toggle-all.current {
+  border-radius: 0; }
+  body.format-culcourse.editing .course-content ul.culcourse li.section.current .side .section-handle .icon,
+  body.format-culcourse.editing .course-content ul.culcourse li#toggle-all.current .side .section-handle .icon {
+    /*color: $white;*/
+    margin-left: 0.5rem; }
+
+/* -- Set the clickable element of the Toggle -- */
+/* cul styles */
+
+/*# sourceMappingURL=styles.css.map */

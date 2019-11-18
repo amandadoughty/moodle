@@ -1,0 +1,21 @@
+<div id="<<jobid>>" class='jobonline_job collapsible' state="0" onClick="M.block_jobonline.close_collapsible(this,event);this.getAttributeNode('state').value^=1">
+  <h1 class='heading jobname' alt='<<jobname>>' title='<<jobname>>'><<jobname>><span title='Closing Date' class='jobonlineblock_headerdate'><<closingdate>></span></h1>
+  <div class='collapsibleinner' onClick="event.cancelBubble=true; event.stopPropagation=true;">
+    <table>
+      <tr class='employername'><td class='label'><<employername_label>></td><td><<employername>></td></tr>
+      <tr class='location'><td class='label'><<location_label>></td><td><<location>></td></tr>
+      <tr class='salaryrange'><td class='label'><<salary_label>></td><td><<salary>></td></tr>
+      <tr class='postingdate'><td class='label'><<postingdate_label>></td><td><<postingdate>></td></tr>
+      <tr class='closingdate'><td class='label'><<closingdate_label>></td><td><<closingdate>></td></tr>
+      <tr class='application'><td class='label'><<application_label>></td><td><<application>></td></tr>
+    </table>
+    <div class='jobdetails collapsible' state="1" onClick="this.getAttributeNode('state').value^=1">
+      <h2 class='heading'>Summary</h2>
+      <div class='summary collapsibleinner' onClick="event.cancelBubble=true; event.stopPropagation=true;">
+        <div class='summarytext' >
+          <<summary>>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

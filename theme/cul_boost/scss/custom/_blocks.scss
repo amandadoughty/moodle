@@ -1,0 +1,837 @@
+.block {
+    margin-bottom: $spacer * 3;
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+    &.hidden {
+        .block-inner {
+            .block-title,
+            >.content {
+                opacity: 0.3;
+            }
+        }
+    }
+    .block-inner {
+        .block-title {
+            color: $body-color;
+            font-size: $h4-font-size;
+            font-weight: $font-weight-normal;
+            line-height: $headings-line-height;
+            text-transform: none;
+            margin: 0;
+        }
+        .content {
+            word-break: break-word;
+            word-wrap: break-word;
+        }
+    }
+    &.block_adminblock {
+        order: -1;
+        margin-bottom: $spacer * 3;
+        padding: $spacer;
+        background-color: $gray-lighter;
+    }
+    &.block_settings {
+        .block_tree {
+            p.hasicon {
+                padding-left: -8px;
+            }
+            .tree_item {
+                ul,
+                &.branch {
+                    padding-left: 0;
+                }
+            }
+        }
+    }
+    &.block_recentlyaccessedcourses .text-truncate {        
+        white-space: normal;
+    }
+    &.block_culactivity_stream {
+        #block-region-dash-feed & {
+            .block-inner {
+                .block-title {
+                    font-size: $h2-font-size;
+                    padding: 0;
+                    margin-bottom: $spacer * 2;
+                    .reload {
+                        font-size: $font-size-root;
+                    }
+                }
+            }
+        }
+        .avatar {
+            width: auto;
+            margin-right: $spacer;
+        }
+        .notificationtext {
+            overflow: visible;
+            margin-bottom: $spacer;
+        }
+        .culactivity_stream {
+            max-height: 1000px;
+            ul {
+                padding: 0;
+                li {
+                    padding: $spacer / 2;
+                    margin: 0 $spacer / 2 $spacer / 2 0;
+                    &.old {
+                        background-color: $gray-lightest;
+                    }
+                }
+            }
+        }
+        .pages {
+            .jsenabled & {
+                display: none;
+            }
+        }
+    }
+    &.block_culupcoming_events {
+        background-color: $primary;
+        border: none;
+        .block-inner {
+            padding: 0;
+            aside:not(#block-region-dash-full) & {
+                .block-title {
+                    padding: $spacer;
+                    font-size: $h4-font-size;
+                    justify-content: flex-start;
+                    margin: 0;
+                    background-color: rgba(#000, 0.2);
+                }
+                .content {
+                    .culupcoming_events {
+                        display: block;
+                        max-height: 400px;
+                        overflow: auto;
+                        ul {
+                            display: block;
+                            width: 100%;
+                            max-width: 300px;
+                            li {
+                                padding: $spacer / 2 0;
+                                margin-bottom: 0;
+                                max-width: 100%;
+                                justify-content: flex-start !important;
+                                &:hover,
+                                &:focus {
+                                    background-color: rgba(#000, 0.1);
+                                }
+                                .event {
+                                    max-width: 100%;
+                                    align-items: flex-start !important;
+                                }
+                                .avatar {
+                                    margin-top: $spacer / 4;
+                                    width: 40px;
+                                    height: 40px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .block-controls {
+                position: absolute;
+                top: $spacer / 2;
+                right: $spacer / 2;
+                z-index: 1;
+                .editing_move,
+                .dropdown-toggle,
+                .moodle-core-dragdrop-draghandle {
+                    color: $white;
+                    .icon {
+                        color: $white;
+                    }
+                }
+            }
+            .block-title {
+                color: $white;
+                font-size: $h2-font-size;
+                font-weight: $font-weight-light;
+                line-height: $headings-line-height;
+                text-transform: none;
+                text-align: center;
+                padding-top: $spacer * 1.5;
+                margin-bottom: $spacer;
+                justify-content: center;
+                .reload,
+                .dockeditempanel_hd .reload {
+                    padding-left: $spacer / 2;
+                }
+                .block_culupcoming_events_reload,
+                .block_culupcoming_events_loading {
+                    color: $white;
+                    font-size: $font-size-base;
+                }
+            }
+            .content {
+                .culupcoming_events {
+                    position: relative;
+                    overflow: visible;
+                    max-height: 100%;
+                    padding-bottom: $spacer * 3;
+                    color: $white;
+                    text-align: center;
+                    >div {
+                        position: relative;
+                        width: 100%;
+                        >i {
+                            display: none;
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            font-size: 30px;
+                            margin: -15px 0 0 -15px;
+                        }
+                        &.loading {
+                            ul {
+                                opacity: 0;
+                            }
+                            >i {
+                                display: block;
+                            }
+                        }
+                    }
+                    ul {
+                        position: relative;
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        transition: opacity 0.2s ease;
+                        &:not(.slick-slider) {
+                            li {
+                                margin-bottom: $spacer;
+                                &:last-of-type {
+                                    margin-bottom: 0;
+                                }
+                            }
+                        }
+                        &.slick-slider {
+                            li {
+                                &:not(.slick-slide) {
+                                    display: none !important;
+                                }
+                                &.slick-slide {
+                                    >ul {
+                                        display: none;
+                                    }
+                                }
+                            }
+                        }
+                        li {
+                            display: block;
+                            width: 100%;
+                            max-width: 400px;
+                            padding: 0 $spacer * 2;
+                            line-height: inherit;
+                            >ul {
+                                display: none;
+                            }
+                            .avatar {
+                                position: relative;
+                                margin: 0;
+                                overflow: visible;
+                                float: none;
+                                display: block;
+                                width: 50px;
+                                height: 50px;
+                                a {
+                                    width: auto;
+                                    height: auto;
+                                    display: block;
+                                    position: relative;
+                                    float: none;
+                                    overflow: visible;
+                                    img {
+                                        position: relative;
+                                        top: auto;
+                                        left: auto;
+                                        bottom: auto;
+                                        right: auto;
+                                        max-width: none!important;
+                                        margin: auto;
+                                        width: 100%;
+                                        height: 100%;
+                                        display: block;
+                                        object-fit: cover;
+                                    }
+                                    .course-image {
+                                        background-repeat: no-repeat;
+                                        background-size: cover;
+                                        background-position: 50% 50%;
+                                    }
+                                }
+                                .activityicon {
+                                    display: inline-block;
+                                    text-align: center;
+                                    position: absolute;
+                                    top: 50%;
+                                    right: 100%;
+                                    width: 24px;
+                                    height: 24px;
+                                    line-height: 24px;
+                                    background-color: $white;
+                                    border-radius: 50%;
+                                    transform: translate(50%, -50%);
+                                    color: $primary;
+                                    i {
+                                        margin: 0;
+                                        line-height: 24px;
+                                        font-size: $font-size-xs;
+                                        width: 100%;
+                                        height: 100%;
+                                    }
+                                    img {
+                                        display: inline-block;
+                                        padding-right: 0;
+                                        position: relative;
+                                        top: auto;
+                                        left: auto;
+                                        right: auto;
+                                        bottom: auto;
+                                        max-width: 100% !important;
+                                        width: 12px;
+                                        height: 12px;
+                                    }
+                                }
+                            }
+                            .event-info-wrap {
+                                max-width: calc(100% - 50px);
+                                text-align: left;
+                                color: $white;
+                                .notificationtext {
+                                    font-size: $font-size-sm;
+                                    width: 100%;
+                                    display: block;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                }
+                                a,
+                                .dimmed_text {
+                                    color: $white !important;
+                                    &[data-type="event"] {
+                                        font-weight: $font-weight-bold;
+                                        display: block;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        &:hover,
+                                        &:focus {
+                                            text-decoration: underline;
+                                        }
+                                    }
+                                }
+                                .meta {
+                                    .timeuntil {
+                                        width: auto;
+                                        font-style: normal;
+                                        text-transform: uppercase;
+                                        display: block;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .slick-arrow {
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    margin-top: -20px;
+                    transform: translateX(-50%);
+                    background-color: darken($primary, 5%);
+                    color: $white;
+                    &:hover,
+                    &:focus {
+                        background-color: darken($primary, 2.5%);
+                    }
+                    &.slick-prev {
+                        margin-left: -60px;
+                    }
+                    &.slick-next {
+                        margin-left: 60px;
+                    }
+                }
+            }
+            .pages {
+                display: none !important;
+            }
+            .footer {
+                display: flex;
+                flex-wrap: wrap;
+                position: absolute;
+                padding: 0 !important;
+                border: none;
+                top: 100%;
+                left: 50%;
+                margin-top: -20px;
+                transform: translateX(-50%);
+                .calendarurl-btn,
+                .addevent-btn {
+                    width: 40px;
+                    height: 40px;
+                    background-color: $gray-lighter;
+                    &:hover,
+                    &:focus {
+                        background-color: $gray-lightest;
+                        color: $link-color;
+                    }
+                    a {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        height: 100%;
+                        .icon {
+                            margin: 0;
+                            font-size: $h4-font-size;
+                            width: auto;
+                            height: auto;
+                            color: $gray-500;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.block_searchcourses {
+        background-color: rgba(51, 51, 51, 0.95);
+        padding: 2rem 1rem 2rem 1rem;
+        margin-bottom: 0;
+        .block-controls {
+            position: absolute !important;
+            top: $spacer / 2;
+            right: $spacer / 2;
+            .editing_move,
+            .dropdown-toggle,
+            .moodle-core-dragdrop-draghandle {
+                color: $white;
+                >.icon {
+                    display: inline-block;
+                    width: 16px;
+                    height: 16px;
+                    margin: 0;
+                    line-height: 1;
+                    vertical-align: middle;
+                    opacity: 1;
+                    color: $white;
+                }
+            }
+            .moodle-core-dragdrop-draghandle {
+                >.icon {
+                    margin-right: 0.5rem;
+                }
+            }
+        }
+        .block-inner {
+            padding: 0;
+            h3.card-title {
+                font-size: $h2-font-size;
+                text-transform: none;
+                color: $white;
+                font-weight: $font-weight-normal;
+                justify-content: center;
+            }
+            #course_search_ac {
+                position: relative;
+                &:before {
+                    @include fa-icon();
+                    content: "\f002";
+                    font-size: $h2-font-size;
+                    color: $primary;
+                    position: absolute;
+                    top: 50%;
+                    right: $spacer * 1.25;
+                    transform: translateY(-50%);
+                    margin-top: -1px;
+                }
+                >.btn.btn-link {
+                    display: none;
+                }
+                label {
+                    display: none;
+                }
+                input#ac-input {
+                    width: 100%;
+                    margin: 0;
+                    height: 70px;
+                    padding: $spacer ($spacer * 4) $spacer $spacer;
+                    font-size: $h3-font-size;
+                    color: $primary;
+                    border: none;
+                }
+                .yui3-aclist {
+                    top: 100% !important;
+                    left: 0 !important;
+                    max-width: 100%;
+                    width: 100% !important;
+                    * {
+                        color: $white;
+                    }
+                    .yui3-highlight {
+                        background-color: $gray-500;
+                    }
+                    .yui3-aclist-content {
+                        background-color: $primary;
+                        box-shadow: none;
+                        .yui3-aclist-item {
+                            padding: $spacer / 2;
+                            opacity: 1;
+                            background-image: none;
+                            &.yui3-aclist-item-hover {
+                                background-color: rgba(0, 0, 0, 0.1);
+                            }
+                        }
+                        .yui3-aclist-item-active {
+                            background-color: $gray-dark;
+                        }
+                        .yui3-aclist-list {
+                            padding: $spacer / 2;
+                            &:empty {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.block_culcourse_listing {
+        background-color: rgba(51, 51, 51, 0.95);
+        padding: 2rem 1rem 2rem 1rem;
+        .block-controls {
+            position: absolute !important;
+            top: $spacer / 2;
+            right: $spacer / 2;
+            .editing_move,
+            .dropdown-toggle,
+            .moodle-core-dragdrop-draghandle {
+                color: $white;
+                >.icon {
+                    color: $white;
+                }
+            }
+            .moodle-core-dragdrop-draghandle {
+                >.icon {
+                    margin-right: 0.5rem;
+                }
+            }
+        }
+        >.block-inner {
+            .content {
+                ul#courselistingnav {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: row-reverse;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: $spacer * 2;
+                    .nav-item {
+                        float: none;
+                        margin: 0 $spacer / 2;
+                        .nav-link {
+                            background-color: transparent;
+                            &:hover,
+                            &:focus {
+                                background-color: rgba(255, 255, 255, 0.05);
+                            }
+                            &.active {
+                                background-color: $primary;
+                                &:hover,
+                                &:focus {
+                                    background-color: $primary;
+                                }
+                            }
+                            h2 {
+                                font-weight: $font-weight-normal;
+                            }
+                            * {
+                                color: $white;
+                            }
+                        }
+                    }
+                }
+                button[type="submit"] {
+                    @include button-variant($white, $primary);
+                    color: $primary;
+                }
+            }
+        }
+        .favourite_list {
+            >span {
+                color: $white;
+            }
+        }
+        .culcoursebox {
+            background-color: rgba($white, .2);
+            border: none;
+            >.panel-heading {
+                .move {
+                    background-color: $gray-lightest;
+                }
+                .coursename_wrapper {
+                    .coursename {
+                        a {
+                            color: $white;
+                            background-image: url([[pix:theme|course-light]]);
+                            ;
+                        }
+                    }
+                }
+            }
+            .content {
+                &.panel-body {
+                    padding: $spacer * .75;
+                    * {
+                        color: $white;
+                    }
+                }
+            }
+            .fa-star {
+                color: gold !important;
+                opacity: 1;
+            }
+            .fa-star-o {
+                color: $gray-lightest;
+            }
+            .favouritelink,
+            .moreinfo,
+            .enrolmenticons {
+                color: $gray-lightest;
+                &+.favouritelink {
+                    margin: 0;
+                    margin-right: $spacer / 2;
+                }
+                .icon {
+                    color: $gray-lightest;
+                    font-size: $h4-font-size;
+                }
+            }
+        }
+        .course_category_tree {
+            &.filter-on {
+                background-color: $primary;
+            }
+            #allcoursesheader {
+                align-items: center;
+                .filter {
+                    form {
+                        label {
+                            color: $white;
+                        }
+                        select {
+                            &.custom-select {
+                                height: auto;     
+                                font-size: $h5-font-size;
+                                color: $primary;
+                            }
+                        }
+                    }
+                }
+                .collapsible-actions {
+                    .culcollapseexpand {
+                        font-size: $h5-font-size !important;                        
+                        color: $primary !important;
+                    }
+                }
+            }
+            .culcategory {
+                .categoryname {
+                    .fa-spinner {
+                        color: $white;
+                    }
+                }
+                &.with_children,
+                &.manage {
+                    >.info {
+                        >.categoryname {
+                            &:before {
+                                background-color: $gray-lightest;
+                                color: $primary;
+                            }
+                            a {
+                                color: $white;
+                            }
+                        }
+                    }
+                }
+                >.info {
+                    border: none;
+                    background-color: rgba($white, .4);
+                    .overviewlink {
+                        i {
+                            color: $white !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.initialsearch-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 690px;
+    &:before {
+        @include fa-icon();
+        content: "\f002";
+        font-size: $h3-font-size;
+        color: $primary;
+        position: absolute;
+        top: 50%;
+        right: $spacer * 1.25;
+        transform: translateY(-50%);
+        margin-top: -1px;
+        @include media-breakpoint-up(sm) {
+            font-size: $h2-font-size;
+        }
+    }
+    .initialsearch {
+        width: 100%;
+        margin: 0;
+        height: 70px;
+        line-height: 70px;
+        text-align: left;
+        background-color: $white;
+        padding: 0 ($spacer * 4) 0 $spacer;
+        font-size: $h4-font-size;
+        color: $primary;
+        border: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @include media-breakpoint-up(sm) {
+            font-size: $h3-font-size;
+        }
+    }
+}
+
+.findblocks-wrap {
+    background-color: rgba($gray-dark, .95);
+    overflow: auto;
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .15s ease, visibility .15s ease;
+    pointer-events: none;
+    &.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+    .close-icon {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        top: $spacer * 1.5;
+        right: $spacer * 1.5;
+        cursor: pointer;
+        &:hover,
+        &:focus {
+            &:before,
+            &:after {
+                background-color: $white;
+            }
+        }
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            width: 3px;
+            height: 100%;
+            background-color: $gray-lightest;
+            top: 50%;
+            left: 50%;
+            border-radius: $border-radius;
+            overflow: hidden;
+        }
+        &:before {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+        &:after {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+    }
+    #block-region-dash-cl {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        .close-icon {
+            position: absolute;
+            top: $spacer * 1.5;
+            right: $spacer * 1.5;
+        }
+        .block {
+            background-color: transparent;
+            border: none;
+            width: 100%;
+            max-width: $container-max-width;
+            .block-controls {
+                position: absolute;
+                top: $spacer / 2;
+                right: $spacer / 2;
+                .editing_move,
+                .dropdown-toggle,
+                .moodle-core-dragdrop-draghandle {
+                    color: $white;
+                    >.icon {
+                        display: inline-block;
+                        width: 16px;
+                        height: 16px;
+                        margin: 0;
+                        line-height: 1;
+                        vertical-align: middle;
+                        opacity: 1;
+                        color: $white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Main block area of dashboard padding
+#block-region-content {
+    padding: 0 15px;
+}
+
+// Quickmail block page
+#page-block-quickmail {
+    .form-control-static {
+        display: block;
+        width: auto;
+        .emailtable {
+            width: 100%;
+            .cell {
+                vertical-align: top;
+                padding: $spacer / 2;
+                input {
+                    display: block;
+                    width: 100%;
+                    max-width: 100%;
+                    margin-bottom: $spacer;
+                }
+                select {
+                    display: block;
+                    width: 100%;
+                    max-width: 100%;
+                    margin-bottom: $spacer;
+                }
+            }
+        }
+    }
+    .fitem.femptylabel .col-md-9 .form-control-static {
+        margin: -$spacer / 2;
+    }
+}

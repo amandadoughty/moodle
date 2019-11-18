@@ -1,0 +1,27 @@
+.breadcrumb {
+    .breadcrumb-item {
+        color: $body-color;
+        a {
+            color: $body-color;
+            display: inline-block;
+            &:hover,
+            &:focus {
+                color: $link-hover-color;
+            }
+        }
+        &:before {
+            color: $breadcrumb-divider-color;
+        }
+        &:last-of-type {
+            a {
+                color: $primary;
+                line-height: 1;
+                &:hover,
+                &:focus {
+                    color: $link-hover-color;
+                    border-bottom: 1px solid;
+                }
+            }
+        }
+    }
+}

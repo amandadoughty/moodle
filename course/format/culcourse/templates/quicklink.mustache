@@ -1,0 +1,64 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_culcourse/quicklink
+
+    Individual quick link.
+
+    Classes required for JS:
+    * quicklink, quicklinkdraggable
+
+    Data attributes required for JS:
+    * data-setting, data-position
+
+    Context variables required for this template:
+    * see format/course/culcourse/classes/output/dashboard.php
+
+}}
+
+{{#ismovingquicklink}}
+    {{> format_culcourse/position}}
+{{/ismovingquicklink}}
+
+<li 
+    class="dash quicklink quicklinkdraggable"
+    data-setting="quicklinksequence"
+    data-position="{{name}}"
+>
+    {{> format_culcourse/movelink}}
+    <span class="dash-link {{class}}">
+        {{^attrs.class}}
+        <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
+            <i class="fa {{icon}}"></i>
+            <span class="sr-only">{{attrs.title}}</span>
+        </a>
+        {{/attrs.class}}
+        {{#attrs.class}}
+        <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
+            <span class="fa-stack">                
+                <i class="fa {{icon}} fa-stack-1x"></i>
+                <i class="fa fa-ban fa-stack-2x"></i>
+            </span>
+            <span class="sr-only">{{attrs.title}}</span>
+        </a>
+        {{/attrs.class}}
+        <a title="{{attrs.title}}" class="dash-text {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
+            {{text}}
+        </a>
+        {{> format_culcourse/editlink}}        
+    </span>
+</li>

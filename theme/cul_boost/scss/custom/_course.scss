@@ -1,0 +1,908 @@
+.courseheader {
+    min-height: 240px;
+    .course-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 240px;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        max-height: calc(100% - 50px);
+    }
+    p:first-of-type {
+        position: relative;
+        text-align: center;
+        margin-right: auto;
+    }
+    .dash-panel {
+        body:not(.editing) & {
+            &.reveal {
+                .dash {
+                    display: flex !important;
+                }
+                .viewmorelink {
+                    .viewmore-text {
+                        display: none;
+                    }
+                    .viewless-text {
+                        display: block;
+                    }
+                }
+            }
+            .dash {
+                display: none;
+                &:first-child,
+                &:nth-child(2),
+                &:nth-child(3),
+                &:nth-child(4),
+                &:nth-child(5),
+                &:nth-child(6),
+                &:nth-child(7) {
+                    display: flex;
+                }
+                &:nth-child(8) {
+                    &~.viewmorelink {
+                        display: flex;
+                    }
+                }
+            }
+            .viewmorelink {
+                display: none;
+                cursor: pointer;
+                &:hover,
+                &:focus {
+                    .viewmore-inner {
+                        background-color: rgba(255, 255, 255, 0.05);
+                    }
+                }
+                .viewmore-inner {
+                    min-height: 100px;
+                }
+                .viewless-text {
+                    display: none;
+                }
+            }
+        }
+        .viewmorelink {
+            body.editing & {
+                display: none;
+            }
+        }
+        &.quicklinks-wrap {
+            background-color: darken($primary, 5%);
+            .dash-link {
+                background-color: #fff;
+                &:hover,
+                &:focus {
+                    background-color: darken(#fff, 5%);
+                }
+            }
+        }
+        &.activities-wrap {
+            background-color: $primary;
+            .linkscontainer {
+                ul.links {
+                    .dash {
+                        .dash-link {
+                            background-color: #fff;
+                            &:hover,
+                            &:focus {
+                                background-color: darken(#fff, 5%);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        h2 {
+            color: #fff;
+        }
+        .linkscontainer {
+            ul.links {
+                list-style: none;
+                padding: 0;
+                margin: -($spacer / 4);
+                .dash {
+                    padding: $spacer / 4;
+                    .dash-link {
+                        display: block;
+                        min-height: 100px;
+                        &:hover,
+                        &:focus {
+                            a {
+                                color: $primary;
+                            }
+                            .dash-move {
+                                color: $primary;
+                                background-color: rgba(#000, 0.1);
+                            }
+                        }
+                        a.dash-edit {
+                            position: absolute;
+                            bottom: $spacer / 2;
+                            left: $spacer / 2;
+                            display: flex;
+                        }
+                        .dash-move {
+                            position: absolute;
+                            top: $spacer / 4;
+                            right: $spacer / 4;
+                            padding: $spacer / 2;
+                            margin: 0;
+                            .icon {
+                                &:first-of-type {
+                                    margin: 0;
+                                }
+                            }
+                        }
+                        .dash-icon {
+                            width: 100%;
+                            min-height: $spacer * 2;
+                            font-size: $font-size-base * 1.75;
+                            img,
+                            svg {
+                                width: $font-size-base * 1.75;
+                                height: auto;
+                                margin: 0;
+                            }
+                        }
+                    }
+                    .dash-text {
+                        line-height: 1.1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+svg.activityicon {
+    @extend img.activityicon;
+}
+
+.path-course-view .completionprogress {
+    position: absolute;
+    top: 0;
+    left: $spacer;
+    margin: 0;
+    display: none;
+}
+
+.course-content {
+    .section {
+        &.current {
+            box-shadow: 0px 0px 0px 2px #fff, 0px 0px 0px 6px darken($primary, 5%);
+            &:before {
+                display: none;
+            }
+        }
+        .side {
+            &.left {
+                &:empty {
+                    display: none;
+                }
+            }
+            .section-handle {
+                >.icon {
+                    margin-left: $spacer / 2;
+                }
+            }
+        }
+        .content {
+            .course-summary {
+                &:empty {
+                    display: none;
+                }
+            }
+            .mod-indent-outer {
+                display: flex;
+                align-items: center;
+                >div:not(.mod-indent) {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    flex-basis: 0%;
+                    flex-grow: 1;
+                    max-width: 100%;
+                    width: 100%;
+                }
+            }
+            span.inplaceeditable {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                .quickeditlink .icon {
+                    display: inline-block;
+                    height: auto;
+                    width: auto;
+                    font-size: $font-size-base;
+                    vertical-align: middle;
+                    margin: 0 $spacer / 2;
+                }
+            }
+            li.activity {
+                padding: 0;
+                margin: $spacer / 2 0;
+                >div {
+                    padding-right: 0;
+                }
+                .actions {
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+                    right: auto;
+                    top: auto;
+                    margin-left: auto;
+                    padding-left: $spacer;
+                    .filler {
+                        display: none;
+                    }
+                    .menubar>.cm-edit-action,
+                    .autocompletion {
+                        display: inline-flex;
+                        align-items: center;
+                    }
+                }
+                .activityinstance,
+                .activityinstance div {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    flex-basis: 0%;
+                    flex-grow: 1;
+                    max-width: 100%;
+                    width: 100%;
+                    padding: 0;
+                    .editing & {
+                        padding: 0 $spacer 0 0;
+                    }
+                    a {
+                        &:first-of-type {
+                            display: inline-flex;
+                            flex-wrap: nowrap;
+                            align-items: center;
+                            text-indent: 0;
+                            padding: 0 0 0 $spacer / 2;
+                            background-color: #fff;
+                            box-shadow: inset 0px 0px 0px 1px $primary;
+                            img,
+                            svg {
+                                &.activityicon {
+                                    min-width: 20px;
+                                    width: 20px;
+                                    height: auto;
+                                    position: relative;
+                                    vertical-align: middle;
+                                    margin-right: $spacer / 2;
+                                }
+                            }
+                        }
+                        span.instancename {
+                            border-left: 1px solid $primary;
+                            padding: $spacer / 2 $spacer;
+                        }
+                        .aspirelists_inline_accordion {
+                            display: flex;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            justify-content: center;
+                            align-self: stretch;
+                            padding: $spacer / 4 $spacer / 2;
+                            background-color: $primary;
+                            color: #fff;
+                            line-height: 1.1;
+                            cursor: pointer;
+                        }
+                    }
+                }
+                .resourcelinkdetails,
+                .ouwikilmt {
+                    margin-left: auto;
+                }
+            }
+            .availabilityinfo,
+            .contentafterlink {
+                width: 100%;
+                margin-left: 0;
+            }
+            .contentafterlink {
+                p {
+                    margin: 0 0 $spacer / 2 0;
+                    &:last-of-type {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+$culcourse-header-bg: $gray-700;
+$culcourse-header-hover-bg: $gray-800;
+$culcourse-header-active-bg: $primary;
+$culcourse-header-text-color: #fff;
+$culcourse-header-editing-color: #fff;
+$culcourse-content-bg: $light;
+$culcourse-arrow-color: #fff;
+$culcourse-arrow-hover-color: #fff;
+$culcourse-arrow-active-color: #fff;
+
+@keyframes grow {
+    0% {
+        opacity: 0
+    }
+    20% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+#page-course-view-culcourse {
+    .course-content {
+        ul.culcourse {
+            padding: 0;
+            list-style: none;
+            #section-0 {
+                margin: 0;
+                border: none;
+                margin-bottom: $spacer;
+                .content {
+                    background-color: transparent;
+                    padding: 0;
+                    margin: 0;
+                    .img-text {
+                        background-color: transparent;
+                        padding: 0;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+        #toggle-all {
+            .left.side,
+            .right.side {
+                display: none;
+            }
+            .content {
+                margin: 0;
+                h4 {
+                    // border: 1px solid darken($body-bg, 5%);
+                    padding: 0;
+                    margin: 0;
+                    font-weight: normal;
+                    text-align: center;
+                }
+                #toggles-all-opened,
+                #toggles-all-closed {
+                    position: relative;
+                    // margin: 0;
+                    background-image: none;
+                    width: auto;
+                    display: inline-flex;
+                    align-items: center;
+                    padding: $spacer $spacer * 1.5;
+                    font-size: $h4-font-size;
+                    // color: $body-color;
+                    &:hover,
+                    &:focus {
+                        background-color: $culcourse-header-bg;
+                        color: #fff;
+                    }
+                    &:before {
+                        @include fa-icon();
+                        content: "\f107";
+                        font-size: $h3-font-size;
+                        margin-top: -$spacer / 4;
+                        margin-right: $spacer;
+                    }
+                }
+                #toggles-all-closed {
+                    &:before {
+                        content: "\f105";
+                    }
+                }
+            }
+        }
+        #topcoll-display-instructions {
+            >.side {
+                display: none;
+            }
+            >.content {
+                margin: 0;
+            }
+        }
+        #toggle-all,
+        #topcoll-display-instructions {
+            margin: 0 0 1rem 0;
+        }
+        ul.culcourse {
+            padding-top: 1px;
+            clear: both;
+            >li.section {
+                border: none;
+                padding-top: 0;
+                margin-top: 0 !important;
+                margin-bottom: .75rem;
+                position: relative;
+                &.hidden {
+                    .content {
+                        .sectionhead {
+                            &.toggle,
+                            &.toggle.collapsed {
+                                background-color: $gray-lightest;
+                                &:hover,
+                                &:focus {
+                                    background-color: darken($gray-lightest, 10%);
+                                    h3 {
+                                        color: darken($text-muted, 10%);
+                                        a {
+                                            color: darken($text-muted, 10%);
+                                            span {
+                                                color: darken($text-muted, 10%);
+                                                .icon {
+                                                    color: darken($text-muted, 10%);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .summary {
+                                        color: darken($text-muted, 10%);
+                                    }
+                                    .section-summary-activities {
+                                        .activity-count {
+                                            color: darken($text-muted, 10%);
+                                        }
+                                    }
+                                }
+                                h3 {
+                                    color: $text-muted;
+                                    a {
+                                        color: $text-muted;
+                                        span {
+                                            color: $text-muted;
+                                            .icon {
+                                                color: $text-muted;
+                                            }
+                                        }
+                                    }
+                                }
+                                .summary {
+                                    color: $text-muted;
+                                }
+                                .section-summary-activities {
+                                    .activity-count {
+                                        color: $text-muted;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                &:not(.hidden) {
+                    .sectionhead {
+                        .section_availability {
+                            color: #fff;
+                            a {
+                                color: #fff;
+                            }
+                        }
+                    }
+                }
+                .content {
+                    background-color: $culcourse-content-bg;
+                    padding: 0;
+                    backface-visibility: hidden;
+                    margin: 0;
+                    .sectionhead {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        border-radius: 0;
+                        background-color: $culcourse-header-active-bg;
+                        background-image: none;
+                        min-height: auto;
+                        &.toggle {
+                            position: relative;
+                            margin: 0;
+                            padding: $spacer * .75;
+                            &:hover {
+                                background-color: $culcourse-header-active-bg;
+                            }
+                            h3 {
+                                display: flex;
+                                margin: 0;
+                                background: none;
+                                padding: 0;
+                                font-size: $h4-font-size;
+                                color: #fff;
+                                &:before {
+                                    @include fa-icon();
+                                    content: "\f107";
+                                    font-size: $h3-font-size;
+                                    margin-top: -1px;
+                                    width: $spacer * 2;
+                                    text-align: center;
+                                    margin-right: $spacer / 4;
+                                }
+                                >span {
+                                    display: flex;
+                                    align-items: center;
+                                }
+                                a {
+                                    display: flex;
+                                    align-items: center;
+                                    color: #fff;
+                                    span {
+                                        display: inline-flex;
+                                        align-items: center;
+                                        color: #fff;
+                                        .icon {
+                                            color: #fff;
+                                        }
+                                    }
+                                }
+                            }
+                            &.collapsed {
+                                background-color: $culcourse-header-bg;
+                                &:hover,
+                                &:focus {
+                                    background-color: $culcourse-header-hover-bg;
+                                    h3 {
+                                        color: #fff;
+                                        a {
+                                            color: #fff;
+                                            span {
+                                                color: #fff;
+                                                .icon {
+                                                    color: #fff;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .summary {
+                                        color: #fff;
+                                    }
+                                    .section-summary-activities {
+                                        .activity-count {
+                                            color: #fff;
+                                        }
+                                    }
+                                }
+                                h3 {
+                                    font-size: $h4-font-size;
+                                    color: $culcourse-header-text-color;
+                                    &:before {
+                                        content: "\f105";
+                                    }
+                                    a {
+                                        color: $culcourse-header-editing-color;
+                                        span {
+                                            color: $culcourse-header-editing-color;
+                                            .icon {
+                                                color: $culcourse-header-editing-color;
+                                            }
+                                        }
+                                    }
+                                }
+                                .summary {
+                                    color: $culcourse-header-text-color;
+                                    .truncate {
+                                        height: auto;
+                                        &.truncated {
+                                            &:after {
+                                                display: none;
+                                            }
+                                        }
+                                        >div>* {
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+                                    }
+                                }
+                                .section-summary-activities {
+                                    .activity-count {
+                                        color: $culcourse-header-text-color;
+                                    }
+                                }
+                            }
+                            .summary {
+                                order: 1;
+                                width: 100%;
+                                padding: 0;
+                                margin: 0;
+                                color: #fff;
+                                margin-top: $spacer /2;
+                                .no-overflow {
+                                    margin: 0;
+                                    min-height: 0;
+                                }
+                            }
+                            .section-summary-activities {
+                                position: relative;
+                                right: auto;
+                                bottom: auto;
+                                margin: 0 0 0 $spacer;
+                                .activity-count {
+                                    color: #fff;
+                                    &+.activity-count {
+                                        margin-left: $spacer / 2;
+                                    }
+                                }
+                                +.section-summary-progress {
+                                    margin-left: $spacer /2;
+                                }
+                            }
+                            .section-summary-progress {
+                                display: inline-flex;
+                                align-content: center;
+                                position: relative;
+                                left: auto;
+                                bottom: auto;
+                                padding: 0;
+                                margin: 0 0 0 auto;
+                                color: #fff;
+                                font-size: $small-font-size;
+                                .activity-count {
+                                    @extend .tag;
+                                    @extend .tag-info;
+                                    background-color: darken($brand-info, 25%);
+                                    color: #fff;
+                                }
+                            }
+                            .section_availability {
+                                text-align: right;
+                                flex-basis: 0%;
+                                flex-grow: 1;
+                                max-width: 400px;
+                                width: 100%;
+                                margin: 0 0 0 auto;
+                                padding: 0;
+                            }
+                        }
+                    }
+                    .sectionbody {
+                        margin: 0;
+                        animation: .5s grow;
+                        background-color: $culcourse-content-bg;
+                        .section,
+                        .summary {
+                            margin: 0;
+                            padding: $spacer;
+                            &:empty {
+                                display: none;
+                            }
+                        }
+                    }
+                    a.sectionclose {
+                        background: none;
+                        padding: 0;
+                        display: inline-block;
+                        &:before {
+                            @include fa-icon();
+                            content: "\f106";
+                            font-size: $h4-font-size;
+                            margin-top: -1px;
+                            width: $spacer * 2;
+                            text-align: center;
+                            margin-right: $spacer / 4;
+                        }
+                        &.collapsed {
+                            display: none;
+                        }
+                    }
+                    ul {
+                        li.activity {
+                            margin: $spacer / 2 0;
+                            &:last-child {
+                                padding-bottom: 0;
+                            }
+                        }
+                    }
+                    a.dimmed {
+                        box-shadow: inset 0px 0px 0px 1px $gray-lighter;
+                        span.instancename {
+                            border-left: 1px solid $gray-lighter;
+                        }
+                    }
+                    span.instancename {
+                        font-size: $font-size-base;
+                        padding: $spacer / 2 $spacer * .75;
+                        border-left: 1px solid $primary;
+                    }
+                }
+                .add_section {
+                    margin-top: .5rem;
+                    margin-bottom: 1rem;
+                }
+                &.orphaned {
+                    .content {
+                        padding: 25px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.cul-important {
+    @extend .tag;
+    @extend .tag-danger;
+    margin: 0 $spacer/4 $spacer/4 0;
+    font-size: $h5-font-size;
+    white-space: normal;
+    text-align: left;
+    line-height: $line-height-base;
+}
+
+.editor_atto_menu .atto_styles_button .dropdown-menu>li:nth-child(2) {
+    @extend .cul-important;
+    display: block;
+    padding: 0.25rem 0.4rem;
+    font-weight: bold;
+    a {
+        color: #fff;
+    }
+}
+
+.cul-generic {
+    @extend .tag;
+    // @extend .tag-info;
+    background-color: darken($info, 14%);
+    margin: 0 $spacer/4 $spacer/4 0;
+    font-size: $font-size-base;
+    white-space: normal;
+    text-align: left;
+    line-height: $line-height-base;
+}
+
+.editor_atto_menu .atto_styles_button .dropdown-menu>li:nth-child(3) {
+    @extend .cul-generic;
+    display: block;
+    padding: 0.25rem 0.4rem;
+    font-weight: bold;
+    a {
+        color: #fff;
+    }
+}
+
+.fixed-anchor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 1px;
+}
+
+$right-container: $container-max-width+($grid-gutter-width / 2)+50px;
+
+.fixed-buttons {
+    position: absolute;
+    top: 155px;
+    right: 0;
+    z-index: 1;
+    transition: transform .2s ease;
+    @include media-breakpoint-only(md) {
+        top: 100px;
+    }
+    &.stick {
+        position: fixed;
+        z-index: 2;
+        @include media-breakpoint-down(md) {
+            &.push {
+                transform: translateY(55px);
+            }
+        }
+    }
+    .fixed-btn {
+        width: 50px;
+        height: 50px;
+        &+.fixed-btn {
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    }
+    .favourite-btn {
+        a {
+            &:before {
+                @include fa-icon();
+                content: "\f006";
+            }
+            &.favourited {
+                &:before {
+                    content: "\f005";
+                    color: gold;
+                }
+            }
+        }
+    }
+}
+
+// Show/Hide Blocks
+.toggleblocks-btn {
+    cursor: pointer;
+    .fa-angle-double-left {
+        display: none;
+    }
+}
+
+.hiddenblocks {
+    .toggleblocks-btn {
+        .fa-angle-double-left {
+            display: block;
+        }
+        .fa-angle-double-right {
+            display: none;
+        }
+    }
+    #block-region-side-post {
+        // The docking button is hidden below media size xl
+        // so the blocks should be visible.
+        flex: 0 0 100%;
+        max-width: 100%;
+        @include media-breakpoint-up(xl) {
+            display: none !important;
+        }
+    }
+    #region-main {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+// For consistency with styles above when blocks are docked.
+#region-main,
+#block-region-side-post {
+    @include media-breakpoint-down(lg) {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+// No JS
+.clipboard {
+    width: 100%;
+    background: gray;
+    color: #fff;
+    padding: $spacer / 2 $spacer;
+    a {
+        color: #fff;
+        font-weight: $font-weight-bold;
+    }
+}
+
+li.movehere {
+    padding: $spacer / 4;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    width: 100%;
+    @include media-breakpoint-up(sm) {
+        width: 16%;
+    }
+    @include media-breakpoint-up(xl) {
+        width: 8%;
+    }
+    >a {
+        width: 100%;
+        height: 100%;
+        border: 1px dashed $gray-dark;
+        padding: 0 $spacer / 4;
+        &:hover,
+        &:focus {
+            border-color: #fff;
+        }
+        .icon {
+            margin: 0;
+            width: auto;
+            height: auto;
+        }
+    }
+}
+
+#dndupload-status {
+  color: #4a4a4d;
+}

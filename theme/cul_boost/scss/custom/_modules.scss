@@ -1,0 +1,318 @@
+.path-mod-assign {
+    div[role="main"],
+    #region-main,
+    #page-content,
+    #page {
+        min-height: 100vh;
+    }
+    [data-region="user-info"] {
+        .img-rounded {
+            width: 40px;
+        }
+    }
+    [data-region="grade-panel"] {
+        .mform {
+            #id_gradeheader {
+                display: block;
+                width: 100%;
+            }
+            .fitem {
+                &.has-popout {
+                    .col-md-3 {
+                        width: 100%;
+                        flex: 0 0 100%;
+                        max-width: 100%;
+                    }
+                    .felement {
+                        flex: 0 0 100%;
+                        max-width: 100%;
+                    }
+                }
+            }
+        }
+    }
+    [data-region="grade-actions"] {
+        padding: .4rem;
+    }
+}
+
+#page-mod-quiz-mod {
+    #id_reviewoptionshdr {
+        .form-group {
+            float: none;
+            margin: 0;
+            padding: 0 $spacer $spacer 0;
+            min-height: 0;
+            width: 100%;
+            @include media-breakpoint-up(sm) {
+                width: 50%;
+            }
+            @include media-breakpoint-up(lg) {
+                width: 25%;
+            }
+        }
+    }
+    #id_reviewoptionshdr:not(.collapsed) {
+        >.fcontainer {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: start;
+        }
+        .col-md-3,
+        .col-md-9 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            float: none;
+            padding: 0;
+        }
+        .col-md-3 {
+            margin-bottom: $spacer / 2;
+        }
+    }
+}
+
+#page-mod-quiz-edit {
+    .statusdisplay {
+        margin-bottom: $spacer * 2;
+    }
+    .mod_quiz-edit-top-controls {
+        clear: both;
+    }
+}
+
+.mod_quiz_preflight_popup fieldset {
+    margin: 0;
+}
+
+#mod_quiz_navblock .btn-secondary {
+    color: #000000;
+}
+
+.moodle-dialogue-base {
+    .moodle-dialogue {
+        &.mod_quiz_preflight_popup {
+            .moodle-dialogue-bd {
+                #mod_quiz_preflight_form {
+                    legend {
+                        padding: $spacer $spacer 0 $spacer;
+                    }
+                    fieldset {
+                        .form-group {
+                            &.femptylabel {
+                                .col-md-3 {
+                                    display: none;
+                                }
+                                .col-md-9 {
+                                    padding: 0 $spacer / 2;
+                                    flex: 0 0 100%;
+                                    max-width: 100%;
+                                }
+                            }
+                        }
+                        .fitem {
+                            margin: 0;
+                            padding: $spacer / 2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.file-picker,
+.filemanager {
+    .ygtvtn,
+    .ygtvtm,
+    .ygtvtmh,
+    .ygtvtp,
+    .ygtvtph,
+    .ygtvln,
+    .ygtvlm,
+    .ygtvlmh,
+    .ygtvlp,
+    .ygtvlph {
+        width: 25px;
+        background-position-x: 5px;
+        background-position-y: 35%;
+    }
+    .ygtvblankdepthcell,
+    .ygtvblankdepthcell {
+        height: 18px;
+    }
+    .ygtvtn,
+    .ygtvtn {
+        height: 30px;
+        background-position-y: 4px;
+    }
+    .ygtvln,
+    .ygtvln,
+    a.ygtvspacer {
+        height: 18px;
+    }
+    .fp-filename {
+        padding-top: 2px;
+        line-height: 18px;
+        display: inline-block;
+    }
+    .fp-filename-icon {
+        margin-top: 0;
+        >a {
+            display: flex;
+            align-items: center;
+        }
+    }
+    .fp-icon {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 0px;
+        width: 20px;
+        line-height: 18px;
+        margin-right: 5px;
+        height: 20px;
+    }
+    .ygtvdepth0 {
+        &.ygtv-collapsed,
+        &.ygtv-expanded {
+            .fp-icon {
+                width: auto;
+                height: auto;
+                margin-right: 0;
+                img {
+                    width: 25px;
+                    height: 25px;
+                    max-width: 100%;
+                    max-height: 100%;
+                }
+            }
+            .fp-filename {
+                font-size: $h5-font-size;
+                line-height: 25px;
+            }
+        }
+    }
+    .ygtvblankdepthcell {
+        width: 25px;
+    }
+}
+
+.iconpicker {
+    .iconpicker-items {
+        .iconpicker-item {
+            * {
+                color: $primary;
+            }
+        }
+    }
+}
+
+// Quiz MCQ choices
+#page-question-type-multichoice {
+    fieldset#id_answerhdr {
+        >.fcontainer {
+            >.form-group {
+                &:nth-of-type(3n+1),
+                &:nth-of-type(3n+2),
+                &:nth-of-type(3n+3) {
+                    padding: $spacer 0;
+                    margin: 0;
+                    background-color: $gray-lightest;
+                    border-left: 1px solid $gray-lighter;
+                    border-right: 1px solid $gray-lighter;
+                }
+                &:nth-of-type(3n+1) {
+                    border-top: 1px solid $gray-lighter;
+                }
+
+                &:nth-of-type(3n+3) {
+                    border-bottom: 1px solid $gray-lighter;
+                    margin-bottom: $spacer * 2;
+                }
+                &.femptylabel {
+                    border: none;
+                    background-color: transparent;
+                    padding: 0;
+                    margin-bottom: $spacer * 2;
+                }
+            }
+        }
+    }
+}
+
+// Forum
+.forumpost {
+    .row {
+        .topic,
+        .content-mask,
+        .options {
+            margin: 0;
+        }
+        &.maincontent {
+            >.no-overflow {
+                flex-basis: 0%;
+                flex-grow: 1;
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+    }
+    .content {
+        .posting {
+            &.fullpost {
+                overflow: visible;
+            }
+        }
+    }
+}
+
+// Few Boost tidy ups for the grade assignments page
+#page-mod-assign-grader {
+    &.pagelayout-embedded {
+        min-height: 100vh;
+    }
+    section#main-region {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    [data-region="grade-actions-panel"] {
+        height: auto;
+        [data-region="grade-actions"] .collapse-buttons {
+            line-height: 37px;
+            height: auto;
+        }
+    }
+    [data-region="grading-navigation"] {
+        margin: 0;
+    }
+}
+
+// Question type box overflows
+.que.ddwtos .drop {
+    max-width: 100%;
+}
+
+.que.ddwtos .drag {
+    max-width: 100%;
+}
+
+// Styling does not suit having the title displayed twice.
+#page-admin-tool-recyclebin-index .pageheading {
+    display: none;
+}
+
+// Scroll bar when looking at the responses of a Choice Activity with too many choices / responses to fit on one page. 
+#page-mod-choice-view,
+#page-mod-choice-report { 
+    .response {
+        overflow-x: scroll;
+    }
+}
+
+.choices label {
+    display: inline;
+}
+
+#prev-activity-link,
+#next-activity-link {
+    white-space: pre-wrap;
+}

@@ -1,0 +1,42 @@
+// Will be useful once core hack is applied to table cell floater JS
+// .path-grade-report-grader {
+//     .gradeparent {
+//         overflow: hidden;
+//         table#user-grades {
+//             display: block;
+//             overflow: auto;
+//             margin: 0;
+//         }
+//     }
+// }
+#page-grade-report-grader-index {
+    overflow-x: visible;
+}
+
+.grade-navigation {
+    a[title="User report"] {
+        display: none;
+    }
+}
+
+#page-mod-assign-index,
+#page-mod-assign-grading,
+#page-grade-report-culuser-index{
+    table .mediaplugin {
+        max-width: 500px
+    }
+}
+
+// CMDLTWO-1584
+#page-grade-report-culuser-index,
+#page-mod-assign-view {
+	.mediaplugin {
+		width: auto;
+		video {
+			width: auto;
+		}
+		> div {
+		    margin: 0;
+		}
+	}
+}

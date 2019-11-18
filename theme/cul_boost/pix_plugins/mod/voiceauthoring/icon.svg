@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>pix_plugins/mod/voiceauthoring/icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="pix_plugins/mod/voiceauthoring/icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="circle_background" transform="translate(-6.000000, -6.000000)"></g>
+        <path d="M0,1.22265625 L0,1.97265625 L0,15.4726562 L0,16.2226562 L0.769230769,16.2226562 L7.35576923,16.2226562 L9.44711538,18.2617187 L10,18.7773437 L10.5528846,18.2617187 L12.6442308,16.2226562 L19.2307692,16.2226562 L20,16.2226562 L20,15.4726562 L20,1.97265625 L20,1.22265625 L19.2307692,1.22265625 L0.769230769,1.22265625 L0,1.22265625 Z M1.53846154,2.72265625 L18.4615385,2.72265625 L18.4615385,14.7226563 L12.3076923,14.7226563 L11.9951923,14.7226563 L11.7548077,14.9335938 L10,16.6445313 L8.24519231,14.9335938 L8.00480769,14.7226563 L7.69230769,14.7226563 L1.53846154,14.7226563 L1.53846154,2.72265625 Z" id="Shape" fill="#A22833" fill-rule="nonzero"></path>
+    </g>
+</svg>

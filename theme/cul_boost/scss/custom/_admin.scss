@@ -1,0 +1,59 @@
+.fp-pathbar {
+    .fp-path-folder {
+        background-size: auto 10px;
+        background-position: 0 40%;
+    }
+    .fp-path-folder-name {
+        margin-left: 30px;
+    }
+}
+
+.path-backup,
+.path-admin {
+    .mform {
+        .root_setting,
+        .grouped_settings,
+        .form-group {
+            .icon:first-of-type,
+            .form-buttons .icon:first-of-type,
+            .path-admin .buttons .icon:first-of-type,
+            .buttons .icon:first-of-type,
+            #fitem_id_submitbutton .icon:first-of-type,
+            .fp-content-center form+div .icon:first-of-type,
+            form+div .icon:first-of-type,
+            div.backup-section+form .icon:first-of-type,
+            #fgroup_id_buttonar .icon:first-of-type,
+            .form-group .icon:first-of-type,
+            .form-buttons .icon:first-of-type,
+            .path-admin .buttons .icon:first-of-type,
+            .buttons .icon:first-of-type,
+            #fitem_id_submitbutton .icon:first-of-type,
+            .fp-content-center form+div .icon:first-of-type,
+            form+div .icon:first-of-type,
+            div.backup-section+form .icon:first-of-type,
+            #fgroup_id_buttonar .icon:first-of-type {
+                margin-left: $spacer / 4;
+            }
+        }
+    }
+}
+
+.rubric_manager_launch,
+.rubric_view_launch {
+    background-image: none;
+}
+
+.moodle-dialogue-base {
+    &.moodle-dialogue-confirm {
+        .pagelayout-mydashboard & {
+            .yui3-widget-mask,
+            .moodle-dialogue-lightbox,
+            .moodle-dialogue {
+                z-index: 999 !important;
+            }
+        }
+    }
+    .moodle-dialogue-wrap {
+        z-index: 11;
+    }
+}

@@ -1,0 +1,364 @@
+/* 
+ * Global overrides to standard HTML elements
+ * Needed to retain consistency across theme
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+
+:focus,
+.focus {
+    outline: none;
+}
+
+// Component outline for accessibility
+a,
+a:link {
+    .label &,
+    .tag &,
+    .badge &,
+    .block.block_calendar_month td &,
+    .helptooltip &,
+    &.fa-info-circle,
+    &.accordion-title,
+    &.navbar-brand,
+    &.toggle-display,
+    &.popover-region-toggle,
+    &.editor_atto_content,
+    &.fheader,
+    &.arrow_link {
+        text-decoration: none;
+        transition: none;
+        &:focus,
+        &.focus {
+            @include component-outline();
+        }
+    }
+    .nav-item &,
+    .nav-link &,
+    &.dropdown-toggle,
+    &.dropdown-item,
+    &.menu-action,
+    &.action-icon,
+    &.nav-link,
+    &.btn {
+        text-decoration: none;
+        transition: none;
+        &:focus,
+        &.focus {
+            @include component-outline();
+        }
+    }
+    &.label,
+    &.tag,
+    &.badge {
+        text-decoration: none;
+        transition: none;
+        &:focus,
+        &.focus {
+            @include component-outline();
+        }
+    }
+    &:focus,
+    &.focus {
+        @include component-outline();
+        transition: none;
+    }
+}
+
+html {
+    font-size: 15px;
+    height: auto;
+    min-height: 100%;
+    &.htmllayout-embedded {
+        height: 100%;
+    }
+}
+
+body {
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .1px;
+    text-rendering: optimizeLegibility;
+    &.navopen {
+        overflow: hidden;
+    }
+    &.pagelayout-embedded {
+        padding-top: 0;
+        height: 100%;
+        div[role="main"],
+        #region-main,
+        #page-content,
+        #page {
+            height: 100%;
+        }
+    }
+}
+
+#page {
+    margin-top: 0;
+    position: relative;
+}
+
+@media (max-width: 1260px) {
+    #page-my-index #page {
+        margin-left: $grid-gutter-width / 2;
+        margin-right: $grid-gutter-width / 2;
+    }
+}
+
+#page-my-index {
+    background-color: $body-bg;
+}
+
+.container-fluid {
+    max-width: $container-max-width;
+}
+
+#region-main {
+    padding-left: $grid-gutter-width / 2;
+    padding-right: $grid-gutter-width / 2;
+    div[role="main"] {
+        // overflow-y: auto;
+        // overflow-y: unset;
+    }
+}
+
+div[role="main"] {
+    clear: both;
+}
+
+h1,
+.h1 {
+    font-weight: $font-weight-medium;
+}
+
+h4,
+.h4 {
+    color: $body-color;
+}
+
+h5,
+.h5,
+h6,
+.h6 {
+    font-weight: $font-weight-medium;
+}
+
+p {
+    margin: 0 0 $spacer 0;
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+}
+
+hr {
+    margin-top: $spacer / 2;
+    margin-bottom: $spacer / 2;
+}
+
+input,
+button {
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .1px;
+    text-rendering: optimizeLegibility;
+}
+
+img {
+    width: auto\9;
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    &.hidden {
+        display: none;
+    }
+}
+
+ul,
+ol {
+    li {
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+}
+
+a {
+    @include transition(all 0.2s);
+}
+
+abbr {
+    &[title],
+    &[data-original-title] {
+        border-bottom: none;
+    }
+}
+
+.no-overflow {
+    margin-bottom: $spacer / 2;
+    overflow-y: visible;
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    display: block;
+    padding-bottom: $spacer / 4;
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+    .path-mod-assign & {
+        overflow-y: visible;
+        overflow-x: auto;
+    }
+}
+
+.col {
+    flex-basis: 0%;
+    flex-grow: 1;
+    max-width: 100%;
+    width: 100%;
+}
+
+.col-12 {
+    @extend .col-xs-12;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.font-weight-medium {
+    font-weight: $font-weight-medium;
+}
+
+.text-break {
+    word-break: break-word;
+}
+
+.w-auto {
+    width: auto !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.h-100 {
+    height: 100% !important;
+}
+
+.float-none {
+    float: none !important;
+}
+
+.row-x {
+    margin-left: -($spacer);
+    margin-right: -($spacer);
+}
+
+.row-y {
+    margin-top: -($spacer);
+    margin-bottom: -($spacer);
+}
+
+.border-0 {
+    border: none !important;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.hidden {
+    display: none;
+}
+
+.tag {
+    letter-spacing: ($spacer * .015625);
+}
+
+.line-height-1 {
+    line-height: 100% !important;
+}
+
+// Add back in bootstrap 4 dropdown menu right
+// alignment for all areas that may use it
+.dropdown-menu-right {
+  right: 0;
+  left: auto; // Reset the default from `.dropdown-menu`
+}
+
+.overlay {
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($gray-dark, .8);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease, visibility .2s ease;
+    pointer-events: none;
+    &.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+    .close-icon {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        top: $spacer;
+        left: $spacer;
+        cursor: pointer;
+        .dashboard-navbar-wrap & {
+            top: calc(85px + #{$spacer});
+        }
+        &:hover,
+        &:focus {
+            &:before,
+            &:after {
+                background-color: #fff;
+            }
+        }
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            width: 3px;
+            height: 100%;
+            background-color: $gray-lightest;
+            top: 50%;
+            left: 50%;
+            border-radius: $border-radius;
+            overflow: hidden;
+        }
+        &:before {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+        &:after {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+    }
+}
+
+.popover {
+    .popover-title,
+    .popover-content {
+        color: $popover-text-color;
+        * {
+            color: $popover-text-color;
+        }
+    }
+}
+
+.yui3-panel {
+    z-index: 20;
+}
+
+.userpicture {
+    border-radius: 50%;
+    overflow: hidden;
+}

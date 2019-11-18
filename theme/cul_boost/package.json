@@ -1,0 +1,30 @@
+{
+  "name": "theme-cul_boost-tasks",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Grunt tasks for CUL Boost theme.",
+  "main": "Gruntfile.js",
+  "author": {
+    "name": "Stephen Sharpe",
+    "url": "http://www.synergy-learning.com"
+  },
+  "scripts": {
+    "postcss": "postcss --config postcss.js --replace style/*.css"
+  },
+  "dependencies": {
+    "autoprefixer": "*",
+    "grunt": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-exec": "*",
+    "grunt-sass": "2.x",
+    "grunt-svgmin": "*",
+    "grunt-text-replace": "*",
+    "npm": "^6.9.0",
+    "postcss-cli": "^2.5.2",
+    "postcss-flexbugs-fixes": "^2.0.0",
+    "time-grunt": "*"
+  },
+  "license": "GPL-3.0+"
+}

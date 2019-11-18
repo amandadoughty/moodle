@@ -1,0 +1,52 @@
+form {
+    margin-bottom: 0;
+    .formsettingheading {
+        margin-bottom: $spacer;
+    }
+    &#adminsettings {
+        .editor_atto {
+            h3 {
+                border: none;
+                line-height: $headings-line-height;
+                font-size: $h3-font-size;
+                width: auto;
+            }
+        }
+    }
+    .form-autocomplete-selection+input.form-control {
+        padding-right: $spacer * 2;
+        min-width: 260px;
+    }
+    .form-autocomplete-downarrow {
+        top: .1rem;
+    }
+}
+
+// Hide the course theme setting - enabled for cass.
+#id_appearancehdr div:first-child div:first-child {
+    display: none;
+    visible: hidden;
+}
+// Hide the user theme setting - enabled for cass.
+select#id_theme {
+    display: none;
+    visible: hidden;
+}
+
+label[for=id_theme] {
+    display: none!important;
+    visible: hidden;
+}
+// Expand rhs of role assignment table.
+table.roleassigntable {
+    table-layout: fixed;
+}
+
+table.roleassigntable td#buttonscell {
+    width: 200px;
+}
+
+// INC0262081 - Course contacts floating behind form area.
+.contacts-area.searchfilter .contacts {
+    clear: both;
+}

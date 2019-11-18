@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>pix_plugins/mod/scorm/pix/passed</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="pix_plugins/mod/scorm/pix/passed" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(-1.000000, 2.000000)" fill="#A22833" fill-rule="nonzero">
+            <path d="M4,1 L4,11 L14,11 L14,1 L4,1 Z M3,0 L15,0 L15,12 L3,12 L3,0 Z" id="Rectangle-2"></path>
+            <path d="M6.31568574,8.93419311 L15.5933469,0.429670359 L17.0463085,1.7615518 L16.6761354,2.10087708 L7.00503237,10.9659025 L6.31568574,11.5703296 L6.01220928,11.304238 L5.61876738,10.9591142 L0.953691518,6.68279462 L2.40665309,5.35091318 L6.31568574,8.93419311 Z M6.31568574,10.1830987 L2.40665309,6.59981874 L2.31612678,6.68280119 L6.23329202,10.2736752 L6.31575409,10.3459789 L6.39050773,10.2804636 L15.683866,1.7615518 L15.5933469,1.67857592 L6.31568574,10.1830987 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

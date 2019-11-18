@@ -1,0 +1,17 @@
+<div class="forumsearch p-0">
+    <form action="{{actionurl}}" class="form-inline d-flex flex-wrap align-items-center">
+        <input type="hidden" name="id" value="{{courseid}}">
+        <span class="d-none d-lg-inline-block mr-1">
+            {{#helpicon}}
+            {{>core/help_icon}}
+            {{/helpicon}}
+        </span>
+        <label class="accesshide" for="search">{{#str}}search, forum{{/str}}</label>
+        <div class="input-group d-flex flex-wrap p-0">
+            <input id="search" name="search" type="text" class="form-control col mr-0" placeholder="{{#str}}searchforums, mod_forum{{/str}}" value="{{query}}">
+            <span class="input-group-btn w-auto">
+                <button class="btn btn-secondary" id="searchforums" type="submit"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+</div>

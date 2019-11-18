@@ -1,0 +1,190 @@
+#jobonlineblockwrapper .jobonline_job
+{
+    padding: 1ex 1em;
+    margin:0 0 .5ex 0;
+}
+
+#jobonlineblockwrapper .label
+{
+    margin-right: 1em;
+}
+
+#jobonlineblockwrapper h1
+{
+    font-size: .9rem;
+    padding:0;
+    margin:0;
+}
+
+#jobonlineblockwrapper h1 .jobonlineblock_headerdate
+{
+    float:right;
+}
+
+@media mobile
+{
+    #jobonlineblockwrapper h1 .jobonlineblock_headerdate
+    {
+        display:none;
+    }
+}
+
+@media (max-width: 800px)
+{
+    #jobonlineblockwrapper #jobonline_sortbuttons td.jobonline_sortbycell
+    {
+        display:none;
+    }
+}
+
+.jobonline_radiobtn
+{
+    width:20%;
+    padding-right:1vw;
+}
+
+
+
+#jobonlineblockwrapper h1,
+#jobonlineblockwrapper h2,
+#jobonlineblockwrapper h3,
+#jobonlineblockwrapper h4,
+#jobonlineblockwrapper h5,
+#jobonlineblockwrapper h6
+{
+    line-height: 1.2rem;
+}
+
+#jobonlineblockwrapper .jobonline_job > h1
+{
+    margin-top:0px;
+}
+
+#jobonlineblockwrapper .jobonline_job h2,
+#jobonlineblockwrapper .jobonline_job h3,
+#jobonlineblockwrapper .jobonline_job h4,
+#jobonlineblockwrapper .jobonline_job h5,
+#jobonlineblockwrapper .jobonline_job h6
+{
+    font-size: 90%;
+    line-height: 90%;
+    margin-top: 1.5ex;
+}
+
+#jobonlineblockwrapper select
+{
+    width: 100%;
+    text-overflow: ellipsis;
+}
+
+#jobonlineblockwrapper > .collapsible[state="0"]
+{
+    border: thin solid grey;
+}
+
+#jobonlineblockwrapper > .collapsible[state="1"]
+{
+    border: thin solid black;
+}
+
+#jobonlineblockwrapper > .collapsible[state="1"] > h1
+{
+    padding-bottom:1ex;
+}
+
+
+#jobonlineblockwrapper .collapsible[state="0"] .heading
+{
+    clear:both;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+}
+
+#jobonlineblockwrapper .collapsible[state="1"] .heading
+{
+    clear:both;
+}
+
+#jobonlineblockwrapper .salaryrange .note
+{
+    padding-left:.25em;
+}
+#jobonlineblockwrapper .salaryrange .note[state='0'] span
+{
+    display:none;
+}
+
+#jobonlineblockwrapper .salaryrange .note[state='1']:before
+{
+    content:'➖ ';
+}
+
+#jobonlineblockwrapper .salaryrange .note[state='0']:before
+{
+    content:'🛈';
+}
+
+#jobonlineblockwrapper .collapsible
+{
+}
+
+#jobonlineblockwrapper .collapsibleinner
+{
+    transition: all .5s ease-out;
+}
+
+#jobonlineblockwrapper .collapsibleinner .imgdiv
+{
+    max-height:9000px; /*Needs to be set to allow shrinking */
+    overflow:hidden;
+    position: relative;
+}
+
+#jobonlineblockwrapper .collapsibleinner .imgdiv:before
+{
+    content: "";
+    display: block;
+    padding-top: 20%; /* The aspect ratio of the image: 100% = 1:1, 50%=2:1 (W:H) etc. */
+}
+
+#jobonlineblockwrapper .collapsibleinner .imgdiv img
+{
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0
+}
+
+#jobonlineblockwrapper .collapsible[state='1'] .heading:before
+{
+    content: '➖';
+    padding-right:.5ex;
+}
+#jobonlineblockwrapper .collapsible[state='0'] .heading:before
+{
+    content: '➕';
+    padding-right:.5ex;
+}
+#jobonlineblockwrapper .collapsible[state='1'] > .collapsibleinner *
+{
+    line-height:1.5em;
+}
+
+#jobonlineblockwrapper .collapsible[state='0'] > .collapsibleinner *
+{
+    opacity:0;
+    padding:0;
+    margin:0;
+    line-height:0;
+    visibility: hidden; /* Prevent clicking on squashed links*/
+    display:none;
+}
+
+#jobonlineblockwrapper .collapsible[state='0'] > .collapsibleinner .imgdiv
+{
+    max-height:0px;
+}
+
+#jobonlineblockwrapper .collapsibleinner *
+{
+    color: black;
+}

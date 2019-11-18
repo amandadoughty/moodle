@@ -1,0 +1,343 @@
+// Width of each branch list
+$branchwidth: 265px;
+
+aside[id*="block-region-nav-settings"] {
+    position: absolute;
+    z-index: 2;
+    top: 100%;
+    left: -200%;
+    margin-bottom: $spacer;
+    width: auto;
+    min-width: calc(#{$branchwidth} + #{$spacer * 2});
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    @include media-breakpoint-up(sm) {
+        left: auto;
+        right: 0;
+    }
+    &.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        @include media-breakpoint-up(sm) {
+            right: 0;
+            left: auto;
+            transform: none;
+        }
+    }
+    .block_settings .block-controls {
+        float: none !important;
+        text-align: right;
+        position: absolute !important;
+        top: 0;
+        right: 100%;
+        z-index: 0;
+        background-color: #fff;
+        border-right: 2px solid $gray-lighter;
+        .moodle-core-dragdrop-draghandle {
+            >.icon {
+                margin-left: 0;
+            }
+        }
+        .moodle-core-dragdrop-draghandle,
+        .dropdown {
+            display: block !important;
+            min-width: 30px;
+            padding: $spacer / 4;
+            text-align: center;
+            .dropdown-toggle::after {
+                margin-left: 0;
+            }
+            .dropdown-menu {
+                margin: 0 !important;
+                right: -2px;
+            }
+        }
+    }
+    ul.block_tree.list {
+        position: relative;
+        min-height: 350px;
+        height: auto;
+        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        min-width: calc(#{$branchwidth} + #{$spacer * 2});
+        padding: $spacer / 2 0;
+        overflow-x: hidden;
+        font-weight: $font-weight-bold;
+        transition: width .2s ease;
+    }
+    .settingsnav {
+        padding: 0 !important;
+    }
+
+    .block_settings #settingsnav {
+        padding: 0 !important;
+        overflow: hidden;
+    }
+
+    .block_settings .block-title {
+        display: none !important;
+    }
+
+    .block_settings {
+        border: none;
+        z-index: 3;
+    }
+
+    .block_settings .block-inner {
+        padding: 0;
+    }
+
+    .block_settings .footer {
+        .adminsearchform {
+            border-top: 1px solid $gray-lighter;
+        }
+    }
+    .block_tree {
+        .type_setting,
+        .type_course,
+        .type_siteadmin {
+            .root_node {
+                &:after {
+                    content: "";
+                    display: inline-block;
+                    font: normal normal normal 14px/1 FontAwesome;
+                    font-size: inherit;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    min-width: 20px;
+                    margin-right: $spacer / 2;
+                    color: $primary;
+                    order: -1;
+                    text-align: center;
+                }
+            }
+        }
+        .type_setting {
+            .root_node {
+                &:after {
+                    content: "\f1de";
+                }
+            }
+        }
+        .type_course {
+            .root_node {
+                &:after {
+                    content: "\f19d";
+                }
+            }
+        }
+        .type_siteadmin {
+            .root_node {
+                &:after {
+                    content: "\f023";
+                    padding-right: 3px;
+                }
+            }
+        }
+    }
+    .block.block_settings .block_tree .tree_item {
+        &:not([aria-expanded]) {
+            >a {
+                color: $primary;
+                >span {
+                    color: $primary;
+                }
+            }
+        }
+        &.hasicon.cog {
+            a {
+                &:before {
+                    content: "\f013";
+                    @include fa-icon();
+                    margin: 0 $spacer / 2 0 0;
+                    color: $primary;
+                    min-width: $font-size-base;
+                    text-align: center;
+                    font-size: $font-size-base;
+                }
+                i {
+                    &[aria-hidden="true"] {
+                        display: none;
+                    }
+                }
+            }
+        }
+        &.root_node.branch,
+        &.branch {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 0;
+            padding: $spacer / 2 $spacer / 2 $spacer / 2 $spacer * 2;
+            &[aria-expanded="false"].loading {
+                background-position: calc(100% - #{$spacer * 2}) 45%;
+            }
+            &[aria-expanded] {
+                padding: $spacer / 2 $spacer * 2 $spacer / 2 $spacer / 2;
+                &:before {
+                    left: auto;
+                    right: $spacer * .3;
+                }
+                >a {
+                    pointer-events: none;
+                }
+            }
+            &:hover {
+                &:before {
+                    background-color: rgba(0, 0, 0, 0.05);
+                }
+            }
+        }
+    }
+
+    .block_settings .block_tree .root_node+ul {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        padding: $spacer;
+    }
+
+    .block.block_settings .block_tree p {
+        padding: ($spacer / 2) $spacer ($spacer / 2) ($spacer / 2);
+        &.hasicon {
+            text-indent: 0;
+            margin: 0;
+        }
+    }
+
+    .block_navigation .block_tree p.hasicon .icon,
+    .block_settings .block_tree p.hasicon .icon {
+        margin: 0 ($spacer / 2) 0 0;
+        color: $primary;
+        min-width: 16px;
+    }
+
+    .block.block_settings .block_tree p>a,
+    .block.block_settings .block_tree p>a>span {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        word-break: break-word;
+        flex-basis: 0%;
+        flex-grow: 1;
+        max-width: 100%;
+        width: 100%;
+        line-height: 1.1;
+        color: $body-color;
+    }
+    .block.block_settings .block_tree p>a {
+        &:hover {
+            color: $primary;
+        }
+    }
+    .block_settings .block_tree .tree_item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        line-height: 1.1;
+    }
+
+    .block.block_settings .block_tree .tree_item ul,
+    .block.block_settings .block_tree .tree_item.branch:before {
+        text-align: center;
+        font-size: $font-size-lg;
+        margin-right: $spacer / 2;
+        line-height: $font-size-base;
+        color: $primary;
+    }
+    .block.block_settings .block_tree .tree_item.branch:before {
+        position: absolute;
+        top: 50%;
+        left: $spacer * .3;
+        width: $spacer * 1.5;
+        height: $spacer * 1.5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        transform: translateY(-50%);
+        border-radius: 50%;
+    }
+    .block.block_settings .block_tree .tree_item.root_node.branch {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        line-height: 1.1;
+        padding: $spacer / 2 $spacer / 2 $spacer / 2 $spacer * 2;
+        &[aria-expanded="true"] {
+            background-color: $gray-lighter;
+            &:hover {
+                background-color: $gray-lighter;
+            }
+        }
+        &:hover {
+            background-color: $gray-lightest;
+        }
+    }
+
+    .block_settings .block_tree .root_node+ul li {
+        >p[aria-expanded="true"] {
+            background-color: $gray-lighter;
+            &:hover {
+                background-color: $gray-lighter;
+            }
+        }
+        >p:hover {
+            background-color: $gray-lightest;
+        }
+    }
+
+    .block.block_settings .contains_branch {
+        p {
+            +ul {
+                display: block;
+                opacity: 0;
+                visibility: hidden;
+                position: absolute;
+                z-index: 1;
+                top: 0;
+                left: $spacer * 2;
+                background-color: #fff;
+                padding: ($spacer / 2) 0;
+                width: 100%;
+                min-width: $branchwidth;
+                max-width: calc(100% - #{$spacer * 2});
+                height: auto;
+                box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.3);
+                min-height: 100%;
+                transition: transform .2s ease;
+                transform: translateX(100%);
+            }
+        }
+    }
+
+    .block.block_settings .contains_branch p.branch[aria-expanded="true"] {
+        &:hover {
+            &+ul {
+                transform: translateX($spacer);
+            }
+        }
+        &+ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+    }
+
+    .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded="true"]+ul {
+        z-index: 1;
+        max-width: calc(100% - #{$spacer * 2});
+    }
+
+    .block.block_settings .contains_branch>hr {
+        display: none;
+    }
+}

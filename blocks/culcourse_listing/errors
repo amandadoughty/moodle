@@ -1,0 +1,18 @@
+yui_combo.php?m/-1/block_culcourse_listing/favourite_list/favourite_list-debug.js:35 Uncaught TypeError: Cannot read property 'addClass' of null
+    at FLIST.initializer (yui_combo.php?m/-1/block_culcourse_listing/favourite_list/favourite_list-debug.js:35)
+    at FLIST._initHierarchy (yui_combo.php?rollup/3.17.2/yui-moodlesimple.js:28941)
+    at FLIST._baseInit (yui_combo.php?rollup/3.17.2/yui-moodlesimple.js:28508)
+    at FLIST.init (yui_combo.php?rollup/3.17.2/yui-moodlesimple.js:29628)
+    at FLIST._initBase (yui_combo.php?rollup/3.17.2/yui-moodlesimple.js:28472)
+    at FLIST.BaseCore (yui_combo.php?rollup/3.17.2/yui-moodlesimple.js:28292)
+    at FLIST.Base (yui_combo.php?rollup/3.17.2/yui-moodlesimple.js:29842)
+    at new FLIST (yui_combo.php?m/-1/block_culcourse_listing/favourite_list/favourite_list-debug.js:5)
+    at Object.M.blocks_culcourse_listing.init_favourite_list (yui_combo.php?m/-1/block_culcourse_listing/favourite_list/favourite_list-debug.js:171)
+    at index.php?sesskey=GW2OdpLX5K&bui_addblock=course_list:526
+
+
+    Missing required key in single structure: year
+Error code: invalidparameter
+* line 332 of /lib/externallib.php: invalid_parameter_exception thrown
+* line 223 of /lib/externallib.php: call to external_api::validate_parameters()
+* line 59 of /lib/ajax/service.php: call to external_api::call_external_function()

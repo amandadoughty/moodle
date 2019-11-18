@@ -1,0 +1,12 @@
+{
+    "name": "moodle-format_culcourse-dragdrop",
+    "builds": {
+        "moodle-format_culcourse-dragdrop": {
+            "jsfiles": [
+            	"selectors.js",
+                "quicklinkdd.js",
+                "activitylinkdd.js"
+            ]
+        }
+    }
+}

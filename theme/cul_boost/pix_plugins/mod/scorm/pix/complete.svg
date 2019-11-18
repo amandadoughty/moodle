@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>pix_plugins/mod/scorm/pix/complete</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="pix_plugins/mod/scorm/pix/complete" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(0.000000, 2.000000)" fill="#A22833" fill-rule="nonzero">
+            <path d="M3,1 L3,11 L13,11 L13,1 L3,1 Z M2,0 L14,0 L14,12 L2,12 L2,0 Z" id="Rectangle-2"></path>
+            <polygon id="Shape" points="15.1617312 0.62110858 5.08428246 9.85876993 0.838268793 5.96659074 0 6.7350038 4.66514806 11.0113895 5.08428246 11.3788914 5.50341686 11.0113895 16 1.38952164"></polygon>
+        </g>
+    </g>
+</svg>

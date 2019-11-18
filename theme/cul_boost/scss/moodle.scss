@@ -1,0 +1,41 @@
+/**
+ * Default preset file.
+ *
+ * Use this space to customise variables, create mixins and override SCSS.
+ */
+
+@import "../../boost/scss/bootstrap/functions";
+
+// Overriding Variables
+@import "variables";
+
+// Boost Styles
+@import "../../boost/scss/bootstrap";
+@import "../../boost/scss/fontawesome";
+@import "../../boost/scss/moodle";
+
+// Custom Overrides
+@import "mixins";
+@import "custom/admin";
+@import "custom/blocks";
+@import "custom/block_settings";
+@import "custom/calendar";
+@import "custom/text";
+@import "custom/nav";
+@import "custom/breadcrumb";
+@import "custom/buttons";
+@import "custom/grade";
+@import "custom/forms";
+@import "custom/slick";
+@import "custom/dashboard";
+@import "custom/course";
+@import "custom/course-editing";
+@import "custom/modules";
+@import "custom/local";
+@import "custom/footer";
+@import "custom/plugins";
+@import "custom/message";
+
+// Global overrides
+@import "icons";
+@import "global";

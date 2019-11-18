@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>pix_plugins/mod/scorm/pix/failed</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="pix_plugins/mod/scorm/pix/failed" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" fill="#A22833" fill-rule="nonzero">
+            <path d="M3,3 L3,13 L13,13 L13,3 L3,3 Z M2,2 L14,2 L14,14 L2,14 L2,2 Z" id="Rectangle-2"></path>
+            <polygon id="Shape" points="10.5386667 8 15.616 2.92266667 13.0773333 0.384 8 5.46133333 2.92266667 0.384 0.384 2.92266667 5.46133333 8 0.384 13.0773333 2.92266667 15.616 8 10.5386667 13.0773333 15.616 15.616 13.0773333"></polygon>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>pix_plugins/mod/quiz/icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="pix_plugins/mod/quiz/icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="circle_background" transform="translate(-6.000000, -6.000000)"></g>
+        <path d="M5.27924183,4 L2.39215646,6.88708538 L1.26481836,5.75974728 L0,7.02456563 L1.75974728,8.78431291 L2.39215646,9.38922604 L3.02456563,8.78431291 L6.54406019,5.26481836 L5.27924183,4 Z M8.56164269,5.51228282 L8.56164269,7.27203009 L20,7.27203009 L20,5.51228282 L8.56164269,5.51228282 Z M5.27924183,11.0389891 L2.39215646,13.9260745 L1.26481836,12.7987364 L0,14.0635547 L1.75974728,15.823302 L2.39215646,16.4282152 L3.02456563,15.823302 L6.54406019,12.3038075 L5.27924183,11.0389891 Z M8.56164269,12.5512719 L8.56164269,14.3110192 L20,14.3110192 L20,12.5512719 L8.56164269,12.5512719 Z" id="Shape" fill="#A22833" fill-rule="nonzero"></path>
+    </g>
+</svg>

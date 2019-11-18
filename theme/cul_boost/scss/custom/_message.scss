@@ -1,0 +1,11 @@
+.message.clickable.bg-secondary {
+	background-color: $white !important;
+}
+
+@media (min-width: 980px) {
+	.message-drawer {
+	    height: calc(100% - 230px);
+	    top: 230px;
+	    z-index: 1;
+	}
+}

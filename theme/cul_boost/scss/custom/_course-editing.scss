@@ -1,0 +1,182 @@
+#page-course-view-culcourse.editing {
+    .course-content {
+        .section .content {
+            .mod-indent-outer {
+                padding-left: 0;
+                >div:not(.mod-indent) {
+                    position: relative;
+                    margin: $spacer * 2 0 0;
+                    padding: $spacer / 2;
+                    background-color: rgba(0, 0, 0, 0.05);
+                }
+            }
+            li.activity {
+                position: relative;
+                .editing_move {
+                    top: 0;
+                    height: $spacer * 2;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: rgba(0, 0, 0, 0.1);
+                    .icon {
+                        margin: 0 $spacer / 2;
+                    }
+                }
+                .actions {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.1);
+                    height: $spacer * 2;
+                    bottom: 100%;
+                    right: 0;
+                    padding: 0 $spacer / 2;
+                }
+                .activityinstance {
+                    padding: 0;
+                    div {
+                        padding: 0;
+                        a:first-of-type {
+                            max-width: calc(100% - 30px);
+                        }
+                    }
+                    a:first-of-type {
+                        max-width: calc(100% - 30px);
+                    }
+                }
+                .resourcelinkdetails {
+                    width: 100%;
+                    margin-top: .25rem;
+                }
+                .ouwikilmt {
+                    width: 100%;
+                    margin-top: .25rem;
+                }
+            }
+        }
+        ul.culcourse {
+            li.section {
+                margin: 0 0 $spacer 0 !important;
+                padding-top: $spacer * 2 !important;
+                .side {
+                    &.left {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        margin: 0;
+                        padding: 0;
+                        height: $spacer * 2;
+                        display: flex;
+                        align-items: center;
+                        background-color: $gray-lighter;
+                    }
+                    &.right {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        margin: 0;
+                        height: $spacer * 2;
+                        display: flex;
+                        align-items: center;
+                        background-color: $gray-lighter;
+                        padding: 0 $spacer / 2;
+                        .section_action_menu {
+                            display: flex;
+                            align-items: center;
+                            a {
+                                display: inline-block;
+                                width: auto;
+                                height: auto;
+                                padding: 0 $spacer / 4;
+                                margin: 0;
+                                >.icon {
+                                    margin: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            #toggle-all .content,
+            .content {
+                margin: 0 !important;
+                ul li.activity {
+                    margin: 0 0 1rem 0;
+                    padding-bottom: 0;
+                }
+                span.inplaceeditable {
+                    flex-grow: 1;
+                    max-width: 100%;
+                    width: 100%;
+                }
+            }
+        }
+    }
+    .section .activity {
+        .contentwithoutlink {
+            padding-right: 0;
+            flex-basis: 0;
+            flex-grow: 1;
+            max-width: 100%;
+            width: 100%;
+        }
+        .activityinstance {
+            padding-right: 0;
+            flex-basis: 0;
+            flex-grow: 1;
+            max-width: 100%;
+            width: 100%;
+        }
+    }
+}
+
+.jsenabled .visibleifjs.addresourcemodchooser {
+    display: table;
+    padding: .5rem;
+    margin: 0 auto;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.05);
+    * {
+        text-align: center;
+    }
+    a .icon {
+        margin-right: 0;
+        margin-top: -2px;
+    }
+}
+
+.groupmanagementtable {
+    #buttonscell {
+        width: auto;
+    }
+    #existingcell,
+    #potentialcell {
+        width: 45%;
+    }
+}
+
+.dragdrop-keyboard-drag [data-drop-target] {
+     font-weight: bold;
+}
+
+.dragdrop-keyboard-drag [data-drop-target^="module-"] {
+  /* Attribute value starts with this */
+    margin-left: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-weight: normal;
+}
+
+.dragdrop-keyboard-drag [data-drop-target^="module-"]:before {
+    content: ' - ';
+} 
+
+.editing.format-culcourse.jsenabled .courseheader .course-image {
+    max-height: 100%;
+}
+
+.editing.format-culcourse .courseheader .clipboard {
+    background: #A22833;
+    position: relative;
+    margin-bottom: 1rem;
+}

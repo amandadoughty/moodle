@@ -1,0 +1,242 @@
+#+OPTIONS: toc:t
+#+TITLE: JobOnline Block Documentation
+#+AUTHOR: Thomas Worthington
+#+SUBTITLE: Released under the GPL ©2018 University of London
+
+* Overview
+University of London's JobOnline block presents a list of jobs in the form of a Moodle block which can be placed in the standard locations or the top of a main content area in themes which do not support central blocks. The jobs are managed and distributed using software (TARGETconnect) provided by Group GTI through a contract with The Careers Group. GTI have built a data feed specifically for The Careers Group to make available to member institutions through Moodle.
+
+* Installation
+Install the block in the normal place (blocks/jobonline) and run notifications from the system administration menu.
+
+* Configuration
+The block has several configuration options, two of which are required for normal working.
+  #+CAPTION: Main block settings
+  [[./docimages/mainsettings.png]]
+
+** Jobs Feed Url.
+This is simply the source of the jobs data and will be provided to you by the Careers Group at the University of London.
+** User name for jobs feed.
+This will be provided to you separately by the Careers Group, who will request it from Group GTI.
+As well as these required settings, there are several options which can be left at their defaults or adjusted to specific needs:
+** Password for jobs feed.
+This will be provided to you separately by the Careers Group, who will request it from Group GTI.
+** Bounce block into centre
+The expected use of the block is as a single item in the main content of a page dedicated to it. However, not all Moodle themes support placing a block in the main area of a page and so some Javascript has been added to the block to allow it to force itself into that area even if the theme does not officially allow it.
+
+If your Moodle theme does allow blocks in the main content area, then turn this setting off and simply use the normal procedure. Otherwise, turn this setting on (or leave it on, as it's the default), and when the block is added to the page you want it to appear on it should automatically "bounce" itself from the marginal block column into the central area.
+
+** Priority Sectors
+Each position offered in the jobs feed falls into one or more sectors, such as "public sector and government", "teaching and education" and so forth. If this setting is left blank then the sector drop-down filter will simply be an alphabetical list of choices. If a single sector is added here, then that sector will be moved to the top of the list regardless of its alphabetical order. To prioritise more than one sector, they should be listed together with a '|' character between them. For example:
+
+#+BEGIN_EXAMPLE
+hr|design|arts administration|Digital marketing
+#+END_EXAMPLE
+
+would move those three items to the top of the list, sort them alphabetically within themselves (so the order here makes no difference), and then list all the remaining sectors after them.
+
+Currently, the full list is
+
+| Academic research and higher education                      |
+| Accountancy and financial management - Assurance            |
+| Agriculture, forestry and fisheries                         |
+| Arts administration                                         |
+| Building services engineering                               |
+| Charities and volunteering                                  |
+| Consulting                                                  |
+| Consumer goods and manufacturing                            |
+| Design                                                      |
+| Digital marketing                                           |
+| Engineering - Aerospace engineering                         |
+| HR                                                          |
+| Hospitality, sport, leisure and tourism                     |
+| IT and technology - Business and systems analysis           |
+| Investment banking and fund management - Investment banking |
+| Law barristers                                              |
+| Law enforcement, security and intelligence                  |
+| Logistics, transport and supply chain                       |
+| Media, journalism and publishing                            |
+| Medical and dental                                          |
+| Public sector and government                                |
+| Retail, buying and merchandising                            |
+| Science and research                                        |
+| Social and market research                                  |
+| Teaching and education                                      |
+| Translation services                                        |
+
+but it may change without notice as jobs are added in different sectors. The list presented to the user is automatically updated when jobs are added or removed from the feed.
+
+With the setting given above, the list presented to the user would be:
+
+| Arts administration                              |
+| Design                                           |
+| Digital marketing                                |
+| HR                                               |
+| Academic research and higher education           |
+| Accountancy and financial management - Assurance |
+| Agriculture, forestry and fisheries              |
+| Building services engineering                    |
+| Charities and volunteering                       |
+| Consulting                                       |
+| ...                                              |
+| Translation services                             |
+
+** Priority Locations
+This works the same way as the Priority Sector setting works. The current list of locations is
+
+| Africa                                                              |
+| Argentina                                                           |
+| Armenia                                                             |
+| Asia                                                                |
+| Australasia                                                         |
+| Australia                                                           |
+| Bahamas                                                             |
+| Bahrain                                                             |
+| Belgium                                                             |
+| Botswana                                                            |
+| Brazil                                                              |
+| Burkina Faso                                                        |
+| Canada                                                              |
+| Channel Islands                                                     |
+| Chile                                                               |
+| China                                                               |
+| Colombia                                                            |
+| Cyprus                                                              |
+| Denmark                                                             |
+| Egypt                                                               |
+| England - East Midlands                                             |
+| England - East of England                                           |
+| England - Greater London                                            |
+| England - North East                                                |
+| England - North West                                                |
+| England - South East                                                |
+| England - South West                                                |
+| England - West Midlands                                             |
+| England - Yorkshire and the Humber                                  |
+| Ethiopia                                                            |
+| France                                                              |
+| Germany                                                             |
+| Greece                                                              |
+| India                                                               |
+| Israel                                                              |
+| Italy                                                               |
+| Jamaica                                                             |
+| Japan                                                               |
+| Jordan                                                              |
+| Kenya                                                               |
+| Liberia                                                             |
+| Libya                                                               |
+| Luxembourg                                                          |
+| Mainland Europe                                                     |
+| Malaysia                                                            |
+| Mexico                                                              |
+| Middle East                                                         |
+| Mozambique                                                          |
+| Nepal                                                               |
+| Netherlands                                                         |
+| Nigeria                                                             |
+| Northern Ireland                                                    |
+| Norway                                                              |
+| Peru                                                                |
+| Philippines                                                         |
+| Poland                                                              |
+| Republic of Ireland                                                 |
+| Rest of the world                                                   |
+| Russia                                                              |
+| Scotland - Aberdeen and North East                                  |
+| Scotland - Central Scotland (Perth, Falkirk, Stirling, Grange mouth) |
+| Scotland - East Scotland (Dundee, Tayside, Fife, Angus)             |
+| Scotland - Edinburgh and Lothian                                    |
+| Scotland - Glasgow                                                  |
+| Scotland - Highlands and Islands                                    |
+| Scotland - Scottish Borders                                         |
+| Scotland - West Scotland                                            |
+| Sierra Leone                                                        |
+| Singapore                                                           |
+| Slovakia                                                            |
+| South Africa                                                        |
+| Spain                                                               |
+| Sri Lanka                                                           |
+| Sweden                                                              |
+| Switzerland                                                         |
+| Tanzania                                                            |
+| Tunisia                                                             |
+| Turkey                                                              |
+| Uganda                                                              |
+| Ukraine                                                             |
+| United Arab Emirates (UAE)                                          |
+| United Kingdom (UK)                                                 |
+| United States                                                       |
+| United States of America (USA)                                      |
+| Vietnam                                                             |
+| Wales - North and Mid                                               |
+| Wales - South                                                       |
+
+** Latest date to show
+This acts as a global filter when sorting by closing date and is simply the distance into the future the block will display. It uses a standard Moodle time selector so it allows the time limit to be given in terms of weeks, days, hours, minutes, or even seconds but most sites will probably use it to define a number of weeks.
+
+The setting has no effect if the block has been set by the user to sort items starting with the most recently added ones.
+** Maximum number of jobs
+Simply a limit to the number of jobs displayed by the block at any one time.
+** Scheduled task
+The feed is read and cached based on a scheduled task in Moodle. The default is to read the feed every ten minutes but this can be adjusted if desired.
+   #+CAPTION: Creating the course: general settings
+   [[./docimages/scheduled.png]]
+* Usage
+** Placement
+The block can be used as a normal Moodle marginal block, and works well as such. However, the intended use is as the single item in a course page devoted to it which allows more space for the text when using a larger display, although it remains responsive to changes in size an use on mobile devices. The suggested setup is as follows:
+*** Create a course
+1. Give the course whatever name seems appropriate
+   #+CAPTION: Adding a course
+   [[./docimages/createcourse1.png]]
+   #+CAPTION: Creating the course: general settings
+   [[./docimages/createcourse2.png]]
+2. Set the format to "Topics format"
+   a. Number of sections to zero
+   b. Hidden sections to "completely invisible"
+   #+CAPTION: Creating the course: topics settings
+   [[./docimages/topics.png]]
+3. Click on "Save and Display"
+   This takes you to the enrolment page, but ignore that for now.
+4. Click on "Proceed to course content"
+5. "Turn editing on"
+   #+CAPTION: Turn editing on button
+   [[./docimages/turneditingon.png]]
+6. Use the "Add a block" dropdown to select "JobOnline Block
+   #+CAPTION: Adding the block
+   [[./docimages/addblock.png]]
+   a. If you have "Bounce into centre" on in the settings then you should immediately see the block appear in the main content section of the course.
+   b. If not, then the block will appear in the margin with the other blocks and can be moved around like any other block.
+      #+CAPTION: Block displayed in margin
+     [[./docimages/nobounce.png]]
+7. You will probably want to turn on guest access to this course so that students can access it without being enrolled on it. Note that this is distinct from allowing guest access to the Moodle site.
+
+The course as set up here will still have a default news forum (probably called "Announcements"). This can be hidden if desired.
+#+CAPTION: No news is good news
+[[./docimages/hidenews.png]]
+** User view
+The usage of the block for the student is fairly straight-forward. The filters are set according to the drop down menus for contract type, sector, and location and a list of posts is displayed. Notice that the contents of each menu react to the settings in the others. Sorting can be with the most recent postings first, or with the most imminent closing dates first.
+
+For example, if the user is only interested in Yorkshire, the contract type and sector menus will only display types and sectors which actually exist in the database for Yorkshire. Similarly, a user looking for graduate schemes in HR will only see a list of locations where any such schemes are available.
+
+#+CAPTION: Combining filters
+[[./docimages/schemes.png]]
+
+The main display lists the job title followed by all the contract types available for that post in brackets, and ends with the closing date. The date shown is always the closing date, even if sorting by recent posts.
+
+Clicking on one of these headlines will open the job description to give further information, including a means to apply. This can be either a link to a webpage where applications can be made, or as a mailto: address which should open the student's mail client to send an email to a contact address.
+*** The job description
+The job description does not hold literally all the data on each job from the feed and in particular it strips a lot of HTML out of the summary text in an effort to protect the Moodle site's layout from stray div tags and out-sized images.
+
+Additionally, many jobs in the feed include several items relating to salary. The display shows the main entry (say, "Competitive") and then a 🛈 icon to show that there is more which is displayed when clicking on the icon. For example, the "Competitive" salary may be noted as "Salary plus generous expenses package worth over £60,000. All expenses covered including travel, accommodation, food, bills and healthcare." to take a real example.
+
+Due to the flexibility of what might be entered into the main salary area for a job, it is not currently possible to filter by salary.
+
+* Design notes
+The plugin does not allow multiple selection in the filters due to the expectation of heavy usage from mobile devices which do not allow such manipulations.
+
+There is currently still a redundant looping over the feed data to generate the three filters. That should be looked at if time becomes available.
+
+Filter setting data is held in the session and then copied into the user's preferences if they are not guest. This allows multiple guests to use the plugin without overwriting each other's filter settings. Guests get their filters reset to all-clear each time they start a new session, but normal users retain theirs from login to login.
+
+Sessionid is not currently passed to brain from the Ajax code. There's no sensitive data being passed so it didn't seem worthwhile.

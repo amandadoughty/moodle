@@ -1,0 +1,40 @@
+.mod-bootstrapelements-toggle .panel-title {
+    display: inline-block;
+}
+
+#page-course-view-culcourse {
+	.course-content {
+		ul.culcourse {
+			li.section {
+				.content {
+					a.sectionclose {
+						padding: 0.75rem;
+						margin: 0;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Fix jerky image when toggling dashboard; 
+.editing.format-culcourse.jsenabled .courseheader .course-image { 
+    max-height: 100%; 
+} 
+
+// Fix cancel link for non-JS dash links move: 
+.editing.format-culcourse .courseheader .clipboard { 
+    background: $primary; 
+    position: relative; 
+    margin-bottom: 1rem; 
+}
+
+.block_advnotifications .alert,
+.add_notification_wrapper .alert {
+	background-color: $primary !important;
+    border-color: darken($primary, 5%) !important;
+    color: $white !important;
+    > .notification_aicon {
+	    top: 1.5rem !important;
+	}
+}

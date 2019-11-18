@@ -1,0 +1,71 @@
+<?php ob_start();
+global $USER;
+?>
+<div id='jobonlineblockwrapper' bounce="<?=get_config('block_jobonline','bounce')?>">
+    <form>
+        <select onchange='M.block_jobonline.settype(this,"<?= $USER->id?>");'>
+            <option value=''>Any type</option>
+            <?php
+            $preset=block_jobonline::get_pref('jobonline_preferred_type','');
+            foreach(block_jobonline::alltypes() as $type)
+            {
+                print "<option value='$type'";
+                if(strtolower($type)===$preset)
+                    print " selected";
+                print ">";
+                print ucfirst($type);
+                print "</option>\n";
+            }
+            ?>
+        </select>
+        <select onchange='M.block_jobonline.setsector(this,"<?= $USER->id?>");'>
+            <option value="">Any Sector</option>
+            <?php
+
+            $preset=block_jobonline::get_pref('jobonline_preferred_sector','');
+
+            foreach(block_jobonline::allareas() as $sector)
+            {
+                $s=trim($sector);
+                print "<option value='$s'";
+                if(strtolower($s)===$preset)
+                    print " selected";
+                print ">";
+                print ucfirst($s);
+                print "</option>\n";
+            }
+            ?>
+        </select>
+        <div id='jobonline_sortbuttons'>
+            <table width="100%"><tr><td class='jobonline_sortbycell'>Sort&nbsp;By:</td>
+                <?php
+                $preset=block_jobonline::get_pref('jobonline_preferred_sort','ending-sort');
+                foreach(array('ending-sort'=>static::$stringmanager->get_string('ending-sort','block_jobonline'),
+                'post-sort'=>static::$stringmanager->get_string('post-sort','block_jobonline')) as $val=>$display)
+                {
+                    print "<td class='jobonline_radiobtn'><input type=radio name='sortdir' value='$val'";
+                    if ($val===$preset)
+                        print " checked";
+                    print " onchange='M.block_jobonline.setsort(this,\"$USER->id\");'>$display</td>";
+                }
+                ?>
+                <td class='jobonline_location'><select onchange='M.block_jobonline.setlocation(this,"<?= $USER->id?>");'><option value="">Any location</option>
+                    <?php
+                    $preset=block_jobonline::get_pref('jobonline_preferred_location','');
+                    foreach(block_jobonline::alllocations() as $place)
+                    {
+                        $p=trim($place);
+                        print "<option value='$p'";
+                        if(strtolower($place)===$preset)
+                            print " selected";
+                        print ">";
+                        print ucfirst($p);
+                        print "</option>\n";
+                    } ?></select>
+
+            </tr></table>
+        </div></form>
+    <?=$inner?>
+</div>
+
+<?php return ob_get_clean();

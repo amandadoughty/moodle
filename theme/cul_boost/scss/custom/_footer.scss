@@ -1,0 +1,20 @@
+#page-footer {
+    color: #fff;
+    * {
+        color: #fff;
+    }
+    .footer-bottom {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    .usertour {
+        background-color: rgba(0, 0, 0, .2);
+        padding-bottom: $spacer;
+        text-align: center;
+        a {
+            max-width: $container-max-width;
+            padding: 0 15px;
+            display: block;
+            margin: 0 auto;
+        }
+    }
+}
