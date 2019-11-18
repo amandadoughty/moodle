@@ -48,7 +48,6 @@ class dashboard implements templatable, renderable {
     /**
      * @var $culconfigchanged - Boolean indicating if settings require updating.
      */
-
     public $culconfigchanged = false;
 
     /**
