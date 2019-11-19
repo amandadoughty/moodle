@@ -28,9 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 $string['choosereadme'] = 'Theme CUL Boost is a child theme of Boost.';
 $string['pluginname'] = 'CUL Boost';
 
-// $string['configtitle'] = 'CUL Boost settings';
-
 // General Settings
+$string['configtitle'] = 'CUL Boost';
 $string['generalsettings'] = 'General settings';
 $string['logo'] = 'Logo';
 $string['logotext'] = 'City, University of London';
