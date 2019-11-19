@@ -38,6 +38,7 @@ M.block_culactivity_stream.scroll = {
         }
 
         try {
+            var doc = Y.one(Y.config.doc);
             var reloaddiv = Y.one('.block_culactivity_stream .reload');
             var block = Y.one('.block_culactivity_stream');
             var id = block.get('id');
@@ -45,7 +46,7 @@ M.block_culactivity_stream.scroll = {
             var h2 = Y.one('#instance-' + id + '-header');
             h2.append(reloaddiv);
             reloaddiv.setStyle('display', 'inline-block');
-            Y.one('.reload .block_culactivity_stream_reload').on('click', this.reloadblock, this);
+            doc.delegate('click', this.reloadblock, '.block_culactivity_stream_reload', this);
         } catch (e) {
             Y.log('Problem adding reload button');
         }
