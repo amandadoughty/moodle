@@ -118,10 +118,11 @@ function block_culcourse_listing_get_old_favourite_courses($preferences) {
             // Check that the favourite course still exists.
             if (array_key_exists($favourite, $courses)) {
                 // Get array of core_course_list_element objects in usersortorder.
-                $course = new core_course_list_element($courses[$favourite]);
+                $course = $courses[$favourite];
 
-                if ($course->is_uservisible()) {
-                    $favourites[$favourite] = $course;
+                if (core_course_category::can_view_course_info($course)) {
+                    $courselistel = new core_course_list_element($course);
+                    $favourites[$favourite] = $courselistel;
                 }
 
             } else {
