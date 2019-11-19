@@ -52,5 +52,8 @@ if (!$reorder) {
 // The user has clicked the confirmation link, so reorder the favourites and redirect back.
 $preferences = block_culcourse_listing_get_preferences();
 $favourites = block_culcourse_listing_get_favourite_courses($preferences);
-block_culcourse_listing_reorder_favourites($favourites);
+// Update the user preference.
+block_culcourse_listing_reorder_favourites($preferences, $favourites, true);
+// Update the Favourites API.
+block_culcourse_listing_reorder_favourites_api($favourites, true);
 redirect(new moodle_url('/my/index.php'));

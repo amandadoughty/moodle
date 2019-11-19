@@ -207,7 +207,6 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * This method is re-used by AJAX to expand content of not loaded category
      *
      * @param block_culcourse_listing_helper $chelper various display options
-     * @param coursecat $coursecat
      * @param core_course_category $coursecat
      * @param int $depth depth of the category in the current tree
      * @return string
@@ -427,7 +426,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
                     $first = true;
                 }
 
-                $content .= $this->coursecat_course($course, false, $first);
+                $content .= $this->coursecat_course($chelper, $course, false, $first);
             }
         }
 
@@ -451,7 +450,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
      * @param bool $isfav 
      * @return string
      */
-    protected function coursecat_course($course, $isfav = false, $isfirst = false) {
+    protected function coursecat_course(block_culcourse_listing_helper $chelper, $course, $isfav = false, $isfirst = false) {
         global $CFG;
 
         // Check if course exists.
@@ -463,7 +462,8 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
             return '';
         }
 
-        $coursebox = new \block_culcourse_listing\output\coursebox($course, $isfav, $isfirst);
+        $favourites = $chelper->get_favourites();
+        $coursebox = new \block_culcourse_listing\output\coursebox($course, $isfav, $isfirst, $favourites);
         $content = $this->render_from_template('block_culcourse_listing/coursebox', $coursebox->export_for_template($this));
 
         return $content;
@@ -570,7 +570,7 @@ class block_culcourse_listing_renderer extends plugin_renderer_base {
         // Add courses with drag and drop hml prepended.
         if ($courses) {
             foreach ($courses as $course) {
-                $content .= $this->coursecat_course($course, true);
+                $content .= $this->coursecat_course($chelper, $course, true);
             }
         }
 

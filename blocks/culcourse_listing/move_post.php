@@ -63,9 +63,9 @@ if ($move == -1) {
     // Add $source to the new array.
     $neworder[] = $source;
     // Get the courses that appear after $source.
-    $remaningcourses = array_slice($sortorder, $destination);
+    $remainingcourses = array_slice($sortorder, $destination);
     // Append the remaining courses to the new array.
-    foreach ($remaningcourses as $courseid) {
+    foreach ($remainingcourses as $courseid) {
         $neworder[] = $courseid;
     }
 
@@ -77,13 +77,23 @@ if ($move == -1) {
     // If the course has not been moved to the bottom of the list.
     if (($destination) < count($favourites)) {
         // Get the courses that appear after $source.
-        $remaningcourses = array_slice($sortorder, $destination);
+        $remainingcourses = array_slice($sortorder, $destination);
         // Append the remaining courses to the new array.
-        foreach ($remaningcourses as $courseid) {
+        foreach ($remainingcourses as $courseid) {
             $neworder[] = $courseid;
         }
     }
 }
+
+$orderfavs = [];
+
+// Sort the favourites by the new order.
+foreach ($neworder as $courseid) {
+    $orderfavs[$courseid] = $favourites[$courseid];
+}
+
 // Update the user preference.
-block_culcourse_listing_update_favourites_pref($neworder);
+block_culcourse_listing_update_favourites_pref($orderfavs);
+// Update the Favourites API.
+block_culcourse_listing_reorder_favourites_api($orderfavs);
 redirect(new moodle_url('/my/index.php'));

@@ -32,7 +32,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             COURSEBOXLISTCOURSEBOX: '.course_category_tree .culcoursebox',
             FAVOURITELIST: '.favourite_list',
             FAVOURITECOURSEBOX: '.favourite_list .culcoursebox',
-            FAVOURITELINK: '.favouritelink',
+            FAVOURITELINK: '.favouritelink i',
             FAVOURITEICON: '.favouritelink i',
             FAVOURITECLEARBUTTON: '.block_culcourse_listing #clearfavourites',
             FAVOURITEREORDERBUTTON: '.block_culcourse_listing #reorderfavourites',
@@ -40,16 +40,16 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
         };
     var URL = M.cfg.wwwroot + '/blocks/culcourse_listing/favourite_ajax.php';
     var APIURL = M.cfg.wwwroot + '/blocks/culcourse_listing/favouriteapi_ajax.php';
-    var editrunning = false;
+    window.editrunning = false;
 
     var editfavourite = function (e) {
         e.preventDefault();
 
-        if (editrunning) {
+        if (window.editrunning) {
             return;
         }
 
-        editrunning = true;
+        window.editrunning = true;
         var link = e.target.get('parentNode');
         var href = link.get('href').split('?');
         var querystring = href[1];
@@ -64,13 +64,21 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 data: params,
                 context: self,
                 success: function(response) {
-                    editfavouritesuccess(response, params);
+                    if (response.error) {
+                        // throw response.error;
+                        Notification.alert(
+                            null,
+                            response.error
+                        );
+                    } else {
+                        editfavouritesuccess(response, params);
+                    }
                 },
                 error: function() {
 
                 },
                 complete: function() {
-                    editrunning = false;
+                    window.editrunning = false;
                     Y.fire('culcourse-listing:update-favourites');
 
                     var roots = $('.block_myoverview .block-myoverview');
@@ -94,37 +102,37 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 var newfavouritenode = $(html);
 
                 if (params.action == 'add') {
-                        var courseboxnode = $(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
+                    var courseboxnode = $(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
 
-                        if (courseboxnode) {
-                            courseboxnode.replaceWith(newcourseboxnode);
-                        }
+                    if (courseboxnode) {
+                        courseboxnode.replaceWith(newcourseboxnode);
+                    }
 
-                        newfavouritenode.css('opacity', 0);
-                        $(SELECTORS.FAVOURITELIST).append(newfavouritenode);
+                    newfavouritenode.css('opacity', 0);
+                    $(SELECTORS.FAVOURITELIST).append(newfavouritenode);
 
-                        // Add all the listeners to the new node. - delegate should remove need for this?
-                        // Keeping the YUI code to avoid complete rewrite.
-                        var newfavourite = Y.one(SELECTORS.FAVOURITELIST + ' [data-courseid="' + params.cid + '"]');
-                        var config = {node: newfavourite};
-                        Favourite.initializer(config);
+                    // Add all the listeners to the new node. - delegate should remove need for this?
+                    // Keeping the YUI code to avoid complete rewrite.
+                    var newfavourite = Y.one(SELECTORS.FAVOURITELIST + ' [data-courseid="' + params.cid + '"]');
+                    var config = {node: newfavourite};
+                    Favourite.initializer(config);
 
-                        // There must be at least one favourite now, so show the favourite buttons
-                        // if they are hidden and hide the 'no favourites' message.
-                        if ($(SELECTORS.FAVOURITECOURSEBOX).length > 0) {
-                            $(SELECTORS.FAVOURITECLEARBUTTON).show().css('display', 'inline-block');
-                            $(SELECTORS.FAVOURITEREORDERBUTTON).show().css('display', 'inline-block');
-                            $(SELECTORS.FAVOURITEALERT).text('');
-                        }
+                    // There must be at least one favourite now, so show the favourite buttons
+                    // if they are hidden and hide the 'no favourites' message.
+                    if ($(SELECTORS.FAVOURITECOURSEBOX).length > 0) {
+                        $(SELECTORS.FAVOURITECLEARBUTTON).show().css('display', 'inline-block');
+                        $(SELECTORS.FAVOURITEREORDERBUTTON).show().css('display', 'inline-block');
+                        $(SELECTORS.FAVOURITEALERT).text('');
+                    }
 
-                        newfavouritenode.animate({
-                            opacity: 1
-                        }, 1000, function() {
-                        });
+                    newfavouritenode.animate({
+                        opacity: 1
+                    }, 1000, function() {
+                    });
 
-                        return;
+                    return;
 
-                } else {
+                } else if (params.action == 'remove') {
                     Str.get_string('nofavourites', 'block_culcourse_listing').then(function(langstring) {
                         var courseboxnode = $(SELECTORS.COURSEBOXLIST + ' [data-courseid="' + params.cid + '"]');
                         var favouritenode = $(SELECTORS.FAVOURITELIST + ' [data-courseid="' + params.cid + '"]');
@@ -152,12 +160,16 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
             .fail(Notification.exception);
     };
 
-    var updateFavouriteViaApi = function() {
+    var updateFavouriteViaApi = function(courseid, action) {
         // Find out what changed via the api.
         $.ajax({
             url: APIURL,
             method: 'POST',
-            data: {sesskey: M.cfg.sesskey},
+            data: {
+                sesskey: M.cfg.sesskey,
+                cid: courseid,
+                action: action
+            },
             context: self,
             success: function(response) {
                 if (response.data) {
@@ -172,6 +184,9 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                     message: response.error,
                     type: 'error'
                 });
+            },
+            complete: function() {
+                Y.fire('culcourse-listing:update-favourites');
             }
         }).fail(Notification.exception);
     };
@@ -185,8 +200,10 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                 broadcast:2
             });
 
-            PubSub.subscribe(CourseEvents.favourited, function() {updateFavouriteViaApi();});
-            PubSub.subscribe(CourseEvents.unfavorited, function() {updateFavouriteViaApi();});
+            /* Not useful until course id is passed. Could maybe reload favourites
+            and try and edit the course if it has been rendered */
+            PubSub.subscribe(CourseEvents.favourited, function(courseid) {updateFavouriteViaApi(courseid, 'add');});
+            PubSub.subscribe(CourseEvents.unfavorited, function(courseid) {updateFavouriteViaApi(courseid, 'delete');});
         }
     };
 });
