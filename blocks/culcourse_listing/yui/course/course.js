@@ -37,6 +37,14 @@ YUI.add('moodle-block_culcourse_listing-course', function(Y) {
             Y.publish('culcourse-listing:update-favourites', {
                 broadcast:2
             })
+
+            Y.publish('core_course:favourited', {
+                broadcast:2
+            })
+
+            Y.publish('core_course:unfavourited', {
+                broadcast:2
+            })
         },
 
         editfavourite: function (e) {
@@ -141,6 +149,7 @@ YUI.add('moodle-block_culcourse_listing-course', function(Y) {
                         } else {
                             // Y.fire('core_course:unfavourited');
                         }
+                        pubsub.publish('core_course:favourited');
                     }
                 }
             });

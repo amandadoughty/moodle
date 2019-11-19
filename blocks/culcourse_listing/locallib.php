@@ -17,7 +17,7 @@
 /**
  * Helper functions for culcourse_listing block
  *
- * @package    block_culcourse_listing
+ * @package    block_culcourse501_listing
  * @copyright  2014 onwards Amanda Doughty (amanda.doughty.1@city.ac.uk)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -61,7 +61,20 @@ function block_culcourse_listing_get_preferences() {
  * @param array $favourites of course ids in sort order
  */
 function block_culcourse_listing_update_favourites_pref($favourites) {
-    set_user_preference('culcourse_listing_course_favourites', serialize($favourites));
+
+    // If user favourites have been transferred to the 
+    // Favourites API then do not recreate the user
+    // preference.
+    if (is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+        return;
+    } 
+
+    try {
+        set_user_preference('culcourse_listing_course_favourites', serialize($favourites));
+        return true;
+    } catch (exception $e) {
+        return false;
+    }    
 }
 
 /**
@@ -85,8 +98,8 @@ function block_culcourse_listing_update_filter_pref($filter) {
  * @return array $favourites of core_course_list_element objects with course id as key,
  * or empty array if none.
  */
-function block_culcourse_listing_get_favourite_courses($preferences) {
-    global $CFG, $DB;
+function block_culcourse_listing_get_old_favourite_courses($preferences) {
+    global $CFG, $DB;    
 
     $favourites = array();
     $usersortorder = $preferences['culcourse_listing_course_favourites'];
@@ -105,10 +118,11 @@ function block_culcourse_listing_get_favourite_courses($preferences) {
             // Check that the favourite course still exists.
             if (array_key_exists($favourite, $courses)) {
                 // Get array of core_course_list_element objects in usersortorder.
-                $course = new core_course_list_element($courses[$favourite]);
+                $course = $courses[$favourite];
 
-                if ($course->is_uservisible()) {
-                    $favourites[$favourite] = $course;
+                if (core_course_category::can_view_course_info($course)) {
+                    $courselistel = new core_course_list_element($course);
+                    $favourites[$favourite] = $courselistel;
                 }
 
             } else {
@@ -132,6 +146,68 @@ function block_culcourse_listing_get_favourite_courses($preferences) {
 }
 
 /**
+ * Gets the users favourites as an array of core_course_list_element objects.
+ *
+ * @param array $preferences
+ * @return array $favourites of core_course_list_element objects with course id as key,
+ * or empty array if none.
+ */
+function block_culcourse_listing_get_favourite_courses($preferences) {
+    global $CFG, $DB, $USER;
+
+    // If the users favourites have not been transferred to the Favourite API then use the user preference.
+    if (!is_null($preferences['culcourse_listing_course_favourites'])) {
+        return block_culcourse_listing_get_old_favourite_courses($preferences);;
+    }
+
+
+    $usercontext = context_user::instance($USER->id);
+
+    // Get the user favourites service, scoped to a single user (their favourites only).
+    $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+
+    // Get the favourites, by type, for the user.
+    $favourites = $userservice->find_favourites_by_type('core_course', 'courses');
+
+    // Sort the favourites by order set and then last added.
+    usort($favourites, function($a, $b) {        
+        if ($a->ordering === $b->ordering) {
+            return $a->timemodified - $b->timemodified;
+        /* We don't want null to count as zero because that will display last added courses first. */
+        } else if (is_null($a->ordering)) {
+            return 1;
+        } else if (is_null($b->ordering)) {
+            return -1;
+        } else {
+            return $a->ordering - $b->ordering;
+        }
+    });
+
+    $formattedcourses = [];
+
+    foreach ($favourites as $favourite) {
+        $course = get_course($favourite->itemid);
+        $course = new core_course_list_element($course);
+
+        if ($course->is_uservisible()) {
+            $formattedcourses[$course->id] = $course;
+        } 
+    }
+
+    // $formattedcourses = array_map(function($favourite) {
+    //     $course = get_course($favourite->itemid);
+    //     $course = new core_course_list_element($course);
+
+    //     if ($course->is_uservisible()) {
+    //         return $course;
+    //     }        
+
+    // }, $favourites);
+
+    return $formattedcourses;
+}
+
+/**
  * Edits the user preference 'culcourse_listing_course_favourites'
  * Adds or deletes course id's
  *
@@ -145,7 +221,9 @@ function block_culcourse_listing_edit_favourites($action, $cid, $userid = 0) {
 
     $favourites = [];
 
-    if (!is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+    if (is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+        return true;
+    } else {
         $favourites = unserialize($myfavourites);
     }
 
@@ -170,7 +248,11 @@ function block_culcourse_listing_edit_favourites($action, $cid, $userid = 0) {
             break;
     }
     // Update the user preference.
-    block_culcourse_listing_update_favourites_pref($favourites);
+    $success = block_culcourse_listing_update_favourites_pref($favourites);
+
+    if (!$success) {
+        return false;
+    }
 
     return $favourites;
 }
@@ -190,15 +272,21 @@ function block_culcourse_listing_edit_favourites_api($action, $cid, $userid = 0)
     $usercontext = \context_user::instance($USER->id);
     $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
 
+    $exists = $ufservice->favourite_exists('core_course', 'courses', $cid, $coursecontext);
+
     switch ($action) {
         case 'add':
             // New favourite api.
-            $ufservice->create_favourite('core_course', 'courses', $cid, $coursecontext);
+            if (!$exists) {
+                $ufservice->create_favourite('core_course', 'courses', $cid, $coursecontext);
+            }
 
             break;
         case 'remove':
             // New favourite api.
-            $ufservice->delete_favourite('core_course', 'courses', $cid, $coursecontext);
+            if ($exists) {
+                $ufservice->delete_favourite('core_course', 'courses', $cid, $coursecontext);
+            }
 
             break;
         default:
@@ -211,55 +299,34 @@ function block_culcourse_listing_edit_favourites_api($action, $cid, $userid = 0)
  *
  * @param string $action add or delete
  * @param int $cid course id
- * @param int $userid user id
  * @return array $favourites a sorted array of course id's
  */
-function block_culcourse_listing_update_from_favourites_api() {
-    global $USER;
+function block_culcourse_listing_update_from_favourites_api($action, $cid) {
 
-    $existing = [];
-    $add = [];
-    $remove = [];
-    $usercontext = \context_user::instance($USER->id);
-
-    // Get the user favourites service, scoped to a single user (their favourites only).
-    $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
-
-    // Get the favourites, by type, for the user.
-    $apifavourites = $userservice->find_favourites_by_type('core_course', 'courses');
-
-    // Sort the favourites getting first added first.
-    usort($apifavourites, function($a, $b) {
-        if ($a->timemodified == $b->timemodified) return 0;
-        return ($a->timemodified < $b->timemodified) ? -1 : 1;
-    });
-
-    $favourites = [];
-
-    if (!is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
+    if ($cid && !is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
         $favourites = (array)unserialize($myfavourites);
-    }
+        $changed = false;
+        $key = array_search($cid, $favourites);
 
-    foreach ($apifavourites as $apifavourite) {
-        if (!in_array($apifavourite->itemid, $favourites)) {
-            $add[] = $apifavourite->itemid;
-        } else {
-            $existing[] = $apifavourite->itemid;
+        if ($action == 'add' && $key === false) {
+            $favourites[] = $cid;
+            $changed = true;
+            // Update the user preference.
+            block_culcourse_listing_update_favourites_pref($favourites);
+        } else if ($action == 'delete' && $key !== false) {                
+            unset($favourites[$key]);
+            $changed = true;
+            // Update the user preference.
+            block_culcourse_listing_update_favourites_pref($favourites);
+        }            
+    }
+  
+    if ($changed) {
+        if ($action == 'delete') {
+            return ['action' => 'remove', 'cid' => $cid];
+        } else if ($action == 'add') {
+            return ['action' => 'add', 'cid' => $cid]; //@TODO return node
         }
-    }
-
-    $remove = array_diff($favourites, $existing);
-    // Remove favourites that are not in api.
-    $favourites = array_intersect($favourites, $existing);
-    // Add new favourites from api.
-    $favourites = array_merge($favourites, $add);
-    // Update the user preference.
-    block_culcourse_listing_update_favourites_pref($favourites);
-
-    if (!empty($remove)) {
-        return ['action' => 'remove', 'cid' => array_shift($remove)]; // Return all in case there has been an error?
-    } else if (!empty($add)) {
-        return ['action' => 'add', 'cid' => array_shift($add)]; //@TODO return node
     } else {
         return ['action' => 'error', 'cid' => null];
     }
@@ -297,8 +364,8 @@ function block_culcourse_listing_clear_favourites_api() {
 /**
  * Binary safe case-insensitive string comparison.
  *
- * @param array a first favourite core_course_list_element object
- * @param string b second favourite core_course_list_element object
+ * @param $a first favourite core_course_list_element object
+ * @param $b second favourite core_course_list_element object
  * @return Returns < 0 if a->displayname is less than b->displayname;
  * > 0 if a->displayname is greater than b->displayname, and 0 if they are equal.
  */
@@ -318,11 +385,59 @@ function block_culcourse_listing_strcasecmp($a, $b) {
  * Sorts the favourites by display name.
  * The new sort order is updated in the user preference setting.
  *
- * @param array $favourites of course ids
+ * @param array $preferences
+ * @param array $favourites of core_course_list_element objects
+ * @param bool $reset
  * @return array $favourites of core_course_list_element objects
  */
-function block_culcourse_listing_reorder_favourites($favourites) {
+function block_culcourse_listing_reorder_favourites($preferences, $favourites, $reset = false) {
     global $CFG, $DB, $USER;
+
+    if (is_null($preferences['culcourse_listing_course_favourites'])) {
+        return;
+    }
+
+    if (!$favourites) {
+        return false;
+    }
+
+    $site = get_site();
+
+    if (array_key_exists($site->id, $favourites)) {
+        unset($favourites[$site->id]);
+    }
+
+    // $favourites = $DB->get_records_list('course', 'id', array_keys($favourites));
+
+    // foreach ($favourites as $favourite) {
+    //     // Get array of core_course_list_element objects in usersortorder.
+    //     $favourites[$favourite->id] = new core_course_list_element($favourite);
+    // }
+
+    if ($reset) {
+        // Sort in aphabetical order.
+        uasort($favourites, 'block_culcourse_listing_strcasecmp');
+    }
+
+    // Update the user preference.
+    block_culcourse_listing_update_favourites_pref(array_keys($favourites));
+
+    return $favourites;
+}
+
+/**
+ * Sorts the favourites by display name.
+ * The new sort order is updated in the user preference setting.
+ *
+ * @param array $favourites of core_course_list_element objects
+ * @param bool $reset
+ * @return array $favourites of favourite objects
+ */
+function block_culcourse_listing_reorder_favourites_api($favourites, $reset = false) {
+    global $CFG, $DB, $USER;
+
+    $usercontext = \context_user::instance($USER->id);
+    $favouritesrepo = new \core_favourites\local\repository\favourite_repository($usercontext);
 
     if (!$favourites) {
         return false;
@@ -334,17 +449,30 @@ function block_culcourse_listing_reorder_favourites($favourites) {
         unset($favourites[$site->id]);
     }
 
-    $favourites = $DB->get_records_list('course', 'id', array_keys($favourites));
-
-    foreach ($favourites as $favourite) {
-        // Get array of core_course_list_element objects in usersortorder.
-        $favourites[$favourite->id] = new core_course_list_element($favourite);
+    if ($reset) {
+        // Sort in aphabetical order.
+        uasort($favourites, 'block_culcourse_listing_strcasecmp');
     }
 
-    // Sort in aphabetical order.
-    uasort($favourites, 'block_culcourse_listing_strcasecmp');
-    // Update the user preference.
-    block_culcourse_listing_update_favourites_pref(array_keys($favourites));
+    // Update the favourites.
+    $i = 1;
+
+    foreach ($favourites as $courseid => $course) {
+        $coursecontext = \context_course::instance($courseid);
+
+        try {
+            $favourite = $favouritesrepo->find_favourite($USER->id, 'core_course', 'courses', $courseid,
+                $coursecontext->id);
+
+            $favourite->ordering = $i;
+            $favouritesrepo->update($favourite);
+            $i++;
+        } catch (Exception $e) {
+            debugging("The course with id $courseid is not in the 
+                Favourite API",
+              DEBUG_DEVELOPER);
+        }   
+    }
 
     return $favourites;
 }

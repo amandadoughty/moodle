@@ -60,7 +60,6 @@ class block_culcourse_listing extends block_base {
         // Get all of the user preferences for this block. NB returns default values if no
         // preferences are set.
         $preferences = block_culcourse_listing_get_preferences();
-
         $chelper = new block_culcourse_listing_helper();
 
         if($config->filtertype == 'date') {

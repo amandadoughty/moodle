@@ -15,32 +15,42 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Move/order favourites functionality for culcourse_listing block.
+ * Helps moodle-block_culcourse_listing-category to serve AJAX requests
+ *
+ * @see block_culcourse_listing_renderer::coursecat_include_js()
+ * @see block_culcourse_listing_renderer::coursecat_ajax()
  *
  * @package    block_culcourse_listing
  * @copyright  2014 onwards Amanda Doughty (amanda.doughty.1@city.ac.uk)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 define('AJAX_SCRIPT', true);
 
+global $PAGE;
+
 require_once(dirname(__FILE__) . '/../../config.php');
-require_once(dirname(__FILE__) . '/locallib.php');
+require_once($CFG->dirroot.'/blocks/culcourse_listing/renderer.php');
+require_once($CFG->dirroot.'/blocks/culcourse_listing/locallib.php');
 
-require_sesskey();
-require_login();
+require_sesskey(); // Gotta have the sesskey.
+require_login(); // Gotta be logged in (of course).
+$PAGE->set_context(context_system::instance());
 
-$sortorder = required_param_array('sortorder', PARAM_INT);
+$config = get_config('block_culcourse_listing');
 $preferences = block_culcourse_listing_get_preferences();
-// Calling this function ensures we only get exisitng courses visible to user
-// as courses may have been deleted or hidden since being added to favourites.
-$favourites = block_culcourse_listing_get_favourite_courses($preferences);
-$orderfavs = [];
+$chelper = new block_culcourse_listing_helper();
 
-foreach ($sortorder as $courseid) {
-    $orderfavs[$courseid] = $favourites[$courseid];
+if($config->filtertype == 'date') {
+    global $DB;
+
+    $daterangeperiods = $DB->get_records('block_culcourse_listing_prds');
+    $chelper->set_daterange_periods($daterangeperiods);
 }
 
-// Update the user preference.
-block_culcourse_listing_update_favourites_pref($orderfavs);
-// Update the Favourites API.
-block_culcourse_listing_reorder_favourites_api($orderfavs);
+$renderer = $PAGE->get_renderer('block_culcourse_listing');
+$renderer->set_config($config);
+$renderer->set_preferences($preferences);
+
+
+echo json_encode($renderer->coursecat_ajax($chelper));
