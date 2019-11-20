@@ -237,5 +237,7 @@ class course_picture implements renderable {
         } else {
             return $OUTPUT->get_generated_image_for_id($this->course->id);
         }
+
+        return $defaulturl;
     }
 }
