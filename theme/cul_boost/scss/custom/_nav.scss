@@ -101,6 +101,19 @@
         }
     }
     /* Logo */
+    .navbar-header {
+        .navbar-brand {
+            img {
+                height: 40px;
+                @include media-breakpoint-up(sm) {
+                    height: 50px;
+                }
+                @include media-breakpoint-up(lg) {
+                    height: 80px;
+                }
+            }
+        }
+    }
     .navbar-outer-wrap .navbar-header {
         width: auto;
         max-width: 100%;
@@ -114,15 +127,6 @@
             font-size: inherit;
             a.homelink {
                 display: inline-block;
-            }
-            img {
-                height: 40px;
-                @include media-breakpoint-up(sm) {
-                    height: 50px;
-                }
-                @include media-breakpoint-up(lg) {
-                    height: 80px;
-                }
             }
         }
     }
