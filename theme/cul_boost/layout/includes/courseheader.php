@@ -1,7 +1,7 @@
 <?php
 
-$sectioninfo = '';
-$hassectioninfo = false;
+$dashboard = '';
+$hasdashboard = false;
 $extraclass = 'courseheader w-100 py-4 px-3 mb-3';
 $course = new core_course_list_element($COURSE);
 
@@ -30,10 +30,10 @@ if (file_exists($CFG->dirroot.'/course/format/'.$course->format.'/renderer.php')
 }
 
 if (isset($renderer) && $course->format == 'culcourse') {
-	$sectioninfo = $renderer->dashboard_section();
+	$dashboard = $renderer->dashboard_section();
 }
 
-if ($sectioninfo) {
-	$hassectioninfo = true;
+if ($dashboard) {
+	$hasdashboard = true;
 }
 
