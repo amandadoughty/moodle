@@ -23239,6 +23239,14 @@ a.dimmed_text:visited,
       padding: 0; }
       .navbar .right-float-menu .dropdown > .dropdown-toggle + .dropdown-menu > .dropdown-item {
         padding: 0.5rem; }
+  .navbar .navbar-header .navbar-brand img {
+    height: 40px; }
+    @media (min-width: 576px) {
+      .navbar .navbar-header .navbar-brand img {
+        height: 50px; } }
+    @media (min-width: 992px) {
+      .navbar .navbar-header .navbar-brand img {
+        height: 80px; } }
   .navbar .navbar-outer-wrap .navbar-header {
     width: auto;
     max-width: 100%; }
@@ -23252,14 +23260,6 @@ a.dimmed_text:visited,
       font-size: inherit; }
       .navbar .navbar-outer-wrap .navbar-header .navbar-brand a.homelink {
         display: inline-block; }
-      .navbar .navbar-outer-wrap .navbar-header .navbar-brand img {
-        height: 40px; }
-        @media (min-width: 576px) {
-          .navbar .navbar-outer-wrap .navbar-header .navbar-brand img {
-            height: 50px; } }
-        @media (min-width: 992px) {
-          .navbar .navbar-outer-wrap .navbar-header .navbar-brand img {
-            height: 80px; } }
   .navbar .nav-wrap {
     /*** City custom menu inside sticky red bar ***/
     /*** Logo ***/
