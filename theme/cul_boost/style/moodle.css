@@ -24293,24 +24293,13 @@ table.roleassigntable td#buttonscell {
       -ms-flex-line-pack: start;
           align-content: flex-start; }
 
-@media (min-width: 544px) {
-  #page-my-index .card-deck .card, #page-my-index .card-deck #page-enrol-users #filterform, #page-enrol-users #page-my-index .card-deck #filterform, #page-my-index .card-deck .que .history, .que #page-my-index .card-deck .history, #page-my-index .card-deck .userprofile .profile_tree section, .userprofile .profile_tree #page-my-index .card-deck section, #page-my-index .card-deck .groupinfobox, #page-my-index .card-deck .well {
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 auto;
-        -ms-flex: 0 0 auto;
-            flex: 0 0 auto; } }
+@media (min-width: 1200px) {
+  #page-my-index .dashboard-card-deck .dashboard-card {
+    width: calc(33.33% - 30px); } }
 
-@media (min-width: 576px) {
-  #page-my-index #page-content .dashboard-card-deck .dashboard-card {
-    width: 100%; } }
-
-@media (min-width: 840px) {
-  #page-my-index #page-content .dashboard-card-deck .dashboard-card {
-    width: calc(50% - 2em); } }
-
-@media (min-width: 1100px) {
-  #page-my-index #page-content .dashboard-card-deck .dashboard-card {
-    width: calc(33.33% - 2rem); } }
+@media (min-width: 1470px) {
+  #page-my-index .dashboard-card-deck .dashboard-card {
+    width: calc(33.33% - 30px); } }
 
 .courseheader {
   min-height: 240px; }
