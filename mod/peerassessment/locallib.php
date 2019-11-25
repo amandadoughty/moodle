@@ -265,8 +265,7 @@ function peerassessment_is_open($peerassessment, $groupid = 0) {
 function peerassessment_get_peer_grades($peerassessment, $group, $membersgradeable = null, $full = true) {
     global $DB;
 
-    $members = groups_get_members($group->id);
-    $members = array_keys($members);
+    $members = array_keys($membersgradeable);
     list($insql1, $inparams1) = $DB->get_in_or_equal($members, SQL_PARAMS_NAMED);
     list($insql2, $inparams2) = $DB->get_in_or_equal($members, SQL_PARAMS_NAMED);
 
