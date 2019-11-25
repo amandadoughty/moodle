@@ -116,6 +116,11 @@ if (has_capability('mod/peerassessment:grade', $context)) {
 
     foreach ($allgroups as $group) {
         $members = groups_get_members($group->id);
+
+        if (!$members) {
+            break;
+        }
+
         $status = peerassessment_get_status($peerassessment, $group);
         $grades = peerassessment_get_peer_grades($peerassessment, $group, $members, false);
         $options = array();
