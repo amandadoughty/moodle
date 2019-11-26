@@ -80,7 +80,11 @@ $temp = new admin_settingpage('theme_cul_boost_general',  get_string('generalset
 
     // Google Analytics consent
     $policyopts = [];
-    $policies = tool_policy\api::list_current_versions(tool_policy\policy_version::AUDIENCE_GUESTS);
+    try {
+        $policies = tool_policy\api::list_current_versions(tool_policy\policy_version::AUDIENCE_GUESTS);
+    } catch (Exception $e) {
+        $policies = false;
+    }
 
     if ($policies) {
         foreach ($policies as $policy) {

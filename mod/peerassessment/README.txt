@@ -29,6 +29,8 @@ Features
  - teachers can grade the group assignment submission
  - the final grade is calculated based on both grades
  - each student gets an individual final grade
+
+
  - teachers can choose between two calculations used to determine the final grade
  - simple creates individual grades based on the students peer marks and the assignment grade
  - outlier option has a more complicated formula which uses standard deviation to remove any
@@ -49,7 +51,6 @@ Installation instructions
    page
 3. You should be prompted to upgrade your Moodle to install the module
 4. Once installed there are no global settings for this activity.
-
 
 Usage instructions
 ==================
