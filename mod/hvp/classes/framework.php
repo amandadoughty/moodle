@@ -58,7 +58,8 @@ class framework implements \H5PFrameworkInterface {
             $fs = new \mod_hvp\file_storage();
 
             $context = \context_system::instance();
-            $url = "{$CFG->httpswwwroot}/pluginfile.php/{$context->id}/mod_hvp";
+            $root = view_assets::getsiteroot();
+            $url = "{$root}/pluginfile.php/{$context->id}/mod_hvp";
 
             $language = self::get_language();
 
@@ -463,11 +464,32 @@ class framework implements \H5PFrameworkInterface {
                 'Author comments' => 'authorcomments',
                 'Comments for the editor of the content (This text will not be published as a part of copyright info)' => 'authorcommentsdescription',
                 'Reuse' => 'reuse',
-                'Reuse Content' => 'reuseContent',
-                'Reuse this content.' => 'reuseDescription',
-                'Content is copied to the clipboard' => 'contentCopied',
+                'Reuse Content' => 'reusecontent',
+                'Reuse this content.' => 'reusedescription',
+                'Content is copied to the clipboard' => 'contentcopied',
+                'Connection lost. Results will be stored and sent when you regain connection.' => 'connectionlost',
+                'Connection reestablished.' => 'connectionreestablished',
+                'Attempting to submit stored results.' => 'resubmitscores',
+                'Your connection to the server was lost' => 'offlinedialogheader',
+                'We were unable to send information about your completion of this task. Please check your internet connection.' => 'offlinedialogbody',
+                'Retrying in :num....' => 'offlinedialogretrymessage',
+                'Retry now' => 'offlinedialogretrybuttonlabel',
+                'Successfully submitted results.' => 'offlinesuccessfulsubmit',
+                'One of the files inside the package exceeds the maximum file size allowed. (%file %used > %max)' => 'fileexceedsmaxsize',
+                'The total size of the unpacked files exceeds the maximum size allowed. (%used > %max)' => 'unpackedfilesexceedsmaxsize',
+                'Unable to read file from the package: %fileName' => 'couldnotreadfilefromzip',
+                'Unable to parse JSON from the package: %fileName' => 'couldnotparsejsonfromzip',
+                'Could not parse post data.' => 'couldnotparsepostdata',
+                'The mbstring PHP extension is not loaded. H5P needs this to function properly' => 'nombstringexteension',
             ];
             // @codingStandardsIgnoreEnd
+        }
+
+        // Some strings such as error messages are not translatable, in this case use message
+        // directly instead of crashing
+        // @see https://github.com/h5p/h5p-php-library/commit/2bd972168e7b22aaeea2dd13682ced9cf8233452#diff-5ca86cd0514d58be6708beff914aba66R1296
+        if (!isset($translationsmap[$message])) {
+            return $message;
         }
 
         return get_string($translationsmap[$message], 'hvp', $replacements);
@@ -488,9 +510,8 @@ class framework implements \H5PFrameworkInterface {
      */
     // @codingStandardsIgnoreLine
     public function getLibraryFileUrl($libraryfoldername, $fileName) {
-        global $CFG;
         $context  = \context_system::instance();
-        $basepath = $CFG->httpswwwroot . '/';
+        $basepath = view_assets::getsiteroot() . '/';
         return "{$basepath}pluginfile.php/{$context->id}/mod_hvp/libraries/{$libraryfoldername}/{$fileName}";
     }
 
@@ -1332,12 +1353,26 @@ class framework implements \H5PFrameworkInterface {
 
     /**
      * Implements clearFilteredParameters().
+     *
+     * @param array $libraryids array of library ids
+     *
+     * @throws \dml_exception
+     * @throws \coding_exception
      */
     // @codingStandardsIgnoreLine
-    public function clearFilteredParameters($libraryid) {
+    public function clearFilteredParameters($libraryids) {
         global $DB;
+        if (empty($libraryids)) {
+            return;
+        }
 
-        $DB->execute("UPDATE {hvp} SET filtered = null WHERE main_library_id = ?", array($libraryid));
+        list($insql, $inparams) = $DB->get_in_or_equal($libraryids);
+        $DB->execute("
+            UPDATE {hvp}
+            SET filtered = null
+            WHERE main_library_id $insql",
+            $inparams
+        );
     }
 
     /**
@@ -1571,7 +1606,7 @@ class framework implements \H5PFrameworkInterface {
                     AND l2.machine_name IS NULL");
 
         // NOTE: These are treated as library objects but are missing the following properties:
-        // title, embed_types, drop_library_css, fullscreen, runnable, semantics, has_icon
+        // title, embed_types, drop_library_css, fullscreen, runnable, semantics, has_icon.
 
         // Extract num from records.
         foreach ($records as $addon) {
