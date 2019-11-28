@@ -37,7 +37,7 @@ function hvp_get_core_settings($context) {
     global $USER, $CFG;
 
     $systemcontext = \context_system::instance();
-    $basepath = $CFG->httpswwwroot . '/';
+    $basepath = \mod_hvp\view_assets::getsiteroot() . '/';
 
     // Check permissions and generate ajax paths.
     $ajaxpaths = array();
@@ -74,6 +74,8 @@ function hvp_get_core_settings($context) {
         'hubIsEnabled' => get_config('mod_hvp', 'hub_is_enabled') ? true : false,
         'reportingIsEnabled' => true,
         'crossorigin' => isset($CFG->mod_hvp_crossorigin) ? $CFG->mod_hvp_crossorigin : null,
+        'crossoriginRegex' => isset($CFG->mod_hvp_crossoriginRegex) ? $CFG->mod_hvp_crossoriginRegex : null,
+        'crossoriginCacheBuster' => isset($CFG->mod_hvp_crossoriginCacheBuster) ? $CFG->mod_hvp_crossoriginCacheBuster : null,
         'libraryConfig' => $core->h5pF->getLibraryConfig(),
         'pluginCacheBuster' => hvp_get_cache_buster(),
         'libraryUrl' => $basepath . 'mod/hvp/library/js'
@@ -89,7 +91,7 @@ function hvp_get_core_settings($context) {
  * @return array
  */
 function hvp_get_core_assets($context) {
-    global $CFG, $PAGE;
+    global $PAGE;
 
     // Get core settings.
     $settings = \hvp_get_core_settings($context);
@@ -104,7 +106,7 @@ function hvp_get_core_assets($context) {
     $cachebuster = \hvp_get_cache_buster();
 
     // Use relative URL to support both http and https.
-    $liburl = $CFG->httpswwwroot . '/mod/hvp/library/';
+    $liburl = \mod_hvp\view_assets::getsiteroot() . '/mod/hvp/library/';
     $relpath = '/' . preg_replace('/^[^:]+:\/\/[^\/]+\//', '', $liburl);
 
     // Add core stylesheets.
@@ -152,7 +154,7 @@ function hvp_add_editor_assets($id = null, $mformid = null) {
     );
 
     // Use relative URL to support both http and https.
-    $url = $CFG->httpswwwroot . '/mod/hvp/';
+    $url = \mod_hvp\view_assets::getsiteroot() . '/mod/hvp/';
     $url = '/' . preg_replace('/^[^:]+:\/\/[^\/]+\//', '', $url);
 
     // Make sure files are reloaded for each plugin update.
@@ -185,7 +187,8 @@ function hvp_add_editor_assets($id = null, $mformid = null) {
     $PAGE->requires->js(new moodle_url('/mod/hvp/' . $languagescript . $cachebuster), true);
 
     // Add JavaScript settings.
-    $filespathbase = "{$CFG->httpswwwroot}/pluginfile.php/{$context->id}/mod_hvp/";
+    $root = \mod_hvp\view_assets::getsiteroot();
+    $filespathbase = "{$root}/pluginfile.php/{$context->id}/mod_hvp/";
     $contentvalidator = \mod_hvp\framework::instance('contentvalidator');
     $editorajaxtoken = \H5PCore::createToken('editorajax');
     $settings['editor'] = array(
@@ -214,7 +217,7 @@ function hvp_add_editor_assets($id = null, $mformid = null) {
         $context = \context_module::instance($cm->id);
 
         // Override content URL.
-        $contenturl = "{$CFG->httpswwwroot}/pluginfile.php/{$context->id}/mod_hvp/content/{$id}";
+        $contenturl = "{$root}/pluginfile.php/{$context->id}/mod_hvp/content/{$id}";
         $settings['contents']['cid-' . $id]['contentUrl'] = $contenturl;
     }
 
@@ -393,8 +396,6 @@ function hvp_content_upgrade_progress($libraryid) {
  *                to upgrade script
  */
 function hvp_get_library_upgrade_info($name, $major, $minor) {
-    global $CFG;
-
     $library = (object) array(
         'name' => $name,
         'version' => (object) array(
@@ -410,7 +411,7 @@ function hvp_get_library_upgrade_info($name, $major, $minor) {
     $context = \context_system::instance();
     $libraryfoldername = "{$library->name}-{$library->version->major}.{$library->version->minor}";
     if (\mod_hvp\file_storage::fileExists($context->id, 'libraries', '/' . $libraryfoldername . '/', 'upgrades.js')) {
-        $basepath = $CFG->httpswwwroot . '/';
+        $basepath = \mod_hvp\view_assets::getsiteroot() . '/';
         $library->upgradesScript = "{$basepath}pluginfile.php/{$context->id}/mod_hvp/libraries/{$libraryfoldername}/upgrades.js";
     }
 
