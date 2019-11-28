@@ -15,19 +15,25 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CUL Course Visibility version information
+ * The mod_journal instance list viewed event.
  *
- * @package    local_culcourse_visibility
- * @copyright  2016 Tim Gagen and Amanda Doughty
+ * @package    mod_journal
+ * @copyright  2014 drachels@drachels.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
  */
+
+namespace mod_journal\event;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017080205; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2014110400; // Requires this Moodle version.
-$plugin->component = 'local_culcourse_visibility'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.1.2 (Build: 2017080205)';
-
+/**
+ * The mod_journal instance list viewed event class.
+ *
+ * @package    mod_journal
+ * @since      Moodle 2.7
+ * @copyright  2014 drachels@drachels.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
+    // No need for any code here as everything is handled by the parent class.
+}

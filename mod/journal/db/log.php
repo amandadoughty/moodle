@@ -14,20 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * CUL Course Visibility version information
- *
- * @package    local_culcourse_visibility
- * @copyright  2016 Tim Gagen and Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
- */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017080205; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2014110400; // Requires this Moodle version.
-$plugin->component = 'local_culcourse_visibility'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.1.2 (Build: 2017080205)';
-
+$logs = array(
+    array('module' => 'journal', 'action' => 'view', 'mtable' => 'journal', 'field' => 'name'),
+    array('module' => 'journal', 'action' => 'view all', 'mtable' => 'journal', 'field' => 'name'),
+    array('module' => 'journal', 'action' => 'view responses', 'mtable' => 'journal', 'field' => 'name'),
+    array('module' => 'journal', 'action' => 'add entry', 'mtable' => 'journal', 'field' => 'name'),
+    array('module' => 'journal', 'action' => 'update entry', 'mtable' => 'journal', 'field' => 'name'),
+    array('module' => 'journal', 'action' => 'update feedback', 'mtable' => 'journal', 'field' => 'name')
+);

@@ -14,20 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * CUL Course Visibility version information
- *
- * @package    local_culcourse_visibility
- * @copyright  2016 Tim Gagen and Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
- */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017080205; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2014110400; // Requires this Moodle version.
-$plugin->component = 'local_culcourse_visibility'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.1.2 (Build: 2017080205)';
+if ($ADMIN->fulltree) {
 
+    $settings->add(new admin_setting_configselect('journal/showrecentactivity', get_string('showrecentactivity', 'journal'),
+                                                  get_string('showrecentactivity', 'journal'), 0,
+                                                  array('0' => get_string('no'), '1' => get_string('yes'))));
+
+    $settings->add(new admin_setting_configselect('journal/overview', get_string('showoverview', 'journal'),
+                                                  get_string('showoverview', 'journal'), 1,
+                                                  array('0' => get_string('no'), '1' => get_string('yes'))));
+}

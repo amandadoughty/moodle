@@ -14,20 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * CUL Course Visibility version information
- *
- * @package    local_culcourse_visibility
- * @copyright  2016 Tim Gagen and Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
- */
+// Only when master becomes a stable the version value will be changed for
+// the current date. Otherwise we just increase the last NN by one.
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017080205; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2014110400; // Requires this Moodle version.
-$plugin->component = 'local_culcourse_visibility'; // Full name of the plugin (used for diagnostics).
+$plugin->component = 'mod_journal';
+$plugin->version  = 2019061600;
+$plugin->requires = 2013111800;  /* Moodle 2.6 */
+$plugin->release = '2.0.0 (Build: 2019061600)';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.1.2 (Build: 2017080205)';
-
+$plugin->cron     = 60;

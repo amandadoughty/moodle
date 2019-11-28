@@ -14,20 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * CUL Course Visibility version information
- *
- * @package    local_culcourse_visibility
- * @copyright  2016 Tim Gagen and Amanda Doughty
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
- */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017080205; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2014110400; // Requires this Moodle version.
-$plugin->component = 'local_culcourse_visibility'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.1.2 (Build: 2017080205)';
+require_once($CFG->dirroot.'/lib/formslib.php');
 
+class mod_journal_entry_form extends moodleform {
+
+    public function definition() {
+        $this->_form->addElement('editor', 'text_editor', get_string('entry', 'mod_journal'),
+                null, $this->_customdata['editoroptions']);
+        $this->_form->setType('text_editor', PARAM_RAW);
+        $this->_form->addRule('text_editor', null, 'required', null, 'client');
+        $this->_form->addElement('hidden', 'id');
+        $this->_form->setType('id', PARAM_INT);
+
+        $this->add_action_buttons();
+    }
+}

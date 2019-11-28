@@ -15,19 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CUL Course Visibility version information
+ * Search area for mod_journal activities.
  *
- * @package    local_culcourse_visibility
- * @copyright  2016 Tim Gagen and Amanda Doughty
+ * @package    mod_journal
+ * @copyright  2016 David Monllao {@link http://www.davidmonllao.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
  */
+
+namespace mod_journal\search;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017080205; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2014110400; // Requires this Moodle version.
-$plugin->component = 'local_culcourse_visibility'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.1.2 (Build: 2017080205)';
+function get_dynamic_parent_activity() {
+    global $CFG;
+    if (class_exists('\core_search\area\base_activity')) {
+        return '\core_search\area\base_activity';
+    } else {
+        return '\core_search\base_activity';
+    }
+}
+class_alias(get_dynamic_parent_activity(), '\mod_journal\search\DynamicParentActivity');
+
+
+/**
+ * Search area for mod_journal activities.
+ *
+ * @package    mod_journal
+ * @copyright  2016 David Monllao {@link http://www.davidmonllao.com}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class activity extends \mod_journal\search\DynamicParentActivity {
+
+}
 
