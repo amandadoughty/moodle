@@ -547,6 +547,10 @@ class qformat_wordtable extends qformat_xml {
             $textstrings['qtype_essay'][] = 'responseisrequired';
             $textstrings['qtype_essay'][] = 'responsenotrequired';
         }
+        if ($CFG->release >= '3.6') {
+            // Add support for new optional ID number field added in Moodle 3.6.
+            $textstrings['question'][] = 'idnumber';
+        }
 
         // Add All-or-Nothing MCQ question type strings if present.
         if (is_object(question_bank::get_qtype('multichoiceset', false))) {
