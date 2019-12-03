@@ -4003,7 +4003,6 @@ p.arrow_button input[type="button"],
     border-radius: 1rem;
     -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    -o-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     -webkit-appearance: none;
@@ -4011,7 +4010,6 @@ p.arrow_button input[type="button"],
     @media (prefers-reduced-motion: reduce) {
       .custom-range::-webkit-slider-thumb {
         -webkit-transition: none;
-        -o-transition: none;
         transition: none; } }
     .custom-range::-webkit-slider-thumb:active {
       background-color: #e5979e; }
@@ -4029,17 +4027,13 @@ p.arrow_button input[type="button"],
     background-color: #A22833;
     border: 0;
     border-radius: 1rem;
-    -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    -o-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -moz-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     -moz-appearance: none;
          appearance: none; }
     @media (prefers-reduced-motion: reduce) {
       .custom-range::-moz-range-thumb {
-        -webkit-transition: none;
-        -o-transition: none;
+        -moz-transition: none;
         transition: none; } }
     .custom-range::-moz-range-thumb:active {
       background-color: #e5979e; }
@@ -4060,16 +4054,12 @@ p.arrow_button input[type="button"],
     background-color: #A22833;
     border: 0;
     border-radius: 1rem;
-    -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    -o-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -ms-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     appearance: none; }
     @media (prefers-reduced-motion: reduce) {
       .custom-range::-ms-thumb {
-        -webkit-transition: none;
-        -o-transition: none;
+        -ms-transition: none;
         transition: none; } }
     .custom-range::-ms-thumb:active {
       background-color: #e5979e; }
@@ -23911,14 +23901,20 @@ a.menu-link .icon {
 
 .btn > a, #page-grade-grading-manage .actions .action > a, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input > a, #rubric-rubric.gradingform_rubric .addcriterion > a,
 button[type="submit"] > a,
-input[type="submit"] > a {
+input[type="submit"] > a,
+input[type="radio"] > a,
+input[type="image"] > a {
   color:   #fff; }
 
 .btn:focus, #page-grade-grading-manage .actions .action:focus, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input:focus, #rubric-rubric.gradingform_rubric .addcriterion:focus, .btn.focus, #page-grade-grading-manage .actions .focus.action, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.focus, #rubric-rubric.gradingform_rubric .focus.addcriterion,
 button[type="submit"]:focus,
 button[type="submit"].focus,
 input[type="submit"]:focus,
-input[type="submit"].focus {
+input[type="submit"].focus,
+input[type="radio"]:focus,
+input[type="radio"].focus,
+input[type="image"]:focus,
+input[type="image"].focus {
   outline: 3px solid #ffbf47 !important;
   outline-offset: 0;
   -webkit-box-shadow: none !important;
