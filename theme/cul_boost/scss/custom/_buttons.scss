@@ -1,6 +1,8 @@
 .btn,
 button[type="submit"],
-input[type="submit"] {
+input[type="submit"],
+input[type="radio"],
+input[type="image"] {
 	> a {
 		color: #fff;
 	}
