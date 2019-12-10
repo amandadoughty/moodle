@@ -32,6 +32,91 @@ require_once($CFG->libdir.'/tablelib.php');
  */
 class grade_report_culuser extends grade_report_user {
 
+    /**
+     * Constructor. Sets local copies of user preferences and initialises grade_tree.
+     * @param int $courseid
+     * @param object $gpr grade plugin return tracking object
+     * @param string $context
+     * @param int $userid The id of the user
+     * @param bool $viewasuser Set this to true when the current user is a mentor/parent of the targetted user.
+     */
+    public function __construct($courseid, $gpr, $context, $userid, $viewasuser = null) {
+        global $DB, $CFG;
+        parent::__construct($courseid, $gpr, $context, $userid, $viewasuser);
+
+        $this->showrank        = grade_get_setting($this->courseid, 'report_culuser_showrank', $CFG->grade_report_culuser_showrank);
+        $this->showpercentage  = grade_get_setting($this->courseid, 'report_culuser_showpercentage', $CFG->grade_report_culuser_showpercentage);
+        $this->showhiddenitems = grade_get_setting($this->courseid, 'report_culuser_showhiddenitems', $CFG->grade_report_culuser_showhiddenitems);
+        $this->showtotalsifcontainhidden = array($this->courseid => grade_get_setting($this->courseid, 'report_culuser_showtotalsifcontainhidden', $CFG->grade_report_culuser_showtotalsifcontainhidden));
+
+        $this->showgrade       = grade_get_setting($this->courseid, 'report_culuser_showgrade',       !empty($CFG->grade_report_culuser_showgrade));
+        $this->showrange       = grade_get_setting($this->courseid, 'report_culuser_showrange',       !empty($CFG->grade_report_culuser_showrange));
+        $this->showfeedback    = grade_get_setting($this->courseid, 'report_culuser_showfeedback',    !empty($CFG->grade_report_culuser_showfeedback));
+
+        $this->showweight = grade_get_setting($this->courseid, 'report_culuser_showweight',
+            !empty($CFG->grade_report_culuser_showweight));
+
+        $this->showcontributiontocoursetotal = grade_get_setting($this->courseid, 'report_culuser_showcontributiontocoursetotal',
+            !empty($CFG->grade_report_culuser_showcontributiontocoursetotal));
+
+        $this->showlettergrade = grade_get_setting($this->courseid, 'report_culuser_showlettergrade', !empty($CFG->grade_report_culuser_showlettergrade));
+        $this->showaverage     = grade_get_setting($this->courseid, 'report_culuser_showaverage',     !empty($CFG->grade_report_culuser_showaverage));
+
+        $this->viewasuser = $viewasuser;
+
+        // The default grade decimals is 2
+        $defaultdecimals = 2;
+        if (property_exists($CFG, 'grade_decimalpoints')) {
+            $defaultdecimals = $CFG->grade_decimalpoints;
+        }
+        $this->decimals = grade_get_setting($this->courseid, 'decimalpoints', $defaultdecimals);
+
+        // The default range decimals is 0
+        $defaultrangedecimals = 0;
+        if (property_exists($CFG, 'grade_report_culuser_rangedecimals')) {
+            $defaultrangedecimals = $CFG->grade_report_culuser_rangedecimals;
+        }
+        $this->rangedecimals = grade_get_setting($this->courseid, 'report_culuser_rangedecimals', $defaultrangedecimals);
+
+        $this->switch = grade_get_setting($this->courseid, 'aggregationposition', $CFG->grade_aggregationposition);
+
+        // Grab the grade_tree for this course
+        $this->gtree = new grade_tree($this->courseid, false, $this->switch, null, !$CFG->enableoutcomes);
+
+        // Get the user (for full name).
+        $this->user = $DB->get_record('user', array('id' => $userid));
+
+        // What user are we viewing this as?
+        $coursecontext = context_course::instance($this->courseid);
+        if ($viewasuser) {
+            $this->modinfo = new course_modinfo($this->course, $this->user->id);
+            $this->canviewhidden = has_capability('moodle/grade:viewhidden', $coursecontext, $this->user->id);
+        } else {
+            $this->modinfo = $this->gtree->modinfo;
+            $this->canviewhidden = has_capability('moodle/grade:viewhidden', $coursecontext);
+        }
+
+        // Determine the number of rows and indentation.
+        $this->maxdepth = 1;
+        $this->inject_rowspans($this->gtree->top_element);
+        $this->maxdepth++; // Need to account for the lead column that spans all children.
+        for ($i = 1; $i <= $this->maxdepth; $i++) {
+            $this->evenodd[$i] = 0;
+        }
+
+        $this->tabledata = array();
+
+        // base url for sorting by first/last name
+        $this->baseurl = $CFG->wwwroot.'/grade/report?id='.$courseid.'&amp;userid='.$userid;
+        $this->pbarurl = $this->baseurl;
+
+        // no groups on this report - rank is from all course users
+        $this->setup_table();
+
+        //optionally calculate grade item averages
+        $this->calculate_averages();
+    }
+
     public function fill_table() {
         $this->fill_table_recursive($this->gtree->top_element);
         return true;
@@ -61,8 +146,8 @@ class grade_report_culuser extends grade_report_user {
 
         // If this is a hidden grade category, hide it completely from the user
         if ($type == 'category' && $grade_object->is_hidden() && !$this->canviewhidden && (
-                $this->showhiddenitems == GRADE_REPORT_USER_HIDE_HIDDEN ||
-                ($this->showhiddenitems == GRADE_REPORT_USER_HIDE_UNTIL && !$grade_object->is_hiddenuntil()))) {
+                $this->showhiddenitems == GRADE_report_culuser_HIDE_HIDDEN ||
+                ($this->showhiddenitems == GRADE_report_culuser_HIDE_UNTIL && !$grade_object->is_hiddenuntil()))) {
             return false;
         }
 
@@ -92,8 +177,8 @@ class grade_report_culuser extends grade_report_user {
             $hide = false;
             // If this is a hidden grade item, hide it completely from the user.
             if ($grade_grade->is_hidden() && !$this->canviewhidden && (
-                    $this->showhiddenitems == GRADE_REPORT_USER_HIDE_HIDDEN ||
-                    ($this->showhiddenitems == GRADE_REPORT_USER_HIDE_UNTIL && !$grade_grade->is_hiddenuntil()))) {
+                    $this->showhiddenitems == GRADE_report_culuser_HIDE_HIDDEN ||
+                    ($this->showhiddenitems == GRADE_report_culuser_HIDE_UNTIL && !$grade_grade->is_hiddenuntil()))) {
                 $hide = true;
             } else if (!empty($grade_object->itemmodule) && !empty($grade_object->iteminstance)) {
                 // The grade object can be marked visible but still be hidden if
@@ -800,15 +885,23 @@ class grade_report_culuser extends grade_report_user {
             FROM {gradingform_guide_criteria} gc
             JOIN {gradingform_guide_fillings} gf
             ON gc.id = gf.criterionid
-            JOIN {grading_instances} gin
-            ON gf.instanceid = gin.id
-            JOIN {assign_grades} ag
-            ON gin.itemid = ag.id
-            JOIN {grade_items} gi
-            ON ag.assignment = gi.iteminstance AND ag.userid = ?
-            JOIN {grade_grades} gg
-            ON gi.id = gg.itemid AND gi.itemmodule = ? 
-            AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ?";
+            JOIN (
+                SELECT gf.criterionid, gf.instanceid, gc.shortname, gf.remark
+                FROM {gradingform_guide_criteria} gc
+                JOIN {gradingform_guide_fillings} gf
+                ON gc.id = gf.criterionid
+                JOIN {grading_instances} gin
+                ON gf.instanceid = gin.id
+                JOIN {assign_grades} ag
+                ON gin.itemid = ag.id
+                JOIN {grade_items} gi
+                ON ag.assignment = gi.iteminstance AND ag.userid = ?
+                JOIN {grade_grades} gg
+                ON gi.id = gg.itemid AND gi.itemmodule = ? 
+                AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ?
+                GROUP BY gf.criterionid
+            ) q
+            ON gf.criterionid = q.criterionid AND gf.instanceid = q.instanceid";
 
         $params = array($userid, $itemmodule, $courseid, $userid, $iteminstance);
         $guides = $DB->get_recordset_sql($sql, $params);
