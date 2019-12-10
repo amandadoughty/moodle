@@ -299,15 +299,23 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
             FROM {gradingform_guide_criteria} gc
             JOIN {gradingform_guide_fillings} gf
             ON gc.id = gf.criterionid
-            JOIN {grading_instances} gin
-            ON gf.instanceid = gin.id
-            JOIN {assign_grades} ag
-            ON gin.itemid = ag.id
-            JOIN {grade_items} gi
-            ON ag.assignment = gi.iteminstance AND ag.userid = ?
-            JOIN {grade_grades} gg
-            ON gi.id = gg.itemid AND gi.itemmodule = ? 
-            AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ?";
+            JOIN (
+                SELECT gf.criterionid, gf.instanceid, gc.shortname, gf.remark
+                FROM {gradingform_guide_criteria} gc
+                JOIN {gradingform_guide_fillings} gf
+                ON gc.id = gf.criterionid
+                JOIN {grading_instances} gin
+                ON gf.instanceid = gin.id
+                JOIN {assign_grades} ag
+                ON gin.itemid = ag.id
+                JOIN {grade_items} gi
+                ON ag.assignment = gi.iteminstance AND ag.userid = ?
+                JOIN {grade_grades} gg
+                ON gi.id = gg.itemid AND gi.itemmodule = ? 
+                AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ?
+                GROUP BY gf.criterionid
+            ) q
+            ON gf.criterionid = q.criterionid AND gf.instanceid = q.instanceid";
 
         $params = array($userid, $itemmodule, $courseid, $userid, $iteminstance);
         $guides = $DB->get_recordset_sql($sql, $params);
