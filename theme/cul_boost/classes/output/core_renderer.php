@@ -432,56 +432,56 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return parent::render_user_picture($userpicture);       
     }
 
-    /**
-     * Overridden function - Renders tabtree
-     * Overridden to use core function instead of Boost
-     *
-     * @param tabtree $tabtree
-     * @return string
-     */
-    protected function render_tabtree(tabtree $tabtree) {
-        if (empty($tabtree->subtree)) {
-            return '';
-        }
+    // /**
+    //  * Overridden function - Renders tabtree
+    //  * Overridden to use core function instead of Boost
+    //  *
+    //  * @param tabtree $tabtree
+    //  * @return string
+    //  */
+    // protected function render_tabtree(tabtree $tabtree) {
+    //     if (empty($tabtree->subtree)) {
+    //         return '';
+    //     }
 
-        $firstrow = $secondrow = '';
+    //     $firstrow = $secondrow = '';
 
-        foreach ($tabtree->subtree as $tab) {
-            $firstrow .= $this->render($tab);
+    //     foreach ($tabtree->subtree as $tab) {
+    //         $firstrow .= $this->render($tab);
 
-            if (($tab->selected || $tab->activated) && !empty($tab->subtree) && $tab->subtree !== array()) {
-                $secondrow = $this->tabtree($tab->subtree);
-            }
-        }
+    //         if (($tab->selected || $tab->activated) && !empty($tab->subtree) && $tab->subtree !== array()) {
+    //             $secondrow = $this->tabtree($tab->subtree);
+    //         }
+    //     }
 
-        return html_writer::tag('ul', $firstrow, array('class' => 'nav nav-tabs')) . $secondrow;
-    }
+    //     return html_writer::tag('ul', $firstrow, array('class' => 'nav nav-tabs')) . $secondrow;
+    // }
 
-    /**
-     * Overridden function - Renders tabobject (part of tabtree)
-     * Overridden to use core function instead of Boost
-     *
-     * This function is called from {@link core_renderer::render_tabtree()}
-     * and also it calls itself when printing the $tabobject subtree recursively.
-     *
-     * @param tabobject $tabobject
-     * @return string HTML fragment
-     */
-    protected function render_tabobject(tabobject $tab) {
-        if ($tab->selected or $tab->activated) {
-            return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'active'));
-        } else if ($tab->inactive) {
-            return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'disabled'));
-        } else {
-            if (!($tab->link instanceof moodle_url)) {
-                $link = "<a href=\"$tab->link\" title=\"$tab->title\">$tab->text</a>";
-            } else {
-                $link = html_writer::link($tab->link, $tab->text, array('title' => $tab->title));
-            }
+    // /**
+    //  * Overridden function - Renders tabobject (part of tabtree)
+    //  * Overridden to use core function instead of Boost
+    //  *
+    //  * This function is called from {@link core_renderer::render_tabtree()}
+    //  * and also it calls itself when printing the $tabobject subtree recursively.
+    //  *
+    //  * @param tabobject $tabobject
+    //  * @return string HTML fragment
+    //  */
+    // protected function render_tabobject(tabobject $tab) {
+    //     if ($tab->selected or $tab->activated) {
+    //         return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'active'));
+    //     } else if ($tab->inactive) {
+    //         return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'disabled'));
+    //     } else {
+    //         if (!($tab->link instanceof moodle_url)) {
+    //             $link = "<a href=\"$tab->link\" title=\"$tab->title\">$tab->text</a>";
+    //         } else {
+    //             $link = html_writer::link($tab->link, $tab->text, array('title' => $tab->title));
+    //         }
 
-            return html_writer::tag('li', $link);
-        }
-    }
+    //         return html_writer::tag('li', $link);
+    //     }
+    // }
 
     /**
      * Overridden function - Output all the blocks in a particular region.
