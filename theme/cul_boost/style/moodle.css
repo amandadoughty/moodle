@@ -23944,6 +23944,9 @@ input[type="image"].focus {
   #page-mod-assign-view .mediaplugin > div {
     margin: 0; }
 
+.gradevalue.dimmed_text {
+  color: #868e96 !important; }
+
 form {
   margin-bottom: 0; }
   form .formsettingheading {

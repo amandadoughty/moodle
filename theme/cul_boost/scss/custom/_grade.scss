@@ -30,13 +30,18 @@
 // CMDLTWO-1584
 #page-grade-report-culuser-index,
 #page-mod-assign-view {
-	.mediaplugin {
-		width: auto;
-		video {
-			width: auto;
-		}
-		> div {
-		    margin: 0;
-		}
-	}
+    .mediaplugin {
+        width: auto;
+        video {
+            width: auto;
+        }
+        > div {
+            margin: 0;
+        }
+    }
+}
+
+// CMDLTWO-1695
+.gradevalue.dimmed_text {
+    color: #868e96!important;
 }
