@@ -110,7 +110,7 @@ class block_culactivity_stream_renderer extends plugin_renderer_base {
             // Text.
             $output .= html_writer::start_tag('div', array('class' => 'notificationtext'));
             $output .= html_writer::start_tag('span');
-            $output .= htmlspecialchars($notification->smallmessage . ' ', ENT_QUOTES, 'UTF-8');
+            $output .= strip_tags($notification->smallmessage);
             $output .= html_writer::end_tag('span');
             $output .= html_writer::end_tag('div'); // Closing div: .notificationtext.
 
