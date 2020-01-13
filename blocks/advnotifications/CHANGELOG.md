@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.3.7 - 19/12/2019
+
+### Changed
+* Travis file updated to Moodle 3.8.
+* Bumped version number.
+
+## v1.3.6 - 19/09/2019
+
+### Changed
+* Code style fixes.
+* Bumped version number.
+
+## v1.3.5 - 17/09/2019
+
+### Changed
+* Moved JS to AMD format.
+* Updated TravisCI file to Ubuntu Xenial - MDL-65992.
+* Bumped version number.
+
 ## v1.3.4 - 11/07/2019
 
 ### Changed
