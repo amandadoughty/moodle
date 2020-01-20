@@ -187,22 +187,12 @@ function block_culcourse_listing_get_favourite_courses($preferences) {
 
     foreach ($favourites as $favourite) {
         $course = get_course($favourite->itemid);
-        $course = new core_course_list_element($course);
 
-        if ($course->is_uservisible()) {
-            $formattedcourses[$course->id] = $course;
-        } 
-    }
-
-    // $formattedcourses = array_map(function($favourite) {
-    //     $course = get_course($favourite->itemid);
-    //     $course = new core_course_list_element($course);
-
-    //     if ($course->is_uservisible()) {
-    //         return $course;
-    //     }        
-
-    // }, $favourites);
+        if (core_course_category::can_view_course_info($course)) {
+            $courselistel = new core_course_list_element($course);
+            $formattedcourses[$course->id] = $courselistel;
+        }
+    }                
 
     return $formattedcourses;
 }
