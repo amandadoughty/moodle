@@ -877,7 +877,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     /**
      * Gets the favourites from the user preference (if it exists)
-     * elso the Favourites API.
+     * else the Favourites API.
      *
      * @return array of courseids indexed by order
      */
@@ -916,7 +916,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $userfavourites = [];
 
             foreach ($favourites as $favourite) {
-                $userfavourites[$favourite->ordering] = $favourite->itemid;
+                $userfavourites[] = $favourite->itemid;
             }
         }
 
@@ -955,14 +955,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         // Ensure correct ordering.
-        foreach ($userfavourites as $ordpos => $courseid) {
+        foreach ($userfavourites as $key => $courseid) {
             if (!empty($favouritescourses[$courseid]) && is_numeric($favouritescourses[$courseid]->id)) {
                 // Set the display name.
                 $favouritescourses[$courseid]->displayname = $favouritescourses[$courseid]->fullname;
                 // Replace the courseid with the course object.
-                $userfavourites[$ordpos] = $favouritescourses[$courseid];
+                $userfavourites[$key] = $favouritescourses[$courseid];
             } else {
-                unset($userfavourites[$ordpos]);
+                unset($userfavourites[$key]);
             }
         }
 
