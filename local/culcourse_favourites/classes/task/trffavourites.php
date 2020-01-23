@@ -75,6 +75,8 @@ class trffavourites extends \core\task\scheduled_task {
                 $courseids = unserialize($userpreference->value);
                 $i = 1;
 
+                mtrace("\n  Updating favourites for user: " . $userid);
+
                 foreach ($courseids as $courseid) {
                     try {
                         if ($coursecontext = \context_course::instance($courseid, IGNORE_MISSING)) {
