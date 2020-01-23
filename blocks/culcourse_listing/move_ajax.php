@@ -41,6 +41,6 @@ foreach ($sortorder as $courseid) {
 }
 
 // Update the user preference.
-block_culcourse_listing_update_favourites_pref($orderfavs);
+block_culcourse_listing_update_favourites_pref($sortorder);
 // Update the Favourites API.
 block_culcourse_listing_reorder_favourites_api($orderfavs);

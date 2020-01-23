@@ -39,7 +39,7 @@ $cid = optional_param('cid', 0, PARAM_INT);
 $result = block_culcourse_listing_update_from_favourites_api($action, $cid);
 $result['data'] = false;
 
-if ($result['cid']) {
+if ($result['cid'] && $result['changed']) {
 	$preferences = block_culcourse_listing_get_preferences();
 	$favourites = block_culcourse_listing_get_favourite_courses($preferences);
     $chelper = new block_culcourse_listing_helper();
