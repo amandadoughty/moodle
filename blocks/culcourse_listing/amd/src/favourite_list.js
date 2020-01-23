@@ -158,7 +158,7 @@ define(['jquery', 'core/ajax', 'core/templates', 'core/notification', 'core/str'
                             var href = link.get('href').split('?');
                             var url = href[0];
                             var querystring = href[1];
-                            var newurl = url + '?' + querystring.replace('remove', 'add');
+                            var newurl = url + '?' + querystring.replace('delete', 'add');
                             var title = M.util.get_string('favouriteadd', 'block_culcourse_listing');
                             link.set('href', newurl);
                             link.set('title', title);

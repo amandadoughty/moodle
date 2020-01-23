@@ -225,7 +225,7 @@ function block_culcourse_listing_edit_favourites($action, $cid, $userid = 0) {
             }
 
             break;
-        case 'remove':
+        case 'delete':
             // Original block user preference setting.
             $key = array_search($cid, $favourites);
 
@@ -272,7 +272,7 @@ function block_culcourse_listing_edit_favourites_api($action, $cid, $userid = 0)
             }
 
             break;
-        case 'remove':
+        case 'delete':
             // New favourite api.
             if ($exists) {
                 $ufservice->delete_favourite('core_course', 'courses', $cid, $coursecontext);
@@ -313,12 +313,12 @@ function block_culcourse_listing_update_from_favourites_api($action, $cid) {
   
     if ($cid) {
         if ($action == 'delete') {
-            return ['action' => 'delete', 'cid' => $cid];
+            return ['action' => 'delete', 'cid' => $cid, 'changed' => $changed];
         } else if ($action == 'add') {
-            return ['action' => 'add', 'cid' => $cid]; //@TODO return node
+            return ['action' => 'add', 'cid' => $cid, 'changed' => $changed]; //@TODO return node
         }
     } else {
-        return ['action' => 'error', 'cid' => null];
+        return ['action' => 'error', 'cid' => null, 'changed' => $changed];
     }
 }
 
@@ -451,6 +451,7 @@ function block_culcourse_listing_reorder_favourites_api($favourites, $reset = fa
         $coursecontext = \context_course::instance($courseid);
 
         try {
+            // Function returns an exception if not found.
             $favourite = $favouritesrepo->find_favourite($USER->id, 'core_course', 'courses', $courseid,
                 $coursecontext->id);
 
