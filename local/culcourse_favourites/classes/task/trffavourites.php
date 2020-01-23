@@ -74,6 +74,8 @@ class trffavourites extends \core\task\scheduled_task {
                 $usercontext = \context_user::instance($userid);
                 $courseids = unserialize($userpreference->value);
                 $i = 1;
+                $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+                $favouritesrepo = new \core_favourites\local\repository\favourite_repository($usercontext);
 
                 mtrace("\n  Updating favourites for user: " . $userid);
 
@@ -81,17 +83,31 @@ class trffavourites extends \core\task\scheduled_task {
                     try {
                         if ($coursecontext = \context_course::instance($courseid, IGNORE_MISSING)) {
                             // Is course already in Favourite API?                            
-                            $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+                            
                             $exists = $ufservice->favourite_exists('core_course', 'courses', $courseid, $coursecontext);
                             // If not add it.
                             if (!$exists) {
                                 // New favourite api.
                                 $ufservice->create_favourite('core_course', 'courses', $courseid, $coursecontext, $i);
                                 mtrace("\n  Added favourite course: " . $courseid);
-                                $i++;                         
+                                                         
                             } else {
+                                // If it does exist then set order.
+                                $favourite = $favouritesrepo->find_favourite(
+                                    $userid,
+                                    'core_course',
+                                    'courses',
+                                    $courseid,
+                                    $coursecontext->id
+                                );
+
+                                $favourite->ordering = $i;
+                                $favouritesrepo->update($favourite);
+
                                 mtrace("\n  Already in favourite courses: " . $courseid);
                             }
+
+                            $i++;
                         } else{
                             mtrace("\n  Problem with course id " . $courseid);
                         } 
