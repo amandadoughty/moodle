@@ -311,9 +311,9 @@ function block_culcourse_listing_update_from_favourites_api($action, $cid) {
         }            
     }
   
-    if ($changed) {
+    if ($cid) {
         if ($action == 'delete') {
-            return ['action' => 'remove', 'cid' => $cid];
+            return ['action' => 'delete', 'cid' => $cid];
         } else if ($action == 'add') {
             return ['action' => 'add', 'cid' => $cid]; //@TODO return node
         }
