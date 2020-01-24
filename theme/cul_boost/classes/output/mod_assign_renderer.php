@@ -128,7 +128,7 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
 
         // $gradinginfo = grade_get_grades($COURSE->id, 'mod', 'assign', $cm->instance, $USER->id);        
 
-        if (!$assign->is_blindmarking()) {        
+        if (!$assign->is_blind_marking()) {        
             $feedbackplugins = $assign->get_feedback_plugins();
             $renderer = $assign->get_renderer();
             $config = get_config('assign');
