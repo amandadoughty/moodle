@@ -116,7 +116,7 @@ class coursebox implements renderable, templatable {
         $move = [];
 
         if ($this->favourites && array_key_exists($this->course->id, $this->favourites)) {
-            $data->action = 'remove';
+            $data->action = 'delete';
             $data->favclass = 'gold fa fa-star';
             $data->favtitle = get_string('favouriteremove', 'block_culcourse_listing');
 

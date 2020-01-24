@@ -126,11 +126,9 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
 
         require_once($CFG->libdir . '/gradelib.php');
 
-        $gradinginfo = grade_get_grades($COURSE->id, 'mod', 'assign', $cm->instance, $USER->id);        
+        // $gradinginfo = grade_get_grades($COURSE->id, 'mod', 'assign', $cm->instance, $USER->id);        
 
-        if (isset($gradinginfo->items[0]->grades[$USER->id]) &&
-                !$gradinginfo->items[0]->grades[$USER->id]->hidden ) {
-        
+        if (!$assign->is_blind_marking()) {        
             $feedbackplugins = $assign->get_feedback_plugins();
             $renderer = $assign->get_renderer();
             $config = get_config('assign');
