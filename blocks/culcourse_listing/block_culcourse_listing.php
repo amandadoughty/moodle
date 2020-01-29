@@ -150,7 +150,7 @@ class block_culcourse_listing extends block_base {
      * @return array
      */
     public function applicable_formats() {
-        return array('all' => false, 'site-index' => true, 'my-index' => true);
+        return array('all' => false, 'site-index' => true, 'my' => true);
     }
 
     /**
