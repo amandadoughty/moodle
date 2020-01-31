@@ -108,7 +108,8 @@ class coursebox implements renderable, templatable {
 
         $data = new \stdClass();
         $data->cid = $this->course->id;
-        $data->coursename = $chelper->get_course_formatted_name($this->course, $config); // @TODO static?                
+        $data->coursename = $chelper->get_course_formatted_name($this->course, $config); // @TODO static?  
+        $data->shortname = $this->course->shortname;              
         $data->type = \core_course_renderer::COURSECAT_TYPE_COURSE;       
         
         $data->isfav = $this->isfav;

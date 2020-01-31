@@ -6,16 +6,16 @@ Feature: Test that students can favourite a course
             | username | firstname | lastname | email                | idnumber |
             | student1 | Student   | X        | student1@example.com | S1       |
         And the following "courses" exist:
-            | fullname | shortname | category |
-            | Course 1 | C1        | 0        |
-            | Course 2 | C2        | 0        |
-            | Course 3 | C3        | 0        |
-            | Course 4 | C4        | 0        |
-            | Course 5 | C5        | 0        |
-            | Course 5 | C6        | 0        |
-            | Course 5 | C7        | 0        |
-            | Course 5 | C8        | 0        |
-            | Course 5 | C9        | 0        |
+            | fullname | shortname | idnumber | category |
+            | Course 1 | C1        | C1       | 0        |
+            | Course 2 | C2        | C2       | 0        |
+            | Course 3 | C3        | C3       | 0        |
+            | Course 4 | C4        | C4       | 0        |
+            | Course 5 | C5        | C5       | 0        |
+            | Course 5 | C6        | C6       | 0        |
+            | Course 5 | C7        | C7       | 0        |
+            | Course 5 | C8        | C8       | 0        |
+            | Course 5 | C9        | C9       | 0        |
         And the following "course enrolments" exist:
             | user | course | role |
             | student1 | C1 | student |
@@ -42,6 +42,12 @@ Feature: Test that students can favourite a course
         Then I should see "Modules"
         And I should see "Course overview"
         And I should see "Starred courses"
+
+        When I click on ".favouritelink" "css_element" in the "//div[@class='course_category_tree']//div[@data-shortname='C1']" "xpath_element"
+    
+        Then "//div[@class='course_category_tree']//div[@data-shortname='C1']//a[@class=favouritelink and @title='Add to favourites']" "xpath_element" should exist
+        And "//div[@class='course_category_tree']//div[@data-shortname='C1']//a[@class=favouritelink]/i[@class=fa-star]" "xpath_element" should exist
+        
 
 
 
