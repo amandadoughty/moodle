@@ -43,15 +43,18 @@ Feature: Test that students can favourite a course
         And I should see "Course overview"
         And I should see "Starred courses"
 
-        When I click on ".favouritelink" "css_element" in the "//div[@class='course_category_tree clearfix filter-off']//div[@data-shortname='C1']" "xpath_element"
+        When I click on ".favouritelink" "css_element" in the "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']" "xpath_element"
 
    
     
-        Then "//div[@class='course_category_tree clearfix filter-off']//div[@data-shortname='C1']//div[@class='favouritelink']/a[@title='Add to favourites']" "xpath_element" should not exist
-        And "//div[@class='course_category_tree clearfix filter-off']//div[@data-shortname='C1']//div[@class='favouritelink']//i[@class='icon fa fa-star-o']" "xpath_element" should not exist
+        Then "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']//div[@class='favouritelink']/a[@title='Add to favourites']" "xpath_element" should not exist
+        And "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']//div[@class='favouritelink']//i[@class='icon fa fa-star-o']" "xpath_element" should not exist
 
-        Then "//div[@class='course_category_tree clearfix filter-off']//div[@data-shortname='C1']//div[@class='favouritelink']/a[@title='Remove from favourites']" "xpath_element" should exist
-        And "//div[@class='course_category_tree clearfix filter-off']//div[@data-shortname='C1']//div[@class='favouritelink']//i[@class='icon gold fa fa-star']" "xpath_element" should exist
+        Then "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']//div[@class='favouritelink']/a[@title='Remove from favourites']" "xpath_element" should exist
+        And "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']//div[@class='favouritelink']//i[@class='icon gold fa fa-star']" "xpath_element" should exist
+        
+
+
         
 
 
