@@ -112,7 +112,5 @@ $string['questionsemanticactivation-tests'] = '';
 $string['questionsemanticactivation-truefalse'] = 'True or False';
 $string['questionxofy'] = 'Question {$a->x} of {$a->y}';
 
-$string['privacy:metadata'] = 'The Cass theme does not store any personal data about any user.';
-
 $string['showstepperonsectionzero'] = 'Show stepper count on activities for section zero';
 $string['showstepperonsectionzerodesc'] = 'If unchecked, the stepper for each activity on the course page will be styled differently e.g. not numbered, completion ignored etc.';
