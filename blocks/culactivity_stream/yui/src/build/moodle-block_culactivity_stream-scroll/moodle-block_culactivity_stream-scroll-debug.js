@@ -1,3 +1,5 @@
+YUI.add('moodle-block_culactivity_stream-scroll', function (Y, NAME) {
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -203,3 +205,16 @@ M.block_culactivity_stream.scroll = {
     }
 
 };
+
+}, '@VERSION@', {
+    "requires": [
+        "base",
+        "node",
+        "io",
+        "json-parse",
+        "dom-core",
+        "querystring",
+        "event-custom",
+        "moodle-core-dock"
+    ]
+});
