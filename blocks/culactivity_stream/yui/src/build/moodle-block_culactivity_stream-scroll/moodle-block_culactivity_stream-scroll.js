@@ -1,3 +1,5 @@
+YUI.add('moodle-block_culactivity_stream-scroll', function (Y, NAME) {
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -49,7 +51,6 @@ M.block_culactivity_stream.scroll = {
             reloaddiv.setStyle('display', 'inline-block');
             doc.delegate('click', this.reloadblock, '.block_culactivity_stream_reload', this);
         } catch (e) {
-            Y.log('Problem adding reload button');
         }
 
         doc.delegate('click', this.removenotification, '.block_culactivity_stream .removelink', this);
@@ -203,3 +204,16 @@ M.block_culactivity_stream.scroll = {
     }
 
 };
+
+}, '@VERSION@', {
+    "requires": [
+        "base",
+        "node",
+        "io",
+        "json-parse",
+        "dom-core",
+        "querystring",
+        "event-custom",
+        "moodle-core-dock"
+    ]
+});
