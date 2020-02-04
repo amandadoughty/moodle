@@ -37,21 +37,33 @@ Feature: Test that students can favourite a course
         And I press "Reset Dashboard for all users"
         And I log out        
 
-    Scenario: Favourite a course in the module list
+    Scenario: Favourite a course in the course list
         Given I log in as "student1"
-        Then I should see "Modules"
-        And I should see "Course overview"
-        And I should see "Starred courses"
+        When I click on ".favouritelink" "css_element" in the "C1" "block_culcourse_listing > Course"    
+        Then "C1" "block_culcourse_listing > Add course to favourites" should not exist
+        And "C1" "block_culcourse_listing > Course empty star" should not exist
+        And "C1" "block_culcourse_listing > Remove course from favourites" should exist
+        And "C1" "block_culcourse_listing > Course gold star" should exist
+        And "C1" "block_culcourse_listing > Add favourite to favourites" should not exist
+        And "C1" "block_culcourse_listing > Favourite empty star" should not exist
+        And "C1" "block_culcourse_listing > Remove favourite from favourites" should exist
+        And "C1" "block_culcourse_listing > Favourite gold star" should exist
 
-        When I click on ".favouritelink" "css_element" in the "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']" "xpath_element"
+    Scenario: Unfavourite a course in the course list
 
-   
-    
-        Then "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']//div[@class='favouritelink']/a[@title='Add to favourites']" "xpath_element" should not exist
-        And "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']//div[@class='favouritelink']//i[@class='icon fa fa-star-o']" "xpath_element" should not exist
+    Scenario: Unfavourite a course in the favourite list
 
-        Then "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']//div[@class='favouritelink']/a[@title='Remove from favourites']" "xpath_element" should exist
-        And "//div[contains(@class,'course_category_tree')]//div[@data-shortname='C1']//div[@class='favouritelink']//i[@class='icon gold fa fa-star']" "xpath_element" should exist
+    Scenario: Clear favourites
+
+    Scenario: Reorder favourites
+
+    Scenario: Favourite a course in the module list to update My overview and Starred Courses
+
+    Scenario: Unfavourite a course in the favourite list to update My overview and Starred Courses
+
+    Scenario: Favourite a course in My Overview and update CUL Course Listing
+
+    Scenario: Unfavourite a course in My Overview and update CUL Course Listing
         
 
 
