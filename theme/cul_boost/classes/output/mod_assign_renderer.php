@@ -300,7 +300,7 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
             JOIN {gradingform_guide_fillings} gf
             ON gc.id = gf.criterionid
             JOIN (
-                SELECT gf.criterionid, gf.instanceid, gc.shortname, gf.remark
+                SELECT gf.criterionid, max(gf.instanceid) instanceid
                 FROM {gradingform_guide_criteria} gc
                 JOIN {gradingform_guide_fillings} gf
                 ON gc.id = gf.criterionid
