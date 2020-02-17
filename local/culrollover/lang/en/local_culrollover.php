@@ -168,6 +168,7 @@ $string['culrollover:view'] = "View rollovers";
 $string['eventrollover_deleted'] = "Rollover delete";
 $string['eventrollover_completed'] = "Rollover complete";
 $string['eventrollover_failed'] = "Rollover failed";
+$string['eventdestinationlocked'] = "The course has been edited";
 
 // Task strings.
 $string['rollovertask'] = "Rollover processing";
