@@ -37,6 +37,18 @@ class local_culobserver_observer {
     public static function assessable_uploaded(\assignsubmission_file\event\assessable_uploaded $event) {
         global $CFG;
 
+        $cmid = $event->contextinstanceid;
+        $context = context_module::instance($cmid);
+        $course = get_course($event->courseid);
+        $modinfo = get_fast_modinfo($course);
+        $cm = $modinfo->get_cm($cmid);
+        $assign = new assign($context, $cm, $course);
+
+        if ($assign->is_blind_marking()) {
+            // Do not log anything that can identify the user.
+            return;
+        }
+
         $fs = get_file_storage();
         $contenthashes = [];
 

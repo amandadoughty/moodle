@@ -160,3 +160,53 @@ function theme_cul_boost_store_in_localcache($filearea, $args, $options) {
         return true;
     }
 }
+
+/**
+ * Serves the grading panel as a fragment.
+ *
+ * @param array $args List of named arguments for the fragment loader.
+ * @return string
+ */
+function theme_cul_boost_output_fragment_gradealert($args) {
+    global $CFG, $OUTPUT;
+
+    require_once($CFG->libdir.'/gradelib.php');
+    require_once($CFG->dirroot . '/mod/assign/locallib.php');
+
+    $o = '';    
+    $courseid = clean_param($args['courseid'], PARAM_INT); 
+    $assignid = clean_param($args['assignid'], PARAM_INT); 
+    $userid = clean_param($args['userid'], PARAM_INT); 
+    $context = $args['context'];
+    $cangrade = has_capability('mod/assign:grade', $context);
+
+    if ($context->contextlevel != CONTEXT_MODULE) {
+        return null;
+    }
+
+    if($cangrade) {
+        $gradinginfo = grade_get_grades(
+            $courseid,
+            'mod',
+            'assign',
+            $assignid,
+            $userid
+        );
+
+        $gradingitem = null;
+        $gradebookgrade = null;
+
+        if (isset($gradinginfo->items[0])) {
+            $gradingitem = $gradinginfo->items[0];
+            $gradebookgrade = $gradingitem->grades[$userid];
+        }
+
+        if ($gradebookgrade->hidden){
+            $o .= $OUTPUT->notification(get_string('gradehidden', 'theme_cul_boost'), 'error hazard');
+        } else {
+            $o .= $OUTPUT->notification(get_string('gradenothidden', 'theme_cul_boost'), 'error hazard');
+        }
+    }
+
+    return $o;
+}

@@ -233,6 +233,17 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
             if ($rubrictext) {
                 $feedback .= $feedbacksubtitle .= $rubrictext;
             }
+
+            // the assignment way? assign locallib #5240
+            // If there is a visible grade, show the feedback.
+            // $feedbackstatus = $assign->get_assign_feedback_status_renderable($user);
+            // if ($feedbackstatus) {
+            //     $feedback .= $assign->get_renderer()->render($feedbackstatus);
+            // }
+
+
+
+
         } else {
             $feedback = '-';
         }  
@@ -300,7 +311,7 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
             JOIN {gradingform_guide_fillings} gf
             ON gc.id = gf.criterionid
             JOIN (
-                SELECT gf.criterionid, gf.instanceid, gc.shortname, gf.remark
+                SELECT gf.criterionid, max(gf.instanceid) instanceid
                 FROM {gradingform_guide_criteria} gc
                 JOIN {gradingform_guide_fillings} gf
                 ON gc.id = gf.criterionid
