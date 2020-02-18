@@ -37,11 +37,11 @@ class local_culobserver_observer {
     public static function assessable_uploaded(\assignsubmission_file\event\assessable_uploaded $event) {
         global $CFG;
 
-        $cmid = $event->cmid;
-        $context = context_module::instance($event->cmid);
+        $cmid = $event->contextinstanceid;
+        $context = context_module::instance($cmid);
         $course = get_course($event->courseid);
         $modinfo = get_fast_modinfo($course);
-        $cm = $modinfo->get_cm($event->cmid);
+        $cm = $modinfo->get_cm($cmid);
         $assign = new assign($context, $cm, $course);
 
         if ($assign->is_blind_marking()) {
