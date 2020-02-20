@@ -157,8 +157,7 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
         } 
 
         $cangrade = has_capability('mod/assign:grade', $assign->get_context());
-        // $hasgrade = $assign->get_instance()->grade != GRADE_TYPE_NONE &&
-        //                 !is_null($gradebookgrade) && !is_null($gradebookgrade->grade);
+
         $gradevisible = $cangrade || 
             $assign->get_instance()->grade == GRADE_TYPE_NONE ||
             (
@@ -167,38 +166,12 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
                 !$assign->is_blind_marking()
             );
         // If there is a visible grade, show the summary.
-        // if (($hasgrade || !$emptyplugins) && $gradevisible) {
         if ($gradevisible) {
-
-
-
-
-
-
-
-
-        // if (isset($gradebookgrade) &&
-        //         !$gradebookgrade->hidden && !$assign->is_blind_marking()) {
-        
-            // $feedbackplugins = $assign->get_feedback_plugins();
             $renderer = $assign->get_renderer();
             $config = get_config('assign');
             // Get the feedback plugin that is set to push comments to the gradebook. This is what populates
             // $grade_grade->feedback unless it is overridden.
             $gradebookfeedbacktype = str_replace('assignfeedback_', '', $config->feedback_plugin_for_gradebook);
-            // We need a stdClass with an id property from assign_grades that is for this $grade_object. 
-            // It is needed to test $feedbackplugin->is_empty() for the remaining assignfeedback plugins.
-            // $params = array(
-            //     'assignment' => $assign->get_instance()->id,  
-            //     'userid' => $USER->id
-            //     );
-
-            // $grades = $DB->get_records('assign_grades', $params, 'attemptnumber DESC');
-            // $grade = array_pop($grades);
-
-
-
-
             $feedback = '';
             $gradebookfeedback = '';
             $assignfeedback = '';
@@ -271,34 +244,21 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
                 }
             }
 
-            // // Get any rubric feedback.
-            // $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('rubric', 'theme_cul_boost') . '</p>';
-            // $rubrictext = $this->assign_get_rubric_feedback($USER->id, $COURSE->id, $assign->get_instance()->id, 'assign');
-
-            // if ($rubrictext) {
-            //     $feedback .= $feedbacksubtitle .= $rubrictext;
-            // }
-
-            // // Get any marking guide feedback.
-            // $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('markingguide', 'theme_cul_boost') . '</p>';
-            // $rubrictext = $this->assign_get_marking_guide_feedback($USER->id, $COURSE->id, $assign->get_instance()->id, 'assign');
-
-            // if ($rubrictext) {
-            //     $feedback .= $feedbacksubtitle .= $rubrictext;
-            // }
-
             // if (!$emptyplugins) {
                 // Get grading form feedback (marking guide or rubric).
-            $gradingmanager = get_grading_manager($assign->get_context(), 'mod_assign', 'submissions');
+                $gradingmanager = get_grading_manager($assign->get_context(), 'mod_assign', 'submissions');
 
-            $activemethod = $gradingmanager->get_active_method();
+                $activemethod = $gradingmanager->get_active_method();
+                $feedbackfn = 'assign_get_gradingform_' . $activemethod . '_feedback';
+                $fnexists = method_exists($this, $feedbackfn);
 
+                if($activemethod && $fnexists) {
+                    $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string($activemethod, 'gradingform_' . $activemethod) . '</p>';
+                    $gradingformtext = $this->$feedbackfn($grade, $gradingmanager);
 
-                $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string($activemethod, 'gradingform_' . $activemethod) . '</p>';
-                $gradingformtext = $this->assign_get_gradingform_feedback($grade, $gradingmanager);
-
-                if ($gradingformtext) {
-                    $feedback .= $feedbacksubtitle .= $gradingformtext;
+                    if ($gradingformtext) {
+                        $feedback .= $feedbacksubtitle .= $gradingformtext;
+                    }
                 }
             // }
 
@@ -310,102 +270,63 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
     }
 
     /**
-     * Get the Grading Form feedback
+     * Get the Grading Form Marking Guide feedback
      * 
-     * @param int $userid The id of the user who's feedback being viewed
-     * @param int $courseid The course the Marking guide is being checked for
-     * @param int $iteminstance The instance of the module item 
-     * @param int $itemmodule The module currently being queried
-     * @return str the text for the Marking guide
+     * @param stdClass The grade record
+     * @param obj grading_manager
+     * @return str the text for the feedback
      */
-    public function assign_get_gradingform_feedback($grade, $gradingmanager) {
+    public function assign_get_gradingform_guide_feedback($grade, $gradingmanager) {
         global $DB;
 
-
-                // If there is a visible grade, show the summary.
-        // if (($hasgrade || !$emptyplugins) && $gradevisible) {
-
-        //     $gradefordisplay = null;
-        //     $gradeddate = null;
-        //     $grader = null;
-        //     $gradingmanager = get_grading_manager($this->get_context(), 'mod_assign', 'submissions');
-
-        //     if ($hasgrade) {
-        //         if ($controller = $gradingmanager->get_active_controller()) {
-        //             $menu = make_grades_menu($this->get_instance()->grade);
-        //             $controller->set_grade_range($menu, $this->get_instance()->grade > 0);
-        //             $gradefordisplay = $controller->render_grade($PAGE,
-        //                                                          $grade->id,
-        //                                                          $gradingitem,
-        //                                                          $gradebookgrade->str_long_grade,
-        //                                                          $cangrade);
-        //         } else {
-        //             $gradefordisplay = $this->display_grade($gradebookgrade->grade, false);
-        //         }
-        //         $gradeddate = $gradebookgrade->dategraded;
-        //         if (isset($grade->grader) && $grade->grader > 0) {
-        //             $grader = $DB->get_record('user', array('id' => $grade->grader));
-        //         } else if (isset($gradebookgrade->usermodified) && $gradebookgrade->usermodified > 0) {
-        //             $grader = $DB->get_record('user', array('id' => $gradebookgrade->usermodified));
-        //         }
-        //     }
-
-
-
-
-  // print_r($controller->get_definition()->guide_criteria);
-        // print_r($gradingmanager->get_guide_filling());
-
-
-
-        $activemethod = $gradingmanager->get_active_method();
-        $feedbackfn = 'get_' . $activemethod . '_filling';
-
         $controller = $gradingmanager->get_active_controller();
-
-
-
         $criteria = $controller->get_definition()->guide_criteria;
-
         $instances = $controller->get_active_instances($grade->id);
-// print_r($instances);
-        // $feedback = [];
-
         $out = '';
 
         foreach ($instances as $instance) {
-            // print_r($instance->get_guide_filling());
-            $remarks = $instance->$feedbackfn()['criteria'];
-
-            // print_r($remarks);
+            $remarks = $instance->get_guide_filling()['criteria'];
 
             foreach ($remarks as $remark) {
                 $criterionid = $remark['criterionid'];
-
                 $shortname = $criteria[$criterionid]['shortname'];
-
                 $remark = $remark['remark'];
-
                 $out .= "<strong>" . $shortname . ": </strong>" . $remark . "<br/>";
             }
         }
 
+        return $out;
+    }
 
+    /**
+     * Get the Grading Form Rubric feedback
+     * 
+     * @param stdClass The grade record
+     * @param obj grading_manager
+     * @return str the text for the feedback
+     */
+    public function assign_get_gradingform_rubric_feedback($grade, $gradingmanager) {
+        global $DB;
 
+        $controller = $gradingmanager->get_active_controller();
+        $criteria = $controller->get_definition()->rubric_criteria;
+        $instances = $controller->get_active_instances($grade->id);
+        $out = '';
 
+        foreach ($instances as $instance) {
+            $values = $instance->get_rubric_filling()['criteria'];
 
-        // $out = '';
-
-        // if ($guides) {
-        //     foreach ($guides as $guide) {
-        //         if ($guide->shortname || $guide->remark) {
-        //             $out .= "<strong>" . $guide->shortname . ": </strong>" . $guide->remark . "<br/>";
-        //         }
-        //     }
-        // }
+            foreach ($values as $value) {
+                $criterionid = $value['criterionid'];
+                $description = $criteria[$criterionid]['description'];
+                $levelid = $value['levelid'];
+                $definition = $criteria[$criterionid]['levels'][$levelid]['definition'];
+                $out .= "<strong>" . $description . ": </strong>" . $definition . "<br/>";
+            }
+        }
 
         return $out;
-    }    
+    }
 
     // /**
     //  * Get the Assign Rubric feedback
