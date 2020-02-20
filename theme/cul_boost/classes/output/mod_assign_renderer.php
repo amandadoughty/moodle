@@ -119,12 +119,24 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
     /**
      * Entry function to collect all the types of feedback for Assignment
      * 
-     * @param int $cmid
+     * @param obj $cm course module
+     * @param obj $assign
+     * @param obj $context course module context
+     * @return str the text for the feedback
      */
     protected function getAssignFeedback($cm, $assign, $context) {
         global $DB, $CFG, $COURSE, $USER;
 
         require_once($CFG->libdir . '/gradelib.php');
+
+        /* 
+        The logic for this function comes from assign->get_assign_feedback_status_renderable.
+        The grading form functions 
+        gradingform_controller->render_grade 
+        have been used to abstract the data we need to display. 
+        These functions introduce a lot of data, html and styling
+        that we don't want.
+        */
 
         $grade = $assign->get_user_grade($USER->id, false);
         $gradingstatus = $assign->get_grading_status($USER->id);
@@ -139,24 +151,27 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
         }
 
         // Check to see if all feedback plugins are empty.
-        // $emptyplugins = true;
+        $emptyplugins = true;
         $feedbackplugins = $assign->get_feedback_plugins();
 
-        // if ($grade) {
-        //     foreach ($feedbackplugins as $plugin) {
-        //         if ($plugin->is_visible() && $plugin->is_enabled()) {echo 'here';
-        //             if (!$plugin->is_empty($grade)) {
-        //                 $emptyplugins = false;
-        //             }
-        //         }
-        //     }
-        // }
+        if ($grade) {
+            foreach ($feedbackplugins as $plugin) {
+                if ($plugin->is_visible() && $plugin->is_enabled()) {
+                    if (!$plugin->is_empty($grade)) {
+                        $emptyplugins = false;
+                    }
+                }
+            }
+        }
 
         if ($assign->get_instance()->markingworkflow && $gradingstatus != ASSIGN_MARKING_WORKFLOW_STATE_RELEASED) {
             $emptyplugins = true; // Don't show feedback plugins until released either.
         } 
 
         $cangrade = has_capability('mod/assign:grade', $assign->get_context());
+
+        $hasgrade = $assign->get_instance()->grade != GRADE_TYPE_NONE &&
+                        !is_null($gradebookgrade) && !is_null($gradebookgrade->grade);
 
         $gradevisible = $cangrade || 
             $assign->get_instance()->grade == GRADE_TYPE_NONE ||
@@ -165,8 +180,9 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
                 !$gradebookgrade->hidden && 
                 !$assign->is_blind_marking()
             );
+
         // If there is a visible grade, show the summary.
-        if ($gradevisible) {
+        if (($hasgrade || !$emptyplugins) && $gradevisible) {
             $renderer = $assign->get_renderer();
             $config = get_config('assign');
             // Get the feedback plugin that is set to push comments to the gradebook. This is what populates
@@ -244,24 +260,21 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
                 }
             }
 
-            // if (!$emptyplugins) {
-                // Get grading form feedback (marking guide or rubric).
-                $gradingmanager = get_grading_manager($assign->get_context(), 'mod_assign', 'submissions');
+            // Get grading form feedback (marking guide or rubric).
+            $gradingmanager = get_grading_manager($assign->get_context(), 'mod_assign', 'submissions');
 
-                $activemethod = $gradingmanager->get_active_method();
-                $feedbackfn = 'assign_get_gradingform_' . $activemethod . '_feedback';
-                $fnexists = method_exists($this, $feedbackfn);
+            $activemethod = $gradingmanager->get_active_method();
+            $feedbackfn = 'assign_get_gradingform_' . $activemethod . '_feedback';
+            $fnexists = method_exists($this, $feedbackfn);
 
-                if($activemethod && $fnexists) {
-                    $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string($activemethod, 'gradingform_' . $activemethod) . '</p>';
-                    $gradingformtext = $this->$feedbackfn($grade, $gradingmanager);
+            if($activemethod && $fnexists) {
+                $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string($activemethod, 'gradingform_' . $activemethod) . '</p>';
+                $gradingformtext = $this->$feedbackfn($grade, $gradingmanager);
 
-                    if ($gradingformtext) {
-                        $feedback .= $feedbacksubtitle .= $gradingformtext;
-                    }
+                if ($gradingformtext) {
+                    $feedback .= $feedbacksubtitle .= $gradingformtext;
                 }
-            // }
-
+            }
         } else {
             $feedback = '-';
         }  
@@ -327,98 +340,6 @@ class theme_cul_boost_mod_assign_renderer extends mod_assign_renderer {
 
         return $out;
     }
-
-    // /**
-    //  * Get the Assign Rubric feedback
-    //  * 
-    //  * @param int $userid The id of the user who's feedback being viewed
-    //  * @param int $courseid The course the Rubric is being checked for
-    //  * @param int $iteminstance The instance of the module item 
-    //  * @param int $itemmodule The module currently being queried
-    //  * @return str the text for the Rubric
-    //  */
-    // public function assign_get_rubric_feedback($userid, $courseid, $iteminstance, $itemmodule) {
-    //     global $DB;
-
-    //     $sql = "SELECT DISTINCT rc.id, rc.description, rl.definition 
-    //         FROM {gradingform_rubric_criteria} rc
-    //         JOIN {gradingform_rubric_levels} rl
-    //         ON rc.id = rl.criterionid
-    //         JOIN {gradingform_rubric_fillings} rf
-    //         ON rl.id = rf.levelid AND rc.id = rf.criterionid
-    //         JOIN {grading_instances} gin
-    //         ON rf.instanceid = gin.id
-    //         JOIN {assign_grades} ag
-    //         ON gin.itemid = ag.id
-    //         JOIN {grade_items} gi
-    //         ON ag.assignment = gi.iteminstance AND ag.userid = ?
-    //         JOIN {grade_grades} gg
-    //         ON gi.id = gg.itemid AND gi.itemmodule = ? 
-    //         AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ? AND status = ?";
-
-    //     $params = array($userid, $itemmodule, $courseid, $userid, $iteminstance, 1);
-    //     $rubrics = $DB->get_recordset_sql($sql, $params);
-    //     $out = '';
-
-    //     if ($rubrics) {
-    //         foreach ($rubrics as $rubric) {
-    //             if ($rubric->description || $rubric->definition) {
-    //                 $out .= "<strong>" . $rubric->description . ": </strong>" . $rubric->definition . "<br/>";
-    //             }
-    //         }
-    //     }
-
-    //     return $out;
-    // }
-
-    // /**
-    //  * Get the Marking guide feedback
-    //  * 
-    //  * @param int $userid The id of the user who's feedback being viewed
-    //  * @param int $courseid The course the Marking guide is being checked for
-    //  * @param int $iteminstance The instance of the module item 
-    //  * @param int $itemmodule The module currently being queried
-    //  * @return str the text for the Marking guide
-    //  */
-    // public function assign_get_marking_guide_feedback($userid, $courseid, $iteminstance, $itemmodule) {
-    //     global $DB;
-
-    //     $sql = "SELECT DISTINCT gc.shortname,gf.remark 
-    //         FROM {gradingform_guide_criteria} gc
-    //         JOIN {gradingform_guide_fillings} gf
-    //         ON gc.id = gf.criterionid
-    //         JOIN (
-    //             SELECT gf.criterionid, gf.instanceid, gc.shortname, gf.remark
-    //             FROM {gradingform_guide_criteria} gc
-    //             JOIN {gradingform_guide_fillings} gf
-    //             ON gc.id = gf.criterionid
-    //             JOIN {grading_instances} gin
-    //             ON gf.instanceid = gin.id
-    //             JOIN {assign_grades} ag
-    //             ON gin.itemid = ag.id
-    //             JOIN {grade_items} gi
-    //             ON ag.assignment = gi.iteminstance AND ag.userid = ?
-    //             JOIN {grade_grades} gg
-    //             ON gi.id = gg.itemid AND gi.itemmodule = ? 
-    //             AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ?
-    //             GROUP BY gf.criterionid
-    //         ) q
-    //         ON gf.criterionid = q.criterionid AND gf.instanceid = q.instanceid";
-
-    //     $params = array($userid, $itemmodule, $courseid, $userid, $iteminstance);
-    //     $guides = $DB->get_recordset_sql($sql, $params);
-    //     $out = '';
-
-    //     if ($guides) {
-    //         foreach ($guides as $guide) {
-    //             if ($guide->shortname || $guide->remark) {
-    //                 $out .= "<strong>" . $guide->shortname . ": </strong>" . $guide->remark . "<br/>";
-    //             }
-    //         }
-    //     }
-
-    //     return $out;
-    // }
 
     /**
      * Gets the assign feedback files.
