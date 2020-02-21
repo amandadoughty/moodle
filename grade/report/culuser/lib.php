@@ -628,12 +628,12 @@ class grade_report_culuser extends grade_report_user {
                     
                         // At this point $data['feedback']['content'] will contain the feedback or an empty string.
                         // Now we check if there is a feedback function for this module.
-                        $feedbackfunction = 'get' . ucfirst($grade_object->itemmodule) . 'Feedback';
+                        $feedbackfunction = 'get_' . $grade_object->itemmodule . '_feedback';
 
                         if (method_exists($this, $feedbackfunction)){
                             $this->{$feedbackfunction}($data, $grade_object);
                         } else {
-                            $this->getModfeedback($data, $grade_object);
+                            $this->get_mod_feedback($data, $grade_object);
                         }
                     }                    
 
@@ -709,7 +709,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getAssignFeedback(&$data, $grade_object) {
+    protected function get_assign_feedback(&$data, $grade_object) {
         global $DB, $CFG;
 
         require_once($CFG->dirroot . '/mod/assign/locallib.php');
@@ -834,7 +834,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getModFeedback(&$data, $grade_object) {
+    protected function get_mod_feedback(&$data, $grade_object) {
         $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
 
         if ($data['feedback']['content']) {
@@ -848,7 +848,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getPeerassessmentFeedback(&$data, $grade_object) {
+    protected function get_peerassessment_feedback(&$data, $grade_object) {
         // NB Overriding grades and feedback in the gradebbok shows changes in gradebook but not in
         // Peerassessment.
         $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
@@ -874,7 +874,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getTurnitintooltwoFeedback(&$data, $grade_object) {
+    protected function get_turnitintooltwo_feedback(&$data, $grade_object) {
         global $DB, $CFG, $PAGE;
 
         $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
@@ -936,7 +936,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getWorkshopFeedback(&$data, $grade_object) {
+    protected function get_workshop_feedback(&$data, $grade_object) {
         global $DB, $CFG, $PAGE;
 
         require_once($CFG->dirroot . '/mod/workshop/locallib.php');
