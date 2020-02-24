@@ -44,9 +44,13 @@ class local_culobserver_observer {
         $cm = $modinfo->get_cm($cmid);
         $assign = new assign($context, $cm, $course);
 
+        $params = [
+            'context' => $event->get_context(),
+            'objectid' => $event->objectid
+        ];
+
         if ($assign->is_blind_marking()) {
-            // Do not log anything that can identify the user.
-            return;
+            $params['anonymous'] = 1;
         }
 
         $fs = get_file_storage();
@@ -62,12 +66,8 @@ class local_culobserver_observer {
         $info .= join("; \n\n", $contenthashes);
         $info = nl2br($info);
 
-        $params = array(
-            'context' => $event->get_context(),
-            'objectid' => $event->objectid,
-            'other' => array('contenthashes' => $info)
-        );
-
+        $params['other'] = ['contenthashes' => $info];
+        
         $event = local_culobserver\event\assessable_uploaded::create($params);
         $event->trigger();
     }
