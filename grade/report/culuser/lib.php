@@ -25,12 +25,174 @@
 require_once($CFG->dirroot . '/grade/report/user/lib.php');
 require_once($CFG->libdir.'/tablelib.php');
 
+//showhiddenitems values
+define("GRADE_REPORT_CULUSER_HIDE_HIDDEN", 0);
+define("GRADE_REPORT_CULUSER_HIDE_UNTIL", 1);
+define("GRADE_REPORT_CULUSER_SHOW_HIDDEN", 2);
+
+define("GRADE_REPORT_CULUSER_VIEW_SELF", 1);
+define("GRADE_REPORT_CULUSER_VIEW_USER", 2);
+
 /**
  * Class providing an API for the user report building and displaying.
  * @uses grade_report
  * @package gradereport_culuser
  */
 class grade_report_culuser extends grade_report_user {
+
+        /**
+     * The user.
+     * @var object $user
+     */
+    public $user;
+
+    /**
+     * A flexitable to hold the data.
+     * @var object $table
+     */
+    public $table;
+
+    /**
+     * An array of table headers
+     * @var array
+     */
+    public $tableheaders = array();
+
+    /**
+     * An array of table columns
+     * @var array
+     */
+    public $tablecolumns = array();
+
+    /**
+     * An array containing rows of data for the table.
+     * @var type
+     */
+    public $tabledata = array();
+
+    /**
+     * An array containing the grade items data for external usage (web services, ajax, etc...)
+     * @var array
+     */
+    public $gradeitemsdata = array();
+
+    /**
+     * The grade tree structure
+     * @var grade_tree
+     */
+    public $gtree;
+
+    /**
+     * Flat structure similar to grade tree
+     */
+    public $gseq;
+
+    /**
+     * show student ranks
+     */
+    public $showrank;
+
+    /**
+     * show grade percentages
+     */
+    public $showpercentage;
+
+    /**
+     * Show range
+     */
+    public $showrange = true;
+
+    /**
+     * Show grades in the report, default true
+     * @var bool
+     */
+    public $showgrade = true;
+
+    /**
+     * Decimal points to use for values in the report, default 2
+     * @var int
+     */
+    public $decimals = 2;
+
+    /**
+     * The number of decimal places to round range to, default 0
+     * @var int
+     */
+    public $rangedecimals = 0;
+
+    /**
+     * Show grade feedback in the report, default true
+     * @var bool
+     */
+    public $showfeedback = true;
+
+    /**
+     * Show grade weighting in the report, default true.
+     * @var bool
+     */
+    public $showweight = true;
+
+    /**
+     * Show letter grades in the report, default false
+     * @var bool
+     */
+    public $showlettergrade = false;
+
+    /**
+     * Show the calculated contribution to the course total column.
+     * @var bool
+     */
+    public $showcontributiontocoursetotal = true;
+
+    /**
+     * Show average grades in the report, default false.
+     * @var false
+     */
+    public $showaverage = false;
+
+    public $maxdepth;
+    public $evenodd;
+
+    public $canviewhidden;
+
+    public $switch;
+
+    /**
+     * Show hidden items even when user does not have required cap
+     */
+    public $showhiddenitems;
+    public $showtotalsifcontainhidden;
+
+    public $baseurl;
+    public $pbarurl;
+
+    /**
+     * The modinfo object to be used.
+     *
+     * @var course_modinfo
+     */
+    protected $modinfo = null;
+
+    /**
+     * View as user.
+     *
+     * When this is set to true, the visibility checks, and capability checks will be
+     * applied to the user whose grades are being displayed. This is very useful when
+     * a mentor/parent is viewing the report of their mentee because they need to have
+     * access to the same information, but not more, not less.
+     *
+     * @var boolean
+     */
+    protected $viewasuser = false;
+
+    /**
+     * An array that collects the aggregationhints for every
+     * grade_item. The hints contain grade, grademin, grademax
+     * status, weight and parent.
+     *
+     * @var array
+     */
+    protected $aggregationhints = array();
 
     /**
      * Constructor. Sets local copies of user preferences and initialises grade_tree.
@@ -42,6 +204,7 @@ class grade_report_culuser extends grade_report_user {
      */
     public function __construct($courseid, $gpr, $context, $userid, $viewasuser = null) {
         global $DB, $CFG;
+
         parent::__construct($courseid, $gpr, $context, $userid, $viewasuser);
 
         $this->showrank        = grade_get_setting($this->courseid, 'report_culuser_showrank', $CFG->grade_report_culuser_showrank);
@@ -146,8 +309,8 @@ class grade_report_culuser extends grade_report_user {
 
         // If this is a hidden grade category, hide it completely from the user
         if ($type == 'category' && $grade_object->is_hidden() && !$this->canviewhidden && (
-                $this->showhiddenitems == GRADE_report_culuser_HIDE_HIDDEN ||
-                ($this->showhiddenitems == GRADE_report_culuser_HIDE_UNTIL && !$grade_object->is_hiddenuntil()))) {
+                $this->showhiddenitems == GRADE_REPORT_CULUSER_HIDE_HIDDEN ||
+                ($this->showhiddenitems == GRADE_REPORT_CULUSER_HIDE_UNTIL && !$grade_object->is_hiddenuntil()))) {
             return false;
         }
 
@@ -177,8 +340,8 @@ class grade_report_culuser extends grade_report_user {
             $hide = false;
             // If this is a hidden grade item, hide it completely from the user.
             if ($grade_grade->is_hidden() && !$this->canviewhidden && (
-                    $this->showhiddenitems == GRADE_report_culuser_HIDE_HIDDEN ||
-                    ($this->showhiddenitems == GRADE_report_culuser_HIDE_UNTIL && !$grade_grade->is_hiddenuntil()))) {
+                    $this->showhiddenitems == GRADE_REPORT_CULUSER_HIDE_HIDDEN ||
+                    ($this->showhiddenitems == GRADE_REPORT_CULUSER_HIDE_UNTIL && !$grade_grade->is_hiddenuntil()))) {
                 $hide = true;
             } else if (!empty($grade_object->itemmodule) && !empty($grade_object->iteminstance)) {
                 // The grade object can be marked visible but still be hidden if
@@ -454,24 +617,23 @@ class grade_report_culuser extends grade_report_user {
                     } else if (!$this->canviewhidden and $grade_grade->is_hidden()) {
                         $data['feedback']['class'] = $classfeedback . ' feedbacktext';
                         $data['feedback']['content'] = '&nbsp;';
+                    } else if (empty($grade_grade->feedback) or (!$this->canviewhidden and $grade_grade->is_hidden())) {
+                        $data['feedback']['class'] = $classfeedback.' feedbacktext';
+                        $data['feedback']['content'] = '&nbsp;';
                     } else {
-                        $data['feedback']['class'] = $classfeedback . ' feedbacktext';
-
-    			        if (empty($grade_grade->feedback)) {
-                                $data['feedback']['content'] = '';
-                        } else {                        
-                            $data['feedback']['content'] = format_text($grade_grade->feedback, $grade_grade->feedbackformat);
-                            $gradeitemdata['feedback'] = $grade_grade->feedback;
-                        }
+                        $data['feedback']['class'] = $classfeedback.' feedbacktext';
+                        $data['feedback']['content'] = format_text($grade_grade->feedback, $grade_grade->feedbackformat,
+                            ['context' => $grade_grade->get_context()]);
+                        $gradeitemdata['feedback'] = $grade_grade->feedback;
                     
                         // At this point $data['feedback']['content'] will contain the feedback or an empty string.
                         // Now we check if there is a feedback function for this module.
-                        $feedbackfunction = 'get' . ucfirst($grade_object->itemmodule) . 'Feedback';
+                        $feedbackfunction = 'get_' . $grade_object->itemmodule . '_feedback';
 
                         if (method_exists($this, $feedbackfunction)){
                             $this->{$feedbackfunction}($data, $grade_object);
                         } else {
-                            $this->getModfeedback($data, $grade_object);
+                            $this->get_mod_feedback($data, $grade_object);
                         }
                     }                    
 
@@ -547,7 +709,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getAssignFeedback(&$data, $grade_object) {
+    protected function get_assign_feedback(&$data, $grade_object) {
         global $DB, $CFG;
 
         require_once($CFG->dirroot . '/mod/assign/locallib.php');
@@ -560,66 +722,107 @@ class grade_report_culuser extends grade_report_user {
             $context = context_module::instance($cm->id);
             $course = get_course($this->courseid);
             $assign = new assign($context, $cm, $course);
+
+            $grade = $assign->get_user_grade($this->user->id, false);
+            $gradingstatus = $assign->get_grading_status($this->user->id);
+            $gradinginfo = grade_get_grades($this->courseid, 'mod', 'assign', $cm->instance, $this->user->id);
+
+            $gradingitem = null;
+            $gradebookgrade = null;
+
+            if (isset($gradinginfo->items[0])) {
+                $gradingitem = $gradinginfo->items[0];
+                $gradebookgrade = $gradingitem->grades[$this->user->id];
+            }
+
+            // Check to see if all feedback plugins are empty.
+            $emptyplugins = true;
             $feedbackplugins = $assign->get_feedback_plugins();
-            $renderer = $assign->get_renderer();
-            $config = get_config('assign');
-            // Get the feedback plugin that is set to push comments to the gradebook. This is what populates
-            // $grade_grade->feedback unless it is overridden.
-            $gradebookfeedbacktype = str_replace('assignfeedback_', '', $config->feedback_plugin_for_gradebook);
-            // We need a stdClass with an id property from assign_grades that is for this $grade_object. 
-            // It is needed to test $feedbackplugin->is_empty() for the remaining assignfeedback plugins.
-            $params = array(
-                'assignment' => $assign->get_instance()->id,  
-                'userid' => $this->user->id
-                );
 
-            $grades = $DB->get_records('assign_grades', $params, 'attemptnumber DESC');
-            $grade = array_pop($grades);
-            
-            foreach($feedbackplugins as $feedbackplugin) {
-                if ($feedbackplugin->is_enabled() &&
-                    $feedbackplugin->is_visible() &&
-                    $feedbackplugin->has_user_summary()                                            
-                ){
-                    $feedbacksubtitle = '<p class="feedbackpluginname">' . $feedbackplugin->get_name() . '</p>';
-
-                    // Add the title of the default feedback type if the feedback is not empty.
-                    if ($feedbackplugin->get_type() == $gradebookfeedbacktype) {
-                        if ($data['feedback']['content']) {
-                            $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
-                        }
-                    // Use the plugin function to output the feedback.
-                    } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
-                        if($feedbackplugin->get_name() == 'Feedback files') {
-                            // Feedback files. We use our own funtion to format these as the 
-                            // plugin produces verbose html.
-                            if($files = $this->assign_get_feedback_files($grade, $context)) {
-                                $filefeedback = $this->get_formatted_feedback_files($files);
-                                // $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';
-                                $data['feedback']['content'] .= $feedbacksubtitle .= $filefeedback;
-                            }
-                        } else {
-                            $data['feedback']['content'] .= $feedbacksubtitle;
-                            $data['feedback']['content'] .= $feedbackplugin->view($grade);
+            if ($grade) {
+                foreach ($feedbackplugins as $plugin) {
+                    if ($plugin->is_visible() && $plugin->is_enabled()) {
+                        if (!$plugin->is_empty($grade)) {
+                            $emptyplugins = false;
                         }
                     }
                 }
             }
 
-            // Get any rubric feedback.
-            $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('rubric', 'gradereport_culuser') . '</p>';
-            $rubrictext = $this->assign_get_rubric_feedback($this->user->id, $this->courseid, $assign->get_instance()->id, 'assign');
+            if ($assign->get_instance()->markingworkflow && $gradingstatus != ASSIGN_MARKING_WORKFLOW_STATE_RELEASED) {
+                $emptyplugins = true; // Don't show feedback plugins until released either.
+            } 
 
-            if ($rubrictext) {
-                $data['feedback']['content'] .= $feedbacksubtitle .= $rubrictext;
-            }
+            $cangrade = has_capability('mod/assign:grade', $assign->get_context());
 
-            // Get any marking guide feedback.
-            $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('markingguide', 'gradereport_culuser') . '</p>';
-            $rubrictext = $this->assign_get_marking_guide_feedback($this->user->id, $this->courseid, $assign->get_instance()->id, 'assign');
+            $hasgrade = $assign->get_instance()->grade != GRADE_TYPE_NONE &&
+                            !is_null($gradebookgrade) && !is_null($gradebookgrade->grade);
 
-            if ($rubrictext) {
-                $data['feedback']['content'] .= $feedbacksubtitle .= $rubrictext;
+            $gradevisible = $cangrade || 
+                $assign->get_instance()->grade == GRADE_TYPE_NONE ||
+                (
+                    !is_null($gradebookgrade) && 
+                    !$gradebookgrade->hidden 
+                    // && 
+                    // !$assign->is_blind_marking()
+                );
+
+            // If there is a visible grade, show the summary.
+            if (($hasgrade || !$emptyplugins) && $gradevisible) {
+                $renderer = $assign->get_renderer();
+                $config = get_config('assign');
+                // Get the feedback plugin that is set to push comments to the gradebook. This is what populates
+                // $grade_grade->feedback unless it is overridden.
+                $gradebookfeedbacktype = str_replace('assignfeedback_', '', $config->feedback_plugin_for_gradebook);
+
+                foreach($feedbackplugins as $feedbackplugin) {
+                    if (
+                        $feedbackplugin->is_enabled() &&
+                        $feedbackplugin->is_visible() &&
+                        $feedbackplugin->has_user_summary()                                   
+                    ){
+                        $feedbacksubtitle = '<p class="feedbackpluginname">' . $feedbackplugin->get_name() . '</p>';
+
+                        // Add the title of the default feedback type if the feedback is not empty.
+                        if ($feedbackplugin->get_type() == $gradebookfeedbacktype) {
+                            if ($data['feedback']['content']) {
+                                $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
+                            }
+                        // Use the plugin function to output the feedback.
+                        } elseif ($grade && !$feedbackplugin->is_empty($grade)) {
+                            if($feedbackplugin->get_name() == 'Feedback files') {
+                                // Feedback files. We use our own funtion to format these as the 
+                                // plugin produces verbose html.
+                                if($files = $this->assign_get_feedback_files($grade, $context)) {
+                                    $filefeedback = $this->get_formatted_feedback_files($files);
+        
+                                    $data['feedback']['content'] .= $feedbacksubtitle .= $filefeedback;
+                                }
+                            } else {
+                                $data['feedback']['content'] .= $feedbacksubtitle;
+                                $data['feedback']['content'] .= $feedbackplugin->view($grade);
+                            }
+                        }
+                    }
+                }
+            
+                if($hasgrade) {
+                    // Get grading form feedback (marking guide or rubric).
+                    $gradingmanager = get_grading_manager($assign->get_context(), 'mod_assign', 'submissions');
+
+                    $activemethod = $gradingmanager->get_active_method();
+                    $feedbackfn = 'assign_get_gradingform_' . $activemethod . '_feedback';
+                    $fnexists = method_exists($this, $feedbackfn);
+
+                    if($activemethod && $fnexists) {
+                        $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string($activemethod, 'gradingform_' . $activemethod) . '</p>';
+                        $gradingformtext = $this->$feedbackfn($grade, $gradingmanager);
+
+                        if ($gradingformtext) {
+                            $data['feedback']['content'] .= $feedbacksubtitle .= $gradingformtext;
+                        }
+                    }
+                }
             }
         }
     }
@@ -631,7 +834,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getModFeedback(&$data, $grade_object) {
+    protected function get_mod_feedback(&$data, $grade_object) {
         $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
 
         if ($data['feedback']['content']) {
@@ -645,7 +848,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getPeerassessmentFeedback(&$data, $grade_object) {
+    protected function get_peerassessment_feedback(&$data, $grade_object) {
         // NB Overriding grades and feedback in the gradebbok shows changes in gradebook but not in
         // Peerassessment.
         $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
@@ -671,7 +874,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getTurnitintooltwoFeedback(&$data, $grade_object) {
+    protected function get_turnitintooltwo_feedback(&$data, $grade_object) {
         global $DB, $CFG, $PAGE;
 
         $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
@@ -733,7 +936,7 @@ class grade_report_culuser extends grade_report_user {
      * @param array $data
      * @param stdClass $grade_object
      */
-    protected function getWorkshopFeedback(&$data, $grade_object) {
+    protected function get_workshop_feedback(&$data, $grade_object) {
         global $DB, $CFG, $PAGE;
 
         require_once($CFG->dirroot . '/mod/workshop/locallib.php');
@@ -827,42 +1030,28 @@ class grade_report_culuser extends grade_report_user {
     // Assignment functions
 
     /**
-     * Get the Assign Rubric feedback
+     * Get the Grading Form Marking Guide feedback
      * 
-     * @param int $userid The id of the user who's feedback being viewed
-     * @param int $courseid The course the Rubric is being checked for
-     * @param int $iteminstance The instance of the module item 
-     * @param int $itemmodule The module currently being queried
-     * @return str the text for the Rubric
+     * @param stdClass The grade record
+     * @param obj grading_manager
+     * @return str the text for the feedback
      */
-    public function assign_get_rubric_feedback($userid, $courseid, $iteminstance, $itemmodule) {
+    public function assign_get_gradingform_guide_feedback($grade, $gradingmanager) {
         global $DB;
 
-        $sql = "SELECT DISTINCT rc.id, rc.description, rl.definition 
-            FROM {gradingform_rubric_criteria} rc
-            JOIN {gradingform_rubric_levels} rl
-            ON rc.id = rl.criterionid
-            JOIN {gradingform_rubric_fillings} rf
-            ON rl.id = rf.levelid AND rc.id = rf.criterionid
-            JOIN {grading_instances} gin
-            ON rf.instanceid = gin.id
-            JOIN {assign_grades} ag
-            ON gin.itemid = ag.id
-            JOIN {grade_items} gi
-            ON ag.assignment = gi.iteminstance AND ag.userid = ?
-            JOIN {grade_grades} gg
-            ON gi.id = gg.itemid AND gi.itemmodule = ? 
-            AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ? AND status = ?";
-
-        $params = array($userid, $itemmodule, $courseid, $userid, $iteminstance, 1);
-        $rubrics = $DB->get_recordset_sql($sql, $params);
+        $controller = $gradingmanager->get_active_controller();
+        $criteria = $controller->get_definition()->guide_criteria;
+        $instances = $controller->get_active_instances($grade->id);
         $out = '';
 
-        if ($rubrics) {
-            foreach ($rubrics as $rubric) {
-                if ($rubric->description || $rubric->definition) {
-                    $out .= "<strong>" . $rubric->description . ": </strong>" . $rubric->definition . "<br/>";
-                }
+        foreach ($instances as $instance) {
+            $remarks = $instance->get_guide_filling()['criteria'];
+
+            foreach ($remarks as $remark) {
+                $criterionid = $remark['criterionid'];
+                $shortname = $criteria[$criterionid]['shortname'];
+                $remark = $remark['remark'];
+                $out .= "<strong>" . $shortname . ": </strong>" . $remark . "<br/>";
             }
         }
 
@@ -870,48 +1059,30 @@ class grade_report_culuser extends grade_report_user {
     }
 
     /**
-     * Get the Marking guide feedback
+     * Get the Grading Form Rubric feedback
      * 
-     * @param int $userid The id of the user who's feedback being viewed
-     * @param int $courseid The course the Marking guide is being checked for
-     * @param int $iteminstance The instance of the module item 
-     * @param int $itemmodule The module currently being queried
-     * @return str the text for the Marking guide
+     * @param stdClass The grade record
+     * @param obj grading_manager
+     * @return str the text for the feedback
      */
-    public function assign_get_marking_guide_feedback($userid, $courseid, $iteminstance, $itemmodule) {
+    public function assign_get_gradingform_rubric_feedback($grade, $gradingmanager) {
         global $DB;
 
-        $sql = "SELECT DISTINCT gc.shortname,gf.remark 
-            FROM {gradingform_guide_criteria} gc
-            JOIN {gradingform_guide_fillings} gf
-            ON gc.id = gf.criterionid
-            JOIN (
-                SELECT gf.criterionid, gf.instanceid, gc.shortname, gf.remark
-                FROM {gradingform_guide_criteria} gc
-                JOIN {gradingform_guide_fillings} gf
-                ON gc.id = gf.criterionid
-                JOIN {grading_instances} gin
-                ON gf.instanceid = gin.id
-                JOIN {assign_grades} ag
-                ON gin.itemid = ag.id
-                JOIN {grade_items} gi
-                ON ag.assignment = gi.iteminstance AND ag.userid = ?
-                JOIN {grade_grades} gg
-                ON gi.id = gg.itemid AND gi.itemmodule = ? 
-                AND gi.courseid = ? AND gg.userid = ? AND gi.iteminstance = ?
-                GROUP BY gf.criterionid
-            ) q
-            ON gf.criterionid = q.criterionid AND gf.instanceid = q.instanceid";
-
-        $params = array($userid, $itemmodule, $courseid, $userid, $iteminstance);
-        $guides = $DB->get_recordset_sql($sql, $params);
+        $controller = $gradingmanager->get_active_controller();
+        $criteria = $controller->get_definition()->rubric_criteria;
+        $instances = $controller->get_active_instances($grade->id);
         $out = '';
 
-        if ($guides) {
-            foreach ($guides as $guide) {
-                if ($guide->shortname || $guide->remark) {
-                    $out .= "<strong>" . $guide->shortname . ": </strong>" . $guide->remark . "<br/>";
-                }
+        foreach ($instances as $instance) {
+            $values = $instance->get_rubric_filling()['criteria'];
+
+            foreach ($values as $value) {
+                $criterionid = $value['criterionid'];
+                $description = $criteria[$criterionid]['description'];
+                $levelid = $value['levelid'];
+                $definition = $criteria[$criterionid]['levels'][$levelid]['definition'];
+                $remark = $value['remark'];
+                $out .= "<strong>" . $description . ": </strong>" . $definition . "<br/>" . $remark . "<br/>";
             }
         }
 
@@ -1409,38 +1580,5 @@ function grade_report_culuser_profilereport($course, $user, $viewasuser = false)
  * @param stdClass $course Course object
  */
 function gradereport_culuser_myprofile_navigation(core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
-    // global $CFG, $USER;
-    // if (empty($course)) {
-    //     // We want to display these reports under the site context.
-    //     $course = get_fast_modinfo(SITEID)->get_course();
-    // }
-    // $usercontext = context_user::instance($user->id);
-    // $anyreport = has_capability('moodle/user:viewuseractivitiesreport', $usercontext);
 
-    // // Start capability checks.
-    // if ($anyreport || $iscurrentuser) {
-    //     // Add grade hardcoded grade report if necessary.
-    //     $gradeaccess = false;
-    //     $coursecontext = context_course::instance($course->id);
-    //     if (has_capability('moodle/grade:viewall', $coursecontext)) {
-    //         // Can view all course grades.
-    //         $gradeaccess = true;
-    //     } else if ($course->showgrades) {
-    //         if ($iscurrentuser && has_capability('moodle/grade:view', $coursecontext)) {
-    //             // Can view own grades.
-    //             $gradeaccess = true;
-    //         } else if (has_capability('moodle/grade:viewall', $usercontext)) {
-    //             // Can view grades of this user - parent most probably.
-    //             $gradeaccess = true;
-    //         } else if ($anyreport) {
-    //             // Can view grades of this user - parent most probably.
-    //             $gradeaccess = true;
-    //         }
-    //     }
-    //     if ($gradeaccess) {
-    //         $url = new moodle_url('/course/user.php', array('mode' => 'grade', 'id' => $course->id, 'user' => $user->id));
-    //         $node = new core_user\output\myprofile\node('reports', 'grade', get_string('grade'), null, $url);
-    //         $tree->add_node($node);
-    //     }
-    // }
 }
