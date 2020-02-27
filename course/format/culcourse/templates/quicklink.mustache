@@ -35,30 +35,30 @@
 {{/ismovingquicklink}}
 
 <li 
-    class="dash quicklink quicklinkdraggable"
+    class="dash quicklink quicklinkdraggable flex-wrap align-items-stretch col-xs-6 col-sm-4 col-xl-3"
     data-setting="quicklinksequence"
     data-position="{{name}}"
+    aria-labelledby="{{attrs.id}}"
 >
-    {{> format_culcourse/movelink}}
-    <span class="dash-link {{class}}">
-        {{^attrs.class}}
-        <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
-            <i class="fa {{icon}}"></i>
-            <span class="sr-only">{{attrs.title}}</span>
+    <div class="dash-link {{class}} {{#attrs.class}}bg-white{{/attrs.class}} w-100 h-100 d-flex flex-wrap align-items-center justify-content-center text-center">
+        {{> format_culcourse/movelink}}
+        <a id="{{attrs.id}}" class="w-100 h-100 d-flex flex-wrap align-items-center justify-content-center {{#attrs.class}}disabled{{/attrs.class}} p-2" href="{{{url}}}" target="{{attrs.target}}" title="{{attrs.title}}">
+            <div class="dash-link-inner w-100 d-flex flex-wrap flex-column">
+                {{^attrs.class}}
+                <div class="dash-icon {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center mb-2">
+                    <i class="fa {{icon}}"></i>
+                </div>
+                {{/attrs.class}}
+                {{#attrs.class}}
+                <div class="dash-icon {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center mb-2">           
+                    <i class="fa {{icon}} text-muted"></i>
+                </div>
+                {{/attrs.class}}
+                <div class="dash-text {{attrs.class}} {{#attrs.class}}text-muted{{/attrs.class}}">
+                    {{text}}
+                </div>      
+            </div>
         </a>
-        {{/attrs.class}}
-        {{#attrs.class}}
-        <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
-            <span class="fa-stack">                
-                <i class="fa {{icon}} fa-stack-1x"></i>
-                <i class="fa fa-ban fa-stack-2x"></i>
-            </span>
-            <span class="sr-only">{{attrs.title}}</span>
-        </a>
-        {{/attrs.class}}
-        <a title="{{attrs.title}}" class="dash-text {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
-            {{text}}
-        </a>
-        {{> format_culcourse/editlink}}        
-    </span>
+        {{> format_culcourse/editlink}}  
+    </div>
 </li>

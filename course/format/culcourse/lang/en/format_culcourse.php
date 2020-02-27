@@ -228,6 +228,9 @@ $string['view-timetable'] = 'View timetable';
 // Activities
 $string['view-mod'] = 'View list of {$a}';
 
+$string['viewmore'] = 'View More';
+$string['viewless'] = 'View Less';
+
 /***** EDITING LINKS ON COURSE PAGE *****/
 // Editing links
 $string['dashshowlink'] = 'Show \'{$a}\' link';
@@ -237,6 +240,7 @@ $string['moveactivitylink'] = 'Move \'{$a}\' link';
 $string['moving'] = 'Moving dash link: {$a}';
 $string['movequicklink'] = 'Move \'{$a}\' link';
 $string['noeditcoursesettings'] = 'You are not permitted to edit course settings.';
+
 
 /* PHOTOBOARD */
 $string['buildinglocation'] = 'Building/location: ';
