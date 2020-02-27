@@ -4,6 +4,11 @@ $dashboard = '';
 $hasdashboard = false;
 $url = '';
 
+// CAUTION, hacky fundamental variable defintion to follow!
+// Note that because of the way course fromats are constructed though
+// inclusion we pass parameters around this way..
+$section = optional_param('section', 0, PARAM_INT);
+
 if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
     $extraclass = 'courseheader w-100 py-4 px-3 mb-3';    
     $course = new core_course_list_element($COURSE);
@@ -30,8 +35,13 @@ if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
         }
     }
 
+    // To be replaced if the format uses local plugin later.
     if (isset($renderer) && $course->format == 'culcourse') {
     	$dashboard = $renderer->dashboard_section();
+    }
+
+    if (isset($renderer) && method_exists($renderer, 'build_dashboard_in_header')) {
+        $dashboard = $renderer->build_dashboard_in_header($course, $section);
     }
 
     if ($dashboard) {
