@@ -22,8 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once("../../../../config.php");
-require_once($CFG->dirroot.'/course/format/culcourse/dashboard/locallib.php');
+require_once("../../config.php");
+require_once($CFG->dirroot.'/local/culcourse_dashboard/locallib.php');
 require_once($CFG->dirroot.'/mod/lti/locallib.php');
 
 $id = required_param('id', PARAM_INT);   // Course id.
@@ -47,7 +47,7 @@ $event = \mod_lti\event\course_module_instance_list_viewed::create($params);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
-$PAGE->set_url('/local/culcourse_dashboard/dashboard/ltiindex.php', array('id' => $course->id, 'typeid' => $typeid));
+$PAGE->set_url('/local/culcourse_dashboard/ltiindex.php', array('id' => $course->id, 'typeid' => $typeid));
 
 if($type->id) {
     $pagetitle = strip_tags($course->shortname . ': ' . $type->name . ' ' . get_string('modulenamepluralformatted', "lti"));

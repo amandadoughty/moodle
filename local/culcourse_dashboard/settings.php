@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$settings = new admin_settingpage('local_culcourse_dashboard', 'CUL Course Dashboard');
+
 /* Quicklinks.
 */
 $elements = [

@@ -60,7 +60,7 @@ if (!defined('ACTIVITYLINK')) {
 function local_culcourse_dashboard_get_external_urls_data($course) {
     global $DB;
 
-    $record = $DB->get_record('local_culcourse_dashboard_ext_urls', ['courseid' => $course->id]);
+    $record = $DB->get_record('culcourse_dashboard_ext_urls', ['courseid' => $course->id]);
     $today = strtotime('today midnight');
     $update = true;
 
@@ -93,10 +93,10 @@ function local_culcourse_dashboard_get_external_urls_data($course) {
     if ($record) {
         $dataobj->id = $record->id;
         // Update.
-        $DB->update_record('local_culcourse_dashboard_ext_urls', $dataobj);
+        $DB->update_record('culcourse_dashboard_ext_urls', $dataobj);
     } else {
         // Insert.
-        $DB->insert_record('local_culcourse_dashboard_ext_urls', $dataobj);
+        $DB->insert_record('culcourse_dashboard_ext_urls', $dataobj);
     }
 
     return $data;
@@ -418,7 +418,7 @@ function local_culcourse_dashboard_get_photoboard_url($course, $roleid) {
     $cid = $cname[0];
     $coursecontext = context_course::instance($COURSE->id);
     $url = new moodle_url(
-        '/course/format/culcourse/dashboard/photoboard.php',
+        '/local/culcourse_dashboard/photoboard.php',
         ['contextid' => $coursecontext->id, 'roleid' => $roleid]
     );
 
@@ -533,7 +533,7 @@ function local_culcourse_dashboard_get_coursecode_data($coursecode) { //TODO: Ca
     return $codedata;
 }
 
-function local_culcourse_dashboard_quicklink_visibility($courseid, $name, $value, $lnktxt = '') {
+function local_culcourse_dashboard_quicklink_visibility($courseid, $section, $name, $value, $lnktxt = '') {
     global $DB;
 
     // Important: Cannot use $format->update_course_format_options($options)
@@ -555,7 +555,8 @@ function local_culcourse_dashboard_quicklink_visibility($courseid, $name, $value
     }
 
     list($editurl, $editicon, $editattrs) = local_culcourse_dashboard_get_edit_link(
-                $courseid, 
+                $courseid,
+                $section, 
                 $name, 
                 $value,
                 $lnktxt
@@ -570,7 +571,7 @@ function local_culcourse_dashboard_quicklink_visibility($courseid, $name, $value
     return json_encode($data);
 }
 
-function local_culcourse_dashboard_dashlink_move($courseid, $name, $link, $moveto = null) {
+function local_culcourse_dashboard_dashlink_move($courseid, $name, $link, $moveto = null, $keyboard = false) {
     $format = course_get_format($courseid);
     $options = $format->get_format_options();    
 
@@ -584,8 +585,14 @@ function local_culcourse_dashboard_dashlink_move($courseid, $name, $link, $movet
             if ($moveto == 'end') {
                 $out = array_splice($value, $fromindex, 1);
                 array_push($out, $value);
+            } else if ($moveto == 'start') {
+                $out = array_splice($value, $fromindex, 1);
+                $out = array_pop($out);
+                array_unshift($value, $out);
             } else {
                 $toindex = $flipped[$moveto];
+                // If keyboard used to move then we move 'after'.
+                $toindex += (int)$keyboard;
                 $newvalue = [];
                 $out = $value[$fromindex];
 
@@ -623,7 +630,7 @@ function local_culcourse_dashboard_dashlink_move($courseid, $name, $link, $movet
     return false;
 }
 
-function local_culcourse_dashboard_get_edit_link($courseid, $name, $value, $namestr) {    
+function local_culcourse_dashboard_get_edit_link($courseid, $section, $name, $value, $namestr) {    
     // Course format settings are 2 = show, 1 = hide.
     if ($value == 2) {
         $newvalue = 1;
@@ -640,13 +647,14 @@ function local_culcourse_dashboard_get_edit_link($courseid, $name, $value, $name
     $editattrs['class'] = 'dashlinkedit';
     $params = [
         'courseid' => $courseid,
+        'section' => $section,
         'action' => SHOWHIDE,
         'name' => $name,
         'showhide' => $newvalue,
         'sesskey' => sesskey()
     ];
     $editurl = new moodle_url(
-        '/course/format/culcourse/dashboard/dashlink_edit.php', $params
+        '/local/culcourse_dashboard/dashlink_edit.php', $params
         );
         
 
@@ -655,13 +663,14 @@ function local_culcourse_dashboard_get_edit_link($courseid, $name, $value, $name
     return [$editurl, $editicon, $editattrs];
 }
 
-function local_culcourse_dashboard_get_move_link($courseid, $copy, $name, $namestr) {    
+function local_culcourse_dashboard_get_move_link($courseid, $section, $copy, $name, $namestr) {    
     $moveicon = 'fa-arrows';        
     $title = 'dashmovelink';
     $moveattrs['title'] = get_string('movequicklink', 'local_culcourse_dashboard', $namestr);
     $moveattrs['class'] = 'dashlinkmove';
     $params = [
         'courseid' => $courseid,
+        'section' => $section,
         'action' => MOVE,
         'copy' => $copy,
         'name' => $name . 'sequence',
@@ -669,7 +678,7 @@ function local_culcourse_dashboard_get_move_link($courseid, $copy, $name, $names
     ];
 
     $moveurl = new moodle_url(
-        '/course/format/culcourse/dashboard/dashlink_edit.php', $params
+        '/local/culcourse_dashboard/dashlink_edit.php', $params
         );
 
     $moveurl = $moveurl->out();
@@ -677,7 +686,7 @@ function local_culcourse_dashboard_get_move_link($courseid, $copy, $name, $names
     return [$moveurl, $moveicon, $moveattrs];
 }
 
-function local_culcourse_dashboard_get_moveto_link($courseid, $moveto, $type) {
+function local_culcourse_dashboard_get_moveto_link($courseid, $section, $moveto, $type) {
     global $USER, $OUTPUT;
 
     $setting = $type . 'sequence';
@@ -705,13 +714,14 @@ function local_culcourse_dashboard_get_moveto_link($courseid, $moveto, $type) {
 
     $params = [
         'courseid' => $courseid,
+        'section' => $section,
         'action' => MOVE,
         'name' => $setting,
         'moveto' => $moveto,
         'sesskey' => sesskey()
     ];
     $movetourl = new moodle_url(
-        '/course/format/culcourse/dashboard/dashlink_edit.php', $params
+        '/local/culcourse_dashboard/dashlink_edit.php', $params
         );
 
     $movetourl = $movetourl->out();

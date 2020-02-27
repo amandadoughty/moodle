@@ -95,6 +95,31 @@ $string['setshowmodname'] = 'Show {$a} link';
 $string['setshowmod'] = 'Show this activity link';
 $string['setshowmod_help'] = 'States if this activity link will be shown.';
 
+// Module leaders heading.
+$string['setselectmoduleleadershdr'] = 'Select the Module Leader(s)';
+$string['setselectmoduleleadershdr_help'] = '
+Identifies the Lecturers on the module who are Module Leaders. 
+To select more than one Lecturer as the Module Leader click on one Lecturer, 
+and then press and hold the Ctrl key. While holding down the Ctrl key, 
+click each of the other lecturers you want to select as Module Leaders.
+';
+// Select module leaders.
+$string['setselectmoduleleaders'] = 'Select the Module Leader(s)';
+$string['setselectmoduleleaders_help'] = '
+Identifies the Lecturers on the module who are Module Leaders. 
+To select more than one Lecturer as the Module Leader click on one Lecturer, 
+and then press and hold the Ctrl key. While holding down the Ctrl key, 
+click each of the other lecturers you want to select as Module Leaders.
+';
+$string['defaultselectmoduleleaders'] = 'Select the Module Leader(s)';
+$string['defaultselectmoduleleaders_desc'] = '
+Identifies the Lecturers on the module who are Module Leaders. 
+To select more than one Lecturer as the Module Leader click on one Lecturer, 
+and then press and hold the Ctrl key. While holding down the Ctrl key, 
+click each of the other lecturers you want to select as Module Leaders.
+';
+$string['nolecturers'] = 'No Lecturers';
+
 // Timeout settings for curl.
 $string['connect_timeout'] = 'Connection timeout';
 $string['connect_timeout_desc'] = 'Enter the maximum time in seconds to wait for a connection to the Reading Lists server (upper limit: 6).';
@@ -177,6 +202,9 @@ $string['view-timetable'] = 'View timetable';
 // Activities
 $string['view-mod'] = 'View list of {$a}';
 
+$string['viewmore'] = 'View More';
+$string['viewless'] = 'View Less';
+
 /***** EDITING LINKS ON COURSE PAGE *****/
 // Editing links
 $string['dashshowlink'] = 'Show \'{$a}\' link';
@@ -186,6 +214,8 @@ $string['moveactivitylink'] = 'Move \'{$a}\' link';
 $string['moving'] = 'Moving dash link: {$a}';
 $string['movequicklink'] = 'Move \'{$a}\' link';
 $string['noeditcoursesettings'] = 'You are not permitted to edit course settings.';
+$string['afterlink'] = 'After "{$a}" link';
+$string['totopoflinks'] = 'To start of links';
 
 /* PHOTOBOARD */
 $string['buildinglocation'] = 'Building/location: ';

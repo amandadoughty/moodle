@@ -22,9 +22,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(__FILE__) . '/../../../../config.php');
-require_once(dirname(__FILE__) . '/../../../lib.php');
-require_once(dirname(__FILE__) . '/locallib.php');
+require_once(dirname(__FILE__) . '/../../config.php');
+require_once($CFG->dirroot . '/course/lib.php');
+require_once($CFG->dirroot . '/local/culcourse_dashboard/locallib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
 $action = required_param('action', PARAM_INT);
@@ -34,6 +34,7 @@ $copy = optional_param('copy', null, PARAM_RAW);
 $moveto = optional_param('moveto', null, PARAM_RAW);
 $cancelcopy = optional_param('cancelcopy', 0, PARAM_BOOL);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
+$section = optional_param('section', null, PARAM_INT);
 
 require_login();
 
@@ -46,8 +47,8 @@ if (!$usercanedit) {
 
 if ($action == SHOWHIDE) {
     if ($name) {
-        local_culcourse_dashboard_quicklink_visibility($courseid, $name, $showhide);
-        redirect(course_get_url($course));
+        local_culcourse_dashboard_quicklink_visibility($courseid, $section, $name, $showhide);
+        redirect(course_get_url($course, $section));
     } else {
         print_error('noname', 'local_culcourse_dashboard');
     }
@@ -79,7 +80,7 @@ if ($action == SHOWHIDE) {
             print_error('courseformatmissing');
         }
 
-        redirect(course_get_url($course));
+        redirect(course_get_url($course, $section));
 
     } else if (!empty($copy) && !empty($name) && confirm_sesskey()) {
         if ($name == 'quicklinksequence') {
@@ -94,7 +95,7 @@ if ($action == SHOWHIDE) {
             unset($USER->quicklinkcopycourse);
         }
 
-        redirect(course_get_url($course));
+        redirect(course_get_url($course, $section));
 
     } else if (!empty($cancelcopy) && !empty($name) and confirm_sesskey()) {
         if ($name == 'quicklinksequence') {
@@ -105,7 +106,7 @@ if ($action == SHOWHIDE) {
             unset($USER->activitylinkcopycourse);
         }
 
-        redirect(course_get_url($course));
+        redirect(course_get_url($course, $section));
     } else {
         print_error('unknowaction');
     }

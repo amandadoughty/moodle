@@ -31,7 +31,7 @@ use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
-// require_once($CFG->dirroot . '/course/format/culcourse/dashboard/locallib.php');
+// require_once($CFG->dirroot . '/local/culcourse_dashboard/locallib.php');
 
 class photoboard implements templatable, renderable {
 

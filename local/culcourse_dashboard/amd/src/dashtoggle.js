@@ -37,8 +37,8 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         DASHBOARD: '#local_culcourse_dashboard_dashboard'
         };
 
-    var GETURL = config.wwwroot + '/course/format/culcourse/dashboard/getuserprefdashtoggle.php';
-    var SETURL = config.wwwroot + '/course/format/culcourse/dashboard/setuserprefdashtoggle.php';
+    var GETURL = config.wwwroot + '/local/culcourse_dashboard/getuserprefdashtoggle.php';
+    var SETURL = config.wwwroot + '/local/culcourse_dashboard/setuserprefdashtoggle.php';
     var courseId;
 
     /**

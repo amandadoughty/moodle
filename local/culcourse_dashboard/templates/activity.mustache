@@ -35,19 +35,23 @@
 {{/ismovingactivitylink}}
 
 <li 
-    class="dash activitylink activitylinkdraggable"
+    class="dash activitylink activitylinkdraggable flex-wrap align-items-stretch col-xs-6 col-sm-4 col-xl-3"
     data-setting="activitylinksequence"
     data-position="{{name}}"
+    aria-labelledby="{{attrs.id}}"
 >
-    {{> local_culcourse_dashboard/movelink}}
-    <span class="dash-link {{class}}">
-        <a title="{{attrs.title}}" class="dash-icon {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
-            {{{icon}}}
-            <span class="sr-only">{{attrs.title}}</span>
+    <span class="dash-link {{class}} w-100 h-100 d-flex flex-wrap align-items-stretch justify-content-stretch text-center">
+        {{> local_culcourse_dashboard/movelink}}
+        <a id="{{attrs.id}}" class="w-100 h-100 d-flex flex-wrap align-items-center justify-content-center p-2" href="{{{url}}}" target="{{attrs.target}}" title="{{attrs.title}}">
+            <div class="dash-link-inner w-100 d-flex flex-wrap flex-column">
+                <div class="dash-icon {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center mb-2">
+                    {{{icon}}}
+                </div>
+                <span class="dash-text {{attrs.class}} d-flex flex-wrap align-items-center justify-content-center">
+                    {{text}}
+                </span>
+            </div>
         </a>
-        <a title="{{attrs.title}}" class="dash-text {{attrs.class}}" href="{{{url}}}" target="{{attrs.target}}">
-            {{text}}
-        </a>
-        {{> local_culcourse_dashboard/editlink}}        
+        {{> local_culcourse_dashboard/editlink}}
     </span>
 </li>

@@ -22,7 +22,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class local_culcourse_dashboard_dashboard {
+namespace local_culcourse_dashboard\format;
+
+class dashboard {
 
     private $elements;
     private $modfullnames;
@@ -95,18 +97,18 @@ class local_culcourse_dashboard_dashboard {
         global $DB, $COURSE;
 
         $dashboardoptionsedit = [];
-        $coursecontext = context_course::instance($COURSE->id);
+        $coursecontext = \context_course::instance($COURSE->id);
         
         foreach ($this->elements as $element) {
             $courseformatoptionsedit['show' . $element] = [
-                'label' => new lang_string('setshow' . $element, 'local_culcourse_dashboard'),
+                'label' => new \lang_string('setshow' . $element, 'local_culcourse_dashboard'),
                 'help' => 'setshow' . $element,
                 'help_component' => 'local_culcourse_dashboard',
                 'element_type' => 'select',
                 'element_attributes' => [
                     [
-                        1 => new lang_string('no'),
-                        2 => new lang_string('yes')
+                        1 => new \lang_string('no'),
+                        2 => new \lang_string('yes')
                     ]
                 ]
             ];
@@ -114,14 +116,14 @@ class local_culcourse_dashboard_dashboard {
 
         foreach ($this->modfullnames as $mod => $modplural) {
             $courseformatoptionsedit['show' . $mod] = [
-                'label' => new lang_string('setshowmodname', 'local_culcourse_dashboard', $modplural),
+                'label' => new \lang_string('setshowmodname', 'local_culcourse_dashboard', $modplural),
                 'help' => 'setshowmod',
                 'help_component' => 'local_culcourse_dashboard',
                 'element_type' => 'select',
                 'element_attributes' => [
                     [
-                        1 => new lang_string('no'),
-                        2 => new lang_string('yes')
+                        1 => new \lang_string('no'),
+                        2 => new \lang_string('yes')
                     ]
                 ]
             ];
@@ -129,14 +131,14 @@ class local_culcourse_dashboard_dashboard {
 
         foreach ($this->ltitypes as $typeid => $name) {
             $courseformatoptionsedit['showltitype' . $typeid] = [
-                'label' => new lang_string('setshowmodname', 'local_culcourse_dashboard', $name),
+                'label' => new \lang_string('setshowmodname', 'local_culcourse_dashboard', $name),
                 'help' => 'setshowmod',
                 'help_component' => 'local_culcourse_dashboard',
                 'element_type' => 'select',
                 'element_attributes' => [
                     [
-                        1 => new lang_string('no'),
-                        2 => new lang_string('yes')
+                        1 => new \lang_string('no'),
+                        2 => new \lang_string('yes')
                     ]
                 ]
             ];
@@ -172,7 +174,7 @@ class local_culcourse_dashboard_dashboard {
         ];
 
         $dashboardoptionsedit['selectmoduleleaders'] = [
-            'label' => new lang_string('setselectmoduleleaders', 'local_culcourse_dashboard'),
+            'label' => new \lang_string('setselectmoduleleaders', 'local_culcourse_dashboard'),
             'help' => 'setselectmoduleleaders',
             'help_component' => 'local_culcourse_dashboard',
             'element_type' => 'select',

@@ -24,7 +24,7 @@
 
 use local_culcourse_dashboard\output\photoboard;
 
-require_once('../../../../config.php');
+require_once('../../config.php');
 require_once($CFG->dirroot . '/user/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 require_once($CFG->libdir . '/filelib.php');
@@ -71,7 +71,7 @@ $filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
 if (has_capability('local/culcourse_dashboard:viewallphotoboard', $context)) {
     // Should use this variable so that we don't break stuff every time a variable 
     // is added or changed.
-    $baseurl = new moodle_url('/local/culcourse_dashboard/dashboard/photoboard.php', array(
+    $baseurl = new moodle_url('/local/culcourse_dashboard/photoboard.php', array(
         'contextid' => $context->id,
         'id' => $course->id,
         'perpage' => $perpage,
@@ -91,7 +91,7 @@ if (has_capability('local/culcourse_dashboard:viewallphotoboard', $context)) {
 } else {
     // Need to include fixed roleid for students as they cannot access roles in the
     // unified filter.
-    $baseurl = new moodle_url('/local/culcourse_dashboard/dashboard/photoboard.php', array(
+    $baseurl = new moodle_url('/local/culcourse_dashboard/photoboard.php', array(
         'contextid' => $context->id,
         'id' => $course->id,
         'perpage' => $perpage,

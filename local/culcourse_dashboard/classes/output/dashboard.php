@@ -31,7 +31,7 @@ use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/culcourse/dashboard/locallib.php');
+require_once($CFG->dirroot . '/local/culcourse_dashboard/locallib.php');
 
 class dashboard implements templatable, renderable {
 
@@ -74,9 +74,10 @@ class dashboard implements templatable, renderable {
      * Constructor method, calls the parent constructor
      *
      * @param stdClass $course
+     * @param int $displaysection The section number in the course which is being displayed
      * @param array $culconfig
      */
-    public function __construct($course, $culconfig) {
+    public function __construct($course, $displaysection, $culconfig) {
         global $PAGE;
 
         $this->usercanedit = has_capability('moodle/course:update', \context_course::instance($course->id));
@@ -86,11 +87,38 @@ class dashboard implements templatable, renderable {
         }
 
         if ($this->userisediting) {
-            $adminurl = new \moodle_url('/course/local/culcourse_dashboard/dashboard/dashlink_edit_ajax.php');
+            $adminurl = new \moodle_url('/local/culcourse_dashboard/dashlink_edit_ajax.php');
             $this->adminurl = $adminurl->out();
+
+            // Add the drag drop YUI. The is a new core amd module for
+            // drag drop but it is not documented or widely used yet.
+            $PAGE->requires->strings_for_js(
+                [
+                    'moveactivitylink',
+                    'movequicklink',
+                    'afterlink',
+                    'totopoflinks'
+                ], 'local_culcourse_dashboard');
+
+            $ajaxurl = '/local/culcourse_dashboard/dashlink_edit_ajax.php';
+
+            $PAGE->requires->yui_module('moodle-local_culcourse_dashboard-dragdrop', 'M.local_culcourse_dashboard.init_quicklinkdd',
+                        [[
+                            'courseid' => $course->id,
+                            'ajaxurl' => $ajaxurl,
+                            'config' => 0,
+                        ]], null, true);
+
+            $PAGE->requires->yui_module('moodle-local_culcourse_dashboard-dragdrop', 'M.local_culcourse_dashboard.init_activitylinkdd',
+                        [[
+                            'courseid' => $course->id,
+                            'ajaxurl' => $ajaxurl,
+                            'config' => 0,
+                        ]], null, true);
         }
 
         $this->course = $course;
+        $this->displaysection = $displaysection;
         $this->culconfig = $culconfig;
         $this->externalurls = local_culcourse_dashboard_get_external_urls_data($course);
     }
@@ -102,13 +130,13 @@ class dashboard implements templatable, renderable {
         $export->activitiesexist = false;
         $export->userisediting = $this->userisediting;
         $export->adminurl = $this->adminurl;
-        $export->quicklinks = $this->quicklink_display($this->course);
+        $export->quicklinks = $this->quicklink_display();
 
         if(count($export->quicklinks)) {
             $export->quicklinksexist = true;
         }
 
-        $export->activities = $this->activity_modules_display($this->course);
+        $export->activities = $this->activity_modules_display();
 
         if(count($export->activities)) {
             $export->activitiesexist = true;
@@ -120,13 +148,15 @@ class dashboard implements templatable, renderable {
         $export->cancelactivitylink = $this->dashboard_clipboard('activitylink');
 
         list($export->qmovetourl, $export->qmovetoicon, $export->qmovetoattrs) = local_culcourse_dashboard_get_moveto_link(
-                            $this->course->id, 
+                            $this->course->id,
+                            $this->displaysection ,
                             'end',
                             'quicklink'
                             );
 
         list($export->amovetourl, $export->amovetoicon, $export->amovetoattrs) = local_culcourse_dashboard_get_moveto_link(
-                            $this->course->id, 
+                            $this->course->id,
+                            $this->displaysection,
                             'end',
                             'activitylink'
                             );
@@ -141,8 +171,11 @@ class dashboard implements templatable, renderable {
         return $export;
     }
 
-    public function get_quicklink($name, $course, $lnktxt = '') {
+    public function get_quicklink($name, $lnktxt = '') {
         global $USER;
+
+        $course = $this->course;
+        $section = $this->displaysection;
 
         if (get_string_manager()->string_exists($name, 'local_culcourse_dashboard')) {
             $lnktxt = get_string($name, 'local_culcourse_dashboard');
@@ -161,21 +194,24 @@ class dashboard implements templatable, renderable {
 
         if ($this->userisediting) {
             list($editurl, $editicon, $editattrs) = local_culcourse_dashboard_get_edit_link(
-                $course->id, 
+                $course->id,
+                $section, 
                 $name, 
                 $this->culconfig['show' . $name],
                 $lnktxt
                 );
 
             list($moveurl, $moveicon, $moveattrs) = local_culcourse_dashboard_get_move_link(
-                $course->id, 
+                $course->id,
+                $section, 
                 $name,
                 'quicklink',
                 $lnktxt
                 );
 
             list($movetourl, $movetoicon, $movetoattrs) = local_culcourse_dashboard_get_moveto_link(
-                $course->id, 
+                $course->id,
+                $section,
                 $name,
                 'quicklink'
                 );
@@ -201,9 +237,11 @@ class dashboard implements templatable, renderable {
         ];
     }
 
-    public function get_photoboard_quicklink($rolename, $name, $course, $options) {
+    public function get_photoboard_quicklink($rolename, $name, $options) {
         global $DB;
 
+        $course = $this->course;
+        $section = $this->displaysection;
         $role = $DB->get_record('role', ['shortname' => $rolename]);
         $coursecontext = \context_course::instance($course->id);
 
@@ -216,7 +254,7 @@ class dashboard implements templatable, renderable {
             $liattrs = [];            
             $alias = $options[$role->id];
             $lnktxt = $alias . 's';
-            $data = $this->get_quicklink($name, $course, $lnktxt);
+            $data = $this->get_quicklink($name, $lnktxt);
             $available = false;
 
             if (count_role_users($role->id, $coursecontext, false)) {
@@ -229,6 +267,8 @@ class dashboard implements templatable, renderable {
                 $attrs['title']  = get_string("no-view-$rolename-photoboard", 'local_culcourse_dashboard', $alias);
                 $url = 'javascript:void(0);';
             }
+
+            $attrs['id'] = uniqid();
 
             if ($this->usercanedit || $available) {
                 $extradata = [
@@ -256,9 +296,11 @@ class dashboard implements templatable, renderable {
      *       Quick Links in future. This could automatically be picked-up by the block
      *       config form. For now, it's over-engineering.
      */
-    public function quicklink_display($course) {
+    public function quicklink_display() {
         global $CFG, $DB, $OUTPUT, $USER;
 
+        $course = $this->course;
+        $section = $this->displaysection;
         $linkitems = [];
         $sortedlinkitems = [];
         $coursecontext = \context_course::instance($course->id);
@@ -277,7 +319,7 @@ class dashboard implements templatable, renderable {
             $extradata = [];
             $attrs  = [];
             $liattrs = [];
-            $data = $this->get_quicklink($name, $course);
+            $data = $this->get_quicklink($name);
             $urldata = $this->externalurls['readinglists'];
             $available = false;
 
@@ -311,6 +353,8 @@ class dashboard implements templatable, renderable {
                 }
             }
 
+            $attrs['id'] = uniqid();
+
             if ($this->usercanedit || $available) {
                 $extradata = [
                     'url' => $url,
@@ -331,7 +375,7 @@ class dashboard implements templatable, renderable {
             $extradata = [];
             $attrs  = [];
             $liattrs = [];
-            $data = $this->get_quicklink($name, $course);
+            $data = $this->get_quicklink($name);
             $urldata = $this->externalurls['libguides'];
             $available = false;
 
@@ -349,6 +393,8 @@ class dashboard implements templatable, renderable {
                 $attrs['class'] = 'nolink';
                 $url = 'javascript:void(0);';
             }
+
+            $attrs['id'] = uniqid();
 
             if ($this->usercanedit || $available) {
                 $extradata = [
@@ -370,7 +416,7 @@ class dashboard implements templatable, renderable {
             $extradata =[];
             $attrs  = [];
             $liattrs = [];
-            $data = $this->get_quicklink($name, $course);
+            $data = $this->get_quicklink($name);
             $urldata = $this->externalurls['timetable'];
             $available = false;
 
@@ -397,6 +443,8 @@ class dashboard implements templatable, renderable {
                 }
             }
 
+            $attrs['id'] = uniqid();
+
             if ($this->usercanedit || $available) {
                 $extradata = [
                     'url' => $url,
@@ -417,7 +465,7 @@ class dashboard implements templatable, renderable {
             $extradata =[];
             $attrs  = [];
             $liattrs = [];
-            $data = $this->get_quicklink($name, $course);
+            $data = $this->get_quicklink($name);
 
             if (has_capability('gradereport/grader:view', $coursecontext)) { // Teacher, ...
                 $lnktxt = get_string('graderreport', 'grades');
@@ -431,6 +479,8 @@ class dashboard implements templatable, renderable {
                 $attrs['class'] = 'nolink';
                 $url = 'javascript:void(0);';
             }
+
+            $attrs['id'] = uniqid();
 
             $extradata = [
                 'url' => $url,
@@ -450,8 +500,9 @@ class dashboard implements templatable, renderable {
             $extradata =[];
             $attrs  = [];
             $liattrs = [];
-            $data = $this->get_quicklink($name, $course);
+            $data = $this->get_quicklink($name);
             $attrs['title'] = get_string('view-calendar', 'local_culcourse_dashboard');
+            $attrs['id'] = uniqid();
             $url  = new \moodle_url('/calendar/view.php', ['view' => 'month', 'course' => $course->id]);
 
             $extradata = [
@@ -473,7 +524,7 @@ class dashboard implements templatable, renderable {
         if ($this->culconfig['showstudents'] == 2 || $this->userisediting) {
             $role = 'student';
             $name = 'students';
-            $data = $this->get_photoboard_quicklink($role, $name, $course, $options);
+            $data = $this->get_photoboard_quicklink($role, $name, $options);
 
             if ($data) {
                 $linkitems[$name] = $data;
@@ -484,7 +535,7 @@ class dashboard implements templatable, renderable {
         if ($this->culconfig['showlecturers'] == 2 || $this->userisediting) {
             $role = 'lecturer';
             $name = 'lecturers';
-            $data = $this->get_photoboard_quicklink($role, $name, $course, $options);
+            $data = $this->get_photoboard_quicklink($role, $name, $options);
 
             if ($data) {
                 $linkitems[$name] = $data;
@@ -495,7 +546,7 @@ class dashboard implements templatable, renderable {
         if ($this->culconfig['showcourseofficers'] == 2 || $this->userisediting) {
             $role = 'courseofficer';
             $name = 'courseofficers';
-            $data = $this->get_photoboard_quicklink($role, $name, $course, $options);
+            $data = $this->get_photoboard_quicklink($role, $name,$options);
 
             if ($data) {
                 $linkitems[$name] = $data;
@@ -510,8 +561,9 @@ class dashboard implements templatable, renderable {
             $extradata =[];
             $attrs  = [];
             $liattrs = [];
-            $data = $this->get_quicklink($name, $course);
+            $data = $this->get_quicklink($name, $course, $section);
             $attrs['title'] = get_string('view-media', 'local_culcourse_dashboard');
+            $attrs['id'] = uniqid();
             $url  = new \moodle_url('/local/kalturamediagallery/index.php', array('courseid' => $course->id));
 
             $extradata = [
@@ -567,11 +619,13 @@ class dashboard implements templatable, renderable {
      * @param stdClass $course
      * @return
      */
-    public function activity_modules_display($course) {
+    public function activity_modules_display() {
         global $CFG, $USER, $OUTPUT;
 
         require_once($CFG->dirroot . '/course/lib.php');
 
+        $course = $this->course;
+        $section = $this->displaysection;
         $modinfo = get_fast_modinfo($course);
         $modfullnames = [];
         $archetypes = [];
@@ -619,7 +673,7 @@ class dashboard implements templatable, renderable {
 
         foreach ($modfullnames as $modname => $modfullname) {
             if ($modname == 'lti') {
-                $ltiactivities = $this->exttools_modules_display($course, $modinfo);
+                $ltiactivities = $this->exttools_modules_display($modinfo);
                 $activities = array_merge($activities, $ltiactivities);
                 continue;
             }
@@ -630,6 +684,7 @@ class dashboard implements templatable, renderable {
                 $attrs = [];
                 $liattrs = [];
                 $attrs['title']  = get_string('view-mod', 'local_culcourse_dashboard', strtolower($modfullname));
+                $attrs['id'] = uniqid();
                 $class = '';
                 $editurl = '';
                 $editicon = '';
@@ -643,21 +698,24 @@ class dashboard implements templatable, renderable {
                 
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = local_culcourse_dashboard_get_edit_link(
-                        $course->id, 
+                        $course->id,
+                        $section, 
                         $modname, 
                         $this->culconfig['show' . $modname],
                         $modfullname
                         );
 
                     list($moveurl, $moveicon, $moveattrs) = local_culcourse_dashboard_get_move_link(
-                        $course->id, 
+                        $course->id,
+                        $section, 
                         $modname,
                         'activitylink',
                         $modfullname
                         );
 
                     list($movetourl, $movetoicon, $movetoattrs) = local_culcourse_dashboard_get_moveto_link(
-                        $course->id, 
+                        $course->id,
+                        $section, 
                         $modname,
                         'activitylink'
                         );
@@ -745,11 +803,13 @@ class dashboard implements templatable, renderable {
      * @param course_modinfo $modinfo
      * @return
      */
-    public function exttools_modules_display($course, $modinfo) {
+    public function exttools_modules_display($modinfo) {
         global $CFG, $DB, $OUTPUT;
 
         require_once($CFG->dirroot. '/mod/lti/locallib.php');
 
+        $course = $this->course;
+        $section = $this->displaysection;
         $content = '';
         $modfullnames = [];
         $cms = $modinfo->get_instances_of('lti');
@@ -810,6 +870,7 @@ class dashboard implements templatable, renderable {
                 $attrs = [];
                 $liattrs = [];
                 $attrs['title']  = get_string('view-mod', 'local_culcourse_dashboard', strtolower($modnames['modfullname']));
+                $attrs['id'] = uniqid();
                 $class = '';
                 $editurl = '';
                 $editicon = '';
@@ -824,21 +885,24 @@ class dashboard implements templatable, renderable {
                 
                 if ($this->userisediting) {
                     list($editurl, $editicon, $editattrs) = local_culcourse_dashboard_get_edit_link(
-                            $course->id, 
+                            $course->id,
+                            $section, 
                             $nametype, 
                             $this->culconfig['show' . $nametype],
                             $modnames['modfullname']
                             );
 
                     list($moveurl, $moveicon, $moveattrs) = local_culcourse_dashboard_get_move_link(
-                        $course->id, 
+                        $course->id,
+                        $section, 
                         $nametype,
                         'activitylink',
                         $modnames['modfullname']
                         );
 
                     list($movetourl, $movetoicon, $movetoattrs) = local_culcourse_dashboard_get_moveto_link(
-                        $course->id, 
+                        $course->id,
+                        $section, 
                         $nametype,
                         'activitylink'
                         );
@@ -848,7 +912,7 @@ class dashboard implements templatable, renderable {
                         $class = 'linkhidden';                
                 }
 
-                $url = new \moodle_url('/course/format/culcourse/dashboard/ltiindex.php', array('id' => $course->id, 'typeid' => $modnames['type']->id));
+                $url = new \moodle_url('/local/culcourse_dashboard/ltiindex.php', array('id' => $course->id, 'typeid' => $modnames['type']->id));
 
                 if (!$modnames['type']->icon) {
                     $icon = $OUTPUT->pix_icon('icon', '', 'mod_lti', array('class' => 'iconsmall'));
@@ -925,9 +989,10 @@ class dashboard implements templatable, renderable {
             $cancel = new stdClass();
 
             $cancel->url = new \moodle_url(
-                '/course/format/culcourse/dashboard/dashlink_edit.php',
+                '/local/culcourse_dashboard/dashlink_edit.php',
                 [
                     'courseid' => $this->course->id,
+                    'section' => $this->displaysection,
                     'action' => MOVE,
                     'sesskey' => sesskey(),
                     'cancelcopy' => true,

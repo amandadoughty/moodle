@@ -37,50 +37,87 @@
 {{/ cancelactivitylink}}
 
 {{#userisediting}}
-<p>
+<p class="local_culcourse_dashboard togglewrap">
   <button id="local_culcourse_dashboard_toggledashboard" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#local_culcourse_dashboard_dashboard" aria-expanded="false" aria-controls="local_culcourse_dashboard_dashboard">
     {{# str}} toggledashboard, local_culcourse_dashboard {{/ str}}
   </button>
 </p>
-<div class="collapse show" id="local_culcourse_dashboard_dashboard">
-
+<div class="collapse show" id="local_culcourse_dashboard_dashboard">    
 {{/userisediting}}
+    <div id="local_culcourse_dashboard" class="d-flex flex-wrap align-items-stretch position-relative">
 
         {{# quicklinksexist}}
-        <div class="dash-panel clearfix">
-            <h2>Quick Links</h2>
+        <div class="local-culcourse-dashboard dash-panel quicklinks-wrap col-12 col-md-6 p-4">
+            <h2 class="mb-3">Quick Links</h2>
             <nav class="linkscontainer">
-                <ul class=" quicklinks links clearfix">
+                <ul 
+                class="quicklinks links d-flex flex-wrap "
+                data-draggroups="quicklinkdraggable"
+                data-position="start">
                     {{# quicklinks}}
                     {{> local_culcourse_dashboard/quicklink}}
                     {{/ quicklinks}}
                     {{#ismovingquicklink}}
                         {{> local_culcourse_dashboard/lastquicklinkposition}}
                     {{/ismovingquicklink}}
+                    <div class="viewmorelink flex-wrap align-items-stretch col-xs-6 col-sm-4 col-xl-3 p-1">
+                        <a href="javascript:void(0);" class="viewmore-inner d-flex flex-wrap flex-column align-items-center justify-content-center w-100 text-white">
+                            <div class="viewmore-text text-center">
+                                <div class="h2 text-white mb-0">
+                                    <i class="fa fa-plus"></i>
+                                </div>
+                                {{#str}}viewmore, local_culcourse_dashboard{{/str}}
+                            </div>
+                            <div class="viewless-text">
+                                <div class="h2 text-white mb-0">
+                                    <i class="fa fa-minus"></i>
+                                </div>
+                                {{#str}}viewless, local_culcourse_dashboard{{/str}}
+                            </div>
+                        </a>
+                    </div>
                 </ul>
             </nav>
         </div>
         {{/ quicklinksexist}}
 
         {{# activitiesexist}}
-        <div class="dash-panel clearfix">
-            <h2>Activities</h2>
+        <div class="local-culcourse-dashboard dash-panel activities-wrap col-12 col-md-6 p-4">
+            <h2 class="mb-3">Activities</h2>
             <nav class="linkscontainer">
-                <ul class="activitylinks links clearfix">
+                <ul 
+                class="activitylinks links d-flex flex-wrap"
+                data-draggroups="activitylinkdraggable"
+                data-position="start">
                     {{# activities}}
                     {{> local_culcourse_dashboard/activity}}
                     {{/ activities}}
                     {{#ismovingactivitylink}}
                         {{> local_culcourse_dashboard/lastactivityposition}}
                     {{/ismovingactivitylink}}
+                    <div class="viewmorelink flex-wrap align-items-stretch col-xs-6 col-sm-4 col-xl-3 p-1">
+                        <a href="javascript:void(0);" class="viewmore-inner d-flex flex-wrap flex-column align-items-center justify-content-center w-100 text-white">
+                            <div class="viewmore-text text-center">
+                                <div class="h2 text-white mb-0">
+                                    <i class="fa fa-plus"></i>
+                                </div>
+                                {{#str}}viewmore, local_culcourse_dashboard{{/str}}
+                            </div>
+                            <div class="viewless-text text-center">
+                                <div class="h2 text-white mb-0">
+                                    <i class="fa fa-minus"></i>
+                                </div>
+                                {{#str}}viewless, local_culcourse_dashboard{{/str}}
+                            </div>
+                        </a>
+                    </div>
                 </ul>
             </nav>
         </div>
         {{/ activitiesexist}}
-
-{{#userisediting}}
+    </div>
+{{#userisediting}}    
 </div>
-
 {{/userisediting}}
 
 {{#userisediting}}
@@ -90,6 +127,14 @@
     });
     require(['local_culcourse_dashboard/dashtoggle'], function(dashtoggle) {
         dashtoggle.init('{{courseid}}');
+    });
+{{/js}}
+{{/userisediting}}
+
+{{^userisediting}}
+{{#js}}
+    require(['local_culcourse_dashboard/dashpanel'], function(dashpanel) {
+        dashpanel.init();
     });
 {{/js}}
 {{/userisediting}}

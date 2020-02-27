@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Gets the saved toggled states of sections.
+ * Ajax script for saving toggle state of sections.
  *
  * @package   local_culcourse_dashboard
  * @copyright 2020 Amanda Doughty
@@ -25,20 +25,24 @@
 define('AJAX_SCRIPT', true);
 
 /** Include config */
-require_once(__DIR__ . '/../../../../config.php');
+require_once(__DIR__ . '/../../config.php');
 
 if (!empty($CFG->forcelogin)) {
     require_login();
 }
 
+// Get the name of the preference to update, and check that it is allowed.
 $courseid = required_param('courseid', PARAM_INT);
+$value = required_param('value', PARAM_BOOL);
 $name = 'local_culcourse_dashboard_toggledash' . $courseid;
-$userpref = get_user_preferences($name);
 
-if (is_null($userpref)) {
-	$userpref = true;
-	set_user_preference($name, $userpref);
+if (!isset($USER->ajax_updatable_user_prefs[$name])) {
+    print_error('notallowedtoupdateprefremotely');
 }
 
-// The value true means the toggle is open.
-echo $userpref;
+// Update.
+if (!set_user_preference($name, $value)) {
+    print_error('errorsettinguserpref');
+}
+
+echo $value;
