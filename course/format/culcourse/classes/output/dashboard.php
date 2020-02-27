@@ -230,6 +230,8 @@ class dashboard implements templatable, renderable {
                 $url = 'javascript:void(0);';
             }
 
+            $attrs['id'] = uniqid();
+
             if ($this->usercanedit || $available) {
                 $extradata = [
                     'url' => $url,
@@ -311,6 +313,8 @@ class dashboard implements templatable, renderable {
                 }
             }
 
+            $attrs['id'] = uniqid();
+
             if ($this->usercanedit || $available) {
                 $extradata = [
                     'url' => $url,
@@ -349,6 +353,8 @@ class dashboard implements templatable, renderable {
                 $attrs['class'] = 'nolink';
                 $url = 'javascript:void(0);';
             }
+
+            $attrs['id'] = uniqid();
 
             if ($this->usercanedit || $available) {
                 $extradata = [
@@ -397,6 +403,8 @@ class dashboard implements templatable, renderable {
                 }
             }
 
+            $attrs['id'] = uniqid();
+
             if ($this->usercanedit || $available) {
                 $extradata = [
                     'url' => $url,
@@ -431,6 +439,8 @@ class dashboard implements templatable, renderable {
                 $attrs['class'] = 'nolink';
                 $url = 'javascript:void(0);';
             }
+
+            $attrs['id'] = uniqid();
 
             $extradata = [
                 'url' => $url,
@@ -810,6 +820,7 @@ class dashboard implements templatable, renderable {
                 $attrs = [];
                 $liattrs = [];
                 $attrs['title']  = get_string('view-mod', 'format_culcourse', strtolower($modnames['modfullname']));
+                $attrs['id'] = uniqid();
                 $class = '';
                 $editurl = '';
                 $editicon = '';
