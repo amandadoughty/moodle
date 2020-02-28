@@ -86,9 +86,34 @@ body:not(.editing) .viewmorelink {
     display: flex; }
   body:not(.editing) .viewmorelink #region-main:not(.has-blocks) .dash:nth-child(8) ~ .viewmorelink {
     display: flex; }
-body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere img.movetarget {
-  height: 16px;
-  width: 80px; }
+body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere {
+  padding: 0.25rem;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%; }
+  @media (min-width: 576px) {
+    body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere {
+      width: 16%; } }
+  @media (min-width: 1200px) {
+    body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere {
+      width: 8%; } }
+  body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere > a {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #343a40;
+    padding: 0 0.25rem; }
+    body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere > a:hover, body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere > a:focus {
+      border-color: #fff; }
+    body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere > a .icon {
+      margin: 0;
+      width: auto;
+      height: auto; }
+  body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere img.movetarget {
+    height: 16px;
+    width: 80px; }
+  body.editing .format_culcourse.dash-panel .linkscontainer ul.links li.movehere:last-of-type {
+    min-height: 7rem; }
 body.editing .viewmorelink {
   display: none; }
 
