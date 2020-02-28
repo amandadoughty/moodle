@@ -51,9 +51,8 @@ class provider implements
      */
     public static function get_metadata(collection $items) : collection {
         // There are several user preferences in the format
-        // local_culcourse_dashboard_expanded{$course-id)}. I've used same
+        // local_culcourse_dashboard_toggledash{$course-id)}. I've used same
         // methods as tool_usertours.
-        $items->add_user_preference('local_culcourse_dashboard_expanded', 'privacy:metadata:preference:local_culcourse_dashboard_expanded');
         $items->add_user_preference('local_culcourse_dashboard_toggledash', 'privacy:metadata:preference:local_culcourse_dashboard_toggledash');
 
         return $items;
@@ -72,49 +71,6 @@ class provider implements
         foreach ($preferences as $name => $value) {
             $descriptionidentifier = null;
             $courseid = null;
-
-            if (strpos($name, 'local_culcourse_dashboard_expanded') === 0) {
-                $descriptionidentifier = 'privacy:request:preference:local_culcourse_dashboard_expanded';
-                $courseid = substr($name, strlen('local_culcourse_dashboard_expanded'));
-            }
-
-            if ($descriptionidentifier !== null) {
-                $decoded = json_decode($value);
-                $sectionstates = '';
-                $modinfo = get_fast_modinfo($courseid);
-                $course = $modinfo->get_course();
-
-                if ($course) {
-                    $sections = $modinfo->get_section_info_all();
-
-                    foreach ($sections as $number => $section) {
-                        if (isset($decoded->{$section->id}) && $decoded->{$section->id}) {
-                            $sectionstate = get_string('expanded', 'local_culcourse_dashboard');
-                        } else {
-                            $sectionstate = get_string('collapsed', 'local_culcourse_dashboard');
-                        }
-
-                        if ($section->name) {
-                            $sectionname = $section->name;
-                        } else {
-                            $sectionname = get_string('sectionname', 'local_culcourse_dashboard');
-                            $sectionname .= " $number";
-                        }
-
-                        $sectionstates .= "$sectionname: $sectionstate, ";
-                    }                    
-
-                    writer::export_user_preference(
-                        'local_culcourse_dashboard',
-                        $name,
-                        $value,
-                        get_string($descriptionidentifier, 'local_culcourse_dashboard', (object) [
-                            'course' => $course->fullname,
-                            'sectionstates' => $sectionstates,
-                        ])
-                    );
-                }
-            }
 
             if (strpos($name, 'local_culcourse_dashboard_toggledash') === 0) {
                 $descriptionidentifier = 'privacy:request:preference:local_culcourse_dashboard_toggledash';
