@@ -31,7 +31,6 @@ require_once($CFG->dirroot. '/course/format/topics/lib.php');
 require_once($CFG->dirroot. '/course/format/weeks/lib.php');
 require_once($CFG->dirroot. '/course/format/culcourse/topics_trait.php');
 require_once($CFG->dirroot. '/course/format/culcourse/weeks_trait.php');
-require_once($CFG->dirroot . '/course/format/culcourse/dashboard/lib.php');
 
 define('FORMATTOPICS', 1);
 define('FORMATWEEKS', 2);
@@ -243,9 +242,15 @@ class format_culcourse extends format_base {
             ];
         }
 
-        // Splice in the dashboard options.
-        $dashboard = new format_culcourse_dashboard();
-        $dashboard->set_dashboard_options($courseformatoptions);
+        // // Splice in the dashboard options.
+        // $dashboard = new format_culcourse_dashboard();
+        // $dashboard->set_dashboard_options($courseformatoptions);
+
+        // $dashboardclass = "local_culcourse_dashboard\\format\dashboard";
+        // $dashboard = new $dashboardclass();
+        // $dashboard->set_dashboard_options($courseformatoptions);
+
+        $this->course_format_dash_options($courseformatoptions, $foreditform);
 
         if ($foreditform && !isset($courseformatoptions['baseclass']['label'])) {
             $baseclasses = [
@@ -273,10 +278,10 @@ class format_culcourse extends format_base {
                 ]
             ];
 
-            // Splice in the dashboard edit options.
-            $dashboard->set_dashboard_edit_options($courseformatoptionsedit);
+            // Splice in the dashboard options.
+            $this->course_format_dash_options_edit($courseformatoptionsedit, $foreditform);
             $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
-        }        
+        }
 
         $args = func_get_args();
         $pcourseformatoptions = $this->call_base_function(__FUNCTION__, $args);
@@ -284,6 +289,46 @@ class format_culcourse extends format_base {
 
         return $courseformatoptions;
     }
+
+    /**
+     * Definitions of the additional options that this course format uses for course
+     *
+     * @param array $courseformatoptions
+     * @param array $courseformatoptionsedit
+     * @param bool $foreditform
+     * @return array of options
+     */
+    public function course_format_dash_options(&$courseformatoptions, $foreditform = false) {
+
+        $dashboardclass = "local_culcourse_dashboard\\format\dashboard";
+
+        if (class_exists($dashboardclass)) {
+            $dashboard = new $dashboardclass();
+            $dashboard->set_dashboard_options($courseformatoptions);
+        }
+
+        return $courseformatoptions;
+    }
+
+    /**
+     * Definitions of the additional options that this course format uses for course
+     *
+     * @param array $courseformatoptions
+     * @param array $courseformatoptionsedit
+     * @param bool $foreditform
+     * @return array of options
+     */
+    public function course_format_dash_options_edit(&$courseformatoptionsedit, $foreditform = false) {
+
+        $dashboardclass = "local_culcourse_dashboard\\format\dashboard";
+
+        if (class_exists($dashboardclass)) {
+            if ($foreditform && !isset($courseformatoptions['baseclass']['label'])) {
+                $dashboard = new $dashboardclass();   
+                $dashboard->set_dashboard_edit_options($courseformatoptionsedit);
+            }                        
+        }
+    }     
 
     /**
      * Adds format options elements to the course/section edit form
@@ -307,9 +352,29 @@ class format_culcourse extends format_base {
         // So we reindex the array.
         $elements = array_values($elements);
 
-        if ($forsection == false) {
-            global $USER;
-  
+        if (!$forsection) {
+            $elements = $this->create_dash_edit_form_elements($mform, $elements);
+        }
+
+        $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');
+
+        return $elements;
+    }
+
+    /**
+     * Adds dashboard format options elements to the course/section edit form.
+     *
+     *
+     * @param MoodleQuickForm $mform form the elements are added to.
+     * @param array array of references to the added form elements.
+     * @return array array of references to the added form elements.
+     */
+    public function create_dash_edit_form_elements(&$mform, $elements) {
+        global $COURSE, $PAGE;
+
+        $dashboardclass = "local_culcourse_dashboard\\format\dashboard";
+
+        if (class_exists($dashboardclass)) {
             // Convert saved course_format_options value back to an array to set the value.
             if ($selectmoduleleaders = $mform->getElementValue('selectmoduleleaders')) {
                 if (!is_array($selectmoduleleaders)) {
@@ -320,19 +385,19 @@ class format_culcourse extends format_base {
             }
 
             // Put module leader setting in own dropdown.
-            $selectmoduleleaderhdr = $mform->addElement('header', 'selectmoduleleadershdr', get_string('setselectmoduleleadershdr', 'format_culcourse'));
-            $mform->addHelpButton('selectmoduleleadershdr', 'setselectmoduleleadershdr', 'format_culcourse', '', true);
-            array_splice($elements, -1, 0, [$selectmoduleleaderhdr]);
+            $selectmoduleleaderhdr = $mform->addElement('header', 'selectmoduleleadershdr', get_string('setselectmoduleleadershdr', 'local_culcourse_dashboard'));
+            $mform->addHelpButton('selectmoduleleadershdr', 'setselectmoduleleadershdr', 'local_culcourse_dashboard', '', true);
+            array_splice($elements, -1, 0, [$selectmoduleleaderhdr]);                
 
             // Put dashboard settings in own dropdown.
-            $dashboardhdr = $mform->addElement('header', 'dashboardhdr', get_string('setdashboardhdr', 'format_culcourse'));
-            array_splice($elements, 4, 0, [$dashboardhdr]);
+            $dashboardhdr = $mform->addElement('header', 'dashboardhdr', get_string('setdashboardhdr', 'local_culcourse_dashboard'));
+            array_splice($elements, 4, 0, [$dashboardhdr]);      
+
+            $PAGE->requires->js_call_amd('local_culcourse_dashboard/updatebaseclass', 'init');
         }
 
-        $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');
-
         return $elements;
-    }
+    }    
 
    /**
      * Updates format options for a course
@@ -348,11 +413,32 @@ class format_culcourse extends format_base {
      * @return bool whether there were any changes to the options values
      */
     public function update_course_format_options($data, $oldcourse = null) {
-        $dashboard = new format_culcourse_dashboard();
-        $data = $dashboard->update_dashboard_options($data, $oldcourse);
+        $data = $this->update_course_format_dash_options($data, $oldcourse);
 
         return $this->call_base_function(__FUNCTION__, [$data, $oldcourse]);
     }
+
+    /**
+     * Updates dashboard format options for a course
+     *
+     * In case if course format was changed to 'culcourse', we try to copy dashboard options from the previous format.
+     *
+     * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
+     * @param stdClass $oldcourse if this function is called from {@link update_course()}
+     *     this object contains information about the course before update
+     * @return stdClass|array $data return value from {@link moodleform::get_data()} or array with data
+     */
+    public function update_course_format_dash_options($data, $oldcourse = null) {
+
+        $dashboardclass = "local_culcourse_dashboard\\format\dashboard";
+
+        if (class_exists($dashboardclass)) {
+            $dashboard = new $dashboardclass();
+            $data = $dashboard->update_dashboard_options($data, $oldcourse);
+        }
+
+        return $data;
+    }     
 
     /**
      * Return the start and end date of the passed section

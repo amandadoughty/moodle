@@ -60,16 +60,21 @@ class format_culcourse_renderer extends format_section_renderer_base {
     }
 
     /**
-     * Generate the starting container html for a list of sections
+     * Generate the html for the dashboard
+     * @param stdClass $course The course entry from DB
+     * @param int $displaysection The section number in the course which is being displayed
      * @return string HTML to output.
      */
-    protected function build_dashboard() {
-        global $COURSE;
-
+    public function build_dashboard($course, $displaysection = null) {
         $o = '';
-        $dashboard = new dashboard($COURSE, $this->culconfig);
-        $templatecontext = $dashboard->export_for_template($this);
-        $o .= $this->render_from_template('format_culcourse/dashboard', $templatecontext);
+        $dashrenderclass = "local_culcourse_dashboard\output\dashboard";
+
+        if (class_exists($dashrenderclass)) {
+            $config = course_get_format($course)->get_format_options();
+            $dashboard = new $dashrenderclass($course, $displaysection, $config);
+            $templatecontext = $dashboard->export_for_template($this);
+            $o .= $this->render_from_template('local_culcourse_dashboard/dashboard', $templatecontext);
+        }
 
         return $o;
     }
@@ -633,7 +638,7 @@ class format_culcourse_renderer extends format_section_renderer_base {
         // Copy activity clipboard..
         echo $this->course_activity_clipboard($course, 0);
         // Now the dashboard.
-        echo $this->build_dashboard();
+        echo $this->build_dashboard($course);
         // Now the list of sections.
         echo $this->start_section_list();
 
