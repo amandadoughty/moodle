@@ -23343,8 +23343,7 @@ a.dimmed_text:visited,
       display: none; }
     .navbar .nav-wrap .nav-inner .nav-item,
     .navbar .nav-wrap .dropdown {
-      margin: 0 0 0 1.5rem;
-      /* First level menu + */ }
+      margin: 0 0 0 1.5rem; }
       .navbar .nav-wrap .nav-inner .nav-item:empty,
       .navbar .nav-wrap .dropdown:empty {
         display: none !important; }
@@ -23365,10 +23364,6 @@ a.dimmed_text:visited,
           display: inline-block; }
       .navbar .nav-wrap .nav-inner .nav-item .dropdown-menu,
       .navbar .nav-wrap .dropdown .dropdown-menu {
-        min-width: 50vw;
-        padding: 0;
-        left: auto;
-        right: 0;
         /* A menu item which is not a submenu dropdown */ }
         .navbar .nav-wrap .nav-inner .nav-item .dropdown-menu .dropdown-item,
         .navbar .nav-wrap .dropdown .dropdown-menu .dropdown-item {
@@ -23473,6 +23468,14 @@ a.dimmed_text:visited,
     margin-top: 0.25rem; }
   .navbar .usermenu_content span.title {
     vertical-align: middle; }
+
+/* Course names needs extra width */
+#theme_cul_boost_myfavourites .dropdown-menu,
+#theme_cul_boost_mymodules .dropdown-menu {
+  min-width: 50vw;
+  padding: 0;
+  left: auto;
+  right: 0; }
 
 /*** Global search form (.navbar .nav-wrap .global_search) ***/
 .slidersearchform {
