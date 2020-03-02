@@ -479,6 +479,19 @@ class format_culcourse extends format_base {
     }
 
     /**
+     * Return the plugin configs for external functions.
+     *
+     * @return array the list of configuration settings
+     * @since Moodle 3.5
+     */
+    public function get_config_for_external() {
+        // Return everything (nothing to hide).
+        $args = func_get_args();
+
+        return $this->call_base_function(__FUNCTION__, $args);
+    }    
+
+    /**
      * There is no way to dynamically inherit from a choice of course formats. So to ease
      * upgrades, the methods of each course format we may want to inherit from have been
      * copied into traits. Each function has been prepended with the format name eg
