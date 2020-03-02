@@ -35,130 +35,7 @@ body {
             margin: -($spacer / 4);
             .dash {
                 padding: $spacer / 4;
-                // position: relative;                  
-                // display: block;
-                // float: left;
-                // text-align: left;
-                // margin: 0;
-                // width: auto;
-                // border: none;                
                 .dash-link {
-                    // position: relative;
-                    // display: block;
-                    // height: 2.5rem;
-                    // min-height: 100px;
-                    // margin: 3px;                        
-                    // border: 1px solid $gray-500;
-                    // overflow: hidden;
-
-                    // &:hover,
-                    // &:focus {
-                    //     a {
-                    //         color: $primary;
-                    //     }
-                    //     .dash-move {
-                    //         color: $primary;
-                    //         background-color: rgba(#000, 0.1);
-                    //     }
-                    // }
-
-                    // a {
-                        // display: inline-block;
-                        // line-height: 2.5rem;
-                        // border-bottom: medium none !important;                            
-                        // i {
-                        //     width: 100%;
-                        //     color: $white;
-                        //     text-align: center;                                                            
-                        // }
-                        // .fa-stack {
-                        //     width: 100%;
-                        //     font-size: 0.7rem;
-                        //     text-align: center;
-                        //     .fa {                                    
-                        //         &.fa-stack-2x {
-                        //             color: $gray-500;
-                        //         }
-                        //         &.fa-stack-1x {
-                        //         } 
-                        //     }
-                            
-                        // }
-                        // img.iconsmall {
-                        //     width: 1rem;
-                        //     height: 1rem;
-                        //     padding: 0 0.75rem;
-                        //     margin: 0 auto;
-                        // }
-                        /** 'disabled'/unavailable links **/
-                        // &.nolink,
-                        // &:hover.nolink,
-                        // &:visited.nolink {
-                        //     text-decoration: none !important;
-                        //     color: $gray-500 !important;
-                        //     cursor: default;
-                        // }
-                        // &.dashlinkedit{
-                        //     position: absolute;
-                        //     right: 0;
-                        //     i {
-                        //         margin-top: 7px;
-                        //         margin-right: 0.3rem;
-                        //         color: inherit;
-                        //         &:hover {
-                        //             color: inherit;
-                        //         }
-
-                        //     }
-                        // }
-                        // &.dash-icon {
-                        //     height: 100%;
-                        //     vertical-align: top;
-                        //     border-right: none; // border-right: 1px solid $gray-500;
-                        //     background: $black;
-                        //     width: 100%;
-                        //     min-height: $spacer * 2;
-                        //     font-size: $font-size-base * 1.75;
-                        //     img,
-                        //     svg {
-                        //         width: $font-size-base * 1.75;
-                        //         height: auto;
-                        //         margin: 0;
-                        //     }
-                        // }
-                        // &.dash-text {
-                        //     display: none;
-                        //     line-height: 1.1;
-                        // }
-                        // &.dash-edit {
-                        //     position: absolute;
-                        //     bottom: $spacer / 2;
-                        //     left: $spacer / 2;
-                        //     display: flex;
-                        // }
-                        // &.dash-move{
-                        //     position: absolute;
-                        //     top: $spacer / 4;
-                        //     right: $spacer / 4;
-                        //     padding: $spacer / 2;
-                        //     margin: 0;
-                        //     i {
-                        //         margin-top: 7px;
-                        //         margin-left: 0;
-                        //         color: $gray-900;
-                        //         &:hover {
-                        //             color: $gray-900;
-                        //         }
-
-                        //     }
-                        //     .icon {
-                        //         &:first-of-type {
-                        //             margin: 0;
-                        //         }
-                        //     }
-                        // }
-
-
                     display: block;
                     min-height: 100px;
                     &:hover,
@@ -205,14 +82,11 @@ body {
                 &.linkhidden {
                     border: 1px dashed $gray-900;
                     opacity: 0.7;
-                }                   
+                }                  
                 
             }
         }
     }
-
-
-
     &:not(.editing) {        
         .local-culcourse-dashboard.reveal {
             .dash {
@@ -272,28 +146,43 @@ body {
             }
         }
     }
-
-
-
-
-
-
     &.editing {
         .local-culcourse-dashboard.dash-panel {
             .linkscontainer ul.links {
-                // li {
-                //     margin: 1rem;                  
-                //     span.dash-link {
-                //         margin-left: 1.2rem;
-                //         a.dash-edit {
-                //             display: inline-block;
-                //         }
-                 
-                //     }
-                // }
-                li.movehere img.movetarget {
-                    height: 16px;
-                    width: 80px;
+                li.movehere {
+                    padding: $spacer / 4;
+                    display: flex;
+                    align-items: stretch;
+                    justify-content: stretch;
+                    width: 100%;
+                    @include media-breakpoint-up(sm) {
+                        width: 16%;
+                    }
+                    @include media-breakpoint-up(xl) {
+                        width: 8%;
+                    }
+                    >a {
+                        width: 100%;
+                        height: 100%;
+                        border: 1px dashed $gray-800;
+                        padding: 0 $spacer / 4;
+                        &:hover,
+                        &:focus {
+                            border-color: #fff;
+                        }
+                        .icon {
+                            margin: 0;
+                            width: auto;
+                            height: auto;
+                        }
+                    }
+                    img.movetarget {
+                        height: 16px;
+                        width: 80px;
+                    }
+                    &:last-of-type {
+                        min-height: 7rem;
+                    }
                 }
             }
         }
