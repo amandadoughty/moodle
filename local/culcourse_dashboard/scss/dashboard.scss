@@ -328,23 +328,23 @@ svg.activityicon {
 //     }
 // }
 
-@media (min-width: 980px) {
-    body {        
-        &.used-region-side-pre,
-        &.used-region-side-post,
-        .drawer-open-left,
-        .has-blocks {
-            #local_culcourse_dashboard {
-               .local-culcourse-dashboard.dash-panel {
-                    .col-xl-3 {
-                        flex: 0 0 50%;
-                        max-width: 50%;
-                    }
-
+@media (min-width: 980px) {     
+    .used-region-side-pre,
+    .used-region-side-post,
+    .drawer-open-left,
+    .has-blocks {
+        #local_culcourse_dashboard {
+           .local-culcourse-dashboard.dash-panel {
+                .col-xl-3 {
+                    flex: 0 0 50%;
+                    max-width: 50%;
                 }
+
             }
         }
-    }    
+        
+    }
+    .used-region-side-pre.used-region-side-post,    
     .drawer-open-left .has-blocks {
         #local_culcourse_dashboard {
            .local-culcourse-dashboard.dash-panel {
@@ -359,23 +359,21 @@ svg.activityicon {
 }
 
 @media (min-width: 1200px) {
-    body {        
-        &.used-region-side-pre,
-        &.used-region-side-post,
-        .drawer-open-left,
-        .has-blocks {
-            #local_culcourse_dashboard {
-               .local-culcourse-dashboard.dash-panel {
-                    .col-xl-3 {
-                        flex: 0 0 33.33333333%;
-                        max-width: 33.33333333%;;
-                    }
-
+    .used-region-side-pre,
+    .used-region-side-post,
+    .drawer-open-left,
+    .has-blocks {
+        #local_culcourse_dashboard {
+           .local-culcourse-dashboard.dash-panel {
+                .col-xl-3 {
+                    flex: 0 0 33.33333333%;
+                    max-width: 33.33333333%;
                 }
+
             }
         }
     }
-    
+    .used-region-side-pre.used-region-side-post,
     .drawer-open-left .has-blocks {
         #local_culcourse_dashboard {
            .local-culcourse-dashboard.dash-panel {

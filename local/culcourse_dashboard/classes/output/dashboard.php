@@ -92,6 +92,9 @@ class dashboard implements templatable, renderable {
 
             // Add the drag drop YUI. The is a new core amd module for
             // drag drop but it is not documented or widely used yet.
+            user_preference_allow_ajax_update('local_culcourse_dashboard_expanded' . $course->id, PARAM_INT);
+            user_preference_allow_ajax_update('local_culcourse_dashboard_toggledash' . $course->id, PARAM_INT);
+
             $PAGE->requires->strings_for_js(
                 [
                     'moveactivitylink',
