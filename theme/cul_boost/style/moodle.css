@@ -24335,27 +24335,27 @@ table.roleassigntable td#buttonscell {
       display: -ms-flexbox;
       display: flex; }
 
-body .theme_cul_boost.dash-panel h2 {
+body .local_culcourse_dashboard.dash-panel h2 {
   color: #fff; }
 
-body .theme_cul_boost.dash-panel.quicklinks-wrap {
+body .local_culcourse_dashboard.dash-panel.quicklinks-wrap {
   background-color: #8e232d; }
-  body .theme_cul_boost.dash-panel.quicklinks-wrap .dash-link {
+  body .local_culcourse_dashboard.dash-panel.quicklinks-wrap .dash-link {
     background-color: #fff; }
-    body .theme_cul_boost.dash-panel.quicklinks-wrap .dash-link:hover, body .theme_cul_boost.dash-panel.quicklinks-wrap .dash-link:focus {
+    body .local_culcourse_dashboard.dash-panel.quicklinks-wrap .dash-link:hover, body .local_culcourse_dashboard.dash-panel.quicklinks-wrap .dash-link:focus {
       background-color: #f2f2f2; }
 
-body .theme_cul_boost.dash-panel.activities-wrap {
+body .local_culcourse_dashboard.dash-panel.activities-wrap {
   background-color: #A22833; }
-  body .theme_cul_boost.dash-panel.activities-wrap .dash-link {
+  body .local_culcourse_dashboard.dash-panel.activities-wrap .dash-link {
     background-color: #fff; }
-    body .theme_cul_boost.dash-panel.activities-wrap .dash-link:hover, body .theme_cul_boost.dash-panel.activities-wrap .dash-link:focus {
+    body .local_culcourse_dashboard.dash-panel.activities-wrap .dash-link:hover, body .local_culcourse_dashboard.dash-panel.activities-wrap .dash-link:focus {
       background-color: #f2f2f2; }
 
-body .theme_cul_boost.dash-panel .linkscontainer ul.links .dash .dash-link:hover a, body .theme_cul_boost.dash-panel .linkscontainer ul.links .dash .dash-link:focus a {
+body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:hover a, body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:focus a {
   color: #A22833; }
 
-body .theme_cul_boost.dash-panel .linkscontainer ul.links .dash .dash-link:hover .dash-move, body .theme_cul_boost.dash-panel .linkscontainer ul.links .dash .dash-link:focus .dash-move {
+body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:hover .dash-move, body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:focus .dash-move {
   color: #A22833;
   background-color: rgba(0, 0, 0, 0.1); }
 
