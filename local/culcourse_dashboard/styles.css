@@ -78,10 +78,6 @@ body:not(.editing) .viewmorelink {
     min-height: 100px; }
   body:not(.editing) .viewmorelink .viewless-text {
     display: none; }
-  body:not(.editing) .viewmorelink #region-main:not(.has-blocks) .dash:nth-child(6), body:not(.editing) .viewmorelink #region-main:not(.has-blocks) .dash:nth-child(7) {
-    display: flex; }
-  body:not(.editing) .viewmorelink #region-main:not(.has-blocks) .dash:nth-child(8) ~ .viewmorelink {
-    display: flex; }
 body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere {
   padding: 0.25rem;
   display: flex;
@@ -178,29 +174,30 @@ svg.activityicon {
     height: auto; }
 
 @media (min-width: 980px) {
-  .used-region-side-pre #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
-  .used-region-side-post #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
   .drawer-open-left #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
   .has-blocks #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3 {
     flex: 0 0 50%;
     max-width: 50%; }
 
-  .used-region-side-pre.used-region-side-post #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
   .drawer-open-left .has-blocks #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3 {
     flex: 0 0 50%;
     max-width: 50%; } }
 @media (min-width: 1200px) {
-  .used-region-side-pre #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
-  .used-region-side-post #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
   .drawer-open-left #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
   .has-blocks #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3 {
     flex: 0 0 33.33333333%;
     max-width: 33.33333333%; }
 
-  .used-region-side-pre.used-region-side-post #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
   .drawer-open-left .has-blocks #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3 {
     flex: 0 0 50%;
-    max-width: 50%; } }
+    max-width: 50%; }
+
+  :not(.editing) #region-main:not(.has-blocks) .dash:nth-child(6), :not(.editing) #region-main:not(.has-blocks) .dash:nth-child(7) {
+    display: flex; }
+  :not(.editing) #region-main:not(.has-blocks) .dash:nth-child(6) ~ .viewmorelink {
+    display: none; }
+  :not(.editing) #region-main:not(.has-blocks) .dash:nth-child(8) ~ .viewmorelink {
+    display: flex; } }
 @media (min-width: 576px) {
   .card-deck.briefuser .card {
     width: calc(100%); } }

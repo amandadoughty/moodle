@@ -38,7 +38,7 @@ $cancelcopy = optional_param('cancelcopy', 0, PARAM_BOOL);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
 $lnktxt = optional_param('lnktxt', '', PARAM_RAW);
 $keyboard = optional_param('keyboard', false, PARAM_INT);
-var_dump($keyboard);
+
 require_login();
 
 $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
