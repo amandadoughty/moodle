@@ -540,6 +540,7 @@ function local_culcourse_dashboard_quicklink_visibility($courseid, $section, $na
     // because activity links do not exist as default values and therefore never
     // get updated.
     $options = $DB->get_records('course_format_options', ['courseid' => $courseid, 'name' => $name]);
+    $course = course_get_format($courseid)->get_course();
     
     if($options) {
         $option = array_pop($options);
@@ -550,7 +551,7 @@ function local_culcourse_dashboard_quicklink_visibility($courseid, $section, $na
         $option->courseid = $courseid;
         $option->name = $name;
         $option->value = $value;
-        $option->format = 'culcourse';
+        $option->format = $course->format;
         $DB->insert_record('course_format_options', $option);
     }
 
