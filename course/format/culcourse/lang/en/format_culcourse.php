@@ -121,31 +121,6 @@ $string['setshowmodname'] = 'Show {$a} link';
 $string['setshowmod'] = 'Show this activity link';
 $string['setshowmod_help'] = 'States if this activity link will be shown.';
 
-// Module leaders heading.
-$string['setselectmoduleleadershdr'] = 'Select the Module Leader(s)';
-$string['setselectmoduleleadershdr_help'] = '
-Identifies the Lecturers on the module who are Module Leaders. 
-To select more than one Lecturer as the Module Leader click on one Lecturer, 
-and then press and hold the Ctrl key. While holding down the Ctrl key, 
-click each of the other lecturers you want to select as Module Leaders.
-';
-// Select module leaders.
-$string['setselectmoduleleaders'] = 'Select the Module Leader(s)';
-$string['setselectmoduleleaders_help'] = '
-Identifies the Lecturers on the module who are Module Leaders. 
-To select more than one Lecturer as the Module Leader click on one Lecturer, 
-and then press and hold the Ctrl key. While holding down the Ctrl key, 
-click each of the other lecturers you want to select as Module Leaders.
-';
-$string['defaultselectmoduleleaders'] = 'Select the Module Leader(s)';
-$string['defaultselectmoduleleaders_desc'] = '
-Identifies the Lecturers on the module who are Module Leaders. 
-To select more than one Lecturer as the Module Leader click on one Lecturer, 
-and then press and hold the Ctrl key. While holding down the Ctrl key, 
-click each of the other lecturers you want to select as Module Leaders.
-';
-$string['nolecturers'] = 'No Lecturers';
-
 // Timeout settings for curl.
 $string['connect_timeout'] = 'Connection timeout';
 $string['connect_timeout_desc'] = 'Enter the maximum time in seconds to wait for a connection to the Reading Lists server (upper limit: 6).';
@@ -171,93 +146,6 @@ $string['libAppsKey_desc'] = 'Enter the Library Guides API key.';
 // Reading list API url.
 $string['aspireAPI'] = 'Reading list API url';
 $string['aspireAPI_desc'] = 'Enter the Reading list API url.';
-
-
-/***** LINKS ON COURSE PAGE *****/
-$string['activities'] = 'Activities';
-$string['quicklinks'] = 'Quick Links';
-
-// Calendar
-$string['calendar'] = get_string('calendar', 'calendar');
-$string['view-calendar'] = 'View calendar';
-
-// Course Officers
-$string['no-view-courseofficer-photoboard'] = 'There are no {$a} enrolled on this module';
-$string['view-courseofficer-photoboard'] = 'View {$a} photoboard';
-
-// Grader report
-$string['graderreport'] = get_string('graderreport', 'grades');
-$string['no-view-grades'] = 'Sorry, you are unable to view grades';
-$string['view-graderreport'] = 'View Grader Report';
-
-// Lecturers
-$string['no-view-lecturer-photoboard'] = 'There are no {$a} enrolled on this module';
-$string['view-lecturer-photoboard'] = 'View {$a} photoboard';
-
-// Media
-$string['view-media'] = 'View Media Gallery';
-$string['media'] = 'Media Gallery';
-
-// Reading lists
-$string['readinglists'] = 'Reading Lists';
-$string['error-readinglist'] = 'Sorry - an error occurred while fetching the reading lists data';
-$string['no-readinglist'] = 'There are no reading lists matching this module';
-$string['not-installed-readinglist'] = 'Reading List (not installed)';
-$string['view-readinglist-module'] = 'View reading list(s) for this module';
-$string['view-readinglist-module-year'] = 'View reading list for this module and year';
-
-// Libguides
-$string['libguides'] = 'Library Guides';
-$string['error-libguide'] = 'Sorry - an error occurred while fetching the library guides data';
-$string['no-libguide'] = 'There are no library guides matching this module';
-$string['default-libguide'] = 'View library guides page';
-$string['not-installed-libguide'] = 'Library guides (not installed)';
-$string['view-libguide-module'] = 'View library guides(s) for this module';
-
-// Students
-$string['no-view-student-photoboard'] = 'There are no {$a} enrolled on this module';
-$string['view-student-photoboard'] = 'View {$a} photoboard';
-
-// Timetable
-$string['timetable'] = 'Timetable';
-$string['error-timetable'] = 'Sorry - an error occurred while fetching the timetable data';
-$string['no-timetable'] = 'There is no timetable link matching this module';
-$string['not-installed-timetable'] = 'Timetable link (not installed)';
-$string['view-timetable'] = 'View timetable';
-
-// Activities
-$string['view-mod'] = 'View list of {$a}';
-
-$string['viewmore'] = 'View More';
-$string['viewless'] = 'View Less';
-
-/***** EDITING LINKS ON COURSE PAGE *****/
-// Editing links
-$string['dashshowlink'] = 'Show \'{$a}\' link';
-$string['dashhidelink'] = 'Hide \'{$a}\' link';
-$string['dashmovelink'] = 'Move \'{$a}\' to this location';
-$string['moveactivitylink'] = 'Move \'{$a}\' link';
-$string['moving'] = 'Moving dash link: {$a}';
-$string['movequicklink'] = 'Move \'{$a}\' link';
-$string['noeditcoursesettings'] = 'You are not permitted to edit course settings.';
-
-
-/* PHOTOBOARD */
-$string['buildinglocation'] = 'Building/location: ';
-$string['culcourse:viewallphotoboard'] = 'View all roles in the photoboard';
-$string['culcourse:viewphotoboard'] = 'View the photoboard';
-$string['detailedlist'] = 'Detailed List';
-$string['email'] = 'Email: ';
-$string['groups'] = 'Groups: ';
-$string['lastaccess'] = 'Last access: ';
-$string['matched'] = 'Matched';
-$string['mobile'] = 'Mobile phone: ';
-$string['moduleleader'] = ' (Module Leader)';
-$string['officehours'] = 'Office hours: ';
-$string['photogrid'] = 'Photo Grid';
-$string['roleerror'] = 'View the photoboard for that role';
-$string['sendmessage'] = 'Send a message';
-$string['telephone'] = 'Telephone: ';
 
 /***** SECTIONS *****/
 $string['addsections'] = 'Add sections';

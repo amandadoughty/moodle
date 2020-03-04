@@ -30,7 +30,6 @@ require_once($CFG->libdir.'/completionlib.php');
 $context = context_course::instance($course->id);
 // Retrieve course format option fields and add them to the $course object.
 $course = course_get_format($course)->get_course();
-$ajaxurl = '/course/format/culcourse/dashboard/dashlink_edit_ajax.php';
 
 if (($marker >=0) && has_capability('moodle/course:setcurrentsection', $context) && confirm_sesskey()) {
     $course->marker = $marker;
@@ -48,27 +47,8 @@ if (!empty($displaysection && $course->coursedisplay == COURSE_DISPLAY_MULTIPAGE
     $renderer->print_multiple_section_page($course, null, null, null, null);
 }
 
-user_preference_allow_ajax_update('format_culcourse_expanded' . $course->id, PARAM_INT);
-user_preference_allow_ajax_update('format_culcourse_toggledash' . $course->id, PARAM_INT);
-
 // Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');
 $PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['courseid' => $course->id]);
 
-if ($PAGE->user_is_editing()) {
-    $PAGE->requires->string_for_js('moveactivitylink', 'format_culcourse');
-    $PAGE->requires->string_for_js('movequicklink', 'format_culcourse');
-    $PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_quicklinkdd',
-                [[
-                    'courseid' => $course->id,
-                    'ajaxurl' => $ajaxurl,
-                    'config' => 0,
-                ]], null, true);
 
-    $PAGE->requires->yui_module('moodle-format_culcourse-dragdrop', 'M.format_culcourse.init_activitylinkdd',
-                [[
-                    'courseid' => $course->id,
-                    'ajaxurl' => $ajaxurl,
-                    'config' => 0,
-                ]], null, true);
-}
