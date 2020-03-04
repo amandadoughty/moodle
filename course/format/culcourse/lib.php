@@ -242,14 +242,6 @@ class format_culcourse extends format_base {
             ];
         }
 
-        // // Splice in the dashboard options.
-        // $dashboard = new format_culcourse_dashboard();
-        // $dashboard->set_dashboard_options($courseformatoptions);
-
-        // $dashboardclass = "local_culcourse_dashboard\\format\dashboard";
-        // $dashboard = new $dashboardclass();
-        // $dashboard->set_dashboard_options($courseformatoptions);
-
         $this->course_format_dash_options($courseformatoptions, $foreditform);
 
         if ($foreditform && !isset($courseformatoptions['baseclass']['label'])) {
@@ -387,13 +379,13 @@ class format_culcourse extends format_base {
             // Put module leader setting in own dropdown.
             $selectmoduleleaderhdr = $mform->addElement('header', 'selectmoduleleadershdr', get_string('setselectmoduleleadershdr', 'local_culcourse_dashboard'));
             $mform->addHelpButton('selectmoduleleadershdr', 'setselectmoduleleadershdr', 'local_culcourse_dashboard', '', true);
-            array_splice($elements, -1, 0, [$selectmoduleleaderhdr]);                
+            array_splice($elements, -1, 0, [$selectmoduleleaderhdr]);
 
             // Put dashboard settings in own dropdown.
             $dashboardhdr = $mform->addElement('header', 'dashboardhdr', get_string('setdashboardhdr', 'local_culcourse_dashboard'));
             array_splice($elements, 4, 0, [$dashboardhdr]);      
 
-            $PAGE->requires->js_call_amd('local_culcourse_dashboard/updatebaseclass', 'init');
+            $PAGE->requires->js_call_amd('format_culcourse/updatebaseclass', 'init');
         }
 
         return $elements;

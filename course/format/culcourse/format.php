@@ -49,6 +49,6 @@ if (!empty($displaysection && $course->coursedisplay == COURSE_DISPLAY_MULTIPAGE
 
 // Include course format js module
 $PAGE->requires->js('/course/format/culcourse/format.js');
-$PAGE->requires->js_call_amd('local_culcourse_dashboard/sectiontoggle', 'init', ['courseid' => $course->id]);
+$PAGE->requires->js_call_amd('format_culcourse/sectiontoggle', 'init', ['courseid' => $course->id]);
 
 
