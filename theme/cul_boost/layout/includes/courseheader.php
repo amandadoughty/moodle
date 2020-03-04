@@ -35,11 +35,6 @@ if ($PAGE->pagelayout == 'course' && $COURSE->id != 1) {
         }
     }
 
-    // To be replaced if the format uses local plugin later.
-    if (isset($renderer) && $course->format == 'culcourse') {
-    	$dashboard = $renderer->dashboard_section();
-    }
-
     if (isset($renderer) && method_exists($renderer, 'build_dashboard_in_header')) {
         $dashboard = $renderer->build_dashboard_in_header($course, $section);
     }
