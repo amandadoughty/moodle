@@ -12,6 +12,7 @@ var QUICKLINK = function() {
 Y.extend(QUICKLINK, M.core.dragdrop, {
 
     goingLeft: null,
+    isdragging: false,
 
     initializer: function() {
         // Set group for parent class.
@@ -98,6 +99,10 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
     },
 
     drag_drag: function(e) {
+        // If we are in this function then the movement is by
+        // dragging.
+        this.isdragging = true;
+
         // Core dragdrop checks for goingUp but our list is fluid
         // so we also need to check goingLeft.
         var drag = e.target,
@@ -192,10 +197,7 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         params.copy = drag.getData('position');
         params.action = 2;
         params.name = drag.getData('setting');
-        // If the move is using the keyboard then this.going up
-        // is not set. Using this as a temporary hack to let
-        // ajax function know that the moveto is 'after'.
-        params.keyboard = (this.goingup === null);
+        params.keyboard = !this.isdragging;
 
         // Perform the AJAX request.
         var uri = M.cfg.wwwroot + this.get('ajaxurl');

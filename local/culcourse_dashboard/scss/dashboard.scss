@@ -1,10 +1,10 @@
 body {
-    .local-culcourse-dashboard.togglewrap {
+    .local_culcourse_dashboard.togglewrap {
         position: relative;
         text-align: center;
         margin-right: auto;
     }
-    .local-culcourse-dashboard.dash-panel {
+    .local_culcourse_dashboard.dash-panel {
         margin-bottom: 1rem;
         &.quicklinks-wrap {
             background-color: darken($primary, 5%);
@@ -88,7 +88,7 @@ body {
         }
     }
     &:not(.editing) {        
-        .local-culcourse-dashboard.reveal {
+        .local_culcourse_dashboard.reveal {
             .dash {
                 display: flex !important;
             }
@@ -131,23 +131,10 @@ body {
             .viewless-text {
                 display: none;
             }
-            #region-main:not(.has-blocks) {
-                .dash {
-                    &:nth-child(6),
-                    &:nth-child(7) {
-                        display: flex;
-                    }
-                    &:nth-child(8) {
-                        &~.viewmorelink {
-                            display: flex;
-                        }
-                    }
-                }
-            }
         }
     }
     &.editing {
-        .local-culcourse-dashboard.dash-panel {
+        .local_culcourse_dashboard.dash-panel {
             .linkscontainer ul.links {
                 li.movehere {
                     padding: $spacer / 4;
@@ -285,7 +272,7 @@ svg.activityicon {
 
 // @media (min-width: 480px) {
 //     body {
-//         .local-culcourse-dashboard.dash-panel {
+//         .local_culcourse_dashboard.dash-panel {
 //             .linkscontainer ul.links li {
 //                 span.dash-link {
 //                     a {
@@ -305,7 +292,7 @@ svg.activityicon {
 //             }
 //         }
 //         &.editing {
-//             .local-culcourse-dashboard.dash-panel {
+//             .local_culcourse_dashboard.dash-panel {
 //                 .linkscontainer ul.links li {
 //                     span.dash-link {
 //                         a {
@@ -328,26 +315,23 @@ svg.activityicon {
 //     }
 // }
 
-@media (min-width: 980px) {
-    body {        
-        &.used-region-side-pre,
-        &.used-region-side-post,
-        .drawer-open-left,
-        .has-blocks {
-            #local_culcourse_dashboard {
-               .local-culcourse-dashboard.dash-panel {
-                    .col-xl-3 {
-                        flex: 0 0 50%;
-                        max-width: 50%;
-                    }
-
+@media (min-width: 980px) {     
+    .drawer-open-left,
+    .has-blocks {
+        #local_culcourse_dashboard {
+           .local_culcourse_dashboard.dash-panel {
+                .col-xl-3 {
+                    flex: 0 0 50%;
+                    max-width: 50%;
                 }
+
             }
         }
-    }    
+        
+    }
     .drawer-open-left .has-blocks {
         #local_culcourse_dashboard {
-           .local-culcourse-dashboard.dash-panel {
+           .local_culcourse_dashboard.dash-panel {
                 .col-xl-3 {
                     flex: 0 0 50%;
                     max-width: 50%;
@@ -359,26 +343,21 @@ svg.activityicon {
 }
 
 @media (min-width: 1200px) {
-    body {        
-        &.used-region-side-pre,
-        &.used-region-side-post,
-        .drawer-open-left,
-        .has-blocks {
-            #local_culcourse_dashboard {
-               .local-culcourse-dashboard.dash-panel {
-                    .col-xl-3 {
-                        flex: 0 0 33.33333333%;
-                        max-width: 33.33333333%;;
-                    }
-
+    .drawer-open-left,
+    .has-blocks {
+        #local_culcourse_dashboard {
+           .local_culcourse_dashboard.dash-panel {
+                .col-xl-3 {
+                    flex: 0 0 33.33333333%;
+                    max-width: 33.33333333%;
                 }
+
             }
         }
     }
-    
     .drawer-open-left .has-blocks {
         #local_culcourse_dashboard {
-           .local-culcourse-dashboard.dash-panel {
+           .local_culcourse_dashboard.dash-panel {
                 .col-xl-3 {
                     flex: 0 0 50%;
                     max-width: 50%;
@@ -386,7 +365,25 @@ svg.activityicon {
 
             }
         }
-    }    
+    }
+    :not(.editing) #region-main:not(.has-blocks) {
+        .dash {
+            &:nth-child(6),
+            &:nth-child(7) {
+                display: flex;
+            }
+            &:nth-child(6) {
+                &~.viewmorelink {
+                    display: none;
+                }
+            }
+            &:nth-child(8) {
+                &~.viewmorelink {
+                    display: flex;
+                }
+            }
+        }
+    }  
 }
 
 @media (min-width: 576px) {

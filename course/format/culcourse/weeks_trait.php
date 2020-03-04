@@ -354,10 +354,12 @@ trait format_weeks_trait {
      * @return stdClass property start for startdate, property end for enddate
      */
     public function format_weeks_get_section_dates($section, $startdate = false) {
+	global $USER;
 
         if ($startdate === false) {
             $course = $this->get_course();
-            $startdate = $course->startdate;
+            $userdates = course_get_course_dates_for_user_id($course, $USER->id);
+            $startdate = $userdates['start'];
         }
 
         if (is_object($section)) {
@@ -565,4 +567,17 @@ trait format_weeks_trait {
             }
         }
     }
+
+    /**
+     * Return the plugin configs for external functions.
+     *
+     * @return array the list of configuration settings
+     * @since Moodle 3.5
+     */
+    public function get_config_for_external() {
+        // Return everything (nothing to hide).
+        return $this->get_format_options();
+    }
 }
+
+

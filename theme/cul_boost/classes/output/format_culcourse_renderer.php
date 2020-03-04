@@ -59,20 +59,36 @@ class theme_cul_boost_format_culcourse_renderer extends format_culcourse_rendere
 	    $this->page->set_other_editing_capability('moodle/course:setcurrentsection');
 	}
 
-	/**
-	 * Generate the starting container html for a list of sections
-	 * @return string HTML to output.
-	 */
-	public function dashboard_section() {
-	    global $COURSE;
+    /**
+     * Generate the html for the dashboard
+     * @param stdClass $course The course entry from DB
+     * @param int $displaysection The section number in the course which is being displayed
+     * @return string HTML to output.
+     */
+    public function build_dashboard($course, $displaysection = null) {
+        $o = '';
+        return $o;
+    }
 
-	    $o = '';
-	    $dashboard = new dashboard($COURSE, $this->culconfig);
-	    $templatecontext = $dashboard->export_for_template($this);
-	    $o .= $this->render_from_template('format_culcourse/dashboard', $templatecontext);
+    /**
+     * Generate the html for the dashboard
+     * @param stdClass $course The course entry from DB
+     * @param int $displaysection The section number in the course which is being displayed
+     * @return string HTML to output.
+     */
+    public function build_dashboard_in_header($course, $displaysection) {
+        $o = '';
+        $dashrenderclass = "local_culcourse_dashboard\output\dashboard";
 
-	    return $o;
-	}
+        if (class_exists($dashrenderclass)) {
+            $config = course_get_format($course)->get_format_options();
+            $dashboard = new $dashrenderclass($course, $displaysection, $config);
+            $templatecontext = $dashboard->export_for_template($this);
+            $o .= $this->render_from_template('local_culcourse_dashboard/dashboard', $templatecontext);
+        }
+
+        return $o;
+    }
 
 	/**
 	 * Generate the starting container html for a list of sections
