@@ -1,67 +1,67 @@
-body .local-culcourse-dashboard.togglewrap {
+body .local_culcourse_dashboard.togglewrap {
   position: relative;
   text-align: center;
   margin-right: auto; }
-body .local-culcourse-dashboard.dash-panel {
+body .local_culcourse_dashboard.dash-panel {
   margin-bottom: 1rem; }
-  body .local-culcourse-dashboard.dash-panel.quicklinks-wrap {
+  body .local_culcourse_dashboard.dash-panel.quicklinks-wrap {
     background-color: #006fe6; }
-    body .local-culcourse-dashboard.dash-panel.quicklinks-wrap .dash-link {
+    body .local_culcourse_dashboard.dash-panel.quicklinks-wrap .dash-link {
       background-color: #fff; }
-      body .local-culcourse-dashboard.dash-panel.quicklinks-wrap .dash-link:hover, body .local-culcourse-dashboard.dash-panel.quicklinks-wrap .dash-link:focus {
+      body .local_culcourse_dashboard.dash-panel.quicklinks-wrap .dash-link:hover, body .local_culcourse_dashboard.dash-panel.quicklinks-wrap .dash-link:focus {
         background-color: #f2f2f2; }
-  body .local-culcourse-dashboard.dash-panel.activities-wrap {
+  body .local_culcourse_dashboard.dash-panel.activities-wrap {
     background-color: #007bff; }
-    body .local-culcourse-dashboard.dash-panel.activities-wrap .dash-link {
+    body .local_culcourse_dashboard.dash-panel.activities-wrap .dash-link {
       background-color: #fff; }
-      body .local-culcourse-dashboard.dash-panel.activities-wrap .dash-link:hover, body .local-culcourse-dashboard.dash-panel.activities-wrap .dash-link:focus {
+      body .local_culcourse_dashboard.dash-panel.activities-wrap .dash-link:hover, body .local_culcourse_dashboard.dash-panel.activities-wrap .dash-link:focus {
         background-color: #f2f2f2; }
-  body .local-culcourse-dashboard.dash-panel h2 {
+  body .local_culcourse_dashboard.dash-panel h2 {
     color: #fff; }
-  body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links {
+  body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links {
     list-style: none;
     padding: 0;
     margin: -0.25rem; }
-    body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash {
+    body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash {
       padding: 0.25rem; }
-      body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link {
+      body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link {
         display: block;
         min-height: 100px; }
-        body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:hover a, body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:focus a {
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:hover a, body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:focus a {
           color: #007bff; }
-        body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:hover .dash-move, body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:focus .dash-move {
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:hover .dash-move, body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:focus .dash-move {
           color: #007bff;
           background-color: rgba(0, 0, 0, 0.1); }
-        body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link a.dash-edit {
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link a.dash-edit {
           position: absolute;
           bottom: 0.5rem;
           left: 0.5rem;
           display: flex; }
-        body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-move {
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-move {
           position: absolute;
           top: 0.25rem;
           right: 0.25rem;
           padding: 0.5rem;
           margin: 0; }
-          body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-move .icon:first-of-type {
+          body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-move .icon:first-of-type {
             margin: 0; }
-        body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon {
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon {
           width: 100%;
           min-height: 2rem;
           font-size: 1.75rem; }
-          body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img,
-          body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg {
+          body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img,
+          body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg {
             width: 1.75rem;
             height: auto;
             margin: 0; }
-      body .local-culcourse-dashboard.dash-panel .linkscontainer ul.links .dash.linkhidden {
+      body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash.linkhidden {
         border: 1px dashed #212529;
         opacity: 0.7; }
-body:not(.editing) .local-culcourse-dashboard.reveal .dash {
+body:not(.editing) .local_culcourse_dashboard.reveal .dash {
   display: flex !important; }
-body:not(.editing) .local-culcourse-dashboard.reveal .viewmorelink .viewmore-text {
+body:not(.editing) .local_culcourse_dashboard.reveal .viewmorelink .viewmore-text {
   display: none; }
-body:not(.editing) .local-culcourse-dashboard.reveal .viewmorelink .viewless-text {
+body:not(.editing) .local_culcourse_dashboard.reveal .viewmorelink .viewless-text {
   display: block; }
 body:not(.editing) .dash {
   display: none; }
@@ -78,33 +78,33 @@ body:not(.editing) .viewmorelink {
     min-height: 100px; }
   body:not(.editing) .viewmorelink .viewless-text {
     display: none; }
-body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere {
+body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere {
   padding: 0.25rem;
   display: flex;
   align-items: stretch;
   justify-content: stretch;
   width: 100%; }
   @media (min-width: 576px) {
-    body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere {
+    body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere {
       width: 16%; } }
   @media (min-width: 1200px) {
-    body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere {
+    body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere {
       width: 8%; } }
-  body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere > a {
+  body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere > a {
     width: 100%;
     height: 100%;
     border: 1px dashed #343a40;
     padding: 0 0.25rem; }
-    body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere > a:hover, body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere > a:focus {
+    body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere > a:hover, body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere > a:focus {
       border-color: #fff; }
-    body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere > a .icon {
+    body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere > a .icon {
       margin: 0;
       width: auto;
       height: auto; }
-  body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere img.movetarget {
+  body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere img.movetarget {
     height: 16px;
     width: 80px; }
-  body.editing .local-culcourse-dashboard.dash-panel .linkscontainer ul.links li.movehere:last-of-type {
+  body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere:last-of-type {
     min-height: 7rem; }
 body.editing .viewmorelink {
   display: none; }
@@ -174,21 +174,21 @@ svg.activityicon {
     height: auto; }
 
 @media (min-width: 980px) {
-  .drawer-open-left #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
-  .has-blocks #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3 {
+  .drawer-open-left #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3,
+  .has-blocks #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3 {
     flex: 0 0 50%;
     max-width: 50%; }
 
-  .drawer-open-left .has-blocks #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3 {
+  .drawer-open-left .has-blocks #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3 {
     flex: 0 0 50%;
     max-width: 50%; } }
 @media (min-width: 1200px) {
-  .drawer-open-left #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3,
-  .has-blocks #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3 {
+  .drawer-open-left #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3,
+  .has-blocks #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3 {
     flex: 0 0 33.33333333%;
     max-width: 33.33333333%; }
 
-  .drawer-open-left .has-blocks #local_culcourse_dashboard .local-culcourse-dashboard.dash-panel .col-xl-3 {
+  .drawer-open-left .has-blocks #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3 {
     flex: 0 0 50%;
     max-width: 50%; }
 

@@ -1,10 +1,10 @@
 body {
-    .local-culcourse-dashboard.togglewrap {
+    .local_culcourse_dashboard.togglewrap {
         position: relative;
         text-align: center;
         margin-right: auto;
     }
-    .local-culcourse-dashboard.dash-panel {
+    .local_culcourse_dashboard.dash-panel {
         margin-bottom: 1rem;
         &.quicklinks-wrap {
             background-color: darken($primary, 5%);
@@ -88,7 +88,7 @@ body {
         }
     }
     &:not(.editing) {        
-        .local-culcourse-dashboard.reveal {
+        .local_culcourse_dashboard.reveal {
             .dash {
                 display: flex !important;
             }
@@ -134,7 +134,7 @@ body {
         }
     }
     &.editing {
-        .local-culcourse-dashboard.dash-panel {
+        .local_culcourse_dashboard.dash-panel {
             .linkscontainer ul.links {
                 li.movehere {
                     padding: $spacer / 4;
@@ -272,7 +272,7 @@ svg.activityicon {
 
 // @media (min-width: 480px) {
 //     body {
-//         .local-culcourse-dashboard.dash-panel {
+//         .local_culcourse_dashboard.dash-panel {
 //             .linkscontainer ul.links li {
 //                 span.dash-link {
 //                     a {
@@ -292,7 +292,7 @@ svg.activityicon {
 //             }
 //         }
 //         &.editing {
-//             .local-culcourse-dashboard.dash-panel {
+//             .local_culcourse_dashboard.dash-panel {
 //                 .linkscontainer ul.links li {
 //                     span.dash-link {
 //                         a {
@@ -319,7 +319,7 @@ svg.activityicon {
     .drawer-open-left,
     .has-blocks {
         #local_culcourse_dashboard {
-           .local-culcourse-dashboard.dash-panel {
+           .local_culcourse_dashboard.dash-panel {
                 .col-xl-3 {
                     flex: 0 0 50%;
                     max-width: 50%;
@@ -331,7 +331,7 @@ svg.activityicon {
     }
     .drawer-open-left .has-blocks {
         #local_culcourse_dashboard {
-           .local-culcourse-dashboard.dash-panel {
+           .local_culcourse_dashboard.dash-panel {
                 .col-xl-3 {
                     flex: 0 0 50%;
                     max-width: 50%;
@@ -346,7 +346,7 @@ svg.activityicon {
     .drawer-open-left,
     .has-blocks {
         #local_culcourse_dashboard {
-           .local-culcourse-dashboard.dash-panel {
+           .local_culcourse_dashboard.dash-panel {
                 .col-xl-3 {
                     flex: 0 0 33.33333333%;
                     max-width: 33.33333333%;
@@ -357,7 +357,7 @@ svg.activityicon {
     }
     .drawer-open-left .has-blocks {
         #local_culcourse_dashboard {
-           .local-culcourse-dashboard.dash-panel {
+           .local_culcourse_dashboard.dash-panel {
                 .col-xl-3 {
                     flex: 0 0 50%;
                     max-width: 50%;
