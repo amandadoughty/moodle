@@ -14,14 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-// Only when master becomes a stable the version value will be changed for
-// the current date. Otherwise we just increase the last NN by one.
+/**
+ * Defines message providers (types of message sent) for the hvp module.
+ *
+ * @package   mod_hvp
+ * @copyright 2020 Joubel AS <contact@joubel.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_journal';
-$plugin->version  = 2020020700;
-$plugin->requires = 2013111800;  /* Moodle 2.6 */
-$plugin->release = '2.0.0 (Build: 2019061600)';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->cron     = 60;
+$messageproviders = array(
+    // Notify teacher that a student has submitted an attempt.
+    'submission' => array(
+        'capability' => 'mod/hvp:emailnotifysubmission'
+    ),
+
+    // Confirm a student's quiz attempt.
+    'confirmation' => array(
+        'capability' => 'mod/hvp:emailconfirmsubmission',
+        'defaults' => array(
+            'airnotifier' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+        ),
+    ),
+);
