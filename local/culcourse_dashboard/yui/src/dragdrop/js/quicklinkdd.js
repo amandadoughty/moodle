@@ -150,22 +150,31 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    drop_over: function(e) {
+    global_drop_over: function(e) {
+        // Overriding parent method so we can go left and right.
+
+        // Check that drop object belong to correct group.
+        if (!e.drop || !e.drop.inGroup(this.groups)) {
+            return;
+        }
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
-            drop = e.drop.get('node'),
-            where;
+            drop = e.drop.get('node');
+
+        // Save last drop target for the case of missed target processing.
+        this.lastdroptarget = e.drop;
 
         // Are we dropping within the same parent node?
         if (drop.hasClass(this.samenodeclass)) {
+            var where;
 
-            if (this.goingleft) {
+            if (this.goingleft === true) {
                 where = 'before';
             } else {
                 where = 'after';
             }
 
-            if (this.goingup) {
+            if (this.goingup === true) {
                 where = 'before';
             }
 
@@ -179,6 +188,7 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
                 drop.prepend(drag);
             }
         }
+        this.drop_over(e);
     },
 
     drop_hit: function(e) {
@@ -189,6 +199,22 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         // Add spinner if it not there.
         var actionarea = drag.one('.' + CSS.ACTIONAREA);
         var spinner = M.util.add_spinner(Y, actionarea);
+
+        // Our nodes are close together and we can move on
+        // both axis. So sometimes the drop node does not
+        // match the displaced node.
+        if (this.isdragging) {
+            var selector = '[data-draggroups="' + CSS.QUICKLINKDRAGGABLE + '"]';
+            if (this.absgoingup === true) {
+                drop = drag.next(selector);
+            } else if (this.absgoingup === false) {
+                drop = drag.previous(selector);
+            } else if (this.absgoingleft === true) {
+                drop = drag.next(selector);
+            } else if (this.absgoingleft === false) {
+                drop = drag.previous(selector);
+            }
+        }
 
         // Prepare request parameters
         params.sesskey = M.cfg.sesskey;
