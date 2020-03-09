@@ -26150,11 +26150,11 @@ abbr[data-original-title] {
            -o-transform: translate(-50%, -50%) rotate(45deg);
               transform: translate(-50%, -50%) rotate(45deg); }
 
-.popover .popover-title,
-.popover .popover-content {
+div:not(.iconpicker-popover).popover .popover-title,
+div:not(.iconpicker-popover).popover .popover-content {
   color: #fff; }
-  .popover .popover-title *,
-  .popover .popover-content * {
+  div:not(.iconpicker-popover).popover .popover-title *,
+  div:not(.iconpicker-popover).popover .popover-content * {
     color: #fff; }
 
 .yui3-panel {
