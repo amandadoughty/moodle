@@ -344,7 +344,7 @@ abbr {
     }
 }
 
-.popover {
+div:not(.iconpicker-popover).popover {
     .popover-title,
     .popover-content {
         color: $popover-text-color;
