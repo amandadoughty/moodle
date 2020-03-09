@@ -58,6 +58,8 @@ M.block_culactivity_stream.scroll = {
         this.limitnum = params.limitnum;
         this.count = params.count;
         this.courseid = params.courseid;
+        this.returnurl = params.returnurl;
+        this.instanceid = params.instanceid;
         // Refresh the feed every 5 mins.
         this.timer = Y.later(1000 * 60 * 5, this, this.reloadnotifications, [], true);
         this.filltobelowblock();
@@ -104,7 +106,9 @@ M.block_culactivity_stream.scroll = {
                 limitnum: this.limitnum,
                 lastid : lastid,
                 newer: false,
-                courseid: this.courseid
+                courseid: this.courseid,
+                returnurl: this.returnurl,
+                instanceid: this.instanceid
             };
 
             Y.io(M.cfg.wwwroot + '/blocks/culactivity_stream/scroll_ajax.php', {
@@ -150,7 +154,9 @@ M.block_culactivity_stream.scroll = {
         var params = {
             sesskey : M.cfg.sesskey,
             lastid : lastid,
-            courseid: this.courseid
+            courseid: this.courseid,
+            returnurl: this.returnurl,
+            instanceid: this.instanceid
         };
 
         Y.io(M.cfg.wwwroot + '/blocks/culactivity_stream/reload_ajax.php', {
