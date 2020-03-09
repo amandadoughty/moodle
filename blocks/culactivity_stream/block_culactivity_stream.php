@@ -94,7 +94,14 @@ class block_culactivity_stream extends block_base {
 
         $this->page->requires->yui_module('moodle-block_culactivity_stream-scroll',
                 'M.block_culactivity_stream.scroll.init',
-                array(array('limitnum' => $limitnum, 'count' => $count, 'courseid' => $COURSE->id)));
+                [[
+                    'limitnum' => $limitnum,
+                    'count' => $count,
+                    'courseid' => $COURSE->id,
+                    'returnurl' => $this->page->url->out(),
+                    'instanceid' => $this->instance->id
+                ]]
+            );
 
         return $this->content;
     }

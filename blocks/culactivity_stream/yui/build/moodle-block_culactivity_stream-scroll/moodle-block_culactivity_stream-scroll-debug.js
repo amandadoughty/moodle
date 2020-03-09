@@ -39,8 +39,9 @@ M.block_culactivity_stream.scroll = {
             Y.one('.pages').hide();
         }
 
+        var doc = Y.one(Y.config.doc);
+
         try {
-            var doc = Y.one(Y.config.doc);
             var reloaddiv = Y.one('.block_culactivity_stream .reload');
             var block = Y.one('.block_culactivity_stream');
             var id = block.get('id');
@@ -53,12 +54,14 @@ M.block_culactivity_stream.scroll = {
             Y.log('Problem adding reload button');
         }
 
-        Y.all('.block_culactivity_stream .removelink').on('click', this.removenotification, this);
+        doc.delegate('click', this.removenotification, '.block_culactivity_stream .removelink', this);
         this.scroller = Y.one('.block_culactivity_stream .culactivity_stream');
         this.scroller.on('scroll', this.filltobelowblock, this);
         this.limitnum = params.limitnum;
         this.count = params.count;
         this.courseid = params.courseid;
+        this.returnurl = params.returnurl;
+        this.instanceid = params.instanceid;
         // Refresh the feed every 5 mins.
         this.timer = Y.later(1000 * 60 * 5, this, this.reloadnotifications, [], true);
         this.filltobelowblock();
@@ -105,7 +108,9 @@ M.block_culactivity_stream.scroll = {
                 limitnum: this.limitnum,
                 lastid : lastid,
                 newer: false,
-                courseid: this.courseid
+                courseid: this.courseid,
+                returnurl: this.returnurl,
+                instanceid: this.instanceid
             };
 
             Y.io(M.cfg.wwwroot + '/blocks/culactivity_stream/scroll_ajax.php', {
@@ -151,7 +156,9 @@ M.block_culactivity_stream.scroll = {
         var params = {
             sesskey : M.cfg.sesskey,
             lastid : lastid,
-            courseid: this.courseid
+            courseid: this.courseid,
+            returnurl: this.returnurl,
+            instanceid: this.instanceid
         };
 
         Y.io(M.cfg.wwwroot + '/blocks/culactivity_stream/reload_ajax.php', {
