@@ -7,10 +7,10 @@
 var CSS = {
         ACTIONAREA: 'dash-edit',
         ACTIVITYLINK: 'activitylink',
-        ACTIVITYLINKCONTAINER: 'activitylinks',
+        ACTIVITYLINKCONTAINER: 'activities-wrap',
         ACTIVITYLINKDRAGGABLE: 'activitylinkdraggable',
         MOVE: 'dash-move',
         QUICKLINK: 'quicklink',
-        QUICKLINKCONTAINER: 'quicklinks',
+        QUICKLINKCONTAINER: 'quicklinks-wrap',
         QUICKLINKDRAGGABLE: 'quicklinkdraggable'
     };

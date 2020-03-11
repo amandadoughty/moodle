@@ -9,11 +9,11 @@ YUI.add('moodle-local_culcourse_dashboard-dragdrop', function (Y, NAME) {
 var CSS = {
         ACTIONAREA: 'dash-edit',
         ACTIVITYLINK: 'activitylink',
-        ACTIVITYLINKCONTAINER: 'activitylinks',
+        ACTIVITYLINKCONTAINER: 'activities-wrap',
         ACTIVITYLINKDRAGGABLE: 'activitylinkdraggable',
         MOVE: 'dash-move',
         QUICKLINK: 'quicklink',
-        QUICKLINKCONTAINER: 'quicklinks',
+        QUICKLINKCONTAINER: 'quicklinks-wrap',
         QUICKLINKDRAGGABLE: 'quicklinkdraggable'
     };/**
  * Quick link drag and drop.
@@ -135,12 +135,26 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         // and down with no X position change.
 
         // Detect changes in the position relative to the start point.
-        if (info.start[0] < info.xy[0]) {
+        if (info.offset[0] < 0) {
             this.absgoingleft = true;
 
-        } else if (info.start[0] > info.xy[0]) {
+        } else if (info.offset[0] > 0) {
             // Otherwise we're going right.
             this.absgoingleft = false;
+        } else {
+            this.absgoingleft = null;
+        }
+
+        // Detect changes in the position relative to the start point.
+        if (info.offset[1] > 0) {
+            // We are going down if our final position is higher than our start position.
+            this.culabsgoingup = false;
+
+        } else if (info.offset[1] < 0) {
+            // Otherwise we're going down.
+            this.culabsgoingup = true;
+        } else {
+            this.culabsgoingup = null;
         }
 
         // Detect changes in the position relative to the last movement.
@@ -151,13 +165,6 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
             // Otherwise we're going right.
             this.goingleft = false;
         }
-
-        // Detect if we are going up or down.
-        if (info.delta[1] != info.xy[1]) {
-            this.vertical = true;
-        } else {
-            this.vertical = false;
-        }
     },
 
     drag_dropmiss: function(e) {
@@ -167,32 +174,25 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    global_drop_over: function(e) {
-        // Overriding parent method so we can go left and right.
-
-        // Check that drop object belong to correct group.
-        if (!e.drop || !e.drop.inGroup(this.groups)) {
-            return;
-        }
+    drop_over: function(e) {
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
             drop = e.drop.get('node');
-
-        // Save last drop target for the case of missed target processing.
-        this.lastdroptarget = e.drop;
 
         // Are we dropping within the same parent node?
         if (drop.hasClass(this.samenodeclass)) {
             var where;
 
-            if (this.goingleft === true) {
+            if (this.absgoingleft === true) {
                 where = 'before';
-            } else {
+            } else if (this.absgoingleft === false) {
                 where = 'after';
             }
 
-            if (this.goingup === true) {
+            if (this.culabsgoingup === true) {
                 where = 'before';
+            } else if (this.culabsgoingup === false) {
+                where = 'after';
             }
 
             // Add the node contents so that it's moved, otherwise only the drag handle is moved.
@@ -205,7 +205,6 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
                 drop.prepend(drag);
             }
         }
-        this.drop_over(e);
     },
 
     drop_hit: function(e) {
@@ -216,22 +215,6 @@ Y.extend(QUICKLINK, M.core.dragdrop, {
         // Add spinner if it not there.
         var actionarea = drag.one('.' + CSS.ACTIONAREA);
         var spinner = M.util.add_spinner(Y, actionarea);
-
-        // Our nodes are close together and we can move on
-        // both axis. So sometimes the drop node does not
-        // match the displaced node.
-        if (this.isdragging) {
-            var selector = '[data-draggroups="' + CSS.QUICKLINKDRAGGABLE + '"]';
-            if (this.absgoingup === true) {
-                drop = drag.next(selector);
-            } else if (this.absgoingup === false) {
-                drop = drag.previous(selector);
-            } else if (this.absgoingleft === true) {
-                drop = drag.next(selector);
-            } else if (this.absgoingleft === false) {
-                drop = drag.previous(selector);
-            }
-        }
 
         // Prepare request parameters
         params.sesskey = M.cfg.sesskey;
@@ -393,6 +376,7 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         // If we are in this function then the movement is by
         // dragging.
         this.isdragging = true;
+
         // Core dragdrop checks for goingUp but our list is fluid
         // so we also need to check goingLeft.
         var drag = e.target,
@@ -408,12 +392,26 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         // and down with no X position change.
 
         // Detect changes in the position relative to the start point.
-        if (info.start[0] < info.xy[0]) {
+        if (info.offset[0] < 0) {
             this.absgoingleft = true;
 
-        } else if (info.start[0] > info.xy[0]) {
+        } else if (info.offset[0] > 0) {
             // Otherwise we're going right.
             this.absgoingleft = false;
+        } else {
+            this.absgoingleft = null;
+        }
+
+        // Detect changes in the position relative to the start point.
+        if (info.offset[1] > 0) {
+            // We are going down if our final position is higher than our start position.
+            this.culabsgoingup = false;
+
+        } else if (info.offset[1] < 0) {
+            // Otherwise we're going down.
+            this.culabsgoingup = true;
+        } else {
+            this.culabsgoingup = null;
         }
 
         // Detect changes in the position relative to the last movement.
@@ -424,13 +422,6 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
             // Otherwise we're going right.
             this.goingleft = false;
         }
-
-        // Detect if we are going up or down.
-        if (info.delta[1] != info.xy[1]) {
-            this.vertical = true;
-        } else {
-            this.vertical = false;
-        }
     },
 
     drag_dropmiss: function(e) {
@@ -440,32 +431,25 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         this.drop_hit(e);
     },
 
-    global_drop_over: function(e) {
-        // Overriding parent method so we can go left and right.
-
-        // Check that drop object belong to correct group.
-        if (!e.drop || !e.drop.inGroup(this.groups)) {
-            return;
-        }
+    drop_over: function(e) {
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
             drop = e.drop.get('node');
-
-        // Save last drop target for the case of missed target processing.
-        this.lastdroptarget = e.drop;
 
         // Are we dropping within the same parent node?
         if (drop.hasClass(this.samenodeclass)) {
             var where;
 
-            if (this.goingleft === true) {
+            if (this.absgoingleft === true) {
                 where = 'before';
-            } else {
+            } else if (this.absgoingleft === false) {
                 where = 'after';
             }
 
-            if (this.goingup === true) {
+            if (this.culabsgoingup === true) {
                 where = 'before';
+            } else if (this.culabsgoingup === false) {
+                where = 'after';
             }
 
             // Add the node contents so that it's moved, otherwise only the drag handle is moved.
@@ -478,7 +462,6 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
                 drop.prepend(drag);
             }
         }
-        this.drop_over(e);
     },
 
     drop_hit: function(e) {
@@ -489,22 +472,6 @@ Y.extend(ACTIVITYLINK, M.core.dragdrop, {
         // Add spinner if it not there.
         var actionarea = drag.one('.' + CSS.ACTIONAREA);
         var spinner = M.util.add_spinner(Y, actionarea);
-
-        // Our nodes are close together and we can move on
-        // both axis. So sometimes the drop node does not
-        // match the displaced node.
-        if (this.isdragging) {
-            var selector = '[data-draggroups="' + CSS.ACTIVITYLINKDRAGGABLE + '"]';
-            if (this.absgoingup === true) {
-                drop = drag.next(selector);
-            } else if (this.absgoingup === false) {
-                drop = drag.previous(selector);
-            } else if (this.absgoingleft === true) {
-                drop = drag.next(selector);
-            } else if (this.absgoingleft === false) {
-                drop = drag.previous(selector);
-            }
-        }
 
         // Prepare request parameters
         params.sesskey = M.cfg.sesskey;
