@@ -47,13 +47,15 @@
     <div id="local_culcourse_dashboard" class="d-flex flex-wrap align-items-stretch position-relative">
 
         {{# quicklinksexist}}
-        <div class="local_culcourse_dashboard dash-panel quicklinks-wrap col-12 col-md-6 p-4">
+        <div 
+            class="local_culcourse_dashboard dash-panel quicklinks-wrap col-12 col-md-6 p-4"
+            data-draggroups="quicklinkdraggable"
+            data-position="start">
             <h2 class="mb-3">Quick Links</h2>
             <nav class="linkscontainer">
                 <ul 
                 class="quicklinks links d-flex flex-wrap "
-                data-draggroups="quicklinkdraggable"
-                data-position="start">
+                >
                     {{# quicklinks}}
                     {{> local_culcourse_dashboard/quicklink}}
                     {{/ quicklinks}}
@@ -82,13 +84,15 @@
         {{/ quicklinksexist}}
 
         {{# activitiesexist}}
-        <div class="local_culcourse_dashboard dash-panel activities-wrap col-12 col-md-6 p-4">
+        <div 
+            class="local_culcourse_dashboard dash-panel activities-wrap col-12 col-md-6 p-4"
+            data-draggroups="activitylinkdraggable"
+            data-position="start">
             <h2 class="mb-3">Activities</h2>
             <nav class="linkscontainer">
                 <ul 
                 class="activitylinks links d-flex flex-wrap"
-                data-draggroups="activitylinkdraggable"
-                data-position="start">
+                >
                     {{# activities}}
                     {{> local_culcourse_dashboard/activity}}
                     {{/ activities}}
