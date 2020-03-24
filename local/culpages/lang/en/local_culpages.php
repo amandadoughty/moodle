@@ -24,6 +24,7 @@
  * 
  */
 
+$string['pluginname'] = 'CUL pages';
 $string['passwordforgottentxt'] = '<h2 id="pageheading" class="main">Forgotten password?</h2>
 <p>You should login using your standard City University username and password.</p>
 <p>Make sure you are using the correct username and password, and that you have <a href="https://moodle-dev.city.ac.uk/help.php?module=moodle&amp;file=cookies.html">cookies enabled</a> in your browser.</p>
