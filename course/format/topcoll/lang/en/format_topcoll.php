@@ -22,8 +22,7 @@
  * Toggles are persistent on a per browser session per course basis but can be made to persist longer by a small
  * code change. Full installation instructions, code adaptions and credits are included in the 'Readme.md' file.
  *
- * @package    course/format
- * @subpackage topcoll
+ * @package    format_topcoll
  * @version    See the value of '$plugin->version' in version.php.
  * @copyright  &copy; 2009-onwards G J Barnard in respect to modifications of standard topics format.
  * @author     G J Barnard - {@link http://moodle.org/user/profile.php?id=442195}
@@ -44,6 +43,9 @@ $string['topcollsidewidthlang'] = 'en-28px';
 $string['topcollall'] = 'sections.';  // Leave as AMOS maintains only the latest translation - so previous versions are still supported.
 $string['topcollopened'] = 'Open all';
 $string['topcollclosed'] = 'Close all';
+$string['sctopenall'] = 'Open all {$a}';
+$string['sctcloseall'] = 'Close all {$a}';
+
 $string['settoggleallenabled'] = 'Toggle all enabled';
 $string['settoggleallenabled_help'] = 'Toggle all functionality enabled.';
 $string['defaulttoggleallenabled'] = 'Toggle all enabled';
@@ -115,6 +117,10 @@ $string['setlayoutstructurecurrenttopicfirst'] = 'Current topic first';
 $string['setlayoutstructureday'] = 'Day';
 $string['resetlayout'] = 'Layout'; // CONTRIB-3529.
 $string['resetalllayout'] = 'Layouts';
+$string['layoutstructuretopics'] = 'topics';
+$string['layoutstructureweeks'] = 'weeks';
+$string['layoutstructuredays'] = 'days';
+
 
 // Colour enhancement - Moodle Tracker CONTRIB-3529.
 $string['setcolour'] = 'Colour';
