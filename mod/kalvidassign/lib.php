@@ -25,7 +25,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-/* Include calendar/lib.php */
 require_once($CFG->dirroot.'/calendar/lib.php');
 
 /**
