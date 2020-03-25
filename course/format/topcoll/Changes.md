@@ -1,5 +1,21 @@
 ﻿Version Information
 ===================
+Version 3.8.0.1
+  1. Fix Collapsed topics format zoom issue - CONTRIB-7893.
+  2. Adjust position of 'view only' icon.
+  3. More accessible open all / close all - #67.
+  4. Moodle 3.8 version based on V3.7.1.1.
+
+Version 3.7.1.0
+  1. Add missing Moodle define.
+  2. Fix "Collapsed Topic Content/EditMenu Overlap" - https://moodle.org/mod/forum/discuss.php?d=388969.
+  3. Fix error with analytic - get_section_dates function - thanks to https://github.com/tuanngocnguyen for the patch - #65.
+  4. Improve accessibility by having the 'left', 'content' and 'right' section areas in that order rather than 'left', 'right' and 'content'
+     which makes the tab order wrong.
+
+Version 3.7.0.1
+  1. Beta version for Moodle 3.7 based on 3.6.0.3.
+
 Version 3.6.0.3
   1. Apply MDL-64819 - #61.
   2. Fix phpunit tests for MDL-64492 - thanks to Rossco Hellmans for the patch - #59.

@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright  (C) 2014 Remote Learner.net Inc http://www.remote-learner.net
  */
-
-define('TINMCE_KALTURAMEDIA_INSERT_BUTTON_ID', 'insert');
 define('TINMCE_KALTURAMEDIA_OBJECT_TAG_ID', 'objecttagcontainer');
 define('TINMCE_KALTURAMEDIA_PREVIEW_IFRAME_TAG_ID', 'video_preview_frame');
 define('TINMCE_KALTURAMEDIA_OBJECT_TAG_HEIGHT', '500');
@@ -36,7 +34,6 @@ function tinymce_kalturamedia_preview_embed_form() {
     // Create hidden elements.
     $hiddenelements = html_writer::empty_tag('input', array('type' => 'hidden', 'id' => 'entry_id', 'value' => ''));
     $hiddenelements .= html_writer::empty_tag('input', array('type' => 'hidden', 'id' => 'source', 'value' => ''));
-    $hiddenelements .= html_writer::empty_tag('input', array('type' => 'hidden', 'id' => 'token', 'value' => KALTURA_URI_TOKEN));
     $hiddenelements .= html_writer::empty_tag('input', array('type' => 'hidden', 'id' => 'kafuri', 'value' => local_kaltura_get_config()->kaf_uri));
     $hiddenelements .= html_writer::empty_tag('input', array('type' => 'hidden', 'id' => 'video_title', 'value' => ''));
     $hiddenelements .= html_writer::empty_tag('input', array('type' => 'hidden', 'id' => 'uiconf_id', 'value' => ''));
@@ -48,19 +45,6 @@ function tinymce_kalturamedia_preview_embed_form() {
     // Create LTI launch and preview container divs
     $ltilaunchcontainer = html_writer::tag('div', '', array('id' => TINMCE_KALTURAMEDIA_OBJECT_TAG_ID));
     $previewcontainer = html_writer::tag('div', '', array('id' => TINMCE_KALTURAMEDIA_PREVIEW_IFRAME_TAG_ID));
-
-    // Create insert button.
-    $params = array(
-        'type' => 'submit',
-        'id' => TINMCE_KALTURAMEDIA_INSERT_BUTTON_ID,
-        'name' => TINMCE_KALTURAMEDIA_INSERT_BUTTON_ID,
-        // Using the language string from the local plug-in.
-        'value' => get_string('insertbtn', 'local_kaltura'),
-        'class' => 'updateButton',
-        'style' => 'display: none'
-    );
-    $insertbutton = html_writer::empty_tag('input', $params);
-    $insertbuttondiv = html_writer::tag('div', $insertbutton, array('style' => 'float: left'));
 
     // Create cancel button.
     $param = array(
@@ -74,7 +58,7 @@ function tinymce_kalturamedia_preview_embed_form() {
     $cancelbutton = html_writer::empty_tag('input', $param);
     $cancelbuttondiv = html_writer::tag('div', $cancelbutton, array('style' => 'float: right'));
 
-    $buttonscontainer = html_writer::tag('div', $insertbuttondiv.$cancelbuttondiv, array('class' => 'mceActionPanel'));
+    $buttonscontainer = html_writer::tag('div', $cancelbuttondiv, array('class' => 'mceActionPanel'));
 
     // This element is used so that the ltiservice.js can simulate a 'click' event.  This tells the plug-in that the user has choosen a video to embed on the page
     // and it will enable the insert button.

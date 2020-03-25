@@ -339,7 +339,7 @@ function local_kaltura_strip_querystring($endpoint, $params) {
  */
 function local_kaltura_request_lti_launch($ltirequest, $withblocks = true, $editor = null) {
     global $CFG, $USER;
-    
+
     if(is_null($editor))
     {
         $editor = 'tinymce';
@@ -389,6 +389,8 @@ function local_kaltura_request_lti_launch($ltirequest, $withblocks = true, $edit
     // Add custom parameters
     $requestparams['custom_publishdata'] = local_kaltura_get_kaf_publishing_data();
     $requestparams['custom_publishdata_encoded'] = '1';
+    $requestparams['custom_moodle_plugin_version'] = local_kaltura_get_config()->version;
+    $requestparams['assignment'] = $ltirequest['submission'];
 
     // Specific settings for video presentation requests.
     if (isset($ltirequest['custom_disable_add_new'])) {
@@ -481,10 +483,10 @@ function local_kaltura_get_kaf_publishing_data() {
 
     // If the user is not an admin then retrieve all of the user's enroled courses.
     if (KALTURA_LTI_ADMIN_ROLE != $role) {
-        $courses = enrol_get_users_courses($USER->id, true, 'id,fullname', 'fullname ASC');
+        $courses = enrol_get_users_courses($USER->id, true, 'id,fullname,shortname', 'fullname ASC');
     } else {
         // Calling refactored code that allows for a limit on the number of courses returned.
-        $courses = local_kaltura_get_user_capability_course('moodle/course:manageactivities', $USER->id, true, 'id,fullname', 'fullname ASC');
+        $courses = local_kaltura_get_user_capability_course('moodle/course:manageactivities', $USER->id, true, 'id,fullname,shortname', 'fullname ASC');
     }
 
     foreach ($courses as $course) {
@@ -503,6 +505,7 @@ function local_kaltura_get_kaf_publishing_data() {
         $data = new stdClass();
         $data->courseId = $course->id;
         $data->courseName = $course->fullname;
+        $data->courseShortName = $course->shortname;
         $data->roles = $role;
         $json->courses[$course->id] = $data;
     }

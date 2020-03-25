@@ -15,16 +15,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Grid Format - A topics based format that uses a grid of user selectable images to popup a light box of the section.
- *
- * @package    course/format
- * @subpackage grid
- * @version    See the value of '$plugin->version' in version.php.
- * @copyright  &copy; 2013 G J Barnard in respect to modifications of standard topics format.
- * @author     G J Barnard - {@link http://about.me/gjbarnard} and
- *                           {@link http://moodle.org/user/profile.php?id=442195}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author    Daniel Tomé <danieltomefer@gmail.com>
+ * @copyright 2018 Servei de Recursos Educatius (http://www.sre.urv.cat)
  */
 
-echo '</body>';
-echo '</html>';
+defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/assignsubmissionquery.php');
+
+class in_memory_assign_submission_query implements assign_submission_query
+{
+    private $memory;
+
+    public function __construct($entitieswithkey) {
+        $this->memory = $entitieswithkey;
+    }
+
+    public function latest_from_assign_and_user($assignid, $userid) {
+        return $this->memory[$assignid] ?? null;
+    }
+
+    public function all_from_assign_and_user($assignid, $userid) {
+        return $this->memory[$assignid] ?? null;
+    }
+}
