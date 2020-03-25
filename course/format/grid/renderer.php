@@ -17,8 +17,7 @@
 /**
  * Grid Format - A topics based format that uses a grid of user selectable images to popup a light box of the section.
  *
- * @package    course/format
- * @subpackage grid
+ * @package    format_grid
  * @version    See the value of '$plugin->version' in version.php.
  * @copyright  &copy; 2012 G J Barnard in respect to modifications of standard topics format.
  * @author     G J Barnard - {@link http://about.me/gjbarnard} and
@@ -310,9 +309,11 @@ class format_grid_renderer extends format_section_renderer_base {
             echo $this->start_section_list();
 
             echo $this->section_header_onsectionpage_topic0notattop($thissection, $course);
-            // Show completion help icon.
-            $completioninfo = new completion_info($course);
-            echo $completioninfo->display_help_icon();
+            if ($course->enablecompletion) {
+                // Show completion help icon.
+                $completioninfo = new completion_info($course);
+                echo $completioninfo->display_help_icon();
+            }
 
             echo $this->courserenderer->course_section_cm_list($course, $thissection, $displaysection);
             echo $this->courserenderer->course_section_add_cm_control($course, $displaysection, $displaysection);
@@ -389,7 +390,7 @@ class format_grid_renderer extends format_section_renderer_base {
 
         echo html_writer::start_tag('ul', array('class' => $gridiconsclass));
         // Print all of the image containers.
-        $this->make_block_icon_topics($coursecontext->id, $sections, $course, $editing, $hascapvishidsect, $urlpicedit);
+        $shownsections = $this->make_block_icon_topics($coursecontext->id, $sections, $course, $editing, $hascapvishidsect, $urlpicedit);
         echo html_writer::end_tag('ul');
 
         echo html_writer::end_tag('div');
@@ -512,17 +513,19 @@ class format_grid_renderer extends format_section_renderer_base {
             $sectionredirect = $this->courseformat->get_view_url(null)->out(true);
         }
 
-        // Initialise the shade box functionality:...
-        $PAGE->requires->js_init_call('M.format_grid.init', array(
-            $PAGE->user_is_editing(),
-            $sectionredirect,
-            $coursenumsections,
-            $this->initialsection,
-            json_encode($this->shadeboxshownarray)));
-        if (!$PAGE->user_is_editing()) {
-            // Initialise the key control functionality...
-            $PAGE->requires->yui_module('moodle-format_grid-gridkeys', 'M.format_grid.gridkeys.init',
-                array(array('rtl' => $rtl)), null, true);
+        if ($shownsections) {
+            // Initialise the shade box functionality:...
+            $PAGE->requires->js_init_call('M.format_grid.init', array(
+                $PAGE->user_is_editing(),
+                $sectionredirect,
+                count($this->shadeboxshownarray),
+                $this->initialsection,
+                json_encode($this->shadeboxshownarray)));
+            if (!$PAGE->user_is_editing()) {
+                // Initialise the key control functionality...
+                $PAGE->requires->yui_module('moodle-format_grid-gridkeys', 'M.format_grid.gridkeys.init',
+                    array(array('rtl' => $rtl)), null, true);
+            }
         }
     }
 
@@ -553,22 +556,20 @@ class format_grid_renderer extends format_section_renderer_base {
         if ($section->section && has_capability('moodle/course:setcurrentsection', $coursecontext)) {
             if ($course->marker == $section->section) {  // Show the "light globe" on/off.
                 $url->param('marker', 0);
-                $markedthissection = get_string('markedthissection', 'format_grid');
                 $highlightoff = get_string('highlightoff');
                 $controls['highlight'] = array('url' => $url, "icon" => 'i/marked',
                                                'name' => $highlightoff,
-                                               'pixattr' => array('class' => '', 'alt' => $markedthissection),
-                                               'attr' => array('class' => 'editing_highlight', 'title' => $markedthissection,
+                                               'pixattr' => array('class' => ''),
+                                               'attr' => array('class' => 'editing_highlight',
                                                'data-action' => 'removemarker'));
                 $url->param('marker', 0);
             } else {
                 $url->param('marker', $section->section);
-                $markthissection = get_string('markthissection', 'format_grid');
                 $highlight = get_string('highlight');
                 $controls['highlight'] = array('url' => $url, "icon" => 'i/marker',
                                                'name' => $highlight,
-                                               'pixattr' => array('class' => '', 'alt' => $markthissection),
-                                               'attr' => array('class' => 'editing_highlight', 'title' => $markthissection,
+                                               'pixattr' => array('class' => ''),
+                                               'attr' => array('class' => 'editing_highlight',
                                                'data-action' => 'setmarker'));
             }
         }
@@ -700,6 +701,8 @@ class format_grid_renderer extends format_section_renderer_base {
 
     /**
      * Makes the grid image containers.
+     *
+     * @return int Number of shown sections.
      */
     private function make_block_icon_topics($contextid, $sections, $course, $editing, $hascapvishidsect,
             $urlpicedit) {
@@ -736,6 +739,7 @@ class format_grid_renderer extends format_section_renderer_base {
         // Are we using WebP for the displayed image?
         $iswebp = (get_config('format_grid', 'defaultdisplayedimagefiletype') == 2);
 
+        $shownsections = 0;
         foreach ($sections as $section => $thissection) {
             if ((($this->section0attop) && ($section == 0)) || ($section > $coursenumsections)) {
                 continue;  // Section 0 at the top and not in the grid / orphaned section.
@@ -753,6 +757,7 @@ class format_grid_renderer extends format_section_renderer_base {
             }
 
             if ($showsection || $sectiongreyedout) {
+                $shownsections++;
                 // We now know the value for the grid shade box shown array.
                 $this->shadeboxshownarray[$section] = 2;
 
@@ -787,11 +792,17 @@ class format_grid_renderer extends format_section_renderer_base {
                         }
                     }
                     if ($canshow) {
-                        $sectiontitleclass .= ' content_inside';
-                        if ($this->settings['sectiontitleboxinsideposition'] == 2) {
-                            $sectiontitleclass .= ' middle';
-                        } else if ($this->settings['sectiontitleboxinsideposition'] == 3) {
-                            $sectiontitleclass .= ' bottom';
+                        $sectiontitleclass .= ' content_inside ';
+                        switch ($this->settings['sectiontitleboxinsideposition']) {
+                            case 1:
+                                $sectiontitleclass .= 'top';
+                                break;
+                            case 2:
+                                $sectiontitleclass .= 'middle';
+                                break;
+                            case 3:
+                                $sectiontitleclass .= 'bottom';
+                                break;
                         }
                     }
                 }
@@ -964,6 +975,8 @@ class format_grid_renderer extends format_section_renderer_base {
                 $this->shadeboxshownarray[$section] = 1;
             }
         }
+
+        return $shownsections;
     }
 
     private function make_block_icon_topics_editing($thissection, $contextid, $urlpicedit) {

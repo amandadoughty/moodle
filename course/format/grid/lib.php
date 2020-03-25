@@ -17,8 +17,7 @@
 /**
  * Grid Format - A topics based format that uses a grid of user selectable images to popup a light box of the section.
  *
- * @package    course/format
- * @subpackage grid
+ * @package    format_grid
  * @version    See the value of '$plugin->version' in version.php.
  * @copyright  &copy; 2012+ G J Barnard in respect to modifications of standard topics format.
  * @author     G J Barnard - {@link http://about.me/gjbarnard} and
@@ -1782,6 +1781,10 @@ class format_grid extends format_base {
            See CONTRIB-4784. */
         $sectionimage = $this->get_image($this->courseid, $data['id']);
         if ($sectionimage) {
+            // Set up our table to get the displayed image back.  The 'auto repair' on page reload will do the rest.
+            global $DB;
+            $DB->set_field('format_grid_icon', 'displayedimageindex', 0, array('sectionid' => $sectionimage->sectionid));
+            // We know the file is normally deleted, but just in case...
             $contextid = $this->get_context()->id;
             $fs = get_file_storage();
             $gridimagepath = $this->get_image_path();
@@ -1831,7 +1834,7 @@ class format_grid extends format_base {
             $updatedata['imagecontaineralignment'] = get_config('format_grid', 'defaultimagecontaineralignment');
             $updateimagecontaineralignment = true;
         }
-        if ($imagecontainernavigationreset && has_capability('format/grid:changeimagecontaineralignment', $context) && $resetallifall) {
+        if ($imagecontainernavigationreset && has_capability('format/grid:changeimagecontainernavigation', $context) && $resetallifall) {
             $updatedata['setsection0ownpagenogridonesection'] = get_config('format_grid', 'defaultsection0ownpagenogridonesection');
             $updateimagecontainernavigation = true;
         }
@@ -1982,25 +1985,30 @@ class format_grid extends format_base {
             return false;
         }
 
-        if (!$sectionimage = $DB->get_record('format_grid_icon', array('sectionid' => $sectionid))) {
+        // Only allow this code to be executed once at the same time for the given section id (the id is unique).
+        $lockfactory = \core\lock\lock_config::get_lock_factory('format_grid');
+        if ($lock = $lockfactory->get_lock('sectionid'.$sectionid, 5)) {
+            if (!$sectionimage = $DB->get_record('format_grid_icon', array('sectionid' => $sectionid))) {
+                $newimagecontainer = new stdClass();
+                $newimagecontainer->sectionid = $sectionid;
+                $newimagecontainer->courseid = $courseid;
+                $newimagecontainer->displayedimageindex = 0;
 
-            $newimagecontainer = new stdClass();
-            $newimagecontainer->sectionid = $sectionid;
-            $newimagecontainer->courseid = $courseid;
-            $newimagecontainer->displayedimageindex = 0;
-
-            if (!$newimagecontainer->id = $DB->insert_record('format_grid_icon', $newimagecontainer, true)) {
-                throw new moodle_exception('invalidrecordid', 'format_grid', '',
-                'Could not create image container.  Grid format database is not ready.' .
-                '  An admin must visit the notifications section.');
+                if (!$newimagecontainer->id = $DB->insert_record('format_grid_icon', $newimagecontainer, true)) {
+                    $lock->release();
+                    throw new moodle_exception('invalidiconrecordid', 'format_grid', '', get_string('invalidiconrecordid', 'format_grid'));
+                }
+                $sectionimage = $newimagecontainer;
+            } else if ($sectionimage->courseid == 1) { // 1 is the default and is the 'site' course so cannot be the Grid format.
+                // Note: Using a double equals in the test and not a triple as the latter does not work for some reason.
+                /* Course id is the default and needs to be set correctly.  This can happen with data created by versions prior to
+                13/7/2012. */
+                $DB->set_field('format_grid_icon', 'courseid', $courseid, array('sectionid' => $sectionid));
+                $sectionimage->courseid = $courseid;
             }
-            $sectionimage = $newimagecontainer;
-        } else if ($sectionimage->courseid == 1) { // 1 is the default and is the 'site' course so cannot be the Grid format.
-            // Note: Using a double equals in the test and not a triple as the latter does not work for some reason.
-            /* Course id is the default and needs to be set correctly.  This can happen with data created by versions prior to
-              13/7/2012. */
-            $DB->set_field('format_grid_icon', 'courseid', $courseid, array('sectionid' => $sectionid));
-            $sectionimage->courseid = $courseid;
+            $lock->release();
+        } else {
+            throw new moodle_exception('cannotgetimagelock', 'format_grid', '', get_string('cannotgetimagelock', 'format_grid'));
         }
         return $sectionimage;
     }
@@ -2014,24 +2022,31 @@ class format_grid extends format_base {
      */
     public function get_summary_visibility($courseid) {
         global $DB;
-        if (!$summarystatus = $DB->get_record('format_grid_summary', array('courseid' => $courseid))) {
-            $newstatus = new stdClass();
-            $newstatus->courseid = $courseid;
-            $newstatus->showsummary = 1;
+        // Only allow this code to be executed once at the same time for the given course id (the id is unique).
+        $lockfactory = \core\lock\lock_config::get_lock_factory('format_grid');
+        if ($lock = $lockfactory->get_lock('courseid'.$courseid, 5)) {
+            if (!$summarystatus = $DB->get_record('format_grid_summary', array('courseid' => $courseid))) {
+                $newstatus = new stdClass();
+                $newstatus->courseid = $courseid;
+                $newstatus->showsummary = 1;
 
-            if (!$newstatus->id = $DB->insert_record('format_grid_summary', $newstatus)) {
-                throw new moodle_exception('invalidrecordid', 'format_grid', '',
-                'Could not set summary status. Grid format database is not ready. An admin must visit the notifications section.');
+                if (!$newstatus->id = $DB->insert_record('format_grid_summary', $newstatus)) {
+                    $lock->release();
+                    throw new moodle_exception('invalidsummaryrecordid', 'format_grid', '', get_string('invalidsummaryrecordid', 'format_grid'));
+                }
+                $summarystatus = $newstatus;
+
+                /* Technically this only happens once when the course is created, so we can use it to set the
+                 * course format options for the first time.  This so that the defaults are set upon creation
+                 * and therefore do not have to detect when they change in the global site settings.  Which
+                 * cannot be detected and therefore the icons would look odd.  So here they are set and set once
+                 * until course settings are reset or changed.
+                 */
+                $this->update_course_format_options($this->get_settings());
             }
-            $summarystatus = $newstatus;
-
-            /* Technically this only happens once when the course is created, so we can use it to set the
-             * course format options for the first time.  This so that the defaults are set upon creation
-             * and therefore do not have to detect when they change in the global site settings.  Which
-             * cannot be detected and therefore the icons would look odd.  So here they are set and set once
-             * until course settings are reset or changed.
-             */
-            $this->update_course_format_options($this->get_settings());
+            $lock->release();
+        } else {
+            throw new moodle_exception('cannotgetsummarylock', 'format_grid', '', get_string('cannotgetsummarylock', 'format_grid'));
         }
         return $summarystatus;
     }
@@ -2105,7 +2120,7 @@ class format_grid extends format_base {
                 $basewidth = $width / 3;
                 break;
             case 4: // 2-3.
-                $basewidth = $width / 1;
+                $basewidth = $width / 2;
                 break;
             case 5: // 1-3.
                 $basewidth = $width;
@@ -2256,7 +2271,15 @@ class format_grid extends format_base {
             } else {
                 $newmime = $mime;
             }
-            $data = self::generate_image($tmpfilepath, $displayedimageinfo['width'], $displayedimageinfo['height'], $crop, $icbc, $newmime);
+            $debugdata = array(
+                'itemid' => $imagecontainerpathfile->get_itemid(),
+                'filename' => $imagecontainerpathfile->get_filename(),
+                'sectionimage_sectionid' => $sectionimage->sectionid,
+                'sectionimage_image' => $sectionimage->image,
+                'sectionimage_displayedimageindex' => $sectionimage->displayedimageindex,
+                'sectionimage_newimage' => $sectionimage->newimage
+            );
+            $data = self::generate_image($tmpfilepath, $displayedimageinfo['width'], $displayedimageinfo['height'], $crop, $icbc, $newmime, $debugdata);
             if (!empty($data)) {
                 // Updated image.
                 $sectionimage->displayedimageindex++;
@@ -2298,6 +2321,7 @@ class format_grid extends format_base {
                 $DB->set_field('format_grid_icon', 'displayedimageindex', $sectionimage->displayedimageindex,
                     array('sectionid' => $sectionimage->sectionid));
             } else {
+                // TODO: Determine if this can actually be called.
                 print_error('cannotconvertuploadedimagetodisplayedimage', 'format_grid',
                         $CFG->wwwroot . "/course/view.php?id=" . $this->courseid);
             }
@@ -2504,9 +2528,11 @@ class format_grid extends format_base {
      * @param bool $crop false = scale, true = crop.
      * @param array $icbc The 'imagecontainerbackgroundcolour' as an RGB array.
      * @param string $mime The mime type.
+     * @param array $debugdata Debug data if the image generation fails.
+     *
      * @return string|bool false if a problem occurs or the image data.
      */
-    private static function generate_image($filepath, $requestedwidth, $requestedheight, $crop, $icbc, $mime) {
+    private static function generate_image($filepath, $requestedwidth, $requestedheight, $crop, $icbc, $mime, $debugdata) {
         if (empty($filepath) or empty($requestedwidth) or empty($requestedheight)) {
             return false;
         }
@@ -2514,13 +2540,19 @@ class format_grid extends format_base {
         $imageinfo = getimagesize($filepath);
 
         if (empty($imageinfo)) {
+            print_error('noimageinformation', 'format_grid', '', self::debugdata_decode($debugdata), 'generate_image');
             return false;
         }
 
         $originalwidth = $imageinfo[0];
         $originalheight = $imageinfo[1];
 
-        if (empty($originalwidth) or empty($originalheight)) {
+        if (empty($originalheight)) {
+            print_error('originalheightempty', 'format_grid', '', self::debugdata_decode($debugdata), 'generate_image');
+            return false;
+        }
+        if (empty($originalwidth)) {
+            print_error('originalwidthempty', 'format_grid', '', self::debugdata_decode($debugdata), 'generate_image');
             return false;
         }
 
@@ -2533,8 +2565,7 @@ class format_grid extends format_base {
                     $filters = PNG_NO_FILTER;
                     $quality = 1;
                 } else {
-                    debugging('PNG\'s are not supported at this server, please fix the system configuration'.
-                        ' to have the GD PHP extension installed.');
+                    print_error('formatnotsupported', 'format_grid', '', 'PNG, '.self::debugdata_decode($debugdata), 'generate_image');
                     return false;
                 }
                 break;
@@ -2544,8 +2575,7 @@ class format_grid extends format_base {
                     $filters = null;
                     $quality = 90;
                 } else {
-                    debugging('JPG\'s are not supported at this server, please fix the system configuration'.
-                        ' to have the GD PHP extension installed.');
+                    print_error('formatnotsupported', 'format_grid', '', 'JPG, '.self::debugdata_decode($debugdata), 'generate_image');
                     return false;
                 }
                 break;
@@ -2557,8 +2587,7 @@ class format_grid extends format_base {
                     $filters = null;
                     $quality = 90;
                 } else {
-                    debugging('WEBP\'s are not supported at this server, please fix the system configuration'.
-                        ' to have the GD PHP extension installed.');
+                    print_error('formatnotsupported', 'format_grid', '', 'WEBP, '.self::debugdata_decode($debugdata), 'generate_image');
                     return false;
                 }
                 break;
@@ -2568,13 +2597,12 @@ class format_grid extends format_base {
                     $filters = null;
                     $quality = null;
                 } else {
-                    debugging('GIF\'s are not supported at this server, please fix the system configuration'.
-                        ' to have the GD PHP extension installed.');
+                    print_error('formatnotsupported', 'format_grid', '', 'GIF, '.self::debugdata_decode($debugdata), 'generate_image');
                     return false;
                 }
                 break;
             default:
-                debugging('Mime type \''.$mime.'\' is not supported as an image format in the Grid format.');
+                print_error('mimetypenotsupported', 'format_grid', '', $mime.', '.self::debugdata_decode($debugdata), 'generate_image');
                 return false;
         }
 
@@ -2677,6 +2705,7 @@ class format_grid extends format_base {
         ob_start();
         if (!$imagefnc($finalimage, null, $quality, $filters)) {
             ob_end_clean();
+            print_error('functionfailed', 'format_grid', '', $imagefnc.', '.self::debugdata_decode($debugdata), 'generate_image');
             return false;
         }
         $data = ob_get_clean();
@@ -2685,6 +2714,18 @@ class format_grid extends format_base {
         imagedestroy($finalimage);
 
         return $data;
+    }
+
+    private static function debugdata_decode($debugdata) {
+        $o = 'itemid > '.$debugdata['itemid'];
+        $o .= ', filename > '.$debugdata['filename'];
+        $o .= ', sectionimage_sectionid > '.$debugdata['sectionimage_sectionid'];
+        $o .= ', sectionimage_image > '.$debugdata['sectionimage_image'];
+        $o .= ', sectionimage_newimage > '.$debugdata['sectionimage_newimage'];
+        $o .= ' and sectionimage_displayedimageindex > '.$debugdata['sectionimage_displayedimageindex'].'.  ';
+        $o .= get_string('reporterror', 'format_grid');
+
+        return $o;
     }
 
     /**
