@@ -37,7 +37,7 @@ use Behat\Gherkin\Node\TableNode as TableNode;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_block_culcourse_listing extends behat_base {
-        /**
+    /**
      * Return the list of partial named selectors.
      * 
      * IMPORTANT! Run Behat installation to register them.
@@ -57,11 +57,28 @@ class behat_block_culcourse_listing extends behat_base {
             // The favourites list.
             new behat_component_named_selector('Favourite', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]"]),
             // A favourite link title in the favourites list.
-            new behat_component_named_selector('Add favourite to favourites', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']/a[@title='Add to favourites']"]),
+            // new behat_component_named_selector('Add favourite to favourites', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']/a[@title='Add to favourites']"]),
             new behat_component_named_selector('Remove favourite from favourites', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']/a[@title='Remove from favourites']"]),
             // A favourite link star icon in the favourites list.
-            new behat_component_named_selector('Favourite empty star', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']//i[@class='icon fa fa-star-o']"]),
+            // new behat_component_named_selector('Favourite empty star', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']//i[@class='icon fa fa-star-o']"]),
             new behat_component_named_selector('Favourite gold star', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']//i[@class='icon gold fa fa-star']"]),
+        ];
+
+
+   }
+
+    /**
+     * Return the list of  named selectors.
+     * 
+     * IMPORTANT! Run Behat installation to register them.
+     *
+     * @return array
+     */
+    public static function get_exact_named_selectors(): array {
+        return [
+            // A message saying how to add favourites when there are none
+            // contains an empty star.
+            new behat_component_named_selector('No favourites', ["//div[contains(@class,'favourites')]//span//i[@class='icon fa fa-star-o']"]),
         ];
 
 

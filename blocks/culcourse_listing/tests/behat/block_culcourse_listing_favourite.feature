@@ -35,27 +35,59 @@ Feature: Test that students can favourite a course
         And I add the "Starred courses" block if not present
         And I press "Blocks editing off"
         And I press "Reset Dashboard for all users"
-        And I log out        
+        And I log out
+        And I log in as "student1"
+        And I click on ".favouritelink" "css_element" in the "C3" "block_culcourse_listing > Course"
+        And I click on ".favouritelink" "css_element" in the "C1" "block_culcourse_listing > Course"
+        And I click on ".favouritelink" "css_element" in the "C2" "block_culcourse_listing > Course"
+        And I log out     
 
     Scenario: Favourite a course in the course list
         Given I log in as "student1"
-        When I click on ".favouritelink" "css_element" in the "C1" "block_culcourse_listing > Course"    
-        Then "C1" "block_culcourse_listing > Add course to favourites" should not exist
-        And "C1" "block_culcourse_listing > Course empty star" should not exist
-        And "C1" "block_culcourse_listing > Remove course from favourites" should exist
-        And "C1" "block_culcourse_listing > Course gold star" should exist
-        And "C1" "block_culcourse_listing > Add favourite to favourites" should not exist
-        And "C1" "block_culcourse_listing > Favourite empty star" should not exist
-        And "C1" "block_culcourse_listing > Remove favourite from favourites" should exist
-        And "C1" "block_culcourse_listing > Favourite gold star" should exist
+        When I click on ".favouritelink" "css_element" in the "C4" "block_culcourse_listing > Course"    
+        Then "C4" "block_culcourse_listing > Add course to favourites" should not exist
+        And "C4" "block_culcourse_listing > Course empty star" should not exist
+        And "C4" "block_culcourse_listing > Remove course from favourites" should exist
+        And "C4" "block_culcourse_listing > Course gold star" should exist
+        And "C4" "block_culcourse_listing > Add favourite to favourites" should not exist
+        And "C4" "block_culcourse_listing > Favourite empty star" should not exist
+        And "C4" "block_culcourse_listing > Remove favourite from favourites" should exist
+        And "C4" "block_culcourse_listing > Favourite gold star" should exist
 
     Scenario: Unfavourite a course in the course list
-
+        Given I log in as "student1"
+        When I click on ".favouritelink" "css_element" in the "C3" "block_culcourse_listing > Course"    
+        Then "C3" "block_culcourse_listing > Remove course from favourites" should not exist
+        And "C3" "block_culcourse_listing > Course gold star" should not exist
+        And "C3" "block_culcourse_listing > Add course to favourites" should exist
+        And "C3" "block_culcourse_listing > Course empty star" should exist
+        And "C3" "block_culcourse_listing > Remove favourite from favourites" should not exist
+        And "C3" "block_culcourse_listing > Favourite gold star" should not exist
+        
     Scenario: Unfavourite a course in the favourite list
+        Given I log in as "student1"
+        When I click on ".favouritelink" "css_element" in the "C3" "block_culcourse_listing > Favourite"    
+        Then "C3" "block_culcourse_listing > Remove course from favourites" should not exist
+        And "C3" "block_culcourse_listing > Course gold star" should not exist
+        And "C3" "block_culcourse_listing > Add course to favourites" should exist
+        And "C3" "block_culcourse_listing > Course empty star" should exist
+        And "C3" "block_culcourse_listing > Remove favourite from favourites" should not exist
+        And "C3" "block_culcourse_listing > Favourite gold star" should not exist
 
     Scenario: Clear favourites
+        Given I log in as "student1"
+        And I press "Clear favourites"
+        And I press "Yes"
+        Then "block_culcourse_listing > No favourites" should exist
 
+
+
+        
     Scenario: Reorder favourites
+
+    
+
+    
 
     Scenario: Favourite a course in the module list to update My overview and Starred Courses
 
@@ -64,8 +96,6 @@ Feature: Test that students can favourite a course
     Scenario: Favourite a course in My Overview and update CUL Course Listing
 
     Scenario: Unfavourite a course in My Overview and update CUL Course Listing
-        
-
 
         
 
