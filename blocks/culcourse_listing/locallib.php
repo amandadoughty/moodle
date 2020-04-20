@@ -293,6 +293,8 @@ function block_culcourse_listing_edit_favourites_api($action, $cid, $userid = 0)
  */
 function block_culcourse_listing_update_from_favourites_api($action, $cid) {
 
+    $changed = true;
+
     if ($cid && !is_null($myfavourites = get_user_preferences('culcourse_listing_course_favourites'))) {
         $favourites = (array)unserialize($myfavourites);
         $changed = false;

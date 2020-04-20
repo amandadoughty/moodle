@@ -27,7 +27,8 @@
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
-use Behat\Gherkin\Node\TableNode as TableNode;
+use Behat\Gherkin\Node\TableNode as TableNode,
+    Behat\Mink\Exception\ExpectationException as ExpectationException;
 /**
  * Cul Course Listing-related steps definitions.
  *
@@ -37,7 +38,7 @@ use Behat\Gherkin\Node\TableNode as TableNode;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_block_culcourse_listing extends behat_base {
-        /**
+    /**
      * Return the list of partial named selectors.
      * 
      * IMPORTANT! Run Behat installation to register them.
@@ -57,14 +58,112 @@ class behat_block_culcourse_listing extends behat_base {
             // The favourites list.
             new behat_component_named_selector('Favourite', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]"]),
             // A favourite link title in the favourites list.
-            new behat_component_named_selector('Add favourite to favourites', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']/a[@title='Add to favourites']"]),
+            // new behat_component_named_selector('Add favourite to favourites', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']/a[@title='Add to favourites']"]),
             new behat_component_named_selector('Remove favourite from favourites', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']/a[@title='Remove from favourites']"]),
             // A favourite link star icon in the favourites list.
-            new behat_component_named_selector('Favourite empty star', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']//i[@class='icon fa fa-star-o']"]),
+            // new behat_component_named_selector('Favourite empty star', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']//i[@class='icon fa fa-star-o']"]),
             new behat_component_named_selector('Favourite gold star', ["//div[contains(@class,'favourites')]//div[@data-shortname=%locator%]//div[@class='favouritelink']//i[@class='icon gold fa fa-star']"]),
         ];
 
 
    }
+
+    /**
+     * Return the list of  named selectors.
+     * 
+     * IMPORTANT! Run Behat installation to register them.
+     *
+     * @return array
+     */
+    public static function get_exact_named_selectors(): array {
+        return [
+            // A message saying how to add favourites when there are none
+            // contains an empty star.
+            new behat_component_named_selector('No favourites', ["//div[contains(@class,'favourites')]//span//i[@class='icon fa fa-star-o']"]),
+        ];
+   }
+
+    /**
+     * Checks that a course within the recently accessed courses 
+     * block is starred.
+     *
+     * @Given /^course in recently accessed block should be starred "(?P<idnumber_string>(?:[^"]|\\")*)"$/
+     * @param string $idnumber
+     */
+    public function course_in_recently_accessed_block_should_be_starred($idnumber) {
+        $id = $this->get_course_id($idnumber);
+        $exception = new ExpectationException('The course '.$idnumber.' is not starred.', $this->getSession());
+        $selector = sprintf('.block-recentlyaccessedcourses span[data-course-id="%d"][data-region="favourite-icon"] span[aria-hidden="false"]', $id);
+        $this->find('css', $selector, $exception);
+    }
+
+    /**
+     * Checks that a course within the recently accessed courses 
+     * block is not starred.
+     *
+     * @Given /^course in recently accessed block should not be starred "(?P<idnumber_string>(?:[^"]|\\")*)"$/
+     * @param string $idnumber
+     */
+    public function course_in_recently_accessed_block_should_not_be_starred($idnumber) {
+        $id = $this->get_course_id($idnumber);
+        $exception = new ExpectationException('The course '.$idnumber.' is not starred.', $this->getSession());
+        $selector = sprintf('.block-recentlyaccessedcourses span[data-course-id="%d"][data-region="favourite-icon"] span[aria-hidden="true"]', $id);
+
+        $this->find('css', $selector, false);
+    }
+
+    /**
+     * Checks that a course within the my overview 
+     * block is starred.
+     *
+     * @Given /^course in my overview block should be starred "(?P<idnumber_string>(?:[^"]|\\")*)"$/
+     * @param string $idnumber
+     */
+    public function course_in_my_overview_block_should_be_starred($idnumber) {
+        $id = $this->get_course_id($idnumber);
+        $exception = new ExpectationException('The course '.$idnumber.' is not starred.', $this->getSession());
+        $selector = sprintf('.block-myoverview span[data-course-id="%d"][data-region="favourite-icon"] span[aria-hidden="false"]', $id);
+        $this->find('css', $selector, $exception);
+    }
+
+    /**
+     * Checks that a course within the my overview 
+     * block is not starred.
+     *
+     * @Given /^course in my overview block should not be starred "(?P<idnumber_string>(?:[^"]|\\")*)"$/
+     * @param string $idnumber
+     */
+    public function course_in_my_overview_block_should_not_be_starred($idnumber) {
+        $id = $this->get_course_id($idnumber);
+        $exception = new ExpectationException('The course '.$idnumber.' is not starred.', $this->getSession());
+        $selector = sprintf('.block-myoverview span[data-course-id="%d"][data-region="favourite-icon"] span[aria-hidden="true"]', $id);
+
+        $this->find('css', $selector, $exception);
+        
+        // try {
+        //     $this->find('css', $selector, false);
+        //     throw new ExpectationException('The course '.$idnumber.' is starred when it should not be.', $this->getSession());
+        // } catch (ElementNotFoundException $e) {
+        //     // This is good, the menu item should not be there.
+        // }
+    }    
+
+    /**
+     * Returns the id of the course with the given idnumber.
+     *
+     * Please note that this function requires the course to exist. If it does not exist an ExpectationException is thrown.
+     *
+     * @param string $idnumber
+     * @return string
+     * @throws ExpectationException
+     */
+    protected function get_course_id($idnumber) {
+        global $DB;
+        try {
+            return $DB->get_field('course', 'id', array('idnumber' => $idnumber), MUST_EXIST);
+        } catch (dml_missing_record_exception $ex) {
+            throw new ExpectationException(sprintf("There is no course in the database with the idnumber '%s'", $idnumber));
+        }
+    }
 
 }
