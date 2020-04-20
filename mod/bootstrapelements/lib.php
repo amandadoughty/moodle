@@ -276,19 +276,19 @@ function bootstrapelements_toggle_outline($togglename, $toggletitle, $togglecont
 function bootstrapelements_modal_outline($modalname, $modaltitle, $modalcontent, $icon) {
     $output = html_writer::start_tag('div', array(
         'id' => $modalname,
-        'class' => 'modal hide fade',        
+        'class' => 'modal hide fade',
+        'role' => 'dialog',
+        'aria-labelledby' => $modalname . '_label',
+        'aria-describedby' => $modalname . '_desc',
         'aria-hidden' => 'true'
     ));
 
     $output .= html_writer::start_tag('div', array(
-        'class' => 'modal-dialog',
-        'role' => 'dialog',
-        'aria-labelledby' => $modalname . '_label',
-        'aria-describedby' => $modalname . '_desc'
+        'class' => 'modal-dialog', 'role' => 'document'
     ));
 
     $output .= html_writer::start_tag('div', array(
-        'class' => 'modal-content', 'role' => 'document'
+        'class' => 'modal-content'
     ));
 
     $output .= html_writer::start_tag('div', array(
