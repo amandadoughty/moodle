@@ -278,7 +278,8 @@ function bootstrapelements_modal_outline($modalname, $modaltitle, $modalcontent,
         'id' => $modalname,
         'class' => 'modal hide fade',
         'role' => 'dialog',
-        'aria-labelledby' => 'myModalLabel',
+        'aria-labelledby' => $modalname . '_label',
+        'aria-describedby' => $modalname . '_desc',
         'aria-hidden' => 'true'
     ));
 
@@ -287,7 +288,7 @@ function bootstrapelements_modal_outline($modalname, $modaltitle, $modalcontent,
     ));
 
     $output .= html_writer::start_tag('div', array(
-        'class' => 'modal-content'
+        'class' => 'modal-content', 'role' => 'document'
     ));
 
     $output .= html_writer::start_tag('div', array(
@@ -295,7 +296,7 @@ function bootstrapelements_modal_outline($modalname, $modaltitle, $modalcontent,
     ));
 
     $output .= html_writer::start_tag('h4', array(
-        'class' => 'modal-title'
+        'class' => 'modal-title', 'id' => $modalname . '_label'
     ));
 
     $output .= '<i class="fa '.$icon.'"></i>';
@@ -307,7 +308,7 @@ function bootstrapelements_modal_outline($modalname, $modaltitle, $modalcontent,
     $output .= html_writer::end_tag('div');
 
     $output .= html_writer::start_tag('div', array(
-        'class' => 'modal-body'
+        'class' => 'modal-body', 'id' => $modalname . '_desc'
     ));
 
     $output .= $modalcontent;
