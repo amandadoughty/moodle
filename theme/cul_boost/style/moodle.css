@@ -2492,30 +2492,46 @@ fieldset:disabled #rubric-rubric.gradingform_rubric a.addcriterion,
       -webkit-box-shadow: 0 0 0 0.2rem rgba(176, 72, 82, 0.5);
               box-shadow: 0 0 0 0.2rem rgba(176, 72, 82, 0.5); }
 
-.btn-secondary, .btn-default {
+.btn-secondary, .btn-default, .btn.btn-link, .btn.btn-icon, #page-grade-grading-manage .actions .btn-icon.action, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-icon, #rubric-rubric.gradingform_rubric .btn-icon.addcriterion, #page-grade-grading-manage .actions .btn-link.action, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-link, #rubric-rubric.gradingform_rubric .btn-link.addcriterion {
   color: #fff;
   background-color: #A22833;
   border-color: #A22833; }
-  .btn-secondary:hover, .btn-default:hover {
+  .btn-secondary:hover, .btn-default:hover, .btn.btn-link:hover, .btn.btn-icon:hover, #page-grade-grading-manage .actions .btn-icon.action:hover, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-icon:hover, #rubric-rubric.gradingform_rubric .btn-icon.addcriterion:hover, #page-grade-grading-manage .actions .btn-link.action:hover, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-link:hover, #rubric-rubric.gradingform_rubric .btn-link.addcriterion:hover {
     color: #fff;
     background-color: #832029;
     border-color: #791e26; }
-  .btn-secondary:focus, .btn-default:focus, .btn-secondary.focus, .focus.btn-default {
+  .btn-secondary:focus, .btn-default:focus, .btn.btn-link:focus, .btn.btn-icon:focus, #page-grade-grading-manage .actions .btn-icon.action:focus, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-icon:focus, #rubric-rubric.gradingform_rubric .btn-icon.addcriterion:focus, #page-grade-grading-manage .actions .btn-link.action:focus, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-link:focus, #rubric-rubric.gradingform_rubric .btn-link.addcriterion:focus, .btn-secondary.focus, .focus.btn-default, .focus.btn.btn-link, .focus.btn.btn-icon, #page-grade-grading-manage .actions .focus.btn-icon.action, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.focus.btn-icon, #rubric-rubric.gradingform_rubric .focus.btn-icon.addcriterion, #page-grade-grading-manage .actions .focus.btn-link.action, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.focus.btn-link, #rubric-rubric.gradingform_rubric .focus.btn-link.addcriterion {
     -webkit-box-shadow: 0 0 0 0.2rem rgba(176, 72, 82, 0.5);
             box-shadow: 0 0 0 0.2rem rgba(176, 72, 82, 0.5); }
-  .btn-secondary.disabled, .fp-viewbar.disabled a, .disabled.btn-default, .btn-secondary:disabled, .btn-default:disabled {
+  .btn-secondary.disabled, .fp-viewbar.disabled a, .disabled.btn-default, .disabled.btn.btn-link, .fp-viewbar.disabled #page-grade-grading-manage .actions a.btn-icon.action, #page-grade-grading-manage .actions .fp-viewbar.disabled a.btn-icon.action, .fp-viewbar.disabled #rubric-rubric.gradingform_rubric a.btn-icon.addcriterion, #rubric-rubric.gradingform_rubric .fp-viewbar.disabled a.btn-icon.addcriterion, .disabled.btn.btn-icon, #page-grade-grading-manage .actions .disabled.btn-icon.action, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.disabled.btn-icon, #rubric-rubric.gradingform_rubric .disabled.btn-icon.addcriterion, #page-grade-grading-manage .actions .disabled.btn-link.action, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.disabled.btn-link, #rubric-rubric.gradingform_rubric .disabled.btn-link.addcriterion, .btn-secondary:disabled, .btn-default:disabled, .btn.btn-link:disabled, .btn.btn-icon:disabled, #page-grade-grading-manage .actions .btn-icon.action:disabled, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-icon:disabled, #rubric-rubric.gradingform_rubric .btn-icon.addcriterion:disabled, #page-grade-grading-manage .actions .btn-link.action:disabled, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-link:disabled, #rubric-rubric.gradingform_rubric .btn-link.addcriterion:disabled {
     color: #fff;
     background-color: #A22833;
     border-color: #A22833; }
-  .btn-secondary:not(:disabled):not(.disabled):active, .btn-default:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .fp-viewbar:not(.disabled) a.checked:not(:disabled):not(.disabled), .btn-default:not(:disabled):not(.disabled).active,
+  .btn-secondary:not(:disabled):not(.disabled):active, .btn-default:not(:disabled):not(.disabled):active, .btn.btn-link:not(:disabled):not(.disabled):active, .btn.btn-icon:not(:disabled):not(.disabled):active, #page-grade-grading-manage .actions .btn-icon.action:not(:disabled):not(.disabled):active, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-icon:not(:disabled):not(.disabled):active, #rubric-rubric.gradingform_rubric .btn-icon.addcriterion:not(:disabled):not(.disabled):active, #page-grade-grading-manage .actions .btn-link.action:not(:disabled):not(.disabled):active, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-link:not(:disabled):not(.disabled):active, #rubric-rubric.gradingform_rubric .btn-link.addcriterion:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .fp-viewbar:not(.disabled) a.checked:not(:disabled):not(.disabled), .btn-default:not(:disabled):not(.disabled).active, .btn.btn-link:not(:disabled):not(.disabled).active, .btn.btn-icon:not(:disabled):not(.disabled).active, #page-grade-grading-manage .actions .btn-icon.action:not(:disabled):not(.disabled).active, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-icon:not(:disabled):not(.disabled).active, #rubric-rubric.gradingform_rubric .btn-icon.addcriterion:not(:disabled):not(.disabled).active, #page-grade-grading-manage .actions .btn-link.action:not(:disabled):not(.disabled).active, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-link:not(:disabled):not(.disabled).active, #rubric-rubric.gradingform_rubric .btn-link.addcriterion:not(:disabled):not(.disabled).active,
   .show > .btn-secondary.dropdown-toggle,
-  .show > .dropdown-toggle.btn-default {
+  .show > .dropdown-toggle.btn-default,
+  .show > .dropdown-toggle.btn.btn-link,
+  .show > .dropdown-toggle.btn.btn-icon,
+  #page-grade-grading-manage .actions .show > .dropdown-toggle.btn-icon.action,
+  #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel .show > input.dropdown-toggle.btn-icon,
+  #rubric-rubric.gradingform_rubric .show > .dropdown-toggle.btn-icon.addcriterion,
+  #page-grade-grading-manage .actions .show > .dropdown-toggle.btn-link.action,
+  #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel .show > input.dropdown-toggle.btn-link,
+  #rubric-rubric.gradingform_rubric .show > .dropdown-toggle.btn-link.addcriterion {
     color: #fff;
     background-color: #791e26;
     border-color: #6f1b23; }
-    .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-default:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus, .fp-viewbar:not(.disabled) a.checked:not(:disabled):not(.disabled):focus, .btn-default:not(:disabled):not(.disabled).active:focus,
+    .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-default:not(:disabled):not(.disabled):active:focus, .btn.btn-link:not(:disabled):not(.disabled):active:focus, .btn.btn-icon:not(:disabled):not(.disabled):active:focus, #page-grade-grading-manage .actions .btn-icon.action:not(:disabled):not(.disabled):active:focus, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-icon:not(:disabled):not(.disabled):active:focus, #rubric-rubric.gradingform_rubric .btn-icon.addcriterion:not(:disabled):not(.disabled):active:focus, #page-grade-grading-manage .actions .btn-link.action:not(:disabled):not(.disabled):active:focus, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-link:not(:disabled):not(.disabled):active:focus, #rubric-rubric.gradingform_rubric .btn-link.addcriterion:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus, .fp-viewbar:not(.disabled) a.checked:not(:disabled):not(.disabled):focus, .btn-default:not(:disabled):not(.disabled).active:focus, .btn.btn-link:not(:disabled):not(.disabled).active:focus, .btn.btn-icon:not(:disabled):not(.disabled).active:focus, #page-grade-grading-manage .actions .btn-icon.action:not(:disabled):not(.disabled).active:focus, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-icon:not(:disabled):not(.disabled).active:focus, #rubric-rubric.gradingform_rubric .btn-icon.addcriterion:not(:disabled):not(.disabled).active:focus, #page-grade-grading-manage .actions .btn-link.action:not(:disabled):not(.disabled).active:focus, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-link:not(:disabled):not(.disabled).active:focus, #rubric-rubric.gradingform_rubric .btn-link.addcriterion:not(:disabled):not(.disabled).active:focus,
     .show > .btn-secondary.dropdown-toggle:focus,
-    .show > .dropdown-toggle.btn-default:focus {
+    .show > .dropdown-toggle.btn-default:focus,
+    .show > .dropdown-toggle.btn.btn-link:focus,
+    .show > .dropdown-toggle.btn.btn-icon:focus,
+    #page-grade-grading-manage .actions .show > .dropdown-toggle.btn-icon.action:focus,
+    #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel .show > input.dropdown-toggle.btn-icon:focus,
+    #rubric-rubric.gradingform_rubric .show > .dropdown-toggle.btn-icon.addcriterion:focus,
+    #page-grade-grading-manage .actions .show > .dropdown-toggle.btn-link.action:focus,
+    #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel .show > input.dropdown-toggle.btn-link:focus,
+    #rubric-rubric.gradingform_rubric .show > .dropdown-toggle.btn-link.addcriterion:focus {
       -webkit-box-shadow: 0 0 0 0.2rem rgba(176, 72, 82, 0.5);
               box-shadow: 0 0 0 0.2rem rgba(176, 72, 82, 0.5); }
 
@@ -18749,7 +18765,12 @@ textarea[data-auto-rows] {
         background-image: url([[pix:t/collapsed_rtl]]);
         */
     /*rtl:remove*/
-    background-image: url([[pix:t/collapsed]]); } }
+    background-image: url([[pix:t/collapsed]]); }
+  .mform .form-inline .fdefaultcustom label {
+    -webkit-box-pack: initial;
+    -webkit-justify-content: initial;
+        -ms-flex-pack: initial;
+            justify-content: initial; } }
 
 .input-group.form-inset .form-inset-item {
   padding-top: calc(0.375rem + 1px);
@@ -18829,6 +18850,9 @@ select {
 .path-mod-forum .forumheaderlist .discussion .replies,
 .path-mod-forum .forumheaderlist .discussion .lastpost {
   vertical-align: top; }
+
+.path-mod-forum .discussion-list .topic {
+  font-weight: inherit; }
 
 .path-mod-forum .subscriptionmode {
   color: #3C3C3C; }
@@ -25323,7 +25347,7 @@ body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-
 .mod_quiz_preflight_popup fieldset {
   margin: 0; }
 
-#mod_quiz_navblock .btn-secondary, #mod_quiz_navblock .btn-default {
+#mod_quiz_navblock .btn-secondary, #mod_quiz_navblock .btn-default, #mod_quiz_navblock .btn.btn-link, #mod_quiz_navblock .btn.btn-icon, #mod_quiz_navblock #page-grade-grading-manage .actions .btn-icon.action, #page-grade-grading-manage .actions #mod_quiz_navblock .btn-icon.action, #mod_quiz_navblock #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-icon, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel #mod_quiz_navblock input.btn-icon, #mod_quiz_navblock #rubric-rubric.gradingform_rubric .btn-icon.addcriterion, #rubric-rubric.gradingform_rubric #mod_quiz_navblock .btn-icon.addcriterion, #mod_quiz_navblock #page-grade-grading-manage .actions .btn-link.action, #page-grade-grading-manage .actions #mod_quiz_navblock .btn-link.action, #mod_quiz_navblock #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel input.btn-link, #rubric-rubric.gradingform_rubric #rubric-criteria .criterion .addlevel #mod_quiz_navblock input.btn-link, #mod_quiz_navblock #rubric-rubric.gradingform_rubric .btn-link.addcriterion, #rubric-rubric.gradingform_rubric #mod_quiz_navblock .btn-link.addcriterion {
   color: #000000; }
 
 .moodle-dialogue-base .moodle-dialogue.mod_quiz_preflight_popup .moodle-dialogue-bd #mod_quiz_preflight_form legend {
