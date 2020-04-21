@@ -9,7 +9,7 @@ define(['jquery', 'core/log'], function($, log) {
 
             $('.bootstrapelements.modal').each(function() {
                     $(this).on('shown.bs.modal', function () {
-                    $(this).find('.modal-title').attr('tabindex',-1).trigger('focus');
+                    $(this).find('button').trigger('focus');
                 })
             });
 
