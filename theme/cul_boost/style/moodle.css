@@ -18765,12 +18765,7 @@ textarea[data-auto-rows] {
         background-image: url([[pix:t/collapsed_rtl]]);
         */
     /*rtl:remove*/
-    background-image: url([[pix:t/collapsed]]); }
-  .mform .form-inline .fdefaultcustom label {
-    -webkit-box-pack: initial;
-    -webkit-justify-content: initial;
-        -ms-flex-pack: initial;
-            justify-content: initial; } }
+    background-image: url([[pix:t/collapsed]]); } }
 
 .input-group.form-inset .form-inset-item {
   padding-top: calc(0.375rem + 1px);
@@ -18850,9 +18845,6 @@ select {
 .path-mod-forum .forumheaderlist .discussion .replies,
 .path-mod-forum .forumheaderlist .discussion .lastpost {
   vertical-align: top; }
-
-.path-mod-forum .discussion-list .topic {
-  font-weight: inherit; }
 
 .path-mod-forum .subscriptionmode {
   color: #3C3C3C; }
@@ -24527,7 +24519,7 @@ body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-
           -ms-flex-align: center;
               align-items: center;
       text-indent: 0;
-      padding: 0 0 0 0.5rem;
+      padding: 0 0.5rem 0 0.5rem;
       background-color: #fff;
       -webkit-box-shadow: inset 0px 0px 0px 1px #A22833;
               box-shadow: inset 0px 0px 0px 1px #A22833; }
