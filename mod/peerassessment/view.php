@@ -118,7 +118,7 @@ if (has_capability('mod/peerassessment:grade', $context)) {
         $members = groups_get_members($group->id);
 
         if (!$members) {
-            break;
+            continue;
         }
 
         $status = peerassessment_get_status($peerassessment, $group);

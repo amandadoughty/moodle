@@ -617,14 +617,16 @@ class grade_report_culuser extends grade_report_user {
                     } else if (!$this->canviewhidden and $grade_grade->is_hidden()) {
                         $data['feedback']['class'] = $classfeedback . ' feedbacktext';
                         $data['feedback']['content'] = '&nbsp;';
-                    } else if (empty($grade_grade->feedback) or (!$this->canviewhidden and $grade_grade->is_hidden())) {
-                        $data['feedback']['class'] = $classfeedback.' feedbacktext';
-                        $data['feedback']['content'] = '&nbsp;';
                     } else {
                         $data['feedback']['class'] = $classfeedback.' feedbacktext';
-                        $data['feedback']['content'] = format_text($grade_grade->feedback, $grade_grade->feedbackformat,
-                            ['context' => $grade_grade->get_context()]);
-                        $gradeitemdata['feedback'] = $grade_grade->feedback;
+
+                        if (empty($grade_grade->feedback)) {
+                                $data['feedback']['content'] = '';
+                        } else {
+                            $data['feedback']['content'] = format_text($grade_grade->feedback, $grade_grade->feedbackformat,
+                                ['context' => $grade_grade->get_context()]);
+                            $gradeitemdata['feedback'] = $grade_grade->feedback;
+                        }
                     
                         // At this point $data['feedback']['content'] will contain the feedback or an empty string.
                         // Now we check if there is a feedback function for this module.
