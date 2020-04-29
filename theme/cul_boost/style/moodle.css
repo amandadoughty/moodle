@@ -25647,6 +25647,9 @@ body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-
     top: 230px;
     z-index: 1; } }
 
+.message-app .body-container {
+  min-height: 400px; }
+
 [class^="icon fa fa-fw fa-fw navicon"] {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
