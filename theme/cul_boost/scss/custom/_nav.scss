@@ -848,3 +848,10 @@ a.menu-link .icon {
 :target::before {
     display: none;
 }
+
+.skip-links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
