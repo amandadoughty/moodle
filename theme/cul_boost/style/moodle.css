@@ -25650,6 +25650,10 @@ body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-
 .message-app .body-container {
   min-height: 400px; }
 
+#page-mod-forum-report-summary-index #filter-dates-popover .popover-header,
+#page-mod-forum-report-summary-index #filter-dates-popover .filter-save {
+  color: #fff; }
+
 [class^="icon fa fa-fw fa-fw navicon"] {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
