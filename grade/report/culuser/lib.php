@@ -732,8 +732,8 @@ class grade_report_culuser extends grade_report_user {
             $gradingitem = null;
             $gradebookgrade = null;
 
-            if (isset($gradinginfo->items[0])) {
-                $gradingitem = $gradinginfo->items[0];
+            if ($gradingitem = reset($gradinginfo->items)) {
+                // $gradingitem = $gradinginfo->items[0];
                 $gradebookgrade = $gradingitem->grades[$this->user->id];
             }
 
@@ -1029,7 +1029,83 @@ class grade_report_culuser extends grade_report_user {
         }
     }
 
-    // Assignment functions
+    /**
+     * Entry function to collect all the types of feedback for Forum
+     * 
+     * @param array $data
+     * @param stdClass $grade_object
+     */
+    protected function get_forum_feedback(&$data, $grade_object) {
+        global $DB, $CFG;
+
+        // We retrieve all the forum modules in the course.
+        $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
+        // Now we use the iteminstance to retrieve the forum module for this grade.
+        if (!empty($instances[$grade_object->iteminstance])) {
+            $cm = $instances[$grade_object->iteminstance];                              
+            $context = context_module::instance($cm->id);
+            $course = get_course($this->courseid);
+            $forumgradeitem = mod_forum\grades\forum_gradeitem::load_from_context($context);
+
+            // Get all the factories that are required.
+            $vaultfactory = mod_forum\local\container::get_vault_factory();
+            $forumvault = $vaultfactory->get_forum_vault();
+            $forum = $forumvault->get_from_course_module_id((int) $context->instanceid);
+
+            $params = [
+                'forum' => $forum->get_id(),
+                'itemnumber' => $forumgradeitem->get_grade_itemid(),
+                'userid' => $this->user->id,
+            ];
+
+            $grade = $DB->get_record('forum_grades', $params);
+            $gradinginfo = grade_get_grades($this->courseid, 'mod', 'forum', $cm->instance, $this->user->id);
+
+            $gradingitem = null;
+            $gradebookgrade = null;
+
+            if ($gradingitem = reset($gradinginfo->items)) {
+                $gradebookgrade = $gradingitem->grades[$this->user->id];
+            }
+
+            $cangrade = has_capability('mod/forum:grade', $forum->get_context());
+
+            $hasgrade = $forumgradeitem->user_has_grade($this->user) &&
+                !is_null($gradebookgrade) &&
+                !is_null($gradebookgrade->grade);
+
+
+            $gradevisible = $cangrade || 
+                $forum->is_grading_enabled() ||
+                (
+                    !is_null($gradebookgrade) && 
+                    !$gradebookgrade->hidden
+                );
+
+            // If there is a visible grade, show the summary.
+            if ($hasgrade && $gradevisible) {
+                if($hasgrade) {
+                    // Get grading form feedback (marking guide or rubric).
+                    $gradingmanager = get_grading_manager($context, 'mod_forum', 'forum');
+
+                    $activemethod = $gradingmanager->get_active_method();
+                    $feedbackfn = 'assign_get_gradingform_' . $activemethod . '_feedback';
+                    $fnexists = method_exists($this, $feedbackfn);
+
+                    if($activemethod && $fnexists) {
+                        $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string($activemethod, 'gradingform_' . $activemethod) . '</p>';
+                        $gradingformtext = $this->$feedbackfn($grade, $gradingmanager);
+
+                        if ($gradingformtext) {
+                            $data['feedback']['content'] .= $feedbacksubtitle .= $gradingformtext;
+                        }
+                    }
+                }
+            }
+        }
+    }    
+
+    // Grading form functions
 
     /**
      * Get the Grading Form Marking Guide feedback
