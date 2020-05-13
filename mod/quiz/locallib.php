@@ -1423,9 +1423,9 @@ function quiz_attempt_state($quiz, $attempt) {
  * The the appropraite mod_quiz_display_options object for this attempt at this
  * quiz right now.
  *
- * @param object $quiz the quiz instance.
- * @param object $attempt the attempt in question.
- * @param $context the quiz context.
+ * @param stdClass $quiz the quiz instance.
+ * @param stdClass $attempt the attempt in question.
+ * @param context $context the quiz context.
  *
  * @return mod_quiz_display_options
  */
@@ -2152,13 +2152,13 @@ function quiz_add_quiz_question($questionid, $quiz, $page = 0, $maxmark = null) 
         );
     }
 
+    $trans = $DB->start_delegated_transaction();
     $slots = $DB->get_records('quiz_slots', array('quizid' => $quiz->id),
             'slot', 'questionid, slot, page, id');
     if (array_key_exists($questionid, $slots)) {
+        $trans->allow_commit();
         return false;
     }
-
-    $trans = $DB->start_delegated_transaction();
 
     $maxpage = 1;
     $numonlastpage = 0;
