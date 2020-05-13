@@ -43,6 +43,7 @@ class restore_peerwork_activity_structure_step extends restore_activity_structur
 
         $paths[] = new restore_path_element('peerwork', '/activity/peerwork');
         $paths[] = new restore_path_element('peerwork_criterion', '/activity/peerwork/criteria/criterion');
+
         if ($userinfo) {
             $paths[] = new restore_path_element('peerwork_peer', '/activity/peerwork/peers/peer');
             $paths[] = new restore_path_element('peerwork_justification', '/activity/peerwork/justifications/justification');
