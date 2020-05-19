@@ -37,6 +37,13 @@ class qtype_wq_question extends question_graded_automatically {
      * **/
     public $wirisquestioninstance;
 
+    /**
+     * @var int
+     * Number of lines of the auxiliar text field.
+     * 10 by default.
+     */
+    public $auxiliartextfieldlines = 10;
+
     public function __construct(question_definition $base = null) {
         $this->base = $base;
     }
@@ -58,7 +65,6 @@ class qtype_wq_question extends question_graded_automatically {
         $text = $this->join_all_text();
         $this->wirisquestioninstance = $builder->newQuestionInstance($this->wirisquestion);
         $this->wirisquestioninstance->setRandomSeed($variant);
-        $this->wirisquestioninstance->setParameter('user_id', $USER->id);
 
         // Begin testing code. It's never used in production.
         global $CFG;
@@ -145,6 +151,8 @@ class qtype_wq_question extends question_graded_automatically {
     public function get_expected_data() {
         $expected = $this->base->get_expected_data();
         $expected['_sqi'] = PARAM_RAW_TRIMMED;
+        $expected['auxiliar_text'] = question_attempt::PARAM_RAW_FILES;
+        $expecteddata['attachments'] = question_attempt::PARAM_FILES;
         return $expected;
     }
 
@@ -191,7 +199,12 @@ class qtype_wq_question extends question_graded_automatically {
     }
 
     public function check_file_access($qa, $options, $component, $filearea, $args, $forcedownload) {
-        return $this->base->check_file_access($qa, $options, $component, $filearea, $args, $forcedownload);
+        if ($component == 'question' && $filearea == 'response_auxiliar_text') {
+            // Response attachments visible if the question has them.
+            return true;
+        } else {
+            return $this->base->check_file_access($qa, $options, $component, $filearea, $args, $forcedownload);
+        }
     }
 
     /**
@@ -212,8 +225,12 @@ class qtype_wq_question extends question_graded_automatically {
 
     public function is_same_response(array $prevresponse, array $newresponse) {
         $baseresponse = $this->base->is_same_response($prevresponse, $newresponse);
-        return $baseresponse && ((empty($newresponse['_sqi']) && empty($prevresponse['_sqi'])) || (!empty($prevresponse['_sqi']) &&
-                !empty($newresponse['_sqi']) && $newresponse['_sqi'] == $prevresponse['_sqi']));
+        $sqicompare = ((empty($newresponse['_sqi']) && empty($prevresponse['_sqi'])) || (!empty($prevresponse['_sqi']) &&
+            !empty($newresponse['_sqi']) && $newresponse['_sqi'] == $prevresponse['_sqi']));
+        $auxiliarcompare = ((empty($newresponse['auxiliar_text']) && empty($prevresponse['auxiliar_text'])) ||
+            (!empty($prevresponse['auxiliar_text']) &&
+            !empty($newresponse['auxiliar_text']) && $newresponse['auxiliar_text'] == $prevresponse['auxiliar_text']));
+        return $baseresponse && $sqicompare && $auxiliarcompare;
 
     }
 

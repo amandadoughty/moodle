@@ -15,13 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * echo360attoplugin settings.
+ * Atto echo360attoplugin settings file.
  *
  * @package   atto_echo360attoplugin
  * @copyright COPYRIGHTINFO
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -29,11 +28,22 @@ $ADMIN->add('editoratto', new admin_category('atto_echo360attoplugin', new lang_
 
 $settings = new admin_settingpage('atto_echo360attoplugin_settings', new lang_string('settings', 'atto_echo360attoplugin'));
 if ($ADMIN->fulltree) {
-  // ex. function admin_setting($name, $visiblename, $description, $defaultsetting, $datatype)
-  $settings->add(new admin_setting_configtext('atto_echo360attoplugin/consumerkey',
-    get_string('consumerkey', 'atto_echo360attoplugin'), 'The Public Key provided by Echo360', '', PARAM_TEXT));
-  $settings->add(new admin_setting_configtext('atto_echo360attoplugin/sharedsecret',
-    get_string('sharedsecret', 'atto_echo360attoplugin'), 'The Secret Key provided by Echo360', '', PARAM_TEXT));
-  $settings->add(new admin_setting_configtext('atto_echo360attoplugin/hosturl',
-    get_string('hosturl', 'atto_echo360attoplugin'), 'The Host URL provided by Echo360', '', PARAM_TEXT));
+    $settings->add(
+        new admin_setting_configtext(
+            'atto_echo360attoplugin/consumerkey',
+            get_string('consumerkey', 'atto_echo360attoplugin'), 'The Public Key provided by Echo360', '', PARAM_TEXT
+        )
+    );
+    $settings->add(
+        new admin_setting_configtext(
+            'atto_echo360attoplugin/sharedsecret',
+            get_string('sharedsecret', 'atto_echo360attoplugin'), 'The Secret Key provided by Echo360', '', PARAM_TEXT
+        )
+    );
+    $settings->add(
+        new admin_setting_configtext(
+            'atto_echo360attoplugin/hosturl',
+            get_string('hosturl', 'atto_echo360attoplugin'), 'The Host URL provided by Echo360', '', PARAM_TEXT
+        )
+    );
 }

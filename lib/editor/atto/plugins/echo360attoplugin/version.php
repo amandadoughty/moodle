@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Atto echo360attoplugin  version file.
+ * Atto echo360attoplugin version file.
  *
  * @package    atto_echo360attoplugin
  * @copyright  COPYRIGHTINFO
@@ -24,9 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019050901;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2017010100;        // Requires this Moodle version.
-$plugin->component = 'atto_echo360attoplugin';  // Full name of the plugin (used for diagnostics).
-$plugin->maturity  = MATURITY_BETA;
-// Human readable version information
-$plugin->release   = '1.0.10 (Build 2019050901)';
+$plugin->version   = 2020031901;                    // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2017010100;                    // Requires this Moodle version.
+$plugin->component = 'atto_echo360attoplugin';      // Full name of the plugin (used for diagnostics).
+$plugin->maturity  = MATURITY_STABLE;               // Human readable version information.
+$plugin->release   = '1.0.19 (Build 2020031901)';   // Update value on lib.php as well.

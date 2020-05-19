@@ -41,15 +41,15 @@ require_once($CFG->dirroot.'/mod/lti/locallib.php');
 require_once($CFG->dirroot . '/lib/completionlib.php');
 require_once($CFG->dirroot.'/mod/aspirelists/classes/event/course_module_viewed.php');
 
-$id = optional_param('id', 0, PARAM_INT); // Course Module ID, or
-$l  = optional_param('l', 0, PARAM_INT);  // aspirelists ID
+$id = \optional_param('id', 0, PARAM_INT); // Course Module ID, or
+$l  = \optional_param('l', 0, PARAM_INT);  // aspirelists ID
 
 if ($l) {  // Two ways to specify the module
     $list = $DB->get_record('aspirelists', array('id' => $l), '*', MUST_EXIST);
-    $cm = get_coursemodule_from_instance('aspirelists', $list->id, $list->course, false, MUST_EXIST);
+    $cm = \get_coursemodule_from_instance('aspirelists', $list->id, $list->course, false, MUST_EXIST);
 
 } else {
-    $cm = get_coursemodule_from_id('aspirelists', $id, 0, false, MUST_EXIST);
+    $cm = \get_coursemodule_from_id('aspirelists', $id, 0, false, MUST_EXIST);
     $list = $DB->get_record('aspirelists', array('id' => $cm->instance), '*', MUST_EXIST);
 }
 
@@ -68,10 +68,10 @@ if ($tool) {
 $list->cmid = $cm->id;
 
 $PAGE->set_cm($cm, $course); // set's up global $COURSE
-$context = context_module::instance($cm->id);
+$context = \context_module::instance($cm->id);
 $PAGE->set_context($context);
 
-$url = new moodle_url('/mod/lti/view.php', array('id'=>$cm->id));
+$url = new \moodle_url('/mod/lti/view.php', array('id'=>$cm->id));
 $PAGE->set_url($url);
 
 $launchcontainer = lti_get_launch_container($list, $toolconfig);
@@ -85,13 +85,13 @@ if ($launchcontainer == LTI_LAUNCH_CONTAINER_EMBED_NO_BLOCKS) {
     $PAGE->set_pagelayout('incourse');
 }
 
-require_login($course);
+\require_login($course);
 
 // Mark viewed by user (if required).
-$completion = new completion_info($course);
+$completion = new \completion_info($course);
 $completion->set_module_viewed($cm);
 
-$event = \aspirelists\event\course_module_viewed::create(
+$event = \mod_aspirelists\event\course_module_viewed::create(
     array(
         'objectid' => $PAGE->cm->instance,
         'context'  => $context,
@@ -121,18 +121,18 @@ if ( $launchcontainer == LTI_LAUNCH_CONTAINER_WINDOW ) {
     echo "window.open('launch.php?id=".$cm->id."','aspirelists');";
     echo "//]]\n";
     echo "</script>\n";
-    echo "<p>".get_string("basiclti_in_new_window", "lti")."</p>\n";
+    echo "<p>".\get_string("basiclti_in_new_window", "lti")."</p>\n";
 } else {
     // Request the launch content with an iframe tag instead of the standard moodle LTI object tag
     echo '<iframe id="contentframe" height="600px" width="100%" type="text/html" src="launch.php?id='.$cm->id.'" frameborder="0"></iframe>';
 
-    //Output script to make the object tag be as large as possible
+    // Prep script to make the object tag be as large as possible
     $resize = '
         <script type="text/javascript">
         //<![CDATA[
             YUI().use("yui2-dom", function(Y) {
                 //Take scrollbars off the outer document to prevent double scroll bar effect
-                document.body.style.overflow = "hidden";
+                document.body.style.overflow = "auto";
 
                 var dom = Y.YUI2.util.Dom;
                 var frame = document.getElementById("contentframe");
@@ -160,7 +160,11 @@ if ( $launchcontainer == LTI_LAUNCH_CONTAINER_WINDOW ) {
         </script>
 ';
 
-    echo $resize;
+    $pluginSettings = \get_config('mod_aspirelists');
+    // Apply resize script if plugin setting is checked
+    if(!empty($pluginSettings->maximiseFrameSize)) {
+        echo $resize;
+    }
 }
 
 // Finish the page

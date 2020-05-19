@@ -5,6 +5,8 @@ class com_wiris_quizzes_impl_QuizzesServiceImpl implements com_wiris_quizzes_api
 		if(!php_Boot::$skip_constructor) {
 		$this->protocol = com_wiris_quizzes_impl_QuizzesServiceImpl::$PROTOCOL_REST;
 		$this->url = com_wiris_quizzes_impl_QuizzesBuilderImpl::getInstance()->getConfiguration()->get(com_wiris_quizzes_api_ConfigurationKeys::$SERVICE_URL);
+		com_wiris_quizzes_impl_QuizzesServiceImpl::$deploymentId = com_wiris_quizzes_impl_QuizzesBuilderImpl::getInstance()->getConfiguration()->get(com_wiris_quizzes_api_ConfigurationKeys::$DEPLOYMENT_ID);
+		com_wiris_quizzes_impl_QuizzesServiceImpl::$licenseId = com_wiris_quizzes_impl_QuizzesBuilderImpl::getInstance()->getConfiguration()->get(com_wiris_quizzes_api_ConfigurationKeys::$LICENSE_ID);
 	}}
 	public function getServiceUrl() {
 		$url = $this->url;
@@ -31,6 +33,22 @@ class com_wiris_quizzes_impl_QuizzesServiceImpl implements com_wiris_quizzes_api
 					_hx_array_get($mqr->questionRequests, $j1)->addProcess(new com_wiris_quizzes_impl_ProcessStoreQuestion());
 					unset($j1);
 				}
+			}
+		}
+		$aqr = $mqr->questionRequests;
+		{
+			$_g = 0;
+			while($_g < $aqr->length) {
+				$qr = $aqr[$_g];
+				++$_g;
+				if(com_wiris_quizzes_impl_QuizzesServiceImpl::$deploymentId !== null) {
+					$qr->addMetaProperty("wrs-deployment", com_wiris_quizzes_impl_QuizzesServiceImpl::getDeploymentId());
+				}
+				if(com_wiris_quizzes_impl_QuizzesServiceImpl::$licenseId !== null) {
+					$qr->addMetaProperty("wrs-license", com_wiris_quizzes_impl_QuizzesServiceImpl::getLicenseId());
+				}
+				$qr->addMetaProperty("wrs-cause", "quizzes_generic_cause");
+				unset($qr);
 			}
 		}
 		$postData = $this->webServiceEnvelope($s->write($mqr));
@@ -121,5 +139,27 @@ class com_wiris_quizzes_impl_QuizzesServiceImpl implements com_wiris_quizzes_api
 	}
 	static $USE_CACHE = true;
 	static $PROTOCOL_REST = 0;
+	static $deploymentId = null;
+	static $licenseId = null;
+	static function getDeploymentId() {
+		return com_wiris_quizzes_impl_QuizzesServiceImpl_0();
+	}
+	static function getLicenseId() {
+		return com_wiris_quizzes_impl_QuizzesServiceImpl_1();
+	}
 	function __toString() { return 'com.wiris.quizzes.impl.QuizzesServiceImpl'; }
+}
+function com_wiris_quizzes_impl_QuizzesServiceImpl_0() {
+	if(com_wiris_quizzes_impl_QuizzesServiceImpl::$deploymentId === null) {
+		return "null";
+	} else {
+		return com_wiris_quizzes_impl_QuizzesServiceImpl::$deploymentId;
+	}
+}
+function com_wiris_quizzes_impl_QuizzesServiceImpl_1() {
+	if(com_wiris_quizzes_impl_QuizzesServiceImpl::$licenseId === null) {
+		return "null";
+	} else {
+		return com_wiris_quizzes_impl_QuizzesServiceImpl::$licenseId;
+	}
 }
