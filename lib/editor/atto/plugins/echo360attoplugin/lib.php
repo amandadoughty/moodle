@@ -13,86 +13,66 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-include('LtiConfiguration.php');
-use Echo360\LtiConfiguration;
 
 /**
  * Atto text editor integration version file.
  *
- * @package    atto_echo360attoplugin
- * @copyright  COPYRIGHTINFO
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   atto_echo360attoplugin
+ * @copyright COPYRIGHTINFO
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/../../../../../config.php');
 
-const PLUGIN_NAME = 'atto_echo360attoplugin';
-const ERROR_CONTEXT = 'ERROR';
-const DEBUG_CONTEXT = 'DEBUG';
-const INFO_CONTEXT = 'INFO';
-
+const ECHO360ATTOPLUGIN_NAME = 'atto_echo360attoplugin';
 const FILTER_PATH = "/filter/echo360/lti_launch.php";
 
 /**
  * Initialize this plugin
  */
 function atto_echo360attoplugin_strings_for_js() {
-  global $CFG, $PAGE;
+    global $CFG, $COURSE, $PAGE;
 
-  $PAGE->requires->strings_for_js(array('dialogtitle', 'ltiConfiguration'), PLUGIN_NAME);
-  // Pass current Context Module Id and Filter LTI Launch URL to Echo360 Atto Plugin button to set in homework embedded URL.
-  if (isset($PAGE->cm->id)) {
-    $PAGE->requires->js_init_code("echo360_context_module_id = " . $PAGE->cm->id . ";");
-  } else {
-    $PAGE->requires->js_init_code("echo360_context_module_id = 0;");
-  }
-  $PAGE->requires->js_init_code("echo360_filter_lti_launch_url = \"" . $CFG->wwwroot . FILTER_PATH . "\";");
+    $PAGE->requires->strings_for_js(array('dialogtitle', 'ltiConfiguration'), ECHO360ATTOPLUGIN_NAME);
+    $PAGE->requires->js_init_code("moodle_page_type = \"". $PAGE->pagetype . "\";");
+
+    // Pass current Context Course Id.
+    if (isset($COURSE)) {
+        $contextcourse = context_course::instance($COURSE->id);
+        $PAGE->requires->js_init_code("echo360_context_course_id = " . $contextcourse->id . ";");
+    }
+    // Pass current Context Module Id and Filter LTI Launch URL to Echo360 Atto Plugin button to set in homework embedded URL.
+    if (isset($PAGE->cm->id)) {
+        $PAGE->requires->js_init_code("echo360_context_module_id = " . $PAGE->cm->id . ";");
+    } else {
+        $PAGE->requires->js_init_code("echo360_context_module_id = 0;");
+    }
+    $PAGE->requires->js_init_code("echo360_filter_lti_launch_url = \"" . $CFG->wwwroot . FILTER_PATH . "\";");
 }
 
 /**
  * Return the JavaScript params required for this module.
  *
- * @param $elementid
- * @param $options
- * @param $fpoptions
+ * @param  $elementid
+ * @param  $options
+ * @param  $fpoptions
  * @return mixed
  */
 function atto_echo360attoplugin_params_for_js($elementid, $options, $fpoptions) {
-  global $COURSE;
+    global $COURSE;
 
-  // config our array of data
-  $params = array();
-  $params['disabled'] = true;
+    // Config our array of data.
+    $params = array();
+    $params['disabled'] = true; // Default to hidden until context visibility can be confirmed.
 
-  if (empty($COURSE)) { return $params; }
-  // fetch the course context, https://docs.moodle.org/34/en/Context
-  $context = context_course::instance($COURSE->id);
-  if (empty($context)) { return $params; }
-  try {
-    $lti = new LtiConfiguration($context, PLUGIN_NAME);
-    $lti_configuration = $lti->generate_lti_configuration();
-    debug_to_console($lti_configuration, INFO_CONTEXT);
-    $params['ltiConfiguration'] = LtiConfiguration::object_to_json($lti_configuration);
-    // if they don't have permission don't show it
-    $params['disabled'] = (!has_capability('atto/echo360attoplugin:visible', $context));
-  } catch (Exception $e) {
-    debug_to_console($e, ERROR_CONTEXT);
-    $params['error'] = $e->getMessage();
-  }
-  return $params;
+    if (!empty($COURSE)) {
+        $context = context_course::instance($COURSE->id);
+        if (!empty($context)) {
+            $params['disabled'] = (!has_capability('atto/echo360attoplugin:visible', $context));
+        }
+    }
+
+    return $params;
 }
 
-/**
- * Simple helper to debug to the browser console
- *
- * @param $data object|array
- * @param $context string  Optional a description.
- * @return void
- */
-function debug_to_console($data, $context = DEBUG_CONTEXT) {
-  ob_start();
-  $output  = 'console.info(\'' . $context . ':\');';
-  $output .= 'console.log(' . LtiConfiguration::object_to_json($data) . ');';
-  $output  = sprintf('<script>%s</script>', $output);
-  echo $output;
-}
