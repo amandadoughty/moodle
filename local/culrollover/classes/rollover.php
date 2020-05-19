@@ -352,9 +352,9 @@ class rollover {
                     $setting->set_value(false);
                 }
 
-                if (preg_match('/^aspirelist.*_([0-9])*_included$/', $setting->get_name())) {
-                    $setting->set_value(false);
-                }
+                // if (preg_match('/^aspirelist.*_([0-9])*_included$/', $setting->get_name())) {
+                //     $setting->set_value(false);
+                // }
             }
         }
 
