@@ -240,9 +240,17 @@ class mod_hsuforum_mod_form extends moodleform_mod {
         }
         $mform->disabledIf('gradepass', 'gradetype', 'neq', HSUFORUM_GRADETYPE_MANUAL);
 
-        $key = array_search('scale', $mform->_dependencies['assessed']['eq'][0]);
-        if ($key !== false) {
-            unset($mform->_dependencies['assessed']['eq'][0][$key]);
+        $reflection = new ReflectionClass($mform);
+        $property = $reflection->getProperty('_hideifs');
+        $property->setAccessible(true);
+        $dependencies = $property->getValue($mform);
+
+        if (isset($dependencies['assessed'])) {
+            $key = array_search('scale', $dependencies['assessed']['eq'][0]);
+            if ($key !== false) {
+                unset($dependencies['assessed']['eq'][0][$key]);
+                $property->setValue($mform, $dependencies);
+            }
         }
         $mform->disabledIf('gradecat', 'gradetype', 'eq', HSUFORUM_GRADETYPE_NONE);
 //-------------------------------------------------------------------------------
