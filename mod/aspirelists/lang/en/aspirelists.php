@@ -3,6 +3,9 @@
 // Released under the LGPL Licence - http://www.gnu.org/licenses/lgpl.html. Anyone is free to change or redistribute this code.
 
 $string['modulename'] = 'Course Resource List';
+$string['modulename_help'] = 'The resource list allows lists or sections of lists to be embedded within a Moodle course.  Displaying lists in-line can be useful for including reading material alongside other course resources.  As sections of lists can be displayed it is possible to break down resources and reading material on a per-week or per-topic basis.
+
+You may be asked to choose which resource list relates to this Moodle course.';
 $string['pluginname'] = 'Course Resource List';
 
 $string['eventAspireLaunch'] = 'Talis Aspire Launch Event';
@@ -80,3 +83,14 @@ $string['accordion_open'] = '&#9660;';
 $string['config_defaultInlineListHeight'] = 'Default height of an embedded list';
 $string['config_defaultInlineListHeight_desc'] = 'The default height of an inline embedded list in the course view';
 $string['config_defaultInlineListHeight_default'] = '400px' ;
+$string['config_maximiseFrameSize_visiblename'] = 'Maximise Frame Size' ;
+$string['config_maximiseFrameSize_description'] = 'Deprecated: This was required under older versions of moodle, but is now "off" by default as it causes display issues at higher text size or page zoom levels.  If switched on it will attempt to maximise the iframe using javascript.' ;
+
+$string['privacy:metadata:reason'] = 'The Aspire Lists LTI Wrapper does not store any user data in Moodle, but some user data is passed via LTI.';
+$string['privacy:metadata:lti_client'] = 'In order to integrate with a remote Talis Aspire LTI Tool Provider, user data needs to be exchanged with Talis Aspire. No user data is stored in Moodle by this plugin';
+$string['privacy:metadata:lti_client:userid'] = 'The userid is sent from Moodle to allow you to access your data in Talis Aspire.';
+$string['privacy:metadata:lti_client:role'] = 'The role is sent from Moodle to allow you to have the right experience in Talis Aspire.';
+$string['privacy:metadata:lti_client:courseid'] = 'The courseid is sent from Moodle to allow you to find the right list in Talis Aspire.';
+$string['privacy:metadata:lti_client:courseidnumber'] = 'The courseidnumber is sent from Moodle to allow you to find the right list in Talis Aspire.';
+$string['privacy:metadata:lti_client:courseshortname'] = 'The courseshortname is sent from Moodle to allow you to find the right list in Talis Aspire.';
+$string['privacy:metadata:lti_client:coursefullname'] = 'The coursefullname is sent from Moodle to allow you to find the right list in Talis Aspire.';

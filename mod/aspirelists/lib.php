@@ -112,7 +112,7 @@ function aspirelists_add_lti_properties(&$aspirelist)
 {
     global $CFG;
 
-    $pluginSettings = get_config('mod_aspirelists');
+    $pluginSettings = \get_config('mod_aspirelists');
 
     $aspirelist->toolurl = $pluginSettings->targetAspire . ASPIRELISTS_LTI_LAUNCH_PATH;
     $aspirelist->instructorchoiceacceptgrades = false;
@@ -125,7 +125,7 @@ function aspirelists_add_lti_properties(&$aspirelist)
     $aspirelist->servicesalt = uniqid('', true);
     if(function_exists('get_course'))
     {
-        $course = get_course($aspirelist->course);
+        $course = \get_course($aspirelist->course);
     } else {
         global $DB;
         $course = $DB->get_record('course', array('id' => $aspirelist->course), '*', MUST_EXIST);
@@ -161,7 +161,7 @@ function aspirelists_add_lti_properties(&$aspirelist)
     if(isset($aspirelist->showexpanded)){
         $customLTIParams[] = 'display_inline_expanded='.(string)$aspirelist->showexpanded;
     }
-    $plugin = get_config('mod_aspirelists');
+    $plugin = \get_config('mod_aspirelists');
     if(isset($plugin->version)){
         $customLTIParams[] = 'moodle_lti_plugin_version='.$plugin->version;
     }
@@ -177,7 +177,7 @@ function aspirelists_cm_info_view(cm_info $cm) {
     global $CFG,$PAGE;
     if ($cm->uservisible && $cm->customdata) {
         // Restore folder object from customdata.
-        // Note the field 'customdata' is not empty IF AND ONLY IF we display contens inline.
+        // Note the field 'customdata' is not empty IF AND ONLY IF we display contents inline.
         // Otherwise the content is default.
         $aspirelist = $cm->customdata;
         $aspirelist->id = (int)$cm->instance;
@@ -194,7 +194,7 @@ function aspirelists_cm_info_view(cm_info $cm) {
         $aspirelist->showdescription = $cm->showdescription;
         // display reading list
         $renderer = $PAGE->get_renderer('mod_aspirelists');
-        $cm->set_content($renderer->display_aspirelists($aspirelist));
+        $cm->set_content($renderer->display_aspirelists($aspirelist), true);
     }
 }
 
@@ -216,9 +216,9 @@ function aspirelists_cm_info_dynamic(cm_info $cm) {
         $aspirelist = $cm->customdata;
         if(isset($aspirelist->showexpanded) && $aspirelist->showexpanded === '1')
         {
-            $afterLink = get_string('accordion_open', 'aspirelists');
+            $afterLink = \get_string('accordion_open', 'aspirelists');
         } else {
-            $afterLink = get_string('accordion_closed', 'aspirelists');
+            $afterLink = \get_string('accordion_closed', 'aspirelists');
         }
 
         $cm->set_after_link("<span class=\"aspirelists_inline_accordion\">" . $afterLink . "</span>");
