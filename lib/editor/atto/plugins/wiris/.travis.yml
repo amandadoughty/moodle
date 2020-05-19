@@ -10,6 +10,9 @@ dist: trusty
 addons:
   firefox: "47.0.1"
   postgresql: "9.4"
+  apt:
+    packages:
+      - chromium-chromedriver
 
 cache:
   directories:
@@ -25,15 +28,21 @@ env:
   global:
     - COVERAGE=false
   matrix:
-    - MOODLE_BRANCH=MOODLE_35_STABLE DB=mysqli
-    - MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_36_STABLE DB=mysqli
-    - MOODLE_BRANCH=MOODLE_36_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_38_STABLE DB=mysqli
+    - MOODLE_BRANCH=MOODLE_38_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_37_STABLE DB=mysqli
     - MOODLE_BRANCH=MOODLE_37_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_36_STABLE DB=mysqli
+    - MOODLE_BRANCH=MOODLE_36_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_35_STABLE DB=mysqli
+    - MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
 
 matrix:
   exclude:
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_38_STABLE DB=mysqli
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_38_STABLE DB=pgsql
     - php: 7.0
       env: MOODLE_BRANCH=MOODLE_37_STABLE DB=mysqli
     - php: 7.0
@@ -55,7 +64,7 @@ before_install:
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
-  - moodle-plugin-ci add-plugin wiris/moodle-filter_wiris
+  - moodle-plugin-ci add-plugin --branch PLUGINS-1286 wiris/moodle-filter_wiris
   - moodle-plugin-ci install
 
 script:
@@ -68,4 +77,4 @@ script:
   - moodle-plugin-ci savepoints
   - moodle-plugin-ci mustache
   - moodle-plugin-ci grunt
-  - moodle-plugin-ci behat
+  - moodle-plugin-ci behat --profile chrome
