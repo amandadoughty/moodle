@@ -58,13 +58,13 @@ if (!defined('ACTIVITYLINK')) {
  * @return
  */
 function local_culcourse_dashboard_get_external_urls_data($course) {
-    global $DB;
+    global $DB, $CFG;
 
     $record = $DB->get_record('culcourse_dashboard_ext_urls', ['courseid' => $course->id]);
     $today = strtotime('today midnight');
     $update = true;
 
-    if ($record) {
+    if ($record && $CFG->debugdeveloper) {
         if ($record->timemodified > $today) {
             // If the last save came back with an error then call the api's again.
             // Check timetable firstas that is most flaky.
