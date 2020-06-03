@@ -48,25 +48,5 @@ function xmldb_format_culcourse_upgrade($oldversion) {
 
     $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 
-    if ($oldversion < 2018051019) {
-        // Define table format_culcourse_ext_urls.
-        $table = new xmldb_table('format_culcourse_ext_urls');
-
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '18', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '18', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('data', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
-        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $table->add_index('idx_courseid', XMLDB_INDEX_UNIQUE, ['courseid']);
-
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
-
-        // CUL Course Format savepoint reached.
-        upgrade_plugin_savepoint(true, 2018051019, 'format', 'culcourse');
-    }
-
     return true;
 }
