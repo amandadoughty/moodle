@@ -63,7 +63,7 @@ class message_output_culactivity_stream extends message_output {
         }
 
         // The insights notification smallmessage is too long and contains html and links.
-        if ($eventdata->eventtype == 'insights') {
+        if ($eventdata->name == 'insights') {
             $notification->smallmessage = $eventdata->subject;
         }
 
