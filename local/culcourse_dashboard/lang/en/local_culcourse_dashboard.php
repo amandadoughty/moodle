@@ -220,7 +220,7 @@ $string['totopoflinks'] = 'To start of links';
 /* PHOTOBOARD */
 $string['buildinglocation'] = 'Building/location: ';
 $string['culcourse:viewallphotoboard'] = 'View all roles in the photoboard';
-$string['culcourse:viewphotoboard'] = 'View the photoboard';
+$string['culcourse_dashboard:viewphotoboard'] = 'View the photoboard';
 $string['detailedlist'] = 'Detailed List';
 $string['email'] = 'Email: ';
 $string['groups'] = 'Groups: ';
