@@ -345,11 +345,21 @@
                 }
             }
         }
-        .popover-region-toggle.nav-link {                  
+        .popover-region {
+            margin-right: 0;
+        }
+        .popover-region-toggle.nav-link {
+            width: auto;
+            margin-right: 0;
+            padding: 0;
+            &:focus {
+                @include component-outline();
+                box-shadow: none !important;
+                transition: none !important;
+            }
             .icon {
-                width: auto;
                 margin-right: 0;
-                // font-size: 1.5rem;
+                // font-size: 1.5rem;                
             }
         }
         .usermenu {
