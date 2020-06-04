@@ -11,7 +11,7 @@ define(['jquery', 'core/log'], function($, log) {
                 $('<div id="navigation-anchor"></div>').insertAfter(navigation);
 
                 var anchor = $('#navigation-anchor');
-                var mainnav = $('.navbar');
+                var mainnav = $('.topmenu');
                 
                 var rightnav = $('.right-navbar').outerHeight();
 
@@ -28,18 +28,18 @@ define(['jquery', 'core/log'], function($, log) {
                     var window_top = $(window).scrollTop();
                     var anchorpos = anchor.offset().top;
                     var mainnavpos = mainnav.offset().top + bottom;
-                    var reveal = mainnav.offset().top + bottom + rightnav + 100;
+                    var reveal = bottom + rightnav;
                     var anchorheight = navigation.outerHeight();
                     var fixedbuttons = $('.fixed-buttons');
 
                     if (window_top > position) {
                         var anchorpos = anchor.offset().top;
                         var mainnavpos = mainnav.offset().top + bottom;
-                        var reveal = mainnav.offset().top + bottom + rightnav + 100;
+                        var reveal = bottom + rightnav;
                     } else {
                         var anchorpos = anchor.offset().top + anchor.outerHeight();
                         var mainnavpos = mainnav.offset().top + bottom;
-                        var reveal = mainnav.offset().top + bottom + rightnav + 100;
+                        var reveal = bottom + rightnav;
                     }
 
                     position = window_top;

@@ -194,6 +194,14 @@
                         }
                     }
                 }
+                /*** Sticky Notifications ***/
+                .popover-region-toggle.nav-link {
+                    color: $white;
+                    .count-container {
+                        background-color: $white;
+                        color: $primary;   
+                    }                   
+                }
                 .usermenu {
                     >a {
                         color: $navbar-dark-color;
@@ -337,6 +345,13 @@
                 }
             }
         }
+        .popover-region-toggle.nav-link {                  
+            .icon {
+                width: auto;
+                margin-right: 0;
+                // font-size: 1.5rem;
+            }
+        }
         .usermenu {
             >a {
                 color: $body-color;
@@ -370,6 +385,9 @@
         span.title {
             vertical-align: middle;
         }
+    }
+    .count-container {
+        background-color: $primary;    
     }
 }
 
