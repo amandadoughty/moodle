@@ -42,6 +42,7 @@ $string['collapseall'] = 'Collapse All Course Lists';
 $string['courseoverview'] = 'CUL Course Listing';
 $string['culcourse_listing:addinstance'] = 'Add a CUL Course Listing block';
 $string['culcourse_listing:myaddinstance'] = 'Add a CUL Course listing block to my moodle';
+$string['culcourse_listing:adminsettings'] = 'Access the CUL Course Listing block admin settings';
 $string['date'] = 'date';
 $string['daterangename'] = 'Name of term';
 $string['daterangetype'] = 'Type of term';
