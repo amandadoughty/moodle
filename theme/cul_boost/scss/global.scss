@@ -353,6 +353,9 @@ div:not(.iconpicker-popover).popover {
         }
     }
 }
+.popover-region-container .see-all-link {
+    color: $popover-text-color;
+}
 
 .yui3-panel {
     z-index: 20;
