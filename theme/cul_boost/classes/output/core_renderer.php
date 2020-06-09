@@ -393,7 +393,15 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
         }
 
-        $user = html_writer::link('javascript://void(0)', $avatarcontents, array('data-toggle'=>"dropdown", 'class'=>'usermenu_header d-flex flex-wrap align-items-center dropdown-toggle text-default'));
+        $user = html_writer::link(
+            'javascript://void(0)',
+            $avatarcontents,
+            [
+                'data-toggle'=>"dropdown",
+                'class'=>'usermenu_header d-flex flex-wrap align-items-center dropdown-toggle text-default',
+                'aria-label' => get_string('usermenu')
+            ]
+        );
 
         $content = html_writer::tag('div', $usertextcontents.$content, array('id'=>'usermenu_content', 'class'=>"usermenu_content m-0 pt-0 dropdown-menu dropdown-menu-right"));
 
