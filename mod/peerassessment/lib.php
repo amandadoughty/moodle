@@ -23,7 +23,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once('locallib.php');
+require_once(dirname(__FILE__).'/locallib.php');
 
 /**
  * Returns the information on whether the module supports a feature
