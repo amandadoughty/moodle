@@ -38,3 +38,10 @@
 	    top: 1.5rem !important;
 	}
 }
+
+// Togglenames lay over save buttons.
+ol.checklist {
+	display: block;
+    width: 100%;
+    margin-bottom: 2rem;
+}
