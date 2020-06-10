@@ -1187,8 +1187,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $classes[] = 'block-region';
         $attributes = array(
             'id' => 'block-region-'.preg_replace('#[^a-zA-Z0-9_\-]+#', '-', $region),
-            'class' => join(' ', $classes),
-            'data-blockregion' => $region,
+            'class' => join(' ', $classes)
         );
         $content = '';
 
