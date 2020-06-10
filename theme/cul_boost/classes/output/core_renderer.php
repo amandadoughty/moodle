@@ -1189,7 +1189,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
             'id' => 'block-region-'.preg_replace('#[^a-zA-Z0-9_\-]+#', '-', $region),
             'class' => join(' ', $classes),
             'data-blockregion' => $region,
-            'data-droptarget' => '1'
         );
         $content = '';
 
