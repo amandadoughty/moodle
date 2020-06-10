@@ -93,7 +93,7 @@ function theme_cul_boost_pluginfile($course, $cm, $context, $filearea, $args, $f
     global $CFG;
 
     if ($context->contextlevel == CONTEXT_SYSTEM) {
-        $theme = theme_config::load('acca_educationhub');
+        $theme = theme_config::load('cul_boost');
         theme_cul_boost_store_in_localcache($filearea, $args, $options);
         exit;
     } else {
