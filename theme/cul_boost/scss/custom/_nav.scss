@@ -492,6 +492,21 @@
         }
     }
 }
+.dropdown-toggle {
+    &:after {
+        @include caret-down;
+    }
+}
+.dropdown >.dropdown-toggle {
+    &:after {
+        @include caret-down;
+    }
+}
+.subopen >.dropdown-toggle {
+    &:after {
+        @include caret-up;
+    }
+}
 
 .action-menu {
     .dropdown {
