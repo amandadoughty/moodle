@@ -28,7 +28,7 @@ require_once($CFG->dirroot . "/blocks/settings/renderer.php");
 
 class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
 
-	    /**
+    /**
      * Build the navigation node.
      *
      * @param navigation_node $node the navigation node object.
@@ -59,12 +59,14 @@ class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
                 $item->hideicon = true;
             }
 
-            $content = $this->output->render($item);
+            $nodetextid = 'label_' . $depth . '_' . $number;
+            // Overridden in theme.
+            $content = $this->output->render_navigation_node($item, $nodetextid);
             $id = $item->id ? $item->id : html_writer::random_id();
             $ulattr = ['id' => $id . '_group', 'role' => 'group'];
             $liattr = ['class' => [$item->get_css_type(), 'depth_'.$depth], 'tabindex' => '-1'];
             $pattr = ['class' => ['tree_item'], 'role' => 'treeitem'];
-            $pattr += !empty($item->id) ? ['id' => $item->id] : [];
+            // $pattr += !empty($item->id) ? ['id' => $item->id] : [];
             $hasicon = (!$isbranch && $item->icon instanceof renderable);
 
             if ($isbranch) {
@@ -91,7 +93,6 @@ class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
             if (!empty($item->classes) && count($item->classes) > 0) {
                 $pattr['class'] = array_merge($pattr['class'], $item->classes);
             }
-            $nodetextid = 'label_' . $depth . '_' . $number;
 
             // class attribute on the div item which only contains the item content
             $pattr['class'][] = 'tree_item';
@@ -108,7 +109,13 @@ class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
                 $ulattr += ['aria-hidden' => 'true'];
             }
 
-            if ($item->text == get_string('enrolmentmethods') || $item->text == get_string('permissions', 'core_role')) {
+            if (
+                $item->text == get_string('enrolmentmethods') || 
+                (
+                    $item->text == get_string('permissions', 'core_role') && 
+                    $item->key == 'override'
+                )
+            ) {
             	$content = html_writer::tag('p', $content, ['class'=>'tree_item hasicon cog']) . $this->navigation_node($item, $ulattr, $depth + 1);
             } else {
             	$content = html_writer::tag('p', $content, $pattr) . $this->navigation_node($item, $ulattr, $depth + 1);
@@ -118,10 +125,9 @@ class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
                 $content = html_writer::empty_tag('hr') . $content;
             }
 
-            // Broken ARIA reference.
-            // $liattr['aria-labelledby'] = $nodetextid;
+            $liattr['aria-labelledby'] = $nodetextid;
             $content = html_writer::tag('li', $content, $liattr);
-            $lis[] = $content;
+            $lis[] = $content;            
         }
 
         if (count($lis)) {
