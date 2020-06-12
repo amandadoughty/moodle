@@ -504,19 +504,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $blocks = $this->page->blocks->get_blocks_for_region($region);
         $lastblock = null;
         $zones = array();
-        // $can_edit = false;
         $admininstanceid = -1;
 
-        // if (has_capability('moodle/course:update', context_course::instance($COURSE->id))) {
-        //     $can_edit = true;
-        // }
-
         foreach ($blocks as $block) {
-        //     if (!$can_edit && $block->name() == 'settings') {
-        //         $admininstanceid = $block->instance->id;
-        //         continue;
-        //     }
-
             $zones[] = $block->title;
         }
 
