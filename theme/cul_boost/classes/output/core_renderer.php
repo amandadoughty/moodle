@@ -504,18 +504,18 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $blocks = $this->page->blocks->get_blocks_for_region($region);
         $lastblock = null;
         $zones = array();
-        $can_edit = false;
+        // $can_edit = false;
         $admininstanceid = -1;
 
-        if (has_capability('moodle/course:update', context_course::instance($COURSE->id))) {
-            $can_edit = true;
-        }
+        // if (has_capability('moodle/course:update', context_course::instance($COURSE->id))) {
+        //     $can_edit = true;
+        // }
 
         foreach ($blocks as $block) {
-            if (!$can_edit && $block->name() == 'settings') {
-                $admininstanceid = $block->instance->id;
-                continue;
-            }
+        //     if (!$can_edit && $block->name() == 'settings') {
+        //         $admininstanceid = $block->instance->id;
+        //         continue;
+        //     }
 
             $zones[] = $block->title;
         }
@@ -1487,4 +1487,68 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         return $content;
     }
+
+    // Overriding to include missing aria-labbelled by id.
+    // Will be fixed by MDL-54596/MDL-56260/MDL-54674.
+
+    /**
+     * Renders a navigation node object.
+     *
+     * @param navigation_node $item The navigation node to render.
+     * @return string HTML fragment
+     */
+    public function render_navigation_node(navigation_node $item, $arialabelledbyid = null) {
+        $content = $item->get_content();
+        $title = $item->get_title();
+        if ($item->icon instanceof renderable && !$item->hideicon) {
+            $icon = $this->render($item->icon);
+            $content = $icon.$content; // use CSS for spacing of icons
+        }
+        if ($item->helpbutton !== null) {
+            $content = trim($item->helpbutton).html_writer::tag('span', $content, array('class'=>'clearhelpbutton', 'tabindex'=>'0'));
+        }
+        if ($content === '') {
+            return '';
+        }
+        if ($item->action instanceof action_link) {
+            $link = $item->action;
+            if ($item->hidden) {
+                $link->add_class('dimmed');
+            }
+            if (!empty($content)) {
+                // Providing there is content we will use that for the link content.
+                $link->text = $content;
+            }
+            if ($arialabelledbyid) {
+                $link->action->$attributes['id'] = $arialabelledbyid;
+            }
+            $content = $this->render($link);
+        } else if ($item->action instanceof moodle_url) {
+            $attributes = array();
+            if ($title !== '') {
+                $attributes['title'] = $title;
+            }
+            if ($item->hidden) {
+                $attributes['class'] = 'dimmed_text';
+            }
+            if ($arialabelledbyid) {
+                $attributes['id'] = $arialabelledbyid;
+            }
+            $content = html_writer::link($item->action, $content, $attributes);
+
+        } else if (is_string($item->action) || empty($item->action)) {
+            $attributes = array('tabindex'=>'0'); //add tab support to span but still maintain character stream sequence.
+            if ($title !== '') {
+                $attributes['title'] = $title;
+            }
+            if ($item->hidden) {
+                $attributes['class'] = 'dimmed_text';
+            }
+            if ($arialabelledbyid) {
+                $attributes['id'] = $arialabelledbyid;
+            }
+            $content = html_writer::tag('span', $content, $attributes);
+        }
+        return $content;
+    }    
 }
