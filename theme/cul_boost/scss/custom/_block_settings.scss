@@ -11,6 +11,7 @@ aside[id*="block-region-nav-settings"] {
     min-width: calc(#{$branchwidth} + #{$spacer * 2});
     opacity: 0;
     visibility: hidden;
+    display: none;
     pointer-events: none;
     @include media-breakpoint-up(sm) {
         left: auto;
@@ -19,6 +20,7 @@ aside[id*="block-region-nav-settings"] {
     &.show {
         opacity: 1;
         visibility: visible;
+        display:block;
         pointer-events: auto;
         left: 50%;
         transform: translateX(-50%);

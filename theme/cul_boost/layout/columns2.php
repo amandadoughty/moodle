@@ -34,7 +34,7 @@ require_once(dirname(__FILE__) . '/includes/footer.php');
 $PAGE->set_popup_notification_allowed(false);
 $isloggedin = isloggedin();
 // Accessibility stuff.
-$OUTPUT->standard_head_html();
+// $OUTPUT->standard_head_html();
 $PAGE->requires->skip_link_to('accessibility', get_string('toaccessibility', 'theme_cul_boost'));
 $bodyattributes = $OUTPUT->body_attributes();
 $iscourse = $PAGE->pagelayout == 'course' && $COURSE->id != 1;
@@ -47,7 +47,7 @@ $regions = theme_cul_boost_bootstrap_grid($hasblocks);
 $blockshtml = '';
 
 if ($knownregionpost) {
-    $blockshtml = $OUTPUT->blocks('side-post', $regions['post']);
+    $blockshtml = $OUTPUT->synergyblocks('side-post', $regions['post']);
 }
 
 $templatecontext = [    

@@ -43,7 +43,7 @@ $regions = theme_cul_boost_bootstrap_grid($hasblocks);
 $blockshtml = '';
 
 if ($knownregionpost) {
-    $blockshtml = $OUTPUT->blocks('side-post', $regions['post']);
+    $blockshtml = $OUTPUT->synergyblocks('side-post', $regions['post']);
 }
 
 // Main region setup.

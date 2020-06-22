@@ -440,95 +440,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return parent::render_user_picture($userpicture);       
     }
 
-    // /**
-    //  * Overridden function - Renders tabtree
-    //  * Overridden to use core function instead of Boost
-    //  *
-    //  * @param tabtree $tabtree
-    //  * @return string
-    //  */
-    // protected function render_tabtree(tabtree $tabtree) {
-    //     if (empty($tabtree->subtree)) {
-    //         return '';
-    //     }
-
-    //     $firstrow = $secondrow = '';
-
-    //     foreach ($tabtree->subtree as $tab) {
-    //         $firstrow .= $this->render($tab);
-
-    //         if (($tab->selected || $tab->activated) && !empty($tab->subtree) && $tab->subtree !== array()) {
-    //             $secondrow = $this->tabtree($tab->subtree);
-    //         }
-    //     }
-
-    //     return html_writer::tag('ul', $firstrow, array('class' => 'nav nav-tabs')) . $secondrow;
-    // }
-
-    // /**
-    //  * Overridden function - Renders tabobject (part of tabtree)
-    //  * Overridden to use core function instead of Boost
-    //  *
-    //  * This function is called from {@link core_renderer::render_tabtree()}
-    //  * and also it calls itself when printing the $tabobject subtree recursively.
-    //  *
-    //  * @param tabobject $tabobject
-    //  * @return string HTML fragment
-    //  */
-    // protected function render_tabobject(tabobject $tab) {
-    //     if ($tab->selected or $tab->activated) {
-    //         return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'active'));
-    //     } else if ($tab->inactive) {
-    //         return html_writer::tag('li', html_writer::tag('a', $tab->text), array('class' => 'disabled'));
-    //     } else {
-    //         if (!($tab->link instanceof moodle_url)) {
-    //             $link = "<a href=\"$tab->link\" title=\"$tab->title\">$tab->text</a>";
-    //         } else {
-    //             $link = html_writer::link($tab->link, $tab->text, array('title' => $tab->title));
-    //         }
-
-    //         return html_writer::tag('li', $link);
-    //     }
-    // }
-
-    /**
-     * Overridden function - Output all the blocks in a particular region.
-     *
-     * @param string $region the name of a region on this page.
-     * @return string the HTML to be output.
-     */
-    public function blocks_for_region($region) {
-        global $COURSE;
-
-        $blockcontents = $this->page->blocks->get_content_for_region($region, $this);
-        $blocks = $this->page->blocks->get_blocks_for_region($region);
-        $lastblock = null;
-        $zones = array();
-        $admininstanceid = -1;
-
-        foreach ($blocks as $block) {
-            $zones[] = $block->title;
-        }
-
-        $output = '';
-
-        foreach ($blockcontents as $bc) {
-            if ($bc->blockinstanceid == $admininstanceid) {
-                continue;
-            }
-
-            if ($bc instanceof block_contents) {
-                $output .= $this->block($bc, $region);
-                $lastblock = $bc->title;
-            } else if ($bc instanceof block_move_target) {
-                $output .= $this->block_move_target($bc, $zones, $lastblock, $region);
-            } else {
-                throw new coding_exception('Unexpected type of thing (' . get_class($bc) . ') found in list of block contents.');
-            }
-        }
-        return $output;
-    }
-
     /**
      * Overridden function - Prints a nice side block with an optional header.
      *
@@ -1177,7 +1088,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $classes[] = 'block-region';
         $attributes = array(
             'id' => 'block-region-'.preg_replace('#[^a-zA-Z0-9_\-]+#', '-', $region),
-            'class' => join(' ', $classes)
+            'class' => join(' ', $classes),
+            'data-blockregion' => $region,
+            'data-droptarget' => '1'
         );
         $content = '';
 
