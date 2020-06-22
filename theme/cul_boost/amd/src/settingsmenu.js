@@ -9,6 +9,14 @@ define(['jquery', 'core/log'], function($, log) {
             // Settings Menu Horizontal Feature
             // Init / re-init the menu
             $(document).ajaxComplete(function(event, xhr, settings) {
+                // The block is set to display: none to prevent
+                // weird drag and drop issues caused by absolute
+                // positioning, and also to prevent screenreaders
+                // reading every item on page load.
+                // We temporarily set it to 'block' here to make
+                // sure that the height and width are correctly
+                // calculated. We set it back after.
+                settingsblock.css('display', 'block');
 
                 // Settings Menu Horizontal Feature
                 var branch = $('.tree_item.branch');
@@ -100,6 +108,8 @@ define(['jquery', 'core/log'], function($, log) {
 
                 // Call again just in case
                 maxheight(sibling);
+                // Set back once height and width have been calculated.
+                settingsblock.css('display', '');
             });
 
         }
