@@ -22660,6 +22660,7 @@ aside[id*="block-region-nav-settings"] {
   min-width: calc(265px + 2rem);
   opacity: 0;
   visibility: hidden;
+  display: none;
   pointer-events: none; }
   @media (min-width: 576px) {
     aside[id*="block-region-nav-settings"] {
@@ -22668,6 +22669,7 @@ aside[id*="block-region-nav-settings"] {
   aside[id*="block-region-nav-settings"].show {
     opacity: 1;
     visibility: visible;
+    display: block;
     pointer-events: auto;
     left: 50%;
     -webkit-transform: translateX(-50%);
