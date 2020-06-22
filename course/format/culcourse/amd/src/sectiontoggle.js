@@ -37,13 +37,14 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
         CLOSEALLLINK: 'a#toggles-all-closed',
         SECTIONHEAD: '.sectionhead',
         SECTIONBODY: '.sectionbody',
+        SECTIONFOOTER: '.sectionclose',
         TOGGLEHEAD: '.course-content #toggle-',
         TOGGLEBODY: '#togglesection-',
         TOGGLEFOOTER: '.course-content #footertoggle-',
         DDPROXY: '.yui3-dd-proxy',
         SECTIONNAME: '.sectionname a'
         };
-    // From Bootstrap collapse.js.    
+    // From Bootstrap collapse.js.
     var ClassName = {
         SHOW: 'show',
         COLLAPSE: 'collapse',
@@ -178,16 +179,22 @@ define(['jquery', 'core/ajax', 'core/config', 'core/notification'], function($, 
                 // sesskey: M.cfg.sesskey
             };
             $.post(GETURL, params, function() {})
-                .done(function(data) {
+                .done(function() {
+                    // No user preference set - close all CMDLTWO-1789.
+                    $(SELECTORS.SECTIONHEAD).addClass(ClassName.COLLAPSED);
+                    $(SELECTORS.SECTIONFOOTER).addClass(ClassName.COLLAPSED);
+                    $(SELECTORS.SECTIONBODY).removeClass(ClassName.SHOW);
+                })
+                .then(function(data) {
                     var sectiontoggles = data;
 
                     for (var sectionid in sectiontoggles) {
-                        // If expanded is set to false then change the classes to
-                        // collapse the section.
-                        if (sectiontoggles[sectionid] == 0) {
-                            $(SELECTORS.TOGGLEHEAD + sectionid).addClass('collapsed');
-                            $(SELECTORS.TOGGLEFOOTER + sectionid).addClass('collapsed');
-                            $(SELECTORS.TOGGLEBODY + sectionid).removeClass('show');
+                        // If expanded is set to true then change the classes to
+                        // expand the section.
+                        if (sectiontoggles[sectionid] == 1) {
+                            $(SELECTORS.TOGGLEHEAD + sectionid).removeClass(ClassName.COLLAPSED);
+                            $(SELECTORS.TOGGLEFOOTER + sectionid).removeClass(ClassName.COLLAPSED);
+                            $(SELECTORS.TOGGLEBODY + sectionid).addClass(ClassName.SHOW);
                         }
                     }
                 })
