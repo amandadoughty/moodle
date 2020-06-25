@@ -9,8 +9,8 @@ aside[id*="block-region-nav-settings"] {
     margin-bottom: $spacer;
     width: auto;
     min-width: calc(#{$branchwidth} + #{$spacer * 2});
-    opacity: 0;
-    visibility: hidden;
+    // opacity: 0;
+    // visibility: hidden;
     display: none;
     pointer-events: none;
     @include media-breakpoint-up(sm) {
@@ -300,7 +300,7 @@ aside[id*="block-region-nav-settings"] {
     .block.block_settings .contains_branch {
         p {
             +ul {
-                display: block;
+                // display: block;
                 opacity: 0;
                 visibility: hidden;
                 position: absolute;
