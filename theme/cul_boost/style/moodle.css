@@ -22658,8 +22658,6 @@ aside[id*="block-region-nav-settings"] {
   margin-bottom: 1rem;
   width: auto;
   min-width: calc(265px + 2rem);
-  opacity: 0;
-  visibility: hidden;
   display: none;
   pointer-events: none; }
   @media (min-width: 576px) {
@@ -22921,7 +22919,6 @@ aside[id*="block-region-nav-settings"] {
   aside[id*="block-region-nav-settings"] .block_settings .block_tree .root_node + ul li > p:hover {
     background-color: #F5F5F5; }
   aside[id*="block-region-nav-settings"] .block.block_settings .contains_branch p + ul {
-    display: block;
     opacity: 0;
     visibility: hidden;
     position: absolute;
