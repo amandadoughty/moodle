@@ -28,6 +28,25 @@ require_once($CFG->dirroot . "/blocks/settings/renderer.php");
 
 class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
 
+    public function settings_tree(settings_navigation $navigation) {
+        $count = 0;
+        foreach ($navigation->children as &$child) {
+            $child->preceedwithhr = ($count!==0);
+            if ($child->display) {
+                $count++;
+            }
+        }
+        $navigationattrs = array(
+            'class' => 'block_tree list',
+            'role' => 'tree',
+            'data-ajax-loader' => 'theme_cul_boost/site_admin_loader');
+        $content = $this->navigation_node($navigation, $navigationattrs);
+        if (isset($navigation->id) && !is_numeric($navigation->id) && !empty($content)) {
+            $content = $this->output->box($content, 'block_tree_box', $navigation->id);
+        }
+        return $content;
+    }    
+
     /**
      * Build the navigation node.
      *
@@ -59,7 +78,7 @@ class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
                 $item->hideicon = true;
             }
 
-            $nodetextid = 'label_' . $depth . '_' . $number;
+            $nodetextid = 'theme_cul_boost_label_' . $item->key . '_' . $number;
             // Overridden in theme.
             $content = $this->output->render_navigation_node($item, $nodetextid);
             $id = $item->id ? $item->id : html_writer::random_id();

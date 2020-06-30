@@ -1414,7 +1414,21 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($content === '') {
             return '';
         }
-        if ($item->action instanceof action_link) {
+        // settingsblock.js replaces the site admin link with a span
+        // and this loses the id we need for aria-labelledby.
+        if ($item->key == 'siteadministration') {
+            $attributes = array('tabindex'=>'0'); //add tab support to span but still maintain character stream sequence.
+            if ($title !== '') {
+                $attributes['title'] = $title;
+            }
+            if ($item->hidden) {
+                $attributes['class'] = 'dimmed_text';
+            }
+            if ($arialabelledbyid) {
+                $attributes['id'] = $arialabelledbyid;
+            }
+            $content = html_writer::tag('span', $content, $attributes);
+        } else if ($item->action instanceof action_link) {
             $link = $item->action;
             if ($item->hidden) {
                 $link->add_class('dimmed');
