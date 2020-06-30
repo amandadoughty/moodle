@@ -3,8 +3,7 @@ define(['jquery', 'core/log', 'core/tree'], function($, log, Tree) {
     return {
         init: function(siteAdminNodeId) {           
             // Ensure root node is tabable.
-            var adminTree = new Tree(".block_settings .block_tree");
-            var siteAdminNode = adminTree.treeRoot.find('#' + siteAdminNodeId);
+            var siteAdminNode = $('#' + siteAdminNodeId);
             var siteAdminLink = siteAdminNode.children('span').first();
             siteAdminLink.attr('tabindex', 0);
 
