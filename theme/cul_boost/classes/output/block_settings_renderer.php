@@ -66,7 +66,7 @@ class theme_cul_boost_block_settings_renderer extends block_settings_renderer {
             $ulattr = ['id' => $id . '_group', 'role' => 'group'];
             $liattr = ['class' => [$item->get_css_type(), 'depth_'.$depth], 'tabindex' => '-1'];
             $pattr = ['class' => ['tree_item'], 'role' => 'treeitem'];
-            // $pattr += !empty($item->id) ? ['id' => $item->id] : [];
+            $pattr += !empty($item->id) ? ['id' => $item->id] : [];
             $hasicon = (!$isbranch && $item->icon instanceof renderable);
 
             if ($isbranch) {

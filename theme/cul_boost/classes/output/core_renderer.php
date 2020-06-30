@@ -1391,7 +1391,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $content;
     }
 
-    // Overriding to include missing aria-labbelled by id.
+    // Overriding to include missing aria-labelled by id.
     // Will be fixed by MDL-54596/MDL-56260/MDL-54674.
 
     /**
@@ -1401,6 +1401,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @return string HTML fragment
      */
     public function render_navigation_node(navigation_node $item, $arialabelledbyid = null) {
+        $name = $item->get_content();
         $content = $item->get_content();
         $title = $item->get_title();
         if ($item->icon instanceof renderable && !$item->hideicon) {
@@ -1452,6 +1453,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
             $content = html_writer::tag('span', $content, $attributes);
         }
+
+        //   if ($name == 'Site administration') {
+        //     echo $content;die;
+        // }
         return $content;
     }    
 }
