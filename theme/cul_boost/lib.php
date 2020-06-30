@@ -55,7 +55,13 @@ function theme_cul_boost_page_init(moodle_page $page) {
     $page->requires->js_call_amd('theme_cul_boost/navsearch', 'init');
     $page->requires->js_call_amd('theme_cul_boost/courselisting', 'init');
     // $page->requires->js_call_amd('theme_cul_boost/dashpanel', 'init');
-    $page->requires->js_call_amd('theme_cul_boost/settingsmenu', 'init');
+
+    $adminnode = $page->settingsnav->find('siteadministration', navigation_node::TYPE_SITE_ADMIN);
+    $arguments = array(
+            'adminnodeid' => $adminnode ? $adminnode->id : null
+        );
+
+    $page->requires->js_call_amd('theme_cul_boost/settingsmenu', 'init', $arguments);
     $page->requires->js_call_amd('theme_cul_boost/navigation', 'init');
     $page->requires->js_call_amd('theme_cul_boost/stickynav', 'init');
     $page->requires->js_call_amd('theme_cul_boost/fixedbuttons', 'init');
