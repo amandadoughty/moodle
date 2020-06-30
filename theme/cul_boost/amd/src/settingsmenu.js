@@ -1,7 +1,12 @@
 /* jshint ignore:start */
-define(['jquery', 'core/log'], function($, log) {
+define(['jquery', 'core/log', 'core/tree'], function($, log, Tree) {
     return {
-        init: function() {
+        init: function(siteAdminNodeId) {           
+            // Ensure root node is tabable.
+            var adminTree = new Tree(".block_settings .block_tree");
+            var siteAdminNode = adminTree.treeRoot.find('#' + siteAdminNodeId);
+            var siteAdminLink = siteAdminNode.children('span').first();
+            siteAdminLink.attr('tabindex', 0);
 
             // Open/Close Settings Menu
             var settingsblock = $('#block-region-nav-settings');
