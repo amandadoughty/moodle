@@ -549,7 +549,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * This renderer is needed to enable the Bootstrap style navigation.
      * Overriden to add id to nodes for JS
      */
-    protected function render_custom_menu(custom_menu $menu) {
+    protected function render_custom_menu(custom_menu $menu, $module = 'theme_cul_boost') {
         global $CFG;
 
         $langs = get_string_manager()->get_list_of_translations();
@@ -573,11 +573,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
         }
 
-        $content = '';
+        $content = '';        
         
         foreach ($menu->get_children() as $item) {
             $context = $item->export_for_template($this);
-            $context->tours = false;            
+            $context->tours = false;        
 
             if ($item->get_title() == 'User tour') {
                 $context->tours = true;
@@ -587,8 +587,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $id = 'theme_cul_boost_' . $id;
                 $context->id = $id;
             }
-            
-            $content .= $this->render_from_template('theme_cul_boost/custom_menu_item', $context);
+
+            $content .= $this->render_from_template("$module/custom_menu_item", $context);
         }
         return $content;
     }
@@ -1071,7 +1071,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // Help & Support from CUL Theme Settings
         if ($showmenu) {
             if ($helpmenu = $this->help_menu_items()) {
-                $content .= parent::render_custom_menu($helpmenu);
+                $content .= $this->render_custom_menu($helpmenu, 'core');
             }
         }
 
