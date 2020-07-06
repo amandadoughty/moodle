@@ -24,19 +24,18 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__) . '/../../../../message/output/popup/lib.php');
+require_once(dirname(__FILE__) . '/../../../../message/lib.php');
 
 $help = $OUTPUT->help_menu();
 $custommenu = $OUTPUT->custom_menu();
 $usermenu = $OUTPUT->user_menu();
 $userinfo = $OUTPUT->user_info();
-// $renderer = $PAGE->get_renderer('core_renderer');
-$notificationpopover = message_popup_render_navbar_output($this);
+$messagepopover = core_message_render_navbar_output($this);
 
 $headertemplatecontext = [
     'help' => $help,
     'custommenu' => $custommenu,
     'usermenu' => $usermenu,
     'userinfo' => $userinfo,
-    'notificationpopover' => $notificationpopover
+    'messagepopover' => $messagepopover
 ];
