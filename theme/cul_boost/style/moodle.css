@@ -25702,6 +25702,9 @@ ol.checklist {
 .message-app .body-container {
   min-height: 400px; }
 
+[data-region=right-hand-drawer].drawer {
+  top: 140px; }
+
 #page-mod-forum-report-summary-index #filter-dates-popover .popover-header,
 #page-mod-forum-report-summary-index #filter-dates-popover .filter-save {
   color: #fff; }
