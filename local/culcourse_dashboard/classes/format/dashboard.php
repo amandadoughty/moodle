@@ -267,7 +267,7 @@ class dashboard {
         $ltitypes = [];
 
         foreach($records as $record) {
-            if (!$record->typeid) {
+            if (!$record->typeid && isset($plurals[$record->name])) {
                 $ltitypes[$record->typeid] = $plurals[$record->name];
             } else {
                 $type = lti_get_type($record->typeid);
