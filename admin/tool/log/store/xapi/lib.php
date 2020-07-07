@@ -22,7 +22,7 @@ define('XAPI_REPORT_ID_HISTORIC', 1);
 // Type constants.
 define('XAPI_IMPORT_TYPE_LIVE', 0);
 define('XAPI_IMPORT_TYPE_HISTORIC', 1);
-define('XAPI_IMPORT_TYPE_RECONCILE', 2);
+define('XAPI_IMPORT_TYPE_FAILED', 2);
 
 // Report source.
 define('XAPI_REPORT_SOURCE_LOG', 'logstore_xapi_log');
@@ -278,13 +278,10 @@ function logstore_xapi_add_event_to_sent_log($event) {
  * @param int $type event type
  * @return array
  */
-function logstore_xapi_extract_events($limitnum = 0, $log = XAPI_REPORT_SOURCE_LOG, $type = null) {
+function logstore_xapi_extract_events($limitnum, $log, $type) {
     global $DB;
 
-    $conditions = null;
-    if ($type) {
-        $conditions = array("type" => $type);
-    }
+    $conditions = array("type" => $type);
     $sort = '';
     $fields = '*';
     $limitfrom = 0;
@@ -365,4 +362,23 @@ function logstore_xapi_store_failed_events($events) {
     $failedevents = logstore_xapi_get_failed_events($events);
     $DB->insert_records('logstore_xapi_failed_log', $failedevents);
     mtrace(count($failedevents) . " " . get_string('failed_events', 'logstore_xapi'));
+}
+
+/**
+ * determine the type from the initial base table
+ *
+ * @param string $table
+ * @return int
+ */
+function logstore_xapi_get_type_from_table($table) {
+    switch ($table) {
+        case XAPI_REPORT_SOURCE_LOG:
+            return XAPI_IMPORT_TYPE_LIVE;
+        case XAPI_REPORT_SOURCE_FAILED:
+            return XAPI_IMPORT_TYPE_FAILED;
+        case XAPI_REPORT_SOURCE_HISTORICAL:
+            return XAPI_IMPORT_TYPE_HISTORIC;
+        default:
+            return XAPI_IMPORT_TYPE_LIVE;
+    }
 }
