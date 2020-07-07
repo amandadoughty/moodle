@@ -43,6 +43,7 @@ use pix_icon;
 use plugin_renderer_base;
 use action_menu_filler;
 use tool_policy;
+use renderable;
 
 /**
  * Renderers to align Moodle's HTML with that expected by Bootstrap
@@ -1416,7 +1417,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
         // settingsblock.js replaces the site admin link with a span
         // and this loses the id we need for aria-labelledby.
-        if ($item->key == 'siteadministration') {
+        if ($item->type == navigation_node::TYPE_SITE_ADMIN) {
             $attributes = array('tabindex'=>'0'); //add tab support to span but still maintain character stream sequence.
             if ($title !== '') {
                 $attributes['title'] = $title;
@@ -1429,6 +1430,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
             $content = html_writer::tag('span', $content, $attributes);
         } else if ($item->action instanceof action_link) {
+        // if ($item->action instanceof action_link) {
             $link = $item->action;
             if ($item->hidden) {
                 $link->add_class('dimmed');
