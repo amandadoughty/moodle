@@ -42,9 +42,6 @@ $systemcontext = context_system::instance();
 
 // Add require login and only admin allowed to see this page.
 require_login(null, false);
-if (!has_capability('logstore/xapi:viewerrorlog', $systemcontext)) {
-    print_error('accessdenied', 'admin');
-}
 
 // Read parameters
 $id           = optional_param('id', XAPI_REPORT_ID_ERROR, PARAM_INT); // This is the report ID
@@ -65,8 +62,6 @@ $url = new moodle_url('/admin/tool/log/store/xapi/report.php', array('id' => $id
 // Set page parameters.
 $PAGE->set_context($systemcontext);
 $PAGE->set_url($url);
-
-$canmanageerrors = has_capability('logstore/xapi:manageerrors', context_system::instance());
 
 // Set filter params and defaults.
 $eventnames = logstore_xapi_get_event_names_array();
@@ -103,11 +98,18 @@ $filterparams = [
 $basetable = XAPI_REPORT_SOURCE_FAILED;
 $extraselect = 'x.errortype, x.response';
 $pagename = 'logstorexapierrorlog';
+$canmanage = false;
 
 switch ($id) {
     case XAPI_REPORT_ID_ERROR:
         $filterparams['errortypes'] = logstore_xapi_get_distinct_options_from_failed_table('errortype');
         $filterparams['responses'] = logstore_xapi_get_distinct_options_from_failed_table('response');
+
+        require_capability('logstore/xapi:viewerrorlog', $systemcontext);
+
+        if (has_capability('logstore/xapi:manageerrors', $systemcontext)) {
+            $canmanage = true;
+        }
         break;
 
     case XAPI_REPORT_ID_HISTORIC:
@@ -116,6 +118,10 @@ switch ($id) {
         $pagename = 'logstorexapihistoriclog';
 
         $filterparams['eventcontexts'] = logstore_xapi_get_logstore_standard_context_options();
+
+        require_capability('logstore/xapi:managehistoric', $systemcontext);
+        $canmanage = true;
+
         break;
 
     default:
@@ -192,7 +198,7 @@ $sql = "SELECT x.id, x.eventname, u.firstname, u.lastname, x.contextid, x.timecr
          WHERE $where";
 
 // Resend elements.
-$canresenderrors = !empty($fromform->resend) && $fromform->resend == XAPI_REPORT_RESEND_TRUE && $canmanageerrors;
+$canresenderrors = !empty($fromform->resend) && $fromform->resend == XAPI_REPORT_RESEND_TRUE && $canmanage;
 
 if ($canresenderrors) {
     $eventids = array_keys($DB->get_records_sql($sql, $params));
@@ -289,7 +295,7 @@ $PAGE->set_title(get_string($pagename, 'logstore_xapi'));
 $PAGE->set_heading(get_string($pagename, 'logstore_xapi'));
 
 // Add requested items to the page view.
-if ($canmanageerrors) {
+if ($canmanage) {
     $PAGE->requires->js_call_amd('logstore_xapi/replayevents', 'init', [$count, XAPI_REPORT_RESEND_FALSE, XAPI_REPORT_RESEND_TRUE]);
 }
 $PAGE->requires->css('/admin/tool/log/store/xapi/styles.css');
