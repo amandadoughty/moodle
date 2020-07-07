@@ -55,7 +55,7 @@ class sendfailednotifications_task extends \core\task\scheduled_task {
 
         $lastnotification = $DB->get_record_sql('SELECT MAX(failedlogid) AS id FROM {logstore_xapi_notif_sent_log}');
 
-        if ($lastnotification) {
+        if ($lastnotification && isset($lastnotification->id)) {
             return $lastnotification->id;
         }
 
@@ -181,9 +181,8 @@ class sendfailednotifications_task extends \core\task\scheduled_task {
         // Set up email message
         $subject = get_string('failedsubject', 'logstore_xapi');
         $messagedata = new \stdClass();
-        if ($endpointurl = get_config('logstore_xapi', 'endpoint')) {
-            $messagedata->endpointurl = $endpointurl;
-        }
+        $messagedata->lmsinstance = new \moodle_url('/');
+
         $messagedata->errorlogpageurl = new \moodle_url('/admin/tool/log/store/xapi/report.php');
         $errors = $this->get_failed_counts($lastsentid);
         $messagedata->errors = array_values($errors);
