@@ -43,6 +43,7 @@ use pix_icon;
 use plugin_renderer_base;
 use action_menu_filler;
 use tool_policy;
+use renderable;
 
 /**
  * Renderers to align Moodle's HTML with that expected by Bootstrap
