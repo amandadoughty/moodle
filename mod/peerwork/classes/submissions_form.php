@@ -128,6 +128,7 @@ class mod_peerwork_submissions_form extends moodleform {
      */
     public function definition_after_data() {
         global $PAGE, $USER;
+
         $mform = $this->_form;
         $peerworkid = $this->_customdata['peerworkid'];
         $peerwork = $this->_customdata['peerwork'];
@@ -159,7 +160,7 @@ class mod_peerwork_submissions_form extends moodleform {
 
         $peers = $this->_customdata['peers'];
         $criteria = $this->get_criteria();
-        $scales = $this->get_scales();
+        $scales = $this->get_scales($peerwork->course);
 
         if ($peerwork->justificationmaxlength) {
             $PAGE->requires->js_call_amd('mod_peerwork/justification-character-limit', 'init',
@@ -463,7 +464,7 @@ class mod_peerwork_submissions_form extends moodleform {
 
         $foundgradererror = false;
         $criteria = $this->get_criteria();
-        $scales = $this->get_scales();
+        $scales = get_scales_menu($peerwork->course);
 
         foreach ($data as $key => $value) {
             $matches = [];
@@ -512,12 +513,12 @@ class mod_peerwork_submissions_form extends moodleform {
      *
      * @return void
      */
-    public function get_scales() {
+    public function get_scales($courseid = SITEID) {
         if (!$this->scales) {
-            $this->scales = grade_scale::fetch_all_global();
+            $this->scales = (array)grade_scale::fetch_all_global() + (array)grade_scale::fetch_all_local($courseid);
         }
         return $this->scales;
-    }
+    }    
 
     /**
      * Check if peer is locked.
@@ -527,6 +528,7 @@ class mod_peerwork_submissions_form extends moodleform {
      */
     public function is_peer_locked($peerid) {
         global $USER;
+
         if (!isset($this->lockedpeers)) {
             $this->lockedpeers = mod_peerwork_get_locked_peers($this->_customdata['peerwork'], $USER->id);
         }

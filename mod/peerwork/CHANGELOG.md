@@ -1,3 +1,9 @@
+v2.0.0
+------
+
+- Refactored the calculator as a subplugin
+- Added course scales to selection
+
 v1.1.0
 ------
 
@@ -17,7 +23,6 @@ v1.1.0
 	Criteria
 	Criteria scale
 	Add criteria
-- Added course scales to selection
 - Style changes to improve responsiveness
 
 v1.0.0
