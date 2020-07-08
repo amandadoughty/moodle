@@ -44,9 +44,17 @@ class mod_peerwork_mod_form extends moodleform_mod {
      * Defines forms elements.
      */
     public function definition() {
-        global $CFG, $DB, $COURSE;
+        global $CFG, $DB, $COURSE, $PAGE;
 
         $mform = $this->_form;
+        $peerwork = null;
+
+        $PAGE->requires->js_call_amd('mod_peerwork/update_calculator', 'init', ['formid' => $mform->getAttribute('id')]);
+
+        if ($this->current && $this->current->id) {
+            $peerwork = $DB->get_record('peerwork', ['id' => $this->current->id], '*', MUST_EXIST);
+        }
+
         $this->pac = new mod_peerwork_criteria($this->current->id);
         $steps = range(0, 100, 1);
         $zerotohundredpcopts = array_combine($steps, array_map(function($i) {
@@ -102,6 +110,8 @@ class mod_peerwork_mod_form extends moodleform_mod {
         if ($hassubmissions) {
             $mform->freeze('selfgrading');
         }
+
+        add_all_plugin_settings($mform, $peerwork);
 
         $mform->addElement('select', 'paweighting', get_string('paweighting', 'peerwork'), $zerotohundredpcopts);
         $mform->addHelpButton('paweighting', 'paweighting', 'peerwork');
@@ -199,8 +209,7 @@ class mod_peerwork_mod_form extends moodleform_mod {
         $scale = $mform->createElement('select', 'critscale',
             get_string('assessmentcriteria:scoretype', 'mod_peerwork'), get_scales_menu($COURSE->id));
         $repeatopts['critscale'] = [
-            'helpbutton' => ['assessmentcriteria:scoretype', 'mod_peerwork'],
-            'default' => get_config('peerwork', 'critscale')
+            'helpbutton' => ['assessmentcriteria:scoretype', 'mod_peerwork']
         ];
 
         // Repeat stuff.
@@ -214,7 +223,7 @@ class mod_peerwork_mod_form extends moodleform_mod {
             for ($i = 0; $i < $repeatels; $i++) {
                 // The max number of default criteria is 5 and we may
                 // have default text and a scale for each one.
-                if ($i <= 5) {
+                if ($i < 5) {
                     $text = $config->{'defaultcrit' . $i};
                     $selected = $config->{'defaultscale' . $i};
 
@@ -280,21 +289,24 @@ class mod_peerwork_mod_form extends moodleform_mod {
                 'format' => $crit->descriptionformat
             ];
 
-            $defaultvalues["critscale[$i]"] = -$crit->grade;    // Scales are saved as negative integers.
+            // Scales are saved as negative integers.
+            $defaultvalues["critscale[$i]"] = -$crit->grade;
         }
     }
 
     public function definition_after_data() {
         global $CFG, $COURSE;
+
         $mform =& $this->_form;
         $hassubmissions = $this->has_submissions();
         $criteria = $this->pac->get_criteria();
         $i = 0;
+        $calculators = core_component::get_plugin_list('peerworkcalculator');
+        $gradesreleased = $this->is_grades_released();
 
         if ($hassubmissions) {
             for ($i; $i < count($criteria); $i++) {
                 // Cannot currently freeze editor elements MDL-29421.
-
                 $elname = 'critscale[' . $i . ']';
 
                 if ($mform->elementExists($elname)) {
@@ -306,6 +318,51 @@ class mod_peerwork_mod_form extends moodleform_mod {
 
             if ($mform->elementExists($elname)) {
                 $mform->freeze($elname); // Prevent adding more criteria.
+            }
+        }
+
+        foreach ($calculators as $name => $path) {
+            $calculator = '\peerworkcalculator_' . $name;
+            $calculatorclass = '\peerworkcalculator_' . $name . '\calculator';
+
+            if (!$calculatorclass::usespaweighting()) {
+                if ($mform->elementExists('calculator')) {
+                    $mform->hideIf('paweighting', 'calculator', 'eq', $name);
+                }
+            }
+        }
+
+        // Calculators can restrict the choice of available scales. If the
+        // selected calculator changes then the available scales are updated.
+        // By default $calculatorclass::get_scales_menu returns false and
+        // all site and course scales are available.
+        if ($mform->elementExists('calculator') && $mform->elementExists('assessmentcriteria_count')) {
+            $selected = $mform->getElementValue('calculator');
+            $name = array_pop($selected);
+            $calculatorclass = '\peerworkcalculator_' . $name . '\calculator';
+            $count = $mform->getElementValue('assessmentcriteria_count');
+            $availablescales = $calculatorclass::get_scales_menu($COURSE->id);
+
+            if ($availablescales) {
+                for ($i; $i < $count; $i++) {
+                    $elname = 'critscale[' . $i . ']';
+
+                    if ($mform->elementExists($elname)) {
+                        $el = $mform->getElement($elname);
+                        $el->removeOptions();
+                        $el->loadArray($availablescales);
+                    }
+                }
+            }
+        }
+
+        // Remove elements the grades have not been released.
+        if (!$gradesreleased) {
+            if ($mform->elementExists('gradesexistmsg')) {
+                $mform->removeElement('gradesexistmsg');
+            }
+            if ($mform->elementExists('recalculategrades')) {
+                $mform->removeElement('recalculategrades');
             }
         }
 
@@ -345,10 +402,11 @@ class mod_peerwork_mod_form extends moodleform_mod {
             if (empty(trim(strip_tags($value['text'])))) {
                 continue;
             }
+            $grade = isset($data->critscale[$i]) ? -abs($data->critscale[$i]) : null;// Scales are saved as negative integers.
             $assessmentcriteria[$i] = (object) [
                 'description' => $value['text'],
                 'descriptionformat' => $value['format'],
-                'grade' => -abs($data->critscale[$i]),   // Scales are saved as negative integers.
+                'grade' => $grade,
                 'sortorder' => $count,
                 'weight' => 1,
             ];
@@ -371,6 +429,13 @@ class mod_peerwork_mod_form extends moodleform_mod {
         if (empty($crits)) {
             $errors['critdesc[0]'] = get_string('provideminimumonecriterion', 'mod_peerwork');
         }
+
+        $invalidscales = array_diff_key($data['critdesc'], $data['critscale']);
+
+        foreach ($invalidscales as $key => $value) {
+            $errors["critscale[$key]"] = get_string('invalidscale', 'mod_peerwork');
+        }
+
         return $errors;
     }
 
