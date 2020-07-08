@@ -160,7 +160,7 @@ foreach ($pac->get_criteria() as $criteria) {
 
 // If assignment has been graded then pass the required data to create a table showing calculated grades.
 if (peerwork_was_submission_graded_from_status($status)) {
-    $result = peerwork_get_webpa_result($peerwork, $group);
+    $result = peerwork_get_pa_result($peerwork, $group);
     $localgrades = peerwork_get_local_grades($peerwork->id, $submission->id);
 
     $data['finalgrades'] = [];

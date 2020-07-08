@@ -1,3 +1,8 @@
+v2.0.0
+------
+
+- Refactored the calculator as a subplugin
+
 v1.1.0
 ------
 
