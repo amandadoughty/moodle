@@ -1,0 +1,44 @@
+@import "pgrid.scss";
+
+body.format-pgrid {
+    .course-content ul.pgrid {
+        margin: 0;
+        list-style: none;
+
+        li.section {
+            .content {
+                margin: 0 40px;
+            }
+
+            .left,
+            .right {
+                width: 40px;
+                padding: 0 6px;
+            }
+
+            .left {
+                padding-top: 22px;
+                text-align: right;
+
+                .section-handle img.icon {
+                    padding: 0;
+                    vertical-align: baseline;
+                }
+            }
+
+            .section_action_menu {
+                .textmenu,
+                .menu-action-text {
+                    white-space: nowrap;
+                }
+            }
+        }
+    }
+
+    .jsenabled .course-content ul.pgrid li.section {
+        .left,
+        .right {
+            width: auto;
+        }
+    }
+}
