@@ -1,0 +1,12 @@
+{
+    "name": "moodle-local_culcourse_dashboard-dragdrop",
+    "builds": {
+        "moodle-local_culcourse_dashboard-dragdrop": {
+            "jsfiles": [
+            	"selectors.js",
+                "quicklinkdd.js",
+                "activitylinkdd.js"
+            ]
+        }
+    }
+}

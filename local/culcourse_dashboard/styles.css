@@ -1,0 +1,223 @@
+body .local_culcourse_dashboard.togglewrap {
+  position: relative;
+  text-align: center;
+  margin-right: auto; }
+body .local_culcourse_dashboard.dash-panel {
+  margin-bottom: 1rem; }
+  body .local_culcourse_dashboard.dash-panel.quicklinks-wrap {
+    background-color: #006fe6; }
+    body .local_culcourse_dashboard.dash-panel.quicklinks-wrap .dash-link {
+      background-color: #fff; }
+      body .local_culcourse_dashboard.dash-panel.quicklinks-wrap .dash-link:hover, body .local_culcourse_dashboard.dash-panel.quicklinks-wrap .dash-link:focus {
+        background-color: #f2f2f2; }
+  body .local_culcourse_dashboard.dash-panel.activities-wrap {
+    background-color: #007bff; }
+    body .local_culcourse_dashboard.dash-panel.activities-wrap .dash-link {
+      background-color: #fff; }
+      body .local_culcourse_dashboard.dash-panel.activities-wrap .dash-link:hover, body .local_culcourse_dashboard.dash-panel.activities-wrap .dash-link:focus {
+        background-color: #f2f2f2; }
+  body .local_culcourse_dashboard.dash-panel h2 {
+    color: #fff; }
+  body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links {
+    list-style: none;
+    padding: 0;
+    margin: -0.25rem; }
+    body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash {
+      padding: 0.25rem; }
+      body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link {
+        display: block;
+        min-height: 100px; }
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:hover a, body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:focus a {
+          color: #007bff; }
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:hover .dash-move, body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link:focus .dash-move {
+          color: #007bff;
+          background-color: rgba(0, 0, 0, 0.1); }
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link a.dash-edit {
+          position: absolute;
+          bottom: 0.5rem;
+          left: 0.5rem;
+          display: flex; }
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-move {
+          position: absolute;
+          top: 0.25rem;
+          right: 0.25rem;
+          padding: 0.5rem;
+          margin: 0; }
+          body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-move .icon:first-of-type {
+            margin: 0; }
+        body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon {
+          width: 100%;
+          min-height: 2rem;
+          font-size: 1.75rem; }
+          body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon img,
+          body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-link .dash-icon svg {
+            width: 1.75rem;
+            height: auto;
+            margin: 0; }
+      body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash.linkhidden {
+        border: 1px dashed #212529;
+        opacity: 0.7; }
+body:not(.editing) .local_culcourse_dashboard.reveal .dash {
+  display: flex !important; }
+body:not(.editing) .local_culcourse_dashboard.reveal .viewmorelink .viewmore-text {
+  display: none; }
+body:not(.editing) .local_culcourse_dashboard.reveal .viewmorelink .viewless-text {
+  display: block; }
+body:not(.editing) .dash {
+  display: none; }
+  body:not(.editing) .dash:first-child, body:not(.editing) .dash:nth-child(2), body:not(.editing) .dash:nth-child(3), body:not(.editing) .dash:nth-child(4), body:not(.editing) .dash:nth-child(5) {
+    display: flex; }
+  body:not(.editing) .dash:nth-child(6) ~ .viewmorelink {
+    display: flex; }
+body:not(.editing) .viewmorelink {
+  display: none;
+  cursor: pointer; }
+  body:not(.editing) .viewmorelink:hover .viewmore-inner, body:not(.editing) .viewmorelink:focus .viewmore-inner {
+    background-color: rgba(255, 255, 255, 0.05); }
+  body:not(.editing) .viewmorelink .viewmore-inner {
+    min-height: 100px; }
+  body:not(.editing) .viewmorelink .viewless-text {
+    display: none; }
+body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere {
+  padding: 0.25rem;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%; }
+  @media (min-width: 576px) {
+    body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere {
+      width: 16%; } }
+  @media (min-width: 1200px) {
+    body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere {
+      width: 8%; } }
+  body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere > a {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #343a40;
+    padding: 0 0.25rem; }
+    body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere > a:hover, body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere > a:focus {
+      border-color: #fff; }
+    body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere > a .icon {
+      margin: 0;
+      width: auto;
+      height: auto; }
+  body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere img.movetarget {
+    height: 16px;
+    width: 80px; }
+  body.editing .local_culcourse_dashboard.dash-panel .linkscontainer ul.links li.movehere:last-of-type {
+    min-height: 7rem; }
+body.editing .viewmorelink {
+  display: none; }
+
+svg.activityicon {
+  height: 24px;
+  width: 24px;
+  vertical-align: middle; }
+
+/* css for photoboard */
+.path-format-culcourse-photos .cul-modelist {
+  border-bottom: 1px solid #ddd; }
+.path-format-culcourse-photos .cul-modelist {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none; }
+.path-format-culcourse-photos .mode-item {
+  float: left;
+  margin-bottom: -1px; }
+.path-format-culcourse-photos .mode-link {
+  display: block;
+  padding: .5em 1em;
+  border: 1px solid transparent;
+  border-top-right-radius: .25rem;
+  border-top-left-radius: .25rem; }
+.path-format-culcourse-photos .mode-link.active,
+.path-format-culcourse-photos .mode-item.open .mode-link,
+.path-format-culcourse-photos .mode-link.active:focus,
+.path-format-culcourse-photos .mode-item.open .mode-link:focus,
+.path-format-culcourse-photos .mode-link.active:hover,
+.path-format-culcourse-photos .mode-item.open .mode-link:hover {
+  color: #55595c;
+  background-color: #f4f4f4;
+  border-color: #ddd #ddd transparent; }
+.path-format-culcourse-photos .userlist li {
+  display: inline-block;
+  list-style: none; }
+  .path-format-culcourse-photos .userlist li.card {
+    display: block;
+    margin-bottom: 0.75rem; }
+  .path-format-culcourse-photos .userlist li .card-img {
+    float: left;
+    width: 25%; }
+    .path-format-culcourse-photos .userlist li .card-img .card-img-top {
+      width: auto; }
+  .path-format-culcourse-photos .userlist li .card-body {
+    float: left;
+    width: 50%;
+    padding: 0; }
+  .path-format-culcourse-photos .userlist li .card-footer {
+    float: right;
+    width: 25%;
+    background: none;
+    border: none; }
+  .path-format-culcourse-photos .userlist li .userpicture {
+    border-radius: 0; }
+.path-format-culcourse-photos .briefuser li.card {
+  flex: 0 0 auto;
+  max-width: 150px;
+  border: none; }
+  .path-format-culcourse-photos .briefuser li.card a {
+    display: block;
+    width: 100%;
+    text-align: center; }
+  .path-format-culcourse-photos .briefuser li.card .card-img-top {
+    max-width: 100px;
+    height: auto; }
+
+@media (min-width: 980px) {
+  .drawer-open-left #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3,
+  .has-blocks #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3 {
+    flex: 0 0 50%;
+    max-width: 50%; }
+
+  .drawer-open-left .has-blocks #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3 {
+    flex: 0 0 50%;
+    max-width: 50%; } }
+@media (min-width: 1200px) {
+  .drawer-open-left #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3,
+  .has-blocks #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3 {
+    flex: 0 0 33.33333333%;
+    max-width: 33.33333333%; }
+
+  .drawer-open-left .has-blocks #local_culcourse_dashboard .local_culcourse_dashboard.dash-panel .col-xl-3 {
+    flex: 0 0 50%;
+    max-width: 50%; }
+
+  :not(.editing) #region-main:not(.has-blocks) .dash:nth-child(6), :not(.editing) #region-main:not(.has-blocks) .dash:nth-child(7) {
+    display: flex; }
+  :not(.editing) #region-main:not(.has-blocks) .dash:nth-child(6) ~ .viewmorelink {
+    display: none; }
+  :not(.editing) #region-main:not(.has-blocks) .dash:nth-child(8) ~ .viewmorelink {
+    display: flex; } }
+@media (min-width: 576px) {
+  .card-deck.briefuser .card {
+    width: calc(100%); } }
+@media (min-width: 840px) {
+  .card-deck.briefuser .card {
+    width: calc(50% - 2rem); } }
+@media (min-width: 1100px) {
+  .card-deck.briefuser .card {
+    width: calc(33.33% - 2rem); } }
+@media print {
+  .path-format-culcourse-photos nav,
+  .path-format-culcourse-photos header,
+  .path-format-culcourse-photos form,
+  .path-format-culcourse-photos h3,
+  .path-format-culcourse-photos .nav,
+  .path-format-culcourse-photos .initialbar,
+  .path-format-culcourse-photos #showall,
+  .path-format-culcourse-photos .right-navbar-wrap,
+  .path-format-culcourse-photos .overlay,
+  .path-format-culcourse-photos #page-footer {
+    display: none !important; } }
+
+/*# sourceMappingURL=styles.css.map */

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/culcourse_dashboard/db" VERSION="20181024" COMMENT="XMLDB file for Moodle local/culcourse_dashboard"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="culcourse_dashboard_ext_urls" COMMENT="culcourse_dashboard_ext_urls table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="data" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="idx_courseid" UNIQUE="true" FIELDS="courseid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
