@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since      2.9
  */
-define(['jquery', 'theme_boost/tether', 'core/event'], function(jQuery, Tether, Event) {
+define(['jquery', 'theme_cul_boost/tether', 'core/event'], function(jQuery, Tether, Event) {
 
     window.jQuery = jQuery;
     window.Tether = Tether;
