@@ -8,7 +8,7 @@
   * @module local_culrollover/selectcourses
   */
 
-    define(['jquery', 'select2'], function($) {
+    define(['jquery', 'local_culrollover/select2'], function($) {
         return {
             initialise: function (delay, chars) {
                 // $.fn.select2.defaults.set("theme", "bootstrap");
