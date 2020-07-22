@@ -44,9 +44,7 @@ $PAGE->requires->jquery_plugin('ui');
 $PAGE->requires->js(new moodle_url('https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/js/jqueryui-editable.min.js'), true);
 $PAGE->requires->css(new moodle_url('https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/css/jqueryui-editable.css'));
 $PAGE->requires->css(new moodle_url('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet'));
-
 $PAGE->requires->js('/local/culrollover/js/cul_rollover.js', true);
-$PAGE->requires->js('/local/culrollover/js/common.js', false);
 $PAGE->requires->css('/local/culrollover/css/style.css');
 
 $step = optional_param('step', 0, PARAM_INT);
