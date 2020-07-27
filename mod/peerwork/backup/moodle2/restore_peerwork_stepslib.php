@@ -139,6 +139,7 @@ class restore_peerwork_activity_structure_step extends restore_activity_structur
 
         $data->peerworkid = $this->get_new_parentid('peerwork');
         $data->groupid = $this->get_mappingid('group', $data->groupid);
+        $data->criteriaid = $this->get_mappingid('peerwork_criteria', $data->criteriaid);
         $data->gradedby = $this->get_mappingid('user', $data->gradedby);
         $data->gradefor = $this->get_mappingid('user', $data->gradefor);
 
