@@ -104,8 +104,7 @@ foreach ($pac->get_criteria() as $criteria) {
     $extraclasses = $justenabledcrit ? 'crit' : '';
 
     $t = new html_table();
-    $t->attributes['class'] = "userenrolment $extraclasses";
-    $t->id = 'mod-peerwork-summary-table';
+    $t->attributes['class'] = "peerwork $extraclasses";
     $t->head[] = '';
     $t->caption = $criteria->description;
 
