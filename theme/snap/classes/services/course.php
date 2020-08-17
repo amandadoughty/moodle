@@ -21,6 +21,7 @@ defined('MOODLE_INTERNAL') || die();
 use theme_snap\renderables\course_card;
 use theme_snap\local;
 use theme_snap\renderables\course_toc;
+use theme_snap\color_contrast;
 
 require_once($CFG->dirroot.'/course/lib.php');
 
@@ -157,6 +158,32 @@ class course {
             local::process_coverimage($context);
         } else if ($context->contextlevel === CONTEXT_COURSE || $context->contextlevel === CONTEXT_COURSECAT) {
             local::process_coverimage($context, $storedfile);
+
+            $finfo = $storedfile->get_imageinfo();
+            $imagemaincolor = color_contrast::calculate_image_main_color($storedfile, $finfo);
+            $contrast = color_contrast::evaluate_color_contrast($imagemaincolor, "#FFFFFF");
+
+            if ($context->contextlevel === CONTEXT_COURSECAT) {
+                $themecolor = get_config('theme_snap', 'themecolor');
+                $catconfig = get_config('theme_snap', 'category_color');
+                $catscolor = [];
+                $catid = $context->instanceid;
+                if (!empty($catconfig)) {
+                    $catscolor = json_decode($catconfig);
+                }
+                if (!empty($catscolor) && property_exists($catscolor, $catid)) {
+                    $themecolor = $catscolor->$catid;
+                }
+                $catcontrast = color_contrast::evaluate_color_contrast($imagemaincolor, $themecolor);
+                if ($catcontrast < 4.5) {
+                    return ['success' => true, 'contrast' => get_string('imageinvalidratiocategory',
+                        'theme_snap', number_format((float)$catcontrast, 2))];
+                }
+            }
+            if ($contrast < 4.5) {
+                return ['success' => true, 'contrast' => get_string('imageinvalidratio',
+                    'theme_snap', number_format((float)$contrast, 2))];
+            }
         }
         return ['success' => $success];
     }
@@ -196,10 +223,10 @@ class course {
         }
 
         if (!isset($favorites[$userid])) {
-            $favorites[$userid] = $DB->get_records('theme_snap_course_favorites',
-                ['userid' => $userid],
-                'courseid ASC',
-                'courseid'
+            $favorites[$userid] = $DB->get_records('favourite',
+                ['userid' => $userid, 'itemtype' => 'courses'],
+                'itemid ASC',
+                'itemid'
             );
         }
 
@@ -245,25 +272,19 @@ class course {
         global $USER, $DB;
 
         $course = $this->coursebyshortname($courseshortname);
+        $coursecontext = \context_course::instance($course->id);
         $userid = $userid !== null ? $userid : $USER->id;
+        $usercontext = \context_user::instance($userid);
 
         $favorited = $this->favorited($course->id, $userid, false);
+        $ufservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
         if ($on) {
             if (!$favorited) {
-                $data = (object) [
-                    'courseid' => $course->id,
-                    'userid' => $userid,
-                    'timefavorited' => time()
-                ];
-                $DB->insert_record('theme_snap_course_favorites', $data);
+                $ufservice->create_favourite('core_course', 'courses', $course->id, $coursecontext);
             }
         } else {
             if ($favorited) {
-                $select = [
-                    'courseid' => $course->id,
-                    'userid' => $userid
-                ];
-                $DB->delete_records('theme_snap_course_favorites', $select);
+                $ufservice->delete_favourite('core_course', 'courses', $course->id, $coursecontext);
             }
         }
         // Kill favorited cache and return if favorited.
@@ -306,7 +327,7 @@ class course {
             $PAGE->set_context(\context_course::instance($course->id));
         }
 
-        list ($unavailablesections, $unavailablemods) = local::conditionally_unavailable_elements($course);
+        [$unavailablesections, $unavailablemods] = local::conditionally_unavailable_elements($course);
 
         $newlyavailablesections = array_diff($previouslyunavailablesections, $unavailablesections);
         $intersectunavailable = array_intersect($previouslyunavailablesections, $unavailablesections);
@@ -435,11 +456,12 @@ class course {
      * @param string $shortname
      * @param int $sectionnumber
      * @param boolean $visible
+     * @param bool $loadmodules Should modules be loaded.
      * @return array
      * @throws \moodle_exception
      * @throws \required_capability_exception
      */
-    public function set_section_visibility($shortname, $sectionnumber, $visible) {
+    public function set_section_visibility($shortname, $sectionnumber, $visible, $loadmodules = true) {
         global $OUTPUT;
         $course = $this->coursebyshortname($shortname);
         $context = \context_course::instance($course->id);
@@ -450,7 +472,9 @@ class course {
         $modinfo = get_fast_modinfo($course);
         $section = $modinfo->get_section_info($sectionnumber);
         $actionmodel = new \theme_snap\renderables\course_action_section_visibility($course, $section);
-        $toc = new \theme_snap\renderables\course_toc($course);
+
+        $nullformat = null;
+        $toc = new \theme_snap\renderables\course_toc($course, $nullformat, $loadmodules);
 
         return [
             'actionmodel' => $actionmodel->export_for_template($OUTPUT),
@@ -474,13 +498,33 @@ class course {
         $sectioninfo = $modinfo->get_section_info($sectionnumber);
 
         if (course_can_delete_section($course, $sectioninfo)) {
-            course_delete_section($course, $sectioninfo, true);
+            course_delete_section($course, $sectioninfo, true, true);
         }
         $toc = new \theme_snap\renderables\course_toc($course);
         return [
             'toc' => $toc->export_for_template($OUTPUT)
         ];
     }
+
+    /**
+     * Get course TOC.
+     * @param string $shortname Course short name
+     * @return array
+     * @throws \coding_exception
+     */
+    public function toc($shortname) {
+        global $OUTPUT;
+        $course = $this->coursebyshortname($shortname);
+
+        $nullformat = null;
+        $loadmodules = true;
+        $toc = new \theme_snap\renderables\course_toc($course, $nullformat, $loadmodules);
+
+        return [
+            'toc' => $toc->export_for_template($OUTPUT)
+        ];
+    }
+
 
     /**
      * Toggle module completion state.
@@ -495,7 +539,7 @@ class course {
         global $DB, $PAGE;
 
         // Get course-modules entry.
-        list ($course, $cminfo) = get_course_and_cm_from_cmid($id);
+        [$course, $cminfo] = get_course_and_cm_from_cmid($id);
 
         // Get renderer for completion HTML.
         $context = \context_module::instance($id);

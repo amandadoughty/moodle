@@ -20,7 +20,7 @@
 # @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 
-@theme @theme_snap
+@theme @theme_snap @theme_snap_color_check
 Feature: When the moodle theme is set to Snap, cover image can be set for site and courses.
 
   Background:
@@ -43,6 +43,9 @@ Feature: When the moodle theme is set to Snap, cover image can be set for site a
       | teacher2 | C1     | teacher        |
     And I log in as "teacher1"
     And I am on the course main page for "C1"
+    And I open the personal menu
+    And I should not see course card image in personal menu
+    And I close the personal menu
     Then I should see "Change cover image"
     And I should not see cover image in page header
     And I upload cover image "testpng_small.png"
@@ -59,6 +62,9 @@ Feature: When the moodle theme is set to Snap, cover image can be set for site a
     Then I should see cover image in page header
     And I reload the page
     Then I should see cover image in page header
+    And I open the personal menu
+    And I should see course card image in personal menu
+    And I close the personal menu
     # Test changing the image again
     And I upload cover image "bpd_bikes_1280px.jpg"
     And I wait until ".btn.ok" "css_element" is visible
@@ -69,12 +75,19 @@ Feature: When the moodle theme is set to Snap, cover image can be set for site a
     And I reload the page
     And I check element ".mast-image .breadcrumb a" with color "#FFFFFF"
     Then I should see cover image in page header
+    And I open the personal menu
+    And I should see course card image in personal menu
+    And I close the personal menu
     # Test deleting cover image
     And I click on "#admin-menu-trigger" "css_element"
     And I navigate to "Edit settings" in current page administration
     And I delete "rawcoverimage.jpg" from "Course image" filemanager
     And I press "Save and display"
     Then I should not see cover image in page header
+    And I reload the page
+    And I open the personal menu
+    And I should not see course card image in personal menu
+    And I close the personal menu
     # Test cover image can only be set on main course page
     And I am on the course main page for "C1"
     Then I should see "Change cover image"
@@ -164,7 +177,13 @@ Feature: When the moodle theme is set to Snap, cover image can be set for site a
     And I reload the page
     Then I should see cover image in page header
     # Test deleting cover image
-    And I navigate to "Appearance > Themes > Snap" in site administration
+    And the following config values are set as admin:
+      | linkadmincategories | 0 |
+    And I click on "#admin-menu-trigger" "css_element"
+    And I expand "Site administration" node
+    And I expand "Appearance" node
+    And I expand "Themes" node
+    And I follow "Snap"
     And I follow "Cover display"
     And I delete "rawcoverimage.png" from "Cover image" filemanager
     And I press "Save changes"
@@ -207,3 +226,51 @@ Feature: When the moodle theme is set to Snap, cover image can be set for site a
     And I log in as "user1"
     And I am on the course category page for category with idnumber "CAT1"
     Then I should not see "Change cover image"
+
+  @javascript
+  Scenario: A warning will be presented if the cover image in a course constrast is not compliant with WG3
+    Given the following "courses" exist:
+      | fullname | shortname | category | format |
+      | Course 1 | C1        | 0        | topics |
+    And the following "users" exist:
+      | username | firstname | lastname | email                |
+      | teacher1 | Teacher   | 1        | teacher1@example.com |
+    And the following "course enrolments" exist:
+      | user     | course | role           |
+      | teacher1 | C1     | editingteacher |
+    And I log in as "teacher1"
+    And I am on the course main page for "C1"
+    Then I should see "Change cover image"
+    And I should not see cover image in page header
+    And I upload cover image "testpng_small.png"
+    And I wait until ".btn.ok" "css_element" is visible
+    And I click on ".btn.ok" "css_element"
+    Then I should see "This image could have contrast problems due not compliance with the WCAG 2.0 minimum ratio value 4.5:1."
+    And I upload cover image "black_cover.jpg"
+    And I wait until ".btn.ok" "css_element" is visible
+    And I click on ".btn.ok" "css_element"
+    Then I should not see "This image could have contrast problems due not compliance with the WCAG 2.0 minimum ratio value 4.5:1."
+
+  @javascript
+  Scenario: A warning will be presented if the cover image in a category constrast is not compliant with WG3
+    Given the following "courses" exist:
+      | fullname | shortname | category | format |
+      | Course 1 | C1        | 0        | topics |
+    And the following "users" exist:
+      | username | firstname | lastname | email                |
+      | teacher1 | Teacher   | 1        | teacher1@example.com |
+    And the following "course enrolments" exist:
+      | user     | course | role           |
+      | teacher1 | C1     | editingteacher |
+    Given I log in as "admin"
+    And I am on course index
+    Then I should see "Change cover image"
+    And I should not see cover image in page header
+    And I upload cover image "testpng_small.png"
+    And I wait until ".btn.ok" "css_element" is visible
+    And I click on ".btn.ok" "css_element"
+    Then I should see "This image could have contrast problems with the theme color due not compliance with the WCAG 2.0 minimum ratio value 4.5:1"
+    And I upload cover image "black_cover.jpg"
+    And I wait until ".btn.ok" "css_element" is visible
+    And I click on ".btn.ok" "css_element"
+    Then I should not see "This image could have contrast problems with the theme color due not compliance with the WCAG 2.0 minimum ratio value 4.5:1"

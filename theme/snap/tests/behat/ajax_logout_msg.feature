@@ -29,6 +29,8 @@ Feature: When the moodle theme is set to Snap, ajax failures due to log outs / e
     And the following "users" exist:
       | username | firstname | lastname | email                |
       | teacher  | Test      | teacher  | teacher@example.com  |
+    And the following config values are set as admin:
+      | personalmenuadvancedfeedsenable | 0 | theme_snap |
 
   @javascript
   Scenario: Logged in user get's login status warning when logged out if personal menu is opened.
@@ -77,7 +79,6 @@ Feature: When the moodle theme is set to Snap, ajax failures due to log outs / e
 
   @javascript
   Scenario: Teacher get's login status warning when trying to manage assets if logged out.
-    Given I skip because "fails randomly"
     Given the following "courses" exist:
       | fullname | shortname | category | format |
       | Course 1 | C1        | 0        | topics |
