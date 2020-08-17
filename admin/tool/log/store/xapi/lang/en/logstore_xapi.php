@@ -63,7 +63,7 @@ $string['logguests'] = 'Log guest actions';
 $string['filters_help'] = 'Enable filters that INCLUDE some actions to be logged.';
 $string['mbox'] = 'Identify users by email';
 $string['mbox_desc'] = 'Statements will identify users with their email (mbox) when this box is ticked.';
-$string['send_username'] = 'Identify users by id';
+$string['send_username'] = 'Identify users by username';
 $string['send_username_desc'] = 'Statements will identify users with their username when this box is ticked, but only if identifying users by email is disabled.';
 $string['send_jisc_data'] = 'Adds JISC data to statements';
 $string['send_jisc_data_desc'] = 'Statements will contain data required by JISC.';
@@ -104,13 +104,14 @@ $string['user'] = 'User';
 $string['user_help'] = 'Searches the users fullname';
 $string['contextidnolongerexists'] = 'Context ID {$a} no longer exists';
 $string['count'] = 'Count';
+$string['unknownverb'] = 'Unknown verb was requested, It should be set by developer.';
 
-// Capabilities
+// Capabilities.
 $string['xapi:viewerrorlog'] = 'View xAPI error log';
 $string['xapi:manageerrors'] = 'Replay failed statements';
 $string['xapi:managehistoric'] = 'Manage historic data';
 
-// Info strings from xAPI errors
+// Info strings from xAPI errors.
 $string['networkerror'] = 'There was a network error sending the response.';
 $string['recipeerror'] = 'The LDH responded with a 400 error, this can be due to an issue with the recipe.';
 $string['autherror'] = 'The server is returning a 401 error. Please ensure the endpoint, username and auth secret/password for
