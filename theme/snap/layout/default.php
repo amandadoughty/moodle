@@ -45,6 +45,9 @@ if ($COURSE->id != SITEID && !empty($coverimagecss)) {
 ////////////////////////// MAIN  ///////////////////////////////
 -->
 <main id="moodle-page" class="clearfix">
+<?php
+echo $OUTPUT->custom_menu_spacer();
+?>
 <div id="page-header" class="clearfix <?php echo $mastimage; ?>">
     <?php if ($PAGE->pagetype !== 'site-index') { ?>
         <div class="breadcrumb-nav" aria-label="breadcrumb"><?php echo $OUTPUT->navbar($mastimage); ?></div>
@@ -71,7 +74,6 @@ if ($COURSE->id != SITEID && !empty($coverimagecss)) {
         } // End else.
     ?>
 </div>
-
 <section id="region-main">
 <?php
 echo $OUTPUT->course_content_header();
@@ -115,9 +117,13 @@ if ($hasadminbutton) {
         }
     }
 }
-
+echo "<div class='snap-page-heading-button' >";
 echo $OUTPUT->page_heading_button();
-
+// Validation added to check if settings option should be displayed;
+$buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions() && !local::show_setting_menu() ;
+$regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
+echo $regionmainsettingsmenu;
+echo "</div>";
 if ($PAGE->pagelayout === 'frontpage' && $PAGE->pagetype === 'site-index') {
     require(__DIR__.'/faux_site_index.php');
 } else {
@@ -144,6 +150,8 @@ if (stripos($PAGE->bodyclasses, 'format-singleactivity') !== false ) {
 
 </div>
 </div>
+
+<?php echo $OUTPUT->standard_after_main_region_html() ?>
 <!-- close moodle js hooks -->
 <?php // @codingStandardsIgnoreEnd
 require(__DIR__.'/footer.php');

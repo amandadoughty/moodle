@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @copyright  Copyright (c) 2018 Blackboard Inc. (http://www.blackboard.com)
+ * @copyright  Copyright (c) 2020 Blackboard Inc. (http://www.blackboard.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,6 +27,7 @@ $string['action:changeassetvisibility'] = 'vaihda sivun näkyvyyttä';
 $string['action:duplicateasset'] = 'päällekkäinen sivu';
 $string['action:changesectionvisibility'] = 'vaihda osion näkyvyyttä';
 $string['action:highlightsectionvisibility'] = 'korosta osion näkyvyys';
+$string['action:sectiontoc'] = 'hae osion sisällysluettelo';
 $string['addanewsection'] = 'Luo uusi osio';
 $string['addresourceoractivity'] = 'Luo oppimisaktiviteetti';
 $string['admin'] = 'Ylläpito';
@@ -49,6 +50,11 @@ $string['cachedef_course_completion_progress_ts'] = 'Tämän avulla voimme mitä
 $string['cachedef_webservicedefinitions'] = 'Tämä on automaattisesti luotavien verkkopalvelumääritelmien välimuistitallennus.';
 $string['card'] = 'Kortti';
 $string['categoryedit'] = 'Muokkaa kategoriaa';
+$string['category_color'] = 'Kategorian väri';
+$string['category_color_description'] = 'Kurssikategorian väri. Alakurssit omaksuvat lähimmän yläkategorian määritykset';
+$string['category_color_palette'] = 'Väripaletti';
+$string['category_color_palette_description'] = 'Katso väriä vastaava heksadesimaaliarvo. Tämä ei vaikuta
+määrityksiin, sillä kyseessä on vain esimerkki, jonka avulla käyttäjät voivat luoda määritysarvon.';
 $string['changecoverimage'] = 'Vaihda kansikuva';
 $string['changefullname'] = 'Muuta sivuston nimeä';
 $string['chapters'] = 'Luvut';
@@ -61,9 +67,11 @@ $string['coursecontacts'] = 'Osallistujaluettelo';
 $string['coursedisplay'] = 'Kurssinäkymä';
 $string['coursefootertoggle'] = 'Kurssin alatunniste';
 $string['coursefootertoggledesc'] = 'Kurssin alatunnisteessa näytetään käyttäjille kurssisivulla hyödyllisiä tietoja, muun muassa kurssin yhteyshenkilöt, kurssin kuvaus ja kurssin viimeisimmät aktiviteetit.';
-$string['courseformatnotification'] = 'Nykyinen kurssimuoto ei täysin tue Snap-teemaa. Parhaan mahdollisen käyttökokemuksen varmistamiseksi Blackboard Open LMS suosittelee Aiheet- tai Viikoittain-kurssimuodon käyttämistä Snap-teeman kanssa. Kurssimuotoa voi vaihtaa <a href="{$a}">kurssin asetuksissa</a>.';
+$string['courseformatnotification'] = 'Snap-teema ei tue täysin käyttämääsi nykyistä kurssimuotoa. Jotta voit käyttää Open LMS:ää parhaalla mahdollisella tavalla, suosittelemme, että käytät Snap-teemassa Aiheet- tai Viikoittainen-kurssimuotoa. Voit vaihtaa kurssimuotoa <a href="{$a}">kurssin asetuksissa</a>.';
 $string['coursefixydefaulttext'] = 'Et ole tällä hetkellä rekisteröitynyt millekään kurssille.<br>Kurssit, joille olet rekisteröitynyt, näytetään tässä.';
 $string['coursegrade'] = 'Kurssin arvosana:';
+$string['coursepartialrender'] = 'Ota kurssiosioiden valikoiva lataus käyttöön';
+$string['coursepartialrenderdesc'] = 'Jos tämä on käytössä, kurssiosiot ladataan vasta, kun käyttäjä valitsee niitä. Tämä nopeuttaa paljon sisältöä sisältävien kurssien latautumista.';
 $string['coursenavigation'] = 'Kurssin siirtymisvalinnat';
 $string['coursesummaryfilesunsuitable'] = 'Tyhjennä kurssin kuvauksen tiedostot, ennen kuin yrität vaihtaa kansikuvaa';
 $string['coursetools'] = 'Kurssin koontinäyttö';
@@ -78,10 +86,12 @@ $string['comingsoon'] = 'Tulossa pian!';
 $string['createsection'] = 'Luo osio';
 $string['current'] = 'Nykyinen';
 $string['customcss'] = 'Mukautettu CSS';
-$string['customcssdesc'] = 'Muista, että tehokkailla muokkaustoiminnoilla voi tehdä myös merkittäviä virheitä. Sinun täytyy itse korjata kaikki virheet, jotka johtuvat tässä lisäämästäsi CSS:stä. Blackboard Open LMSin tuki auta CSS:ään liittyvän sisällön vianmäärityksessä.';
+$string['customcssdesc'] = 'Muista, että tehokkailla muokkaustoiminnoilla voi tehdä myös merkittäviä virheitä. Käyttäjän on korjattava kaikki virheet, jotka johtuvat tässä lisätystä CSS-koodista. Open LMS:n tuki ei auta CSS-sisällön vianmäärityksessä.';
 $string['customtopbar'] = 'Siirtymispalkki';
 $string['customisenavbar'] = 'Vaihda siirtymispalkin värit';
 $string['customisenavbutton'] = 'Vaihda Omat kurssini -painikkeen värit';
+$string['customisecustommenu'] = 'Vaihda mukautetun valikon tekstin väriä';
+$string['custommenutext'] = 'Mukautetun valikon tekstin väri';
 $string['deadlines'] = 'Määräajat';
 $string['deadlinestoggle'] = 'Määräajat';
 $string['deadlinestoggledesc'] = 'Näytä käyttäjille rekisteröityneiden kurssien tulevien aktiviteettien määräajat.';
@@ -96,7 +106,7 @@ $string['deletingassetname'] = 'Poistetaan kohdetta {$a->type} nimeltä {$a->nam
 $string['deletesectionconfirm'] = 'Poista osio';
 $string['deletingsection'] = 'Poistetaan osiota {$a}';
 $string['draft'] = 'Ei julkaistu opiskelijoille';
-$string['dropzonelabel'] = 'Pudota liitetiedostot, tai <span class="btn-link">selaa</span>';
+$string['dropzonelabel'] = 'Pudota liitetiedostot tai <span class="fake-link">selaa</span>';
 $string['due'] = 'Määräaika: {$a}';
 $string['edit'] = 'Muokkaa kohdetta {$a}';
 $string['editcoursecontent'] = 'Muokkaa lohkoja';
@@ -104,13 +114,18 @@ $string['editcoursesettings'] = 'Kurssiasetukset';
 $string['editcoursetopic'] = 'Muokkaa osiota';
 $string['editcustomfooter'] = 'Muokkaa alatunnistetta';
 $string['editcustommenu'] = 'Muokkaa mukautettua valikkoa';
+$string['error:categorycolorinvalidjson'] = 'Virheellinen JSON-muoto kurssikategorioille';
+$string['error:categorycolorinvalidvalue'] = 'Tallenteen tunnus tai väriarvo kategorialle "{$a}" ei kelpaa';
+$string['error:categorynotfound'] = 'Kategorian tallennetta tunnuksella "{$a}" ei löytynyt';
 $string['error:coverimageexceedsmaxbytes'] = 'Kansikuva ylittää sivuston suurimman sallitun tiedostokoon ({$a})';
 $string['error:coverimageresolutionlow'] = 'Parhaan laadun takaamiseksi suosittelemme kuvaa, jonka leveys on vähintään 1024 pikseliä.';
+$string['error:duplicatedcategoryids'] = 'Virheellinen JSON-muoto, osa tunnuksista esiintyy kahdesti';
 $string['error:failedtochangeassetvisibility'] = 'Sivun näyttäminen/piilottaminen epäonnistui';
 $string['error:failedtochangesectionvisibility'] = 'Osion näyttäminen/piilottaminen epäonnistui';
 $string['error:failedtohighlightsection'] = 'Osion korostaminen epäonnistui';
 $string['error:failedtoduplicateasset'] = 'Kopiointi epäonnistui';
 $string['error:failedtodeleteasset'] = 'Sivun poistaminen epäonnistui';
+$string['error:failedtotoc'] = 'Sisällysluettelon hakeminen epäonnistui.';
 $string['extension'] = 'Tiedostomuoto: {$a}';
 $string['facebook'] = 'Facebook';
 $string['facebookdesc'] = 'Tämä on Facebook-sivusi URL-osoite.';
@@ -126,6 +141,14 @@ $string['featurespotsheading'] = 'Toimintomainosten otsikko';
 $string['featureonetitle'] = 'Toiminnon 1 otsikko';
 $string['featuretwotitle'] = 'Toiminnon 2 otsikko';
 $string['featurethreetitle'] = 'Toiminnon 3 otsikko';
+$string['featureonetitlelink'] = 'Toiminnon 1 otsikon linkki';
+$string['featuretwotitlelink'] = 'Toiminnon 2 otsikon linkki';
+$string['featurethreetitlelink'] = 'Toiminnon 3 otsikon linkki';
+$string['featuretitlelinkdesc'] = 'Kirjoita verkko-osoite, johon haluat linkittää tämän toiminnon esittelyn. Voit lisätä sivustoosi ulkoisia tai sisäisiä linkkejä. Voit lisätä sisäisen linkin kopioimalla sen verkko-osoitteesta merkin / jälkeen. Esimerkiksi kurssin linkissä haluttu osoite olisi course/view.php?id=160. Voit lisätä ulkoisen linkin aloittamalla linkin https://.';
+$string['featureonetitlecb'] = 'Toiminto 1 avautuu uudessa ikkunassa';
+$string['featuretwotitlecb'] = 'Toiminto 2 avautuu uudessa ikkunassa';
+$string['featurethreetitlecb'] = 'Toiminto 3 avautuu uudessa ikkunassa';
+$string['featuretitlecbdesc'] = 'Jos tämä on käytössä, esittelyyn lisätty linkki avataan uudessa ikkunassa';
 $string['featureonetext'] = 'Toiminnon 1 sisältö';
 $string['featuretwotext'] = 'Toiminnon 2 sisältö';
 $string['featurethreetext'] = 'Toiminnon 3 sisältö';
@@ -178,7 +201,17 @@ $string['images'] = 'Kuvat';
 $string['instagram'] = 'Instagram';
 $string['instagramdesc'] = 'Tämä on Instagram-tilisi URL-osoite.';
 $string['introduction'] = 'Johdanto';
-$string['knowledgebase'] = 'Blackboard Open LMS-tietämyskanta';
+$string['jsontext'] = 'JSON-teksti';
+$string['jsontextdescription'] = 'Tekstialue vahvistaa annetun JSON:n, joten vain olemassa olevat kategoriat sallitaan,
+vain numeeriset arvot tunnustietueina (kategoriatietueet) kelpaavat ja väreinä hyväksytään vain heksadesimaaliarvot.
+Esimerkki:<br>
+{"1":"#FAAFFF",<br>
+"45":"#AFF",<br>
+"65":"#FFF228",<br>
+"12":"#CC0084",<br>
+"56":"#CC0087",<br>
+"89":"#CCF084"}';
+$string['knowledgebase'] = 'Open LMS -tietämyskanta';
 $string['list'] = 'Luettelo';
 $string['linkedin'] = 'LinkedIn';
 $string['linkedindesc'] = 'Tämä on organisaation LinkedIn-tilin URL-osoite.';
@@ -227,14 +260,22 @@ $string['personalmenu'] = 'Henkilökohtainen valikko';
 $string['personalmenufeatures'] = 'Henkilökohtaisen valikon toiminnot';
 $string['personalmenulogintoggle'] = 'Näytä henkilökohtainen valikko kirjauduttaessa';
 $string['personalmenulogintoggledesc'] = 'Avaa henkilökohtaisen valikon heti kirjautumisen jälkeen';
+$string['personalmenuadvancedfeedsenable'] = 'Ota kehittyneet syötteet käyttöön (testausvaiheessa)';
+$string['personalmenuadvancedfeedsenabledesc'] = 'Kehittyneet syötteet lataavat joitain henkilökohtaisia valikkokohteita, mikä mahdollistaa nopeammat latausajat ja päivittää sisältöä tarpeen mukaan.';
+$string['personalmenuadvancedfeedsperpage'] = 'Kehittyneiden syötteiden näytettävien kohteiden määrä';
+$string['personalmenuadvancedfeedsperpagedesc'] = 'Valitse, montako kohdetta syötteessä näytetään. Käyttäjät näyttää lisää kohteita valitsemalla <strong>Näytä lisää</strong>.';
 $string['pld'] = 'PLD';
 $string['pluginname'] = 'Snap';
 $string['poster'] = 'Kansikuva';
 $string['posterdesc'] = 'Tämä on sivuston etusivulla näytettävä suuri ylätunnistekuva. Parhaiten toimivat vaakasuuntaiset kuvat, joiden koko on vähintään 1 200 x 600 pikseliä.';
-$string['poweredbyrunby'] = 'Kehitetty <a href="https://www.blackboard.com/blackboard-open-lms" target="_blank">Blackboard Open LMS</a> illa,
-     <a href="https://moodle.com/" target="_blank">Moodle</a>-pohjainen tuote.<br>
-    Copyright &#169; {$a} Blackboard Inc. Kaikki oikeudet pidätetään.';
+$string['poweredbyrunby'] = 'Luotu <a href="https://www.blackboard.com/blackboard-open-lms" target="_blank" rel="noopener">Open LMS:llä</a>,
+     joka on <a href="https://moodle.com/" target="_blank" rel="noopener">Moodleen</a> perustuva tuote.<br>
+    Copyright &#169; {$a} Open LMS. Kaikki oikeudet pidätetään.';
 $string['previoussection'] = 'Edellinen osio';
+$string['privacy:metadata:theme_snap_course_favorites:courseid'] = 'Käyttäjän suosikkeihin lisäämän kurssin tunnus';
+$string['privacy:metadata:theme_snap_course_favorites:userid'] = 'Suosikkeihin kurssin lisänneen käyttäjän käyttäjätunnus';
+$string['privacy:metadata:theme_snap_course_favorites:timefavorited'] = 'Aikaleima, joka näyttää, milloin käyttäjä lisäsi kurssin suosikkeihin';
+$string['privacy:metadata:theme_snap_course_favorites'] = 'Tallentaa käyttäjän kurssisuosikit Snapissa';
 $string['problemsfound'] = 'Löydetyt ongelmat';
 $string['progress'] = 'Edistyminen';
 $string['readmore'] = 'Lue lisää&nbsp;»';
@@ -248,7 +289,10 @@ $string['region-side-top'] = 'Yläosa';
 $string['released'] = 'Julkaistu: {$a}';
 $string['reopened'] = 'Avattu uudelleen';
 $string['resourcedisplay'] = 'Aineistonäyttö';
-$string['resourcedisplayhelp'] = 'Valitse, miten liitteet ja linkit näytetään kurssilla.';
+$string['resourcedisplayhelp'] = 'Valitse, miten liitteet ja linkit näytetään kurssilla. Snap-teema ei tue multimediatiedostoja pienissä aktiviteeteissa ja aineistokorttien kuvauksissa.';
+$string['displaydescription'] = 'Näytä kuvaus';
+$string['displaydescriptionhelp'] = 'Jos haluat näyttää aineiston kuvauksen ja URL-aktiviteetit ensin uudella sivulla, valitse tämä. Opiskelijat käyttävät sisältöä kuvauksesta.';
+$string['search'] = 'Etsi sisältöä';
 $string['seriffont'] = 'Serif-fontti';
 $string['seriffont_desc'] = 'Tätä fonttia käytetään suurimmassa osassa käyttäjän luomaa sisältöä. Serif-fontin käyttäminen käyttäjän luomassa sisällössä parantaa luettavuutta ja saa tekstin näyttämään ihmisen kirjoittamalta.';
 $string['showcoursegradepersonalmenu'] = 'Arvosanat';
@@ -288,3 +332,53 @@ $string['xofysubmitted'] = '{$a->completed}/{$a->participants} palauttanut';
 $string['xungraded'] = '{$a} arvioimatta';
 $string['youtube'] = 'YouTube';
 $string['youtubedesc'] = 'Tämä on YouTube-kanavasi URL-osoite.';
+$string['showallsectionsdisabled'] = 'Design-kielen takia "Näytä kaikki osiot yhdellä sivulla" ei ole käytettävissä Snapissa.';
+$string['disabled'] = 'Ei käytössä';
+$string['showappearancedisabled'] = 'Snapin suunnittelukieli estää muutokset ulkoasuasetuksiin.';
+$string['pbb'] = 'Profiiliperusteinen brändäys';
+$string['pbb_description'] = 'Kun otat käyttöön <strong>profiiliperusteisen brändäyksen</strong>, voit muokata tiettyjen käyttäjäryhmien brändäystä valitun käyttäjäprofiilikentän perusteella.
+<ul><li>Käyttäjäkentän arvo <em>muunnetaan</em>. Tämä muuntaa kaikki merkit pieniksi ja erottaa ne yhdysviivalla (-)</li>
+<li>Merkkijono <code>snap-pbb-</code> liitetään eteen.</li>
+<li>Tämä luokka lisätään HTML-tunnisteeseen <code>body</code>.</li></ul>
+Jos käyttäjäkentän arvo on esimerkiksi <em>Blueberry Extravaganza</em>, muuntamisen jälkeen se on <code>snap-pbb-blueberry-extravaganza</code>.<br /><br />
+Tätä toimintoa käytetään yhdessä <a href="https://help.blackboard.com/Blackboard_Open_LMS/Administrator/Manage_a_Site/Course_and_Site_Design/Themes/Snap#advanced-branding_OTP-3" target="_blank">mukautetun CSS:n</a> kanssa,
+joten sinun täytyy lisätä CSS-valitsimet <a class="snap-settings-tab-link" href="#themesnapbranding">perusteiden</a> osion uusilla luokilla.';
+$string['pbb_enable'] = 'Ota profiiliperusteinen brändäys käyttöön';
+$string['pbb_enable_description'] = 'Lisää luokan body-tunnisteeseen vain, jos aktiivinen.';
+$string['pbb_field'] = 'Käytettävä käyttäjäkenttä';
+$string['pbb_field_description'] = 'Tämän kentän arvo muunnetaan ja sitä käytetään CSS-luokan nimenä siten, että sen eteen lisätään <code>snap-pbb-</code>.';
+$string['cachedef_profile_based_branding'] = 'Tämä profiiliperusteinen brändäyksen välimuistipalvelu-';
+$string['cachedef_course_card_bg_image'] = 'Tämä on kurssin taustakuvan välimuistipalvelu.';
+$string['cachedef_course_card_teacher_avatar'] = 'Tämä on opettajien avatareiden välimuistipalvelu.';
+$string['cachedef_course_card_teacher_avatar_index'] = 'Tämä on opettajien avatareiden indeksin välimuistipalvelu.';
+$string['accessforumstringdis'] = 'Näyttöasetukset';
+$string['accessforumstringmov'] = 'Siirtämisasetukset';
+$string['accesscalendarstring'] = 'Kalenteri';
+$string['accessglobalsearchstring'] = 'Hae';
+$string['admineventwarning'] = 'Jos haluat nähdä kaikkien kurssien tapahtumat, ';
+$string['gotocalendarsnap'] = 'siirry sivuston kalenteriin.';
+$string['quizattemptswarn'] = 'Jättää pois jäädytettyjen käyttäjien suorituskerrat';
+$string['quizfeedback'] = 'Palaute';
+$string['validratio'] = 'Tämä väriyhdistelmä ei noudata WCAG 2.0:n minimisuhdearvoa 4.5:1';
+$string['invalidratio'] = 'Tämä väriyhdistelmä ei noudata
+<a href="https://www.w3.org/TR/WCAG20-TECHS/G18.html" target="_blank">WCAG 2.0:n minimisuhdearvoa 4.5:1</a>. Arvo: {$a}';
+$string['imageinvalidratio'] = 'Tässä kuvassa saattaa olla kontrastiongelmia, jotka johtuvat poikkeamisesta WCAG 2.0:n vähimmäismittasuhdearvosta 4.5:1.Keskimääräinen pikseliarvo: {$a}';
+$string['catinvalidratio'] = 'Seuraavat värikategoriat eivät noudata
+<a href="https://www.w3.org/TR/WCAG20-TECHS/G18.html" target="_blank">WCAG 2.0:n minimisuhdearvoa 4.5:1</a>:
+Sivun taustaväriä (valkoinen) vasten: {$a->white}. Siirtymispalkin taustaväriä vasten: {$a->custombar}. Omat kurssit -painikkeen taustaväriä vasten: {$a->customnav}';
+$string['imageinvalidratiocategory'] = 'Tässä kuvassa voi olla kontrastiongelmia teeman väriä vasten johtuen siitä, ettei se noudata WCAG 2.0:n minimimittasuhdearvoa 4.5:1. Keskimääräinen pikseliarvo: {$a}';
+$string['lazyload_mod_page'] = 'Ota sivuaineistojen valikoiva lataus käyttöön';
+$string['lazyload_mod_page_description'] = 'Jos tämä asetus on käytössä, se nopeuttaa merkittävästi sivujen latausaikoja kursseilla, joilla on monia sivuja.';
+$string['pmadvancedfeed_viewmore'] = 'Näytä lisää';
+$string['pmadvancedfeed_reload'] = 'Päivitä';
+$string['multimediacard'] = 'Multimediatiedostoja ei näytetä Snap-teeman aktiviteettikorttinäkymissä. Tätä käytetään vain aloitussivulla ja kurssisivuilla vian pienissä aktiviteeteissa ja aineistokorteissa.';
+$string['enabledlogin'] = 'Näytetyt kirjautumisvaihtoehdot';
+$string['enabledlogindesc'] = 'Valitse näytettävät kirjautumisvaihtoehdot.';
+$string['moodlelogin'] = 'Näytä vain Moodle-kirjautuminen';
+$string['alternativelogin'] = 'Näytä vain vaihtoehtoiset kirjautumistavat';
+$string['bothlogin'] = 'Näytä molemmat kirjautumisvaihtoehdot';
+$string['enabledloginorder'] = 'Kirjautumisvaihtoehtojen järjestys';
+$string['enabledloginorderdesc'] = 'Valitse, kumpi kirjautumisvaihtoehto näytetään ensimmäisenä.';
+$string['moodleloginfirst'] = 'Näytä Moodle-kirjautuminen ensimmäisenä';
+$string['alternativeloginfirst'] = 'Näytä vaihtoehtoiset kirjautumistavat ensin';
+$string['alternativeloginoptions'] = 'Vaihtoehtoiset kirjautumistavat';

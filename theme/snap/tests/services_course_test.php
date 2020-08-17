@@ -323,7 +323,6 @@ class theme_snap_services_course_test extends \advanced_testcase {
 
     public function test_course_toc_chapters_escaped_chars() {
         global $OUTPUT, $DB;
-
         $titles = [ "This & that", "This < that", "This > that", "This & & that"];
         $generator = $this->getDataGenerator();
 
@@ -347,7 +346,7 @@ class theme_snap_services_course_test extends \advanced_testcase {
         $chapters = $this->courseservice->course_toc_chapters('testcourse');
 
         $tochtml = $OUTPUT->render_from_template('theme_snap/course_toc_chapters',
-            (object) ['chapters' => $chapters->chapters, 'listlarge' => (count($chapters) > 9)]);
+            (object) ['chapters' => $chapters->chapters, 'listlarge' => (count($chapters->chapters) > 9)]);
         $pattern = '/>(.*)<\/a>/';
         preg_match_all($pattern, $tochtml, $matches);
         for ($x = 0; $x < count($titles); $x++) {
@@ -430,14 +429,32 @@ class theme_snap_services_course_test extends \advanced_testcase {
     // Records for favorite courses should not exist when the user is deleted.
     public function test_user_deletion() {
         global $DB;
-
         $service = $this->courseservice;
         $service->setfavorite($this->courses[0]->shortname, true, $this->user1->id);
         $service->setfavorite($this->courses[1]->shortname, true, $this->user1->id);
-        $favorites = $DB->get_records('theme_snap_course_favorites', array('userid' => $this->user1->id));
+        $params = array('userid' => $this->user1->id, 'component' => 'core_course');
+        $favorites = $DB->get_records('favourite', $params);
         $this->assertNotEmpty($favorites);
         delete_user($this->user1);
-        $favorites = $DB->get_records('theme_snap_course_favorites', array('userid' => $this->user1->id));
+        $favorites = $DB->get_records('favourite', $params);
+        $this->assertEmpty($favorites);
+    }
+
+    // Records for favorite courses should not exist when the course is deleted.
+    public function test_course_deletion() {
+        global $DB;
+        $service = $this->courseservice;
+        $service->setfavorite($this->courses[0]->shortname, true, $this->user1->id);
+        $service->setfavorite($this->courses[1]->shortname, true, $this->user1->id);
+        $params = array('userid' => $this->user1->id, 'component' => 'core_course');
+        $favorites = $DB->count_records('favourite', $params);
+        $this->assertEquals(2, $favorites);
+        $this->assertNotEmpty($favorites);
+        delete_course($this->courses[0], false);
+        $favorites = $DB->count_records('favourite', $params);
+        $this->assertEquals(1, $favorites);
+        delete_course($this->courses[1], false);
+        $favorites = $DB->get_records('favourite', $params);
         $this->assertEmpty($favorites);
     }
 
@@ -531,5 +548,47 @@ class theme_snap_services_course_test extends \advanced_testcase {
         // Assert incomplete.
         $this->assertEquals(COMPLETION_INCOMPLETE, $completiondata->completionstate);
 
+    }
+
+    public function test_section_fragment() {
+        global $CFG, $DB;
+        require_once($CFG->dirroot .'/theme/snap/lib.php');
+        $topics = $this->getDataGenerator()->create_course(
+            array('numsections' => 5, 'format' => 'topics'),
+            array('createsections' => true));
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
+        $teacherole = $DB->get_record('role', array('shortname' => 'editingteacher'));
+
+        $student = $this->getDataGenerator()->create_user();
+        $teacher = $this->getDataGenerator()->create_user();
+        $this->getDataGenerator()->enrol_user($student->id,
+            $topics->id,
+            'student');
+        $this->getDataGenerator()->enrol_user($teacher->id,
+            $topics->id,
+            'editingteacher');
+        $this->getDataGenerator()->create_module('assign', ['course' => $topics->id, 'section' => 1,
+            'name' => 'Section Assign']);
+        $params = ['courseid' => $topics->id, 'section' => 1];
+        $this->setUser($student);
+        $section = theme_snap_output_fragment_section($params);
+        $this->assertContains('aria-label="Topic 1"', $section);
+        // Section doesn't have the modchooser div.
+        $this->assertNotContains('snap-modchooser', $section);
+        $this->assertContains('Section Assign', $section);
+        $this->getDataGenerator()->create_module('forum', ['course' => $topics->id, 'section' => 2,
+            'name' => 'Fragment forum']);
+        $params['section'] = 2;
+        $section = theme_snap_output_fragment_section($params);
+        $this->assertContains('Fragment forum', $section);
+        $this->setUser($teacher);
+        // Missing param will result on empty text.
+        $params['section'] = '';
+        $section = theme_snap_output_fragment_section($params);
+        $this->assertEmpty($section);
+        $params['section'] = 2;
+        $section = theme_snap_output_fragment_section($params);
+        $this->assertContains('Fragment forum', $section);
+        $this->assertContains('snap-modchooser', $section);
     }
 }

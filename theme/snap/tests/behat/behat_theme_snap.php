@@ -68,7 +68,7 @@ class behat_theme_snap extends behat_base {
                 return false;
             },
             $node,
-            self::EXTENDED_TIMEOUT,
+            behat_base::get_extended_timeout(),
             $exception,
             true
         );
@@ -233,6 +233,52 @@ class behat_theme_snap extends behat_base {
     }
 
     /**
+     * @param string $shortname - course shortname
+     * @Given /^I create a new section in course "(?P<shortname>(?:[^"]|\\")*)" with content$/
+     * @return array
+     */
+    public function i_create_a_new_section_in_course_with_content($shortname) {
+        global $USER, $CFG;
+
+        $origuser = $USER;
+        $USER = $this->get_session_user();
+
+        $context = context_user::instance($USER->id);
+
+        $fs = get_file_storage();
+        // Prepare file record object.
+        $fileinfo = array(
+            'contextid' => $context->id,
+            'component' => 'user',
+            'filearea' => 'private',
+            'itemid' => 0,
+            'filepath' => '/',
+            'filename' => 'test.png');
+
+        $fs->create_file_from_pathname($fileinfo, $CFG->dirroot . "/theme/snap/tests/fixtures/testpng.png");
+
+        $this->i_am_on_course_page($shortname);
+        $this->execute('behat_general::click_link', ['Create a new section']);
+        $this->execute('behat_general::i_click_on', ['Insert or edit image', 'button']);
+        $this->execute('behat_general::i_click_on', ['Browse repositories...', 'button']);
+        $this->execute('behat_general::i_click_on', ['Private files', 'link', '.fp-repo-area', 'css_element']);
+        $this->execute('behat_general::i_click_on', ['test.png', 'link']);
+        $this->execute('behat_general::i_click_on', ['Select this file', 'button']);
+        $this->execute('behat_forms::i_set_the_field_to', ['Describe this image', 'File test']);
+        $this->execute('behat_general::wait_until_the_page_is_ready');
+        $javascript = "document.querySelector('button.atto_image_urlentrysubmit').click()";
+        $this->getSession()->executeScript($javascript);
+
+        $this->execute('behat_forms::i_set_the_field_to', ['Title', 'New section with content']);
+        $javascript = "var value = document.getElementById('summary-editor').value;";
+        $javascript .= "document.getElementById('summary-editor').value = value + '<p>New section contents</p>'";
+        $this->getSession()->executeScript($javascript);
+
+        $this->execute('behat_general::i_click_on', ['Create section', 'button']);
+        $USER = $origuser;
+    }
+
+    /**
      * I follow "Menu" fails randomly on occasions, this custom step is an alternative to resolve that issue.
      * It also avoids a failure if the menu is already open.
      * @Given /^I open the personal menu$/
@@ -342,9 +388,9 @@ class behat_theme_snap extends behat_base {
      * @return bool
      */
     protected function is_node_visible(NodeElement $node,
-                                       $timeout = self::EXTENDED_TIMEOUT,
+                                       $timeout = null,
                                        ExpectationException $exception = null) {
-
+        $timeout = $timeout == null ? behat_base::get_extended_timeout() : $timeout;
         // If an exception isn't specified then don't throw an error if visibility can't be evaluated.
         $dontthrowerror = empty($exception);
 
@@ -390,7 +436,7 @@ class behat_theme_snap extends behat_base {
         }
 
         // See if the first node is visible and if so click it.
-        if ($this->is_node_visible($linknode, self::REDUCED_TIMEOUT)) {
+        if ($this->is_node_visible($linknode, behat_base::get_reduced_timeout())) {
             $linknode->click();
             return;
         }
@@ -491,7 +537,7 @@ class behat_theme_snap extends behat_base {
      */
     public function i_restrict_assign_by_date($assigntitle, $date) {
         $datetime = strtotime($date);
-        $xpath = "//li[contains(@class, 'modtype_assign')]//a/span[contains(text(), '{$assigntitle}')]";
+        $xpath = "//li[contains(@class, 'modtype_assign')]//a/p[contains(text(), '{$assigntitle}')]";
         $this->execute('behat_general::i_wait_seconds', [1]);
         $this->execute('behat_general::i_click_on', [$xpath, 'xpath_element']);
         $this->i_wait_until_is_visible('.assign-intro', 'css_element');
@@ -530,6 +576,25 @@ class behat_theme_snap extends behat_base {
     }
 
     /**
+     * Apply asset completion restriction when edit form is shown.
+     * @param string $group
+     * @param string $savestr
+     */
+    protected function apply_group_restriction($group, $savestr) {
+        /** @var behat_general $helper */
+        $helper = behat_context_helper::get('behat_general');
+        /** @var behat_forms $formhelper */
+        $formhelper = behat_context_helper::get('behat_forms');
+        $formhelper->i_expand_all_fieldsets();
+        $helper->i_click_on('Add restriction...', 'button');
+        $helper->should_be_visible('Add restriction...', 'dialogue');
+        $helper->i_click_on_in_the('Group', 'button', 'Add restriction...', 'dialogue');
+        $formhelper->i_set_the_field_with_xpath_to('//select[@name=\'id\']', $group);
+        $formhelper->press_button($savestr);
+        $helper->wait_until_the_page_is_ready();
+    }
+
+    /**
      * Restrict a course asset by date.
      * @param string $asset1
      * @param string $asset2
@@ -540,6 +605,20 @@ class behat_theme_snap extends behat_base {
         $helper = behat_context_helper::get('behat_general');
         $helper->i_click_on('img[alt=\'Edit "' . $asset1 . '"\']', 'css_element');
         $this->apply_completion_restriction($asset2, 'Save and return to course');
+    }
+
+    /**
+     * Restrict a course asset by belonging to a group.
+     * @param string $asset1
+     * @param string $group1
+     * @codingStandardsIgnoreLine
+     * @Given /^I restrict course asset "(?P<asset1_string>(?:[^"]|\\")*)" by belong to the group "(?P<group1_string>(?:[^"]|\\")*)"$/
+     */
+    public function i_restrict_asset_by_belong_to_group($asset1, $group1) {
+        /** @var behat_general $helper */
+        $helper = behat_context_helper::get('behat_general');
+        $helper->i_click_on('img[alt=\'Edit "' . $asset1 . '"\']', 'css_element');
+        $this->apply_group_restriction($group1, 'Save and return to course');
     }
 
     /**
@@ -577,14 +656,14 @@ class behat_theme_snap extends behat_base {
             $baseselector = '//li[@id="section-'.$elementstr.'"]';
         } else if ($type === 'asset') {
             $baseselector = '(//li[contains(@class, \'snap-asset\')]'. // Selection when editing teacher.
-                '//h4[contains(@class, \'snap-asset-link\')]'.
+                '//h3[contains(@class, \'snap-asset-link\')]'.
                 '//span[contains(text(), \''.$elementstr.'\')]'.
-                '/parent::a/parent::h4/parent::div'.
+                '/parent::a/parent::h3/parent::div'.
                 '|'.
                 '//li[contains(@class, \'snap-asset\')]'. // Selection when anyone else.
-                '//h4[contains(@class, \'snap-asset-link\')]'.
+                '//h3[contains(@class, \'snap-asset-link\')]'.
                 '//*[contains(text(),  \''.$elementstr.'\')]'.
-                '/parent::h4/parent::div)';
+                '/parent::h3/parent::div)';
         } else {
             throw new coding_exception('Unknown element type ('.$type.')');
         }
@@ -782,7 +861,7 @@ class behat_theme_snap extends behat_base {
 
         // Cycle through all nodes and if just one of them is visible break loop.
         foreach ($linknodes as $node) {
-            $visible = $this->is_node_visible($node, self::REDUCED_TIMEOUT);
+            $visible = $this->is_node_visible($node, behat_base::get_reduced_timeout());
             if ($visible) {
                 break;
             }
@@ -986,6 +1065,17 @@ class behat_theme_snap extends behat_base {
     }
 
     /**
+     * Get course card image for course card element.
+     * @return string
+     */
+    protected function coursecard_image() {
+        $session = $this->getSession();
+        return $session->evaluateScript(
+            "return jQuery('#snap-pm-courses-current-cards div[style*=\'background-image: url\']').css('background-image')"
+        );
+    }
+
+    /**
      * @Given /^I should see cover image in page header$/
      */
     public function  pageheader_has_cover_image() {
@@ -1004,6 +1094,31 @@ class behat_theme_snap extends behat_base {
         $bgimage = $this->pageheader_backgroundimage();
         if (!empty($bgimage) && $bgimage !== 'none') {
             $msg = '#page-header has a background image ('.$bgimage.')';
+            $exception = new ExpectationException($msg, $this->getSession());
+            throw $exception;
+        }
+    }
+
+
+    /**
+     * @Given /^I should see course card image in personal menu$/
+     */
+    public function personalmenu_has_coursecard_image() {
+        $ccimage = $this->coursecard_image();
+        if (empty($ccimage) || $ccimage === 'none') {
+            $msg = 'Course card does not have image ('.$ccimage.')';
+            $exception = new ExpectationException($msg, $this->getSession());
+            throw $exception;
+        }
+    }
+
+    /**
+     * @Given /^I should not see course card image in personal menu$/
+     */
+    public function personalmenu_does_not_have_coursecard_image() {
+        $ccimage = $this->coursecard_image();
+        if (!empty($ccimage) && $ccimage !== 'none') {
+            $msg = 'Course card has an image ('.$ccimage.')';
             $exception = new ExpectationException($msg, $this->getSession());
             throw $exception;
         }
@@ -1056,7 +1171,13 @@ class behat_theme_snap extends behat_base {
         $title = $node->getHtml();
         // Title case version of type.
         $ttype = ucfirst($type);
-        $expectedtitle = '<span class="nav_guide">' . $ttype . ' section</span><br>'.htmlentities($linktitle);
+        if ($type == 'next') {
+            $sectionnumber = $section + 1;
+        } else {
+            $sectionnumber = $section - 1;
+        }
+        $expectedtitle = '<span class="nav_guide" section-number="' . $sectionnumber . '">' . $ttype
+            . ' section</span><br>'.htmlentities($linktitle);
         if (strtolower($title) !== strtolower($expectedtitle)) {
             $msg = $ttype.' title does not match expected "' . $expectedtitle . '"' . ' V "' . $title .
                     '" - selector = "'.$titleselector.'"';
@@ -1565,7 +1686,8 @@ class behat_theme_snap extends behat_base {
      */
     private function personal_menu_deadline_xpath($deadline, $eventname) {
         $deadline = calendar_day_representation($deadline);
-        $xpath = "//div[@id='snap-personal-menu-deadlines']//h3[contains(text(), '$eventname')]/parent::a/parent::div".
+        $ids = "@id='snap-personal-menu-deadlines'|@id='snap-personal-menu-feed-deadlines'";
+        $xpath = "//div[$ids]//h3[contains(text(), '$eventname')]/parent::a/parent::div".
             "/parent::div//time[contains(text(), '$deadline')]";
         return $xpath;
     }
@@ -1596,7 +1718,7 @@ class behat_theme_snap extends behat_base {
      * @return string
      */
     private function meta_assign_xpath($name) {
-        $xpath = "//span[contains(@class, 'instancename')][contains(text(), '$name')]/parent::a/parent::h4".
+        $xpath = "//p[contains(@class, 'instancename')][contains(text(), '$name')]/parent::a/parent::h3".
         "/parent::div//div[contains(@class, 'snap-completion-meta')]";
         return $xpath;
     }
@@ -1715,5 +1837,83 @@ class behat_theme_snap extends behat_base {
         $this->execute('behat_forms::i_set_the_following_fields_to_these_values', $table);
         $this->execute('behat_forms::press_button', get_string('posttoforum', 'forum'));
         $this->execute('behat_general::i_wait_to_be_redirected');
+    }
+
+    /**
+     * @param string $activityname - assign name
+     * @param string $activity - activity type
+     * @Given /^Activity "(?P<activity>(?:[^"]|\\")*)" "(?P<activityname>(?:[^"]|\\")*)" is deleted$/
+     * @return array
+     */
+    public function activity_is_deleted($activity, $activityname) {
+        global $DB;
+        $activityid = $DB->get_field($activity, 'id', ['name' => $activityname], MUST_EXIST);
+        $cm = get_coursemodule_from_instance($activity, $activityid, 0, false, MUST_EXIST);
+        course_delete_module($cm->id, true);
+    }
+
+    /**
+     * Opens the course homepage.
+     *
+     * @Given /^I am on activity "(?P<activity>(?:[^"]|\\")*)" "(?P<activityname>(?:[^"]|\\")*)" page$/
+     * @throws coding_exception
+     * @param string $coursefullname The full name of the course.
+     * @return void
+     */
+    public function i_am_on_activity_page($activity, $activityname) {
+        global $DB;
+        $activityid = $DB->get_field($activity, 'id', ['name' => $activityname], MUST_EXIST);
+        $cm = get_coursemodule_from_instance($activity, $activityid, 0, false, MUST_EXIST);
+        $url = new moodle_url('/mod/' . $activity . '/view.php', ['id' => $cm->id]);
+        $this->getSession()->visit($this->locate_path($url->out_as_local_url(false)));
+    }
+
+    /**
+     * Checks if a css element have a full width.
+     *
+     * @Given /^CSS element "(?P<element_string>(?:[^"]|\\")*)" is full width$/
+     * @param string $element css element to be checked
+     * @throws Exception
+     */
+    public function css_element_is_full_width($element) {
+        $session = $this->getSession();
+        $elementwidth = $session->getDriver()->evaluateScript(
+            'window.getComputedStyle(document.querySelectorAll("'
+            . $element . '")[0], null).getPropertyValue("width");');
+        $windowwidth = $session->getDriver()->evaluateScript('window.screen.width;');
+
+        $elementwidth = str_replace("px", "", $elementwidth);
+
+        if ($elementwidth < $windowwidth) {
+            throw new Exception("Element " . $element . " is not full width. Expected " .
+                $windowwidth . ", actual " . $elementwidth);
+        }
+    }
+
+    /**
+     * Generic field setter.
+     *
+     * Internal API method, a generic *I set "VALUE" to "FIELD" field*
+     * could be created based on it.
+     *
+     * @param string $fieldlocator The pointer to the field, it will depend on the field type.
+     * @param string $value
+     * @return void
+     */
+    protected function set_field_value($fieldlocator, $value) {
+
+        // We delegate to behat_form_field class, it will
+        // guess the type properly as it is a select tag.
+        $field = behat_field_manager::get_form_field_from_label($fieldlocator, $this);
+        $field->set_value($value);
+    }
+
+    /**
+     * Sets the specified multi-line value to the field
+     *
+     * @Given /^I set the text field  "(?P<field_string>(?:[^"]|\\")*)" with multi-line text:/
+     */
+    public function i_set_the_text_field_with_multi_line_text($field, \Behat\Gherkin\Node\PyStringNode $value) {
+        $this->set_field_value($field, $value);
     }
 }
