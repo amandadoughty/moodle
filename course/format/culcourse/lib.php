@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $DB, $COURSE;
 
+require_once($CFG->dirroot. '/course/lib.php');
 require_once($CFG->dirroot. '/course/format/lib.php');
 require_once($CFG->dirroot. '/course/format/topics/lib.php');
 require_once($CFG->dirroot. '/course/format/weeks/lib.php');
@@ -609,9 +610,7 @@ class format_culcourse extends format_base {
  * @return \core\output\inplace_editable
  */
 function format_culcourse_inplace_editable($itemtype, $itemid, $newvalue) {
-    global $DB, $CFG;
-
-    require_once($CFG->dirroot . '/course/lib.php');
+    global $DB, $CFG;    
 
     if ($itemtype === 'sectionname' || $itemtype === 'sectionnamenl') {
         $section = $DB->get_record_sql(
