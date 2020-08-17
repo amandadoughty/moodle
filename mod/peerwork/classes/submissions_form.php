@@ -516,8 +516,8 @@ class mod_peerwork_submissions_form extends moodleform {
         global $COURSE;
 
         if (!$this->scales) {
-            $globalscales = grade_scale::fetch_all_global();
-            $localscales = grade_scale::fetch_all_local($COURSE->id);
+            $globalscales = (array)grade_scale::fetch_all_global();
+            $localscales = (array)grade_scale::fetch_all_local($COURSE->id);
             $this->scales = $globalscales + $localscales;
         }
         return $this->scales;
