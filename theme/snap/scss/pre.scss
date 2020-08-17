@@ -29,14 +29,23 @@ $font-size-lg:   1.25rem;
 $font-size-sm:   .75rem;
 $font-size-xs:   .6rem;
 
+// -------------------------
+// Course cards size in the user dashboard.
+// -------------------------
+$grid-gutter-width:     1.7rem !default;
+$card-group-margin:     ($grid-gutter-width / 2) !default;
+$card-deck-margin:      $card-group-margin !default;
+$card-gutter:           $card-deck-margin * 2;
+
+
 // This needs some investigation of issues around IE11 and Moodle's autoprefixer implementaion.
 //$enable-flex:               true;
 
 $brand-primary:         #ff7f41 !default;
-$brand-success:         #8bc34a;
-$brand-warning:         #ff9800;
-$brand-danger:          #e91e63;
-$brand-info:            #03a9f4;
+$brand-success:         #3d5c1f;
+$brand-warning:         #b55600;
+$brand-danger:          #990f3d;
+$brand-info:            #02567e;
 
 $body-bg:               #fff;
 $body-color:            #565656;

@@ -195,7 +195,7 @@ class mod_assign_renderer extends \mod_assign_renderer {
                 $percentage = round(($summary->submissionssubmittedcount / $summary->participantcount), 3) * 100 . '%';
             }
             $submissionsdata = '<div class="submissions-status">';
-            $submissionsdata .= get_string('submissions', 'assign').': ';
+            $submissionsdata .= get_string('gradeitem:submissions', 'assign').': ';
             $submissionsdata .= '<div class="submission-status-row">';
             $submissionsdata .= '<span>'.$summary->submissionssubmittedcount.' / '.$summary->participantcount.'</span>';
             $submissionsdata .= '<span>'.$percentage.'</span>';
@@ -442,6 +442,11 @@ class mod_assign_renderer extends \mod_assign_renderer {
                     } else {
                         $submissiondata .= '<a href="'.$url.'" role="button" class="btn btn-primary">'
                             .get_string('editsubmission', 'assign').'</a>';
+
+                        $urlparams = array('id' => $status->coursemoduleid, 'action' => 'removesubmissionconfirm');
+                        $url = new moodle_url('/mod/assign/view.php', $urlparams);
+                        $submissiondata .= '<a href="'.$url.'" role="button" class="btn btn-primary">'
+                            .get_string('removesubmission', 'assign').'</a>';
                     }
                 }
 

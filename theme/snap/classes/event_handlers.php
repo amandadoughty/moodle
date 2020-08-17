@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace theme_snap;
+use cache_helper;
 use core\event\course_updated;
 use core\event\course_deleted;
 use core\event\course_completion_updated;
@@ -28,6 +29,8 @@ use core\event\base;
 use core\event\role_assigned;
 use core\event\role_unassigned;
 use core\event\user_enrolment_deleted;
+use core\event\group_member_added;
+use core\event\group_member_removed;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -55,6 +58,7 @@ class event_handlers {
         $context = \context_course::instance($event->objectid);
 
         local::process_coverimage($context);
+        local::clean_course_card_bg_image_cache($event->contextid);
     }
 
     /**
@@ -67,8 +71,8 @@ class event_handlers {
     public static function course_deleted(course_deleted $event) {
         global $DB;
 
-        $select = ['courseid' => $event->objectid];
-        $DB->delete_records('theme_snap_course_favorites', $select);
+        $select = ['itemid' => $event->objectid, 'component' => 'core_course'];
+        $DB->delete_records('favourite', $select);
 
         local::clean_course_card_bg_image_cache($event->contextid);
         local::clean_course_card_teacher_avatar_cache($event->contextid);
@@ -84,8 +88,8 @@ class event_handlers {
     public static function user_deleted($event) {
         global $DB;
 
-        $select = ['userid' => $event->objectid];
-        $DB->delete_records('theme_snap_course_favorites', $select);
+        $select = ['userid' => $event->objectid, 'component' => 'core_course'];
+        $DB->delete_records('favourite', $select);
 
         local::clean_course_card_teacher_avatar_cache(null, $event->objectid);
     }
@@ -207,5 +211,31 @@ class event_handlers {
             $context->id,
             $event->relateduserid
         );
+    }
+
+    /**
+     * This group member event may make activity_deadlines cache invalid.
+     * @param group_member_added $event
+     */
+    public static function group_member_added(group_member_added $event) {
+        $context = \context::instance_by_id($event->contextid, MUST_EXIST);
+        if ($context->contextlevel != CONTEXT_COURSE) {
+            return;
+        }
+
+        cache_helper::purge_by_event('groupmemberschanged');
+    }
+
+    /**
+     * This group member event may make activity_deadlines cache invalid.
+     * @param group_member_removed $event
+     */
+    public static function group_member_removed(group_member_removed $event) {
+        $context = \context::instance_by_id($event->contextid, MUST_EXIST);
+        if ($context->contextlevel != CONTEXT_COURSE) {
+            return;
+        }
+
+        cache_helper::purge_by_event('groupmemberschanged');
     }
 }
