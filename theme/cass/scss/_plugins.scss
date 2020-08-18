@@ -12,6 +12,13 @@ a#snap-home {
 }
 
 /**
+ * Feedback plugin.
+ */
+.path-mod-feedback input[type="radio"] {
+    margin-bottom: 0;
+}
+
+/**
  * Mod assignment page.
  */
 
@@ -48,6 +55,13 @@ a#snap-home {
     }
 }
 
+.sub-theme-cass {
+    &#page-mod-page-mod, &#page-mod-resource-mod {
+        #id_submitbutton {
+            display: inline-block;
+        }
+    }
+}
 
 #page-mod-assign-grading {
     // Style the table to be smaller.
@@ -74,3 +88,10 @@ a#snap-home {
         }
     }
 }
+
+/**
+ * Mod quiz selects.
+ */
+ .custom-select:focus {
+         border: 1px solid #80bdff;
+ }

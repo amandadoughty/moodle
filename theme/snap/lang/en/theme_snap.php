@@ -62,6 +62,7 @@ $string['changecoverimage'] = 'Change cover image';
 $string['changefullname'] = 'Change site name';
 $string['chapters'] = 'Chapters';
 $string['choosereadme'] = '<div class="clearfix"><div class="theme_screenshot"><h2>Snap</h2><img class=img-polaroid src="snap/pix/screenshot.jpg" /></div></div>';
+$string['close'] = 'Close';
 $string['conditional'] = 'Conditional';
 $string['contents'] = 'Contents';
 $string['contributed'] = 'Contributed';
@@ -117,6 +118,8 @@ $string['editcoursesettings'] = 'Course settings';
 $string['editcoursetopic'] = 'Edit section';
 $string['editcustomfooter'] = 'Edit footer';
 $string['editcustommenu'] = 'Edit custom menu';
+$string['error'] = 'Error';
+$string['errorgettingfeed'] = 'Error occurred while getting feed items.';
 $string['error:categorycolorinvalidjson'] = 'Incorrect JSON format for course categories';
 $string['error:categorycolorinvalidvalue'] = 'Record id or color value for category "{$a}" aren\'t valid';
 $string['error:categorynotfound'] = 'The category record with id "{$a}" hasn\'t been found';
@@ -273,7 +276,7 @@ $string['pld'] = 'PLD';
 $string['pluginname'] = 'Snap';
 $string['poster'] = 'Cover image';
 $string['posterdesc'] = 'A large header image for the front page of your site. Landscape images (1200 x 600 pixels) or larger work best.';
-$string['poweredbyrunby'] = 'Built with <a href="https://www.blackboard.com/blackboard-open-lms" target="_blank" rel="noopener">Open LMS</a>,
+$string['poweredbyrunby'] = 'Built with <a href="https://www.openlms.net/" target="_blank" rel="noopener">Open LMS</a>,
     a <a href="https://moodle.com/" target="_blank" rel="noopener">Moodle</a>-based product.<br>
     Copyright &#169; {$a} Open LMS, All Rights Reserved.';
 $string['previoussection'] = 'Previous section';
@@ -323,6 +326,7 @@ $string['unread'] = 'unread';
 $string['unsupportedcoverimagetype'] = 'Unsupported cover image type ({$a})';
 $string['via'] = 'via';
 $string['viewcourse'] = 'View Course';
+$string['viewmore'] = 'View more';
 $string['viewyourprofile'] = 'View your profile';
 $string['viewmyfeedback'] = 'View my feedback';
 $string['viewcalendar'] = 'View my calendar';
@@ -388,4 +392,7 @@ $string['enabledloginorderdesc'] = 'Select which login option should be displaye
 $string['moodleloginfirst'] = 'Display Moodle login first';
 $string['alternativeloginfirst'] = 'Display alternative login options first';
 $string['alternativeloginoptions'] = 'Alternative login options';
+$string['openmessagedrawer'] = 'Open messaging drawer. ';
+$string['design_mod_page'] = 'Enable previous design for page resources';
+$string['design_mod_page_description'] = 'If enabled, page resource content will be displayed inside the same page, course or front page.';
 
