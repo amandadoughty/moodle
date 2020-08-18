@@ -647,8 +647,11 @@ $custom-menu-text-color: rgb(255, 255, 255) !default; // Need to define this wit
                 color: $nav-color;
             }
         }
-        .conversation_badge_count {
-            background-color: darken($nav-color, 8%);
+        .badge-count-container .icon.fa-comment {
+            color: $nav-color;
+            .conversation_badge_count {
+                background-color: $nav-color;
+            }
         }
     }
 

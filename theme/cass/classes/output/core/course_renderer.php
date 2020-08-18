@@ -67,39 +67,6 @@ class course_renderer extends snap_course_renderer {
             list($snapmodtype, $extension) = $this->get_mod_type($mod);
 
             $modclasses = array('snap-activity');
-            /*
-            if ($mod->modname === 'resource') {
-                // Default for resources/attatchments e.g. pdf, doc, etc.
-                $modclasses = array('snap-resource', 'snap-mime-'.$extension);
-                if (in_array($extension, $this->snap_multimedia())) {
-                    $modclasses[] = 'js-snap-media';
-                }
-                // For images we overwrite with the native class.
-                if ($this->is_image_mod($mod)) {
-                    $modclasses = array('snap-native-image', 'snap-image', 'snap-mime-'.$extension);
-                }
-            } else if ($mod->modname === 'folder' && !$mod->url) {
-                // Folder mod set to display on page.
-                $modclasses = array('snap-activity');
-            } else if (plugin_supports('mod', $mod->modname, FEATURE_MOD_ARCHETYPE) === MOD_ARCHETYPE_RESOURCE) {
-                $modclasses = array('snap-resource');
-            } else if ($mod->modname === 'scorm') {
-                $modclasses = array('snap-resource');
-            } else if ($mod->modname !== 'label') {
-                $modclasses = array('snap-activity');
-            }
-
-            // Special classes for native html elements.
-            if (in_array($mod->modname, ['page', 'book'])) {
-                $modclasses = array('snap-native', 'snap-mime-'.$mod->modname);
-                $attr['aria-expanded'] = "false";
-            } else if ($modurl = $mod->url) {
-                // For snap cards, js uses this to make the whole card clickable.
-                if ($mod->uservisible) {
-                    $attr['data-href'] = $modurl;
-                }
-            }
-            */
 
             // Is this mod draft?
             if (!$mod->visible && !$mod->visibleold) {
@@ -379,8 +346,11 @@ class course_renderer extends snap_course_renderer {
                 $activitycurrent = ' snap-activity-current';
             }
 
+            // Activity/resource type.
+            $snapmodtype = $this->get_mod_type($mod)[0];
+            $assetlink = '<div class="snap-assettype">'.$snapmodtype.'</div>';
             // Asset link.
-            $assetlink = '<h4 class="snap-asset-link' . $activitycurrent . '">'.$cmname.'</h4>';
+            $assetlink .= '<h4 class="snap-asset-link' . $activitycurrent . '">'.$cmname.'</h4>';
         }
 
         // Append everything together
@@ -715,7 +685,7 @@ class course_renderer extends snap_course_renderer {
      * @return string
      * @throws coding_exception
      */
-    public function submission_cta(cm_info $mod, activity_meta $meta) {
+    public static function submission_cta(cm_info $mod, activity_meta $meta) {
         global $CFG;
 
         if (empty($meta->submissionnotrequired)) {
@@ -814,7 +784,7 @@ class course_renderer extends snap_course_renderer {
             }
             // @codingStandardsIgnoreLine
             /* @var cm_info $mod */
-            $content .= $this->submission_cta($mod, $meta);
+            $content .= self::submission_cta($mod, $meta);
         }
 
         // Activity due date.
@@ -1046,6 +1016,8 @@ class course_renderer extends snap_course_renderer {
 
         $target = '';
 
+        $activityimg = "<img class='iconlarge activityicon' alt='' role='presentation'  src='".$mod->get_icon_url()."' />";
+
         // Multimedia mods we want to open in the same window.
         $snapmultimedia = $this->snap_multimedia();
 
@@ -1070,14 +1042,14 @@ class course_renderer extends snap_course_renderer {
 
         if ($mod->uservisible) {
             if (!$url) {
-                $output .= "<span class='instancename'>$instancename</span>" . $groupinglabel;
+                $output .= "$activityimg<span class='instancename'>$instancename</span>" . $groupinglabel;
             } else {
-                $output .= "<a $target  href='$url'><span class='instancename'>$instancename</span></a>" . $groupinglabel;
+                $output .= "<a $target  href='$url'>$activityimg<span class='instancename'>$instancename</span></a>" . $groupinglabel;
             }
         } else {
             // We may be displaying this just in order to show information
             // about visibility, without the actual link ($mod->uservisible).
-            $output .= "<div>$instancename</div> $groupinglabel";
+            $output .= "<div>$activityimg $instancename</div> $groupinglabel";
         }
 
         return $output;
@@ -1194,8 +1166,9 @@ class course_renderer extends snap_course_renderer {
         $categoryselector = '';
         // NOTE - we output manage catagory button in the layout file in Snap.
 
+        $simplesite = coursecat::is_simple_site();
         if (!$coursecat->id) {
-            if (coursecat::count_all() == 1) {
+            if ($simplesite) {
                 // There exists only one category in the system, do not display link to it.
                 $coursecat = coursecat::get_default();
                 $strfulllistofcourses = get_string('fulllistofcourses');
@@ -1206,13 +1179,13 @@ class course_renderer extends snap_course_renderer {
             }
         } else {
             $title = $site->shortname;
-            if (coursecat::count_all() > 1) {
+            if (!$simplesite) {
                 $title .= ": ". $coursecat->get_formatted_name();
             }
             $this->page->set_title($title);
 
             // Print the category selector.
-            if (coursecat::count_all() > 1) {
+            if (!$simplesite) {
                 $select = new \single_select(new moodle_url('/course/index.php'), 'categoryid',
                     coursecat::make_categories_list(), $coursecat->id, null, 'switchcategory');
                 $select->set_label(get_string('category').':');
@@ -1285,7 +1258,7 @@ class course_renderer extends snap_course_renderer {
 
         $output .= $this->container_start('buttons');
         ob_start();
-        if (coursecat::count_all() == 1) {
+        if ($simplesite) {
             print_course_request_buttons(\context_system::instance());
         } else {
             print_course_request_buttons($context);

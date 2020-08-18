@@ -387,8 +387,13 @@ p.tree_item.hasicon i.nav-missing-icon:before {
     content: '■'; // Where settings nav icon is missing use this.
 }
 
-// Adjust Page resource activity display when the content is a table.
+// Adjust Page resource activity display.
 li.modtype_page {
+    div.summary-text p {
+        padding-top: 1em !important; // Override summary-text core inherit property.
+    }
+
+    // Adjust Page resource content when it is a table.
     div.pagemod-content {
         overflow: auto;
         tr {
@@ -399,6 +404,7 @@ li.modtype_page {
         }
         div.d-block {
             padding-left: 25%;
+            padding-right: 25%;
             width: 100%;
         }
     }
@@ -947,22 +953,34 @@ footer #moodle-footer
         }
         color: darken($nav-button-color, 8%);
     }
+}
 
-    // Core alerts badge.
+// Core alerts badge.
+.badge-count-container {
+    display: inline-block;
+    float: none;
+
+    .icon.fa-comment {
+        font-size: 24px;
+        position: relative;
+
+        &:before {
+            content: "\f0e5";
+        }
+    }
     .conversation_badge_count {
         height: 18px;
         width: 18px;
         border-radius: 50%;
-        padding: 0;
-        line-height: inherit;
-        color: white;
-        position: absolute;
-        left: .33em; // Magic number.
-        top: .6em; // Magic number.
-        font-size: 10px;
+        color: white !important; // Override core color preset for anchors.
+        font-size: x-small;
+        font-family: $font-family-system;
         display: flex;
         justify-content: center;
         align-items: center;
+        position: absolute;
+        right: -0.5em; // Magic number.
+        top: -0.5em; // Magic number.
 
         &.hidden {
             display: none;
@@ -3415,6 +3433,7 @@ table th img.iconhelp {
     }
 
     .snap-feature-image {
+        object-fit: contain;
         max-width: 12.5em;
     }
 
@@ -3423,6 +3442,7 @@ table th img.iconhelp {
     }
 
     div.snap-feature-image-wrap {
+        display: flex;
         width: 12.5em;
         height: 7.5em;
         margin: 0 auto;
