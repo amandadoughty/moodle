@@ -27,9 +27,9 @@ namespace theme_cass\output;
 
 defined('MOODLE_INTERNAL') || die();
 
-use theme_cass\renderables\course_action_section_highlight;
-use theme_cass\renderables\course_action_section_move;
-use theme_cass\renderables\course_action_section_visibility;
+use theme_snap\renderables\course_action_section_highlight;
+use theme_snap\renderables\course_action_section_move;
+use theme_snap\renderables\course_action_section_visibility;
 use theme_snap\renderables\course_action_section_delete; // This one isn't overriden by cass.
 use theme_snap\output\format_section_trait as snap_section_trait;
 

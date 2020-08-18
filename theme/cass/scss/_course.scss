@@ -1,27 +1,14 @@
-
-.path-course-view #page-header h1 {
-    display: none;
+.theme-snap {
+  #course-toc #chapters {
+    list-style: decimal;
+  }
 }
 
 .format-topics {
-    li.section .sectionname:before {
-        content: none;
-    }
+  li.section .sectionname:before {
+    content: none;
+  }
 }
-
-.course-content {
-    max-width: $cass-width;
-}
-
-.sectionname {
-    font-size: 3.5em;
-    line-height: 1em;
-    color: black;
-    font-weight: 700;
-    padding-bottom: 1em;
-    padding-top: 0;
-}
-
 
 .path-course-view .section .summary {
   padding-bottom: 1.25em;
@@ -30,6 +17,10 @@
 .snap-section-editing {
   text-align: center;
   margin-top: 0;
+}
+
+span#mod_quiz_navblock_title {
+  display: none;
 }
 
 .section-modchooser-link.btn {
@@ -44,7 +35,7 @@
   margin: 0;
   font-size: inherit;
   line-height: inherit;
-  font-family: $font-family-feature !important;
+  font-family: $font-family-fancy !important;
 
   &:hover,
   &:focus {
@@ -53,7 +44,7 @@
   }
 }
 
-.snap-modchooser {
+.col-sm-6.snap-modchooser {
   padding-top: 1em;
 }
 
@@ -189,14 +180,8 @@ h4.snap-asset-link {
   }
 }
 
-// Resticted activies that are not clickable output the title twice.
-// Hide it in the activity instance.
-.unavailable {
-    .activityinstance {
-        .snap-asset-link {
-            display: none !important;
-        }
-    }
+.unavailable .snap-asset-link:before {
+  background: $gray-light;
 }
 
 // A circle for each activity. Contains a number and/or staus tick.
@@ -236,6 +221,10 @@ li.unavailable h4 {
 
 .course-content #section-0 .content ul.section.img-text {
   margin: 0;
+}
+
+h2.sectionname {
+  line-height: 1em;
 }
 
 .section li.snap-activity {
@@ -280,7 +269,7 @@ a.snap-assignment-stage.label.label-warning {
 .snap-grouping-tag {
   text-align: inherit;
   margin-left: -0.4em;
-  font-family: $font-family-feature;
+  font-family: $font-family-fancy;
 }
 
 .snap-asset-completion-tracking {
@@ -311,7 +300,7 @@ a.snap-assignment-stage.label.label-warning {
   color: $modal-bg;
   a {
     color: $modal-bg;
-    font-family: $font-family-feature;
+    font-family: $font-family-fancy;
   }
 }
 

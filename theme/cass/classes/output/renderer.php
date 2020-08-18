@@ -304,9 +304,9 @@ class renderer extends \renderer_base {
             $PAGE->requires->js_call_amd('theme_cass/cass', 'addPopCompletion', [$mod]);
         }
 
-        else if ($showcompletionnextactivity) {
+        if ($showcompletionnextactivity) {
             if  (in_array($mod->modname, self::EXCLUDE_POPUP_MODS) && !$this->module_is_complete($mod)) {
-                $output .= '<div class="next_activity_area"><div class="next_activity_overlay"><div><h2>Mark as complete</h2><button data-cmid="'.$mod->id.'" class="btn btn-primary completeclick">Complete</button></div></div><div class="next_activity_link"><div class="activity-complete"><span class="activity-complete fa fa-check"></span><div class="done">Activity complete</div></div><div class="next_activity_text"> <a class="next_activity" href="' . $forwardlinkurl . '"><div class="nav_icon"><i class="icon-arrow-right"></i></div><span class="text"><span class="nav_guide">' . $forwardlinktext . '</span><br>' . $forwardlinkname . '</span></a></div></div></div>';
+                $output .= '<div class="next_activity_area"><div class="next_activity_overlay"><div><h5>Confirm as Complete</h5><button data-cmid="'.$mod->id.'" class="btn btn-primary completeclick">I have completed this activity</button></div></div><div class="next_activity_link"><div class="activity-complete"><span class="activity-complete fa fa-check"></span><div class="done">Activity complete</div></div><div class="next_activity_text"> <a class="next_activity" href="' . $forwardlinkurl . '"><div class="nav_icon"><i class="icon-arrow-right"></i></div><span class="text"><span class="nav_guide">' . $forwardlinktext . '</span><br>' . $forwardlinkname . '</span></a></div></div></div>';
             } else {
                 $output .= '<div class="next_activity_area"><div class="next_activity_link"><div class="activity-complete"><span class="activity-complete fa fa-check"></span><div class="done">Activity complete</div></div><div class="next_activity_text"> <a class="next_activity" href="' . $forwardlinkurl . '"><div class="nav_icon"><i class="icon-arrow-right"></i></div><span class="text"><span class="nav_guide">' . $forwardlinktext . '</span><br>' . $forwardlinkname . '</span></a></div></div></div>';
             }
