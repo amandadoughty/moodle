@@ -98,64 +98,21 @@ $data['peergradesawarded'] = '';
 $justenabled = $peerwork->justification != MOD_PEERWORK_JUSTIFICATION_DISABLED;
 $justcrit = $peerwork->justificationtype == MOD_PEERWORK_JUSTIFICATION_CRITERIA;
 $justenabledcrit = $justenabled && $justcrit;
-
-foreach ($pac->get_criteria() as $criteria) {
-    $critid = $criteria->id;
-    $extraclasses = $justenabledcrit ? 'crit' : '';
-
-    $t = new html_table();
-    $t->attributes['class'] = "peerwork $extraclasses";
-    $t->head[] = '';
-    $t->caption = $criteria->description;
-
-    foreach ($members as $member) {
-        $t->head[] = fullname($member);
-
-        $label = fullname($member);
-        if ($canunlock && in_array($member->id, $lockedgraders)) {
-            $label .= $OUTPUT->action_icon('#',
-                new pix_icon('t/locked', get_string('editinglocked', 'mod_peerwork'), 'core'),
-                null,
-                [
-                    'data-peerworkid' => $peerwork->id,
-                    'data-graderid' => $member->id,
-                    'data-graderfullname' => fullname($member),
-                    'data-graderunlock' => 'true',
-                ]
-            );
-        }
-
-        $row = new html_table_row();
-        $row->cells = array();
-        $row->cells[] = $label;
-
-        foreach ($members as $peer) {
-            if (!isset($grades->grades[$critid]) || !isset($grades->grades[$critid][$member->id])
-                    || !isset($grades->grades[$critid][$member->id][$peer->id])) {
-                $row->cells[] = '-';
-            } else {
-                $feedbacktext = '';
-
-                if (
-                    $justenabledcrit &&
-                    isset($justifications[$member->id]) &&
-                    isset($justifications[$member->id][$critid]) &&
-                    isset($justifications[$member->id][$critid][$peer->id])
-                ) {
-                    $feedbacktext = print_collapsible_region(
-                        $justifications[$member->id][$critid][$peer->id]->justification,
-                        'peerwork-feedback',
-                        'peerwork-feedback-' . $member->id . '-' . $critid . '-' . $peer->id,
-                        shorten_text($justifications[$member->id][$critid][$peer->id]->justification, 20), '', true, true);
-                }
-
-                $row->cells[] = $grades->grades[$critid][$member->id][$peer->id] . $feedbacktext;
-            }
-        }
-        $t->data[] = $row;
-    }
-    $data['peergradesawarded'] .= html_writer::table($t); // Write the table for this criterion into the HTML placeholder element.
-}
+$criterion = $pac->get_criteria();
+$summary = new mod_peerwork\output\peerwork_detail_summary(
+    $criterion,
+    $grades,
+    $justifications,
+    $members,
+    $lockedgraders,
+    $peerwork,
+    $canunlock,
+    $justenabledcrit,
+    $cm->id,
+    $groupid
+);
+$renderer = $PAGE->get_renderer('mod_peerwork');
+$data['peergradesawarded'] .= $renderer->render($summary);
 
 // If assignment has been graded then pass the required data to create a table showing calculated grades.
 if (peerwork_was_submission_graded_from_status($status)) {
