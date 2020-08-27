@@ -50,7 +50,7 @@ trait format_section_trait {
      * @param bool $onsectionpage true if being printed on a section page
      * @return array of links with edit controls
      */
-    protected function section_edit_control_items($course, $section, $onsectionpage = false) {
+    protected function section_edit_controls($course, $section, $onsectionpage = false) {
 
         if ($section->section === 0) {
             return [];
