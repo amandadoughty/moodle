@@ -28,110 +28,26 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
 defined('MOODLE_INTERNAL') || die();
 
-class filter_wiris extends moodle_text_filter {
+require_once('subfilters/php.php');
+require_once('subfilters/mathjax.php');
 
+class filter_wiris extends moodle_text_filter {
     public function filter($text, array $options = array()) {
 
-        global $CFG, $DB;
-
-        $n0 = mb_stripos($text, '«math');
-        $n1 = stripos($text, '<math');
-        $n2 = mb_stripos($text, '«applet');
-
-        if ($n0 === false && $n1 === false && $n2 === false) {
-            // Nothing to do.
-            return $text;
+        switch (get_config('filter_wiris', 'rendertype')) {
+            case 'mathjax':
+                $subfilter = new filter_wiris_mathjax($this->context, $this->localconfig);
+                break;
+            case 'php':
+            default:
+                $subfilter = new filter_wiris_php($this->context, $this->localconfig);
+                break;
         }
 
-        require_once("$CFG->dirroot/filter/wiris/lib.php");
+        return $subfilter->filter($text, $options);
 
-        // Automatic class loading not avaliable for Moodle 2.4 and 2.5.
-        wrs_loadclasses();
-
-        // MathJax and MathML
-        // Not filter if MathJax filter order < MathType filter order.
-        if ($n1 !== false && $this->mathjax_have_preference()) {
-            return $text;
-        }
-
-        $wirispluginwrapper = new filter_wiris_pluginwrapper();
-
-        $wirispluginwrapper->begin();
-        $textservice = $wirispluginwrapper->get_instance()->newTextService();
-
-        $query = '';
-
-        global $COURSE;
-
-        if (isset($COURSE->id)) {
-            $query .= '?course=' . $COURSE->id;
-        }
-        if (isset($COURSE->category)) {
-            $query .= empty($query) ? '?' : '/';
-            $query .= 'category=' . $COURSE->category;
-        }
-
-        $prop['refererquery'] = $query;
-        $prop['lang'] = current_language();
-        $prop['savemode'] = 'safeXml'; // ...safeXml filtering.
-        $text = $textservice->filter($text, $prop);
-        $prop['savemode'] = 'xml'; // ...xml filtering.
-        $text = $textservice->filter($text, $prop);
-        $wirispluginwrapper->end();
-
-        // If a CAS session has been filtered.
-        // We need to create a JNLP link for browsers non supporting JAVA.
-        if ($n2) {
-            $text = wrs_filterapplettojnlp($text);
-        }
-
-        return $text;
-    }
-
-    /**
-     * Returns true if MathJax filter is active in active context and
-     * have preference over MathType filter
-     * @return [bool] true if MathJax have preference over MathType filter. False otherwise.
-     */
-    private function mathjax_have_preference() {
-
-        // The complex logic is working out the active state in the parent context,
-        // so strip the current context from the list. We need avoid to call
-        // filter_get_avaliable_in_context method if the context
-        // is system context only.
-        $contextids = explode('/', trim($this->context->path, '/'));
-        array_pop($contextids);
-        $contextids = implode(',', $contextids);
-        // System context only.
-        if (empty($contextids)) {
-            return false;
-        }
-
-        $mathjaxpreference = false;
-        $mathjaxfilteractive = false;
-        $avaliablecontextfilters = filter_get_available_in_context($this->context);
-
-        // First we need to know if MathJax filter is active in active context.
-        if (array_key_exists('mathjaxloader', $avaliablecontextfilters)) {
-            $mathjaxfilter = $avaliablecontextfilters['mathjaxloader'];
-            $mathjaxfilteractive = $mathjaxfilter->localstate == TEXTFILTER_ON ||
-                                   ($mathjaxfilter->localstate == TEXTFILTER_INHERIT &&
-                                    $mathjaxfilter->inheritedstate == TEXTFILTER_ON);
-        }
-
-        // Check filter orders.
-        if ($mathjaxfilteractive) {
-            $filterkeys = array_keys($avaliablecontextfilters);
-            $mathjaxfilterorder = array_search('mathjaxloader', $filterkeys);
-            $mathtypefilterorder = array_search('wiris', $filterkeys);
-
-            if ($mathtypefilterorder > $mathjaxfilterorder) {
-                $mathjaxpreference = true;
-            }
-        }
-
-        return $mathjaxpreference;
     }
 }
