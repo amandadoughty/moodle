@@ -24,7 +24,8 @@
     "npm": "^6.9.0",
     "postcss-cli": "^2.5.2",
     "postcss-flexbugs-fixes": "^2.0.0",
-    "time-grunt": "*"
+    "time-grunt": "*",
+    "grunt-load-gruntfile": "*"
   },
   "license": "GPL-3.0+"
 }
