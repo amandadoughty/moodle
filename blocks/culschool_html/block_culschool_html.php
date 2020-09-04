@@ -126,33 +126,6 @@ class block_culschool_html extends block_base {
         return $this->content;
     }
 
-
-    /**
-     * Serialize and store config data
-     */
-    public function instance_config_save($data, $nolongerused = false) {
-        global $DB, $CFG;
-        require_once($CFG->dirroot . '/blocks/culschool_html/lib.php');
-
-        // Get all of the categories.
-        $categories = $DB->get_records('course_categories', null, 'id, name');
-        $types = block_culschool_html_get_type();
-        $config = clone($data);
-
-        foreach ($types as $type) {
-            foreach ($categories as $category) {
-                $name = $type . $category;
-                $textname = 'text' . $name;
-
-                // Move embedded files into a proper filearea and adjust HTML links to match.
-                $config->{$textname} = file_save_draft_area_files($data->{$textname}['itemid'], $this->context->id,
-                    'block_culschool_html', 'content', 0, array('subdirs' => true), $data->{$textname}['text']);
-            }
-        }
-
-        parent::instance_config_save($config, $nolongerused);
-    }
-
     public function instance_delete() {
         global $DB;
         $fs = get_file_storage();
