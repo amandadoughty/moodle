@@ -27,6 +27,11 @@ namespace mod_peerwork\output;
 
 defined('MOODLE_INTERNAL') || die();
 
+use renderer_base;
+use renderable;
+use templatable;
+use stdClass;
+
 /**
  * Summary.
  *
@@ -35,7 +40,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class peerwork_detail_summary implements \renderable {
+class peerwork_detail_summary implements templatable, renderable {
 
     /** @var object The criterion. */
     public $criterion;
@@ -53,6 +58,10 @@ class peerwork_detail_summary implements \renderable {
     public $canunlock;
     /** @var bool Whether justification is enabled. */
     public $justenabledcrit;
+    /** @var int Course module id. */
+    public $cmid;
+    /** @var int Group id. */
+    public $groupid;
 
     /**
      * Constructor.
@@ -149,8 +158,11 @@ class peerwork_detail_summary implements \renderable {
                         );
                     }
 
-                    if (!isset($grades->grades[$critid]) || !isset($grades->grades[$critid][$member->id])
-                            || !isset($grades->grades[$critid][$member->id][$peer->id])) {
+                    if (
+                        !isset($grades->grades[$critid]) ||
+                        !isset($grades->grades[$critid][$member->id]) ||
+                        !isset($grades->grades[$critid][$member->id][$peer->id])
+                    ) {
                         $gradedby['gradefor'][] = [
                             'name' => $label,
                             'grade' => '-'
@@ -163,18 +175,16 @@ class peerwork_detail_summary implements \renderable {
                         // Display help tip if original peer grade has been
                         // overridden.
                         if (
-                            isset($grades->overrides[$critid]) &&
-                            isset($grades->overrides[$critid][$member->id]) &&
-                            isset($grades->overrides[$critid][$member->id][$peer->id])
+                            // The peergrade may be null.
+                            array_key_exists($critid, $grades->overrides) &&
+                            array_key_exists($member->id, $grades->overrides[$critid]) &&
+                            array_key_exists($peer->id, $grades->overrides[$critid][$member->id])
                         ) {
                             $peergrade = $grades->overrides[$critid][$member->id][$peer->id];
 
                             if ($peergrade != $grade) {
-                                $helpicon = new \help_icon('gradeoverriden', 'mod_peerwork', $peergrade);
-                                $override = $output->render($helpicon);
-
+                                $peergrade = $peergrade == null ? '-' : $peergrade;
                                 $title = get_string('gradeoverridden', 'mod_peerwork', $peergrade);
-
                                 $pixicon = new \pix_icon('help', '', 'moodle', ['title' => $title]);
                                 $override = $output->render($pixicon);
                             }

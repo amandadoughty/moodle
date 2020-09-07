@@ -138,6 +138,10 @@
     color: #868e96;
 }
 
+#memberdropdown {
+    display: inline-block;
+}
+
 @media(max-width: 768px) {
     .mod_peerwork_peername {
         max-width: none;
