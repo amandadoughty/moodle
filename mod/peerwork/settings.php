@@ -146,6 +146,13 @@ if ($ADMIN->fulltree) {
         false
     ));
 
+    $settings->add(new admin_setting_configcheckbox(
+        'peerwork/overridepeergrades',
+        get_string('overridepeergrades', 'mod_peerwork'),
+        get_string('overridepeergrades_help', 'mod_peerwork'),
+        false
+    ));
+
     $settings->add(new admin_setting_configselect(
         'peerwork/justification',
         get_string('justification', 'mod_peerwork'),

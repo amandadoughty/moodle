@@ -1,3 +1,8 @@
+v2.1.0
+------
+
+- Added individual peer grade override
+
 v2.0.0
 ------
 
