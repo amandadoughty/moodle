@@ -518,7 +518,7 @@ class mod_peerwork_submissions_form extends moodleform {
             $this->scales = (array)grade_scale::fetch_all_global() + (array)grade_scale::fetch_all_local($courseid);
         }
         return $this->scales;
-    }    
+    }
 
     /**
      * Check if peer is locked.
