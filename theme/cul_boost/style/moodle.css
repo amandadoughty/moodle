@@ -22759,54 +22759,54 @@ aside[id*="block-region-nav-settings"] {
   aside[id*="block-region-nav-settings"] .block_tree .type_siteadmin .root_node:after {
     content: "\f023";
     padding-right: 3px; }
-  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item {
+  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item:focus {
     outline: 3px solid #ffbf47 !important;
     outline-offset: -3px; }
-    aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item:not([aria-expanded]) > a {
+  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item:not([aria-expanded]) > a {
+    color: #A22833; }
+    aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item:not([aria-expanded]) > a > span {
       color: #A22833; }
-      aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item:not([aria-expanded]) > a > span {
-        color: #A22833; }
-    aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.hasicon.cog a:before {
-      content: "\f013";
-      display: inline-block;
-      font: normal normal normal 14px/1 FontAwesome;
-      font-size: inherit;
-      text-rendering: auto;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      margin: 0 0.5rem 0 0;
-      color: #A22833;
-      min-width: 1rem;
-      text-align: center;
-      font-size: 1rem; }
-    aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.hasicon.cog a i[aria-hidden="true"] {
-      display: none; }
-    aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch {
-      position: relative;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-flex-wrap: wrap;
-          -ms-flex-wrap: wrap;
-              flex-wrap: wrap;
-      -webkit-box-align: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
-      margin: 0;
-      padding: 0.5rem 0.5rem 0.5rem 2rem; }
-      aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded="false"].loading, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded="false"].loading {
-        background-position: calc(100% - 2rem) 45%; }
-      aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded], aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded] {
-        padding: 0.5rem 2rem 0.5rem 0.5rem; }
-        aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded]:before, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded]:before {
-          left: auto;
-          right: 0.3rem; }
-        aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded] > a, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded] > a {
-          pointer-events: none; }
-      aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch:hover:before, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch:hover:before {
-        background-color: rgba(0, 0, 0, 0.05); }
+  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.hasicon.cog a:before {
+    content: "\f013";
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0 0.5rem 0 0;
+    color: #A22833;
+    min-width: 1rem;
+    text-align: center;
+    font-size: 1rem; }
+  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.hasicon.cog a i[aria-hidden="true"] {
+    display: none; }
+  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    margin: 0;
+    padding: 0.5rem 0.5rem 0.5rem 2rem; }
+    aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded="false"].loading, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded="false"].loading {
+      background-position: calc(100% - 2rem) 45%; }
+    aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded], aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded] {
+      padding: 0.5rem 2rem 0.5rem 0.5rem; }
+      aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded]:before, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded]:before {
+        left: auto;
+        right: 0.3rem; }
+      aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch[aria-expanded] > a, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch[aria-expanded] > a {
+        pointer-events: none; }
+    aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.root_node.branch:hover:before, aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item.branch:hover:before {
+      background-color: rgba(0, 0, 0, 0.05); }
   aside[id*="block-region-nav-settings"] .block_settings .block_tree .root_node + ul {
     position: absolute;
     top: 100%;
