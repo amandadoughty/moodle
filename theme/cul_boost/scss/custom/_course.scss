@@ -682,7 +682,7 @@ $culcourse-arrow-active-color: #fff;
 .cul-generic {
     @extend .tag;
     // @extend .tag-info;
-    background-color: darken($info, 14%);
+    background-color: darken($info, 15%);
     margin: 0 $spacer/4 $spacer/4 0;
     font-size: $font-size-base;
     white-space: normal;

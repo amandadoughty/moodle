@@ -15,5 +15,6 @@
 }
 
 [data-region=right-hand-drawer].drawer {
-	top: 140px
+	top: 140px;
+	height: calc(100% - 140px);
 };

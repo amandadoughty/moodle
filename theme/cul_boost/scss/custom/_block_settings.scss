@@ -143,6 +143,10 @@ aside[id*="block-region-nav-settings"] {
         }
     }
     .block.block_settings .block_tree .tree_item {
+        &:focus {
+            outline: 3px solid $highlight !important;
+            outline-offset: -3px;
+        }
         &:not([aria-expanded]) {
             >a {
                 color: $primary;
