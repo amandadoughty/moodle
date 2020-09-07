@@ -27,6 +27,11 @@ namespace mod_peerwork\output;
 
 defined('MOODLE_INTERNAL') || die();
 
+use renderer_base;
+use renderable;
+use templatable;
+use stdClass;
+
 /**
  * Summary.
  *
@@ -35,7 +40,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Amanda Doughty
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class peerwork_detail_summary implements \renderable {
+class peerwork_detail_summary implements templatable, renderable {
 
     /** @var object The criterion. */
     public $criterion;
@@ -53,6 +58,10 @@ class peerwork_detail_summary implements \renderable {
     public $canunlock;
     /** @var bool Whether justification is enabled. */
     public $justenabledcrit;
+    /** @var int Course module id. */
+    public $cmid;
+    /** @var int Group id. */
+    public $groupid;
 
     /**
      * Constructor.
@@ -151,6 +160,7 @@ class peerwork_detail_summary implements \renderable {
 
                     if (!isset($grades->grades[$critid]) || !isset($grades->grades[$critid][$member->id])
                             || !isset($grades->grades[$critid][$member->id][$peer->id])) {
+
                         $gradedby['gradefor'][] = [
                             'name' => $label,
                             'grade' => '-'
@@ -178,7 +188,7 @@ class peerwork_detail_summary implements \renderable {
                                 $pixicon = new \pix_icon('help', '', 'moodle', ['title' => $title]);
                                 $override = $output->render($pixicon);
                             }
-                        }
+                        }                       
 
                         if (
                             $justenabledcrit &&

@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_peerwork/peerwork_detail_summary
+    @template mod_peerwork/peerwork_dtail_summary
 
     Table output for criteria and justification in the details form.
 
@@ -48,6 +48,29 @@
     }
 }}
 
+<!-- {{# criteria }}
+{{# gradefor }}
+<table class="{{ attributes.class }}">
+    <caption>{{{ caption }}}</caption>
+    <thead>
+    <tr>
+        <th></th>
+        <th>{{ name }}</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{# gradedby }} 
+        <tr>            
+            <td>{{{ name }}}</td>                      
+            <td>{{{ grade }}}</td>                        
+        </tr>
+        {{/ gradedby }}       
+    </tbody>
+</table>
+{{/ gradefor }}
+{{/ criteria }} -->
+
+
 {{# criteria }}
 <table class="{{ attributes.class }}">
     <caption>{{{ caption }}}</caption>
@@ -71,26 +94,3 @@
     </tbody>
 </table>
 {{/ criteria }}
-</br>
-{{# overridepeergrades }}
-<strong>{{# str }} overridepeergradesby, mod_peerwork {{/ str }}</strong>
-<div id="memberdropdown" class="dropdown justify-content-center py-3">
-    <a class="dropdown-toggle nav-link" id="drop-down-{{ uniqid }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{# str }} select, core {{/ str }}" href="#">
-        {{# str }} select, core {{/ str }}
-    </a>
-    <div class="dropdown-menu mt-0" aria-labelledby="drop-down-{{ uniqid }}">
-        {{# memberdropdown }}
-        <a 
-            class="dropdown-item" 
-            href="/mod/peerwork/override.php?id={{{ id }}}&pid={{{ peerworkid }}}&gid={{{ groupid }}}&uid={{{ gradedby }}}" 
-            title="{{{ name }}}"
-        >
-            {{{ name }}}
-        </a>
-        {{/ memberdropdown }}
-    </div>
-</div>
-{{/ overridepeergrades }}
-
-
-
