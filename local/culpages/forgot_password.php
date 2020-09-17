@@ -27,9 +27,6 @@
 
 require('../../config.php');
 
-// HTTPS is required in this page when $CFG->loginhttps enabled.
-$PAGE->https_required();
-
 $PAGE->set_url('/local/culpages/forgot_password.php');
 $systemcontext = context_system::instance();
 $PAGE->set_context($systemcontext);
@@ -47,9 +44,6 @@ $PAGE->set_heading($COURSE->fullname);
 if (isloggedin() and !isguestuser()) {
     redirect($CFG->wwwroot.'/my');
 }
-
-// Make sure we really are on the https page when https login required.
-$PAGE->verify_https_required();
 
 // DISPLAY FORM.
 
