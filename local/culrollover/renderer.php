@@ -394,7 +394,7 @@ class local_culrollover_renderer extends plugin_renderer_base {
 
                 $rollover->type = $choices->what[$i];
                 $rollover->merge = $choices->merge[$i];
-                $rollover->groups = $choices->groups[$i];
+                $rollover->includegroups = $choices->groups[$i];
                 $rollover->enrolments = $choices->roles[$i];
                 $rollover->notify = $notifies;
                 $rollover->visible = $choices->visible[$i];

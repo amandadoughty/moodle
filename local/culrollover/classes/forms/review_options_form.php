@@ -237,7 +237,7 @@ class review_options_form extends moodleform {
                 ]
             ];
 
-        $params['groups'] = $groups;
+        $params['includegroups'] = $groups;
 
         $merge = [
             'value' => $this->_customdata['defaultmerge'],

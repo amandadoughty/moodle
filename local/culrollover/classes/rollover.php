@@ -78,7 +78,7 @@ class rollover {
 
         $this->record->status = 'Processing';
 
-        $opt[] = array('name' => 'groups', 'value' => (int)$this->record->groups);
+        $opt[] = array('name' => 'groups', 'value' => (int)$this->record->includegroups);
 
         switch($this->record->type) {
             case COPY_EVERYTHING:
