@@ -62,7 +62,7 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
         $this->assertArrayHasKey('schedule', $privacyfields);
         $this->assertArrayHasKey('type', $privacyfields);
         $this->assertArrayHasKey('merge', $privacyfields);
-        $this->assertArrayHasKey('groups', $privacyfields);
+        $this->assertArrayHasKey('includegroups', $privacyfields);
         $this->assertArrayHasKey('enrolments', $privacyfields);
         $this->assertArrayHasKey('visible', $privacyfields);
         $this->assertArrayHasKey('visibledate', $privacyfields);
@@ -350,7 +350,7 @@ class local_culrollover_privacy_provider_testcase extends \core_privacy\tests\pr
         $record->schedule = $schedule;
         $record->type = 1;
         $record->merge = 0;
-        $record->groups = 0;
+        $record->includegroups = 0;
         $record->enrolments = '9,3,4,11,19,16';
         $record->visible = 0;
         $record->visibledate = $visibledate;

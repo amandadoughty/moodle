@@ -252,7 +252,7 @@ class cul_ssp {
 			 cr.id,
 			 cr.schedule,
 			 cr.merge,
-			 cr.groups,
+			 cr.includegroups,
 			 cr.enrolments,
 			 cr.visible,
 			 cr.visibledate,

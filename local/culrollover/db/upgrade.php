@@ -62,7 +62,21 @@ function xmldb_local_culrollover_upgrade($oldversion) {
 
         // CUL Rollover savepoint reached.
         upgrade_plugin_savepoint(true, 2016080505, 'local', 'culrollover');
-    } 
+    }
+
+    if ($oldversion < 2019031203) {
+        global $DB;
+
+        $table = new xmldb_table('cul_rollover');
+        $field = new xmldb_field('groups', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, null, null, '0', 'merge');
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'includegroups');
+        }
+
+        // CUL Rollover savepoint reached.
+        upgrade_plugin_savepoint(true, 2019031203, 'local', 'culrollover');
+    }
 
     return true;
 }

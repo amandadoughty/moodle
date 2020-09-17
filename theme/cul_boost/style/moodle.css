@@ -22759,6 +22759,9 @@ aside[id*="block-region-nav-settings"] {
   aside[id*="block-region-nav-settings"] .block_tree .type_siteadmin .root_node:after {
     content: "\f023";
     padding-right: 3px; }
+  aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item:focus {
+    outline: 3px solid #ffbf47 !important;
+    outline-offset: -3px; }
   aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item:not([aria-expanded]) > a {
     color: #A22833; }
     aside[id*="block-region-nav-settings"] .block.block_settings .block_tree .tree_item:not([aria-expanded]) > a > span {
@@ -25003,7 +25006,7 @@ body .local_culcourse_dashboard.dash-panel .linkscontainer ul.links .dash .dash-
     color: #fff; }
 
 .cul-generic, .editor_atto_menu .atto_styles_button .dropdown-menu > li:nth-child(3) {
-  background-color: #747479;
+  background-color: #717176;
   margin: 0 0.25rem 0.25rem 0;
   font-size: 1rem;
   white-space: normal;
@@ -25703,7 +25706,8 @@ ol.checklist {
   min-height: 400px; }
 
 [data-region=right-hand-drawer].drawer {
-  top: 140px; }
+  top: 140px;
+  height: calc(100% - 140px); }
 
 #page-mod-forum-report-summary-index #filter-dates-popover .popover-header,
 #page-mod-forum-report-summary-index #filter-dates-popover .filter-save {
@@ -26235,6 +26239,9 @@ div:not(.iconpicker-popover).popover .popover-content {
 
 .popover-region-container .see-all-link {
   color: #fff; }
+
+.iconpicker-popover.popover .popover-title .form-control {
+  color: #434343; }
 
 .yui3-panel {
   z-index: 20; }

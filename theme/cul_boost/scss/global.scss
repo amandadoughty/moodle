@@ -353,8 +353,13 @@ div:not(.iconpicker-popover).popover {
         }
     }
 }
+
 .popover-region-container .see-all-link {
     color: $popover-text-color;
+}
+
+.iconpicker-popover.popover .popover-title .form-control {
+  color: $gray-700; 
 }
 
 .yui3-panel {
