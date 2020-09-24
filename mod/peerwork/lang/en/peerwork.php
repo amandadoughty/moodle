@@ -107,6 +107,7 @@ $string['invalidgrade'] = 'Invalid grade';
 $string['invalidpaweighting'] = 'Invalid weighting';
 $string['invalidscale'] = 'Invalid scale. Please select from options above.';
 $string['justification'] = 'Justification';
+$string['justification_help'] = 'Enable/disable justification comments and select visibility.';
 $string['justificationbyfor'] = 'By {$a} for';
 $string['justificationdisabled'] = 'Disabled';
 $string['justificationhiddenfromstudents'] = 'Hidden from students';
