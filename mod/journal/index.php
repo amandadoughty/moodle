@@ -111,8 +111,7 @@ foreach ($journals as $journal) {
     }
 
     // Description.
-    $description = file_rewrite_pluginfile_urls($journal->intro, 'pluginfile.php', $context->id, 'mod_journal', 'intro', null);
-    $table->data[$i][] = format_text($description,  $journal->introformat, array('context' => $context));
+    $table->data[$i][] = format_text($journal->intro,  $journal->introformat, array('context' => $context));
 
     // Entries info.
     if ($entriesmanager) {
