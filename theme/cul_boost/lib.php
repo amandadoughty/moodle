@@ -216,3 +216,111 @@ function theme_cul_boost_output_fragment_gradealert($args) {
 
     return $o;
 }
+
+// Override all of the messaging api ajax calls to remove hidden photos.
+function theme_cul_boost_override_webservice_execution($function, $params) {
+    switch ($function->name) {
+        case 'core_message_get_member_info':
+        case 'core_message_get_user_contacts':
+        case 'core_message_get_contact_requests':
+        case 'core_message_get_conversation_members':       
+            $result = call_user_func_array([$function->classname, $function->methodname], $params);
+            $result = theme_cul_boost_edit_message_contact_photo ($result);
+
+            return $result;
+            break;
+
+        case 'core_message_get_conversation_messages':
+            $result = call_user_func_array([$function->classname, $function->methodname], $params);
+            $result['members'] = theme_cul_boost_edit_message_contact_photo ($result['members']);
+
+            return $result;
+            break;
+
+        case 'core_message_message_search_users':
+            $result = call_user_func_array([$function->classname, $function->methodname], $params);
+            $result['contacts'] = theme_cul_boost_edit_message_contact_photo ($result['contacts']);
+            $result['noncontacts'] = theme_cul_boost_edit_message_contact_photo ($result['noncontacts']);
+
+            return $result;
+            break;
+
+        case 'core_message_get_conversations':
+            $result = call_user_func_array([$function->classname, $function->methodname], $params);
+
+            foreach ($result->conversations as $key => &$conversation) {
+                $conversation->members = theme_cul_boost_edit_message_contact_photo ($conversation->members);
+            }
+
+            return $result;
+            break;
+
+        default:
+            return false;
+    }
+}
+
+function theme_cul_boost_edit_message_contact_photo ($members) {
+    global $CFG, $USER, $PAGE, $DB;
+
+    $renderer = $PAGE->get_renderer('core');
+
+    foreach ($members as $member) {
+        if ($member->id == $USER->id) {
+            continue;
+        }
+
+        $context = \context_system::instance();
+
+        if (!has_capability('moodle/user:viewhiddendetails', $context)) { 
+            $sql = 'SELECT shortname, data
+                    FROM {user_info_data} uid
+                    JOIN {user_info_field} uif
+                    ON uid.fieldid = uif.id
+                    WHERE uid.userid = :userid';
+
+            if ($result = $DB->get_records_sql($sql, array('userid' => $member->id))){
+                if(isset($result['publicphoto']->data) && $result['publicphoto']->data == 0) {
+
+                    $defaultprofileimageurl = $renderer->image_url('u/f1'); // default image.
+                    $defaultprofileimageurlsmall = $renderer->image_url('u/f2'); // default image.
+
+                    if (!empty($CFG->enablegravatar)) {
+                        // Build a gravatar URL with what we know.
+
+                        // Find the best default image URL we can (MDL-35669)
+                        if (empty($CFG->gravatardefaulturl)) {
+                            $absoluteimagepath = $page->theme->resolve_image_location('u/'.$filename, 'core');
+                            if (strpos($absoluteimagepath, $CFG->dirroot) === 0) {
+                                $gravatardefault = $CFG->wwwroot . substr($absoluteimagepath, strlen($CFG->dirroot));
+                            } else {
+                                $gravatardefault = $CFG->wwwroot . '/pix/u/' . $filename . '.png';
+                            }
+                        } else {
+                            $gravatardefault = $CFG->gravatardefaulturl;
+                        }
+
+                        // If the currently requested page is https then we'll return an
+                        // https gravatar page.
+                        if (is_https()) {
+                            $defaultprofileimageurl = new moodle_url("https://secure.gravatar.com/avatar", array('s' => 100, 'd' => $gravatardefault));
+                            $defaultprofileimageurlsmall = new moodle_url("https://secure.gravatar.com/avatar", array('s' => 35, 'd' => $gravatardefault));
+                        } else {
+                            $defaultprofileimageurl =  new moodle_url("http://www.gravatar.com/avatar/{$md5}", array('s' => 100, 'd' => $gravatardefault));
+                            $defaultprofileimageurlsmall =  new moodle_url("http://www.gravatar.com/avatar/{$md5}", array('s' => 35, 'd' => $gravatardefault));
+                        }
+                    }
+
+                    $member->profileimageurl = $defaultprofileimageurl->out(false);
+                    $member->profileimageurlsmall = $defaultprofileimageurlsmall->out(false);
+                    
+                    
+
+                }
+            }
+        }
+    }
+
+    return $members;
+}
+
