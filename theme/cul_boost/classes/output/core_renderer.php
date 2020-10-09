@@ -433,6 +433,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
             if ($result = $DB->get_records_sql($sql, array('userid' => $userpicture->user->id))){                      ;
                 if(isset($result['publicphoto']->data) && $result['publicphoto']->data == 0) {
+                    // This can result in a user gravatar being displayed.
                     $userpicture->user->picture = 0;
                 }
             }
