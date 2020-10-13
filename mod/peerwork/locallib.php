@@ -337,8 +337,19 @@ function peerwork_from_date($peerwork) {
  * @param object $status The status.
  * @return bool
  */
-function peerwork_can_student_view_grade_and_feedback_from_status($status) {
-    return $status->code == PEERWORK_STATUS_RELEASED;
+function peerwork_can_student_view_grade_and_feedback_from_status($status, $gradinginfo) {
+    global $USER;
+
+    $hidden = false;
+
+    if ($gradinginfo &&
+        isset($gradinginfo->items[0]->grades[$USER->id]) &&
+        $gradinginfo->items[0]->grades[$USER->id]->hidden
+    ) {
+        $hidden = true;
+    }
+
+    return $status->code == PEERWORK_STATUS_RELEASED && !$hidden;
 }
 
 /**
