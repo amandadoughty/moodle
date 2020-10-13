@@ -26,6 +26,7 @@ require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot . '/mod/peerwork/lib.php');
 require_once($CFG->dirroot . '/lib/grouplib.php');
 require_once($CFG->dirroot . '/mod/peerwork/locallib.php');
+require_once($CFG->dirroot . '/lib/gradelib.php');
 
 $id = required_param('id', PARAM_INT);
 $groupid = required_param('groupid', PARAM_INT);
@@ -119,8 +120,27 @@ if (peerwork_was_submission_graded_from_status($status)) {
     $result = peerwork_get_pa_result($peerwork, $group);
     $localgrades = peerwork_get_local_grades($peerwork->id, $submission->id);
 
+    $gradinginfo = grade_get_grades(
+        $course->id,
+        'mod',
+        'peerwork',
+        $peerwork->id,
+        array_keys($members)
+    );
+
     $data['finalgrades'] = [];
     foreach ($members as $member) {
+        // Check if the grade has been overridden in the gradebook.
+        $grade = $gradinginfo->items[0]->grades[$member->id];
+
+        // Format mixed bool/integer parameters.
+        $grade->overridden = (empty($grade->overridden)) ? 0 : $grade->overridden;
+        $grade->locked = (empty($grade->locked)) ? 0 : $grade->locked;
+
+        if ($grade->overridden || $grade->locked) {
+            $localgrades[$member->id]->revisedgrade = $grade->str_grade;
+        }
+
         $data['finalgrades'][] = array(
             'memberid' => $member->id,
             'fullname' => fullname($member),
@@ -128,7 +148,9 @@ if (peerwork_was_submission_graded_from_status($status)) {
             'calcgrade' => $result->get_preliminary_grade($member->id),
             'penalty' => $result->get_non_completion_penalty($member->id),
             'finalweightedgrade' => $result->get_grade($member->id),
-            'revisedgrade' => $localgrades[$member->id]->revisedgrade ?? null
+            'revisedgrade' => $localgrades[$member->id]->revisedgrade ?? null,
+            'overridden' => $grade->overridden,
+            'locked' => $grade->locked
         );
     }
 }
