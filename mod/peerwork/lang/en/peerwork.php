@@ -233,7 +233,7 @@ $string['requirejustification_help'] = '
 - Visible with usernames: Any comments left by students will be visible to their peers along with the identities of those leaving the feedback
 ';
 $string['revisedgrade'] = 'Revised grade';
-$string['revisedgrade_help'] = 'Use this field to override the final weighted grade, if needed.';
+$string['revisedgrade_help'] = 'Use this field to override the final weighted grade, if needed. However if the grade has been overidden or locked in the gradebook then it cannot be edited.';
 $string['search:activity'] = 'Peer work - activity information';
 $string['studentcalculatedgrade'] = 'Student calculated grade';
 $string['studentcontribution'] = 'Student contribution';
