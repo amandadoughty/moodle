@@ -236,8 +236,30 @@ class calculator extends \mod_peerwork\peerworkcalculator_plugin {
         return new \mod_peerwork\pa_result($meanscores, $pascores, $prelimgrades, $grades, $noncompletionpenalties);
     }
 
+    /**
+     * Function to return if calculation uses paweighting.
+     *
+     * @return bool
+     */
     public static function usespaweighting() {
         return false;
+    }
+
+    /**
+     * Function to return the scales that can be used.
+     *
+     * @return array/bool false if no resriction on scales.
+     */
+    public static function get_scales_menu($courseid = 0) {
+        $availablescales = false;
+
+        if ($config = get_config('peerworkcalculator_simplepa', 'availablescales')) {
+            $scales = get_scales_menu($courseid);
+            $available = explode(',', $config);
+            $availablescales = array_intersect_key($scales, array_flip($available));
+        }
+
+        return $availablescales;
     }
 
     /**
@@ -259,7 +281,13 @@ class calculator extends \mod_peerwork\peerworkcalculator_plugin {
         foreach ($prelimgrades as $criteriaid => $gradedby) {
             foreach ($gradedby as $gradedbyid => $gradefor) {
                 foreach ($gradefor as $gradeforid => $grade) {
-                    $grades[$criteriaid][$gradedbyid][$gradeforid] = $translator[$grade];
+                    if ($grade > 3) {
+                        $newgrade = $translator[3];
+                    } else {
+                        $newgrade = $translator[$grade];
+                    }
+
+                    $grades[$criteriaid][$gradedbyid][$gradeforid] = $newgrade;
                 }
             }
         }

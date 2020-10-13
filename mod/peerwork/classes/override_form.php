@@ -1,0 +1,173 @@
+<?php
+// This file is part of a 3rd party created module for Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Override form.
+ *
+ * @package mod_peerwork
+ * @copyright 2020 Amanda Doughty
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->libdir . '/grade/grade_scale.php');
+
+/**
+ * This form is for teachers to override the grades given by peers.
+ */
+class mod_peerwork_override_form extends moodleform {
+
+    /** @var object[] The criteria. */
+    protected $criteria;
+
+    /**
+     * Definition.
+     *
+     * @return void
+     */
+    protected function definition() {
+        global $USER, $CFG, $COURSE, $PAGE;
+
+        $mform = $this->_form;
+
+        $mform->addElement('hidden', 'peerworkid');
+        $mform->setType('peerworkid', PARAM_INT);
+        $mform->setConstant('peerworkid', $this->_customdata['peerworkid']);
+
+        $mform->addElement('hidden', 'gradedby');
+        $mform->setType('gradedby', PARAM_INT);
+        $mform->setConstant('gradedby', $this->_customdata['gradedby']->id);
+
+        $mform->addElement('hidden', 'groupid');
+        $mform->setType('groupid', PARAM_INT);
+        $mform->setConstant('groupid', $this->_customdata['groupid']);
+
+        $peers = $this->_customdata['peers'];
+        $criteria = $this->get_criteria();
+        $gradedby = fullname($peers[$this->_customdata['gradedby']->id]);
+        $grades = $this->_customdata['grades']->grade;
+
+        // Create a section with all the criteria.
+        $mform->addElement('header', 'gradesgivenby', get_string('gradesgivenby', 'peerwork', $gradedby));
+
+        $scales = get_scales_menu($COURSE->id);
+
+        foreach ($criteria as $criterion) {
+            // Get the scale.
+            $scaleid = abs($criterion->grade);
+            $scale = isset($scales[$scaleid]) ? $scales[$scaleid] : null;
+
+            if (!$scale) {
+                throw new moodle_exception('Unknown scale ' . $scaleid);
+            }
+
+            $scale = grade_scale::fetch(['id' => $scaleid]);
+            $scaleitems = $scale->load_items();
+
+            // Add crit description.
+            $mform->addElement('static', 'criterion', get_string('criteria', 'mod_peerwork'), $criterion->description);
+
+            foreach ($peers as $peer) {
+
+                if (!$this->_customdata['selfgrading']) {
+                    if ($peer->id == $this->_customdata['gradedby']->id) {
+                        continue;
+                    }
+                }
+
+                $overridearray = [];
+                $fullname = fullname($peer);
+
+                if ($grade = $grades[$peer->id][$criterion->id]['peergrade']) {
+                    $grade = $grades[$peer->id][$criterion->id]['grade'];
+                    $overiddengrade = null;
+                } else {
+                    $grade = $grades[$peer->id][$criterion->id]['peergrade'];
+                    $overiddengrade = $grades[$peer->id][$criterion->id]['grade'];
+                }
+
+                $mform->addElement('static', 'name', get_string('gradegivento', 'mod_peerwork'), "<strong>$fullname</strong>");
+
+                $mform->addElement('static', 'grade', get_string('grade', 'moodle'), $scaleitems[$grade]);
+                $uniqueid = 'idx_' . $criterion->id . '[' . $peer->id . ']';
+
+                $mform->addElement('select', 'override_' . $uniqueid, get_string('override', 'mod_peerwork'), $scaleitems);
+                $mform->setType('override_'  . $uniqueid, PARAM_INT);
+
+                $selected = $overiddengrade ? $overiddengrade : $grade;
+                $mform->getElement('override_'  . $uniqueid)->setSelected($selected);
+
+                $mform->addElement(
+                    'textarea',
+                    'comments_' .
+                    $uniqueid,
+                    get_string('comments', 'moodle'),
+                    'wrap="virtual" rows="1" cols="50"'
+                );
+                $mform->setDefault('comments_' . $uniqueid, $grades[$peer->id][$criterion->id]['comments']);
+            }
+        }
+
+        $this->add_action_buttons();
+    }
+
+    /**
+     * Get data.
+     *
+     * @return object
+     */
+    public function get_data() {
+        $data = parent::get_data();
+
+        if (!$data) {
+            return $data;
+        }
+
+        // Group the grades and data.
+        $data = (array) $data;
+
+        foreach ($data as $key => $value) {
+            if (preg_match('/^override_idx_([0-9]+)$/', $key, $matches)) {
+                foreach ($value as $gradefor => $grade) {
+                    $data['grades'][$key] = $value;
+                }
+            }
+
+            if (preg_match('/^comments_idx_([0-9]+)$/', $key, $matches)) {
+                foreach ($value as $gradefor => $grade) {
+                    $data['comments'][$key] = $value;
+                }
+            }
+        }
+
+        return (object) $data;
+    }
+
+    /**
+     * Get the criteria.
+     *
+     * @return void
+     */
+    public function get_criteria() {
+        if (!$this->criteria) {
+            $pac = new mod_peerwork_criteria($this->_customdata['peerworkid']);
+            $this->criteria = $pac->get_criteria();
+        }
+        return $this->criteria;
+    }
+}

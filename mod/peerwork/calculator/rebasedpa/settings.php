@@ -42,3 +42,13 @@ $settings->add(new admin_setting_configtext(
     5
 ));
 
+$scales = get_scales_menu();
+
+$settings->add(new admin_setting_configmultiselect(
+    'peerworkcalculator_rebasedpa/availablescales',
+    get_string('availablescales', 'mod_peerwork'),
+    get_string('availablescales_help', 'mod_peerwork'),
+    [],
+    $scales
+));
+

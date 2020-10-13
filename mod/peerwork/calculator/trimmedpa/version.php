@@ -25,6 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2020052200;
+$plugin->version  = 2020052201;
 $plugin->requires = 2019111200;  // Requires this Moodle version.
 $plugin->component = 'peerworkcalculator_trimmedpa';

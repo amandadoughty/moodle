@@ -337,8 +337,19 @@ function peerwork_from_date($peerwork) {
  * @param object $status The status.
  * @return bool
  */
-function peerwork_can_student_view_grade_and_feedback_from_status($status) {
-    return $status->code == PEERWORK_STATUS_RELEASED;
+function peerwork_can_student_view_grade_and_feedback_from_status($status, $gradinginfo) {
+    global $USER;
+
+    $hidden = false;
+
+    if ($gradinginfo &&
+        isset($gradinginfo->items[0]->grades[$USER->id]) &&
+        $gradinginfo->items[0]->grades[$USER->id]->hidden
+    ) {
+        $hidden = true;
+    }
+
+    return $status->code == PEERWORK_STATUS_RELEASED && !$hidden;
 }
 
 /**
@@ -441,15 +452,18 @@ function peerwork_get_peer_grades($peerwork, $group, $membersgradeable = null, $
 
     $peers = $DB->get_records('peerwork_peers', array('peerwork' => $peerwork->id, 'groupid' => $group->id));
     $grades = [];
+    $overrides = [];
     $feedback = [];
 
     foreach ($peers as $peer) {
         $grades[$peer->criteriaid][$peer->gradedby][$peer->gradefor] = $peer->grade;
+        $overrides[$peer->criteriaid][$peer->gradedby][$peer->gradefor] = $peer->peergrade;
         $feedback[$peer->criteriaid][$peer->gradedby][$peer->gradefor] = $peer->feedback;
     }
 
     // Translate the scales to grades.
     $grades = $calculator->translate_scales_to_scores($grades);
+    $overrides = $calculator->translate_scales_to_scores($overrides);
 
     // Anything not proceessed about gets a default string.
     if ($full) {
@@ -471,6 +485,7 @@ function peerwork_get_peer_grades($peerwork, $group, $membersgradeable = null, $
     }
 
     $return->grades = $grades;
+    $return->overrides = $overrides;
     $return->feedback = $feedback;
 
     return $return;
@@ -650,6 +665,37 @@ function peerwork_grades_by_user($peerwork, $user, $membersgradeable) {
     foreach ($mygrades as $grade) {
         $peerid = $grade->gradefor;
         $data->grade[$peerid][] = $grade->grade;
+    }
+
+    return $data;
+}
+
+/**
+ * All the grades and the overrides awarded by the $user/teacher
+ * to other members of the group.
+ *
+ * @param object $peerwork The instance.
+ * @param object $user The user.
+ * @param object[] $membersgradeable The user's peers.
+ */
+function peerwork_grades_overrides_by_user($peerwork, $user, $membersgradeable) {
+    global $DB;
+
+    $data = new stdClass();
+    $data->grade = [];
+    $data->feedback = [];
+
+    $mygrades = $DB->get_records('peerwork_peers', array('peerwork' => $peerwork->id,
+        'gradedby' => $user->id), '', 'id,criteriaid,gradefor,grade,peergrade,comments');
+
+    foreach ($mygrades as $grade) {
+        $peerid = $grade->gradefor;
+        $criteriaid = $grade->criteriaid;
+        $data->grade[$peerid][$criteriaid] = [
+            'grade' => $grade->grade,
+            'peergrade' => $grade->peergrade,
+            'comments' => $grade->comments
+        ];
     }
 
     return $data;
@@ -868,6 +914,8 @@ function peerwork_save($peerwork, $submission, $group, $course, $cm, $context, $
             } else {
                 $peer->grade = 0;
             }
+            // Save the original peer grade given. Grade may be overridden later.
+            $peer->peergrade = $peer->grade;
 
             $peer->id = $DB->insert_record('peerwork_peers', $peer, true);
 
@@ -949,6 +997,69 @@ function peerwork_save($peerwork, $submission, $group, $course, $cm, $context, $
     // Send email confirmation.
     if (!mod_peerwork_mail_confirmation_submission($course, $submission, $draftfiles, $membersgradeable, $data)) {
         throw new moodle_exception("Submission saved but no email sent.");
+    }
+}
+
+/**
+ * Teacher has overridden some grades for peers using the override_form, save into database and trigger events.
+ *
+ * @param int $peerworkid
+ * @param int $gradedby
+ * @param int $groupid
+ * @param array $grades
+ * @param array $comments
+ */
+function peerwork_peer_override($peerworkid, $gradedby, $groupid, $grades, $comments) {
+    global $CFG, $USER, $DB;
+
+    $cm = get_coursemodule_from_instance('peerwork', $peerworkid, 0, false, MUST_EXIST);
+    $context = context_module::instance($cm->id);
+
+    // Save the overrides.
+    $pac = new mod_peerwork_criteria($peerworkid);
+    $criteria = $pac->get_criteria();
+    $peerworkpeers = $DB->get_records(
+        'peerwork_peers',
+        [
+            'peerwork' => $peerworkid,
+            'groupid' => $groupid,
+            'gradedby' => $gradedby
+        ]
+    );
+
+    foreach ($criteria as $criterion) {
+        foreach ($peerworkpeers as $id => $peerworkpeer) {
+            if ($peerworkpeer->criteriaid != $criterion->id) {
+                continue;
+            }
+
+            $grade = $grades['override_idx_' . $criterion->id][$peerworkpeer->gradefor];
+            $comment = $comments['comments_idx_' . $criterion->id][$peerworkpeer->gradefor];
+
+            // If grade or comment has changed.
+            if ($peerworkpeer->grade != $grade || $peerworkpeer->comments != $comment) {
+                $peerworkpeer->grade = $grade;
+                $peerworkpeer->comments = $comment;
+                $peerworkpeer->overriddenby = $USER->id;
+                $peerworkpeer->timeoverridden = time();
+                $DB->update_record('peerwork_peers', $peerworkpeer, true);
+
+                $params = array(
+                    'objectid' => $peerworkid,
+                    'context' => $context,
+                    'relateduserid' => $gradedby,
+                    'other' => array(
+                        'gradefor' => $peerworkpeer->gradefor,
+                        'grade' => $peerworkpeer->grade,
+                        'peergrade' => $peerworkpeer->peergrade
+                    )
+                );
+
+                $event = \mod_peerwork\event\peer_grade_overridden::create($params);
+                $event->add_record_snapshot('peerwork_peers', $peerworkpeer);
+                $event->trigger();
+            }
+        }
     }
 }
 
@@ -1449,8 +1560,11 @@ function add_all_plugin_settings(MoodleQuickForm $mform, $peerwork) {
             $calculatorpluginnames
         );
         $mform->setType('calculator', PARAM_TEXT);
-
         $mform->disabledIf('calculator', 'recalculategrades', 'eq', 0);
+
+        // Button to update calculator-specific options on format change (will be hidden by JavaScript).
+        $mform->registerNoSubmitButton('updatecalculator');
+        $mform->addElement('submit', 'updatecalculator', get_string('calculatorupdate', 'mod_peerwork'));
     } else if (count($calculatorpluginsenabled) == 1) {
         $value = array_pop($calculatorpluginsenabled);
         $mform->addElement('hidden', 'calculator');

@@ -132,11 +132,6 @@ class mod_peerwork_details_form extends moodleform {
             $mform->setType('paweighting', PARAM_INT);
         }
 
-        foreach ($members as $member) {
-            $mform->addElement('hidden', 'grade_' . $member->id, '');
-            $mform->setType('grade_' . $member->id, PARAM_RAW); // We don't want the value to be forced to 0.
-        }
-
         $mform->addElement('static', 'finalgrades', get_string('calculatedgrades', 'mod_peerwork'));
 
         $mform->addElement('editor', 'feedback', get_string('feedback', 'peerwork'), ['rows' => 6]);
@@ -219,8 +214,15 @@ class mod_peerwork_details_form extends moodleform {
                 $row->cells[] = format_float($member['calcgrade'], 2);
                 $row->cells[] = format_float($member['penalty'] * 100, 0) . '%';
                 $row->cells[] = format_float($member['finalweightedgrade'], 2);
-                $row->cells[] = $this->_form->createElement('text', 'grade_' . $member['memberid'], '',
-                    ['maxlength' => 15, 'size' => 10, 'value' => format_float($revisedgrade ?? null, 5)])->toHtml();
+
+                $revisedgradeel = $this->_form->createElement('text', 'grade_' . $member['memberid'], '',
+                    ['maxlength' => 15, 'size' => 10, 'value' => format_float($revisedgrade ?? null, 5)]);
+
+                if ($member['overridden'] || $member['locked']) {
+                    $revisedgradeel->freeze();
+                }
+
+                $row->cells[] = $revisedgradeel->toHtml();
 
                 $totalcalculated += $member['calcgrade'];
                 $totalfinalweighted += $member['finalweightedgrade'];
