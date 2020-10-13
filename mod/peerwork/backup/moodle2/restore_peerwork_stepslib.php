@@ -162,6 +162,7 @@ class restore_peerwork_activity_structure_step extends restore_activity_structur
         $data->criteriaid = $this->get_mappingid('peerwork_criteria', $data->criteriaid);
         $data->gradedby = $this->get_mappingid('user', $data->gradedby);
         $data->gradefor = $this->get_mappingid('user', $data->gradefor);
+        $data->overriddenby = $this->get_mappingid('user', $data->overriddenby);
 
         $newitemid = $DB->insert_record('peerwork_peers', $data);
     }

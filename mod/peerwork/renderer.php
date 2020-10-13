@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 use mod_peerwork\output\peerwork_summary;
+use mod_peerwork\output\peerwork_detail_summary;
 
 /**
  * Renderer class.
@@ -36,7 +37,7 @@ use mod_peerwork\output\peerwork_summary;
 class mod_peerwork_renderer extends plugin_renderer_base {
 
     /**
-     * Render summary.
+     * Render summary for student.
      *
      * @param peerwork_summary $summary The summary.
      * @return string
@@ -298,3 +299,4 @@ class mod_peerwork_renderer extends plugin_renderer_base {
         return html_writer::table($t);
     }
 }
+

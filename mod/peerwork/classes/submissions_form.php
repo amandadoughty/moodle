@@ -128,6 +128,7 @@ class mod_peerwork_submissions_form extends moodleform {
      */
     public function definition_after_data() {
         global $PAGE, $USER;
+
         $mform = $this->_form;
         $peerworkid = $this->_customdata['peerworkid'];
         $peerwork = $this->_customdata['peerwork'];
@@ -159,7 +160,7 @@ class mod_peerwork_submissions_form extends moodleform {
 
         $peers = $this->_customdata['peers'];
         $criteria = $this->get_criteria();
-        $scales = $this->get_scales();
+        $scales = get_scales_menu($peerwork->course);
 
         if ($peerwork->justificationmaxlength) {
             $PAGE->requires->js_call_amd('mod_peerwork/justification-character-limit', 'init',
@@ -172,6 +173,7 @@ class mod_peerwork_submissions_form extends moodleform {
             $criteriondata['criterion']['justifcriteria'] = $justifcriteria;
             // Get the scale.
             $scaleid = abs($criterion->grade);
+            // $scale = grade_scale::fetch(['id' => $scaleid]); // TODO ???
             $scale = isset($scales[$scaleid]) ? $scales[$scaleid] : null;
 
             if (!$scale) {
@@ -463,7 +465,7 @@ class mod_peerwork_submissions_form extends moodleform {
 
         $foundgradererror = false;
         $criteria = $this->get_criteria();
-        $scales = $this->get_scales();
+        $scales = get_scales_menu($peerwork->course);
 
         foreach ($data as $key => $value) {
             $matches = [];
@@ -505,22 +507,6 @@ class mod_peerwork_submissions_form extends moodleform {
             $this->criteria = $pac->get_criteria();
         }
         return $this->criteria;
-    }
-
-    /**
-     * Get the scales.
-     *
-     * @return void
-     */
-    public function get_scales() {
-        global $COURSE;
-
-        if (!$this->scales) {
-            $globalscales = (array)grade_scale::fetch_all_global();
-            $localscales = (array)grade_scale::fetch_all_local($COURSE->id);
-            $this->scales = $globalscales + $localscales;
-        }
-        return $this->scales;
     }
 
     /**
