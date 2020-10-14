@@ -871,6 +871,27 @@ class grade_report_culuser extends grade_report_user {
     }
 
     /**
+     * Entry function to collect all the types of feedback for Peerwork
+     * 
+     * @param array $data
+     * @param stdClass $grade_object
+     */
+    protected function get_peerwork_feedback(&$data, $grade_object) {
+        $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('comments', 'gradereport_culuser') . '</p>';
+
+        if ($data['feedback']['content']) {
+            $data['feedback']['content'] = $feedbacksubtitle .= $data['feedback']['content'];
+        }
+
+        // Feedback files.
+        if($files = $this->peerwork_get_feedback_files($grade_object)) {
+            $filefeedback = $this->get_formatted_feedback_files($files);
+            $feedbacksubtitle = '<p class="feedbackpluginname">' . get_string('files', 'gradereport_culuser') . '</p>';
+            $data['feedback']['content'] .= $feedbacksubtitle .= $filefeedback;
+        }
+    }    
+
+    /**
      * Entry function to collect all the types of feedback for Workshop
      * 
      * @param array $data
@@ -1220,7 +1241,47 @@ class grade_report_culuser extends grade_report_user {
         }        
 
         return $files;
-    } 
+    }
+
+    // Peerwork functions
+
+    /**
+     * Gets the peerwork feedback files.
+     *
+     * @param stdClass $grade_object
+     * 
+     * @return array
+     */
+    public function peerwork_get_feedback_files($grade_object) {
+        global $CFG, $DB;
+
+        require_once($CFG->dirroot . '/lib/grouplib.php');
+
+        $instances = $this->modinfo->get_instances_of($grade_object->itemmodule);
+        $files = [];
+
+        if (!empty($instances[$grade_object->iteminstance])) {
+            $cm = $instances[$grade_object->iteminstance];                              
+            $context = context_module::instance($cm->id);
+            $peerwork = $DB->get_record('peerwork', array('id' => $grade_object->iteminstance));
+            // $groupingid = $peerwork->submissiongroupingid;
+            $groupingid = $cm->groupingid;
+
+            try {
+                $groups = groups_get_all_groups($this->courseid, $this->user->id, $groupingid);
+
+                if(count($groups) == 1) {
+                    $group = array_shift($groups);
+                    $fs = get_file_storage();
+                    $files = $fs->get_area_files($context->id, 'mod_peerwork', 'feedback_files', $group->id, 'sortorder', false);
+                }
+            } catch(Exception $e) {
+                // Do nothing.
+            }
+        }        
+
+        return $files;
+    }     
 
     // Turnitin functions
 
