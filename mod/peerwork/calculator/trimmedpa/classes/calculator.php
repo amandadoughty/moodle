@@ -268,7 +268,7 @@ class calculator extends \mod_peerwork\peerworkcalculator_plugin {
     public static function get_scales_menu($courseid = 0) {
         $availablescales = false;
 
-        if ($config = get_config('peerworkcalculator_simplepa', 'availablescales')) {
+        if ($config = get_config('peerworkcalculator_trimmedpa', 'availablescales')) {
             $scales = get_scales_menu($courseid);
             $available = explode(',', $config);
             $availablescales = array_intersect_key($scales, array_flip($available));
