@@ -60,20 +60,21 @@ $customdata['grades'] = $grades;
 $customdata['selfgrading'] = $peerwork->selfgrading;
 
 $action = new moodle_url('override.php', ['id' => $id, 'pid' => $peerworkid, 'gid' => $groupid, 'uid' => $gradedbyid]);
+$parenturl = new moodle_url('details.php', ['id' => $cm->id, 'groupid' => $groupid]);
 
 $mform = new mod_peerwork_override_form($action->out(false), $customdata);
 
 if ($mform->is_cancelled()) {
-    // Handle form cancel operation, if cancel button is present on form.
+    redirect($parenturl);
 } else if ($fromform = $mform->get_data()) {
     peerwork_peer_override(
         $fromform->peerworkid,
         $fromform->gradedby,
         $fromform->groupid,
-        $fromform->grades,
+        $fromform->gradeoverrides,
         $fromform->comments
     );
-    redirect(new moodle_url('details.php', ['id' => $cm->id, 'groupid' => $groupid]));
+    redirect($parenturl);
 } else {
     echo $OUTPUT->header();
     $mform->display();

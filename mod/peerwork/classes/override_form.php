@@ -83,7 +83,6 @@ class mod_peerwork_override_form extends moodleform {
             $mform->addElement('static', 'criterion', get_string('criteria', 'mod_peerwork'), $criterion->description);
 
             foreach ($peers as $peer) {
-
                 if (!$this->_customdata['selfgrading']) {
                     if ($peer->id == $this->_customdata['gradedby']->id) {
                         continue;
@@ -92,34 +91,77 @@ class mod_peerwork_override_form extends moodleform {
 
                 $overridearray = [];
                 $fullname = fullname($peer);
+                $grade = null;
+                $peergrade = null;
+                $comments = null;
 
-                if ($grade = $grades[$peer->id][$criterion->id]['peergrade']) {
+                // Get the original 'peergrade' and the final 'grade' and any 'comments'.
+                if (
+                    isset($grades[$peer->id]) &&
+                    isset($grades[$peer->id][$criterion->id]) &&
+                    isset($grades[$peer->id][$criterion->id]['peergrade'])
+                ) {
+                    $peergrade = $grades[$peer->id][$criterion->id]['peergrade'];
+                }
+
+                if (
+                    isset($grades[$peer->id]) &&
+                    isset($grades[$peer->id][$criterion->id]) &&
+                    isset($grades[$peer->id][$criterion->id]['grade'])
+                ) {
                     $grade = $grades[$peer->id][$criterion->id]['grade'];
+                }
+
+                if (
+                    isset($grades[$peer->id]) &&
+                    isset($grades[$peer->id][$criterion->id]) &&
+                    isset($grades[$peer->id][$criterion->id]['comments'])
+                ) {
+                    $comments = $grades[$peer->id][$criterion->id]['comments'];
+                }
+
+                if ($grade == $peergrade) {
+                    $originalgrade = $peergrade;
                     $overiddengrade = null;
                 } else {
-                    $grade = $grades[$peer->id][$criterion->id]['peergrade'];
-                    $overiddengrade = $grades[$peer->id][$criterion->id]['grade'];
+                    $originalgrade = $peergrade;
+                    $overiddengrade = $grade;
                 }
 
                 $mform->addElement('static', 'name', get_string('gradegivento', 'mod_peerwork'), "<strong>$fullname</strong>");
 
-                $mform->addElement('static', 'grade', get_string('grade', 'moodle'), $scaleitems[$grade]);
+                if (isset($scaleitems[$grade])) {
+                    $value = $scaleitems[$grade];
+                } else {
+                    $value = null;
+                }
+
+                $mform->addElement('static', 'grade', get_string('grade', 'moodle'), $value);
                 $uniqueid = 'idx_' . $criterion->id . '[' . $peer->id . ']';
 
-                $mform->addElement('select', 'override_' . $uniqueid, get_string('override', 'mod_peerwork'), $scaleitems);
-                $mform->setType('override_'  . $uniqueid, PARAM_INT);
+                $mform->addElement('checkbox', 'overridden_' . $uniqueid, get_string('overridden', 'mod_peerwork'));
+
+                $mform->addElement(
+                    'select',
+                    'gradeoverride_' . $uniqueid,
+                    get_string('gradeoverride', 'mod_peerwork'),
+                    $scaleitems
+                );
+                $mform->setType('gradeoverride_'  . $uniqueid, PARAM_INT);
 
                 $selected = $overiddengrade ? $overiddengrade : $grade;
-                $mform->getElement('override_'  . $uniqueid)->setSelected($selected);
+                $mform->getElement('gradeoverride_'  . $uniqueid)->setSelected($selected);
 
                 $mform->addElement(
                     'textarea',
-                    'comments_' .
-                    $uniqueid,
+                    'comments_' . $uniqueid,
                     get_string('comments', 'moodle'),
                     'wrap="virtual" rows="1" cols="50"'
                 );
-                $mform->setDefault('comments_' . $uniqueid, $grades[$peer->id][$criterion->id]['comments']);
+                $mform->setDefault('comments_' . $uniqueid, $comments);
+
+                $mform->disabledIf('gradeoverride_' . $uniqueid, 'overridden_' . $uniqueid);
+                $mform->disabledIf('comments_' . $uniqueid, 'overridden_' . $uniqueid);
             }
         }
 
@@ -142,9 +184,9 @@ class mod_peerwork_override_form extends moodleform {
         $data = (array) $data;
 
         foreach ($data as $key => $value) {
-            if (preg_match('/^override_idx_([0-9]+)$/', $key, $matches)) {
+            if (preg_match('/^gradeoverride_idx_([0-9]+)$/', $key, $matches)) {
                 foreach ($value as $gradefor => $grade) {
-                    $data['grades'][$key] = $value;
+                    $data['gradeoverrides'][$key] = $value;
                 }
             }
 

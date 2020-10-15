@@ -469,15 +469,21 @@ function peerwork_get_peer_grades($peerwork, $group, $membersgradeable = null, $
     if ($full) {
         foreach (array_keys($grades) as $critid) {
             foreach ($membersgradeable as $member1) {
-                if (!isset($grades[$member1->id])) {
-                    $grades[$member1->id] = [];
+                if (!isset($grades[$critid][$member1->id])) {
+                    $grades[$critid][$member1->id] = [];
+                }
+                if (!isset($overrides[$critid][$member1->id])) {
+                    $overrides[$critid][$member1->id] = [];
                 }
                 foreach ($membersgradeable as $member2) {
-                    if (!isset($grades[$member1->id][$member2->id])) {
-                        $grades[$member1->id][$member2->id] = '-';
+                    if (!isset($grades[$critid][$member1->id][$member2->id])) {
+                        $grades[$critid][$member1->id][$member2->id] = '-';
                     }
-                    if (!isset($feedback[$member1->id][$member2->id])) {
-                        $feedback[$member1->id][$member2->id] = '-';
+                    if (!isset($overrides[$critid][$member1->id][$member2->id])) {
+                        $overrides[$critid][$member1->id][$member2->id] = '-';
+                    }
+                    if (!isset($feedback[$critid][$member1->id][$member2->id])) {
+                        $feedback[$critid][$member1->id][$member2->id] = '-';
                     }
                 }
             }
@@ -1014,35 +1020,82 @@ function peerwork_peer_override($peerworkid, $gradedby, $groupid, $grades, $comm
 
     $cm = get_coursemodule_from_instance('peerwork', $peerworkid, 0, false, MUST_EXIST);
     $context = context_module::instance($cm->id);
-
-    // Save the overrides.
     $pac = new mod_peerwork_criteria($peerworkid);
     $criteria = $pac->get_criteria();
-    $peerworkpeers = $DB->get_records(
-        'peerwork_peers',
-        [
-            'peerwork' => $peerworkid,
-            'groupid' => $groupid,
-            'gradedby' => $gradedby
-        ]
-    );
+    $members = groups_get_members($groupid);
+    $peerwork = $DB->get_record('peerwork', ['id' => $peerworkid], '*', MUST_EXIST);
 
     foreach ($criteria as $criterion) {
-        foreach ($peerworkpeers as $id => $peerworkpeer) {
-            if ($peerworkpeer->criteriaid != $criterion->id) {
+        // Get existing peer scores.
+        $peerworkpeers = $DB->get_records(
+            'peerwork_peers',
+            [
+                'peerwork' => $peerworkid,
+                'groupid' => $groupid,
+                'gradedby' => $gradedby,
+                'criteriaid' => $criterion->id
+            ],
+            '',
+            'gradefor, grade, comments'
+        );
+
+        foreach ($members as $member) {
+            // Do nothing if grade has not been overridden.
+            if (
+                !isset($grades['gradeoverride_idx_' . $criterion->id]) ||
+                !isset($grades['gradeoverride_idx_' . $criterion->id][$member->id])
+            ) {
                 continue;
             }
 
-            $grade = $grades['override_idx_' . $criterion->id][$peerworkpeer->gradefor];
-            $comment = $comments['comments_idx_' . $criterion->id][$peerworkpeer->gradefor];
+            $grade = $grades['gradeoverride_idx_' . $criterion->id][$member->id];
+            $comment = $comments['comments_idx_' . $criterion->id][$member->id];
 
-            // If grade or comment has changed.
-            if ($peerworkpeer->grade != $grade || $peerworkpeer->comments != $comment) {
+            // If peer grade record exists then update it.
+            if (array_key_exists($member->id, $peerworkpeers)) {
+                $peerworkpeer = $peerworkpeers[$member->id];
+                // If grade or comment has changed.
+                if ($peerworkpeer->grade != $grade || $peerworkpeer->comments != $comment) {
+                    $peerworkpeer->grade = $grade;
+                    $peerworkpeer->comments = $comment;
+                    $peerworkpeer->overriddenby = $USER->id;
+                    $peerworkpeer->timeoverridden = time();
+
+                    $DB->update_record('peerwork_peers', $peerworkpeer, true);
+
+                    $params = array(
+                        'objectid' => $peerworkid,
+                        'context' => $context,
+                        'relateduserid' => $gradedby,
+                        'other' => array(
+                            'gradefor' => $peerworkpeer->gradefor,
+                            'grade' => $peerworkpeer->grade,
+                            'peergrade' => $peerworkpeer->peergrade
+                        )
+                    );
+
+                    $event = \mod_peerwork\event\peer_grade_overridden::create($params);
+                    $event->add_record_snapshot('peerwork_peers', $peerworkpeer);
+                    $event->trigger();
+                }
+            } else {
+                $peerworkpeer = new stdClass();
+                $peerworkpeer->peerwork = $peerworkid;
+                $peerworkpeer->groupid = $groupid;
+                $peerworkpeer->gradedby = $gradedby;
+                $peerworkpeer->gradefor = $member->id;
+                $peerworkpeer->criteriaid = $criterion->id;
                 $peerworkpeer->grade = $grade;
+                $peerworkpeer->peergrade = null;
                 $peerworkpeer->comments = $comment;
                 $peerworkpeer->overriddenby = $USER->id;
                 $peerworkpeer->timeoverridden = time();
-                $DB->update_record('peerwork_peers', $peerworkpeer, true);
+                $peerworkpeer->feedback = null;
+                $peerworkpeer->locked = $peerwork->lockediting;
+                $peerworkpeer->timecreated = 0;
+                $peerworkpeer->timemodified = 0;
+
+                $peerworkpeer->id = $DB->insert_record('peerwork_peers', $peerworkpeer, true);
 
                 $params = array(
                     'objectid' => $peerworkid,
@@ -1051,7 +1104,7 @@ function peerwork_peer_override($peerworkid, $gradedby, $groupid, $grades, $comm
                     'other' => array(
                         'gradefor' => $peerworkpeer->gradefor,
                         'grade' => $peerworkpeer->grade,
-                        'peergrade' => $peerworkpeer->peergrade
+                        'peergrade' => '-'
                     )
                 );
 
