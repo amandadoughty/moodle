@@ -132,6 +132,14 @@ class mod_peerwork_details_form extends moodleform {
             $mform->setType('paweighting', PARAM_INT);
         }
 
+        if ($usespaweighting) {
+            $mform->addElement('text', 'paweighting', get_string('paweighting', 'mod_peerwork'), ['maxlength' => 15, 'size' => 10]);
+            $mform->setType('paweighting', PARAM_INT);
+        } else {
+            $mform->addElement('hidden', 'paweighting');
+            $mform->setType('paweighting', PARAM_INT);
+        }
+
         $mform->addElement('static', 'finalgrades', get_string('calculatedgrades', 'mod_peerwork'));
 
         $mform->addElement('editor', 'feedback', get_string('feedback', 'peerwork'), ['rows' => 6]);
