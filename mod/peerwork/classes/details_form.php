@@ -140,6 +140,11 @@ class mod_peerwork_details_form extends moodleform {
             $mform->setType('paweighting', PARAM_INT);
         }
 
+        foreach ($members as $member) {
+            $mform->addElement('hidden', 'grade_' . $member->id, '');
+            $mform->setType('grade_' . $member->id, PARAM_RAW); // We don't want the value to be forced to 0.
+        }
+
         $mform->addElement('static', 'finalgrades', get_string('calculatedgrades', 'mod_peerwork'));
 
         $mform->addElement('editor', 'feedback', get_string('feedback', 'peerwork'), ['rows' => 6]);
