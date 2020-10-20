@@ -132,14 +132,6 @@ class mod_peerwork_details_form extends moodleform {
             $mform->setType('paweighting', PARAM_INT);
         }
 
-        if ($usespaweighting) {
-            $mform->addElement('text', 'paweighting', get_string('paweighting', 'mod_peerwork'), ['maxlength' => 15, 'size' => 10]);
-            $mform->setType('paweighting', PARAM_INT);
-        } else {
-            $mform->addElement('hidden', 'paweighting');
-            $mform->setType('paweighting', PARAM_INT);
-        }
-
         foreach ($members as $member) {
             $mform->addElement('hidden', 'grade_' . $member->id, '');
             $mform->setType('grade_' . $member->id, PARAM_RAW); // We don't want the value to be forced to 0.

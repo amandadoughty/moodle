@@ -126,14 +126,31 @@ class peerwork_detail_summary implements templatable, renderable {
             $table = [];
             $critid = $criteria->id;
             $extraclasses = $justenabledcrit ? 'crit' : '';
-            $table['attributes']['class'] = "peerwork $extraclasses";
+            $table['attributes']['id'] = "mod_peerwork_peergrades";
+            $table['attributes']['class'] = "table-striped $extraclasses";
             $table['caption'] = $criteria->description;
 
             foreach ($members as $member) {
                 $gradedby = [];
                 $gradefor = [];
-                $gradedby = ['name' => fullname($member)];
                 $gradefor = ['name' => fullname($member)];
+                $label = fullname($member);
+
+                if ($canunlock && in_array($member->id, $lockedgraders)) {
+                    $label .= $output->action_icon('#',
+                        new \pix_icon('t/locked', get_string('editinglocked', 'mod_peerwork'), 'core'),
+                        null,
+                        [
+                            'data-peerworkid' => $peerwork->id,
+                            'data-graderid' => $member->id,
+                            'data-graderfullname' => fullname($member),
+                            'data-graderunlock' => 'true',
+                        ]
+                    );
+                }
+
+                $gradedby = ['name' => $label];
+
                 $memberdropdown[$member->id] = [
                     'id' => $cmid,
                     'peerworkid' => $peerwork->id,
@@ -143,28 +160,13 @@ class peerwork_detail_summary implements templatable, renderable {
                 ];
 
                 foreach ($members as $peer) {
-                    $label = fullname($peer);
-
-                    if ($canunlock && in_array($peergrades->id, $lockedgraders)) {
-                        $label .= $OUTPUT->action_icon('#',
-                            new pix_icon('t/locked', get_string('editinglocked', 'mod_peerwork'), 'core'),
-                            null,
-                            [
-                                'data-peerworkid' => $peerwork->id,
-                                'data-graderid' => $peer->id,
-                                'data-graderfullname' => fullname($peer),
-                                'data-graderunlock' => 'true',
-                            ]
-                        );
-                    }
-
                     if (
                         !isset($grades->grades[$critid]) ||
                         !isset($grades->grades[$critid][$member->id]) ||
                         !isset($grades->grades[$critid][$member->id][$peer->id])
                     ) {
                         $gradedby['gradefor'][] = [
-                            'name' => $label,
+                            'name' => fullname($peer),
                             'grade' => '-'
                         ];
                     } else {

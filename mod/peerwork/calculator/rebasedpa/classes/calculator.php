@@ -159,7 +159,11 @@ class calculator extends \mod_peerwork\peerworkcalculator_plugin {
         }
 
         // Average of the mean scores.
-        $overallaverating = array_sum($avegradegiven) / count($avegradegiven);
+        if (count($avegradegiven)) {
+            $overallaverating = array_sum($avegradegiven) / count($avegradegiven);
+        } else {
+            $overallaverating = 0;
+        }
 
         // Initialise everyone's score at 0.
         $pascores = array_reduce($memberids, function($carry, $memberid) {

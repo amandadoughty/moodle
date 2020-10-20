@@ -173,7 +173,6 @@ class mod_peerwork_submissions_form extends moodleform {
             $criteriondata['criterion']['justifcriteria'] = $justifcriteria;
             // Get the scale.
             $scaleid = abs($criterion->grade);
-            // $scale = grade_scale::fetch(['id' => $scaleid]); // TODO ???
             $scale = isset($scales[$scaleid]) ? $scales[$scaleid] : null;
 
             if (!$scale) {
@@ -519,7 +518,7 @@ class mod_peerwork_submissions_form extends moodleform {
             $this->scales = (array)grade_scale::fetch_all_global() + (array)grade_scale::fetch_all_local($courseid);
         }
         return $this->scales;
-    }    
+    }
 
     /**
      * Check if peer is locked.
