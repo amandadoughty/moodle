@@ -185,11 +185,13 @@ class calculator extends \mod_peerwork\peerworkcalculator_plugin {
         // (Rating(B) = ScoreSum(B) - 0.5 *
         // (MaxScore(B) + MinScore(B))) / (ScoreCount(B) - 1).
         array_walk($pascores, function(&$score, $memberid) use($count, $paallscores) {
-            $max = max($paallscores[$memberid]);
-            $min = min($paallscores[$memberid]);
-            $score = $score > 0 ?
-            ($score - 0.5 * ($max + $min)) / ($count[$memberid] - 1) :
-            0;
+            if (count($paallscores[$memberid])) {
+                $max = max($paallscores[$memberid]);
+                $min = min($paallscores[$memberid]);
+                $score = $score > 0 ?
+                ($score - 0.5 * ($max + $min)) / ($count[$memberid] - 1) :
+                0;
+            }
         });
 
         // Average of the mean scores.

@@ -184,7 +184,7 @@ if (has_capability('mod/peerwork:grade', $context)) {
 
     echo $OUTPUT->box_end();
 
-
+    // Student view.
 } else {
     // Student output displays summary of submissions made so far and provides a button to start editing.
     $mygroup = peerwork_get_mygroup($course->id, $USER->id, $groupingid);

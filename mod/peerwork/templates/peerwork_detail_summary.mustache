@@ -49,21 +49,21 @@
 }}
 
 {{# criteria }}
-<table class="{{ attributes.class }}">
+<table id="{{ attributes.id }}" class="{{ attributes.class }}">
     <caption>{{{ caption }}}</caption>
     <thead>
     <tr>
         <th></th>
-        {{# peergradedby }}
+        {{# peergradefor }}
         <th>{{ name }}</th>
-        {{/ peergradedby }}
+        {{/ peergradefor }}
     </tr>
     </thead>
     <tbody>
         {{# peergradedby }}        
         <tr>
             <td>{{{ name }}}</td>
-            {{# gradefor }}           
+            {{# gradefor }} 
             <td>{{{ grade }}}</td> 
             {{/ gradefor }}           
         </tr>
