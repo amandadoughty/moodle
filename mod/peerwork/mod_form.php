@@ -338,19 +338,24 @@ class mod_peerwork_mod_form extends moodleform_mod {
         // all site and course scales are available.
         if ($mform->elementExists('calculator') && $mform->elementExists('assessmentcriteria_count')) {
             $selected = $mform->getElementValue('calculator');
-            $name = array_pop($selected);
-            $calculatorclass = '\peerworkcalculator_' . $name . '\calculator';
-            $count = $mform->getElementValue('assessmentcriteria_count');
-            $availablescales = $calculatorclass::get_scales_menu($COURSE->id);
 
-            if ($availablescales) {
-                for ($i; $i < $count; $i++) {
-                    $elname = 'critscale[' . $i . ']';
+            // Behat tests fail without this if.
+            if ($selected) {            
+                $name = array_pop($selected);
 
-                    if ($mform->elementExists($elname)) {
-                        $el = $mform->getElement($elname);
-                        $el->removeOptions();
-                        $el->loadArray($availablescales);
+                $calculatorclass = '\peerworkcalculator_' . $name . '\calculator';
+                $count = $mform->getElementValue('assessmentcriteria_count');
+                $availablescales = $calculatorclass::get_scales_menu($COURSE->id);
+
+                if ($availablescales) {
+                    for ($i; $i < $count; $i++) {
+                        $elname = 'critscale[' . $i . ']';
+
+                        if ($mform->elementExists($elname)) {
+                            $el = $mform->getElement($elname);
+                            $el->removeOptions();
+                            $el->loadArray($availablescales);
+                        }
                     }
                 }
             }

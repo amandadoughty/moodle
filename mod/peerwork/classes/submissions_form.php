@@ -464,7 +464,7 @@ class mod_peerwork_submissions_form extends moodleform {
 
         $foundgradererror = false;
         $criteria = $this->get_criteria();
-        $scales = get_scales_menu($peerwork->course);
+        $scales = $this->get_scales($peerwork->course);
 
         foreach ($data as $key => $value) {
             $matches = [];
