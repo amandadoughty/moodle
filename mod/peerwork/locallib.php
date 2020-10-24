@@ -922,6 +922,9 @@ function peerwork_save($peerwork, $submission, $group, $course, $cm, $context, $
             }
             // Save the original peer grade given. Grade may be overridden later.
             $peer->peergrade = $peer->grade;
+            $peer->comments = null;
+            $peer->overriddenby = null;
+            $peer->timeoverridden = null;
 
             $peer->id = $DB->insert_record('peerwork_peers', $peer, true);
 
