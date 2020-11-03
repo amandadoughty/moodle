@@ -61,7 +61,7 @@ class peer_grade_overridden extends \core\event\base {
     public function get_description() {
         return "User with id '{$this->userid}' changed the grade given by the user with id '{$this->relateduserid}' " .
             "to the user with id '{$this->other['gradefor']}'" .
-            "from '{$this->other['peergrade']}' to  '{$this->other['grade']}'.";
+            " from '{$this->other['peergrade']}' to  '{$this->other['grade']}'.";
     }
 
     /**
@@ -78,8 +78,8 @@ class peer_grade_overridden extends \core\event\base {
         if (!isset($this->other['gradefor'])) {
             throw new \coding_exception('The \'gradefor\' value must be set in other.');
         }
-        if (!isset($this->other['peergrade'])) {
-            throw new \coding_exception('The \'peergrade\' value must be set in other.');
+        if (!array_key_exists('peergrade', $this->other)) {
+            $this->other['peergrade'] = '-';
         }
         if (!isset($this->other['grade'])) {
             throw new \coding_exception('The \'grade\' value must be set in other.');
