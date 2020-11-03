@@ -250,6 +250,10 @@ class mod_peerwork_submissions_form extends moodleform {
                         $textareaattrs
                     );
                     $textarea->setHiddenLabel(true);
+                    
+                    if ($this->is_peer_locked($peer['data-peerid'])) {
+                        $mform->hardFreeze('justification_' . $criterion['criterion']['id'] . '[' . $peer['data-peerid'] . ']');
+                    }
                 }
 
                 $html = $renderer->render_from_template('mod_peerwork/peergrades_end', []);
