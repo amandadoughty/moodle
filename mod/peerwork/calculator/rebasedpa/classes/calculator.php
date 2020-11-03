@@ -292,7 +292,9 @@ class calculator extends \mod_peerwork\peerworkcalculator_plugin {
         foreach ($prelimgrades as $criteriaid => $gradedby) {
             foreach ($gradedby as $gradedbyid => $gradefor) {
                 foreach ($gradefor as $gradeforid => $grade) {
-                    if ($grade > 3) {
+                    if ($grade == null) {
+                        $newgrade = $grade;
+                    } else if ($grade > 3) {
                         $newgrade = $translator[3];
                     } else {
                         $newgrade = $translator[$grade];
