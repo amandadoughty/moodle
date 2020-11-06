@@ -13,6 +13,7 @@
 @import "blocks";
 @import "../../snap/scss/core";
 @import "core"; // CASS overrides.
+@import "atto";
 @import "../../snap/scss/course";
 @import "course"; // CASS overrides.
 @import "../../snap/scss/coursefooter";
@@ -27,6 +28,7 @@
 @import "../../snap/scss/plugins";
 @import "plugins"; // CASS overrides.
 @import "hsuforum"; // CASS overrides.
+@import "quiz"; // CASS overrides.
 @import "../../snap/scss/userprofile";
 @import "userprofile"; // CASS overrides.
 @import "message";

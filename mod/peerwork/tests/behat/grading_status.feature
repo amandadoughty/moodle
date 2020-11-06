@@ -1,8 +1,9 @@
-@mod @mod_peerwork
+@mod @mod_peerwork @mod_peerwork_grading_status
 Feature: View the grading status of a submission
-  In order to test the grading status for submissions is displaying correctly
-  As a student
-  I need to view my grading status
+    In order to test the grading status for submissions is displaying correctly
+    As a student
+    I need to view my grading status
+    
     Background:
         Given the following "courses" exist:
             | fullname | shortname | category | groupmode |
@@ -38,7 +39,9 @@ Feature: View the grading status of a submission
             | Peer grades visibility | Hidden from students |
             | Require justification | Disabled |
             | Criteria 1 description | Criteria 1 |
-            | Criteria 1 scoring type | Default competence scale |            
+            | Criteria 1 scoring type | Default competence scale |
+            | Calculator | Web PA |
+            | Peer assessment weighting | 0 |          
         And I log out
 
     @javascript
@@ -89,10 +92,9 @@ Feature: View the grading status of a submission
         And "Add submission" "button" should exist
         # Submission made
         And I press "Add submission"
-        And I set the following fields to these values: 
-            | Student 0 | 0 |
-            | Student 2 | 1 |
-            | Student 3 | 1 |
+        And I give "student0" grade "0" for criteria "Criteria 1"
+        And I give "student2" grade "1" for criteria "Criteria 1"
+        And I give "student3" grade "1" for criteria "Criteria 1"
         And I press "Save changes"
         Then I should see "1 day" in the "Time remaining" "table_row"
         And I should see "First submitted by Student 1 on" in the "Submission status" "table_row"

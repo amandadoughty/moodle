@@ -1018,7 +1018,7 @@ function peerwork_save($peerwork, $submission, $group, $course, $cm, $context, $
  * @param array $grades
  * @param array $comments
  */
-function peerwork_peer_override($peerworkid, $gradedby, $groupid, $grades, $comments) {
+function peerwork_peer_override($peerworkid, $gradedby, $groupid, $overridden, $grades, $comments) {
     global $CFG, $USER, $DB;
 
     $cm = get_coursemodule_from_instance('peerwork', $peerworkid, 0, false, MUST_EXIST);
@@ -1039,14 +1039,15 @@ function peerwork_peer_override($peerworkid, $gradedby, $groupid, $grades, $comm
                 'criteriaid' => $criterion->id
             ],
             '',
-            'gradefor, grade, comments'
+            'gradefor, grade, peergrade, comments, id, peerwork, criteriaid,
+             groupid, gradedby, feedback, locked, timecreated, timemodified'
         );
 
         foreach ($members as $member) {
             // Do nothing if grade has not been overridden.
             if (
-                !isset($grades['gradeoverride_idx_' . $criterion->id]) ||
-                !isset($grades['gradeoverride_idx_' . $criterion->id][$member->id])
+                !isset($overridden['overridden_idx_' . $criterion->id]) ||
+                !isset($overridden['overridden_idx_' . $criterion->id][$member->id])
             ) {
                 continue;
             }

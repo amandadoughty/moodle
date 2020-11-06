@@ -340,7 +340,7 @@ class mod_peerwork_mod_form extends moodleform_mod {
             $selected = $mform->getElementValue('calculator');
 
             // Behat tests fail without this if.
-            if ($selected) {            
+            if ($selected) {
                 $name = array_pop($selected);
 
                 $calculatorclass = '\peerworkcalculator_' . $name . '\calculator';
