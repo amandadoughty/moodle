@@ -1039,7 +1039,8 @@ function peerwork_peer_override($peerworkid, $gradedby, $groupid, $overridden, $
                 'criteriaid' => $criterion->id
             ],
             '',
-            'gradefor, grade, peergrade, comments, id, peerwork, criteriaid, groupid, gradedby, feedback, locked, timecreated, timemodified'
+            'gradefor, grade, peergrade, comments, id, peerwork, criteriaid,
+             groupid, gradedby, feedback, locked, timecreated, timemodified'
         );
 
         foreach ($members as $member) {
