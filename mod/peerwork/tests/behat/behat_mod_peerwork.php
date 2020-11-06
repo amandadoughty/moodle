@@ -55,7 +55,7 @@ class behat_mod_peerwork extends behat_base {
         $criterionid = $node->getParent()->getAttribute('data-criterionid');
         $studentid = $this->get_student_id($peer);
         $fieldlocator = "grade_idx_{$criterionid}[{$studentid}]";
-        $fieldxpath = "//input[@name='" . $fieldlocator . "' and @value='" . $grade . "']";
+        $fieldxpath = "//input[@name='" . $fieldlocator . "' and type='radio' and @value='" . $grade . "']";
 
         $this->execute('behat_forms::i_set_the_field_with_xpath_to', [$fieldxpath, $grade]);
     }
