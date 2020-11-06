@@ -2,6 +2,9 @@ v2.1.0
 ------
 
 - Added individual peer grade override
+- Added site setting:
+	Justification - disabled, hidden, visible anonymous, visible with usernames
+- Added suite of Behat tests
 
 v2.0.0
 ------
