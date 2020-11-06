@@ -71,6 +71,7 @@ if ($mform->is_cancelled()) {
         $fromform->peerworkid,
         $fromform->gradedby,
         $fromform->groupid,
+        $fromform->overridden,
         $fromform->gradeoverrides,
         $fromform->comments
     );

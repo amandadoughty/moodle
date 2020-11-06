@@ -1,6 +1,9 @@
-@mod @mod_peerwork @mod_peerwork_submission
-Feature: Assignment submissions
-
+@mod @mod_peerwork @mod_peerwork_justification
+Feature: Peerwork justification
+    In order to test the peer justification type setting is working correctly
+    As a student
+    I need to view a graded submission
+    
     Background:
         Given the following "courses" exist:
             | fullname | shortname | category | groupmode |
@@ -27,111 +30,100 @@ Feature: Assignment submissions
             | student0 | G1 |
             | student1 | G1 |
             | student2 | G1 |
-            | student3 | G1 |        
+            | student3 | G1 |
+        And the following config values are set as admin:
+        | availablescales | 2 | peerworkcalculator_webpa |
         And I log in as "teacher1"
         And I am on "Course 1" course homepage with editing mode on
         And I add a "Peer Assessment" to section "1" and I fill the form with:
             | Peer assessment | Test peerwork name |
             | Description | Test peerwork description |
             | Peer grades visibility | Hidden from students |
-            | Require justification | Disabled |
+            | Require justification | Disabled |            
             | Criteria 1 description | Criteria 1 |
             | Criteria 1 scoring type | Default competence scale |
         And I log out
 
     @javascript
-    Scenario: Students must grade every peer
+    Scenario: Teacher views grades when justification is disabled.
+        Given I log in as "teacher1"
+        And I am on "Course 1" course homepage
+        And I follow "Test peerwork name"
+        And I follow "Group 1"
+        Then "Justifications" "link" should not exist
+
+    @javascript
+    Scenario: Students do not give justification when set to 'Disabled'
         Given I log in as "student1"
         And I am on "Course 1" course homepage
         And I follow "Test peerwork name"
         And I press "Add submission"
-        And I give "student0" grade "0" for criteria "Criteria 1"
-        And I give "student2" grade "1" for criteria "Criteria 1"
-        And I press "Save changes"
-        Then I should see "Please provide a rating for each one of your peers."
+        Then "Justifications" "link" should not exist
         And I log out
 
     @javascript
-    Scenario: Students must grade themselves when Allow students to self-grade along with peers is set to yes
+    Scenario: Students must give justification when set to 'Hidden from students'
         Given I log in as "teacher1"
         And I am on "Course 1" course homepage with editing mode on
         And I follow "Test peerwork name"
         And I navigate to "Edit settings" in current page administration
         And I set the following fields to these values:
-            | Allow students to self-grade along with peers | Yes |
+            | Require justification | Hidden from students |
         And I press "Save and display"
         And I log out
         And I log in as "student1"
         And I am on "Course 1" course homepage
         And I follow "Test peerwork name"
         And I press "Add submission"
-        Then I should see "Student 1 (you)" in the "Grade your peers" "fieldset"
-        And I give "student0" grade "0" for criteria "Criteria 1"
-        And I give "student2" grade "1" for criteria "Criteria 1"
-        And I give "student3" grade "1" for criteria "Criteria 1"
-        And I press "Save changes"
-        Then I should see "Please provide a rating for each one of your peers."
-        And I give "student1" grade "1" for criteria "Criteria 1"
-        And I press "Save changes"
-        Then I should not see "Please provide a rating for each one of your peers."
-        And I log out
+        Then "Justification" "link" should exist
+        And I should see "Note: your comments will be hidden from your peers and only visible to teaching staff."
+        And I log out    
 
-    @javascript @_file_upload
-    Scenario: Students can upload and view files
+    @javascript
+    Scenario: Students must give justification when set to 'Visible anonymous'
         Given I log in as "teacher1"
         And I am on "Course 1" course homepage with editing mode on
         And I follow "Test peerwork name"
         And I navigate to "Edit settings" in current page administration
         And I set the following fields to these values:
-            | Maximum number of uploaded files | 2 |
+            | Require justification | Visible anonymous |
         And I press "Save and display"
         And I log out
         And I log in as "student1"
         And I am on "Course 1" course homepage
         And I follow "Test peerwork name"
-        When I press "Add submission"
-        And I upload "lib/tests/fixtures/empty.txt" file to "Assignment" filemanager
-        And I give "student0" grade "0" for criteria "Criteria 1"
-        And I give "student2" grade "1" for criteria "Criteria 1"
-        And I give "student3" grade "1" for criteria "Criteria 1"
-        And I press "Save changes"
-        Then I should see "First submitted by Student 1"
-        And "empty.txt" "link" should exist
-        And I press "Edit submission"
-        And I upload "lib/tests/fixtures/upload_users.csv" file to "Assignment" filemanager
-        And ".ffilemanager .fm-maxfiles .fp-btn-add" "css_element" should not be visible
-        And I press "Save changes"
-        And I should see "First submitted by Student 1"
-        And "empty.txt" "link" should exist
-        And "upload_users.csv" "link" should exist
-        And I log out
-        And I log in as "student2"
-        And I am on "Course 1" course homepage
-        And I follow "Test peerwork name"
         And I press "Add submission"
-        And ".ffilemanager .fm-maxfiles .fp-btn-add" "css_element" should not be visible
-        And I delete "empty.txt" from "Assignment" filemanager
-        And I give "student0" grade "1" for criteria "Criteria 1"
-        And I give "student1" grade "1" for criteria "Criteria 1"
-        And I give "student3" grade "1" for criteria "Criteria 1"
-        And I press "Save changes"
-        And I should see "First submitted by Student 1"
-        And "empty.txt" "link" should not exist
-        And "upload_users.csv" "link" should exist
+        Then "Justification" "link" should exist
+        And I should see "Note: your comments will be visible to your peers but anonymised, your username will not be shown next to comments you leave."
         And I log out
 
     @javascript
-    Scenario: Students cannot edit locked submissions - justification per peer
+    Scenario: Students must give justification when set to 'Visible with usernames'
         Given I log in as "teacher1"
         And I am on "Course 1" course homepage with editing mode on
         And I follow "Test peerwork name"
         And I navigate to "Edit settings" in current page administration
-        And I expand all fieldsets
-        And I press "Add 1 more criteria"
         And I set the following fields to these values:
             | Require justification | Visible with usernames |
-            | Justification type | Peer |
-            | Lock editing | 1 |
+        And I press "Save and display"
+        And I log out
+        And I log in as "student1"
+        And I am on "Course 1" course homepage
+        And I follow "Test peerwork name"
+        And I press "Add submission"
+        Then "Justification" "link" should exist
+        And I should see "Note: your comments and your username will be visible to your peers."
+        And I log out
+
+    @javascript
+    Scenario: Students cannot give justification longer than the setting 'Justification character limit'
+        Given I log in as "teacher1"
+        And I am on "Course 1" course homepage with editing mode on
+        And I follow "Test peerwork name"
+        And I navigate to "Edit settings" in current page administration
+        And I set the following fields to these values:
+            | Require justification | Visible with usernames |
+            | Justification character limit | 10 |
         And I press "Save and display"
         And I log out
         And I log in as "student1"
@@ -142,23 +134,16 @@ Feature: Assignment submissions
         And I give "student2" grade "1" for criteria "Criteria 1"
         And I give "student3" grade "1" for criteria "Criteria 1"
         And I set the following fields in the "Justification" "fieldset" to these values:
-            | Student 0 | Poor |
+            | Student 0 | This is more than 10 words. 1 2 3 4 5 6 7 8 9 10.  |
             | Student 2 | Did well |
             | Student 3 | Exceeded |
-        And I click on "Save changes" "button"
-        And I click on "Yes" "button"
-        And I press "Edit submission"
-        Then "Assignment" "field" should not be visible
-        And "Criteria 1" "student0" rating should be disabled
-        And "Criteria 1" "student2" rating should be disabled
-        And "Criteria 1" "student3" rating should be disabled
-        And peer "student0" justification should be disabled
-        And peer "student2" justification should be disabled
-        And peer "student3" justification should be disabled
+        Then I should see "-39 character(s) remaining"
+        And I press "Save changes"
+        Then I should see "You must enter no more than 10 characters here"
         And I log out
 
     @javascript
-    Scenario: Students cannot edit locked submissions - justification per criteria
+    Scenario: Students must give justification for each criteria
         Given I log in as "teacher1"
         And I am on "Course 1" course homepage with editing mode on
         And I follow "Test peerwork name"
@@ -168,32 +153,48 @@ Feature: Assignment submissions
         And I set the following fields to these values:
             | Require justification | Visible with usernames |
             | Justification type | Criteria |
-            | Lock editing | 1 |
+            | Criteria 2 description | Criteria 2 |
+            | Criteria 2 scoring type | Default competence scale |
         And I press "Save and display"
         And I log out
         And I log in as "student1"
         And I am on "Course 1" course homepage
         And I follow "Test peerwork name"
         And I press "Add submission"
+        Then "Justification" "link" should not exist
+        And "Justification" "field" should appear after "Competent" "radio"
+        And I log out
+
+    @javascript
+    Scenario: Teacher views grades when justification is enabled and has been submitted.
+        Given I log in as "teacher1"
+        And I am on "Course 1" course homepage with editing mode on
+        And I follow "Test peerwork name"
+        And I navigate to "Edit settings" in current page administration
+        And I expand all fieldsets
+        And I press "Add 1 more criteria"
+        And I set the following fields to these values:
+            | Require justification | Visible with usernames |
+        And I press "Save and display"
+        And I log out
+        Given I log in as "student1"
+        And I am on "Course 1" course homepage
+        And I follow "Test peerwork name"
+        And I press "Add submission"
         And I give "student0" grade "0" for criteria "Criteria 1"
         And I give "student2" grade "1" for criteria "Criteria 1"
         And I give "student3" grade "1" for criteria "Criteria 1"
-        And I give "student0" justification "Poor" for criteria "Criteria 1"
-        And I give "student2" justification "Did well " for criteria "Criteria 1"
-        And I give "student3" justification "Exceeded" for criteria "Criteria 1"
-        And I click on "Save changes" "button"
-        And I click on "Yes" "button" in the "Are you sure?" "dialogue"
-        And I press "Edit submission"
-        Then "Assignment" "field" should not be visible
-        And "Criteria 1" "student0" rating should be disabled
-        And "Criteria 1" "student2" rating should be disabled
-        And "Criteria 1" "student3" rating should be disabled
-        And criteria "Criteria 1" "student0" justification should be disabled
-        And criteria "Criteria 1" "student2" justification should be disabled
-        And criteria "Criteria 1" "student3" justification should be disabled
+        And I set the following fields in the "Justification" "fieldset" to these values:
+            | Student 0 | Poor  |
+            | Student 2 | Did well |
+            | Student 3 | Exceeded |
+        And I press "Save changes"
         And I log out
-
-
+        And I log in as "teacher1"
+        And I am on "Course 1" course homepage
+        And I follow "Test peerwork name"
+        And I follow "Group 1"
+        Then "Justifications" "link" should exist
 
 
 

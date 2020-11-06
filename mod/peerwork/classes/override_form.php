@@ -63,7 +63,7 @@ class mod_peerwork_override_form extends moodleform {
         $grades = $this->_customdata['grades']->grade;
 
         // Create a section with all the criteria.
-        $mform->addElement('header', 'gradesgivenby', get_string('gradesgivenby', 'peerwork', $gradedby));
+        $mform->addElement('static', 'gradesgivenby', get_string('gradesgivenby', 'peerwork', $gradedby));
 
         $scales = get_scales_menu($COURSE->id);
 
@@ -80,7 +80,7 @@ class mod_peerwork_override_form extends moodleform {
             $scaleitems = $scale->load_items();
 
             // Add crit description.
-            $mform->addElement('static', 'criterion', get_string('criteria', 'mod_peerwork'), $criterion->description);
+            $mform->addElement('header', 'criterion', $criterion->description);
 
             foreach ($peers as $peer) {
                 if (!$this->_customdata['selfgrading']) {
@@ -130,8 +130,8 @@ class mod_peerwork_override_form extends moodleform {
 
                 $mform->addElement('static', 'name', get_string('gradegivento', 'mod_peerwork'), "<strong>$fullname</strong>");
 
-                if (isset($scaleitems[$grade])) {
-                    $value = $scaleitems[$grade];
+                if (isset($scaleitems[$originalgrade])) {
+                    $value = $scaleitems[$originalgrade];
                 } else {
                     $value = null;
                 }
@@ -184,6 +184,12 @@ class mod_peerwork_override_form extends moodleform {
         $data = (array) $data;
 
         foreach ($data as $key => $value) {
+            if (preg_match('/^overridden_idx_([0-9]+)$/', $key, $matches)) {
+                foreach ($value as $gradefor => $grade) {
+                    $data['overridden'][$key] = $value;
+                }
+            }
+
             if (preg_match('/^gradeoverride_idx_([0-9]+)$/', $key, $matches)) {
                 foreach ($value as $gradefor => $grade) {
                     $data['gradeoverrides'][$key] = $value;
