@@ -15,17 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
+ * Activity base class.
  *
- * @package    mod_attendance
- * @copyright  2011 Artem Andreev <andreev.artem@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_attendance
+ * @copyright 2020 Catalyst IT
+ * @author    Dan Marsden
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+namespace mod_attendance\analytics\indicator;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2020082500;
-$plugin->requires = 2019072500; // Requires 3.8.
-$plugin->release = '3.8.4';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->cron     = 0;
-$plugin->component = 'mod_attendance';
+/**
+ * Activity base class.
+ *
+ * @package   mod_attendance
+ * @copyright 2020 Catalyst IT
+ * @author    Dan Marsden
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+abstract class activity_base extends \core_analytics\local\indicator\community_of_inquiry_activity {
+
+    /**
+     * feedback_viewed_events
+     *
+     * @return string[]
+     */
+    protected function feedback_viewed_events() {
+        return array('\mod_attendance\event\session_report_viewed');
+    }
+}
