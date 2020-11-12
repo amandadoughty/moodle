@@ -75,9 +75,15 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
     /** Information about the latest response */
     protected $currentresponse = null;
 
+    /** Text content of response template */
+    protected $responsetemplatetext = null;
+
+    /** Text content of response sample */
+    protected $responsesampletext = null;
+
     /**
      * These variables are only used if needed
-     * to dtect paterns in a student response
+     * to detect patterns in a student response
      */
     private static $aliases = null;
     private static $metachars = null;
@@ -113,28 +119,11 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
      * @return bool whether this response can be graded.
      */
     public function is_gradable_response(array $response) {
-
-        // If there is no answer, the response is not gradable.
-        if (empty($response['answer'])) {
+        if ($this->get_validation_error($response)) {
             return false;
-        }
-
-        // If there is no response template or sample,
-        // the answer must be original and therefore it is gradable.
-        if (empty($this->responsetemplate) && empty($this->responsesample)) {
+        } else {
             return true;
         }
-
-        // Check that the answer is not simply the unaltered response template/sample.
-        if ($this->is_similar_text($response['answer'], $this->responsetemplate)) {
-            return false;
-        }
-        if ($this->is_similar_text($response['answer'], $this->responsesample)) {
-            return false;
-        }
-
-        // The response can be graded.
-        return true;
     }
 
     /**
@@ -143,10 +132,50 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
      * @return string the message.
      */
     public function get_validation_error(array $response) {
-        if ($this->is_gradable_response($response)) {
-            return '';
+
+        // Check we have either a text answer or a file attachment.
+        if (empty($response['answer']) && empty($response['attachments'])) {
+            return get_string('noresponse', 'quiz');
         }
-        return get_string('pleaseenterananswer', $this->plugin_name());
+
+        // Ensure we have text response, if required
+        if ($this->responseformat == 'noinline') {
+            $responserequired = 0; // i.e. not required
+        } else {
+            $responserequired = $this->responserequired;
+        }
+        if ($responserequired && empty($response['answer'])) {
+            return get_string('pleaseinputtext', $this->plugin_name());
+        }
+
+        // Ensure we have attachments, if required
+        if ($this->itemtype == $this->plugin_constant('ITEM_TYPE_FILES')) {
+            $attachmentsrequired = $this->itemcount;
+        } else if ($this->attachments) {
+            $attachmentsrequired = $this->attachmentsrequired;
+        } else {
+            $attachmentsrequired = 0;
+        }
+        if ($attachmentsrequired && empty($response['attachments'])) {
+            return get_string('pleaseattachfiles', $this->plugin_name());
+        }
+
+        // Check that the answer is not simply the unaltered response template/sample.
+        if ($text = $this->get_response_answer_text($response)) {
+
+            $this->set_template_and_sample_text();
+
+            if ($this->is_similar_text($text, $this->responsetemplatetext)) {
+                return get_string('responseisnotoriginal', $this->plugin_name());
+            }
+
+            if ($this->is_similar_text($text, $this->responsesampletext)) {
+                return get_string('responseisnotoriginal', $this->plugin_name());
+            }
+        }
+
+        // No validation errors.
+        return '';
     }
 
     /**
@@ -277,12 +306,38 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
     }
 
     public function update_current_response($response, $displayoptions=null) {
+        global $CFG, $PAGE, $USER;
+
+        if (empty($CFG->enableplagiarism)) {
+            $enableplagiarism = false;
+            $plagiarismparams = array();
+            $context = null;
+            $course = null;
+            $cm = null;
+        } else {
+            $enableplagiarism = true;
+            require_once($CFG->dirroot.'/lib/plagiarismlib.php');
+
+            list($context, $course, $cm) = get_context_info_array($PAGE->context->id);
+            $plagiarismparams = array(
+                'userid' => $USER->id
+            );
+            if ($course) {
+                $plagiarismparams['course'] = $course->id;
+            }
+            if ($cm) {
+                $plagiarismparams['cmid'] = $cm->id;
+                $plagiarismparams[$cm->modname] = $cm->instance;
+            }
+        }
 
         // Initialize data about this $response
         $count = 0;
         $bands = array();
         $phrases = array();
         $myphrases = array();
+        $plagiarism = array();
+        $breaks = 0;
         $rawpercent = 0;
         $rawfraction = 0.0;
         $autopercent = 0;
@@ -294,31 +349,34 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
         $completecount = 0;
         $completepercent = 0;
 
-        // Clean the $response text
-        if (empty($response) || empty($response['answer'])) {
-            $text = ''; // No response was entered. 
-        } else if ($this->is_similar_text($response['answer'], $this->responsetemplate)) {
-            $text = ''; 
-        } else if ($this->is_similar_text($response['answer'], $this->responsesample)) {
-            $text = '';
+        if ($text = $this->get_response_answer_text($response)) {
+            $this->set_template_and_sample_text();
+            if ($this->is_similar_text($text, $this->responsetemplatetext)) {
+                $text = '';
+            } else if ($this->is_similar_text($text, $this->responsesampletext)) {
+                $text = '';
+            }
+        }
+        if ($enableplagiarism) {
+            $plagiarism[] = plagiarism_get_links($plagiarismparams + array('content' => $text));
+        }
+
+        if (empty($response) || empty($response['attachments'])) {
+            $files = array();
         } else {
-            $text = question_utils::to_plain_text($response['answer'],
-                                                  $response['answerformat'],
-                                                  array('para' => false));
-            // Standardize white space in $text.
-            // Html-entity for non-breaking space, $nbsp;,
-            // is converted to a unicode character, "\xc2\xa0",
-            // that can be simulated by two ascii chars (194,160)
-            $text = str_replace(chr(194).chr(160), ' ', $text);
-            $text = preg_replace('/[ \t]+/', ' ', trim($text));
-            $text = preg_replace('/ *[\r\n]+ */s', "\n", $text);
+            $files = $response['attachments']->get_files();
+        }
+        if ($enableplagiarism) {
+            foreach ($files as $file) {
+                $plagiarism[] = plagiarism_get_links($plagiarismparams + array('file' => $file));
+            }
         }
 
         // detect common errors
         list($errors, $errorpercent) = $this->get_common_errors($text);
 
         // Get stats for this $text.
-        $stats = $this->get_stats($text, $errors);
+        $stats = $this->get_stats($text, $files, $errors);
 
         // Count items in $text.
         switch ($this->itemtype) {
@@ -326,12 +384,13 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
             case $this->plugin_constant('ITEM_TYPE_WORDS'): $count = $stats->words; break;
             case $this->plugin_constant('ITEM_TYPE_SENTENCES'): $count = $stats->sentences; break;
             case $this->plugin_constant('ITEM_TYPE_PARAGRAPHS'): $count = $stats->paragraphs; break;
+            case $this->plugin_constant('ITEM_TYPE_FILES'): $count = $stats->files; break;
         }
 
         // Get records from "question_answers" table.
         $answers = $this->get_answers();
 
-        if (empty($answers)) {
+        if (empty($answers) || ($this->itemtype == $this->plugin_constant('ITEM_TYPE_FILES'))) {
 
             // Set fractional grade from number of items.
             if (empty($this->itemcount)) {
@@ -343,8 +402,8 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
         } else {
 
             // Cache plugin constants.
-            $BAND = $this->plugin_constant('ANSWER_TYPE_BAND');
-            $PHRASE = $this->plugin_constant('ANSWER_TYPE_PHRASE');
+            $ANSWER_TYPE_BAND = $this->plugin_constant('ANSWER_TYPE_BAND');
+            $ANSWER_TYPE_PHRASE = $this->plugin_constant('ANSWER_TYPE_PHRASE');
 
             // override "addpartialgrades" with incoming form data, if necessary
             $addpartialgrades = $this->addpartialgrades;
@@ -354,9 +413,9 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
             $rawfraction = 0.0;
             $checkbands = true;
             foreach ($answers as $answer) {
-                switch ($answer->fraction) {
+                switch ($answer->type) {
 
-                    case $BAND:
+                    case $ANSWER_TYPE_BAND:
                         if ($checkbands) {
                             if ($answer->answer > $count) {
                                 $checkbands = false;
@@ -370,11 +429,13 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
                         $bands[$answer->answer] = $answer->answerformat;
                         break;
 
-                    case $PHRASE:
+                    case $ANSWER_TYPE_PHRASE:
                         if ($search = trim($answer->feedback)) {
-                            if ($match = $this->search_text($search, $text, $answer->fullmatch, $answer->casesensitive)) {
+                            if ($match = $this->search_text($search, $text, $answer->fullmatch, $answer->casesensitive, $answer->ignorebreaks)) {
                                 $rawfraction += ($answer->feedbackformat / 100);
                                 $myphrases[$match] = $search;
+                            } else if (empty($answer->ignorebreaks) && preg_match('/\\bAND|ANY\\b/', $search) && preg_match("/[\r\n]/us", $text)) {
+                                $breaks++;
                             }
                             $phrases[$search] = $answer->feedbackformat;
                         }
@@ -424,6 +485,8 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
         $this->save_current_response('bands', $bands);
         $this->save_current_response('phrases', $phrases);
         $this->save_current_response('myphrases', $myphrases);
+        $this->save_current_response('plagiarism', $plagiarism);
+        $this->save_current_response('breaks', $breaks);
         $this->save_current_response('rawpercent', $rawpercent);
         $this->save_current_response('rawfraction', $rawfraction);
         $this->save_current_response('autopercent', $autopercent);
@@ -435,6 +498,58 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
         $this->save_current_response('displayoptions', $displayoptions);
         $this->save_current_response('errors', $errors);
         $this->save_current_response('errorpercent', $errorpercent);
+    }
+
+    /**
+     * set_template_and_sample_text
+     */
+    protected function set_template_and_sample_text() {
+        if ($this->responsetemplatetext === null) {
+            $this->responsetemplatetext = $this->to_plain_text(
+                $this->responsetemplate, $this->responsetemplateformat
+            );
+        }
+        if ($this->responsesampletext === null) {
+            $this->responsesampletext = $this->to_plain_text(
+                $this->responsesample, $this->responsesampleformat
+            );
+        }
+    }
+
+    /**
+     * get_response_answer_text($response)
+     */
+    protected function get_response_answer_text($response) {
+        if (empty($response) || empty($response['answer'])) {
+            return '';
+        }
+        return $this->to_plain_text($response['answer'], $response['answerformat']);
+    }
+
+    /**
+     * to_plain_text
+     */
+    protected function to_plain_text($text, $format) {
+        if (empty($text)) {
+            return '';
+        }
+        $plaintext = question_utils::to_plain_text($text, $format, array('para' => false));
+        $plaintext = $this->standardize_white_space($plaintext);
+        return $plaintext;
+    }
+
+    /**
+     * standardize_white_space($text)
+     */
+    protected function standardize_white_space($text) {
+        // Standardize white space in $text.
+        // Html-entity for non-breaking space, $nbsp;,
+        // is converted to a unicode character, "\xc2\xa0",
+        // that can be simulated by two ascii chars (194,160)
+        $text = str_replace(chr(194).chr(160), ' ', $text);
+        $text = preg_replace('/[ \t]+/', ' ', trim($text));
+        $text = preg_replace('/( *[\x0A-\x0D]+ *)+/s', "\n", $text);
+        return $text;
     }
 
     /**
@@ -462,15 +577,15 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
 
         // Cache the length of the longer of the two strings.
         $maxlen = max($alen, $blen);
-        
+
         // Compare short strings (of up to 255 chars) with "levenshtein()" because its faster.
         // Compare long strings with "similar_text()" because it can handle texts of any length.
         if ($alen > 255 || $blen > 255) {
-            // "similar_text()" returns the number of matching chars in both $a and $b, 
+            // "similar_text()" returns the number of matching chars in both $a and $b,
             // i.e. the higher number, the more similar the texts are.
             $fraction = (($maxlen - similar_text($a, $b)) / $maxlen);
         } else {
-            // "levenshtein()" returns the minimal number of characters 
+            // "levenshtein()" returns the minimal number of characters
             // you have to replace, insert or delete to transform $a into $b
             // i.e. the lower the number, the more similar the texts are.
             $fraction = (levenshtein($a, $b) / $maxlen);
@@ -529,7 +644,7 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
             array_multisort($keys, SORT_DESC, $matches);
 
             // remove matches that are substrings of longer matches
-            $keys = array();            
+            $keys = array();
             foreach ($matches as $match) {
                 $search = '/^'.preg_quote($match, '/').'.+/iu';
                 $search = preg_grep($search, $matches);
@@ -550,7 +665,7 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
      * @param object $entry
      * @param string $match
      * @param string $text
-     * @return string the matching substring in $text or "" 
+     * @return string the matching substring in $text or ""
      */
     protected function glossary_entry_search_text($entry, $search, $text) {
         return $this->search_text($search, $text, $entry->fullmatch, $entry->casesensitive);
@@ -563,7 +678,7 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
      * @param string $text
      * @return boolean TRUE if $text mattches the $match; otherwise FALSE;
      */
-    protected function search_text($search, $text, $fullmatch=false, $casesensitive=false) {
+    protected function search_text($search, $text, $fullmatch=false, $casesensitive=false, $ignorebreaks=true) {
 
         $text = trim($text);
         if ($text=='') {
@@ -625,6 +740,9 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
         $regexp = "/$regexp/u"; // unicode match
         if (empty($casesensitive)) {
             $regexp .= 'i';
+        }
+        if ($ignorebreaks) {
+            $regexp .= 's';
         }
         if (preg_match($regexp, $text, $match)) {
             if (core_text::strlen($search) < core_text::strlen($match[0])) {
@@ -690,21 +808,20 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
     public function get_answers() {
         global $DB;
         if ($this->answers===null) {
-            if ($this->answers = $DB->get_records('question_answers', array('question' => $this->id), 'fraction,id')) {
-
-                //$ANSWER_TYPE_BAND = $this->plugin_constant('ANSWER_TYPE_BAND');
-                //$ANSWER_TYPE_PHRASE = $this->plugin_constant('ANSWER_TYPE_PHRASE');
+            if ($this->answers = $DB->get_records('question_answers', array('question' => $this->id), 'id')) {
 
                 $ANSWER_TYPE = $this->plugin_constant('ANSWER_TYPE');
                 $ANSWER_FULL_MATCH = $this->plugin_constant('ANSWER_FULL_MATCH');
                 $ANSWER_CASE_SENSITIVE = $this->plugin_constant('ANSWER_CASE_SENSITIVE');
+                $ANSWER_IGNORE_BREAKS = $this->plugin_constant('ANSWER_IGNORE_BREAKS');
 
                 foreach ($this->answers as $id => $answer) {
                     $fraction = intval($answer->fraction);
                     $this->answers[$id]->fraction = $fraction;
                     $this->answers[$id]->type = ($fraction & $ANSWER_TYPE);
-                    $this->answers[$id]->fullmatch = ($fraction & $ANSWER_FULL_MATCH);
-                    $this->answers[$id]->casesensitive = ($fraction & $ANSWER_CASE_SENSITIVE);
+                    $this->answers[$id]->fullmatch = (($fraction & $ANSWER_FULL_MATCH) ? 1 : 0);
+                    $this->answers[$id]->casesensitive = (($fraction & $ANSWER_CASE_SENSITIVE) ? 1 : 0);
+                    $this->answers[$id]->ignorebreaks = (($fraction & $ANSWER_IGNORE_BREAKS) ? 1 : 0);
                 }
             } else {
                 $this->answers = array();
@@ -716,12 +833,13 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
     /**
      * get_stats
      */
-    protected function get_stats($text, $errors) {
+    protected function get_stats($text, $files, $errors) {
         $precision = 1;
         $stats = (object)array('chars' => $this->get_stats_chars($text),
                                'words' => $this->get_stats_words($text),
                                'sentences' => $this->get_stats_sentences($text),
                                'paragraphs' => $this->get_stats_paragraphs($text),
+                               'files' => $this->get_stats_files($files),
                                'longwords' => $this->get_stats_longwords($text),
                                'uniquewords' => $this->get_stats_uniquewords($text),
                                'fogindex' => 0,
@@ -779,6 +897,13 @@ class qtype_essayautograde_question extends qtype_essay_question implements ques
         $items = explode("\n", $text);
         $items = array_filter($items);
         return count($items);
+    }
+
+    /**
+     * get_stats_files
+     */
+    protected function get_stats_files($files) {
+        return count($files);
     }
 
     /**
