@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once('locallib.php');
+
 global $CFG;
 
 if ($ADMIN->fulltree) {
@@ -86,6 +88,18 @@ if ($ADMIN->fulltree) {
             get_string('setting/multilang', 'block_advnotifications'),                                      // TITLE.
             get_string('setting/multilang_desc', 'block_advnotifications'),                                 // DESCRIPTION.
             get_string('setting/multilang_default', 'block_advnotifications')                               // DEFAULT.
+        )
+    );
+
+    // DATE FORMAT.
+    $options = get_date_formats();
+    $settings->add(
+        new admin_setting_configselect(
+            'block_advnotifications/dateformat',                                                            // NAME.
+            get_string('setting/dateformat', 'block_advnotifications'),                                     // TITLE.
+            get_string('setting/dateformat_desc', 'block_advnotifications'),                                // DESCRIPTION.
+            array_keys($options)[0],                                                                        // DEFAULT.
+            $options                                                                                        // OPTIONS.
         )
     );
 

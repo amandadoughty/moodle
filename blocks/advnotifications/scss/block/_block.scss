@@ -2,7 +2,7 @@
 body {
     .block.block_advnotifications {
         .content {
-            margin-top: 0 !important;  // To overcome core '!important' CSS :( .
+            margin-top: 0 !important; /* stylelint-disable-line declaration-no-important */ // Override core !important CSS :( .
             .notification-block-wrapper {
                 margin-bottom: 1em;
                 .alert {
@@ -12,18 +12,19 @@ body {
                     .notification-block-close {
                         position: absolute;
                         right: 1em;
-                        top: 0.75rem;
+                        top: calc(50% - 0.5em);
                         cursor: pointer;
                         font-size: 1em;
+                        line-height: 1em;
                         transition: 250ms;
                         &:hover {
-                            color: color(black);
+                            color: color(black); /* stylelint-disable-line csstree/validator */
                             transition: 250ms;
                         }
                     }
                 }
 
-                // Moodle automatically bolds the class 'warning', so this is to negate that (for the notifications specifically).
+                // Moodle automatically bolds class 'warning', so this negates that (for the notifications specifically).
                 &.warning {
                     font-weight: 400;
                 }
@@ -34,11 +35,9 @@ body {
                         > .notification_aicon {
                             height: 1.5em;
                             position: absolute;
-                            top: 50%;
-                            bottom: 50%;
+                            top: calc(50% - 0.75em);
                             margin-left: -2em;
                             opacity: 0.5;
-                            transform: translateY(-50%);
                         }
                     }
                 }
@@ -56,12 +55,12 @@ body {
             box-shadow: none;
             border: none;
             background-color: transparent;
-            margin-bottom: 0 !important; // To overcome core '!important' CSS :( .
+            margin-bottom: 0 !important; /* stylelint-disable-line declaration-no-important */ // Override core !important CSS :( .
             padding: 0;
             min-height: 0;
 
             .card-body {
-                padding: 0 !important; // To overcome core '!important' CSS :( .
+                padding: 0 !important; /* stylelint-disable-line declaration-no-important */ // Override core !important CSS :( .
             }
 
             .header {
