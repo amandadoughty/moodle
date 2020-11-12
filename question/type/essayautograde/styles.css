@@ -74,6 +74,10 @@
     margin-top:    2px;
 }
 
+.que.essayautograde .fp-restrictions span:first-of-type {
+    display: none;
+}
+
 table.essayautograde.review {
     border-collapse: separate;
     border-spacing:         0;
@@ -171,4 +175,13 @@ table.essayautograde.review .present {
     background-color:  #dff4d8; /* light green */
     border-color:      #99ff66; /* gentle green */
     color:             #009900; /* dark green */
+}
+
+@media (min-width: 768px) {
+    /** Moodle <= 3.6 **/
+    [id^=fgroup_id_phrasebehavior_] label,
+    /** Moodle >= 3.7 **/
+    [id^=fgroup_id_phrasebehavior_] [id$=_label] {
+        visibility: hidden;
+    }
 }

@@ -64,6 +64,7 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
         if ($readonly) {
             $answer = $renderer->response_area_read_only('answer', $qa, $step, $linecount, $options->context);
             $answer = preg_replace('/<a[^>]*class="[^">]*autolink[^">]*"[^>]*>(.*?)<\/a>/ius', '$1', $answer);
+            $answer = preg_replace('/ *min-height: [0-9.]+em;/ius', '$1', $answer);
             if ($question->errorcmid) {
                 $currentresponse = $question->get_current_response();
                 if (count($currentresponse->errors)) {
@@ -79,7 +80,7 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
             if ($readonly) {
                 $files = $this->files_read_only($qa, $options);
             } else {
-                $files = $this->files_input($qa, $question->attachments, $options);
+                $files = $this->files_input($qa, $options);
             }
         }
 
@@ -96,6 +97,7 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
             case $question->plugin_constant('ITEM_TYPE_WORDS'): $itemtype = 'words'; break;
             case $question->plugin_constant('ITEM_TYPE_SENTENCES'): $itemtype = 'sentences'; break;
             case $question->plugin_constant('ITEM_TYPE_PARAGRAPHS'): $itemtype = 'paragraphs'; break;
+            case $question->plugin_constant('ITEM_TYPE_FILES'): $itemtype = 'files'; break;
         }
 
         $editor = $this->get_editor_type($question);
@@ -131,13 +133,44 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
      *      not be displayed. Used to get the context.
      */
     public function files_read_only(question_attempt $qa, question_display_options $options) {
-        $files = $qa->get_last_qt_files('attachments', $options->context->id);
         $output = array();
 
+        $files = $qa->get_last_qt_files('attachments', $options->context->id);
         foreach ($files as $file) {
-            $output[] = html_writer::tag('p', html_writer::link($qa->get_response_file_url($file),
-                    $this->output->pix_icon(file_file_icon($file), get_mimetype_description($file),
-                    'moodle', array('class' => 'icon')) . ' ' . s($file->get_filename())));
+
+            $url = $qa->get_response_file_url($file);
+            $url = preg_replace('/(\?|\&|\&amp;)forcedownload=1/', '', $url);
+
+            $mimetype = $file->get_mimetype();
+            $mimetext = get_mimetype_description($file);
+
+            switch (substr($mimetype, 0, strpos($mimetype, '/'))) {
+
+                case 'image':
+                    $params = array('src' => $url,
+                                    'alt' => $mimetext);
+                    $file = html_writer::empty_tag('img', $params);
+                    break;
+
+                case 'audio':
+                    $file = html_writer::empty_tag('source', array('src' => $url));
+                    $params = array('controls' => 'true');
+                    $file = html_writer::tag('audio', $file.$url, $params);
+                    break;
+
+                case 'video':
+                    $file = html_writer::empty_tag('source', array('src' => $url));
+                    $params = array('controls' => 'true',
+                                    'playsinline' => 'true');
+                    $file = html_writer::tag('video', $file.$url, $params);
+                    break;
+
+                default:
+                    $icon = file_file_icon($file);
+                    $icon = $this->output->pix_icon($icon, $mimetext, 'moodle', array('class' => 'icon'));
+                    $file = html_writer::link($qa->get_response_file_url($file), $icon.' '.s($file->get_filename()));
+            }
+            $output[] = html_writer::tag('p', $file, array('style' => 'width: 100%; max-width: 480px;'));
         }
         return implode($output);
     }
@@ -145,27 +178,96 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
     /**
      * Displays the input control for when the student should upload a single file.
      * @param question_attempt $qa the question attempt to display.
-     * @param int $maxfiles the maximum number of attachments allowed. -1 = unlimited.
      * @param question_display_options $options controls what should and should
      *      not be displayed. Used to get the context.
      */
-    public function files_input(question_attempt $qa, $maxfiles, question_display_options $options) {
-        global $CFG;
+    public function files_input(question_attempt $qa, question_display_options $options) {
+        global $CFG, $PAGE;
         require_once($CFG->dirroot.'/lib/form/filemanager.php');
+
+        // cache reference to $question
+        $question = $qa->get_question();
 
         $name = 'attachments';
         $itemid = $qa->prepare_response_files_draft_itemid($name, $options->context->id);
         $pickeroptions = (object)array('mainfile' => null,
-                                       'maxfiles' => $maxfiles,
+                                       'maxfiles' => $question->attachments,
                                        'itemid'   => $itemid,
                                        'context'  => $options->context,
                                        'return_types' => FILE_INTERNAL);
-        $fm = new form_filemanager($pickeroptions);
-        $filesrenderer = $this->page->get_renderer('core', 'files');
+
+        if ($filetypes = $question->filetypeslist) {
+            $pickeroptions->accepted_types = $filetypes;
+        }
+
+        $manager = new form_filemanager($pickeroptions);
+        $renderer = $this->page->get_renderer('core', 'files');
         $params = array('type'  => 'hidden',
                         'value' => $itemid,
                         'name'  => $qa->get_qt_field_name($name));
-        return $filesrenderer->render($fm).html_writer::empty_tag('input', $params);
+        $output = $renderer->render($manager).html_writer::empty_tag('input', $params);
+
+        // Remove restrictions (this is done  with CSS)
+        // $output = preg_replace('/(?<=<div class="fp-restrictions">)\s*<span>.*?<\/span>/s', '', $output);
+
+        $restrictions = array();
+
+        // Append warning about required number of attachments.
+        if ($question->attachments) {
+            if ($question->attachments == $question->attachmentsrequired) {
+                $restrictions[] = get_string('requiredfilecount', $this->plugin_name(), $question->attachments);
+            } else {
+                if ($question->attachmentsrequired > 0) {
+                    $restrictions[] = get_string('minimumfilecount', $this->plugin_name(), $question->attachmentsrequired);
+                }
+                if ($question->attachments > 0) {
+                    $restrictions[] = get_string('maximumfilecount', $this->plugin_name(), $question->attachments);
+                }
+            }
+        }
+
+        list($context, $course, $cm) = get_context_info_array($options->context->id);
+        if ($course) {
+            $maxbytes = $course->maxbytes;
+        } else {
+            $maxbytes = $PAGE->course->maxbytes;
+        }
+        $maxbytes = get_user_max_upload_file_size($context, $CFG->maxbytes, $maxbytes);
+        if ($maxbytes == USER_CAN_IGNORE_FILE_SIZE_LIMITS) {
+            // $maxbytes = get_string('unlimited');
+        } else {
+            $restrictions[] = get_string('maximumfilesize', $this->plugin_name(), $maxbytes);
+        }
+
+        // Append details of accepted file types.
+        if ($filetypes) {
+            if (class_exists('\\core_form\\filetypes_util')) {
+                // Moodle >= 3.4
+                $util = new \core_form\filetypes_util();
+                $filetypes = $util->describe_file_types($filetypes);
+                $filetypes = $this->render_from_template('core_form/filetypes-descriptions', $filetypes);
+                $filetypes = get_string('acceptedfiletypes', 'qtype_essay').get_string('labelsep', 'langconfig').$filetypes;
+                $restrictions[] = $filetypes;
+            } else {
+                // Moodle <= 3.3
+                $filetypes = strtolower($filetypes);
+                $filetypes = preg_split('/[\s,;:"\']+/', $filetypes, null, PREG_SPLIT_NO_EMPTY);
+                foreach ($filetypes as $i => $filetype) {
+                    $filetype = str_replace('*.', '', $filetype);
+                    $filetypes[$i] = trim(ltrim($filetype, '.'));
+                }
+                $filetypes = array_filter($filetypes);
+                $filetypes = implode(', ', $filetypes);
+                $restrictions[] = get_string('acceptedfiletypes', 'qtype_essay').get_string('labelsep', 'langconfig').$filetypes;
+            }
+        }
+
+        if (count($restrictions)) {
+            $output .= html_writer::alist($restrictions);
+        }
+
+
+        return $output;
     }
 
     public function manual_comment(question_attempt $qa, question_display_options $options) {
@@ -203,7 +305,7 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
         }
 
         // If required, show explanation of grade calculation.
-        if ($show) {
+        if ($show || true) {
 
             $plugin = 'qtype_essayautograde';
             $question = $qa->get_question();
@@ -233,6 +335,7 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                 case $question->plugin_constant('ITEM_TYPE_WORDS'): $itemtype = get_string('words', $plugin); break;
                 case $question->plugin_constant('ITEM_TYPE_SENTENCES'): $itemtype = get_string('sentences', $plugin); break;
                 case $question->plugin_constant('ITEM_TYPE_PARAGRAPHS'): $itemtype = get_string('paragraphs', $plugin); break;
+                case $question->plugin_constant('ITEM_TYPE_FILES'): $itemtype = get_string('files', $plugin); break;
             }
             $itemtype = core_text::strtolower($itemtype);
 
@@ -255,15 +358,23 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                 $this->plugin_constant('SHOW_TEACHERS_AND_STUDENTS') => ($showstudent || $showteacher),
             );
 
-            $showgradebands = ($show[$question->showgradebands] && count($currentresponse->bands));
+            if ($question->itemtype == $question->plugin_constant('ITEM_TYPE_FILES')) {
+                $textstatitems = '';
+                $showgradebands = false;
+                $showtargetphrases = false;
+            } else {
+                $textstatitems = $question->textstatitems;
+                $showgradebands = ($show[$question->showgradebands] && count($currentresponse->bands));
+                $showtargetphrases = $show[$question->showtargetphrases] && count($currentresponse->phrases);
+            }
 
-            if ($show[$question->showtextstats] && $question->textstatitems) {
+            if ($show[$question->showtextstats] && $textstatitems) {
                 $strman = get_string_manager();
 
                 $table = new html_table();
                 $table->attributes['class'] = 'generaltable essayautograde review stats';
 
-                $names = explode(',', $question->textstatitems);
+                $names = explode(',', $textstatitems);
                 $names = array_filter($names);
                 foreach ($names as $name) {
                     $label = get_string($name, $plugin);
@@ -290,6 +401,8 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
             if ($show[$question->showcalculation]) {
 
                 $details = array();
+
+                // Partial grade bands.
                 if ($currentresponse->completecount) {
                     $a = (object)array('percent'   => $currentresponse->completepercent,
                                        'count'     => $currentresponse->completecount,
@@ -302,6 +415,8 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                     }
                     $details[] = $this->get_calculation_detail($name, $plugin, $a);
                 }
+
+                // Partial grade bands.
                 if ($currentresponse->partialcount) {
                     $a = (object)array('percent'   => $currentresponse->partialpercent,
                                        'count'     => $currentresponse->partialcount,
@@ -321,6 +436,7 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                     }
                 }
 
+                // Target phrases.
                 foreach ($currentresponse->myphrases as $myphrase => $phrase) {
                     $percent = $currentresponse->phrases[$phrase];
                     $a = (object)array('percent' => $percent,
@@ -328,10 +444,24 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                     $details[] = $this->get_calculation_detail('explanationtargetphrase', $plugin, $a);
                 }
 
+                // Common errors.
                 foreach ($currentresponse->errors as $error => $link) {
                     $a = (object)array('percent' => $question->errorpercent,
                                        'error'   => $error);
                     $details[] = $this->get_calculation_detail('explanationcommonerror', $plugin, $a, '- ');
+                }
+
+                // Files.
+                if ($question->itemtype == $question->plugin_constant('ITEM_TYPE_FILES')) {
+                    $a = (object)array('percent' => $currentresponse->rawpercent,
+                                       'filecount' => $currentresponse->count,
+                                       'itemcount' => $question->itemcount);
+                    $details[] = get_string('explanationfiles', $plugin, $a);
+                }
+
+                // Plagiarism links, if any.
+                foreach ($currentresponse->plagiarism as $plagiarism) {
+                    $details[] = html_writer('p', $plagiarism);
                 }
 
                 if (empty($details) && $currentresponse->count) {
@@ -455,7 +585,7 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                 }
             }
 
-            // show grade bands, if required
+            // Show grade bands, if required.
             if ($showgradebands) {
                 $details = array();
                 $i = 1; // grade band index
@@ -472,8 +602,8 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                 $output .= html_writer::tag('dl', implode('', $details), array('class' => 'gradebands'));
             }
 
-            // show target phrases, if required
-            if ($show[$question->showtargetphrases] && count($currentresponse->phrases)) {
+            // Show target phrases, if required.
+            if ($showtargetphrases) {
                 $details = array();
                 foreach ($currentresponse->phrases as $match => $percent) {
                     $details[] = get_string('phrasematch', $plugin).' "'.$match.'" '.
@@ -484,7 +614,7 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                 $output .= html_writer::alist($details);
             }
 
-            // show actionable feedback, if required
+            // Show actionable feedback, if required.
             if ($show[$question->showfeedback]) {
                 $hints = array();
 
@@ -508,36 +638,54 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                 // Item count
                 if ($maxcount = $question->itemcount) {
                     $count = $currentresponse->count;
-                    if ($count < $maxcount) {
-                        $hints['words'] = get_string('feedbackhintwords', $plugin);
-                    }
                     switch ($question->itemtype) {
                         case $question->plugin_constant('ITEM_TYPE_CHARS'):
-                            $itemtype = get_string('chars', $plugin);
+                            $type = 'chars';
+                            $hint = 'feedbackhintchars';
                             break;
                         case $question->plugin_constant('ITEM_TYPE_WORDS'):
-                            $itemtype = get_string('words', $plugin);
+                            $type = 'words';
+                            $hint = 'feedbackhintwords';
                             break;
                         case $question->plugin_constant('ITEM_TYPE_SENTENCES'):
-                            $itemtype = get_string('sentences', $plugin);
+                            $type = 'sentences';
+                            $hint = 'feedbackhintsentences';
                             break;
                         case $question->plugin_constant('ITEM_TYPE_PARAGRAPHS'):
-                            $itemtype = get_string('paragraphs', $plugin);
+                            $type = 'paragraphs';
+                            $hint = 'feedbackhintparagraphs';
+                            break;
+                        case $question->plugin_constant('ITEM_TYPE_FILES'):
+                            $type = 'files';
+                            $hint = 'feedbackhintfiles';
                             break;
                         default:
-                            $itemtype = $question->itemtype; // shouldn't happen !!
+                            // shouldn't happen !!
+                            $type = $question->itemtype;
+                            $hint = '';
                     }
                     $output .= html_writer::start_tag('tr', array('class' => 'items'));
-                    $output .= html_writer::tag('th', $itemtype, array('class' => 'cell c0'));
+                    $output .= html_writer::tag('th', get_string($type, $plugin), array('class' => 'cell c0'));
                     $output .= html_writer::tag('td', $count.' / '.$maxcount, array('class' => 'cell c1'));
                     $output .= html_writer::end_tag('tr');
+                    if ($count < $maxcount && $hint) {
+                        $hints[$type] = get_string($hint, $plugin);
+                    }
                 }
 
                 // Target phrases
-                if ($maxcount = count($currentresponse->phrases)) {
+                if ($showtargetphrases) {
+                    $maxcount = count($currentresponse->phrases);
+                } else {
+                    $maxcount = 0;
+                }
+                if ($maxcount) {
                     $count = count($currentresponse->myphrases);
                     if ($count < $maxcount) {
                         $hints['phrases'] = get_string('feedbackhintphrases', $plugin);
+                    }
+                    if ($currentresponse->breaks) {
+                        $hints['breaks'] = get_string('feedbackhintbreaks', $plugin);
                     }
                     $output .= html_writer::start_tag('tr', array('class' => 'phrases'));
                     $output .= html_writer::tag('th', get_string('targetphrases', $plugin), array('class' => 'cell c0'));
@@ -561,6 +709,7 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
                     }
                 }
 
+                // Errors
                 if ($maxcount = count($currentresponse->errors)) {
                     $hints['errors'] = get_string('feedbackhinterrors', $plugin);
                     $output .= html_writer::start_tag('tr', array('class' => 'errors'));
@@ -581,7 +730,14 @@ class qtype_essayautograde_renderer extends qtype_with_combined_feedback_rendere
 
                 // Hints
                 if (count($hints)) {
-                    $hints['rewriteresubmit'] = get_string('rewriteresubmit'.implode('', array_keys($hints)), $plugin);
+                    $name = 'rewriteresubmit';
+                    $hint = array();
+                    foreach (array_keys($hints) as $type) {
+                        $hint[] = get_string($name.$type, $plugin);
+                    }
+                    if ($hint = implode(get_string($name.'join', $plugin), $hint)) {
+                        $hints[$name] = ucfirst($hint).get_string($name, $plugin);
+                    }
                     $output .= html_writer::start_tag('tr');
                     $output .= html_writer::tag('th', get_string('feedbackhints', $plugin), array('class' => 'cell c0'));
                     $output .= html_writer::tag('td', html_writer::alist($hints), array('class' => 'cell c1'));

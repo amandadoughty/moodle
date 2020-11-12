@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.3.12 - 13/10/2020
+
+### Changed
+* Bumped version number.
+
+### Fixed
+* Improper default settings value. Now sets first date format as default. 
+
+## v1.3.11 - 06/10/2020
+
+### Added
+* Gruntfile - scss & js processing.
+* More date formats available.
+
+### Changed
+* UI/UX Improvements.
+* Cleaned up unused SCSS variables & functions.
+* Bumped version number.
+
+### Fixed
+* 'Date-to' would not be shown if 'Date-from' was not set (0). It now correctly checks if date-to is set instead.
+* Various travis & moodle plugin db-recommended code style fixes. 
+
+## v1.3.10 - 02/10/2020
+
+### Added
+* Setting to customise 'date format' shown by plugin.
+
+### Changed
+* Utilised bootstrap more for form styling.
+* Bumped version number.
+
 ## v1.3.9 - 22/06/2020
 
 ### Changed
