@@ -33,3 +33,22 @@ Feature: Bulk message
       | bulk-message | "Hello world!" |
     And I press "Send message to 3 people"
     And I should see "Message sent to 3 people"
+
+  Scenario: Send a bulk message to module participants when one participant has suspended enrolment
+    Given the following "users" exist:
+      | username | firstname | lastname | email                |
+      | student3 | Student   | 3        | student3@example.com |
+    And the following "course enrolments" exist:
+      | user     | course | role           |status|
+      | student3 | C1     | student        |1     |
+    When I log in as "teacher1"
+    And I am on "Course 1" course homepage
+    And I navigate to course participants
+    And I click on "Select all" "checkbox"
+    And I set the field "With selected users..." to "Send a message"
+    And "Send message to 4 people" "dialogue" should exist
+    And I set the following fields to these values:
+      | bulk-message | "Hello world!" |
+    And I press "Send message to 4 people"
+    And I should see "Message sent to 3 people"
+    And I should see "You can't message 'Student 3' due to their message preferences. Try adding them as a contact."

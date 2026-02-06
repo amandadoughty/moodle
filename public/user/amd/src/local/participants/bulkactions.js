@@ -180,6 +180,24 @@ const submitSendMessage = (modal, users, text) => {
     });
 
     return Repository.sendMessagesToUsers(messages)
+        .then(function(messageIds) {
+            const successIds = [];
+            // Error handling for the weird way the old function works.
+            var errors = messageIds.reduce(function (carry, result) {
+                if (result.errormessage) {
+                    carry.push(result.errormessage);
+                } else {
+                    successIds.push(result);
+                }
+
+                return carry;
+            }, [], successIds);
+            if (errors.length) {
+                notifyUser(Error(errors.join("\n")));
+            }
+
+            return successIds;
+        })
     .then(messageIds => {
         if (messageIds.length == 1) {
             return Str.get_string('sendbulkmessagesentsingle', 'core_message');

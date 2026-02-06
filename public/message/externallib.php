@@ -211,8 +211,10 @@ class core_message_external extends external_api {
             // TODO MDL-31118 performance improvement - edit the function so we can pass an array instead userid
             // Check if the recipient can be messaged by the sender.
             if ($success && !\core_message\api::can_send_message($tousers[$message['touserid']]->id, $USER->id)) {
+                $user = core_user::get_user($message['touserid']);
+                $fullname = fullname($user, has_capability('moodle/site:viewfullnames', $context));
                 $success = false;
-                $errormessage = get_string('usercantbemessaged', 'message');
+                $errormessage = get_string('usercantbemessaged', 'message', $fullname);
             }
 
             // Now we can send the message (at least try).
@@ -255,11 +257,16 @@ class core_message_external extends external_api {
                 $id = $resultmessage['msgid'];
                 $resultmessage['conversationid'] = isset($messagerecords[$id]) ? $messagerecords[$id]->conversationid : null;
                 $resultmessage['useridfrom'] = $USER->id;
-                $resultmessage['text'] = message_format_message_text((object) [
-                    'smallmessage' => $messagerecords[$id]->smallmessage,
-                    'fullmessageformat' => util::validate_format($messagerecords[$id]->fullmessageformat),
-                    'fullmessagetrust' => $messagerecords[$id]->fullmessagetrust
-                ]);
+
+                if ($id == -1) {
+//
+                } else {
+                    $resultmessage['text'] = message_format_message_text((object)[
+                        'smallmessage' => $messagerecords[$id]->smallmessage,
+                        'fullmessageformat' => util::validate_format($messagerecords[$id]->fullmessageformat),
+                        'fullmessagetrust' => $messagerecords[$id]->fullmessagetrust
+                    ]);
+                }
                 return $resultmessage;
             }, $resultmessages);
         }
