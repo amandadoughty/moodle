@@ -236,6 +236,31 @@ abstract class qtype_essay_format_renderer_base extends plugin_renderer_base {
     }
 
     /**
+     * Add the word count element
+     *
+     * @return string the HTML for the wordcount.
+     */
+    protected function wordcount() {
+        $id = uniqid();
+        $output = html_writer::tag(
+            'div',
+            html_writer::tag(
+                'span',
+                0,
+                ['data-region' => 'wordcount']
+            ) .
+            html_writer::tag(
+                'span',
+                get_string('words', 'qtype_essay')
+            ),
+            ['id' => "$id"]
+        );
+        $this->page->requires->js_call_amd('qtype_essay/wordcount', 'init', [$id]);
+
+        return $output;
+    }
+
+    /**
      * Render the students respone when the question is in read-only mode.
      * @param string $name the variable name this input edits.
      * @param question_attempt $qa the question attempt being display.
@@ -314,6 +339,7 @@ class qtype_essay_format_editor_renderer extends qtype_essay_format_renderer_bas
         ]);
         // Height $lines * 1.5 because that is a typical line-height on web pages.
         // That seems to give results that look OK.
+        $output .= $this->wordcount();
 
         return $output;
     }
@@ -556,6 +582,7 @@ class qtype_essay_format_plain_renderer extends qtype_essay_format_renderer_base
         $responselabel = $this->displayoptions->add_question_identifier_to_label(get_string('answertext', 'qtype_essay'));
         $output = html_writer::tag('label', $responselabel, ['class' => 'visually-hidden', 'for' => $id]);
         $output .= $this->textarea($step->get_qt_var($name), $lines, ['id' => $id, 'readonly' => 'readonly']);
+        $output .= $this->wordcount();
         return $output;
     }
 
@@ -566,6 +593,7 @@ class qtype_essay_format_plain_renderer extends qtype_essay_format_renderer_base
         $responselabel = $this->displayoptions->add_question_identifier_to_label(get_string('answertext', 'qtype_essay'));
         $output = html_writer::tag('label', $responselabel, ['class' => 'visually-hidden', 'for' => $id]);
         $output .= $this->textarea($step->get_qt_var($name), $lines, ['name' => $inputname, 'id' => $id]);
+        $output .= $this->wordcount();
         $output .= html_writer::empty_tag('input', ['type' => 'hidden', 'name' => $inputname . 'format', 'value' => FORMAT_PLAIN]);
 
         return $output;
