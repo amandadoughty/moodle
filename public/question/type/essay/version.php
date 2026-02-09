@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'qtype_essay';
-$plugin->version   = 2026042000;
+$plugin->version   = 2026101900;
 
 $plugin->requires  = 2026041000;
 
