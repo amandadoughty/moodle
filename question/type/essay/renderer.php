@@ -536,10 +536,29 @@ class qtype_essay_format_plain_renderer extends qtype_essay_format_renderer_base
      * @return string the HTML for the textarea.
      */
     protected function textarea($response, $lines, $attributes) {
+        global $PAGE;
+
+        $id = uniqid();
         $attributes['class'] = $this->class_name() . ' qtype_essay_response form-control';
         $attributes['rows'] = $lines;
         $attributes['cols'] = 60;
-        return html_writer::tag('textarea', s($response), $attributes);
+        $output = html_writer::tag('textarea', s($response), $attributes);
+
+        $output .= html_writer::tag('div',
+            html_writer::tag(
+                'span',
+                0,
+                ['data-region' => 'wordcount']
+            ) .
+            html_writer::tag(
+                'span',
+                get_string('words', 'qtype_essay')
+            ),
+            ['id' => "$id"]
+        );
+        $PAGE->requires->js_call_amd('qtype_essay/wordcount', 'init', [$id]);
+
+        return $output;
     }
 
     protected function class_name() {
