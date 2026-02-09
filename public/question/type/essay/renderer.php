@@ -542,6 +542,31 @@ class qtype_essay_format_plain_renderer extends qtype_essay_format_renderer_base
         return html_writer::tag('textarea', s($response), $attributes);
     }
 
+    /**
+     * Add the word count element
+     *
+     * @return string the HTML for the wordcount.
+     */
+    protected function wordcount() {
+        $id = uniqid();
+        $output = html_writer::tag(
+            'div',
+            html_writer::tag(
+                'span',
+                0,
+                ['data-region' => 'wordcount']
+            ) .
+            html_writer::tag(
+                'span',
+                get_string('words', 'qtype_essay')
+            ),
+            ['id' => "$id"]
+        );
+        $this->page->requires->js_call_amd('qtype_essay/wordcount', 'init', [$id]);
+
+        return $output;
+    }
+
     protected function class_name() {
         return 'qtype_essay_plain';
     }
@@ -562,6 +587,7 @@ class qtype_essay_format_plain_renderer extends qtype_essay_format_renderer_base
         $responselabel = $this->displayoptions->add_question_identifier_to_label(get_string('answertext', 'qtype_essay'));
         $output = html_writer::tag('label', $responselabel, ['class' => 'visually-hidden', 'for' => $id]);
         $output .= $this->textarea($step->get_qt_var($name), $lines, ['name' => $inputname, 'id' => $id]);
+        $output .= $this->wordcount();
         $output .= html_writer::empty_tag('input', ['type' => 'hidden', 'name' => $inputname . 'format', 'value' => FORMAT_PLAIN]);
 
         return $output;
