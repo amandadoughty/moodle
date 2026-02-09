@@ -82,3 +82,4 @@ $string['responsetemplate_help'] = 'Any text entered here will be displayed in t
 $string['wordcount'] = 'Word count: {$a}';
 $string['wordcounttoofew'] = 'Word count: {$a->count}, less than the required {$a->limit} words.';
 $string['wordcounttoomuch'] = 'Word count: {$a->count}, more than the limit of {$a->limit} words.';
+$string['words'] = ' words';
