@@ -268,4 +268,15 @@ abstract class assign_feedback_plugin extends assign_plugin {
     public function has_downloadable_marker_columns(): bool {
         return false;
     }
+
+    /**
+     * Returns true if the plugin returns feedback files
+     * and has existing feedback.
+     * This will help in determining whether to show the download feedback link.
+     *
+     * @return bool.
+     */
+    public function return_files() {
+        return false;
+    }
 }
