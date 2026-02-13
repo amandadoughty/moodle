@@ -1,6 +1,6 @@
 @mod @mod_assign
-Feature: In an assignment, teachers can download submissions through the actions dropdown
-  In order to download all submissions in an assignment
+Feature: In an assignment, teachers can download submissions/feedback through the actions dropdown
+  In order to download all submissions/feedback in an assignment
   As a teacher
   I need to have the option available in the actions dropdown menu
 
@@ -47,3 +47,38 @@ Feature: In an assignment, teachers can download submissions through the actions
       | onlinetext_enabled | file_enabled |
       | 1                  | 0            |
       | 0                  | 0            |
+
+  @_file_upload @javascript
+  Scenario: The option to download all feedback is available when there are feedback files.
+    Given the following "activity" exists:
+      | activity                            | assign               |
+      | course                              | C1                   |
+      | name                                | Test assignment name |
+      | assignsubmission_onlinetext_enabled | 1                    |
+      | assignfeedback_file_enabled         | 1                    |
+    And the following "mod_assign > submissions" exist:
+      | assign               | user     | onlinetext                       |
+      | Test assignment name | student1 | I'm the student first submission |
+    And I am on the "Test assignment name" Activity page logged in as teacher1
+    And I click on "Grade" "link" in the ".tertiary-navigation" "css_element"
+    And I upload "mod/assign/feedback/file/tests/fixtures/feedback.txt" file to "Feedback files" filemanager
+    And I press "Save changes"
+    And I am on the "Test assignment name" Activity page logged in as teacher1
+    And I change window size to "large"
+    When I navigate to "Submissions" in current page administration
+    Then the "Download all feedback" item should exist in the "Actions" action menu
+
+  Scenario: Option to download all feedback is unavailable if no feedback files exist.
+    Given the following "activity" exists:
+      | activity                            | assign               |
+      | course                              | C1                   |
+      | name                                | Test assignment name |
+      | assignsubmission_onlinetext_enabled | 1                    |
+      | assignfeedback_file_enabled         | 1                    |
+    And the following "mod_assign > submissions" exist:
+      | assign               | user     | onlinetext                       |
+      | Test assignment name | student1 | I'm the student first submission |
+    And I am on the "Test assignment name" Activity page logged in as teacher1
+    And I change window size to "large"
+    When I navigate to "Submissions" in current page administration
+    Then the "Download all feedback files" item should not exist in the "Actions" action menu
