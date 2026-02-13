@@ -24,16 +24,18 @@ use assign;
  *
  * @package    mod_assign
  * @category   test
- * @copyright  2022 Ferran Recio <ferran@moodle.com>
+ * @copyright  2026 Amanda Doughty <m.doughty@ucl.ac.uk
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @coversDefaultClass \mod_assign\downloader
  */
-final class downloader_test extends \advanced_testcase {
+final class feedback_downloader_test extends \advanced_testcase {
     /**
      * Setup to ensure that fixtures are loaded.
      */
-    public static function setupBeforeClass(): void {
+    public static function setUpBeforeClass(): void {
         global $CFG;
+
+        parent::setUpBeforeClass();
         require_once($CFG->dirroot . '/mod/assign/locallib.php');
     }
 
@@ -58,7 +60,6 @@ final class downloader_test extends \advanced_testcase {
         bool $downloadasfolder,
         array $expected
     ): void {
-        global $CFG;
         $this->resetAfterTest();
         $this->setAdminUser();
 
@@ -75,6 +76,7 @@ final class downloader_test extends \advanced_testcase {
             'student4' => $this->getDataGenerator()->create_and_enrol($course, 'student'),
             'student5' => $this->getDataGenerator()->create_and_enrol($course, 'student'),
         ];
+        $teacher = $this->getDataGenerator()->create_and_enrol($course, 'teacher');
 
         // Generate groups.
         $groups = [];
@@ -92,6 +94,7 @@ final class downloader_test extends \advanced_testcase {
             'assignsubmission_file_enabled' => 1,
             'assignsubmission_file_maxfiles' => 12,
             'assignsubmission_file_maxsizebytes' => 1024 * 1024,
+            'assignfeedback_file_enabled' => 1,
         ];
         if ($teamsubmission) {
             $params['teamsubmission'] = 1;
@@ -103,12 +106,13 @@ final class downloader_test extends \advanced_testcase {
         $activity = $this->getDataGenerator()->create_module('assign', $params);
         $cm = get_coursemodule_from_id('assign', $activity->cmid, 0, false, MUST_EXIST);
         $context = context_module::instance($cm->id);
+        $manager = new assign($context, $cm, $course);
 
         // Generate submissions.
         $datagenerator = $this->getDataGenerator()->get_plugin_generator('mod_assign');
         $files = [
-            "mod/assign/tests/fixtures/submissionsample01.txt",
-            "mod/assign/tests/fixtures/submissionsample02.txt"
+            "mod/assign/tests/fixtures/feedbacksample01.txt",
+            "mod/assign/tests/fixtures/submissionsample02.txt",
         ];
         foreach ($users as $key => $user) {
             if ($key == 'student5') {
@@ -121,15 +125,50 @@ final class downloader_test extends \advanced_testcase {
             ]);
         }
 
+        // Generate feedback.
+        foreach ($users as $key => $user) {
+            // Student 5 did not submit but will get grades and feedback for team submissions.
+            if ($key == 'student5' && !$teamsubmission) {
+                continue;
+            }
+
+            $this->setUser($teacher);
+
+            $fs = get_file_storage();
+            $context = \context_user::instance($teacher->id);
+            $draftitemid = file_get_unused_draft_itemid();
+            file_prepare_draft_area($draftitemid, $context->id, 'assignfeedback_file', 'feedback_files', 1);
+
+            $dummy = [
+                'contextid' => $context->id,
+                'component' => 'user',
+                'filearea' => 'draft',
+                'itemid' => $draftitemid,
+                'filepath' => '/',
+                'filename' => 'feedbacksample01.txt',
+            ];
+
+            $fs->create_file_from_string($dummy, 'This is the first feedback file');
+
+            // Create formdata.
+            $data = new \stdClass();
+            $data->{'files_' . $user->id . '_filemanager'} = $draftitemid;
+            $grade = $manager->get_user_grade($user->id, true);
+            $plugin = $manager->get_feedback_plugin_by_type('file');
+            // Save the feedback.
+            $plugin->save($grade, $data);
+        }
+
+        $this->setAdminUser();
+
         // Generate file list.
         if ($filterusers) {
             foreach ($filterusers as $key => $identifier) {
                 $filterusers[$key] = $users[$identifier]->id;
             }
         }
-        $manager = new assign($context, $cm, $course);
         $downloader = new downloader($manager, $filterusers);
-        $hasfiles = $downloader->load_filelist('submission');
+        $hasfiles = $downloader->load_filelist('feedback');
 
         // Expose protected filelist attribute.
         $rc = new \ReflectionClass(downloader::class);
@@ -179,8 +218,8 @@ final class downloader_test extends \advanced_testcase {
      * @return array of scenarios
      */
     public static function load_filelist_provider(): array {
-        $downloadasfoldertests = static::load_filelist_downloadasfolder_scenarios();
-        $downloadasfilestests = static::load_filelist_downloadasfiles_scenarios();
+        $downloadasfoldertests = self::load_filelist_downloadasfolder_scenarios();
+        $downloadasfilestests = self::load_filelist_downloadasfiles_scenarios();
         return array_merge(
             $downloadasfoldertests,
             $downloadasfilestests,
@@ -196,7 +235,7 @@ final class downloader_test extends \advanced_testcase {
      * @return array of scenarios
      */
     private static function load_filelist_downloadasfiles_scenarios(): array {
-        $result = static::load_filelist_downloadasfolder_scenarios("Download as files:");
+        $result = self::load_filelist_downloadasfolder_scenarios("Download as files:");
         // Transform paths from files.
         foreach ($result as $scenario => $info) {
             $info['downloadasfolder'] = false;
@@ -226,14 +265,10 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'STUDENT1_STUDENT1.ID_assignsubmission_file/submissionsample01.txt',
-                    'STUDENT1_STUDENT1.ID_assignsubmission_file/submissionsample02.txt',
-                    'STUDENT2_STUDENT2.ID_assignsubmission_file/submissionsample01.txt',
-                    'STUDENT2_STUDENT2.ID_assignsubmission_file/submissionsample02.txt',
-                    'STUDENT3_STUDENT3.ID_assignsubmission_file/submissionsample01.txt',
-                    'STUDENT3_STUDENT3.ID_assignsubmission_file/submissionsample02.txt',
-                    'STUDENT4_STUDENT4.ID_assignsubmission_file/submissionsample01.txt',
-                    'STUDENT4_STUDENT4.ID_assignsubmission_file/submissionsample02.txt',
+                    'STUDENT1_STUDENT1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'STUDENT2_STUDENT2.ID_assignfeedback_file/feedbacksample01.txt',
+                    'STUDENT3_STUDENT3.ID_assignfeedback_file/feedbacksample01.txt',
+                    'STUDENT4_STUDENT4.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtered users' => [
@@ -243,10 +278,8 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'STUDENT1_STUDENT1.ID_assignsubmission_file/submissionsample01.txt',
-                    'STUDENT1_STUDENT1.ID_assignsubmission_file/submissionsample02.txt',
-                    'STUDENT2_STUDENT2.ID_assignsubmission_file/submissionsample01.txt',
-                    'STUDENT2_STUDENT2.ID_assignsubmission_file/submissionsample02.txt',
+                    'STUDENT1_STUDENT1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'STUDENT2_STUDENT2.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtering users without submissions' => [
@@ -256,8 +289,7 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'STUDENT1_STUDENT1.ID_assignsubmission_file/submissionsample01.txt',
-                    'STUDENT1_STUDENT1.ID_assignsubmission_file/submissionsample02.txt',
+                    'STUDENT1_STUDENT1.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Asking only for users without submissions' => [
@@ -280,12 +312,9 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample02.txt',
-                    'GROUP2_GROUP2.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP2_GROUP2.ID_assignsubmission_file/submissionsample02.txt',
-                    'GROUP3_GROUP3.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP3_GROUP3.ID_assignsubmission_file/submissionsample02.txt',
+                    'GROUP1_GROUP1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'GROUP2_GROUP2.ID_assignfeedback_file/feedbacksample01.txt',
+                    'GROUP3_GROUP3.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtering users with disjoined groups' => [
@@ -299,10 +328,8 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample02.txt',
-                    'GROUP2_GROUP2.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP2_GROUP2.ID_assignsubmission_file/submissionsample02.txt',
+                    'GROUP1_GROUP1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'GROUP2_GROUP2.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtering users with default teams who does not do a submission' => [
@@ -316,10 +343,8 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample02.txt',
-                    'GROUP3_GROUP3.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP3_GROUP3.ID_assignsubmission_file/submissionsample02.txt',
+                    'GROUP1_GROUP1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'GROUP3_GROUP3.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtering users without submission but member of a group' => [
@@ -330,13 +355,12 @@ final class downloader_test extends \advanced_testcase {
                     'group3' => ['student4', 'student5'],
                 ],
                 'filterusers' => [
-                    'student5'
+                    'student5',
                 ],
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'GROUP3_GROUP3.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP3_GROUP3.ID_assignsubmission_file/submissionsample02.txt',
+                    'GROUP3_GROUP3.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             // Test with default team.
@@ -349,10 +373,8 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample02.txt',
-                    'DEFAULTTEAM_assignsubmission_file/submissionsample01.txt',
-                    'DEFAULTTEAM_assignsubmission_file/submissionsample02.txt',
+                    'GROUP1_GROUP1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'DEFAULTTEAM_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtered users in groups with users in the default team' => [
@@ -364,8 +386,7 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample02.txt',
+                    'GROUP1_GROUP1.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtered users without groups with users in the default team' => [
@@ -377,8 +398,7 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'DEFAULTTEAM_assignsubmission_file/submissionsample01.txt',
-                    'DEFAULTTEAM_assignsubmission_file/submissionsample02.txt',
+                    'DEFAULTTEAM_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtered users with some users in the default team' => [
@@ -390,10 +410,8 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample02.txt',
-                    'DEFAULTTEAM_assignsubmission_file/submissionsample01.txt',
-                    'DEFAULTTEAM_assignsubmission_file/submissionsample02.txt',
+                    'GROUP1_GROUP1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'DEFAULTTEAM_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtering users with joined groups' => [
@@ -406,10 +424,8 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => false,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample01.txt',
-                    'GROUP1_GROUP1.ID_assignsubmission_file/submissionsample02.txt',
-                    'DEFAULTTEAM_assignsubmission_file/submissionsample01.txt',
-                    'DEFAULTTEAM_assignsubmission_file/submissionsample02.txt',
+                    'GROUP1_GROUP1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'DEFAULTTEAM_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             // Tests with blind marking.
@@ -420,14 +436,10 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => true,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'PARTICIPANT_STUDENT1.ID_assignsubmission_file/submissionsample01.txt',
-                    'PARTICIPANT_STUDENT1.ID_assignsubmission_file/submissionsample02.txt',
-                    'PARTICIPANT_STUDENT2.ID_assignsubmission_file/submissionsample01.txt',
-                    'PARTICIPANT_STUDENT2.ID_assignsubmission_file/submissionsample02.txt',
-                    'PARTICIPANT_STUDENT3.ID_assignsubmission_file/submissionsample01.txt',
-                    'PARTICIPANT_STUDENT3.ID_assignsubmission_file/submissionsample02.txt',
-                    'PARTICIPANT_STUDENT4.ID_assignsubmission_file/submissionsample01.txt',
-                    'PARTICIPANT_STUDENT4.ID_assignsubmission_file/submissionsample02.txt',
+                    'PARTICIPANT_STUDENT1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'PARTICIPANT_STUDENT2.ID_assignfeedback_file/feedbacksample01.txt',
+                    'PARTICIPANT_STUDENT3.ID_assignfeedback_file/feedbacksample01.txt',
+                    'PARTICIPANT_STUDENT4.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
             $prefix . ' Filtered users without groups and blindmarking' => [
@@ -437,10 +449,8 @@ final class downloader_test extends \advanced_testcase {
                 'blindmarking' => true,
                 'downloadasfolder' => true,
                 'expected' => [
-                    'PARTICIPANT_STUDENT1.ID_assignsubmission_file/submissionsample01.txt',
-                    'PARTICIPANT_STUDENT1.ID_assignsubmission_file/submissionsample02.txt',
-                    'PARTICIPANT_STUDENT2.ID_assignsubmission_file/submissionsample01.txt',
-                    'PARTICIPANT_STUDENT2.ID_assignsubmission_file/submissionsample02.txt',
+                    'PARTICIPANT_STUDENT1.ID_assignfeedback_file/feedbacksample01.txt',
+                    'PARTICIPANT_STUDENT2.ID_assignfeedback_file/feedbacksample01.txt',
                 ],
             ],
         ];

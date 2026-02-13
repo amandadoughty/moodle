@@ -70,3 +70,49 @@ Feature: In an assignment, teachers can perform bulk actions on submissions
       | onlinetext_enabled | file_enabled | download_visibility  | lock_visibility  | unlock_visibility  | delete_visibility  |
       | 1                  | 0            | not see              | see              | see                | not see            |
       | 0                  | 0            | not see              | not see          | not see            | not see            |
+
+  @_file_upload @javascript
+  Scenario Outline: Appropriate bulk actions should be available when there are submissions.
+    Given the following "activity" exists:
+      | activity                            | assign               |
+      | course                              | C1                   |
+      | name                                | Test assignment name |
+      | assignsubmission_onlinetext_enabled | 1                    |
+      | assignfeedback_file_enabled         | 1                    |
+    And the following "mod_assign > submissions" exist:
+      | assign               | user     | onlinetext                       |
+      | Test assignment name | student1 | I'm the student first submission |
+    And I am on the "Test assignment name" Activity page logged in as teacher1
+    And I click on "Grade" "link" in the ".tertiary-navigation" "css_element"
+    And I upload "mod/assign/feedback/file/tests/fixtures/feedback.txt" file to "Feedback files" filemanager
+    And I press "Save changes"
+    And I am on the "Test assignment name" Activity page logged in as <user>
+    And I change window size to "large"
+    When I navigate to "Submissions" in current page administration
+    And I click on "Select all" "checkbox"
+    And I should <downloadfeedback_visibility> "Download feedback" in the "sticky-footer" "region"
+
+    Examples:
+      | user     | downloadfeedback_visibility |
+      | manager1 | see                         |
+      | teacher1 | see                         |
+
+  @javascript
+  Scenario Outline: Appropriate bulk actions should be available if no feedback files have uploaded.
+    Given the following "activity" exists:
+      | activity                            | assign               |
+      | course                              | C1                   |
+      | name                                | Test assignment name |
+      | assignsubmission_onlinetext_enabled | <onlinetext_enabled> |
+      | assignsubmission_file_enabled       | <file_enabled>       |
+      | assignfeedback_file_enabled         | 1                    |
+    And I am on the "Test assignment name" Activity page logged in as teacher1
+    And I change window size to "large"
+    When I navigate to "Submissions" in current page administration
+    And I click on "Select all" "checkbox" in the "#submissions" "css_element"
+    Then I should <downloadfeedback_visibility> "Download" in the "sticky-footer" "region"
+
+    Examples:
+      | onlinetext_enabled | file_enabled | downloadfeedback_visibility |
+      | 1                  | 0            | not see                     |
+      | 0                  | 0            | not see                     |

@@ -73,6 +73,9 @@ export default class extends BulkActions {
     /** @type {boolean} Whether this assignment has submissions. */
     #hasSubmissions;
 
+    /** @type {boolean} Whether this assignment has feedback files. */
+    #hasFeedbacks;
+
     /**
      * Returns the instance of the class.
      *
@@ -89,6 +92,7 @@ export default class extends BulkActions {
      * @param {string} options.sesskey - The session key.
      * @param {boolean} options.supportssubmissions - Whether this assignment supports submissions.
      * @param {boolean} options.hassubmissions - Whether this assignment has submissions.
+     * @param {boolean} options.hasfeedbacks - Whether this assignment has feedback files.
      * @returns {this} An instance of the anonymous class extending BulkActions.
      */
     static init(options) {
@@ -111,11 +115,12 @@ export default class extends BulkActions {
      * @param {string} options.sesskey - The session key.
      * @param {boolean} options.hassubmissions - Whether this assignment has any submissions.
      * @param {boolean} options.supportssubmissions - Whether this assignment allows submissions.
+     * @param {boolean} options.hasfeedbacks - Whether this assignment has any feedback files.
      */
     constructor({
         cmid, message, submissiondrafts, removesubmission, extend,
         grantattempt, workflowstate, markingallocation, pluginoperations, sesskey,
-        hassubmissions, supportssubmissions
+        hassubmissions, supportssubmissions, hasfeedbacks
     }) {
         super();
         this.#cmid = cmid;
@@ -130,6 +135,7 @@ export default class extends BulkActions {
         this.#pluginOperations = pluginoperations;
         this.#hasSubmissions = hassubmissions;
         this.#supportsSubmissions = supportssubmissions;
+        this.#hasFeedbacks = hasfeedbacks;
     }
 
     getBulkActions() {
@@ -169,6 +175,20 @@ export default class extends BulkActions {
                     getString('downloadselectedsubmissions', 'mod_assign'),
                     getString('batchoperationconfirmdownloadselected', 'mod_assign'),
                     getString('batchoperationdownloadselected', 'mod_assign'),
+                ),
+            );
+        }
+        if (this.#hasFeedbacks) {
+            actions.push(
+                new GeneralAction(
+                    this.#cmid,
+                    this.#sesskey,
+                    'downloadselectedfeedback',
+                    getString('batchoperationdownloadselectedfeedback', 'mod_assign'),
+                    Templates.renderPix('t/download', 'core'),
+                    getString('downloadselectedfeedback', 'mod_assign'),
+                    getString('batchoperationconfirmdownloadselectedfeedback', 'mod_assign'),
+                    getString('batchoperationdownloadselectedfeedback', 'mod_assign'),
                 ),
             );
         }

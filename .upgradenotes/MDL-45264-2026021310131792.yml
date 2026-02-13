@@ -1,0 +1,7 @@
+issueNumber: MDL-45264
+notes:
+  assignfeedback_file:
+    - message: >-
+        Feedback files can now be bulk downlaoded for any assignfeedback plugin
+        that implements new method assign_feedback_plugin::return_files()
+      type: improved
