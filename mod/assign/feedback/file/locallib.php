@@ -719,4 +719,57 @@ class assign_feedback_file extends assign_feedback_plugin {
     public function get_config_for_external() {
         return (array) $this->get_config();
     }
+
+    /**
+     * Returns true if the plugin returns feedback files
+     * and has existing feedback.
+     *
+     * @return boolean
+     */
+    public function return_files() {
+        // Check the total number of feedback files.
+        $fs = get_file_storage();
+        $files = $fs->get_area_files(
+            $this->assignment->get_context()->id,
+            'assignfeedback_file',
+            ASSIGNFEEDBACK_FILE_FILEAREA,
+            false,
+            'id',
+            false
+        );
+
+        return (bool)count($files);
+    }
+
+
+    /**
+     * Produce a list of files suitable for export that represent this feedback
+     *
+     * @param stdClass $grade The grade
+     * @param stdClass $user unused
+     * @return array - return an array of files indexed by filename
+     */
+    public function get_files(stdClass $grade, stdClass $user) {
+        $result = [];
+        $fs = get_file_storage();
+
+        $files = $fs->get_area_files(
+            $this->assignment->get_context()->id,
+            'assignfeedback_file',
+            ASSIGNFEEDBACK_FILE_FILEAREA,
+            $grade->id,
+            'timemodified',
+            false
+        );
+
+        foreach ($files as $file) {
+            // Do we return the full folder path or just the file name?
+            if (isset($grade->exportfullpath) && !$grade->exportfullpath) {
+                $result[$file->get_filename()] = $file;
+            } else {
+                $result[$file->get_filepath() . $file->get_filename()] = $file;
+            }
+        }
+        return $result;
+    }
 }
