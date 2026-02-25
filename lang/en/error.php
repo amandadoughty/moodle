@@ -23,6 +23,7 @@
  */
 
 $string['activityisscheduledfordeletion'] = 'Activity deletion in progress...';
+$string['activityoutofscope'] = 'Activity is out of scope';
 $string['agedigitalconsentmapinvalidage'] = '"{$a}" is not a valid value for age.';
 $string['agedigitalconsentmapinvalidcomma'] = '"{$a}" has more or less than one comma separator.';
 $string['agedigitalconsentmapinvalidcountry'] = '"{$a}" is not a valid value for country.';
