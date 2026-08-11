@@ -641,4 +641,10 @@ $definitions = array(
         'simpledata' => true,
         'ttl' => 90000, // 25 hours.
     ],
+
+    'capability_cache' => [
+        'mode' => cache_store::MODE_REQUEST,
+        'simpledata' => true,
+        'staticacceleration' => true,
+    ],
 );
